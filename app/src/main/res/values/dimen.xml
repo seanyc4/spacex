@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- view sizes -->
+    <dimen name="toolbar_height">@dimen/_48sdp</dimen>
+    <dimen name="toolbar_height_tablet">@dimen/_36sdp</dimen>
+
+    <!-- view margins -->
+    <dimen name="default_view_margin">@dimen/_16sdp</dimen>
+    <dimen name="default_view_margin_negative">@dimen/_minus16sdp</dimen>
+    <dimen name="recyclerview_start_end_margins">@dimen/_8sdp</dimen>
+    <dimen name="scrollview_bottom_margin">80dp</dimen>
+
+    <!-- text size -->
+    <dimen name="text_size_xxs">@dimen/_6sdp</dimen>
+    <dimen name="text_size_xs">@dimen/_8sdp</dimen>
+    <dimen name="text_size_small">@dimen/_10sdp</dimen>
+    <dimen name="text_size_medium">@dimen/_12sdp</dimen>
+    <dimen name="text_size_subHeading">@dimen/_14sdp</dimen>
+    <dimen name="text_size_heading">@dimen/_16sdp</dimen>
+    <dimen name="text_size_large">@dimen/_18sdp</dimen>
+    <dimen name="text_size_xl">@dimen/_20sdp</dimen>
+    <dimen name="text_size_2xl">@dimen/_22sdp</dimen>
+    <dimen name="text_size_3xl">@dimen/_24sdp</dimen>
+
+
+</resources>

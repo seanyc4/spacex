@@ -1,0 +1,399 @@
+{
+  "movies": [
+    {
+      "adult": false,
+      "backdrop_path": "/dbuR6XuVubN5ZmRUiOycZi2457l.jpg",
+      "genre_ids": [
+        12,
+        878,
+        35
+      ],
+      "id": 640146,
+      "original_language": "en",
+      "original_title": "Ant-Man and the Wasp: Quantumania",
+      "overview": "The third film in the Marvel Studios' Ant-Man trilogy.",
+      "popularity": 19.882,
+      "poster_path": "/mYCBuVGQGWPlUNZQusdHfbSzP1h.jpg",
+      "release_date": "2023-07-26",
+      "title": "Ant-Man and the Wasp: Quantumania",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jRSAkKG9QSu6Nc1zvI3ejmgLshe.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878,
+        35
+      ],
+      "id": 447365,
+      "original_language": "en",
+      "original_title": "Guardians of the Galaxy Vol. 3",
+      "overview": "The third and final film in the Guardians of the Galaxy trilogy.",
+      "popularity": 42.914,
+      "poster_path": "/1neAtYqPFfuyzpOnj3ZVDXtGXLf.jpg",
+      "release_date": "2023-05-03",
+      "title": "Guardians of the Galaxy Vol. 3",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3AbHZcRdon7TmpqracuQqgJxOGE.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "id": 609681,
+      "original_language": "en",
+      "original_title": "The Marvels",
+      "overview": "The sequel to Captain Marvel (2019).",
+      "popularity": 21.046,
+      "poster_path": "/bnz17wOkp9O0c9JADOncEx0Q1sJ.jpg",
+      "release_date": "2023-02-15",
+      "title": "The Marvels",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1xaib1Y52yZPvu4oyiZu6LNC1uj.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "id": 505642,
+      "original_language": "en",
+      "original_title": "Black Panther: Wakanda Forever",
+      "overview": "The sequel to Black Panther (2018).",
+      "popularity": 28.406,
+      "poster_path": "/6N6Rr1Y5wsi2KbTP4hFAP3hnWQE.jpg",
+      "release_date": "2022-11-09",
+      "title": "Black Panther: Wakanda Forever",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/qB3HdCZKHWU33k9QYTIZaM4v5qo.jpg",
+      "genre_ids": [
+        28,
+        12,
+        14,
+        35
+      ],
+      "id": 616037,
+      "original_language": "en",
+      "original_title": "Thor: Love and Thunder",
+      "overview": "The fourth installment of the Marvel Studios' Thor movie series.",
+      "popularity": 53.693,
+      "poster_path": "/ifx23jgqQ8ZjUb9eiGjwbKtf0qQ.jpg",
+      "release_date": "2022-07-07",
+      "title": "Thor: Love and Thunder",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ndCSoasjIZAMMDIuMxuGnNWu4DU.jpg",
+      "genre_ids": [
+        14,
+        28,
+        12
+      ],
+      "id": 453395,
+      "original_language": "en",
+      "original_title": "Doctor Strange in the Multiverse of Madness",
+      "overview": "Doctor Strange, with the help of mystical allies both old and new, traverses the mind-bending and dangerous alternate realities of the Multiverse to confront a mysterious new adversary.",
+      "popularity": 526.098,
+      "poster_path": "/wRnbWt44nKjsFPrqSmwYki5vZtF.jpg",
+      "release_date": "2022-05-04",
+      "title": "Doctor Strange in the Multiverse of Madness",
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/gBh15609apMzMgcafijKNBxdeTS.jpg",
+      "genre_ids": [
+        99
+      ],
+      "id": 939356,
+      "original_language": "en",
+      "original_title": "ASSEMBLED: The Making of Eternals",
+      "overview": "Join director Chloe Zhao and the Cast of Eternals as they recount their experiences during the making of Marvel Studios’ most ambitious film to date. Discover how the ensemble cast felt stepping into their roles, filming in remote locations, and creating bonds that would help to create the on-screen relationships that span over 7,000 years.",
+      "popularity": 42.728,
+      "poster_path": "/fBJ5ZjFJ6IHQWz90SsW80PizVlF.jpg",
+      "release_date": "2022-02-16",
+      "title": "ASSEMBLED: The Making of Eternals",
+      "video": false,
+      "vote_average": 6.6,
+      "vote_count": 11
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jUhqvox1RCNMg4yWWW5AqIVX8Mj.jpg",
+      "genre_ids": [
+        99
+      ],
+      "id": 936643,
+      "original_language": "en",
+      "original_title": "ASSEMBLED: The Making of Hawkeye",
+      "overview": "Join the likes of Jeremy Renner, Hailee Steinfeld, Florence Pugh, and Vincent D’Onofrio as they reveal how Marvel Studios’ “Hawkeye” was conceived and created. Witness firsthand what it took to pull off the show’s pulse-pounding action set pieces, and discover how iconic characters from the pages of Marvel Comics such as Kate Bishop were adapted and brought to life for the six-episode series.",
+      "popularity": 25.942,
+      "poster_path": "/pQOLNPHe4rwXl3RpKNa0VWjYNLR.jpg",
+      "release_date": "2022-02-09",
+      "title": "ASSEMBLED: The Making of Hawkeye",
+      "video": false,
+      "vote_average": 6.4,
+      "vote_count": 11
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "id": 634649,
+      "original_language": "en",
+      "original_title": "Spider-Man: No Way Home",
+      "overview": "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
+      "popularity": 8408.901,
+      "poster_path": "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+      "release_date": "2021-12-15",
+      "title": "Spider-Man: No Way Home",
+      "video": false,
+      "vote_average": 8.2,
+      "vote_count": 11655
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/vn8G4EZjKnO5SuXHLYN3YWuDEyz.jpg",
+      "genre_ids": [
+        99
+      ],
+      "id": 877188,
+      "original_language": "en",
+      "original_title": "Marvel Studios' 2021 Disney+ Day Special",
+      "overview": "Explore the Disney+ series of the MCU—past, present and future.",
+      "popularity": 11.936,
+      "poster_path": "/zh0B5DDP93e3zokktb5aHHfIh01.jpg",
+      "release_date": "2021-11-12",
+      "title": "Marvel Studios' 2021 Disney+ Day Special",
+      "video": false,
+      "vote_average": 6.6,
+      "vote_count": 11
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/c6H7Z4u73ir3cIoCteuhJh7UCAR.jpg",
+      "genre_ids": [
+        878,
+        28
+      ],
+      "id": 524434,
+      "original_language": "en",
+      "original_title": "Eternals",
+      "overview": "The Eternals are a team of ancient aliens who have been living on Earth in secret for thousands of years. When an unexpected tragedy forces them out of the shadows, they are forced to reunite against mankind’s most ancient enemy, the Deviants.",
+      "popularity": 1730.99,
+      "poster_path": "/bcCBq9N1EMo3daNIjWJ8kYvrQm6.jpg",
+      "release_date": "2021-11-03",
+      "title": "Eternals",
+      "video": false,
+      "vote_average": 7.1,
+      "vote_count": 5270
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/cinER0ESG0eJ49kXlExM0MEWGxW.jpg",
+      "genre_ids": [
+        28,
+        12,
+        14
+      ],
+      "id": 566525,
+      "original_language": "en",
+      "original_title": "Shang-Chi and the Legend of the Ten Rings",
+      "overview": "Shang-Chi must confront the past he thought he left behind when he is drawn into the web of the mysterious Ten Rings organization.",
+      "popularity": 1136.46,
+      "poster_path": "/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg",
+      "release_date": "2021-09-01",
+      "title": "Shang-Chi and the Legend of the Ten Rings",
+      "video": false,
+      "vote_average": 7.7,
+      "vote_count": 6201
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/keIxh0wPr2Ymj0Btjh4gW7JJ89e.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "id": 497698,
+      "original_language": "en",
+      "original_title": "Black Widow",
+      "overview": "Natasha Romanoff, also known as Black Widow, confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises. Pursued by a force that will stop at nothing to bring her down, Natasha must deal with her history as a spy and the broken relationships left in her wake long before she became an Avenger.",
+      "popularity": 518.751,
+      "poster_path": "/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg",
+      "release_date": "2021-07-07",
+      "title": "Black Widow",
+      "video": false,
+      "vote_average": 7.5,
+      "vote_count": 7387
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4oQo2pkNyv5zOqwAdwI2dSJTmEx.jpg",
+      "genre_ids": [
+        16,
+        28,
+        12,
+        10751
+      ],
+      "id": 592689,
+      "original_language": "en",
+      "original_title": "Marvel Rising: Playing with Fire",
+      "overview": "Inferno’s powers are stolen by a young and powerful villain and it’s up to the Secret Warriors to defeat their new foe and help their friend. But does Inferno even WANT his powers back? Meanwhile, America Chavez learns a lesson about friendship and family from teammate Ms. Marvel.",
+      "popularity": 9.656,
+      "poster_path": "/lelNkBnjIi4N1uQBV2TnODgS9UT.jpg",
+      "release_date": "2019-12-18",
+      "title": "Marvel Rising: Playing with Fire",
+      "video": false,
+      "vote_average": 6.7,
+      "vote_count": 31
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/43NgWUj0Sr9AoM8Prv0QOWsL92k.jpg",
+      "genre_ids": [
+        99
+      ],
+      "id": 647375,
+      "original_language": "en",
+      "original_title": "Marvel Studios: Expanding the Universe",
+      "overview": "An exciting look into the future of Marvel Studios' films and upcoming Disney+ series.",
+      "popularity": 26.282,
+      "poster_path": "/dU7qXzttvOUvSlwwpEFQDsLnThK.jpg",
+      "release_date": "2019-11-12",
+      "title": "Marvel Studios: Expanding the Universe",
+      "video": false,
+      "vote_average": 5.9,
+      "vote_count": 16
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/26lpL6CMsOFSf59zbaP13rY5z18.jpg",
+      "genre_ids": [
+        10751,
+        16,
+        878,
+        12
+      ],
+      "id": 592688,
+      "original_language": "en",
+      "original_title": "Marvel Rising: Operation Shuri",
+      "overview": "The lives of the Secret Warriors are turned upside down when faced with their latest mission: hang out with Shuri, the Crown Princess of Wakanda, and show her what it’s like to be an ordinary teenager. But nothing’s ordinary when you’re dealing with one of the smartest and most famous people on the planet.",
+      "popularity": 7.165,
+      "poster_path": "/4fcvluN98HWo6VB7C5ONRNOL4CY.jpg",
+      "release_date": "2019-10-11",
+      "title": "Marvel Rising: Operation Shuri",
+      "video": false,
+      "vote_average": 6.8,
+      "vote_count": 19
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/p7S09fY0hGm1BVsQ48oRcuOqglg.jpg",
+      "genre_ids": [
+        878,
+        35
+      ],
+      "id": 758025,
+      "original_language": "en",
+      "original_title": "Peter's To-Do List",
+      "overview": "On the eve of his departure to Europe, Peter Parker tells Ned Leeds that he has several things to do before they leave.",
+      "popularity": 32.74,
+      "poster_path": "/wf7SV7nSgxjSB9nCcCZGkwWTAdd.jpg",
+      "release_date": "2019-09-17",
+      "title": "Peter's To-Do List",
+      "video": false,
+      "vote_average": 7.2,
+      "vote_count": 26
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/p056WP3fMnEcSSYhiN1kV9AyNZW.jpg",
+      "genre_ids": [
+        10751,
+        16,
+        28,
+        35,
+        878
+      ],
+      "id": 592687,
+      "original_language": "en",
+      "original_title": "Marvel Rising: Battle of the Bands",
+      "overview": "On the day of Gwen’s “Battle of the Bands” competition, mysterious attacks force her and the Secret Warriors to investigate. Can they save the city and get Gwen to the concert on time?",
+      "popularity": 10.062,
+      "poster_path": "/mFL0EzAhEj3vscyGUMk6sT7pfQg.jpg",
+      "release_date": "2019-08-28",
+      "title": "Marvel Rising: Battle of the Bands",
+      "video": false,
+      "vote_average": 7.2,
+      "vote_count": 33
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/EXJrCRBYAPffNuMQbX7irsbrRn.jpg",
+      "genre_ids": [
+        16,
+        28
+      ],
+      "id": 622230,
+      "original_language": "en",
+      "original_title": "LEGO Marvel Spider-Man: Vexed by Venom",
+      "overview": "Thanks to Green Goblin and Venom, tech theft is now at an all-time high. Can our Friendly Neighborhood Spider-Man put an end to their mysterious villainous scheme before all of New York City is destroyed?",
+      "popularity": 22.749,
+      "poster_path": "/gTo2r8nNU3ZYAS6DqdeSp1VEqkq.jpg",
+      "release_date": "2019-08-03",
+      "title": "LEGO Marvel Spider-Man: Vexed by Venom",
+      "video": false,
+      "vote_average": 7.2,
+      "vote_count": 13
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/vamhMTvh9m9zFHDoR0v1nRtf6T4.jpg",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "id": 429617,
+      "original_language": "en",
+      "original_title": "Spider-Man: Far From Home",
+      "overview": "Peter Parker and his friends go on a summer trip to Europe. However, they will hardly be able to rest - Peter will have to agree to help Nick Fury uncover the mystery of creatures that cause natural disasters and destruction throughout the continent.",
+      "popularity": 254.967,
+      "poster_path": "/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg",
+      "release_date": "2019-06-28",
+      "title": "Spider-Man: Far From Home",
+      "video": false,
+      "vote_average": 7.5,
+      "vote_count": 12407
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Movies</string>
+
+    <string name="text_error">Error</string>
+    <string name="text_success">Success</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_info">Info</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_enter_a_title">Enter a title</string>
+    <string name="text_undo">Undo</string>
+    <string name="text_delete">Delete</string>
+    <string name="text_filter">Filter</string>
+    <string name="text_search">Search</string>
+    <string name="text_apply">Apply</string>
+
+    <string name="back">back</string>
+    <string name="back_button">back_button</string>
+    <string name="movies">Movies</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="overview">Overview</string>
+    <string name="cast_picture">Cast picture</string>
+    <string name="cast">Cast</string>
+    <string name="name">Name</string>
+    <string name="movie_image">Movie Image</string>
+
+</resources>
