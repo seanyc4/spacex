@@ -18,12 +18,11 @@ object AndroidX {
     private const val lifecycle_version = "2.4.1"
     const val lifecycle_vm_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     const val lifecycle_live_data_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    const val lifecycle_live_data_core_ktx = "androidx.lifecycle:lifecycle-livedata-core-ktx:$lifecycle_version"
     const val lifecycle_saved_state = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     const val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:${lifecycle_version}"
 
     const val fragment_version = "1.4.1"
-    const val fragment_ktx = "androidx.fragment.fragment-ktx:$fragment_version"
+    const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
 
 }
 

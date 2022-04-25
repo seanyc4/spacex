@@ -1,7 +1,6 @@
 object Versions {
 
-    const val androidx_test_ext = "1.3.0"
-    const val crashlytics_gradle = "2.2.0"
+    const val androidx_test_ext = "1.1.3"
     const val espresso_core = "3.3.0"
     const val espresso_idling_resource = "3.3.0"
     const val junit_4_version = "4.13"

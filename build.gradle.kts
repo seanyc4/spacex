@@ -9,7 +9,7 @@ buildscript {
     dependencies {
         classpath(Build.gradle)
         classpath(Build.kotlin_gradle_plugin)
-        classpath(Build.hilt_android)
+       /* classpath(Build.hilt_android)*/
         classpath(Build.safe_args)
         classpath(Build.secrets_gradle_plugin)
     }
