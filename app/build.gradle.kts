@@ -62,6 +62,9 @@ android {
     }
 
     testOptions {
+        // Fix for mock issue on >= API 28
+        packagingOptions.jniLibs.useLegacyPackaging = true
+
         unitTests.all {
             it.useJUnitPlatform()
         }
