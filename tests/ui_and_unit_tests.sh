@@ -11,7 +11,7 @@ print_blue(){
 print_blue "\n\n\nStarting"
 
 print_blue "\n\n\ncd into working directory...\n"
-cd "/d/Android Studio Projects/Movies/"
+cd "/c/Users/Sean/StudioProjects/Movies"
 
 print_blue "\n\n\nrun unit tests...\n"
 ./gradlew test

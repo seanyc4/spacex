@@ -119,7 +119,7 @@ class MovieListDaoServiceTests : BaseTest() {
 
         val queriedMovies = movieListDaoService.getAll()
 
-        assertTrue { queriedMovies == movieList }
+        assertTrue { queriedMovies?.containsAll(movieList) == true }
     }
 
     @Test

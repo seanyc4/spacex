@@ -4,14 +4,27 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
+import com.seancoyle.movies.R
+import com.seancoyle.movies.business.domain.model.moviedetail.Cast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.util.DateUtil
 import com.seancoyle.movies.di.TestAppComponent
+import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
+import com.seancoyle.movies.framework.datasource.data.moviedetail.MovieDetailDataFactory
 import com.seancoyle.movies.framework.datasource.data.movielist.MovieListDataFactory
 import com.seancoyle.movies.framework.presentation.TestMovieFragmentFactory
 import com.seancoyle.movies.framework.presentation.UIController
+import com.seancoyle.movies.framework.presentation.moviedetail.adapter.MovieCastAdapter
 import com.seancoyle.movies.framework.presentation.movielist.MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
 import io.mockk.mockk
@@ -47,22 +60,25 @@ class MovieDetailFragmentTests : BaseTest() {
     @Inject
     lateinit var movieListDataFactory: MovieListDataFactory
 
-    private val testMovie: MovieParent
+    @Inject
+    lateinit var movieDetailCacheMapper: MovieDetailCacheMapper
+
+    @Inject
+    lateinit var movieDetailDataFactory: MovieDetailDataFactory
+
+    @Inject
+    lateinit var dateUtil: DateUtil
+
+    private val testMovie: Movie
+    private val testMovieCast: List<Cast>
 
     val uiController = mockk<UIController>(relaxed = true)
-
     val navController = mockk<NavController>(relaxed = true)
 
     init {
         injectTest()
-        testMovie = movieListDataFactory.createSingleMovie(
-            id = UUID.randomUUID().toString(),
-            category = UUID.randomUUID().toString(),
-            page = UUID.randomUUID().hashCode(),
-            movies = emptyList(),
-            total_pages = UUID.randomUUID().hashCode(),
-            total_results = UUID.randomUUID().hashCode()
-        )
+        testMovie = movieListDataFactory.produceListOfMovies().getOrNull(0)?.movies?.getOrNull(0)!!
+        testMovieCast = movieDetailDataFactory.produceListOfMovieCast().getOrNull(0)?.cast ?: emptyList()
     }
 
     override fun injectTest() {
@@ -91,7 +107,7 @@ class MovieDetailFragmentTests : BaseTest() {
         // setup
         val scenario = launchFragmentInContainer<MovieDetailFragment>(
             factory = fragmentFactory,
-            fragmentArgs = bundleOf(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY to testMovie.movies.getOrNull(0))
+            fragmentArgs = bundleOf(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY to testMovie)
         ).onFragment { fragment ->
             fragment.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
                 if (viewLifecycleOwner != null) {
@@ -103,8 +119,24 @@ class MovieDetailFragmentTests : BaseTest() {
         // test
 
         // confirm arguments are set from bundle
-       // onView(withId(R.id.movie_title)).check(matches(withText(testMovie.)))
+        ("${testMovie.title} (${dateUtil.removeTimeFromDateString(testMovie.release_date)})").also {
+            onView(withId(R.id.movie_title)).check(matches(withText(it)))
+        }
+        onView(withId(R.id.movie_overview)).check(matches(withText(testMovie.overview)))
 
+        // confirm the cast recyclerview is in view
+        val movieCastRecyclerView = onView(withId(R.id.rv_movie_cast))
+        movieCastRecyclerView.check(matches(isDisplayed()))
+
+        // Scroll to the end of the horizontal cast recyclerview
+        movieCastRecyclerView.perform(
+            RecyclerViewActions.scrollToPosition<MovieCastAdapter.MovieCastViewHolder>(
+                testMovieCast.size.minus(1)
+            )
+        )
+
+        // navigate back
+        Espresso.pressBack()
 
         // confirm NavController attempted to navigate
         verify {
