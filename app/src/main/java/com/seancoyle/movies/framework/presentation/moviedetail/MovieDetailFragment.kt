@@ -128,7 +128,7 @@ constructor(
     }
 
     override fun onItemSelected(position: Int, item: Cast) {
-        TODO("Not yet implemented")
+
     }
 
     private fun setupUI() {
@@ -163,7 +163,7 @@ constructor(
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    GetMovieCastFromNetworkAndInsertToCache.INSERT_SUCCESS -> {
+                    GetMovieCastFromNetworkAndInsertToCache.MOVIE_CAST_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         updateAdapter()
                     }
@@ -185,7 +185,7 @@ constructor(
 
                         when (response.message) {
 
-                            GetMovieCastFromNetworkAndInsertToCache.INSERT_FAILED -> {
+                            GetMovieCastFromNetworkAndInsertToCache.MOVIE_CAST_INSERT_FAILED -> {
                                 viewModel.setStateEvent(
                                     MovieDetailStateEvent.GetMovieCastByIdFromCacheEvent(
                                         id = viewModel.getMovie()?.id!!

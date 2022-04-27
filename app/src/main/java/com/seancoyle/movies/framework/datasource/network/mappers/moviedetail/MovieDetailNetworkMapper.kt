@@ -11,22 +11,6 @@ import com.seancoyle.movies.framework.datasource.network.model.moviedetail.Movie
 
 class MovieDetailNetworkMapper : EntityMapper<MovieCastNetworkEntity, MovieCast> {
 
-    fun entityListToDomainList(entityList: List<MovieCastNetworkEntity>): List<MovieCast> {
-        val list: ArrayList<MovieCast> = ArrayList()
-        for (item in entityList) {
-            list.add(mapFromEntity(item))
-        }
-        return list
-    }
-
-    fun domainListToEntityList(domainList: List<MovieCast>): List<MovieCastNetworkEntity> {
-        val list: ArrayList<MovieCastNetworkEntity> = ArrayList()
-        for (item in domainList) {
-            list.add(mapToEntity(item))
-        }
-        return list
-    }
-
     override fun mapFromEntity(entity: MovieCastNetworkEntity): MovieCast {
         return MovieCast(
             cast = entity.cast?.map { cast ->

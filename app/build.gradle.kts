@@ -4,9 +4,10 @@ plugins {
     kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    /* id("dagger.hilt.android.plugin")*/
     id("androidx.navigation.safeargs")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("de.mannodermaus.android-junit5")
+    /* id("dagger.hilt.android.plugin")*/
     kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
 

@@ -51,6 +51,9 @@ object MovieListModule {
             getMovieByIdFromCache = GetMovieByIdFromCache(
                 cacheDataSource = movieListCacheDataSource
             ),
+            getMoviesFromNetwork = GetMoviesFromNetwork(
+                movieListNetworkDataSource = movieListNetworkDataSource
+            ),
             getMoviesFromNetworkAndInsertToCache = GetMoviesFromNetworkAndInsertToCache(
                 cacheDataSource = movieListCacheDataSource,
                 movieListNetworkDataSource = movieListNetworkDataSource,

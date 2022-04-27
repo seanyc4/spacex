@@ -1,4 +1,4 @@
-package com.seancoyle.movies.framework.datasource.network.model
+package com.seancoyle.movies.framework.datasource.network.model.movielist
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

@@ -47,7 +47,7 @@ constructor(
                 } else {
                     DataState.data(
                         response = Response(
-                            message = NETWORK_EMPTY,
+                            message = MOVIES_NETWORK_EMPTY,
                             uiComponentType = UIComponentType.Toast,
                             messageType = MessageType.Error
                         ),
@@ -60,7 +60,7 @@ constructor(
             override suspend fun handleFailure(): DataState<MovieListViewState> {
                 return DataState.error(
                     response = Response(
-                        message = ERROR,
+                        message = MOVIES_ERROR,
                         uiComponentType = UIComponentType.Toast,
                         messageType = MessageType.Error
                     ),
@@ -68,7 +68,10 @@ constructor(
                 )
             }
         }.getResult()
-        emit(networkResponse)
+
+        if (networkResponse?.stateMessage?.response?.message == MOVIES_ERROR) {
+            emit(networkResponse)
+        }
 
         // Insert to Cache
         if (networkResponse?.data != null) {
@@ -92,19 +95,24 @@ constructor(
             ) {
                 override suspend fun handleSuccess(resultObj: Long): DataState<MovieListViewState> {
                     return if (resultObj > 0) {
+                        val viewState =
+                            MovieListViewState(
+                                movieParent = movies
+                            )
+
                         DataState.data(
                             response = Response(
-                                message = INSERT_SUCCESS,
+                                message = MOVIES_INSERT_SUCCESS,
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Success
                             ),
-                            data = null,
+                            data = viewState,
                             stateEvent = stateEvent
                         )
                     } else {
                         DataState.data(
                             response = Response(
-                                message = INSERT_FAILED,
+                                message = MOVIES_INSERT_FAILED,
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Error
                             ),
@@ -119,10 +127,10 @@ constructor(
     }
 
     companion object {
-        val NETWORK_SUCCESS = "Successfully retrieved movies from network."
-        val NETWORK_EMPTY = "No data returned from network."
-        val ERROR = "Error updating movies from network.\n\nReason: Network error"
-        val INSERT_SUCCESS = "Successfully inserted movies from network."
-        val INSERT_FAILED = "Failed to insert movies from network."
+        val MOVIES_NETWORK_SUCCESS = "Successfully retrieved movies from network."
+        val MOVIES_NETWORK_EMPTY = "No data returned from network."
+        val MOVIES_ERROR = "Error getting movies from network.\n\nReason: Network error"
+        val MOVIES_INSERT_SUCCESS = "Successfully inserted movies from network."
+        val MOVIES_INSERT_FAILED = "Failed to insert movies from network."
     }
 }

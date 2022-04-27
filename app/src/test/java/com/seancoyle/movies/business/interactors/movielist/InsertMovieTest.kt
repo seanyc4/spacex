@@ -82,14 +82,12 @@ class InsertMovieTest {
                 total_pages = newMovie.total_pages,
                 total_results = newMovie.total_results,
             )
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    INSERT_MOVIE_SUCCESS
-                )
-            }
-        })
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                INSERT_MOVIE_SUCCESS
+            )
+        }
 
         // confirm cache was updated
         val cacheMovieThatWasInserted = cacheDataSource.getById(newMovie.id)
@@ -123,14 +121,12 @@ class InsertMovieTest {
                 total_pages = newMovie.total_pages,
                 total_results = newMovie.total_results,
             )
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    InsertMovie.INSERT_MOVIE_FAILED
-                )
-            }
-        })
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                InsertMovie.INSERT_MOVIE_FAILED
+            )
+        }
 
         // confirm cache was not changed
         val cacheMovieThatWasInserted = cacheDataSource.getById(newMovie.id)
@@ -164,14 +160,12 @@ class InsertMovieTest {
                 total_pages = newMovie.total_pages,
                 total_results = newMovie.total_results,
             )
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assert(
-                    value?.stateMessage?.response?.message
-                        ?.contains(CacheErrors.CACHE_ERROR_UNKNOWN) ?: false
-                )
-            }
-        })
+        ).collect { value ->
+            assert(
+                value?.stateMessage?.response?.message
+                    ?.contains(CacheErrors.CACHE_ERROR_UNKNOWN) ?: false
+            )
+        }
 
         // confirm cache was not changed
         val cacheMovieThatWasInserted = cacheDataSource.getById(newMovie.id)

@@ -12,7 +12,7 @@ const val FORCE_GENERAL_FAILURE = "FORCE_GENERAL_FAILURE"
 
 class FakeMovieListCacheDataSourceImpl
 constructor(
-    private val moviesData: HashMap<String, MovieParent>
+    private val moviesData: MutableMap<String, MovieParent>
 ) : MovieListCacheDataSource {
 
     override suspend fun insert(movie: MovieParent): Long {

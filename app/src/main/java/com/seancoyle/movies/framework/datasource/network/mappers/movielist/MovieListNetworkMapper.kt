@@ -3,27 +3,11 @@ package com.seancoyle.movies.framework.datasource.network.mappers.movielist
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.model.movielist.MovieParent
 import com.seancoyle.movies.business.domain.util.EntityMapper
-import com.seancoyle.movies.framework.datasource.network.model.MovieNetworkEntity
-import com.seancoyle.movies.framework.datasource.network.model.ResultNetwork
+import com.seancoyle.movies.framework.datasource.network.model.movielist.MovieNetworkEntity
+import com.seancoyle.movies.framework.datasource.network.model.movielist.ResultNetwork
 
 
 class MovieListNetworkMapper : EntityMapper<MovieNetworkEntity, MovieParent> {
-
-    fun entityListToDomainList(entityList: List<MovieNetworkEntity>): List<MovieParent> {
-        val list: ArrayList<MovieParent> = ArrayList()
-        for (item in entityList) {
-            list.add(mapFromEntity(item))
-        }
-        return list
-    }
-
-    fun domainListToEntityList(domainList: List<MovieParent>): List<MovieNetworkEntity> {
-        val list: ArrayList<MovieNetworkEntity> = ArrayList()
-        for (item in domainList) {
-            list.add(mapToEntity(item))
-        }
-        return list
-    }
 
     override fun mapFromEntity(entity: MovieNetworkEntity): MovieParent {
         return MovieParent(

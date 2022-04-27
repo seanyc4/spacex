@@ -115,7 +115,7 @@ constructor(
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    GetMoviesFromNetworkAndInsertToCache.INSERT_SUCCESS -> {
+                    GetMoviesFromNetworkAndInsertToCache.MOVIES_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         updateAdapter()
                         binding.swipeRefresh.isRefreshing = false
@@ -139,7 +139,7 @@ constructor(
 
                         when (response.message) {
 
-                            GetMoviesFromNetworkAndInsertToCache.INSERT_FAILED -> {
+                            GetMoviesFromNetworkAndInsertToCache.MOVIES_INSERT_FAILED -> {
                                 viewModel.setStateEvent(MovieListStateEvent.GetMoviesFromCacheEvent)
                             }
                         }

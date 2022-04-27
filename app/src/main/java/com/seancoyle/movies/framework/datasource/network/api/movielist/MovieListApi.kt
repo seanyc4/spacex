@@ -1,6 +1,6 @@
 package com.seancoyle.movies.framework.datasource.network.api.movielist
 
-import com.seancoyle.movies.framework.datasource.network.model.MovieNetworkEntity
+import com.seancoyle.movies.framework.datasource.network.model.movielist.MovieNetworkEntity
 import com.seancoyle.movies.util.Constants.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
