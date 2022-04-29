@@ -25,5 +25,6 @@
     <string name="cast">Cast</string>
     <string name="name">Name</string>
     <string name="movie_image">Movie Image</string>
+    <string name="movie_poster">Movie Poster</string>
 
 </resources>

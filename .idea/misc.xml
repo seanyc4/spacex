@@ -9,6 +9,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/drawable-v24/ic_arrow_back.xml" value="0.1485" />
+        <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/drawable/ic_no_image.xml" value="0.143" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/activity_main.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/fragment_movie_detail.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/fragment_movie_list.xml" value="0.2" />

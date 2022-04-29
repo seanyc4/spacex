@@ -38,6 +38,7 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 
 ## Future updates
 
+* Add pagination to the movie list recycler view 
 * Refactor dagger2 to hilt
 * Refactor to modular design pattern
 * Change from XML to compose

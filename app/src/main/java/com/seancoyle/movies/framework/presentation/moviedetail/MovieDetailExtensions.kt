@@ -4,6 +4,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.seancoyle.movies.R
 import com.seancoyle.movies.util.Constants.BASE_IMAGE_URL
 
 fun ImageView.glideLoadMovieCast(url: String?, withCrossFade: Boolean? = true) {

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/backgroundColorPrimary">
+        android:background="@color/black">
 
         <ImageView
             android:id="@+id/moviePoster"
@@ -18,7 +18,8 @@
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/movie_poster" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
