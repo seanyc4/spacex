@@ -57,7 +57,7 @@ sealed class MovieListStateEvent : StateEvent {
     }
 
     class DeleteMovieEvent(
-        val movieDomainEntity: MoviesDomainEntity
+        val movie: MoviesDomainEntity
     ) : MovieListStateEvent() {
 
         override fun errorInfo(): String {
@@ -66,19 +66,6 @@ sealed class MovieListStateEvent : StateEvent {
 
         override fun eventName(): String {
             return "DeleteMovieEvent"
-        }
-
-        override fun shouldDisplayProgressBar() = true
-    }
-
-    object GetMoviesFromCacheEvent : MovieListStateEvent() {
-
-        override fun errorInfo(): String {
-            return "Error getting list of movies."
-        }
-
-        override fun eventName(): String {
-            return "GetMoviesFromCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = true
@@ -102,7 +89,7 @@ sealed class MovieListStateEvent : StateEvent {
     object GetAllMoviesFromCacheEvent: MovieListStateEvent() {
 
         override fun errorInfo(): String {
-            return "Error getting all movies."
+            return "Error getting all movies from cache."
         }
 
         override fun eventName(): String {

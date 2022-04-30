@@ -133,6 +133,7 @@ constructor(
                             stateMessageCallback = object : StateMessageCallback {
                                 override fun removeMessageFromStack() {
                                     viewModel.clearStateMessage()
+                                    disableSwipeToRefreshAnimation()
                                 }
                             }
                         )
@@ -148,18 +149,6 @@ constructor(
                                 // Check cache for movies if net connection fails
                                 getMoviesFromCacheEvent()
                             }
-
-                            GetAllMoviesFromCache.NO_DATA -> {
-                                disableSwipeToRefreshAnimation()
-                            }
-
-                            GetAllMoviesFromCache.GET_ALL_MOVIES_FAILED -> {
-                                disableSwipeToRefreshAnimation()
-                            }
-
-                            GetAllMoviesFromCache.GET_ALL_MOVIES_NO_MATCHING_RESULTS -> {
-                                disableSwipeToRefreshAnimation()
-                            }
                         }
                     }
                 }
@@ -169,7 +158,7 @@ constructor(
 
     private fun getMoviesFromCacheEvent() {
         viewModel.setStateEvent(
-            MovieListStateEvent.GetMoviesFromCacheEvent
+            MovieListStateEvent.GetAllMoviesFromCacheEvent
         )
     }
 

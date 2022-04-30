@@ -58,7 +58,8 @@ class GetAllMoviesFromCache(
         val GET_ALL_MOVIES_SUCCESS = "Successfully retrieved all movies"
         val GET_ALL_MOVIES_NO_MATCHING_RESULTS = "There are no movies that match that query."
         val GET_ALL_MOVIES_FAILED = "Failed to retrieve all movies."
-        val NO_DATA = "Error getting all movies from cache.\n\nReason: Cache data is null."
+        val GET_ALL_MOVIES_NO_DATA = "Error getting all movies from cache.\n\nReason: Cache data is null."
+        val GET_ALL_MOVIES_UNKOWN_ERROR = "Error getting all movies from cache.\n\nReason: Unknown cache error."
 
     }
 }

@@ -60,7 +60,7 @@ constructor(
                 )
             }
 
-            is GetMoviesFromCacheEvent -> {
+            is GetAllMoviesFromCacheEvent -> {
                 movieListInteractors.getAllMoviesFromCache.execute(
                     stateEvent = stateEvent
                 )
