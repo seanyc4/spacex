@@ -12,22 +12,22 @@ interface MovieDetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(castList: List<MovieCastCacheEntity>): LongArray
 
-    @Query("DELETE FROM movieCast WHERE id = :id")
+    @Query("DELETE FROM movie_cast WHERE id = :id")
     suspend fun deleteById(id: Int): Int
 
-    @Query("DELETE FROM movieCast WHERE id IN (:ids)")
+    @Query("DELETE FROM movie_cast WHERE id IN (:ids)")
     suspend fun deleteList(ids: List<Int>): Int
 
-    @Query("DELETE FROM movieCast")
+    @Query("DELETE FROM movie_cast")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM movieCast WHERE id = :id")
+    @Query("SELECT * FROM movie_cast WHERE id = :id")
     suspend fun get(id: Int): MovieCastCacheEntity?
 
-    @Query("SELECT * FROM movieCast")
+    @Query("SELECT * FROM movie_cast")
     suspend fun getAll(): List<MovieCastCacheEntity>?
 
-    @Query("SELECT COUNT(*) FROM movieCast")
+    @Query("SELECT COUNT(*) FROM movie_cast")
     suspend fun getTotalEntries(): Int
 
 }

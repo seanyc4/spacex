@@ -2,7 +2,7 @@ package com.seancoyle.movies.framework.datasource.data.movielist
 
 import android.app.Application
 import android.content.res.AssetManager
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,16 +21,16 @@ constructor(
     private val factory: MovieListFactory
 ) {
 
-    fun produceListOfMovies(): List<MovieParent> {
-        val movies: List<MovieParent> = Gson()
+    fun produceListOfMovies(): List<MoviesDomainEntity> {
+        val movies: List<MoviesDomainEntity> = Gson()
             .fromJson(
                 getMoviesFromFile("movie_list.json"),
-                object : TypeToken<List<MovieParent>>() {}.type
+                object : TypeToken<List<MoviesDomainEntity>>() {}.type
             )
         return movies
     }
 
-    fun produceEmptyListOfMovies(): List<MovieParent> {
+    fun produceEmptyListOfMovies(): List<MoviesDomainEntity> {
         return ArrayList()
     }
 

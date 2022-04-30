@@ -4,7 +4,7 @@ import com.seancoyle.movies.business.data.cache.CacheResponseHandler
 import com.seancoyle.movies.business.data.cache.abstraction.moviedetail.MovieDetailCacheDataSource
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.data.util.safeCacheCall
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.framework.presentation.moviedetail.state.MovieDetailViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
@@ -19,13 +19,13 @@ class DeleteMultipleMovieCasts(
 
 
     fun execute(
-        movieCasts: List<MovieCast>,
+        movieCastList: List<MovieCastDomainEntity>,
         stateEvent: StateEvent
     ): Flow<DataState<MovieDetailViewState>?> = flow {
 
-        val successfulDeletes: ArrayList<MovieCast> =
+        val successfulDeletes: ArrayList<MovieCastDomainEntity> =
             ArrayList() // movie casts that were successfully deleted
-        for (cast in movieCasts) {
+        for (cast in movieCastList) {
             val cacheResult = safeCacheCall(IO) {
                 cacheDataSource.deleteById(cast.id)
             }

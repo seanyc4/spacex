@@ -1,7 +1,7 @@
 
 ## Overview
 
-This app is for demonstration purposes to show good coding practices in android development. The app itself is quiet simple. It displays a list of movies from tmdb using an open api. When a user clicks on a movie they can see more detailed information including the cast, overview etc.
+This app is for demonstration purposes to show good coding practices in android development. The app itself is quiet simple. It displays a list of movies from tmdb using an open api. When a user clicks on a movies they can see more detailed information including the cast, overview etc.
 
 
 ## Tech stack
@@ -38,7 +38,7 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 
 ## Future updates
 
-* Add pagination to the movie list recycler view 
+* Add pagination to the movies list recycler view
 * Refactor dagger2 to hilt
 * Refactor to modular design pattern
 * Change from XML to compose

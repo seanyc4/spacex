@@ -1,35 +1,35 @@
 package com.seancoyle.movies.business.data
 
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.seancoyle.movies.business.data.cache.movielist.FakeMovieListDatabase
 
 class MovieListDataFactory(
     private val testClassLoader: ClassLoader
 ) {
 
-    fun produceListOfMovies(): List<MovieParent> {
-        val movies: List<MovieParent> = Gson()
+    fun produceListOfMovies(): List<MoviesDomainEntity> {
+        return Gson()
             .fromJson(
                 getMoviesFromFile("movie_list.json"),
-                object: TypeToken<List<MovieParent>>() {}.type
+                object : TypeToken<List<MoviesDomainEntity>>() {}.type
             )
-        return movies
     }
 
-    fun produceHashMapOfMovies(movieList: List<MovieParent>): HashMap<String, MovieParent> {
-        val map = HashMap<String, MovieParent>()
+    fun produceFakeAppDatabase(movieList: List<MoviesDomainEntity>): FakeMovieListDatabase {
+        val database = FakeMovieListDatabase()
         for (movie in movieList) {
-            map[movie.id] = movie
+            database.movies.add(movie)
         }
-        return map
+        return database
     }
 
-    fun produceEmptyListOfMovies(): List<MovieParent> {
+    fun produceEmptyListOfMovies(): List<MoviesDomainEntity> {
         return ArrayList()
     }
 
-     fun getMoviesFromFile(fileName: String): String {
+    private fun getMoviesFromFile(fileName: String): String {
         return testClassLoader.getResource(fileName).readText()
     }
 

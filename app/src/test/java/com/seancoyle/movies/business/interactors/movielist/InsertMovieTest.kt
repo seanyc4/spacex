@@ -6,12 +6,9 @@ import com.seancoyle.movies.business.data.cache.movielist.FORCE_GENERAL_FAILURE
 import com.seancoyle.movies.business.data.cache.movielist.FORCE_NEW_MOVIE_EXCEPTION
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.interactors.movielist.InsertMovie.Companion.INSERT_MOVIE_SUCCESS
-import com.seancoyle.movies.business.domain.state.DataState
 import com.seancoyle.movies.di.DependencyContainer
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
-import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

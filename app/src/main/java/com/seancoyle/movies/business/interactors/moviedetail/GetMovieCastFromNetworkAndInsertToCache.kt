@@ -6,7 +6,7 @@ import com.seancoyle.movies.business.data.network.ApiResponseHandler
 import com.seancoyle.movies.business.data.network.abstraction.moviedetail.MovieDetailNetworkDataSource
 import com.seancoyle.movies.business.data.util.safeApiCall
 import com.seancoyle.movies.business.data.util.safeCacheCall
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.framework.presentation.moviedetail.state.MovieDetailViewState
@@ -30,11 +30,11 @@ constructor(
             networkDataSource.getCast(movieId = movieId)
         }
 
-        val networkResponse = object : ApiResponseHandler<MovieDetailViewState, MovieCast?>(
+        val networkResponse = object : ApiResponseHandler<MovieDetailViewState, MovieCastDomainEntity?>(
             response = networkResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: MovieCast?): DataState<MovieDetailViewState> {
+            override suspend fun handleSuccess(resultObj: MovieCastDomainEntity?): DataState<MovieDetailViewState> {
                 return if (resultObj != null) {
                     val viewState =
                         MovieDetailViewState(

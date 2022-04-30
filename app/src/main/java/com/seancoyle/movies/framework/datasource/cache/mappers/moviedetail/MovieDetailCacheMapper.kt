@@ -2,32 +2,32 @@ package com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail
 
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.moviedetail.Crew
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.util.EntityMapper
 import com.seancoyle.movies.framework.datasource.cache.model.moviedetail.CastCacheEntity
 import com.seancoyle.movies.framework.datasource.cache.model.moviedetail.CrewCacheEntity
 import com.seancoyle.movies.framework.datasource.cache.model.moviedetail.MovieCastCacheEntity
 
-class MovieDetailCacheMapper : EntityMapper<MovieCastCacheEntity, MovieCast> {
+class MovieDetailCacheMapper : EntityMapper<MovieCastCacheEntity, MovieCastDomainEntity> {
 
-    fun entityListToDomainList(entities: List<MovieCastCacheEntity>): List<MovieCast> {
-        val list: ArrayList<MovieCast> = ArrayList()
-        for (entity in entities) {
+    fun entityListToDomainList(entityList: List<MovieCastCacheEntity>): List<MovieCastDomainEntity> {
+        val list: ArrayList<MovieCastDomainEntity> = ArrayList()
+        for (entity in entityList) {
             list.add(mapFromEntity(entity))
         }
         return list
     }
 
-    fun domainListToEntityList(castList: List<MovieCast>): List<MovieCastCacheEntity> {
+    fun domainListToEntityList(domainList: List<MovieCastDomainEntity>): List<MovieCastCacheEntity> {
         val entities: ArrayList<MovieCastCacheEntity> = ArrayList()
-        for (movie in castList) {
+        for (movie in domainList) {
             entities.add(mapToEntity(movie))
         }
         return entities
     }
 
-    override fun mapFromEntity(entity: MovieCastCacheEntity): MovieCast {
-        return MovieCast(
+    override fun mapFromEntity(entity: MovieCastCacheEntity): MovieCastDomainEntity {
+        return MovieCastDomainEntity(
             cast = entity.cast.map { cast ->
                 Cast(
                     adult = cast.adult,
@@ -63,7 +63,7 @@ class MovieDetailCacheMapper : EntityMapper<MovieCastCacheEntity, MovieCast> {
         )
     }
 
-    override fun mapToEntity(domainModel: MovieCast): MovieCastCacheEntity {
+    override fun mapToEntity(domainModel: MovieCastDomainEntity): MovieCastCacheEntity {
         return MovieCastCacheEntity(
             cast = domainModel.cast.map { cast ->
                 CastCacheEntity(

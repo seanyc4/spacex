@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieCast(
+data class MovieCastDomainEntity(
     val cast: List<Cast>,
     val crew: List<Crew>,
     val id: Int
@@ -13,7 +13,7 @@ data class MovieCast(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MovieCast
+        other as MovieCastDomainEntity
 
         if (cast != other.cast) return false
         if (crew != other.crew) return false

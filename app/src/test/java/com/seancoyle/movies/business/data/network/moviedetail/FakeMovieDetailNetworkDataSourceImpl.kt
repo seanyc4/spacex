@@ -2,7 +2,7 @@ package com.seancoyle.movies.business.data.network.moviedetail
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.movies.business.data.network.abstraction.moviedetail.MovieDetailNetworkDataSource
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.framework.datasource.network.api.moviedetail.MovieDetailApi
 import com.seancoyle.movies.framework.datasource.network.mappers.moviedetail.MovieDetailNetworkMapper
 import com.seancoyle.movies.util.Constants.API_KEY
@@ -23,7 +23,7 @@ constructor(
         .create(MovieDetailApi::class.java)
 
 
-    override suspend fun getCast(movieId: String): MovieCast {
+    override suspend fun getCast(movieId: String): MovieCastDomainEntity {
         return networkMapper.mapFromEntity(
             api.getCast(
                 movieId = "447365" ,

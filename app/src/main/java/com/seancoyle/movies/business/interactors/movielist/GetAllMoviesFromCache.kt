@@ -2,7 +2,7 @@ package com.seancoyle.movies.business.interactors.movielist
 
 import com.seancoyle.movies.business.data.cache.CacheResponseHandler
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.data.util.safeCacheCall
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
@@ -22,11 +22,11 @@ class GetAllMoviesFromCache(
             cacheDataSource.getAll()
         }
 
-        val response = object: CacheResponseHandler<MovieListViewState, List<MovieParent>?>(
+        val response = object: CacheResponseHandler<MovieListViewState, List<MoviesDomainEntity>?>(
             response = cacheResult,
             stateEvent = stateEvent
         ){
-            override suspend fun handleSuccess(resultObj: List<MovieParent>?): DataState<MovieListViewState> {
+            override suspend fun handleSuccess(resultObj: List<MoviesDomainEntity>?): DataState<MovieListViewState> {
                 var message: String? =
                     GET_ALL_MOVIES_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None
@@ -42,11 +42,13 @@ class GetAllMoviesFromCache(
                         messageType = MessageType.Success
                     ),
                     data = MovieListViewState(
-                        movieParents = resultObj as ArrayList<MovieParent>?
+                        movieList = resultObj as ArrayList<MoviesDomainEntity>?
                     ),
                     stateEvent = stateEvent
                 )
             }
+
+
         }.getResult()
 
         emit(response)

@@ -68,7 +68,7 @@ constructor(
         val viewState = viewModel.viewState.value
 
         //clear the list. Don't want to save a large list to bundle.
-        viewState?.movieParents = ArrayList()
+        viewState?.movieList = ArrayList()
 
         outState.putParcelable(
             MOVIE_LIST_STATE_BUNDLE_KEY,
@@ -106,9 +106,9 @@ constructor(
 
     private fun subscribeObservers() {
 
-       /* viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
-            uiController.displayProgressBar(it)
-        }*/
+        /* viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
+             uiController.displayProgressBar(it)
+         }*/
 
 
         viewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
@@ -118,13 +118,13 @@ constructor(
                     GetMoviesFromNetworkAndInsertToCache.MOVIES_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         updateAdapter()
-                        binding.swipeRefresh.isRefreshing = false
+                        disableSwipeToRefreshAnimation()
                     }
 
                     GetAllMoviesFromCache.GET_ALL_MOVIES_SUCCESS -> {
                         viewModel.clearStateMessage()
                         updateAdapter()
-                        binding.swipeRefresh.isRefreshing = false
+                        disableSwipeToRefreshAnimation()
                     }
 
                     else -> {
@@ -140,7 +140,25 @@ constructor(
                         when (response.message) {
 
                             GetMoviesFromNetworkAndInsertToCache.MOVIES_INSERT_FAILED -> {
-                                viewModel.setStateEvent(MovieListStateEvent.GetMoviesFromCacheEvent)
+                                // Check cache for movies if insert fails
+                                getMoviesFromCacheEvent()
+                            }
+
+                            GetMoviesFromNetworkAndInsertToCache.MOVIES_ERROR -> {
+                                // Check cache for movies if net connection fails
+                                getMoviesFromCacheEvent()
+                            }
+
+                            GetAllMoviesFromCache.NO_DATA -> {
+                                disableSwipeToRefreshAnimation()
+                            }
+
+                            GetAllMoviesFromCache.GET_ALL_MOVIES_FAILED -> {
+                                disableSwipeToRefreshAnimation()
+                            }
+
+                            GetAllMoviesFromCache.GET_ALL_MOVIES_NO_MATCHING_RESULTS -> {
+                                disableSwipeToRefreshAnimation()
                             }
                         }
                     }
@@ -149,9 +167,22 @@ constructor(
         }
     }
 
+    private fun getMoviesFromCacheEvent() {
+        viewModel.setStateEvent(
+            MovieListStateEvent.GetMoviesFromCacheEvent
+        )
+    }
+
+    private fun disableSwipeToRefreshAnimation() {
+        binding.swipeRefresh.isRefreshing = false
+
+    }
+
     private fun updateAdapter() {
         listAdapter?.updateAdapter(
-            viewModel.getMovieParent()?.movies ?: emptyList()
+            viewModel.getMovies()?.movies
+                ?: viewModel.getMovieList()?.getOrNull(0)?.movies
+                ?: emptyList()
         )
     }
 
@@ -204,7 +235,7 @@ constructor(
     }
 
     override fun onItemSelected(position: Int, selectedMovie: Movie) {
-       val bundle = bundleOf(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY to selectedMovie)
+        val bundle = bundleOf(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY to selectedMovie)
         navigateToMovieDetailFragment(bundle)
     }
 

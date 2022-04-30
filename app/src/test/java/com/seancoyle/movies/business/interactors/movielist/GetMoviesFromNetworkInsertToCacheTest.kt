@@ -1,11 +1,12 @@
 package com.seancoyle.movies.business.interactors.movielist
 
+import com.seancoyle.movies.business.data.cache.movielist.FakeMovieListDatabase
 import com.seancoyle.movies.business.data.cache.movielist.FakeMovieListCacheDataSourceImpl
 import com.seancoyle.movies.business.data.network.movielist.FakeMovieListNetworkDataSourceImpl
 import com.seancoyle.movies.business.data.network.movielist.MockWebServerResponseMovieList.movieList
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.interactors.movielist.GetMoviesFromNetworkAndInsertToCache.Companion.MOVIES_ERROR
 import com.seancoyle.movies.business.interactors.movielist.GetMoviesFromNetworkAndInsertToCache.Companion.MOVIES_INSERT_SUCCESS
 import com.seancoyle.movies.di.DependencyContainer
@@ -23,7 +24,7 @@ import java.net.HttpURLConnection
 
 class GetMoviesFromNetworkInsertToCacheTest {
 
-    private val moviesData = mutableMapOf<String, MovieParent>()
+    private val fakeMovieListDatabase = FakeMovieListDatabase()
     private lateinit var mockWebServer: MockWebServer
     private lateinit var baseUrl: HttpUrl
 
@@ -49,7 +50,7 @@ class GetMoviesFromNetworkInsertToCacheTest {
         )
 
         dao = FakeMovieListCacheDataSourceImpl(
-            moviesData = moviesData
+            fakeMovieListDatabase = fakeMovieListDatabase
         )
 
         factory = dependencyContainer.movieListFactory
@@ -69,7 +70,7 @@ class GetMoviesFromNetworkInsertToCacheTest {
      */
     @Test
     fun getMoviesFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
-        var movieResult: MovieParent? = null
+        var moviesResult: MoviesDomainEntity? = null
 
         // condition the response
         mockWebServer.enqueue(
@@ -89,7 +90,7 @@ class GetMoviesFromNetworkInsertToCacheTest {
                 value?.stateMessage?.response?.message,
                 MOVIES_INSERT_SUCCESS
             ).also {
-                movieResult = value?.data?.movieParent
+                moviesResult = value?.data?.movies
             }
         }
 
@@ -97,10 +98,10 @@ class GetMoviesFromNetworkInsertToCacheTest {
         assert(dao.getAll().isNotEmpty())
 
         // Movie Result should contain a list of movies
-        assert(movieResult?.movies?.size ?: 0 > 0)
+        assert(moviesResult?.movies?.size ?: 0 > 0)
 
         // confirm they are actually Movie objects
-        assert(movieResult?.movies?.get(index = 0) is Movie)
+        assert(moviesResult?.movies?.get(index = 0) is Movie)
 
     }
 

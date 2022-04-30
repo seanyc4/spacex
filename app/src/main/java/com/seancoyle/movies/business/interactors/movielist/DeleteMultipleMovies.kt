@@ -2,7 +2,7 @@ package com.seancoyle.movies.business.interactors.movielist
 
 import com.seancoyle.movies.business.data.cache.CacheResponseHandler
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.data.util.safeCacheCall
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
@@ -19,11 +19,11 @@ class DeleteMultipleMovies(
 
 
     fun execute(
-        movies: List<MovieParent>,
+        movies: List<MoviesDomainEntity>,
         stateEvent: StateEvent
     ): Flow<DataState<MovieListViewState>?> = flow {
 
-        val successfulDeletes: ArrayList<MovieParent> =
+        val successfulDeletes: ArrayList<MoviesDomainEntity> =
             ArrayList() // movies that were successfully deleted
         for (movie in movies) {
             val cacheResult = safeCacheCall(IO) {

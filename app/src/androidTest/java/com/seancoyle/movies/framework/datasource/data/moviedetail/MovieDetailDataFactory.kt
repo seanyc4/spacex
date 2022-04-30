@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.moviedetail.Crew
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
 import java.io.IOException
 import java.io.InputStream
@@ -22,15 +22,15 @@ constructor(
     private val factory: MovieDetailFactory
 ) {
 
-    fun produceListOfMovieCast(): List<MovieCast> {
+    fun produceListOfMovieCast(): List<MovieCastDomainEntity> {
         return Gson()
             .fromJson(
                 getMovieCastFromFile("cast_list.json"),
-                object : TypeToken<List<MovieCast>>() {}.type
+                object : TypeToken<List<MovieCastDomainEntity>>() {}.type
             )
     }
 
-    fun produceEmptyListOfMovieCast(): List<MovieCast> {
+    fun produceEmptyListOfMovieCast(): List<MovieCastDomainEntity> {
         return ArrayList()
     }
 

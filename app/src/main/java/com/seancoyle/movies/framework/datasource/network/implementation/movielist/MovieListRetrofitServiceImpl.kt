@@ -1,6 +1,6 @@
 package com.seancoyle.movies.framework.datasource.network.implementation.movielist
 
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.framework.datasource.network.abstraction.movielist.MovieListRetrofitService
 import com.seancoyle.movies.framework.datasource.network.mappers.movielist.MovieListNetworkMapper
 import com.seancoyle.movies.framework.datasource.network.api.movielist.MovieListApi
@@ -15,7 +15,7 @@ constructor(
     private val networkMapper: MovieListNetworkMapper
 ) : MovieListRetrofitService {
 
-    override suspend fun get(): MovieParent {
+    override suspend fun get(): MoviesDomainEntity {
         return networkMapper.mapFromEntity(
             api.get()
         )

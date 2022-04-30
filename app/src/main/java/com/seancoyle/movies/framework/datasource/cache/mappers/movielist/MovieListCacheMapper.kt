@@ -1,22 +1,22 @@
 package com.seancoyle.movies.framework.datasource.cache.mappers.movielist
 
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.util.EntityMapper
 import com.seancoyle.movies.framework.datasource.cache.model.movielist.MovieCacheEntity
 import com.seancoyle.movies.framework.datasource.cache.model.movielist.ResultCache
 
-class MovieListCacheMapper : EntityMapper<MovieCacheEntity, MovieParent> {
+class MovieListCacheMapper : EntityMapper<MovieCacheEntity, MoviesDomainEntity> {
 
-    fun entityListToDomainList(entities: List<MovieCacheEntity>): List<MovieParent> {
-        val list: ArrayList<MovieParent> = ArrayList()
+    fun entityListToDomainList(entities: List<MovieCacheEntity>): List<MoviesDomainEntity> {
+        val list: ArrayList<MoviesDomainEntity> = ArrayList()
         for (entity in entities) {
             list.add(mapFromEntity(entity))
         }
         return list
     }
 
-    fun domainListToEntityList(movies: List<MovieParent>): List<MovieCacheEntity> {
+    fun domainListToEntityList(movies: List<MoviesDomainEntity>): List<MovieCacheEntity> {
         val entities: ArrayList<MovieCacheEntity> = ArrayList()
         for (movie in movies) {
             entities.add(mapToEntity(movie))
@@ -24,8 +24,8 @@ class MovieListCacheMapper : EntityMapper<MovieCacheEntity, MovieParent> {
         return entities
     }
 
-    override fun mapFromEntity(entity: MovieCacheEntity): MovieParent {
-        return MovieParent(
+    override fun mapFromEntity(entity: MovieCacheEntity): MoviesDomainEntity {
+        return MoviesDomainEntity(
             id = entity.id,
             category = entity.category,
             created_at = entity.created_at,
@@ -53,7 +53,7 @@ class MovieListCacheMapper : EntityMapper<MovieCacheEntity, MovieParent> {
         )
     }
 
-    override fun mapToEntity(domainModel: MovieParent): MovieCacheEntity {
+    override fun mapToEntity(domainModel: MoviesDomainEntity): MovieCacheEntity {
         return MovieCacheEntity(
             id = domainModel.id,
             category = domainModel.category,

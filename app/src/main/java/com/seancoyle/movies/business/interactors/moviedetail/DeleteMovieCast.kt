@@ -4,7 +4,7 @@ import com.seancoyle.movies.business.data.cache.CacheResponseHandler
 import com.seancoyle.movies.business.data.cache.abstraction.moviedetail.MovieDetailCacheDataSource
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.data.util.safeCacheCall
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,7 +14,7 @@ class DeleteMovieCast<ViewState>(
 ) {
 
     fun execute(
-        movieCast: MovieCast,
+        movieCast: MovieCastDomainEntity,
         stateEvent: StateEvent
     ): Flow<DataState<ViewState>?> = flow {
 

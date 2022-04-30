@@ -1,9 +1,7 @@
 package com.seancoyle.movies.business.data.cache.moviedetail
 
 import com.seancoyle.movies.business.data.cache.abstraction.moviedetail.MovieDetailCacheDataSource
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 
 const val FORCE_DELETE_MOVIE_CAST_EXCEPTION = -2
 const val FORCE_DELETES_MOVIE_CAST_EXCEPTION = -3
@@ -12,17 +10,17 @@ const val FORCE_GENERAL_FAILURE = -5
 
 class FakeMovieDetailCacheDataSourceImpl
 constructor(
-    private val castData: MutableMap<Int, MovieCast>
+    private val fakeMovieDetailDatabase: FakeMovieDetailDatabase
 ) : MovieDetailCacheDataSource {
 
-    override suspend fun insert(movieCast: MovieCast): Long {
+    override suspend fun insert(movieCast: MovieCastDomainEntity): Long {
         if (movieCast.id == FORCE_NEW_MOVIE_CAST_EXCEPTION) {
             throw Exception("Something went wrong inserting the movie cast.")
         }
         if (movieCast.id == FORCE_GENERAL_FAILURE) {
             return -1 // fail
         }
-        castData[movieCast.id] = movieCast
+        fakeMovieDetailDatabase.movieCast.add(movieCast)
         return 1 // success
     }
 
@@ -32,42 +30,47 @@ constructor(
         } else if (id == FORCE_DELETES_MOVIE_CAST_EXCEPTION) {
             throw Exception("Something went wrong deleting the movie cast.")
         }
-        return castData.remove(id)?.let {
+
+        return if (fakeMovieDetailDatabase.movieCast.removeIf { it.id == id }) {
             1 // return 1 for success
-        } ?: -1 // -1 for failure
+        } else {
+            -1 // -1 for failure
+        }
     }
 
-    override suspend fun deleteList(castList: List<MovieCast>): Int {
+    override suspend fun deleteList(castList: List<MovieCastDomainEntity>): Int {
         var failOrSuccess = 1
         for (cast in castList) {
-            if (castData.remove(cast.id) == null) {
-                failOrSuccess = -1 // mark for failure
+            failOrSuccess = if (fakeMovieDetailDatabase.movieCast.removeIf { it.id == cast.id }) {
+                1 // return 1 for success
+            } else {
+                -1 // mark for failure
             }
         }
         return failOrSuccess
     }
 
     override suspend fun deleteAll() {
-        castData.clear()
+        fakeMovieDetailDatabase.movieCast.clear()
     }
 
-    override suspend fun getById(id: Int): MovieCast? {
-        return castData[id]
+    override suspend fun getById(id: Int): MovieCastDomainEntity? {
+        return fakeMovieDetailDatabase.movieCast.find { it.id == id }
     }
 
-    override suspend fun getAll(): List<MovieCast> {
-        return ArrayList(castData.values)
+    override suspend fun getAll(): List<MovieCastDomainEntity> {
+        return fakeMovieDetailDatabase.movieCast
     }
 
     override suspend fun getTotalEntries(): Int {
-        return castData.size
+        return fakeMovieDetailDatabase.movieCast.size
     }
 
-    override suspend fun insertList(castList: List<MovieCast>): LongArray {
+    override suspend fun insertList(castList: List<MovieCastDomainEntity>): LongArray {
         val results = LongArray(castList.size)
-        for ((index, movie) in castList.withIndex()) {
-            results[index] = 1
-            castData[movie.id] = movie
+        for (movie in castList.withIndex()) {
+            results[movie.index] = 1
+            fakeMovieDetailDatabase.movieCast.add(movie.value)
         }
         return results
     }

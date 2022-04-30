@@ -1,6 +1,6 @@
 package com.seancoyle.movies.framework.datasource.network.implementation.moviedetail
 
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.framework.datasource.network.abstraction.moviedetail.MovieDetailRetrofitService
 import com.seancoyle.movies.framework.datasource.network.api.moviedetail.MovieDetailApi
 import com.seancoyle.movies.framework.datasource.network.mappers.moviedetail.MovieDetailNetworkMapper
@@ -15,7 +15,7 @@ constructor(
     private val networkMapper: MovieDetailNetworkMapper
 ) : MovieDetailRetrofitService {
 
-    override suspend fun getCast(movieId: String): MovieCast {
+    override suspend fun getCast(movieId: String): MovieCastDomainEntity {
         return networkMapper.mapFromEntity(
             api.getCast(movieId = movieId)
         )

@@ -1,10 +1,11 @@
 package com.seancoyle.movies.business.interactors.moviedetail
 
 import com.seancoyle.movies.business.data.cache.moviedetail.FakeMovieDetailCacheDataSourceImpl
+import com.seancoyle.movies.business.data.cache.moviedetail.FakeMovieDetailDatabase
 import com.seancoyle.movies.business.data.network.moviedetail.FakeMovieDetailNetworkDataSourceImpl
 import com.seancoyle.movies.business.data.network.moviedetail.MockWebServerResponseMovieDetail.movieCast
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
 import com.seancoyle.movies.business.interactors.moviedetail.GetMovieCastFromNetworkAndInsertToCache.Companion.MOVIE_CAST_ERROR
 import com.seancoyle.movies.business.interactors.moviedetail.GetMovieCastFromNetworkAndInsertToCache.Companion.MOVIE_CAST_INSERT_SUCCESS
@@ -23,7 +24,7 @@ import java.net.HttpURLConnection
 
 class GetMovieCastFromNetworkInsertToCacheTest {
 
-    private val moviesData = mutableMapOf<Int, MovieCast>()
+    private val fakeMovieDetailDatabase = FakeMovieDetailDatabase()
     private lateinit var mockWebServer: MockWebServer
     private lateinit var baseUrl: HttpUrl
 
@@ -49,7 +50,7 @@ class GetMovieCastFromNetworkInsertToCacheTest {
         )
 
         dao = FakeMovieDetailCacheDataSourceImpl(
-            castData = moviesData
+            fakeMovieDetailDatabase = fakeMovieDetailDatabase
         )
 
         factory = dependencyContainer.movieDetailFactory
@@ -65,11 +66,11 @@ class GetMovieCastFromNetworkInsertToCacheTest {
     /**
      * 1. Are the movie cast retrieved from the network?
      * 2. Are the movie cast inserted into the cache?
-     * 3. Check the list of movie cast are valid MovieCast?
+     * 3. Check the list of movie cast are valid MovieCastDomainEntity?
      */
     @Test
     fun getMovieCastFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
-        var movieResult: MovieCast? = null
+        var movieResult: MovieCastDomainEntity? = null
 
         // condition the response
         mockWebServer.enqueue(

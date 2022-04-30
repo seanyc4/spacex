@@ -2,14 +2,11 @@ package com.seancoyle.movies.business.interactors.movielist
 
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
-import com.seancoyle.movies.business.domain.state.DataState
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.interactors.movielist.GetMovieByIdFromCache.Companion.GET_MOVIE_BY_ID_SUCCESS
 import com.seancoyle.movies.di.DependencyContainer
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
-import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -46,27 +43,25 @@ class GeMoviesByIdFromCacheTest {
     fun getMoviesByIdFromCache_success_confirmCorrect() = runBlocking {
 
         val movieId = "1"
-        var retrievedMovie: MovieParent? = null
+        var retrievedMovies: MoviesDomainEntity? = null
 
         getMovieById.execute(
             id = movieId,
             stateEvent = GetMovieByIdFromCacheEvent(
                 id = movieId
             )
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    GET_MOVIE_BY_ID_SUCCESS
-                )
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                GET_MOVIE_BY_ID_SUCCESS
+            )
 
-                value?.data?.movieParent?.let { movie ->
-                    retrievedMovie = movie
-                }
+            value?.data?.movies?.let { movie ->
+                retrievedMovies = movie
             }
-        })
+        }
 
-        assertTrue { retrievedMovie?.id == movieId }
+        assertTrue { retrievedMovies?.id == movieId }
     }
 
 }

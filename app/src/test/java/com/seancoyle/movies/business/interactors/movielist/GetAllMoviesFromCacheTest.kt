@@ -2,14 +2,11 @@ package com.seancoyle.movies.business.interactors.movielist
 
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
-import com.seancoyle.movies.business.domain.state.DataState
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.interactors.movielist.GetAllMoviesFromCache.Companion.GET_ALL_MOVIES_SUCCESS
 import com.seancoyle.movies.di.DependencyContainer
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
-import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -47,22 +44,20 @@ class GetAllMoviesFromCacheTest {
     fun getAllMoviesFromCache_success_confirmCorrect() = runBlocking {
 
         val numMovies = cacheDataSource.getTotalEntries()
-        var results: ArrayList<MovieParent>? = null
+        var results: ArrayList<MoviesDomainEntity>? = null
 
         getAllMovies.execute(
             stateEvent = GetAllMoviesFromCacheEvent
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    GET_ALL_MOVIES_SUCCESS
-                )
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                GET_ALL_MOVIES_SUCCESS
+            )
 
-                value?.data?.movieParents?.let { list ->
-                    results = ArrayList(list)
-                }
+            value?.data?.movieList?.let { list ->
+                results = ArrayList(list)
             }
-        })
+        }
 
         // confirm movies were retrieved
         assertTrue { results != null }

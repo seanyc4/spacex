@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 
-@Entity(tableName = "movieCast")
+@Entity(tableName = "movie_cast")
 data class MovieCastCacheEntity(
 
     @TypeConverters(MovieCastTypeConverter::class)

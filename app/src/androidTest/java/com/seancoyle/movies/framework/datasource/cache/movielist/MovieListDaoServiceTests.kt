@@ -2,7 +2,7 @@ package com.seancoyle.movies.framework.datasource.cache.movielist
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.di.TestAppComponent
 import com.seancoyle.movies.framework.datasource.cache.abstraction.movielist.MovieListDaoService
@@ -156,10 +156,10 @@ class MovieListDaoServiceTests : BaseTest() {
 
     @Test
     fun deleteMovieList_confirmDeleted() = runBlocking {
-        val movies: ArrayList<MovieParent> = ArrayList(movieListDaoService.getAll())
+        val movies: ArrayList<MoviesDomainEntity> = ArrayList(movieListDaoService.getAll())
 
         // select some random movies for deleting
-        val moviesToDelete: ArrayList<MovieParent> = ArrayList()
+        val moviesToDelete: ArrayList<MoviesDomainEntity> = ArrayList()
 
         // 1st
         var movieToDelete = movies[Random.nextInt(0, movies.size - 1) + 1]

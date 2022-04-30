@@ -3,16 +3,14 @@ package com.seancoyle.movies.business.interactors.movielist
 import com.seancoyle.movies.business.data.cache.CacheErrors.CACHE_ERROR_UNKNOWN
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
 import com.seancoyle.movies.business.data.cache.movielist.FORCE_DELETE_MOVIE_EXCEPTION
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.interactors.movielist.DeleteMovie.Companion.DELETE_MOVIE_FAILED
 import com.seancoyle.movies.business.interactors.movielist.DeleteMovie.Companion.DELETE_MOVIE_SUCCESS
-import com.seancoyle.movies.business.domain.state.DataState
 import com.seancoyle.movies.di.DependencyContainer
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -63,27 +61,26 @@ class DeleteMovieTest {
         deleteMovie.execute(
             movieToDelete!!,
             DeleteMovieEvent(movieToDelete)
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    DELETE_MOVIE_SUCCESS
-                )
-            }
-        })
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                DELETE_MOVIE_SUCCESS
+            )
+        }
 
         // confirm was deleted
-        val wasMovieDeleted = cacheDataSource.getById("1")
-        assertTrue { wasMovieDeleted != movieToDelete }
+        val doesMovieExist = cacheDataSource.getAll()?.contains(movieToDelete)
+        assertTrue { doesMovieExist == false }
     }
 
     @Test
     fun deleteMovie_fail() = runBlocking {
 
+        // checks total db size before trying to delete
         val numMoviesInCacheBeforeDelete = cacheDataSource.getTotalEntries()
 
         // create a movie to delete that doesn't exist in data set
-        val movieToDelete = MovieParent(
+        val movieToDelete = MoviesDomainEntity(
             id = UUID.randomUUID().toString(),
             category = UUID.randomUUID().toString(),
             page = UUID.randomUUID().hashCode(),
@@ -96,14 +93,12 @@ class DeleteMovieTest {
         deleteMovie.execute(
             movieToDelete,
             DeleteMovieEvent(movieToDelete)
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assertEquals(
-                    value?.stateMessage?.response?.message,
-                    DELETE_MOVIE_FAILED
-                )
-            }
-        })
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                DELETE_MOVIE_FAILED
+            )
+        }
 
         // confirm nothing was deleted from "movie" db
         val numMoviesInCacheAfterDelete = cacheDataSource.getTotalEntries()
@@ -117,7 +112,7 @@ class DeleteMovieTest {
         val numMoviesInCacheBeforeDelete = cacheDataSource.getTotalEntries()
 
         // create a movie to delete that will throw exception
-        val movieToDelete = MovieParent(
+        val movieToDelete = MoviesDomainEntity(
             id = FORCE_DELETE_MOVIE_EXCEPTION,
             category = UUID.randomUUID().toString(),
             page = UUID.randomUUID().hashCode(),
@@ -131,14 +126,12 @@ class DeleteMovieTest {
         deleteMovie.execute(
             movieToDelete,
             DeleteMovieEvent(movieToDelete)
-        ).collect(object : FlowCollector<DataState<MovieListViewState>?> {
-            override suspend fun emit(value: DataState<MovieListViewState>?) {
-                assert(
-                    value?.stateMessage?.response?.message
-                        ?.contains(CACHE_ERROR_UNKNOWN) ?: false
-                )
-            }
-        })
+        ).collect { value ->
+            assert(
+                value?.stateMessage?.response?.message
+                    ?.contains(CACHE_ERROR_UNKNOWN) ?: false
+            )
+        }
 
         // confirm nothing was deleted from "movies" db
         val numMoviesInCache = cacheDataSource.getTotalEntries()

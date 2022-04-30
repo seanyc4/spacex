@@ -6,7 +6,7 @@ import com.seancoyle.movies.business.data.network.ApiResponseHandler
 import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieListNetworkDataSource
 import com.seancoyle.movies.business.data.util.safeApiCall
 import com.seancoyle.movies.business.data.util.safeCacheCall
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
@@ -29,15 +29,15 @@ constructor(
             movieListNetworkDataSource.get()
         }
 
-        val networkResponse = object : ApiResponseHandler<MovieListViewState, MovieParent?>(
+        val networkResponse = object : ApiResponseHandler<MovieListViewState, MoviesDomainEntity?>(
             response = networkResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: MovieParent?): DataState<MovieListViewState> {
+            override suspend fun handleSuccess(resultObj: MoviesDomainEntity?): DataState<MovieListViewState> {
                 return if (resultObj != null) {
                     val viewState =
                         MovieListViewState(
-                            movieParent = resultObj
+                            movies = resultObj
                         )
                     DataState.data(
                         response = null,
@@ -79,10 +79,10 @@ constructor(
             val movies = factory.createSingleMovie(
                 id = "1",
                 category = "Marvel",
-                page = networkResponse.data?.movieParent?.page,
-                movies = networkResponse.data?.movieParent?.movies,
-                total_results = networkResponse.data?.movieParent?.total_results,
-                total_pages = networkResponse.data?.movieParent?.total_pages
+                page = networkResponse.data?.movies?.page,
+                movies = networkResponse.data?.movies?.movies,
+                total_results = networkResponse.data?.movies?.total_results,
+                total_pages = networkResponse.data?.movies?.total_pages
             )
 
             val cacheResult = safeCacheCall(Dispatchers.IO) {
@@ -97,7 +97,7 @@ constructor(
                     return if (resultObj > 0) {
                         val viewState =
                             MovieListViewState(
-                                movieParent = movies
+                                movies = movies
                             )
 
                         DataState.data(

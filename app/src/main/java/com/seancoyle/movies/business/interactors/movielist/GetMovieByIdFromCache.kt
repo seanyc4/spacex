@@ -2,7 +2,7 @@ package com.seancoyle.movies.business.interactors.movielist
 
 import com.seancoyle.movies.business.data.cache.CacheResponseHandler
 import com.seancoyle.movies.business.data.cache.abstraction.movielist.MovieListCacheDataSource
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.data.util.safeCacheCall
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
@@ -25,11 +25,11 @@ class GetMovieByIdFromCache(
             )
         }
 
-        val response = object : CacheResponseHandler<MovieListViewState, MovieParent?>(
+        val response = object : CacheResponseHandler<MovieListViewState, MoviesDomainEntity?>(
             response = cacheResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: MovieParent?): DataState<MovieListViewState> {
+            override suspend fun handleSuccess(resultObj: MoviesDomainEntity?): DataState<MovieListViewState> {
                 var message: String? =
                     GET_MOVIE_BY_ID_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None
@@ -45,7 +45,7 @@ class GetMovieByIdFromCache(
                         messageType = MessageType.Success
                     ),
                     data = MovieListViewState(
-                        movieParent = resultObj
+                        movies = resultObj
                     ),
                     stateEvent = stateEvent
                 )

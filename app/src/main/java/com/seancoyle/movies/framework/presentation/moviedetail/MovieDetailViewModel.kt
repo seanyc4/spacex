@@ -1,7 +1,7 @@
 package com.seancoyle.movies.framework.presentation.moviedetail
 
 import com.seancoyle.movies.business.domain.model.movielist.Movie
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.business.domain.util.DateUtil
 import com.seancoyle.movies.business.interactors.moviedetail.MovieDetailInteractors
@@ -80,9 +80,9 @@ constructor(
         return MovieDetailViewState()
     }
 
-    private fun setMovieCast(movieCast: MovieCast) {
+    private fun setMovieCast(movieCastDomainEntity: MovieCastDomainEntity) {
         val update = getCurrentViewStateOrNew()
-        update.movieCast = movieCast
+        update.movieCast = movieCastDomainEntity
         setViewState(update)
     }
 

@@ -16,7 +16,7 @@ import java.util.*
 class DependencyContainer {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", Locale.ENGLISH)
-    val dateUtil = DateUtil(dateFormat)
+    private val dateUtil = DateUtil(dateFormat)
     lateinit var movieListCacheDataSource: MovieListCacheDataSource
     lateinit var movieDetailCacheDataSource: MovieDetailCacheDataSource
     lateinit var movieListFactory: MovieListFactory
@@ -41,18 +41,17 @@ class DependencyContainer {
         movieListFactory = MovieListFactory(dateUtil)
         movieDetailFactory = MovieDetailFactory()
 
-         movieListCacheDataSource = FakeMovieListCacheDataSourceImpl(
-              moviesData = movieListDataFactory.produceHashMapOfMovies(
-                  movieListDataFactory.produceListOfMovies()
-              ),
-          )
+        movieListCacheDataSource = FakeMovieListCacheDataSourceImpl(
+            fakeMovieListDatabase = movieListDataFactory.produceFakeAppDatabase(
+                movieListDataFactory.produceListOfMovies()
+            ),
+        )
 
-          movieDetailCacheDataSource = FakeMovieDetailCacheDataSourceImpl(
-              castData = movieDetailDataFactory.produceHashMapOfMovies(
-                  movieDetailDataFactory.produceListOfCastMembers()
-              )
-          )
-
+        movieDetailCacheDataSource = FakeMovieDetailCacheDataSourceImpl(
+            fakeMovieDetailDatabase = movieDetailDataFactory.produceFakeMovieDetailDatabase(
+                movieDetailDataFactory.produceListOfCastMembers()
+            )
+        )
     }
 
 }

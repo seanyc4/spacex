@@ -47,7 +47,7 @@ class InsertMovie(
                 return if (resultObj > 0) {
                     val viewState =
                         MovieListViewState(
-                            movieParent = newMovie
+                            movies = newMovie
                         )
                     DataState.data(
                         response = Response(

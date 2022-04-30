@@ -3,7 +3,7 @@ package com.seancoyle.movies.business.interactors.movielist
 import com.seancoyle.movies.business.data.network.ApiResponseHandler
 import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieListNetworkDataSource
 import com.seancoyle.movies.business.data.util.safeApiCall
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
 import kotlinx.coroutines.Dispatchers
@@ -23,15 +23,15 @@ constructor(
             movieListNetworkDataSource.get()
         }
 
-        val networkResponse = object : ApiResponseHandler<MovieListViewState, MovieParent?>(
+        val networkResponse = object : ApiResponseHandler<MovieListViewState, MoviesDomainEntity?>(
             response = networkResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: MovieParent?): DataState<MovieListViewState> {
+            override suspend fun handleSuccess(resultObj: MoviesDomainEntity?): DataState<MovieListViewState> {
                 return if (resultObj != null) {
                     val viewState =
                         MovieListViewState(
-                            movieParent = resultObj
+                            movies = resultObj
                         )
                     DataState.data(
                         response = Response(

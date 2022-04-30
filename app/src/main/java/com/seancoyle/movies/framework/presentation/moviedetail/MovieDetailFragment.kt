@@ -59,21 +59,23 @@ constructor(
 
     }
 
-    private fun getMovieCastFromNetworkEvent(){
-        viewModel.setStateEvent(MovieDetailStateEvent.GetMovieCastFromNetworkAndInsertToCacheEvent(
-            movieId = viewModel.getMovie()?.id.toString()
-        ))
+    private fun getMovieCastFromNetworkEvent() {
+        viewModel.setStateEvent(
+            MovieDetailStateEvent.GetMovieCastFromNetworkAndInsertToCacheEvent(
+                movieId = viewModel.getMovie()?.id.toString()
+            )
+        )
     }
 
     private fun getMovieData() {
         arguments?.let { args ->
             (args.getParcelable(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY) as Movie?)?.let { selectedMovie ->
-               viewModel.setMovie(selectedMovie)
-            }?: onErrorRetrievingMovieFromPreviousFragment()
+                viewModel.setMovie(selectedMovie)
+            } ?: onErrorRetrievingMovieFromPreviousFragment()
         }
     }
 
-    private fun onErrorRetrievingMovieFromPreviousFragment(){
+    private fun onErrorRetrievingMovieFromPreviousFragment() {
         viewModel.setStateEvent(
             MovieDetailStateEvent.CreateStateMessageEvent(
                 stateMessage = StateMessage(
@@ -143,7 +145,10 @@ constructor(
             }
 
             viewModel.getMovie()?.apply {
+
                 bannerImage.glideLoadMoviePosters(backdrop_path)
+
+                // concat title and date together & format date
                 ("$title (${viewModel.dateUtil.removeTimeFromDateString(release_date)})").also {
                     movieTitle.text = it
                 }
@@ -186,17 +191,28 @@ constructor(
                         when (response.message) {
 
                             GetMovieCastFromNetworkAndInsertToCache.MOVIE_CAST_INSERT_FAILED -> {
-                                viewModel.setStateEvent(
-                                    MovieDetailStateEvent.GetMovieCastByIdFromCacheEvent(
-                                        id = viewModel.getMovie()?.id!!
-                                    )
-                                )
+                                // Check cache for movie cast if insert fails
+                                getMovieCastFromCacheEvent()
                             }
+
+                            GetMovieCastFromNetworkAndInsertToCache.MOVIE_CAST_ERROR -> {
+                                // Check cache for movie cast if net connection fails
+                                getMovieCastFromCacheEvent()
+                            }
+
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun getMovieCastFromCacheEvent() {
+        viewModel.setStateEvent(
+            MovieDetailStateEvent.GetMovieCastByIdFromCacheEvent(
+                id = viewModel.getMovie()?.id ?: 1
+            )
+        )
     }
 
     private fun updateAdapter() {

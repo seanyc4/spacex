@@ -1,16 +1,16 @@
 package com.seancoyle.movies.framework.datasource.network.mappers.movielist
 
 import com.seancoyle.movies.business.domain.model.movielist.Movie
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.util.EntityMapper
 import com.seancoyle.movies.framework.datasource.network.model.movielist.MovieNetworkEntity
 import com.seancoyle.movies.framework.datasource.network.model.movielist.ResultNetwork
 
 
-class MovieListNetworkMapper : EntityMapper<MovieNetworkEntity, MovieParent> {
+class MovieListNetworkMapper : EntityMapper<MovieNetworkEntity, MoviesDomainEntity> {
 
-    override fun mapFromEntity(entity: MovieNetworkEntity): MovieParent {
-        return MovieParent(
+    override fun mapFromEntity(entity: MovieNetworkEntity): MoviesDomainEntity {
+        return MoviesDomainEntity(
             id = "1",
             category = "",
             page = entity.page ?: 0,
@@ -38,7 +38,7 @@ class MovieListNetworkMapper : EntityMapper<MovieNetworkEntity, MovieParent> {
         )
     }
 
-    override fun mapToEntity(domainModel: MovieParent): MovieNetworkEntity {
+    override fun mapToEntity(domainModel: MoviesDomainEntity): MovieNetworkEntity {
         return MovieNetworkEntity(
             page = domainModel.page,
             total_pages = domainModel.total_pages,

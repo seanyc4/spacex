@@ -2,17 +2,17 @@ package com.seancoyle.movies.framework.datasource.network.mappers.moviedetail
 
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.moviedetail.Crew
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.util.EntityMapper
 import com.seancoyle.movies.framework.datasource.network.model.moviedetail.CastNetworkEntity
 import com.seancoyle.movies.framework.datasource.network.model.moviedetail.CrewNetworkEntity
 import com.seancoyle.movies.framework.datasource.network.model.moviedetail.MovieCastNetworkEntity
 
 
-class MovieDetailNetworkMapper : EntityMapper<MovieCastNetworkEntity, MovieCast> {
+class MovieDetailNetworkMapper : EntityMapper<MovieCastNetworkEntity, MovieCastDomainEntity> {
 
-    override fun mapFromEntity(entity: MovieCastNetworkEntity): MovieCast {
-        return MovieCast(
+    override fun mapFromEntity(entity: MovieCastNetworkEntity): MovieCastDomainEntity {
+        return MovieCastDomainEntity(
             cast = entity.cast?.map { cast ->
                 Cast(
                     adult = cast?.adult ?: false,
@@ -48,7 +48,7 @@ class MovieDetailNetworkMapper : EntityMapper<MovieCastNetworkEntity, MovieCast>
         )
     }
 
-    override fun mapToEntity(domainModel: MovieCast): MovieCastNetworkEntity {
+    override fun mapToEntity(domainModel: MovieCastDomainEntity): MovieCastNetworkEntity {
         return MovieCastNetworkEntity(
             cast = domainModel.cast.map { cast ->
                 CastNetworkEntity(

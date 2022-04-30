@@ -1,7 +1,6 @@
 package com.seancoyle.movies.framework.datasource.cache.implementation.moviedetail
 
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.framework.datasource.cache.abstraction.moviedetail.MovieDetailDaoService
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
@@ -16,7 +15,7 @@ constructor(
     private val cacheMapper: MovieDetailCacheMapper
 ) : MovieDetailDaoService {
 
-    override suspend fun insert(movieCast: MovieCast): Long {
+    override suspend fun insert(movieCast: MovieCastDomainEntity): Long {
         return dao.insert(
             cacheMapper.mapToEntity(
                 domainModel = movieCast
@@ -24,10 +23,10 @@ constructor(
         )
     }
 
-    override suspend fun insertList(castList: List<MovieCast>): LongArray {
+    override suspend fun insertList(castList: List<MovieCastDomainEntity>): LongArray {
         return dao.insertList(
             cacheMapper.domainListToEntityList(
-                castList = castList
+                domainList = castList
             )
         )
     }
@@ -42,20 +41,20 @@ constructor(
         )
     }
 
-    override suspend fun deleteList(castList: List<MovieCast>): Int {
+    override suspend fun deleteList(castList: List<MovieCastDomainEntity>): Int {
         val ids = castList.mapIndexed { _, cast -> cast.id }
         return dao.deleteList(
             ids = ids
         )
     }
 
-    override suspend fun getById(id: Int): MovieCast? {
+    override suspend fun getById(id: Int): MovieCastDomainEntity? {
         return dao.get(id = id)?.let {
             cacheMapper.mapFromEntity(it)
         }
     }
 
-    override suspend fun getAll(): List<MovieCast>? {
+    override suspend fun getAll(): List<MovieCastDomainEntity>? {
         return dao.getAll()?.let {
             cacheMapper.entityListToDomainList(it)
         }

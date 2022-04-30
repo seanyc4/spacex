@@ -3,7 +3,7 @@ package com.seancoyle.movies.business.domain.model.movielist
 import android.os.Parcelable
 
 @kotlinx.parcelize.Parcelize
-data class MovieParent(
+data class MoviesDomainEntity(
     val id: String,
     val category: String,
     val page: Int,
@@ -17,7 +17,7 @@ data class MovieParent(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MovieParent
+        other as MoviesDomainEntity
 
         if (id != other.id) return false
         if (category != other.category) return false

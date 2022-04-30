@@ -1,5 +1,6 @@
 package com.seancoyle.movies.di
 
+import com.seancoyle.movies.framework.datasource.cache.moviedetail.MovieDetailDaoServiceTests
 import com.seancoyle.movies.framework.datasource.cache.movielist.MovieListDaoServiceTests
 import com.seancoyle.movies.framework.datasource.network.movielist.MovieListRetrofitServiceTests
 import com.seancoyle.movies.framework.presentation.TestBaseApplication
@@ -37,6 +38,7 @@ interface TestAppComponent : AppComponent {
     fun inject(movieListRetrofitServiceTests: MovieListRetrofitServiceTests)
     fun inject(moviesListFragmentTests: MoviesListFragmentTests)
     fun inject(movieDetailFragmentTests: MovieDetailFragmentTests)
+    fun inject(movieDetailDaoServiceTests: MovieDetailDaoServiceTests)
     fun inject(movieFeatureTest: MovieFeatureTest)
 
 }

@@ -19,8 +19,8 @@ constructor(
         movies: List<Movie>?,
         total_pages: Int?,
         total_results: Int?
-    ): MovieParent {
-        return MovieParent(
+    ): MoviesDomainEntity {
+        return MoviesDomainEntity(
             id = id ?: UUID.randomUUID().toString(),
             category = category ?: "",
             created_at = dateUtil.getCurrentTimestamp(),
@@ -31,8 +31,8 @@ constructor(
         )
     }
 
-    fun createMovieList(numMovies: Int): List<MovieParent> {
-        val list: ArrayList<MovieParent> = ArrayList()
+    fun createMovieList(numMovies: Int): List<MoviesDomainEntity> {
+        val list: ArrayList<MoviesDomainEntity> = ArrayList()
         for(i in 0 until numMovies){ // exclusive on upper bound
             list.add(
                 createSingleMovie(

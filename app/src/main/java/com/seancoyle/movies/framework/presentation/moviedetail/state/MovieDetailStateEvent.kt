@@ -2,7 +2,7 @@ package com.seancoyle.movies.framework.presentation.moviedetail.state
 
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.moviedetail.Crew
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.state.StateEvent
 import com.seancoyle.movies.business.domain.state.StateMessage
 
@@ -58,7 +58,7 @@ sealed class MovieDetailStateEvent: StateEvent {
     }
 
     class DeleteMovieCastEvent(
-        val movieCast: MovieCast
+        val movieCast: MovieCastDomainEntity
     ): MovieDetailStateEvent(){
 
         override fun errorInfo(): String {

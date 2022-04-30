@@ -17,7 +17,7 @@ import com.seancoyle.movies.framework.datasource.cache.model.movielist.MoviesTyp
         MovieCacheEntity::class,
         MovieCastCacheEntity::class
     ],
-    version = 2
+    version = 3
 )
 @TypeConverters(
     MoviesTypeConverter::class,

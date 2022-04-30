@@ -2,7 +2,7 @@ package com.seancoyle.movies.framework.presentation.movielist
 
 import android.os.Parcelable
 import com.seancoyle.movies.business.domain.model.movielist.Movie
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
+import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.interactors.movielist.MovieListInteractors
 import com.seancoyle.movies.business.domain.state.*
@@ -35,16 +35,16 @@ constructor(
     override fun handleNewData(data: MovieListViewState) {
 
         data.let { viewState ->
-            viewState.movieParents?.let { movies ->
-                setMovieListData(movies)
+            viewState.movieList?.let { movies ->
+                setMovieList(movies)
             }
 
             viewState.numMoviesInCache?.let { numMovies ->
                 setNumMoviesInCache(numMovies)
             }
 
-            viewState.movieParent?.let { movie ->
-                setMovieParent(movie)
+            viewState.movies?.let { movie ->
+                setMovies(movie)
             }
         }
 
@@ -84,19 +84,21 @@ constructor(
         return MovieListViewState()
     }
 
-    private fun setMovieListData(movieParents: ArrayList<MovieParent>) {
+    private fun setMovieList(movieDomainEntities: ArrayList<MoviesDomainEntity>) {
         val update = getCurrentViewStateOrNew()
-        update.movieParents = movieParents
+        update.movieList = movieDomainEntities
         setViewState(update)
     }
 
-    fun setMovieParent(movieParent: MovieParent?) {
+    fun getMovieList() = getCurrentViewStateOrNew().movieList
+
+    private fun setMovies(movies: MoviesDomainEntity?) {
         val update = getCurrentViewStateOrNew()
-        update.movieParent = movieParent
+        update.movies = movies
         setViewState(update)
     }
 
-    fun getMovieParent() = getCurrentViewStateOrNew().movieParent
+    fun getMovies() = getCurrentViewStateOrNew().movies
 
     fun setMovie(movies: Movie?) {
         val update = getCurrentViewStateOrNew()
@@ -112,7 +114,7 @@ constructor(
         setViewState(update)
     }
 
-    fun getMoviesListSize() = getCurrentViewStateOrNew().movieParents?.size ?: 0
+    fun getMoviesListSize() = getCurrentViewStateOrNew().movieList?.size ?: 0
 
     private fun getNumMoviesInCache() = getCurrentViewStateOrNew().numMoviesInCache ?: 0
 
@@ -121,7 +123,7 @@ constructor(
 
     fun clearList() {
         val update = getCurrentViewStateOrNew()
-        update.movieParents = ArrayList()
+        update.movieList = ArrayList()
         setViewState(update)
     }
 

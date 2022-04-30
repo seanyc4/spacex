@@ -13,9 +13,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
 import com.seancoyle.movies.business.domain.model.movielist.Movie
-import com.seancoyle.movies.business.domain.model.movielist.MovieParent
 import com.seancoyle.movies.business.domain.util.DateUtil
 import com.seancoyle.movies.di.TestAppComponent
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
@@ -35,7 +33,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 import javax.inject.Inject
 
 /*

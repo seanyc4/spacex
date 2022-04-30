@@ -1,9 +1,9 @@
 package com.seancoyle.movies.framework.datasource.network.abstraction.moviedetail
 
-import com.seancoyle.movies.business.domain.model.moviedetail.MovieCast
+import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 
 interface MovieDetailRetrofitService {
 
-    suspend fun getCast(movieId: String): MovieCast
+    suspend fun getCast(movieId: String): MovieCastDomainEntity
 
 }
