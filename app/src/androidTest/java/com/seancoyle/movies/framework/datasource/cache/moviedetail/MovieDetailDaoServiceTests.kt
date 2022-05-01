@@ -148,7 +148,7 @@ class MovieDetailDaoServiceTests : BaseTest() {
 
     @Test
     fun deleteMovieCastList_confirmDeleted() = runBlocking {
-        val movieCast: ArrayList<MovieCastDomainEntity> = ArrayList(daoService.getAll())
+        val movieCast: ArrayList<MovieCastDomainEntity> = ArrayList(daoService.getAll() ?: emptyList())
 
         // select some random movie casts for deleting
         val movieCastListToDelete: ArrayList<MovieCastDomainEntity> = ArrayList()

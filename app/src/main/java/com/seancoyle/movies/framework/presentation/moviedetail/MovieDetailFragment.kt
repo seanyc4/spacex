@@ -41,6 +41,20 @@ constructor(
     private val binding by viewBinding(FragmentMovieDetailBinding::bind)
     private var castAdapter: MovieCastAdapter? = null
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        val viewState = viewModel.getCurrentViewStateOrNew()
+        outState.putParcelable(MOVIE_DETAIL_STATE_BUNDLE_KEY, viewState)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun restoreInstanceState() {
+        arguments?.let { args ->
+            (args.getParcelable(MOVIE_DETAIL_STATE_BUNDLE_KEY) as MovieDetailViewState?)?.let { viewState ->
+                viewModel.setViewState(viewState)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
@@ -50,9 +64,9 @@ constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        restoreInstanceState()
         setupUI()
         setupOnBackPressDispatcher()
-        restoreInstanceState()
         setupRecyclerView()
         subscribeObservers()
         getMovieCastFromNetworkEvent()
@@ -93,24 +107,9 @@ constructor(
         getAppComponent().inject(this)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        val viewState = viewModel.getCurrentViewStateOrNew()
-        outState.putParcelable(MOVIE_DETAIL_STATE_BUNDLE_KEY, viewState)
-        super.onSaveInstanceState(outState)
-    }
-
     private fun onBackPressed() {
         view?.hideKeyboard()
         findNavController().popBackStack()
-    }
-
-    private fun restoreInstanceState() {
-        arguments?.let { args ->
-            (args.getParcelable(MOVIE_DETAIL_STATE_BUNDLE_KEY) as MovieDetailViewState?)?.let { viewState ->
-                viewModel.setViewState(viewState)
-
-            }
-        }
     }
 
     private fun setupRecyclerView() {

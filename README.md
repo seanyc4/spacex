@@ -33,7 +33,7 @@ Clone the git repository and open in the latest version of android studio.
 
 ## Testing
 
-Unit and instrumentation tests can be ran either manually in android studio or else by executing the script ##ui_and_unit_tests.sh in a terminal or gitbash window. The script is located in the /tests directory.
+Unit and instrumentation tests can be ran either manually in android studio or else by executing the script ui_and_unit_tests.sh in a terminal or gitbash window. The script is located in the /tests directory.
 
 
 ## Future updates
