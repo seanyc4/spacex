@@ -54,14 +54,13 @@ constructor(
         fun bind(movie: Movie) = with(itemView) {
             with(binding){
 
-                moviePoster.glideLoadMoviePosters(movie.poster_path, true)
+                movieListPoster.glideLoadMoviePosters(movie.poster_path, true)
 
             }
 
             setOnClickListener {
                 interaction?.onItemSelected(absoluteAdapterPosition, movie)
             }
-
 
         }
     }

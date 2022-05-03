@@ -12,7 +12,7 @@
         android:background="@color/black">
 
         <ImageView
-            android:id="@+id/moviePoster"
+            android:id="@+id/movie_list_poster"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_130sdp"
             android:adjustViewBounds="true"

@@ -146,6 +146,7 @@ constructor(
             viewModel.getMovie()?.apply {
 
                 bannerImage.glideLoadMoviePosters(backdrop_path)
+                movieDetailPoster.glideLoadMoviePosters(poster_path)
 
                 // concat title and date together & format date
                 ("$title (${viewModel.dateUtil.removeTimeFromDateString(release_date)})").also {
