@@ -25,6 +25,7 @@ import com.seancoyle.movies.framework.presentation.MainActivity
 import com.seancoyle.movies.framework.presentation.moviedetail.adapter.MovieCastAdapter
 import com.seancoyle.movies.framework.presentation.movielist.adapter.MovieListAdapter.*
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -132,12 +133,10 @@ class MovieFeatureTest: BaseTest() {
         // Confirm MovieDetailFragment is in view
         onView(withId(R.id.movie_title)).check(matches(withText("Guardians of the Galaxy Vol. 3 (2023)")))
         onView(withId(R.id.movie_overview)).check(matches(withText("The third and final film in the Guardians of the Galaxy trilogy.")))
-        onView(withId(R.id.rv_movie_cast)).check(matches(isDisplayed()))
-
-
-        val movieCastRecyclerView = onView(withId(R.id.rv_movie_cast))
+        onView(withId(R.id.movie_detail_poster)).check(matches(isDisplayed()))
 
         // confirm MoviesCastFragment is in view
+        val movieCastRecyclerView = onView(withId(R.id.rv_movie_cast))
         movieCastRecyclerView.check(matches(isDisplayed()))
 
         // Scroll to the end of the horizontal cast recyclerview

@@ -120,6 +120,7 @@ class MovieDetailFragmentTests : BaseTest() {
             onView(withId(R.id.movie_title)).check(matches(withText(it)))
         }
         onView(withId(R.id.movie_overview)).check(matches(withText(testMovie.overview)))
+        onView(withId(R.id.movie_detail_poster)).check(matches(isDisplayed()))
 
         // confirm the cast recyclerview is in view
         val movieCastRecyclerView = onView(withId(R.id.rv_movie_cast))
