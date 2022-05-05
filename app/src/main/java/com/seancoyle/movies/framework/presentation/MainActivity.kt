@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
@@ -28,28 +27,29 @@ import com.seancoyle.movies.R
 import com.seancoyle.movies.databinding.ActivityMainBinding
 import com.seancoyle.movies.framework.presentation.common.gone
 import com.seancoyle.movies.framework.presentation.common.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 import javax.inject.Inject
 
-
-@ExperimentalCoroutinesApi
 @FlowPreview
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class MainActivity :
     AppCompatActivity(),
     UIController {
 
     private val TAG: String = "AppDebug"
 
-    @Inject
-    lateinit var fragmentFactory: MovieFragmentFactory
+    /*@Inject
+    lateinit var fragmentFactory: MovieFragmentFactory*/
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private var appBarConfiguration: AppBarConfiguration? = null
     private var dialogInView: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         setFragmentFactory()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -58,12 +58,7 @@ class MainActivity :
     }
 
     private fun setFragmentFactory() {
-        supportFragmentManager.fragmentFactory = fragmentFactory
-    }
-
-    private fun inject() {
-        (application as BaseApplication).appComponent
-            .inject(this)
+       // supportFragmentManager.fragmentFactory = fragmentFactory
     }
 
     inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
@@ -174,7 +169,7 @@ class MainActivity :
             is None -> {
                 // This would be a good place to send to your Error Reporting
                 // software of choice (ex: Firebase crash reporting)
-                Log.i(TAG, "onResponseReceived: ${response.message}")
+                Timber.i("onResponseReceived: " + response.message)
                 stateMessageCallback.removeMessageFromStack()
             }
         }

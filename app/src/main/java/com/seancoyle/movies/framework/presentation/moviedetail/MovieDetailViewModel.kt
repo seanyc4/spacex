@@ -9,6 +9,7 @@ import com.seancoyle.movies.framework.presentation.common.BaseViewModel
 import com.seancoyle.movies.framework.presentation.moviedetail.state.MovieDetailStateEvent
 import com.seancoyle.movies.framework.presentation.moviedetail.state.MovieDetailViewState
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -17,7 +18,7 @@ import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@Singleton
+@HiltViewModel
 class MovieDetailViewModel
 @Inject
 constructor(

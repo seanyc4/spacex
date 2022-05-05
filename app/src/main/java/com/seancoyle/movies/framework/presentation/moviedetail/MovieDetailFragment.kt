@@ -24,6 +24,7 @@ import com.seancoyle.movies.framework.presentation.moviedetail.state.MovieDetail
 import com.seancoyle.movies.framework.presentation.movielist.MOVIE_DETAIL_ERROR_RETRIEVEING_SELECTED_MOVIE
 import com.seancoyle.movies.framework.presentation.movielist.MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY
 import com.seancoyle.movies.framework.presentation.movielist.glideLoadMoviePosters
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 const val MOVIE_DETAIL_STATE_BUNDLE_KEY =
@@ -31,13 +32,11 @@ const val MOVIE_DETAIL_STATE_BUNDLE_KEY =
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class MovieDetailFragment
-constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-) : BaseFragment(R.layout.fragment_movie_detail),
+@AndroidEntryPoint
+class MovieDetailFragment : BaseFragment(R.layout.fragment_movie_detail),
     MovieCastAdapter.Interaction {
 
-    private val viewModel: MovieDetailViewModel by viewModels { viewModelFactory }
+    private val viewModel: MovieDetailViewModel by viewModels()
     private val binding by viewBinding(FragmentMovieDetailBinding::bind)
     private var castAdapter: MovieCastAdapter? = null
 
@@ -101,10 +100,6 @@ constructor(
                 )
             )
         )
-    }
-
-    override fun inject() {
-        getAppComponent().inject(this)
     }
 
     private fun onBackPressed() {

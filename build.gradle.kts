@@ -12,7 +12,7 @@ buildscript {
         classpath(Build.safe_args)
         classpath(Build.secrets_gradle_plugin)
         classpath(Build.junit5)
-        /* classpath(Build.hilt_android)*/
+        classpath(Build.hilt_android)
     }
 }
 

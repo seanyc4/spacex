@@ -11,22 +11,18 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class MovieFragmentFactory
-@Inject
-constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-): FragmentFactory(){
+class MovieFragmentFactory : FragmentFactory(){
 
     override fun instantiate(classLoader: ClassLoader, className: String) =
 
         when(className){
 
             MoviesListFragment::class.java.name -> {
-                MoviesListFragment(viewModelFactory)
+                MoviesListFragment()
             }
 
             MovieDetailFragment::class.java.name -> {
-                 MovieDetailFragment(viewModelFactory)
+                 MovieDetailFragment()
             }
 
             else -> {

@@ -2,7 +2,6 @@ package com.seancoyle.movies.framework.datasource.network.movielist
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
-import com.seancoyle.movies.di.TestAppComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.junit.runner.RunWith
@@ -38,10 +37,7 @@ class MovieListRetrofitServiceTests: BaseTest(){
         injectTest()
     }*/
 
-    override fun injectTest() {
-        (application.appComponent as TestAppComponent)
-            .inject(this)
-    }
+
 
 }
 

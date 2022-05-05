@@ -17,14 +17,13 @@ import com.seancoyle.movies.framework.datasource.network.implementation.moviedet
 import com.seancoyle.movies.framework.datasource.network.mappers.moviedetail.MovieDetailNetworkMapper
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @Module
+@InstallIn(SingletonComponent::class)
 object MovieDetailModule {
 
     @Singleton

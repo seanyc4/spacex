@@ -12,11 +12,7 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Singleton
-class TestMovieFragmentFactory
-@Inject
-constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-) : FragmentFactory() {
+class TestMovieFragmentFactory : FragmentFactory() {
 
     lateinit var uiController: UIController
 
@@ -25,7 +21,7 @@ constructor(
         when (className) {
 
             MoviesListFragment::class.java.name -> {
-                val fragment = MoviesListFragment(viewModelFactory)
+                val fragment = MoviesListFragment()
                 if (::uiController.isInitialized) {
                     fragment.setUIController(uiController)
                 }
@@ -33,7 +29,7 @@ constructor(
             }
 
             MovieDetailFragment::class.java.name -> {
-                val fragment = MovieDetailFragment(viewModelFactory)
+                val fragment = MovieDetailFragment()
                 if (::uiController.isInitialized) {
                     fragment.setUIController(uiController)
                 }

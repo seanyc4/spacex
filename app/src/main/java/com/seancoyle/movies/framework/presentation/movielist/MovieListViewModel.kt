@@ -3,16 +3,15 @@ package com.seancoyle.movies.framework.presentation.movielist
 import android.os.Parcelable
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
-import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.interactors.movielist.MovieListInteractors
 import com.seancoyle.movies.business.domain.state.*
 import com.seancoyle.movies.framework.presentation.common.BaseViewModel
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListStateEvent.*
 import com.seancoyle.movies.framework.presentation.movielist.state.MovieListViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import javax.inject.Singleton
 
 const val MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY = "selectedMovie"
 const val MOVIE_DETAIL_ERROR_RETRIEVEING_SELECTED_MOVIE = "Error retrieving selected movie from bundle."
@@ -20,12 +19,11 @@ const val MOVIE_DETAIL_ERROR_RETRIEVEING_SELECTED_MOVIE = "Error retrieving sele
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@Singleton
+@HiltViewModel
 class MovieListViewModel
 @Inject
 constructor(
-    private val movieListInteractors: MovieListInteractors,
-    private val movieListFactory: MovieListFactory
+    private val movieListInteractors: MovieListInteractors
 ) : BaseViewModel<MovieListViewState>() {
 
     init {

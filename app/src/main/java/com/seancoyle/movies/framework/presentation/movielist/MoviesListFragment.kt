@@ -19,6 +19,7 @@ import com.seancoyle.movies.framework.presentation.movielist.adapter.MovieListAd
 import com.seancoyle.movies.framework.presentation.movielist.state.*
 import com.seancoyle.movies.util.AndroidTestUtils
 import com.seancoyle.movies.util.printLogD
+import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -28,16 +29,14 @@ const val MOVIE_LIST_STATE_BUNDLE_KEY =
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class MoviesListFragment
-constructor(
-    private val viewModelFactory: ViewModelProvider.Factory
-) : BaseFragment(R.layout.fragment_movie_list),
+@AndroidEntryPoint
+class MoviesListFragment : BaseFragment(R.layout.fragment_movie_list),
     MovieListAdapter.Interaction {
 
     @Inject
     lateinit var androidTestUtils: AndroidTestUtils
 
-    private val viewModel: MovieListViewModel by viewModels { viewModelFactory }
+    private val viewModel: MovieListViewModel by viewModels()
     private val binding by viewBinding(FragmentMovieListBinding::bind)
     private var listAdapter: MovieListAdapter? = null
 
@@ -106,7 +105,7 @@ constructor(
 
     private fun subscribeObservers() {
 
-        /* viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
+        /*viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
              uiController.displayProgressBar(it)
          }*/
 
@@ -203,10 +202,6 @@ constructor(
                 }
             }
         }
-    }
-
-    override fun inject() {
-        getAppComponent().inject(this)
     }
 
     override fun onDestroyView() {

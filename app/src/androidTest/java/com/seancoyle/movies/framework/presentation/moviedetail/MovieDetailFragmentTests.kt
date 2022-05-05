@@ -15,7 +15,7 @@ import com.seancoyle.movies.R
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.util.DateUtil
-import com.seancoyle.movies.di.TestAppComponent
+import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
 import com.seancoyle.movies.framework.datasource.data.moviedetail.MovieDetailDataFactory
@@ -25,6 +25,9 @@ import com.seancoyle.movies.framework.presentation.UIController
 import com.seancoyle.movies.framework.presentation.moviedetail.adapter.MovieCastAdapter
 import com.seancoyle.movies.framework.presentation.movielist.MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,12 +41,18 @@ import javax.inject.Inject
 /*
     --Test cases:
     1. Is the selected movie retrieve from the bundle args and set properly?
-
+    2. Is the movie cast recyclerview displayed correctly and scrolling?
+    3. Is the nav controller called to navigate backwards?
  */
 @ExperimentalCoroutinesApi
 @FlowPreview
+@HiltAndroidTest
+@UninstallModules(ProductionModule::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MovieDetailFragmentTests : BaseTest() {
+
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
 
     @get: Rule
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
@@ -73,14 +82,8 @@ class MovieDetailFragmentTests : BaseTest() {
     val navController = mockk<NavController>(relaxed = true)
 
     init {
-        injectTest()
         testMovie = movieListDataFactory.produceListOfMovies().getOrNull(0)?.movies?.getOrNull(0)!!
         testMovieCast = movieDetailDataFactory.produceListOfMovieCast().getOrNull(0)?.cast ?: emptyList()
-    }
-
-    override fun injectTest() {
-        (application.appComponent as TestAppComponent)
-            .inject(this)
     }
 
     @Before

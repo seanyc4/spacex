@@ -1,20 +1,28 @@
 package com.seancoyle.movies.di
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.seancoyle.movies.business.domain.util.DateUtil
+import com.seancoyle.movies.framework.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
+
+    @Singleton
+    @Provides
+    fun provideApplication(@ApplicationContext app: Context): BaseApplication {
+        return app as BaseApplication
+    }
 
     // https://developer.android.com/reference/java/text/SimpleDateFormat.html?hl=pt-br
     @Singleton

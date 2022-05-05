@@ -7,7 +7,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("de.mannodermaus.android-junit5")
-    /* id("dagger.hilt.android.plugin")*/
+    id("dagger.hilt.android.plugin")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
 
@@ -99,9 +99,9 @@ dependencies {
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
-    implementation(Dagger2.dagger)
+   /* implementation(Dagger2.dagger)
     kapt(Dagger2.dagger_compiler)
-    kaptAndroidTest(Dagger2.dagger_compiler)
+    kaptAndroidTest(Dagger2.dagger_compiler)*/
 
     implementation(Glide.glide)
     kapt(Glide.glide_compiler)
@@ -112,8 +112,9 @@ dependencies {
     implementation(Google.recycler_view)
     implementation(Google.swipe_refresh_layout)
 
-    /*implementation(Hilt.android)
-    kapt(Hilt.compiler)*/
+    implementation(Hilt.android)
+    implementation(HiltTest.hilt_android_testing)
+    kapt(Hilt.compiler)
 
     implementation(Insetter.insetter)
 

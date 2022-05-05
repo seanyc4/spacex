@@ -4,7 +4,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
-import com.seancoyle.movies.di.TestAppComponent
 import com.seancoyle.movies.framework.datasource.cache.abstraction.moviedetail.MovieDetailDaoService
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.implementation.moviedetail.MovieDetailDaoServiceImpl
@@ -61,7 +60,6 @@ class MovieDetailDaoServiceTests : BaseTest() {
     lateinit var cacheMapper: MovieDetailCacheMapper
 
     init {
-        injectTest()
         insertTestData()
         daoService = MovieDetailDaoServiceImpl(
             dao = dao,
@@ -69,10 +67,7 @@ class MovieDetailDaoServiceTests : BaseTest() {
         )
     }
 
-    override fun injectTest() {
-        (application.appComponent as TestAppComponent)
-            .inject(this)
-    }
+
 
     private fun insertTestData() = runBlocking {
         val entityList = cacheMapper.domainListToEntityList(

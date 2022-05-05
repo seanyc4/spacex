@@ -4,12 +4,14 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.business.domain.model.movielist.MoviesDomainEntity
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
-import com.seancoyle.movies.di.TestAppComponent
+import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.abstraction.movielist.MovieListDaoService
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
 import com.seancoyle.movies.framework.datasource.cache.implementation.movielist.MovieListDaoServiceImpl
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
 import com.seancoyle.movies.framework.datasource.data.movielist.MovieListDataFactory
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -39,6 +41,8 @@ import kotlin.test.assertTrue
  */
 @ExperimentalCoroutinesApi
 @FlowPreview
+@UninstallModules(ProductionModule::class)
+@HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class MovieListDaoServiceTests : BaseTest() {
@@ -61,7 +65,6 @@ class MovieListDaoServiceTests : BaseTest() {
     lateinit var movieListCacheMapper: MovieListCacheMapper
 
     init {
-        injectTest()
         insertTestData()
         movieListDaoService = MovieListDaoServiceImpl(
             dao = dao,
@@ -69,10 +72,6 @@ class MovieListDaoServiceTests : BaseTest() {
         )
     }
 
-    override fun injectTest() {
-        (application.appComponent as TestAppComponent)
-            .inject(this)
-    }
 
     fun insertTestData() = runBlocking {
         val entityList = movieListCacheMapper.domainListToEntityList(

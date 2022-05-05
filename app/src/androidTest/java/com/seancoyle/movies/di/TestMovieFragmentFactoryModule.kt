@@ -19,6 +19,6 @@ object TestMovieFragmentFactoryModule {
     fun provideFragmentFactory(
         viewModelFactory: ViewModelProvider.Factory
     ): FragmentFactory {
-        return TestMovieFragmentFactory(viewModelFactory)
+        return TestMovieFragmentFactory()
     }
 }

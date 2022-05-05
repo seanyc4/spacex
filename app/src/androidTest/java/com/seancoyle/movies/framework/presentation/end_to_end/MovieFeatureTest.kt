@@ -12,7 +12,7 @@ import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
 import com.seancoyle.movies.business.data.network.abstraction.moviedetail.MovieDetailNetworkDataSource
 import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieListNetworkDataSource
-import com.seancoyle.movies.di.TestAppComponent
+import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
@@ -25,10 +25,13 @@ import com.seancoyle.movies.framework.presentation.MainActivity
 import com.seancoyle.movies.framework.presentation.moviedetail.adapter.MovieCastAdapter
 import com.seancoyle.movies.framework.presentation.movielist.adapter.MovieListAdapter.*
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
-import io.mockk.verify
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,8 +49,13 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
+@HiltAndroidTest
+@UninstallModules(ProductionModule::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MovieFeatureTest: BaseTest() {
+
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
 
     @get: Rule
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
@@ -79,13 +87,12 @@ class MovieFeatureTest: BaseTest() {
     private val testMovieList: List<MovieCacheEntity>
     private val testMovieCastList: List<MovieCastCacheEntity>
 
-    override fun injectTest() {
-        (application.appComponent as TestAppComponent)
-            .inject(this)
+    @Before
+    fun init() {
+        hiltRule.inject()
     }
 
     init {
-        injectTest()
         testMovieList = movieListCacheMapper.domainListToEntityList(
             movieListDataFactory.produceListOfMovies()
         )
