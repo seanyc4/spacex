@@ -13,10 +13,8 @@ import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
 import com.seancoyle.movies.business.data.network.abstraction.moviedetail.MovieDetailNetworkDataSource
 import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieListNetworkDataSource
-import com.seancoyle.movies.di.AppModule
 import com.seancoyle.movies.di.MovieDetailModule
 import com.seancoyle.movies.di.MovieListModule
-import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
@@ -59,6 +57,7 @@ import javax.inject.Inject
     MovieListModule::class,
     MovieDetailModule::class
 )
+@RunWith(AndroidJUnit4ClassRunner::class)
 class MovieFeatureTest: BaseTest() {
 
     @get:Rule(order = 0)

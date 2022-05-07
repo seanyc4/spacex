@@ -1,6 +1,5 @@
 package com.seancoyle.movies.di
 
-
 import androidx.room.Room
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory

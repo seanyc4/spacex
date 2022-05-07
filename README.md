@@ -7,16 +7,22 @@ This app is for demonstration purposes to show good coding practices in android 
 ## Tech stack
 
 * Clean Architecture
-* MVI architectural pattern
-* Dagger2
-* Kotlin
 * Coroutines
+* Espresso Instrumentation Tests
 * Flows and channels
-* Unit tests (Junit5)
+* Glide
+* Hilt Dependency Injection
+* Kotlin
 * Instrumentation testing (Espresso and androidx.test)
+* Leak Canary
+* Live Data
+* MVI architectural pattern
 * Navigation Component
-* Room Persistence
 * Retrofit2
+* Room Persistence
+* Splash Screen
+* Timber
+* Unit tests (Junit5)
 * Window insets
 
 ![](images/clean_architecture.png)
@@ -39,7 +45,6 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 ## Future updates
 
 * Add pagination to the movies list recycler view
-* Refactor dagger2 to hilt
 * Refactor to modular design pattern
 * Change from XML to compose
 

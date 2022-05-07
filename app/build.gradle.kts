@@ -78,13 +78,6 @@ android {
 
 dependencies {
 
-    /* implementation(project(Modules.core))
-     implementation(project(Modules.movieDataSource))
-     implementation(project(Modules.movieDomain))
-     implementation(project(Modules.movieInteractors))
-     implementation(project(Modules.ui_movieDetail))
-     implementation(project(Modules.ui_movieList))*/
-
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.fragment_ktx)
@@ -119,7 +112,7 @@ dependencies {
     implementation(Kotlinx.coroutines_android)
     implementation(Kotlinx.datetime)
 
-    // debugImplementation LeakCanary.leak_canary
+    //debugImplementation(LeakCanary.leak_canary)
     implementation(MaterialDialogs.material_dialogs)
 
     implementation(Retrofit.ok_http)

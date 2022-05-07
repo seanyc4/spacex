@@ -10,10 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
-import com.seancoyle.movies.di.AppModule
 import com.seancoyle.movies.di.MovieFragmentFactoryModule
 import com.seancoyle.movies.di.MovieListModule
-import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
 import com.seancoyle.movies.framework.datasource.cache.model.movielist.MovieCacheEntity
@@ -52,6 +50,7 @@ import javax.inject.Inject
     MovieListModule::class,
     MovieFragmentFactoryModule::class
 )
+@RunWith(AndroidJUnit4ClassRunner::class)
 class MoviesListFragmentTests: BaseTest() {
 
     @get:Rule(order = 0)
@@ -107,7 +106,6 @@ class MoviesListFragmentTests: BaseTest() {
     fun movieListFragmentTest() = runBlocking{
 
         // setup
-
         launchFragmentInHiltContainer<MoviesListFragment>(
             fragmentFactory = fragmentFactory
         ){

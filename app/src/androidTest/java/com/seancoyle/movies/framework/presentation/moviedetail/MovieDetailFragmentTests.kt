@@ -52,6 +52,7 @@ import javax.inject.Inject
     MovieListModule::class,
     MovieFragmentFactoryModule::class
 )
+@RunWith(AndroidJUnit4ClassRunner::class)
 class MovieDetailFragmentTests : BaseTest() {
 
     @get:Rule(order = 0)

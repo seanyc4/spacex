@@ -1,7 +1,6 @@
 package com.seancoyle.movies.framework.presentation
 
 import androidx.fragment.app.FragmentFactory
-import androidx.lifecycle.ViewModelProvider
 import com.seancoyle.movies.framework.presentation.moviedetail.MovieDetailFragment
 import com.seancoyle.movies.framework.presentation.movielist.MoviesListFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -7,7 +7,6 @@ import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieLis
 import com.seancoyle.movies.business.data.network.implementation.movielist.MovieListNetworkDataSourceImpl
 import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.business.domain.util.DateUtil
-import com.seancoyle.movies.business.interactors.movielist.*
 import com.seancoyle.movies.framework.datasource.cache.abstraction.movielist.MovieListDaoService
 import com.seancoyle.movies.framework.datasource.cache.database.Database
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
@@ -30,43 +29,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MovieListModule {
 
-    @Singleton
-    @Provides
-    fun provideMovieListInteractors(
-        movieListCacheDataSource: MovieListCacheDataSource,
-        movieListNetworkDataSource: MovieListNetworkDataSource,
-        movieListFactory: MovieListFactory
-    ): MovieListInteractors {
-        return MovieListInteractors(
-            deleteMovie = DeleteMovie(
-                cacheDataSource = movieListCacheDataSource
-            ),
-            deleteMultipleMovies = DeleteMultipleMovies(
-                cacheDataSource = movieListCacheDataSource
-            ),
-            getAllMoviesFromCache = GetAllMoviesFromCache(
-                cacheDataSource = movieListCacheDataSource
-            ),
-            getMovieByIdFromCache = GetMovieByIdFromCache(
-                cacheDataSource = movieListCacheDataSource
-            ),
-            getMoviesFromNetwork = GetMoviesFromNetwork(
-                movieListNetworkDataSource = movieListNetworkDataSource
-            ),
-            getMoviesFromNetworkAndInsertToCache = GetMoviesFromNetworkAndInsertToCache(
-                cacheDataSource = movieListCacheDataSource,
-                movieListNetworkDataSource = movieListNetworkDataSource,
-                factory = movieListFactory
-            ),
-            getNumMovies = GetNumMovies(
-                cacheDataSource = movieListCacheDataSource
-            ),
-            insertMovie = InsertMovie(
-                cacheDataSource = movieListCacheDataSource,
-                factory = movieListFactory
-            ),
-        )
-    }
 
     @Singleton
     @Provides

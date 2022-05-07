@@ -4,7 +4,6 @@ import androidx.fragment.app.FragmentFactory
 import com.seancoyle.movies.framework.presentation.common.MovieFragmentFactory
 import dagger.Module
 import dagger.Provides
-
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
