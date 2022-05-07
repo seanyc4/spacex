@@ -1,7 +1,6 @@
 package com.seancoyle.movies.framework.presentation.moviedetail
 
 import androidx.core.os.bundleOf
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso
@@ -15,7 +14,7 @@ import com.seancoyle.movies.R
 import com.seancoyle.movies.business.domain.model.moviedetail.Cast
 import com.seancoyle.movies.business.domain.model.movielist.Movie
 import com.seancoyle.movies.business.domain.util.DateUtil
-import com.seancoyle.movies.di.ProductionModule
+import com.seancoyle.movies.di.*
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
 import com.seancoyle.movies.framework.datasource.data.moviedetail.MovieDetailDataFactory
@@ -25,6 +24,7 @@ import com.seancoyle.movies.framework.presentation.UIController
 import com.seancoyle.movies.framework.presentation.moviedetail.adapter.MovieCastAdapter
 import com.seancoyle.movies.framework.presentation.movielist.MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
+import com.seancoyle.movies.util.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -47,18 +47,18 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
-@UninstallModules(ProductionModule::class)
-@RunWith(AndroidJUnit4ClassRunner::class)
+@UninstallModules(
+    MovieDetailModule::class,
+    MovieListModule::class,
+    MovieFragmentFactoryModule::class
+)
 class MovieDetailFragmentTests : BaseTest() {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get: Rule
+    @get:Rule(order = 1)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
-
-    @Inject
-    lateinit var fragmentFactory: TestMovieFragmentFactory
 
     @Inject
     lateinit var movieListCacheMapper: MovieListCacheMapper
@@ -75,19 +75,20 @@ class MovieDetailFragmentTests : BaseTest() {
     @Inject
     lateinit var dateUtil: DateUtil
 
-    private val testMovie: Movie
-    private val testMovieCast: List<Cast>
+    @Inject
+    lateinit var fragmentFactory: TestMovieFragmentFactory
 
-    val uiController = mockk<UIController>(relaxed = true)
-    val navController = mockk<NavController>(relaxed = true)
-
-    init {
-        testMovie = movieListDataFactory.produceListOfMovies().getOrNull(0)?.movies?.getOrNull(0)!!
-        testMovieCast = movieDetailDataFactory.produceListOfMovieCast().getOrNull(0)?.cast ?: emptyList()
-    }
+    private lateinit var testMovie: Movie
+    private lateinit var testMovieCast: List<Cast>
+    private val uiController = mockk<UIController>(relaxed = true)
+    private val navController = mockk<NavController>(relaxed = true)
 
     @Before
     fun before() {
+        hiltRule.inject()
+        testMovie = movieListDataFactory.produceListOfMovies().getOrNull(0)?.movies?.getOrNull(0)!!
+        testMovieCast =
+            movieDetailDataFactory.produceListOfMovieCast().getOrNull(0)?.cast ?: emptyList()
         setupUIController()
     }
 
@@ -105,13 +106,13 @@ class MovieDetailFragmentTests : BaseTest() {
     fun movieDetailFragmentTest() {
 
         // setup
-        val scenario = launchFragmentInContainer<MovieDetailFragment>(
-            factory = fragmentFactory,
+        launchFragmentInHiltContainer<MovieDetailFragment>(
+            fragmentFactory = fragmentFactory,
             fragmentArgs = bundleOf(MOVIE_DETAIL_SELECTED_MOVIE_BUNDLE_KEY to testMovie)
-        ).onFragment { fragment ->
-            fragment.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
+        ) {
+            this.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
                 if (viewLifecycleOwner != null) {
-                    Navigation.setViewNavController(fragment.requireView(), navController)
+                    Navigation.setViewNavController(this.requireView(), navController)
                 }
             }
         }

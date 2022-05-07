@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -99,10 +98,6 @@ dependencies {
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
-   /* implementation(Dagger2.dagger)
-    kapt(Dagger2.dagger_compiler)
-    kaptAndroidTest(Dagger2.dagger_compiler)*/
-
     implementation(Glide.glide)
     kapt(Glide.glide_compiler)
 
@@ -113,8 +108,9 @@ dependencies {
     implementation(Google.swipe_refresh_layout)
 
     implementation(Hilt.android)
-    implementation(HiltTest.hilt_android_testing)
     kapt(Hilt.compiler)
+    androidTestImplementation(HiltTest.hilt_android_testing)
+    kaptAndroidTest(Hilt.compiler)
 
     implementation(Insetter.insetter)
 
@@ -159,4 +155,8 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.text_core_ktx)
 
+}
+
+kapt {
+    correctErrorTypes = true
 }

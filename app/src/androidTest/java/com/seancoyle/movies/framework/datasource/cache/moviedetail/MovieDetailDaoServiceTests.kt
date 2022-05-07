@@ -4,15 +4,24 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieCastDomainEntity
 import com.seancoyle.movies.business.domain.model.moviedetail.MovieDetailFactory
+import com.seancoyle.movies.di.AppModule
+import com.seancoyle.movies.di.MovieDetailModule
+import com.seancoyle.movies.di.MovieListModule
+import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.abstraction.moviedetail.MovieDetailDaoService
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.implementation.moviedetail.MovieDetailDaoServiceImpl
 import com.seancoyle.movies.framework.datasource.cache.mappers.moviedetail.MovieDetailCacheMapper
 import com.seancoyle.movies.framework.datasource.data.moviedetail.MovieDetailDataFactory
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -40,11 +49,19 @@ import kotlin.test.assertTrue
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@HiltAndroidTest
+@UninstallModules(
+    MovieDetailModule::class,
+    AppModule::class,
+    ProductionModule::class
+)
 class MovieDetailDaoServiceTests : BaseTest() {
 
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private val daoService: MovieDetailDaoService
+    private lateinit var daoService: MovieDetailDaoService
 
     // dependencies
     @Inject
@@ -59,7 +76,9 @@ class MovieDetailDaoServiceTests : BaseTest() {
     @Inject
     lateinit var cacheMapper: MovieDetailCacheMapper
 
-    init {
+    @Before
+    fun init() {
+        hiltRule.inject()
         insertTestData()
         daoService = MovieDetailDaoServiceImpl(
             dao = dao,

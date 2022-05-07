@@ -7,12 +7,12 @@ import com.seancoyle.movies.business.domain.model.movielist.MovieListFactory
 import com.seancoyle.movies.framework.datasource.cache.database.Database
 import com.seancoyle.movies.framework.datasource.data.moviedetail.MovieDetailDataFactory
 import com.seancoyle.movies.framework.datasource.data.movielist.MovieListDataFactory
-import com.seancoyle.movies.framework.presentation.BaseApplication
 import com.seancoyle.movies.util.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
+import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
@@ -20,10 +20,12 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Module
-@InstallIn(SingletonComponent::class)
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [ProductionModule::class]
+)
 object TestModule {
 
-    
     @Singleton
     @Provides
     fun provideAndroidTestUtils(): AndroidTestUtils {
@@ -32,7 +34,7 @@ object TestModule {
 
     @Singleton
     @Provides
-    fun provideMovieDb(app: BaseApplication): Database {
+    fun provideMovieDb(app: HiltTestApplication): Database {
         return Room
             .inMemoryDatabaseBuilder(app, Database::class.java)
             .fallbackToDestructiveMigration()
@@ -42,7 +44,7 @@ object TestModule {
     @Singleton
     @Provides
     fun provideMovieListDataFactory(
-        application: BaseApplication,
+        application: HiltTestApplication,
         movieListFactory: MovieListFactory
     ): MovieListDataFactory {
         return MovieListDataFactory(application, movieListFactory)
@@ -51,7 +53,7 @@ object TestModule {
     @Singleton
     @Provides
     fun provideMovieDetailDataFactory(
-        application: BaseApplication,
+        application: HiltTestApplication,
         movieDetailFactory: MovieDetailFactory
     ): MovieDetailDataFactory {
         return MovieDetailDataFactory(application, movieDetailFactory)

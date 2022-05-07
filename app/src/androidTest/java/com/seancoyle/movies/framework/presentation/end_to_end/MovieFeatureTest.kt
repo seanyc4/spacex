@@ -7,11 +7,15 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
 import com.seancoyle.movies.business.data.network.abstraction.moviedetail.MovieDetailNetworkDataSource
 import com.seancoyle.movies.business.data.network.abstraction.movielist.MovieListNetworkDataSource
+import com.seancoyle.movies.di.AppModule
+import com.seancoyle.movies.di.MovieDetailModule
+import com.seancoyle.movies.di.MovieListModule
 import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.dao.moviedetail.MovieDetailDao
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
@@ -50,14 +54,17 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
-@UninstallModules(ProductionModule::class)
-@RunWith(AndroidJUnit4ClassRunner::class)
+@LargeTest
+@UninstallModules(
+    MovieListModule::class,
+    MovieDetailModule::class
+)
 class MovieFeatureTest: BaseTest() {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get: Rule
+    @get: Rule(order = 1)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
@@ -84,15 +91,12 @@ class MovieFeatureTest: BaseTest() {
     @Inject
     lateinit var movieDetailNetworkDataSource: MovieDetailNetworkDataSource
 
-    private val testMovieList: List<MovieCacheEntity>
-    private val testMovieCastList: List<MovieCastCacheEntity>
+    private lateinit var testMovieList: List<MovieCacheEntity>
+    private lateinit var testMovieCastList: List<MovieCastCacheEntity>
 
     @Before
     fun init() {
         hiltRule.inject()
-    }
-
-    init {
         testMovieList = movieListCacheMapper.domainListToEntityList(
             movieListDataFactory.produceListOfMovies()
         )

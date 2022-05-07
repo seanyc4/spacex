@@ -12,7 +12,9 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Singleton
-class TestMovieFragmentFactory : FragmentFactory() {
+class TestMovieFragmentFactory
+@Inject
+constructor() : FragmentFactory() {
 
     lateinit var uiController: UIController
 

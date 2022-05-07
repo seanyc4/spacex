@@ -1,6 +1,5 @@
 package com.seancoyle.movies.framework.presentation.movielist
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
@@ -11,6 +10,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
 import com.seancoyle.movies.R
+import com.seancoyle.movies.di.AppModule
+import com.seancoyle.movies.di.MovieFragmentFactoryModule
+import com.seancoyle.movies.di.MovieListModule
 import com.seancoyle.movies.di.ProductionModule
 import com.seancoyle.movies.framework.datasource.cache.dao.movielist.MovieListDao
 import com.seancoyle.movies.framework.datasource.cache.mappers.movielist.MovieListCacheMapper
@@ -20,6 +22,7 @@ import com.seancoyle.movies.framework.presentation.TestMovieFragmentFactory
 import com.seancoyle.movies.framework.presentation.UIController
 import com.seancoyle.movies.framework.presentation.movielist.adapter.MovieListAdapter.MovieListViewHolder
 import com.seancoyle.movies.util.EspressoIdlingResourceRule
+import com.seancoyle.movies.util.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -34,7 +37,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 
-
 /*
     --Test cases:
 
@@ -46,18 +48,17 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
-@UninstallModules(ProductionModule::class)
-@RunWith(AndroidJUnit4ClassRunner::class)
+@UninstallModules(
+    MovieListModule::class,
+    MovieFragmentFactoryModule::class
+)
 class MoviesListFragmentTests: BaseTest() {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get: Rule
+    @get:Rule(order = 1)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
-
-    @Inject
-    lateinit var fragmentFactory: TestMovieFragmentFactory
 
     @Inject
     lateinit var movieListCacheMapper: MovieListCacheMapper
@@ -68,21 +69,20 @@ class MoviesListFragmentTests: BaseTest() {
     @Inject
     lateinit var dao: MovieListDao
 
-    private val testMovieList: List<MovieCacheEntity>
+    @Inject
+    lateinit var fragmentFactory: TestMovieFragmentFactory
 
-    val uiController = mockk<UIController>(relaxed = true)
+    private lateinit var testMovieList: List<MovieCacheEntity>
+    private val uiController = mockk<UIController>(relaxed = true)
+    private val navController = mockk<NavController>(relaxed = true)
 
-    val navController = mockk<NavController>(relaxed = true)
-
-    init {
+    @Before
+    fun before(){
+        hiltRule.inject()
         testMovieList = movieListCacheMapper.domainListToEntityList(
             movieListDataFactory.produceListOfMovies()
         )
         prepareDataSet(testMovieList)
-    }
-
-    @Before
-    fun before(){
         setupUIController()
     }
 
@@ -107,12 +107,13 @@ class MoviesListFragmentTests: BaseTest() {
     fun movieListFragmentTest() = runBlocking{
 
         // setup
-        val scenario = launchFragmentInContainer<MoviesListFragment>(
-            factory = fragmentFactory
-        ).onFragment { fragment ->
-            fragment.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
+
+        launchFragmentInHiltContainer<MoviesListFragment>(
+            fragmentFactory = fragmentFactory
+        ){
+            this.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
                 if (viewLifecycleOwner != null) {
-                    Navigation.setViewNavController(fragment.requireView(), navController)
+                    Navigation.setViewNavController(this.requireView(), navController)
                 }
             }
         }

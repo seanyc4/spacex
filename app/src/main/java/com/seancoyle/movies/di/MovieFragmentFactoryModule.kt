@@ -1,11 +1,12 @@
 package com.seancoyle.movies.di
 
 import androidx.fragment.app.FragmentFactory
-import com.seancoyle.movies.framework.presentation.TestMovieFragmentFactory
+import com.seancoyle.movies.framework.presentation.common.MovieFragmentFactory
 import dagger.Module
 import dagger.Provides
+
+import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
@@ -13,16 +14,13 @@ import javax.inject.Singleton
 @FlowPreview
 @ExperimentalCoroutinesApi
 @Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [MovieFragmentFactoryModule::class]
-)
-object TestMovieFragmentFactoryModule {
+@InstallIn(SingletonComponent::class)
+object MovieFragmentFactoryModule {
 
     @Singleton
     @Provides
-    fun provideMovieFragmentFactory(
-    ): FragmentFactory {
-        return TestMovieFragmentFactory()
+    fun provideMovieFragmentFactory(): FragmentFactory {
+        return MovieFragmentFactory()
     }
+
 }

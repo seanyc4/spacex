@@ -1,4 +1,4 @@
-package com.seancoyle.movies.util
+package com.seancoyle.movies
 
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint

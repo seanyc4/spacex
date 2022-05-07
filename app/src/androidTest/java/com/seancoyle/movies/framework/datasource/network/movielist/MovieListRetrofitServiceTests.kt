@@ -2,6 +2,11 @@ package com.seancoyle.movies.framework.datasource.network.movielist
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.movies.BaseTest
+import com.seancoyle.movies.di.AppModule
+import com.seancoyle.movies.di.MovieListModule
+import com.seancoyle.movies.di.ProductionModule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.junit.runner.RunWith
@@ -17,6 +22,12 @@ import org.junit.runner.RunWith
  */
 @ExperimentalCoroutinesApi
 @FlowPreview
+@HiltAndroidTest
+@UninstallModules(
+    MovieListModule::class,
+    AppModule::class,
+    ProductionModule::class
+)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MovieListRetrofitServiceTests: BaseTest(){
 

@@ -1,8 +1,6 @@
 package com.seancoyle.movies
 
-import android.content.Context
 import android.view.View
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
@@ -18,7 +16,6 @@ import org.hamcrest.Matcher
 @ExperimentalCoroutinesApi
 @FlowPreview
 abstract class BaseTest {
-
 
     // wait for a certain view to be shown.
     // ex: waiting for splash screen to transition to MoviesListFragment
