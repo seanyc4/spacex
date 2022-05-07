@@ -8,7 +8,6 @@ This app is for demonstration purposes to show good coding practices in android 
 
 * Clean Architecture
 * Coroutines
-* Espresso Instrumentation Tests
 * Flows and channels
 * Glide
 * Hilt Dependency Injection
