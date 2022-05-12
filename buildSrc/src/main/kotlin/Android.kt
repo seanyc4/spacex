@@ -1,5 +1,5 @@
 object Android {
-    const val appId = "com.seancoyle.movies"
+    const val appId = "com.seancoyle.spacex"
     const val compileSdk = 32
     const val buildTools = "30.0.3"
     const val minSdk = 24

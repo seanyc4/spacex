@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.seancoyle.movies">
+    package="com.seancoyle.spacex">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.seancoyle.movies.framework.presentation.BaseApplication"
+        android:name="com.seancoyle.spacex.framework.presentation.BaseApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.seancoyle.movies.framework.presentation.MainActivity"
+            android:name="com.seancoyle.spacex.framework.presentation.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

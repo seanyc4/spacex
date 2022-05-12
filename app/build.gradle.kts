@@ -4,7 +4,6 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
@@ -34,22 +33,24 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                "$project.rootDir/tools/proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "$project.rootDir/tools/proguard-rules.pro"
+            )
         }
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        // Enable Java 8 time below api 26
+        isCoreLibraryDesugaringEnabled = true
+
     }
 
     kotlinOptions {
         jvmTarget = Java.java_version
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Compose.compose_version
     }
 
     buildFeatures {
@@ -58,7 +59,7 @@ android {
     }
 
     sourceSets {
-       getByName("test").resources.srcDir("src/test/res")
+        getByName("test").resources.srcDir("src/test/res")
     }
 
     testOptions {
@@ -78,6 +79,7 @@ android {
 
 dependencies {
 
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.fragment_ktx)
@@ -107,7 +109,6 @@ dependencies {
 
     implementation(Insetter.insetter)
 
-    implementation(Kotlin.kotlin_reflect)
     implementation(Kotlinx.coroutines_core)
     implementation(Kotlinx.coroutines_android)
     implementation(Kotlinx.datetime)

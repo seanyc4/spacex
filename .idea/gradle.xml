@@ -13,15 +13,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/constants" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/movie" />
-            <option value="$PROJECT_DIR$/movie/movie-datasource" />
-            <option value="$PROJECT_DIR$/movie/movie-datasource-test" />
-            <option value="$PROJECT_DIR$/movie/movie-domain" />
-            <option value="$PROJECT_DIR$/movie/movie-interactors" />
-            <option value="$PROJECT_DIR$/movie/ui-movieDetail" />
-            <option value="$PROJECT_DIR$/movie/ui-movieList" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

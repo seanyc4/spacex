@@ -1,8 +1,7 @@
 
 ## Overview
 
-This app is for demonstration purposes to show good coding practices in android development. The app itself is quiet simple. It displays a list of movies from tmdb using an open api. When a user clicks on a movies they can see more detailed information including the cast, overview etc.
-
+This app is for demonstration purposes to show good coding practices in android development.
 
 ## Tech stack
 
@@ -22,18 +21,8 @@ This app is for demonstration purposes to show good coding practices in android 
 * Splash Screen
 * Timber
 * Unit tests (Junit5)
-* Window insets
 
 ![](images/clean_architecture.png)
-
-
-## Installation
-
-Clone the git repository and open in the latest version of android studio.
-* Register for an account on tmdb.com and get your free api key
-* Open the constants file in the util package.
-* Paste your api key into the const val API_KEY = ""
-* Compile and run
 
 
 ## Testing
@@ -43,7 +32,7 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 
 ## Future updates
 
-* Add pagination to the movies list recycler view
+* Add pagination to the launch list recycler view
 * Refactor to modular design pattern
 * Change from XML to compose
 
