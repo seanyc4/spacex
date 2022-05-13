@@ -42,7 +42,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         dependencyContainer.build()
         mockWebServer = MockWebServer()
         mockWebServer.start()
-        baseUrl = mockWebServer.url("v3/launches")
+        baseUrl = mockWebServer.url("v3/launches/")
 
         networkMapper = LaunchNetworkMapper(
             dateFormatter = dependencyContainer.dateFormatter,

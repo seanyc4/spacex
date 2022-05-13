@@ -8,7 +8,8 @@
     <!-- view margins -->
     <dimen name="default_view_margin">@dimen/_16sdp</dimen>
     <dimen name="default_view_margin_negative">@dimen/_minus16sdp</dimen>
-    <dimen name="recyclerview_start_end_margins">@dimen/_8sdp</dimen>
+    <dimen name="default_bottom_sheet_margin">@dimen/_10sdp</dimen>
+    <dimen name="small_view_margins_8dp">@dimen/_8sdp</dimen>
     <dimen name="scrollview_bottom_margin">80dp</dimen>
 
     <!-- text size -->
@@ -18,10 +19,9 @@
     <dimen name="text_size_medium">@dimen/_12sdp</dimen>
     <dimen name="text_size_subHeading">@dimen/_14sdp</dimen>
     <dimen name="text_size_heading">@dimen/_16sdp</dimen>
-    <dimen name="text_size_large">@dimen/_18sdp</dimen>
-    <dimen name="text_size_xl">@dimen/_20sdp</dimen>
-    <dimen name="text_size_2xl">@dimen/_22sdp</dimen>
-    <dimen name="text_size_3xl">@dimen/_24sdp</dimen>
+    <dimen name="text_size_xl">@dimen/_22sdp</dimen>
 
+    <!-- Corner radii -->
+    <dimen name="default_corner_radius">@dimen/_10sdp</dimen>
 
 </resources>

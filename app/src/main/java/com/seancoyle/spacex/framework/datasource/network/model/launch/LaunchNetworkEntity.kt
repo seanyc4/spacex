@@ -15,7 +15,7 @@ data class LaunchNetworkEntity(
 
     @Expose
     @SerializedName("launch_success")
-    val launchSuccess: Boolean?,
+    val isLaunchSuccess: Boolean?,
 
     @Expose
     @SerializedName("launch_year")

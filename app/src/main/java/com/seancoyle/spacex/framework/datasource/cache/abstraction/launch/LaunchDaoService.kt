@@ -1,6 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.cache.abstraction.launch
 
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_PAGINATION_PAGE_SIZE
 
 interface LaunchDaoService {
 
@@ -19,6 +20,27 @@ interface LaunchDaoService {
     suspend fun getAll(): List<LaunchDomainEntity>?
 
     suspend fun getTotalEntries(): Int
+
+    suspend fun searchLaunchItemsOrderByYearDESC(
+        query: String,
+        isLaunchSuccess: Boolean,
+        page: Int,
+        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+    ): List<LaunchDomainEntity>
+
+    suspend fun searchLaunchItemsOrderByYearASC(
+        query: String,
+        isLaunchSuccess: Boolean,
+        page: Int,
+        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+    ): List<LaunchDomainEntity>
+
+    suspend fun returnOrderedQuery(
+        query: String?,
+        order: String,
+        isLaunchSuccess: Boolean?,
+        page: Int
+    ): List<LaunchDomainEntity>?
 
 }
 

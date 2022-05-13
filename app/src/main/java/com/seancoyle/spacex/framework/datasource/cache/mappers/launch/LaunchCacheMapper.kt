@@ -28,6 +28,8 @@ class LaunchCacheMapper {
             return LaunchDomainEntity(
                 id = id,
                 launchDate = launchDate,
+                launchDateLocalDateTime = launchDateLocalDateTime,
+                isLaunchSuccess = isLaunchSuccess,
                 launchSuccessIcon = launchSuccessIcon,
                 launchYear = launchYear,
                 links = Links(
@@ -52,6 +54,8 @@ class LaunchCacheMapper {
             return LaunchCacheEntity(
                 id = id,
                 launchDate = launchDate,
+                launchDateLocalDateTime = launchDateLocalDateTime,
+                isLaunchSuccess = isLaunchSuccess,
                 launchSuccessIcon = launchSuccessIcon,
                 launchYear = launchYear,
                 links = LinksCache(

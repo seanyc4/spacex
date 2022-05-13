@@ -39,6 +39,9 @@ object LaunchInteractorsModule {
             insertLaunchListToCache = InsertLaunchListToCache(
                 cacheDataSource = launchCacheDataSource,
                 factory = launchFactory
+            ),
+            searchLaunchItemsInCache = SearchLaunchItemsInCache(
+                cacheDataSource = launchCacheDataSource
             )
 
         )

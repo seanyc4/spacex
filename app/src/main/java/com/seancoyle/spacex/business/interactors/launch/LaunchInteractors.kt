@@ -5,7 +5,8 @@ class LaunchInteractors(
     val getLaunchItemByIdFromCache: GetLaunchItemByIdFromCache,
     val getLaunchItemsFromNetworkAndInsertToCache: GetLaunchItemsFromNetworkAndInsertToCache,
     val getNumLaunchItemsFromCache: GetNumLaunchItemsFromCache,
-    val insertLaunchListToCache: InsertLaunchListToCache
+    val insertLaunchListToCache: InsertLaunchListToCache,
+    val searchLaunchItemsInCache: SearchLaunchItemsInCache
 )
 
 

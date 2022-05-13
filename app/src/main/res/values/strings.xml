@@ -7,17 +7,21 @@
     <string name="days_from_now">Days from now</string>
     <string name="days_data">+/- %s</string>
 
+    <!-- Material Dialog text -->
     <string name="text_error">Error</string>
     <string name="text_success">Success</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_info">Info</string>
     <string name="text_yes">Yes</string>
-    <string name="text_undo">Undo</string>
-    <string name="text_delete">Delete</string>
+    <string name="text_apply">Apply</string>
     <string name="text_filter">Filter</string>
     <string name="text_search">Search</string>
-    <string name="text_apply">Apply</string>
+
+    <!-- Error Messages-->
+    <string name="no_links">This launch event has no media links</string>
+    <string name="error_links">Unable to load link</string>
+
 
     <string name="back">back</string>
     <string name="back_button">back_button</string>
@@ -30,5 +34,18 @@
     <string name="days">Days %s now</string>
     <string name="date">Date</string>
     <string name="filter_button">Filter button</string>
+    <string name="menu">Menu</string>
+    <string name="article">Article</string>
+    <string name="youtube">Youtube</string>
+    <string name="wikipedia">Wikipedia</string>
+    <string name="filter_by_year">FILTER BY YEAR</string>
+    <string name="year">YEAR</string>
+    <string name="asc_desc">ASC/DESC</string>
+    <string name="asc">ASC</string>
+    <string name="desc">DESC</string>
+    <string name="success_failure">Success/Failure</string>
+    <string name="failure">FAILURE</string>
+    <string name="success">SUCCESS</string>
+    <string name="launch_status">Launch Status</string>
 
 </resources>

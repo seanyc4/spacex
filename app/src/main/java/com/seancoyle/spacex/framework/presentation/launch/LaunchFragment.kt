@@ -1,19 +1,33 @@
 package com.seancoyle.spacex.framework.presentation.launch
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
-import com.seancoyle.spacex.business.domain.state.StateMessageCallback
+import com.seancoyle.spacex.business.domain.model.launch.Links
+import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
-import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemsFromNetworkAndInsertToCache
+import com.seancoyle.spacex.business.interactors.launch.SearchLaunchItemsInCache
 import com.seancoyle.spacex.databinding.FragmentLaunchBinding
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.presentation.common.BaseFragment
 import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
@@ -21,8 +35,10 @@ import com.seancoyle.spacex.framework.presentation.launch.state.*
 import com.seancoyle.spacex.util.AndroidTestUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import timber.log.Timber
 import javax.inject.Inject
 
+const val LINKS_KEY = "links"
 const val LAUNCH_STATE_BUNDLE_KEY =
     "com.seancoyle.launch.framework.presentation.launch.state"
 
@@ -38,6 +54,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     private val viewModel: LaunchViewModel by viewModels()
     private val binding by viewBinding(FragmentLaunchBinding::bind)
     private var listAdapter: LaunchAdapter? = null
+    private var links: Links? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +82,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = viewModel.viewState.value
 
-        //clear the list. Don't want to save a large list to bundle.
+        //clear the list. Don't save a large list to bundle.
         viewState?.launchList = ArrayList()
 
         outState.putParcelable(
@@ -117,7 +134,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromCacheEvent)
                     }
 
-                    GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
+                    SearchLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
                         viewModel.clearStateMessage()
                     }
 
@@ -163,11 +180,42 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 }
             }
         }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
+            ?.observe(viewLifecycleOwner) { result ->
+                when (result) {
+
+                    ARTICLE -> {
+                        launchIntent(links?.articleLink)
+                    }
+
+                    YOUTUBE -> {
+                        launchIntent(links?.videoLink)
+                    }
+
+                    WIKI -> {
+                        launchIntent(links?.wikipedia)
+                    }
+                }
+            }
+    }
+
+    private fun launchIntent(url: String?) {
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(url.toString())
+                )
+            )
+        } catch (e: ActivityNotFoundException) {
+            displayErrorDialogUnableToLoadLink()
+        }
     }
 
     private fun getLaunchDataFromCacheEvent() {
         viewModel.setStateEvent(
-            LaunchStateEvent.GetLaunchListFromCacheEvent
+            LaunchStateEvent.SearchLaunchListEvent()
         )
     }
 
@@ -198,7 +246,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     private fun setListeners() {
         with(binding) {
             toolbar.filterBtn.setOnClickListener {
-
+                showFilterDialog()
             }
         }
     }
@@ -217,10 +265,124 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
-    override fun onItemSelected(position: Int, selectedItem: LaunchDomainEntity) {
-        /**
-         * Show options menu
-         */
+    override fun onItemSelected(position: Int, launchLinks: Links) {
+        links = launchLinks
+        if (isLinksNullOrEmpty()) {
+            displayErrorDialogNoLinks()
+        } else {
+            displayBottomActionSheet(launchLinks)
+        }
+    }
+
+    private fun isLinksNullOrEmpty() =
+        links?.articleLink.isNullOrEmpty() &&
+                links?.videoLink.isNullOrEmpty() &&
+                links?.wikipedia.isNullOrEmpty()
+
+
+    private fun displayBottomActionSheet(launchLinks: Links) {
+        if (findNavController().currentDestination?.id == R.id.launchFragment) {
+            findNavController().navigate(
+                R.id.action_launchFragment_to_launchBottomActionSheet,
+                bundleOf(LINKS_KEY to launchLinks)
+            )
+        }
+    }
+
+    private fun showFilterDialog() {
+
+        activity?.let {
+            val dialog = MaterialDialog(it)
+                .noAutoDismiss()
+                .customView(R.layout.layout_filter)
+
+            val view = dialog.getCustomView()
+            val order = viewModel.getOrder()
+            var newOrder: String? = null
+
+            // set switch to on/off based on state
+            val orderSwitch = view.findViewById<SwitchMaterial>(R.id.order_switch).apply {
+                when (order) {
+                    LAUNCH_ORDER_ASC -> isChecked = false
+                    LAUNCH_ORDER_DESC -> isChecked = true
+                }
+            }
+
+            orderSwitch.setOnCheckedChangeListener { _, isChecked ->
+                newOrder = if (isChecked) {
+                    LAUNCH_ORDER_DESC
+                } else {
+                    LAUNCH_ORDER_ASC
+                }
+            }
+
+
+            view.findViewById<TextView>(R.id.positive_button).setOnClickListener {
+
+                val isSuccess =
+                    when (view.findViewById<RadioGroup>(R.id.success_group).checkedRadioButtonId) {
+                        R.id.filter_success -> true
+                        R.id.filter_failure -> false
+                        else -> null
+                    }
+
+                val searchQuery = view.findViewById<EditText>(R.id.search_query).text.toString()
+
+
+                // Save data to view model
+                viewModel.apply {
+                    newOrder?.let { order ->
+                        saveOrder(order)
+                        setLaunchOrder(newOrder)
+                    }
+                    setQuery(searchQuery)
+                    setIsLaunchSuccess(isSuccess)
+                }
+
+                startNewSearch()
+                dialog.dismiss()
+            }
+
+            view.findViewById<TextView>(R.id.negative_button).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+    }
+
+    private fun startNewSearch() {
+        Timber.e("DCM", "start new search")
+        viewModel.clearList()
+        viewModel.loadFirstPage()
+    }
+
+    private fun displayErrorDialogNoLinks() {
+        viewModel.setStateEvent(
+            stateEvent = LaunchStateEvent.CreateStateMessageEvent(
+                StateMessage(
+                    response = Response(
+                        messageType = MessageType.Info,
+                        message = getString(R.string.no_links),
+                        uiComponentType = UIComponentType.Dialog
+                    )
+                )
+            )
+        )
+    }
+
+    private fun displayErrorDialogUnableToLoadLink() {
+        viewModel.setStateEvent(
+            stateEvent = LaunchStateEvent.CreateStateMessageEvent(
+                StateMessage(
+                    response = Response(
+                        messageType = MessageType.Error,
+                        message = getString(R.string.error_links),
+                        uiComponentType = UIComponentType.Dialog
+                    )
+                )
+            )
+        )
     }
 
 }

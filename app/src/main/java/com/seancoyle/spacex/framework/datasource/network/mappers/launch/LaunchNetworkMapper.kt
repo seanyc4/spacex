@@ -28,10 +28,12 @@ constructor(
     private fun mapFromEntity(entity: LaunchNetworkEntity): LaunchDomainEntity {
         entity.apply {
             val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
-            val launchSuccess = launchSuccess ?: false
+            val launchSuccess = isLaunchSuccess ?: false
             return LaunchDomainEntity(
                 id = flightNumber ?: 0,
                 launchDate = dateTransformer.formatDateTimeToString(localDateTime),
+                launchDateLocalDateTime = localDateTime,
+                isLaunchSuccess = isLaunchSuccess?: false,
                 launchSuccessIcon = isLaunchSuccess(launchSuccess),
                 launchYear = launchYear.orEmpty(),
                 links = Links(

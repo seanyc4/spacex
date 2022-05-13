@@ -2,10 +2,12 @@ package com.seancoyle.spacex.framework.datasource.cache.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
 import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoCacheEntity
+import com.seancoyle.spacex.framework.datasource.cache.typeconverters.LocalDateTimeTypeConverter
 
 @Database(
     entities =
@@ -14,6 +16,9 @@ import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfo
         CompanyInfoCacheEntity::class
     ],
     version = 1
+)
+@TypeConverters(
+    LocalDateTimeTypeConverter::class
 )
 abstract class Database : RoomDatabase() {
 

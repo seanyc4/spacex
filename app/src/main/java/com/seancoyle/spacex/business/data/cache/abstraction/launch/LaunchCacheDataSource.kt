@@ -19,6 +19,13 @@ interface LaunchCacheDataSource {
     suspend fun getTotalEntries(): Int
 
     suspend fun insertLaunchList(launchList: List<LaunchDomainEntity>): LongArray
+
+    suspend fun searchLaunchList(
+        query: String,
+        order: String,
+        isLaunchSuccess: Boolean?,
+        page: Int
+    ): List<LaunchDomainEntity>?
 }
 
 

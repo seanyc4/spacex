@@ -3,6 +3,7 @@ package com.seancoyle.spacex.business.domain.model.launch
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
@@ -13,6 +14,8 @@ class LaunchFactory {
     fun createLaunchItem(
         id: Int,
         launchDate: String,
+        launchDateLocalDateTime: LocalDateTime,
+        isLaunchSuccess: Boolean,
         launchSuccessIcon: Int,
         launchYear: String,
         links: Links,
@@ -25,6 +28,8 @@ class LaunchFactory {
         return LaunchDomainEntity(
             id = id,
             launchDate = launchDate,
+            launchDateLocalDateTime = launchDateLocalDateTime,
+            isLaunchSuccess = isLaunchSuccess,
             launchSuccessIcon = launchSuccessIcon,
             launchYear = launchYear,
             links = links,
@@ -45,6 +50,8 @@ class LaunchFactory {
                 createLaunchItem(
                     id = item.id,
                     launchDate = item.launchDate,
+                    launchDateLocalDateTime = item.launchDateLocalDateTime,
+                    isLaunchSuccess = item.isLaunchSuccess,
                     launchSuccessIcon = item.launchSuccessIcon,
                     launchYear = item.launchYear,
                     links = item.links,
@@ -69,6 +76,8 @@ class LaunchFactory {
                 createLaunchItem(
                     id = id ?: 1,
                     launchDate = UUID.randomUUID().toString(),
+                    launchDateLocalDateTime = LocalDateTime.now(),
+                    isLaunchSuccess = true,
                     launchSuccessIcon = R.drawable.ic_launch_success,
                     launchYear = UUID.randomUUID().toString(),
                     links = Links(

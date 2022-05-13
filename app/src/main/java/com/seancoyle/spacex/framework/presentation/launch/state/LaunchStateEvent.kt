@@ -120,6 +120,21 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
+    class SearchLaunchListEvent(
+        val clearLayoutManagerState: Boolean = true
+    ): LaunchStateEvent(){
+
+        override fun errorInfo(): String {
+            return "Error getting list of launch items."
+        }
+
+        override fun eventName(): String {
+            return "SearchLaunchListEvent"
+        }
+
+        override fun shouldDisplayProgressBar() = true
+    }
+
     class CreateStateMessageEvent(
         val stateMessage: StateMessage
     ) : LaunchStateEvent() {

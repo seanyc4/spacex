@@ -5,7 +5,7 @@
     android:id="@+id/launch_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColorPrimary">
+    android:background="@color/colorPrimary">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -17,7 +17,7 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar_home" />
+            layout="@layout/toolbar_launch_fragment" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

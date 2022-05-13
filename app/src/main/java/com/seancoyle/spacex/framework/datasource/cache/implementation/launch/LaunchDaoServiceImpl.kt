@@ -3,6 +3,7 @@ package com.seancoyle.spacex.framework.datasource.cache.implementation.launch
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.returnOrderedQuery
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -62,6 +63,53 @@ constructor(
 
     override suspend fun getTotalEntries(): Int {
         return dao.getTotalEntries()
+    }
+
+    override suspend fun searchLaunchItemsOrderByYearDESC(
+        query: String,
+        isLaunchSuccess: Boolean,
+        page: Int,
+        pageSize: Int
+    ): List<LaunchDomainEntity> {
+        return cacheMapper.entityListToDomainList(
+            dao.searchLaunchItemsOrderByYearDESC(
+                query = query,
+                page = page,
+                pageSize = pageSize
+            )
+        )
+    }
+
+    override suspend fun searchLaunchItemsOrderByYearASC(
+        query: String,
+        isLaunchSuccess: Boolean,
+        page: Int,
+        pageSize: Int
+    ): List<LaunchDomainEntity> {
+        return cacheMapper.entityListToDomainList(
+            dao.searchLaunchItemsOrderByYearASC(
+                query = query,
+                page = page,
+                pageSize = pageSize
+            )
+        )
+    }
+
+    override suspend fun returnOrderedQuery(
+        query: String?,
+        order: String,
+        isLaunchSuccess: Boolean?,
+        page: Int
+    ): List<LaunchDomainEntity>? {
+        return dao.returnOrderedQuery(
+            query = query,
+            isLaunchSuccess = isLaunchSuccess,
+            page = page,
+            order = order
+        )?.let {
+            cacheMapper.entityListToDomainList(it)
+        }
+
     }
 
 }

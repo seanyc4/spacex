@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
+import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.model.launch.SectionTitle
 import com.seancoyle.spacex.databinding.RvCompanyInfoItemBinding
 import com.seancoyle.spacex.databinding.RvLaunchItemBinding
@@ -112,7 +113,7 @@ constructor(
             }
 
             setOnClickListener {
-                interaction?.onItemSelected(absoluteAdapterPosition, item)
+                interaction?.onItemSelected(absoluteAdapterPosition, item.links)
             }
 
         }
@@ -146,7 +147,7 @@ constructor(
 
     interface Interaction {
 
-        fun onItemSelected(position: Int, selectedItem: LaunchDomainEntity)
+        fun onItemSelected(position: Int, launchLinks: Links)
 
     }
 

@@ -2,9 +2,9 @@
 <resources>
 
     <!-- Main theme colors -->
-    <color name="colorPrimary">#FAFAFA</color>
+    <color name="colorPrimary">#212121</color>
     <color name="colorSecondary">#424242</color>
-    <color name="colorAccent">#0288D1</color>
+    <color name="colorAccent">#03A9F4</color>
 
     <!-- Text colors -->
     <color name="textColorPrimary">#FFFFFF</color>
@@ -13,10 +13,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
-
-    <!-- background colors -->
-    <color name="backgroundColorPrimary">#212121</color>
-    <color name="backgroundColorSecondary">#424242</color>
 
     <color name="grey_50">#FAFAFA</color>
     <color name="grey_100">#F5F5F5</color>

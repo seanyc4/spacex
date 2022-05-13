@@ -55,6 +55,20 @@ constructor(
         )
     }
 
+    override suspend fun searchLaunchList(
+        query: String,
+        order: String,
+        isLaunchSuccess: Boolean?,
+        page: Int
+    ): List<LaunchDomainEntity>? {
+        return daoService.returnOrderedQuery(
+            query = query,
+            order = order,
+            isLaunchSuccess = isLaunchSuccess,
+            page = page
+        )
+    }
+
 }
 
 

@@ -13,9 +13,15 @@ data class LaunchViewState(
     var launch: LaunchDomainEntity? = null,
     var company: CompanyInfoDomainEntity? = null,
     var layoutManagerState: Parcelable? = null,
-    var numLaunchItemsInCache: Int? = null
+    var numLaunchItemsInCache: Int? = null,
+    var page: Int? = null,
+    var isQueryExhausted: Boolean? = null,
+    var isLaunchSuccess: Boolean? = null,
+    var filter: String? = null,
+    var order: String? = null,
+    var searchQuery: String? = null,
 
-): Parcelable, ViewState
+    ): Parcelable, ViewState
 
 
 
