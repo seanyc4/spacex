@@ -35,10 +35,14 @@ import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import com.seancoyle.spacex.framework.presentation.launch.state.*
 import com.seancoyle.spacex.util.AndroidTestUtils
+import com.seancoyle.spacex.util.printLogD
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.text.NumberFormat
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 const val LINKS_KEY = "links"
 const val LAUNCH_STATE_BUNDLE_KEY =
@@ -103,7 +107,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onResume() {
         super.onResume()
         viewModel.retrieveNumLaunchItemsInCache()
-        if(viewModel.getLaunchList() != null){
+        if (viewModel.getLaunchList() != null) {
             viewModel.refreshSearchQuery()
         }
     }
@@ -338,7 +342,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
-                .customView(R.layout.layout_filter)
+                .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 
             val view = dialog.getCustomView()

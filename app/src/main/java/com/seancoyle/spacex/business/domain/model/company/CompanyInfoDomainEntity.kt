@@ -6,12 +6,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class CompanyInfoDomainEntity(
     val id: String,
-    val employees: Int,
+    val employees: String,
     val founded: Int,
     val founder: String,
     val launchSites: Int,
     val name: String,
-    val valuation: Long
+    val valuation: String
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -32,7 +32,7 @@ data class CompanyInfoDomainEntity(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + employees
+        result = 31 * result + employees.hashCode()
         result = 31 * result + founded
         result = 31 * result + founder.hashCode()
         result = 31 * result + launchSites

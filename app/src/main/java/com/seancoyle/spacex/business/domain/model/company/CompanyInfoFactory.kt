@@ -8,12 +8,12 @@ class CompanyInfoFactory {
 
     fun createCompanyInfo(
         id: String?,
-        employees: Int,
+        employees: String,
         founded: Int,
         founder: String,
         launchSites: Int,
         name: String,
-        valuation: Long
+        valuation: String
     ): CompanyInfoDomainEntity {
         return CompanyInfoDomainEntity(
             id = id?: UUID.randomUUID().toString(),

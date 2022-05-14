@@ -6,12 +6,14 @@ import com.seancoyle.spacex.business.data.cache.implementation.launch.LaunchCach
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.implementation.launch.LaunchNetworkDataSourceImpl
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
+import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
@@ -72,8 +74,8 @@ object LaunchModule {
     @Singleton
     @Provides
     fun provideLaunchNetworkMapper(
-        dateFormatter: DateFormatterImpl,
-        dateTransformer: DateTransformerImpl
+        dateFormatter: DateFormatter,
+        dateTransformer: DateTransformer
     ): LaunchNetworkMapper {
         return LaunchNetworkMapper(
             dateFormatter = dateFormatter,

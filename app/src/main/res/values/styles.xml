@@ -6,6 +6,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/space_grotesk</item>
     </style>
 
     <!-- Material TextView Styles. -->

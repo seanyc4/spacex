@@ -2,7 +2,6 @@ package com.seancoyle.spacex.framework.presentation.launch
 
 import android.content.SharedPreferences
 import android.os.Parcelable
-import androidx.lifecycle.viewModelScope
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity

@@ -24,6 +24,7 @@
             android:textColor="@color/textColorPrimary"
             android:textSize="@dimen/text_size_heading"
             android:textStyle="bold"
+            android:fontFamily="@font/orbitron"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

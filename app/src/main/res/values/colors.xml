@@ -5,6 +5,7 @@
     <color name="colorPrimary">#212121</color>
     <color name="colorSecondary">#424242</color>
     <color name="colorAccent">#03A9F4</color>
+    <color name="colorError">#E4342D</color>
 
     <!-- Text colors -->
     <color name="textColorPrimary">#FFFFFF</color>

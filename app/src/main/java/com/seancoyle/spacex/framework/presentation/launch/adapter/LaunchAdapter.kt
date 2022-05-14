@@ -50,10 +50,12 @@ constructor(
             adapter.notifyItemRangeChanged(position, count)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         override fun onMoved(fromPosition: Int, toPosition: Int) {
             adapter.notifyDataSetChanged()
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         override fun onRemoved(position: Int, count: Int) {
             adapter.notifyDataSetChanged()
         }

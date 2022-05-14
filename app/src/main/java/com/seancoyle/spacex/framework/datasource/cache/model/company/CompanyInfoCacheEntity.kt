@@ -8,10 +8,10 @@ data class CompanyInfoCacheEntity(
 
     @PrimaryKey(autoGenerate = false)
     val id: String,
-    val employees: Int,
+    val employees: String,
     val founded: Int,
     val founder: String,
     val launch_sites: Int,
     val name: String,
-    val valuation: Long
+    val valuation: String
 )

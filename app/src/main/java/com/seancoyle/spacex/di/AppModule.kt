@@ -2,8 +2,12 @@ package com.seancoyle.spacex.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
+import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
+import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.spacex.framework.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
@@ -49,7 +53,7 @@ object AppModule {
     @Provides
     fun provideDateFormatter(
         dateFormat: DateTimeFormatter
-    ): DateFormatterImpl {
+    ): DateFormatter {
         return DateFormatterImpl(
             dateFormat = dateFormat
         )
@@ -57,7 +61,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDateTransformer(): DateTransformerImpl {
+    fun provideNumberFormatter(): NumberFormatter {
+        return NumberFormatterImpl(
+
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDateTransformer(): DateTransformer {
         return DateTransformerImpl()
     }
 
