@@ -1,7 +1,8 @@
 package com.seancoyle.spacex.framework.presentation.launch.adapter
 
+import android.annotation.SuppressLint
 import android.view.*
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
@@ -11,13 +12,52 @@ import com.seancoyle.spacex.databinding.RvCompanyInfoItemBinding
 import com.seancoyle.spacex.databinding.RvLaunchItemBinding
 import com.seancoyle.spacex.databinding.RvSectionTitleItemBinding
 import com.seancoyle.spacex.framework.presentation.launch.glideLoadLaunchImage
+import timber.log.Timber
 
 class LaunchAdapter
 constructor(
     private val interaction: Interaction? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var launchList: List<LaunchType> = emptyList()
+    private val diffCallBack = object : DiffUtil.ItemCallback<LaunchType>() {
+
+        override fun areItemsTheSame(oldItem: LaunchType, newItem: LaunchType): Boolean {
+            return oldItem.type == newItem.type
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        override fun areContentsTheSame(oldItem: LaunchType, newItem: LaunchType): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    private val differ =
+        AsyncListDiffer(
+            LaunchRecyclerChangeCallback(this),
+            AsyncDifferConfig.Builder(diffCallBack).build()
+        )
+
+    internal inner class LaunchRecyclerChangeCallback(
+        private val adapter: LaunchAdapter
+    ) : ListUpdateCallback {
+
+        override fun onChanged(position: Int, count: Int, payload: Any?) {
+            adapter.notifyItemRangeChanged(position, count, payload)
+        }
+
+        override fun onInserted(position: Int, count: Int) {
+            adapter.notifyItemRangeChanged(position, count)
+        }
+
+        override fun onMoved(fromPosition: Int, toPosition: Int) {
+            adapter.notifyDataSetChanged()
+        }
+
+        override fun onRemoved(position: Int, count: Int) {
+            adapter.notifyDataSetChanged()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -63,35 +103,38 @@ constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SectionTitleViewHolder -> {
-                val sectionItem: SectionTitle = launchList[position] as SectionTitle
+                val sectionItem: SectionTitle = differ.currentList[position] as SectionTitle
                 holder.bind(sectionItem)
             }
 
             is CompanyViewHolder -> {
-                val companyInfo: CompanySummary = launchList[position] as CompanySummary
+                val companyInfo: CompanySummary = differ.currentList[position] as CompanySummary
                 holder.bind(companyInfo)
             }
 
             is LaunchViewHolder -> {
-                val launchItem: LaunchDomainEntity = launchList[position] as LaunchDomainEntity
+                val launchItem: LaunchDomainEntity =
+                    differ.currentList[position] as LaunchDomainEntity
                 holder.bind(launchItem)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return launchList[position].type
+        return differ.currentList[position].type
     }
 
     override fun getItemCount(): Int {
-        return if (!launchList.isNullOrEmpty()) {
-            launchList.size
-        } else 0
+        return differ.currentList.size
     }
 
-    fun updateAdapter(launchList: List<LaunchType>) {
-        this.launchList = launchList
-        notifyDataSetChanged()
+    fun submitList(launchList: List<LaunchType>) {
+        val commitCallback = Runnable {
+            // if process died must restore list position
+            // interaction?.restoreListPosition()
+        }
+        Timber.e("list_adapter", "size: ${launchList.size}")
+        differ.submitList(launchList, commitCallback)
     }
 
     inner class LaunchViewHolder

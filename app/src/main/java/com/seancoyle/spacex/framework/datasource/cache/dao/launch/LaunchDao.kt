@@ -25,10 +25,23 @@ interface LaunchDao {
     @Query("DELETE FROM launch")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM launch WHERE id = :id")
+    @Query(
+        """
+        SELECT * 
+        FROM launch 
+        WHERE id = :id
+        ORDER BY launchDateLocalDateTime DESC
+    """
+    )
     suspend fun getById(id: Int): LaunchCacheEntity?
 
-    @Query("SELECT * FROM launch")
+    @Query(
+        """
+        SELECT * 
+        FROM launch
+        ORDER BY launchDateLocalDateTime DESC
+    """
+    )
     suspend fun getAll(): List<LaunchCacheEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
@@ -150,28 +163,28 @@ suspend fun LaunchDao.returnOrderedQuery(
 
     when {
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) && query.isNullOrEmpty()  ->{
+        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) && query.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearDESC(
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )
         }
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) && query.isNullOrEmpty() ->{
+        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) && query.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearASC(
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )
         }
 
-        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && isLaunchSuccess == null  -> {
+        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && isLaunchSuccess == null -> {
             return searchLaunchItemsOrderByYearDESC(
                 query = query,
                 page = page
             )
         }
 
-        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && isLaunchSuccess == null  -> {
+        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && isLaunchSuccess == null -> {
             return searchLaunchItemsOrderByYearASC(
                 query = query,
                 page = page

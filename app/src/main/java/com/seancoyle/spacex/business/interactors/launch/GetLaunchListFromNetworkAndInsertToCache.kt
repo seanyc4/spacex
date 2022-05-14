@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetLaunchItemsFromNetworkAndInsertToCache
+class GetLaunchListFromNetworkAndInsertToCache
 constructor(
     private val cacheDataSource: LaunchCacheDataSource,
     private val launchNetworkDataSource: LaunchNetworkDataSource,

@@ -33,14 +33,14 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetLaunchListFromCacheEvent: LaunchStateEvent() {
+    object GetAllLaunchDataFromCacheEvent: LaunchStateEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch list from cache."
         }
 
         override fun eventName(): String {
-            return "GetLaunchListFromCacheEvent"
+            return "GetAllLaunchDataFromCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = true

@@ -6,8 +6,8 @@ import com.seancoyle.spacex.business.data.network.launch.FakeLaunchNetworkDataSo
 import com.seancoyle.spacex.business.data.network.launch.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
-import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemsFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
-import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemsFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
+import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
+import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.spacex.di.DependencyContainer
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
@@ -28,7 +28,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     private lateinit var baseUrl: HttpUrl
 
     // system in test
-    private lateinit var getLaunchListFromNetworkAndInsertToCache: GetLaunchItemsFromNetworkAndInsertToCache
+    private lateinit var getLaunchListFromNetworkAndInsertToCache: GetLaunchListFromNetworkAndInsertToCache
 
     // dependencies
     private val dependencyContainer: DependencyContainer = DependencyContainer()
@@ -61,7 +61,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         factory = dependencyContainer.launchFactory
 
         // instantiate the system in test
-        getLaunchListFromNetworkAndInsertToCache = GetLaunchItemsFromNetworkAndInsertToCache(
+        getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
             cacheDataSource = dao,
             launchNetworkDataSource = api,
             factory = factory

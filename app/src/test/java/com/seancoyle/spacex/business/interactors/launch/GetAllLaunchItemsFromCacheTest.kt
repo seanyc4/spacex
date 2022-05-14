@@ -47,7 +47,7 @@ class GetAllLaunchItemsFromCacheTest {
         var results: ArrayList<LaunchDomainEntity>? = null
 
         getAllLaunchItems.execute(
-            stateEvent = GetLaunchListFromCacheEvent
+            stateEvent = GetAllLaunchDataFromCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,

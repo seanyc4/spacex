@@ -31,7 +31,7 @@ object TestLaunchListInteractorsModule {
             getLaunchItemByIdFromCache = GetLaunchItemByIdFromCache(
                 cacheDataSource = launchCacheDataSource
             ),
-            getLaunchItemsFromNetworkAndInsertToCache = GetLaunchItemsFromNetworkAndInsertToCache(
+            getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
                 cacheDataSource = launchCacheDataSource,
                 launchNetworkDataSource = launchNetworkDataSource,
                 factory = launchFactory

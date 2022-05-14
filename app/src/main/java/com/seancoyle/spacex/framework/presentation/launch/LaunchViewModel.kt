@@ -14,6 +14,7 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_A
 import com.seancoyle.spacex.framework.presentation.common.BaseViewModel
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
+import com.seancoyle.spacex.util.printLogD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +34,7 @@ constructor(
 ) : BaseViewModel<LaunchViewState>() {
 
     init {
-        setStateEvent(GetLaunchListFromNetworkAndInsertToCacheEvent)
+        setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
 
         setLaunchOrder(
             sharedPreferences.getString(
@@ -48,7 +49,6 @@ constructor(
         data.let { viewState ->
             viewState.launchList?.let { launchList ->
                 setLaunchList(launchList)
-                setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
             }
 
             viewState.company?.let { companyInfo ->
@@ -66,12 +66,12 @@ constructor(
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
             is GetLaunchListFromNetworkAndInsertToCacheEvent -> {
-                launchInteractors.getLaunchItemsFromNetworkAndInsertToCache.execute(
+                launchInteractors.getLaunchListFromNetworkAndInsertToCache.execute(
                     stateEvent = stateEvent
                 )
             }
 
-            is GetLaunchListFromCacheEvent -> {
+            is GetAllLaunchDataFromCacheEvent -> {
                 launchInteractors.getAllLaunchItemsFromCache.execute(
                     stateEvent = stateEvent
                 )
@@ -98,6 +98,12 @@ constructor(
                     order = getOrder(),
                     isLaunchSuccess = getIsLaunchSuccess(),
                     page = getPage(),
+                    stateEvent = stateEvent
+                )
+            }
+
+            is GetNumLaunchItemsInCacheEvent -> {
+                launchInteractors.getNumLaunchItemsFromCache.execute(
                     stateEvent = stateEvent
                 )
             }
@@ -154,7 +160,9 @@ constructor(
         setViewState(update)
     }
 
-    fun isQueryExhausted() = getCurrentViewStateOrNew().isQueryExhausted ?: true
+    fun isQueryExhausted(): Boolean{
+        return getCurrentViewStateOrNew().isQueryExhausted?: false
+    }
 
     // for debugging
     fun getActiveJobs() = dataChannelManager.getActiveJobs()
@@ -210,7 +218,7 @@ constructor(
         setViewState(update)
     }
 
-    fun clearLayoutManagerState() {
+    private fun clearLayoutManagerState() {
         val update = getCurrentViewStateOrNew()
         update.layoutManagerState = null
         setViewState(update)
@@ -251,6 +259,12 @@ constructor(
     private fun getIsLaunchSuccess() = getCurrentViewStateOrNew().isLaunchSuccess
     private fun getSearchQuery() = getCurrentViewStateOrNew().searchQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
+
+    fun clearQueryParameters(){
+        setQuery(null)
+        setIsLaunchSuccess(null)
+        resetPage()
+    }
 
     fun setQueryExhausted(isExhausted: Boolean) {
         val update = getCurrentViewStateOrNew()

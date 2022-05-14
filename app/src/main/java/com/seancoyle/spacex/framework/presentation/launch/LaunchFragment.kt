@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
@@ -23,7 +24,8 @@ import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
-import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemsFromNetworkAndInsertToCache
+import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
+import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache
 import com.seancoyle.spacex.business.interactors.launch.SearchLaunchItemsInCache
 import com.seancoyle.spacex.databinding.FragmentLaunchBinding
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
@@ -94,6 +96,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     override fun onResume() {
         super.onResume()
+        viewModel.retrieveNumLaunchItemsInCache()
     }
 
     private fun saveLayoutManagerState() {
@@ -109,11 +112,20 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 listAdapter = LaunchAdapter(
                     interaction = this@LaunchFragment,
                 )
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                        val lastPosition = layoutManager.findLastVisibleItemPosition()
+                        if (lastPosition == listAdapter?.itemCount?.minus(1)) {
+                            viewModel.nextPage()
+                        }
+                    }
+                })
 
                 adapter = listAdapter
                 listAdapter?.stateRestorationPolicy =
                     RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                setHasFixedSize(true)
             }
         }
     }
@@ -129,15 +141,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    GetLaunchItemsFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
-                        viewModel.clearStateMessage()
-                        viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromCacheEvent)
-                    }
-
-                    SearchLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
-                        viewModel.clearStateMessage()
-                    }
-
                     GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         viewModel.setStateEvent(LaunchStateEvent.GetCompanyInfoFromCacheEvent)
@@ -145,7 +148,22 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                     GetCompanyInfoFromCache.GET_COMPANY_INFO_SUCCESS -> {
                         viewModel.clearStateMessage()
-                        updateAdapter()
+                        viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                    }
+
+                    GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
+                        viewModel.clearStateMessage()
+                        searchLaunchDataFromCacheEvent()
+                    }
+
+                    SearchLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
+                        viewModel.clearStateMessage()
+                        submitList()
+                    }
+
+                    GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
+                        viewModel.clearStateMessage()
+                        submitList()
                     }
 
                     else -> {
@@ -160,12 +178,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            GetLaunchItemsFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
-                                getLaunchDataFromCacheEvent()
+                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
+                                searchLaunchDataFromCacheEvent()
                             }
 
-                            GetLaunchItemsFromNetworkAndInsertToCache.LAUNCH_ERROR -> {
-                                getLaunchDataFromCacheEvent()
+                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_ERROR -> {
+                                searchLaunchDataFromCacheEvent()
                             }
 
                             GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_INSERT_FAILED -> {
@@ -181,6 +199,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             }
         }
 
+        // Observes data returned from the bottom action sheet fragment
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
             ?.observe(viewLifecycleOwner) { result ->
                 when (result) {
@@ -198,6 +217,21 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                     }
                 }
             }
+
+        // Update UI when list size changes
+        viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
+
+            if (viewState != null) {
+                viewState.launchList?.let { _ ->
+                    if (viewModel.isPaginationExhausted()
+                        && !viewModel.isQueryExhausted()
+                    ) {
+                        viewModel.setQueryExhausted(true)
+                    }
+                    submitList()
+                }
+            }
+        }
     }
 
     private fun launchIntent(url: String?) {
@@ -213,7 +247,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
-    private fun getLaunchDataFromCacheEvent() {
+    private fun searchLaunchDataFromCacheEvent() {
         viewModel.setStateEvent(
             LaunchStateEvent.SearchLaunchListEvent()
         )
@@ -225,8 +259,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
-    private fun updateAdapter() {
-        listAdapter?.updateAdapter(
+    private fun submitList() {
+        listAdapter?.submitList(
             viewModel.createLaunchData(
                 viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
             ) as List<LaunchType>
@@ -260,6 +294,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         with(binding) {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
+                viewModel.clearQueryParameters()
                 viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
             }
         }
