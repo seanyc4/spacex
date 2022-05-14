@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorSecondary"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorSecondary">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
@@ -24,9 +24,9 @@
         android:id="@+id/year_input_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_26sdp"
-        app:hintTextColor="@color/colorAccent"
+        android:layout_marginTop="@dimen/default_view_margin"
         android:textColorHint="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
@@ -35,11 +35,11 @@
             android:layout_width="@dimen/_140sdp"
             android:layout_height="@dimen/_60sdp"
             android:gravity="center_horizontal"
-            android:textColor="@color/colorAccent"
             android:hint="@string/year"
             android:inputType="number"
             android:maxLength="4"
             android:maxLines="1"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_heading" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -48,6 +48,7 @@
         android:id="@+id/success_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/launch_success_title"
         app:layout_constraintTop_toBottomOf="@+id/launch_success_title">
@@ -119,10 +120,11 @@
         android:id="@+id/launch_success_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/launch_status"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_subHeading"
+        android:textSize="@dimen/text_size_xl"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/year_input_layout"
         app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
 

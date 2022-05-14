@@ -35,12 +35,9 @@ import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import com.seancoyle.spacex.framework.presentation.launch.state.*
 import com.seancoyle.spacex.util.AndroidTestUtils
-import com.seancoyle.spacex.util.printLogD
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.text.NumberFormat
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -148,7 +145,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
             uiController.displayProgressBar(it)
         }
-
 
         viewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
             stateMessage?.response?.let { response ->

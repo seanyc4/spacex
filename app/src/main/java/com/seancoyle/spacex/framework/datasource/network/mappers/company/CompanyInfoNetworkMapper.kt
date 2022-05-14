@@ -3,8 +3,6 @@ package com.seancoyle.spacex.framework.datasource.network.mappers.company
 import com.seancoyle.spacex.business.domain.model.company.*
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.model.company.CompanyInfoNetworkEntity
-import java.text.NumberFormat
-import java.util.*
 import javax.inject.Inject
 
 
