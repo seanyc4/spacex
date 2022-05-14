@@ -2,6 +2,7 @@ package com.seancoyle.spacex.framework.presentation.launch
 
 import android.content.SharedPreferences
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
@@ -11,10 +12,10 @@ import com.seancoyle.spacex.business.interactors.launch.LaunchInteractors
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.CompanyInfoInteractors
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.presentation.common.BaseViewModel
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
-import com.seancoyle.spacex.util.printLogD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +40,7 @@ constructor(
         setLaunchOrder(
             sharedPreferences.getString(
                 LAUNCH_ORDER,
-                LAUNCH_ORDER_ASC
+                LAUNCH_ORDER_DESC
             )
         )
     }
@@ -228,28 +229,29 @@ constructor(
 
         val consolidatedList = mutableListOf<LaunchType>()
 
-        consolidatedList.add(
-            SectionTitle(
-                title = "COMPANY",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        consolidatedList.add(
-            CompanySummary(
-                summary = companySummary ?: "",
-                type = LaunchType.TYPE_COMPANY
-            )
-        )
-        consolidatedList.add(
-            SectionTitle(
-                title = "LAUNCH",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        getLaunchList()?.map { launchItems ->
             consolidatedList.add(
-                launchItems
+                SectionTitle(
+                    title = "COMPANY",
+                    type = LaunchType.TYPE_TITLE
+                )
             )
+            consolidatedList.add(
+                CompanySummary(
+                    summary = companySummary ?: "",
+                    type = LaunchType.TYPE_COMPANY
+                )
+            )
+            consolidatedList.add(
+                SectionTitle(
+                    title = "LAUNCH",
+                    type = LaunchType.TYPE_TITLE
+                )
+            )
+            getLaunchList()?.map { launchItems ->
+                consolidatedList.add(
+                    launchItems
+                )
+
         }
 
         return consolidatedList

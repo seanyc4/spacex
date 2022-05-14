@@ -148,6 +148,7 @@ class MainActivity :
             .show {
                 title(R.string.text_success)
                 message(text = message)
+                cornerRadius(res = R.dimen.default_corner_radius)
                 positiveButton(R.string.text_ok) {
                     stateMessageCallback.removeMessageFromStack()
                     dismiss()
@@ -167,6 +168,7 @@ class MainActivity :
             .show {
                 title(R.string.text_error)
                 message(text = message)
+                cornerRadius(res = R.dimen.default_corner_radius)
                 positiveButton(R.string.text_ok) {
                     stateMessageCallback.removeMessageFromStack()
                     dismiss()
@@ -186,6 +188,7 @@ class MainActivity :
             .show {
                 title(R.string.text_info)
                 message(text = message)
+                cornerRadius(res = R.dimen.default_corner_radius)
                 positiveButton(R.string.text_ok) {
                     stateMessageCallback.removeMessageFromStack()
                     dismiss()

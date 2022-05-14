@@ -131,7 +131,7 @@ constructor(
     fun submitList(launchList: List<LaunchType>) {
         val commitCallback = Runnable {
             // if process died must restore list position
-            // interaction?.restoreListPosition()
+             interaction?.restoreListPosition()
         }
         Timber.e("list_adapter", "size: ${launchList.size}")
         differ.submitList(launchList, commitCallback)
@@ -191,6 +191,8 @@ constructor(
     interface Interaction {
 
         fun onItemSelected(position: Int, launchLinks: Links)
+
+        fun restoreListPosition()
 
     }
 

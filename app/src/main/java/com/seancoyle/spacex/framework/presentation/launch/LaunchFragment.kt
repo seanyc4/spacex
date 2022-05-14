@@ -81,6 +81,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
+    override fun restoreListPosition() {
+        viewModel.getLayoutManagerState()?.let { lmState ->
+            binding.rvLaunch.layoutManager?.onRestoreInstanceState(lmState)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = viewModel.viewState.value
 
@@ -97,6 +103,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onResume() {
         super.onResume()
         viewModel.retrieveNumLaunchItemsInCache()
+        if(viewModel.getLaunchList() != null){
+            viewModel.refreshSearchQuery()
+        }
     }
 
     private fun saveLayoutManagerState() {
@@ -330,6 +339,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
                 .customView(R.layout.layout_filter)
+                .cornerRadius(res = R.dimen.default_corner_radius)
 
             val view = dialog.getCustomView()
             val order = viewModel.getOrder()
