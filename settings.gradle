@@ -4,7 +4,6 @@ dependencyResolutionManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-        jcenter()
     }
 }
 

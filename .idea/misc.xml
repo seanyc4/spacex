@@ -20,8 +20,11 @@
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/rv_movie_list.xml" value="0.1" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/toolbar_home.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/toolbar_movie_detail.xml" value="0.2546875" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2005" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.1555" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_filter_list.xml" value="0.1555" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_launch_fail.xml" value="0.2005" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_launch_success.xml" value="0.2005" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/activity_main.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/dialog_filter.xml" value="0.4" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/fragment_launch.xml" value="0.2546875" />

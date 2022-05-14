@@ -3,7 +3,6 @@ plugins {
     kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("androidx.navigation.safeargs")
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
@@ -107,11 +106,9 @@ dependencies {
     androidTestImplementation(HiltTest.hilt_android_testing)
     kaptAndroidTest(Hilt.compiler)
 
-    implementation(Insetter.insetter)
-
-    implementation(Kotlinx.coroutines_core)
-    implementation(Kotlinx.coroutines_android)
-    implementation(Kotlinx.datetime)
+    implementation(Kotlin.coroutines_core)
+    implementation(Kotlin.coroutines_android)
+    implementation(Kotlin.datetime)
 
     //debugImplementation(LeakCanary.leak_canary)
     implementation(MaterialDialogs.material_dialogs)
@@ -124,8 +121,6 @@ dependencies {
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
     kapt(Room.room_compiler)
-    implementation(Room.room_migration)
-    implementation(Room.room_paging3)
 
     implementation(SplashScreen.splash_screen)
     implementation(ScalingPixels.scaling_pixels)
