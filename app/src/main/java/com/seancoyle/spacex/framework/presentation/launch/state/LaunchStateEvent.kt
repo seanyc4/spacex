@@ -43,7 +43,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "GetAllLaunchDataFromCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     class GetLaunchItemFromCacheEvent
@@ -59,7 +59,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "GetLaunchItemFromCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     object GetCompanyInfoFromCacheEvent: LaunchStateEvent() {
@@ -72,7 +72,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "GetCompanyInfoFromCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     object GetNumLaunchItemsInCacheEvent : LaunchStateEvent() {
@@ -85,7 +85,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "GetNumLaunchItemsInCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     class InsertCompanyInfoToCacheEvent
@@ -101,7 +101,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "InsertCompanyInfoToCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     class InsertLaunchListToCacheEvent
@@ -117,7 +117,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "InsertLaunchListToCacheEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     class SearchLaunchListEvent(
@@ -132,7 +132,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "SearchLaunchListEvent"
         }
 
-        override fun shouldDisplayProgressBar() = true
+        override fun shouldDisplayProgressBar() = false
     }
 
     class CreateStateMessageEvent(

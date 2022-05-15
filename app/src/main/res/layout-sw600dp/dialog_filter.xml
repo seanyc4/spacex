@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSecondary">
@@ -14,7 +13,7 @@
         android:layout_marginEnd="@dimen/default_view_margin"
         android:text="@string/filter_by_year"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +23,7 @@
         android:id="@+id/year_input_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/default_view_margin"
         android:textColorHint="@color/colorAccent"
         app:hintTextColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="@+id/title"
@@ -32,35 +31,23 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_query"
-            android:layout_width="@dimen/_140sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_30sdp"
             android:gravity="center_horizontal"
             android:hint="@string/year"
             android:inputType="number"
             android:maxLength="4"
             android:maxLines="1"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_heading" />
+            android:textSize="@dimen/text_size_medium" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/launch_success_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_24sdp"
-        android:text="@string/launch_status"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
 
     <RadioGroup
         android:id="@+id/success_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_minus4sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/launch_success_title"
         app:layout_constraintTop_toBottomOf="@+id/launch_success_title">
@@ -72,7 +59,7 @@
             android:checked="false"
             android:text="@string/success"
             android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/text_size_medium" />
+            android:textSize="@dimen/text_size_xs" />
 
         <RadioButton
             android:id="@+id/filter_failure"
@@ -81,7 +68,7 @@
             android:checked="false"
             android:text="@string/failure"
             android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/text_size_medium" />
+            android:textSize="@dimen/text_size_xs" />
 
     </RadioGroup>
 
@@ -89,44 +76,58 @@
         android:id="@+id/negative_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_70sdp"
         android:text="@string/text_cancel"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_subHeading"
-        app:layout_constraintBottom_toBottomOf="@+id/positive_button"
+        android:textSize="@dimen/text_size_medium"
         app:layout_constraintEnd_toStartOf="@+id/positive_button"
-        app:layout_constraintTop_toTopOf="@+id/positive_button" />
+        app:layout_constraintTop_toBottomOf="@+id/success_group" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/positive_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/text_apply"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_size_subHeading"
+        android:textSize="@dimen/text_size_medium"
+        app:layout_constraintBottom_toBottomOf="@+id/negative_button"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/order_switch" />
+        app:layout_constraintTop_toTopOf="@+id/negative_button" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/asc_desc_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
         android:text="@string/asc_desc"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/success_group" />
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintStart_toEndOf="@+id/year_input_layout"
+        app:layout_constraintTop_toTopOf="@+id/year_input_layout" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/order_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/asc_desc_title"
-        app:layout_constraintStart_toEndOf="@+id/asc_desc_title"
-        app:layout_constraintTop_toTopOf="@+id/asc_desc_title" />
+        app:layout_constraintEnd_toEndOf="@+id/asc_desc_title"
+        app:layout_constraintStart_toStartOf="@+id/asc_desc_title"
+        app:layout_constraintTop_toBottomOf="@+id/asc_desc_title" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/launch_success_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/launch_status"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/year_input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

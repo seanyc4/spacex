@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,7 +85,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     override fun restoreListPosition() {
         viewModel.getLayoutManagerState()?.let { lmState ->
-            binding.rvLaunch.layoutManager?.onRestoreInstanceState(lmState)
+            view?.findViewById<RecyclerView>(R.id.rv_launch)?.layoutManager?.onRestoreInstanceState(
+                lmState
+            )
         }
     }
 
@@ -208,25 +211,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             }
         }
 
-        // Observes data returned from the bottom action sheet fragment
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
-            ?.observe(viewLifecycleOwner) { result ->
-                when (result) {
-
-                    ARTICLE -> {
-                        launchIntent(links?.articleLink)
-                    }
-
-                    YOUTUBE -> {
-                        launchIntent(links?.videoLink)
-                    }
-
-                    WIKI -> {
-                        launchIntent(links?.wikipedia)
-                    }
-                }
-            }
-
         // Update UI when list size changes
         viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
 
@@ -241,8 +225,16 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 }
             }
         }
+
+        // Get result from bottom action sheet fragment which will be a link type string
+        setFragmentResultListener(LINKS_KEY) { key, bundle ->
+            if (key == LINKS_KEY) {
+                launchIntent(bundle.getString(LINKS_KEY))
+            }
+        }
     }
 
+    // Load url link in external browser
     private fun launchIntent(url: String?) {
         try {
             startActivity(

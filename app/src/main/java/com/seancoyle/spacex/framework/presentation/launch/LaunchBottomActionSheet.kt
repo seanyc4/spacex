@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.Links
@@ -13,14 +14,11 @@ import com.seancoyle.spacex.databinding.FragmentLaunchBottomActionSheetBinding
 import com.seancoyle.spacex.framework.presentation.common.gone
 import com.seancoyle.spacex.framework.presentation.common.viewBinding
 
-const val ARTICLE = "article"
-const val YOUTUBE = "youtube"
-const val WIKI = "wiki"
-const val KEY = "key"
 
 class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
     private val binding by viewBinding(FragmentLaunchBottomActionSheetBinding::bind)
+    private var links: Links? = null
 
     @Override
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +42,7 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
     private fun setupUI() {
         with(binding) {
 
-            val links: Links? = arguments?.getParcelable(LINKS_KEY)
+            links = arguments?.getParcelable(LINKS_KEY)
 
             // hide links which are null or empty
             if (links?.articleLink.isNullOrEmpty()) {
@@ -72,18 +70,19 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
                 dismiss()
             }
 
+            // Send the result back to the fragment
             tvArticle.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(KEY, ARTICLE)
+                setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.articleLink))
                 dismiss()
             }
 
             tvYoutube.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(KEY, YOUTUBE)
+                setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.videoLink))
                 dismiss()
             }
 
             tvWiki.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(KEY, WIKI)
+                setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.wikipedia))
                 dismiss()
             }
 
