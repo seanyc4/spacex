@@ -31,6 +31,10 @@ import com.seancoyle.spacex.business.interactors.launch.SearchLaunchItemsInCache
 import com.seancoyle.spacex.databinding.FragmentLaunchBinding
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Options
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Populate
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Select
 import com.seancoyle.spacex.framework.presentation.common.BaseFragment
 import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
@@ -106,8 +110,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     override fun onResume() {
         super.onResume()
-        viewModel.retrieveNumLaunchItemsInCache()
         if (viewModel.getLaunchList() != null) {
+            GetTotalNumEntriesInLaunchCacheEvent()
             viewModel.refreshSearchQuery()
         }
     }
@@ -160,11 +164,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                     GetCompanyInfoFromCache.GET_COMPANY_INFO_SUCCESS -> {
                         viewModel.clearStateMessage()
-                        viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                        getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
                     GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
+                        GetTotalNumEntriesInLaunchCacheEvent()
                         searchLaunchDataFromCacheEvent()
                     }
 
@@ -216,9 +221,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
             if (viewState != null) {
                 viewState.launchList?.let { _ ->
-                    if (viewModel.isPaginationExhausted()
-                        && !viewModel.isQueryExhausted()
-                    ) {
+                    if (viewModel.isPaginationExhausted() && !viewModel.isQueryExhausted()) {
                         viewModel.setQueryExhausted(true)
                     }
                     submitList()
@@ -260,6 +263,10 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
+    private fun GetTotalNumEntriesInLaunchCacheEvent(){
+        viewModel.retrieveNumLaunchItemsInCache()
+    }
+
     private fun submitList() {
         listAdapter?.submitList(
             viewModel.createLaunchData(
@@ -291,12 +298,20 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         listAdapter = null // can leak memory
     }
 
+    private fun getLaunchListFromNetworkAndInsertToCacheEvent(){
+        viewModel.setStateEvent(
+            LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+                launchOptions = viewModel.launchOptions
+            )
+        )
+    }
+
     private fun setupSwipeRefresh() {
         with(binding) {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 viewModel.clearQueryParameters()
-                viewModel.setStateEvent(LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                getLaunchListFromNetworkAndInsertToCacheEvent()
             }
         }
     }

@@ -12,6 +12,7 @@ import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.CompanyInfoInteractors
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.common.BaseViewModel
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
@@ -29,6 +30,7 @@ class LaunchViewModel
 constructor(
     private val launchInteractors: LaunchInteractors,
     private val companyInfoInteractors: CompanyInfoInteractors,
+    val launchOptions: LaunchOptions,
     private val editor: SharedPreferences.Editor,
     sharedPreferences: SharedPreferences
 ) : BaseViewModel<LaunchViewState>() {
@@ -67,6 +69,7 @@ constructor(
 
             is GetLaunchListFromNetworkAndInsertToCacheEvent -> {
                 launchInteractors.getLaunchListFromNetworkAndInsertToCache.execute(
+                    launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
@@ -152,7 +155,13 @@ constructor(
 
     private fun getNumLunchItemsInCache() = getCurrentViewStateOrNew().numLaunchItemsInCache ?: 0
 
-    fun isPaginationExhausted() = getLaunchListSize() >= getNumLunchItemsInCache()
+    fun isPaginationExhausted(): Boolean{
+        printLogDebug(
+            "LaunchListViewModel",
+            "isPaginationExhausted: ${getLaunchListSize()}, ${getNumLunchItemsInCache()}"
+        )
+        return getLaunchListSize() >= getNumLunchItemsInCache()
+    }
 
     private fun resetPage() {
         val update = getCurrentViewStateOrNew()
@@ -161,6 +170,10 @@ constructor(
     }
 
     fun isQueryExhausted(): Boolean{
+        printLogDebug(
+            "LaunchListViewModel",
+            "isQueryExhausted: ${getCurrentViewStateOrNew().isQueryExhausted}"
+        )
         return getCurrentViewStateOrNew().isQueryExhausted?: false
     }
 

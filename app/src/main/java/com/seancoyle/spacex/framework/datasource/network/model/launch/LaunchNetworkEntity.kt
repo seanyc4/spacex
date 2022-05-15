@@ -6,68 +6,65 @@ import com.google.gson.annotations.SerializedName
 data class LaunchNetworkEntity(
 
     @Expose
+    @SerializedName("docs")
+    val docs: List<Docs>,
+    )
+
+data class Docs(
+
+    @Expose
     @SerializedName("flight_number")
     val flightNumber: Int?,
 
     @Expose
-    @SerializedName("launch_date_utc")
+    @SerializedName("date_utc")
     val launchDate: String?,
-
-    @Expose
-    @SerializedName("launch_success")
-    val isLaunchSuccess: Boolean?,
-
-    @Expose
-    @SerializedName("launch_year")
-    val launchYear: String?,
 
     @Expose
     val links: LinksNetwork,
 
     @Expose
-    @SerializedName("mission_name")
+    @SerializedName("name")
     val missionName: String?,
 
     @Expose
     val rocket: RocketNetwork,
-)
+
+    @Expose
+    @SerializedName("success")
+    val isLaunchSuccess: Boolean?,
+
+    )
 
 data class LinksNetwork(
     @Expose
-    @SerializedName("mission_patch_small")
-    val missionImage: String?,
+    val patch: PatchNetwork,
 
     @Expose
-    @SerializedName("article_link")
+    @SerializedName("article")
     val articleLink: String?,
 
     @Expose
-    @SerializedName("video_link")
+    @SerializedName("webcast")
     val videoLink: String?,
 
     @Expose
-    @SerializedName("wikipedia")
     val wikipedia: String?,
 
-)
+    )
 
 data class RocketNetwork(
+    @Expose
+    val name: String?,
 
     @Expose
-    @SerializedName("rocket_name")
-    val rocketName: String?,
-
-    @Expose
-    @SerializedName("rocket_type")
-    val rocketType: String?,
+    val type: String?,
 )
 
-
-
-
-
-
-
-
+data class PatchNetwork(
+    @Expose
+    @SerializedName("small")
+    val missionImage: String?
+)
 
 

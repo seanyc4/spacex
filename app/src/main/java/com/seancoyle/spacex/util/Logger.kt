@@ -7,7 +7,7 @@ var isUnitTest = false
 
 fun printLogDebug(className: String?, message: String ) {
     if (DEBUG && !isUnitTest) {
-        Timber.d("$className: $message")
+        Timber.i("$className: $message")
     }
     else if(DEBUG && isUnitTest){
         println("$className: $message")

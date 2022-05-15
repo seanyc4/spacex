@@ -1,11 +1,15 @@
 package com.seancoyle.spacex.framework.datasource.network.api.launch
 
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchNetworkEntity
-import retrofit2.http.GET
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface LaunchService {
 
-    @GET("v3/launches")
-    suspend fun getLaunchList(): List<LaunchNetworkEntity>
+    @POST("/v4/launches/query")
+    suspend fun getLaunchList(
+        @Body options: LaunchOptions
+    ): LaunchNetworkEntity
 
 }

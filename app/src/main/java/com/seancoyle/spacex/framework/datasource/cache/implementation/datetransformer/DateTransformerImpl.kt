@@ -44,4 +44,10 @@ class DateTransformerImpl : DateTransformer {
             ).days.absoluteValue.toString())
         }
     }
+
+    override fun returnYearOfLaunch(launchDate: LocalDateTime): String {
+        return buildString {
+            append(launchDate.year.addZeroToSingleDateValue())
+        }
+    }
 }

@@ -9,6 +9,7 @@ import com.seancoyle.spacex.business.data.util.safeCacheCall
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,11 +23,12 @@ constructor(
 ) {
 
     fun execute(
+        launchOptions: LaunchOptions,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val networkResult = safeApiCall(Dispatchers.IO) {
-            launchNetworkDataSource.getLaunchList()
+            launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         }
 
         val networkResponse = object : ApiResponseHandler<LaunchViewState, List<LaunchDomainEntity>?>(

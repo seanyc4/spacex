@@ -29,6 +29,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -118,6 +119,8 @@ class LaunchDaoServiceTests : BaseTest() {
         val newLaunchItem = launchFactory.createLaunchItem(
             id = 1,
             launchDate = UUID.randomUUID().toString(),
+            launchDateLocalDateTime = LocalDateTime.now(),
+            isLaunchSuccess = true,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
             links = Links(
@@ -132,8 +135,9 @@ class LaunchDaoServiceTests : BaseTest() {
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
             launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LAUNCH
+            type = TYPE_LAUNCH,
         )
+
         launchDaoService.insert(newLaunchItem)
 
         val cachedLaunchItem = launchDaoService.getById(1)
@@ -168,6 +172,8 @@ class LaunchDaoServiceTests : BaseTest() {
         val newLaunchItem = launchFactory.createLaunchItem(
             id = 2,
             launchDate = UUID.randomUUID().toString(),
+            launchDateLocalDateTime = LocalDateTime.now(),
+            isLaunchSuccess = true,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
             links = Links(
@@ -182,7 +188,7 @@ class LaunchDaoServiceTests : BaseTest() {
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
             launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LAUNCH
+            type = TYPE_LAUNCH,
         )
         launchDaoService.insert(newLaunchItem)
 

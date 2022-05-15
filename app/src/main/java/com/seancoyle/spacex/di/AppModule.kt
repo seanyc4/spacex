@@ -8,6 +8,10 @@ import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatt
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Options
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Populate
+import com.seancoyle.spacex.framework.datasource.network.model.launch.Select
 import com.seancoyle.spacex.framework.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
@@ -71,6 +75,27 @@ object AppModule {
     @Provides
     fun provideDateTransformer(): DateTransformer {
         return DateTransformerImpl()
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideLaunchOptions(): LaunchOptions {
+        return LaunchOptions(
+            options = Options(
+                populate = listOf(
+                    Populate(
+                        path = "rocket",
+                        select = Select(
+                            name = 1,
+                            type =2
+                        )
+                    )
+
+                ),
+                limit =500
+            )
+        )
     }
 
 }

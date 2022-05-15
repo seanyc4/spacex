@@ -4,10 +4,14 @@ import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntit
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.state.StateEvent
 import com.seancoyle.spacex.business.domain.state.StateMessage
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 
 sealed class LaunchStateEvent : StateEvent {
 
-    object GetLaunchListFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
+    class GetLaunchListFromNetworkAndInsertToCacheEvent
+        constructor(
+            val launchOptions: LaunchOptions
+        ): LaunchStateEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch from network."

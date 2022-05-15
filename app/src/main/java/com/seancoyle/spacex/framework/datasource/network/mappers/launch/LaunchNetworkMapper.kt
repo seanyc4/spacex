@@ -17,34 +17,27 @@ constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun entityListToDomainList(entities: List<LaunchNetworkEntity>): List<LaunchDomainEntity> {
-        val list: ArrayList<LaunchDomainEntity> = ArrayList()
-        for (entity in entities) {
-            list.add(mapFromEntity(entity))
-        }
-        return list
-    }
+    fun mapEntityToList(entity: LaunchNetworkEntity): List<LaunchDomainEntity> {
+        return entity.docs.map { item ->
+            val localDateTime = dateFormatter.formatDate(item.launchDate.orEmpty())
+            val launchSuccess = item.isLaunchSuccess ?: false
 
-    private fun mapFromEntity(entity: LaunchNetworkEntity): LaunchDomainEntity {
-        entity.apply {
-            val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
-            val launchSuccess = isLaunchSuccess ?: false
-            return LaunchDomainEntity(
-                id = flightNumber ?: 0,
+            LaunchDomainEntity(
+                id = item.flightNumber ?: 0,
                 launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                 launchDateLocalDateTime = localDateTime,
-                isLaunchSuccess = isLaunchSuccess?: false,
+                isLaunchSuccess = item.isLaunchSuccess ?: false,
                 launchSuccessIcon = isLaunchSuccess(launchSuccess),
-                launchYear = launchYear.orEmpty(),
+                launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                 links = Links(
-                    missionImage = links.missionImage ?: DEFAULT_LAUNCH_IMAGE,
-                    articleLink = links.articleLink.orEmpty(),
-                    videoLink = links.videoLink.orEmpty(),
-                    wikipedia = links.wikipedia.orEmpty(),
+                    missionImage = item.links.patch.missionImage ?: DEFAULT_LAUNCH_IMAGE,
+                    articleLink = item.links.articleLink.orEmpty(),
+                    videoLink = item.links.videoLink.orEmpty(),
+                    wikipedia = item.links.wikipedia.orEmpty(),
                 ),
-                missionName = missionName.orEmpty(),
+                missionName =item. missionName.orEmpty(),
                 rocket = Rocket(
-                    rocketNameAndType = "${rocket.rocketName}/${rocket.rocketType}",
+                    rocketNameAndType = "${item.rocket.name}/${item.rocket.type}",
                 ),
                 daysToFromTitle = setCorrectLaunchText(localDateTime),
                 launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),

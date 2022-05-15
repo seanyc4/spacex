@@ -24,7 +24,7 @@ constructor(
 
     override suspend fun getLaunchList(): List<LaunchDomainEntity> {
         return networkMapper.entityListToDomainList(
-            service.getLaunchList()
+            service.getLaunchList(null)
         )
     }
 

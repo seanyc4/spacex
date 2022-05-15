@@ -10,4 +10,6 @@ interface DateTransformer {
 
     fun getLaunchDaysDifference(dateTime: LocalDateTime): String
 
+    fun returnYearOfLaunch(launchDate: LocalDateTime): String
+
 }
