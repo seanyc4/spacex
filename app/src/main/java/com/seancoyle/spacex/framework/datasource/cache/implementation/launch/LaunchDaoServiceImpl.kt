@@ -65,44 +65,14 @@ constructor(
         return dao.getTotalEntries()
     }
 
-    override suspend fun searchLaunchItemsOrderByYearDESC(
-        query: String,
-        isLaunchSuccess: Boolean,
-        page: Int,
-        pageSize: Int
-    ): List<LaunchDomainEntity> {
-        return cacheMapper.entityListToDomainList(
-            dao.searchLaunchItemsOrderByYearDESC(
-                query = query,
-                page = page,
-                pageSize = pageSize
-            )
-        )
-    }
-
-    override suspend fun searchLaunchItemsOrderByYearASC(
-        query: String,
-        isLaunchSuccess: Boolean,
-        page: Int,
-        pageSize: Int
-    ): List<LaunchDomainEntity> {
-        return cacheMapper.entityListToDomainList(
-            dao.searchLaunchItemsOrderByYearASC(
-                query = query,
-                page = page,
-                pageSize = pageSize
-            )
-        )
-    }
-
     override suspend fun returnOrderedQuery(
-        query: String?,
+        year: String?,
         order: String,
         isLaunchSuccess: Boolean?,
         page: Int
     ): List<LaunchDomainEntity>? {
         return dao.returnOrderedQuery(
-            query = query,
+            year = year,
             isLaunchSuccess = isLaunchSuccess,
             page = page,
             order = order

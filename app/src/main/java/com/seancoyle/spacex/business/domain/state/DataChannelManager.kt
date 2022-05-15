@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.business.domain.state
 
-import com.seancoyle.spacex.util.printLogD
+import com.seancoyle.spacex.util.printLogDebug
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -28,7 +28,7 @@ abstract class DataChannelManager<ViewState> {
         jobFunction: Flow<DataState<ViewState>?>
     ){
         if(canExecuteNewStateEvent(stateEvent)){
-            printLogD("DCM", "launching job: ${stateEvent.eventName()}")
+            printLogDebug("DCM", "launching job: ${stateEvent.eventName()}")
             addStateEvent(stateEvent)
             jobFunction
                 .onEach { dataState ->
@@ -77,7 +77,7 @@ abstract class DataChannelManager<ViewState> {
     }
 
     fun clearStateMessage(index: Int = 0){
-        printLogD("DataChannelManager", "clear state message")
+        printLogDebug("DataChannelManager", "clear state message")
         messageStack.removeAt(index)
     }
 
@@ -85,7 +85,7 @@ abstract class DataChannelManager<ViewState> {
 
     fun printStateMessages(){
         for(message in messageStack){
-            printLogD("DCM", "${message.response.message}")
+            printLogDebug("DCM", "${message.response.message}")
         }
     }
 

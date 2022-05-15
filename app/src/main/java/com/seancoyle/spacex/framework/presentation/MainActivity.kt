@@ -15,10 +15,10 @@ import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
 import com.seancoyle.spacex.framework.presentation.common.gone
 import com.seancoyle.spacex.framework.presentation.common.visible
+import com.seancoyle.spacex.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import timber.log.Timber
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -78,7 +78,7 @@ class MainActivity :
             is None -> {
                 // This would be a good place to send to your Error Reporting
                 // software of choice (ex: Firebase crash reporting)
-                Timber.i("onResponseReceived: " + response.message)
+                printLogDebug("onResponseReceived: ", response.message.orEmpty())
                 stateMessageCallback.removeMessageFromStack()
             }
         }

@@ -25,7 +25,7 @@ class InsertCompanyInfoToCache(
 
         companyInfo.apply {
             newCompanyInfo = factory.createCompanyInfo(
-                id = null,
+                id = id,
                 employees = employees,
                 founded = founded,
                 founder = founder,

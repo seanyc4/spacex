@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.domain.state
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.seancoyle.spacex.util.EspressoIdlingResource
-import com.seancoyle.spacex.util.printLogD
+import com.seancoyle.spacex.util.printLogDebug
 
 /**
  * - Keeps track of active StateEvents in DataChannelManager
@@ -24,7 +24,7 @@ class StateEventManager {
     }
 
     fun clearActiveStateEventCounter(){
-        printLogD("DCM", "Clear active state events")
+        printLogDebug("DCM", "Clear active state events")
         EspressoIdlingResource.clear()
         activeStateEvents.clear()
         syncNumActiveStateEvents()
@@ -37,7 +37,7 @@ class StateEventManager {
     }
 
     fun removeStateEvent(stateEvent: StateEvent?){
-        printLogD("DCM sem", "remove state event: ${stateEvent?.eventName()}")
+        printLogDebug("DCM sem", "remove state event: ${stateEvent?.eventName()}")
         stateEvent?.let {
             EspressoIdlingResource.decrement()
         }
@@ -46,7 +46,7 @@ class StateEventManager {
     }
 
     fun isStateEventActive(stateEvent: StateEvent): Boolean{
-        printLogD("DCM sem", "is state event active? " +
+        printLogDebug("DCM sem", "is state event active? " +
                 "${activeStateEvents.containsKey(stateEvent.eventName())}")
         return activeStateEvents.containsKey(stateEvent.eventName())
     }

@@ -12,7 +12,7 @@ import com.seancoyle.spacex.databinding.RvCompanyInfoItemBinding
 import com.seancoyle.spacex.databinding.RvLaunchItemBinding
 import com.seancoyle.spacex.databinding.RvSectionTitleItemBinding
 import com.seancoyle.spacex.framework.presentation.launch.glideLoadLaunchImage
-import timber.log.Timber
+import com.seancoyle.spacex.util.printLogDebug
 
 class LaunchAdapter
 constructor(
@@ -135,7 +135,7 @@ constructor(
             // if process died must restore list position
              interaction?.restoreListPosition()
         }
-        Timber.e("list_adapter", "size: ${launchList.size}")
+        printLogDebug("list_adapter", "size: ${launchList.size}")
         differ.submitList(launchList, commitCallback)
     }
 

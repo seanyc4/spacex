@@ -29,7 +29,7 @@ class SearchLaunchItemsInCache(
 
         val cacheResult = safeCacheCall(Dispatchers.IO) {
             cacheDataSource.searchLaunchList(
-                query = query,
+                year = query,
                 order = order,
                 isLaunchSuccess = isLaunchSuccess,
                 page = updatedPage

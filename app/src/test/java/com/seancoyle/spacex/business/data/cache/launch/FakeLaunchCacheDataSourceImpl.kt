@@ -2,11 +2,15 @@ package com.seancoyle.spacex.business.data.cache.launch
 
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.interactors.launch.InsertLaunchListToCache.Companion.INSERT_LAUNCH_LIST_FAILED
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_PAGINATION_PAGE_SIZE
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
 const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
 const val FORCE_NEW_LAUNCH_EXCEPTION = -4
 const val FORCE_GENERAL_FAILURE = -5
+const val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
+
 
 class FakeLaunchCacheDataSourceImpl
 constructor(
@@ -66,10 +70,44 @@ constructor(
     }
 
     override suspend fun insertLaunchList(launchList: List<LaunchDomainEntity>): LongArray {
-        val results = LongArray(launchList.size)
+        var results = LongArray(launchList.size)
         for (item in launchList.withIndex()) {
-            results[item.index] = 1
-            fakeLaunchDatabase.launchList.add(item.value)
+
+            when (item.value.id) {
+                FORCE_GENERAL_FAILURE -> {
+                    results = LongArray(0)
+                }
+                FORCE_NEW_LAUNCH_EXCEPTION -> {
+                    throw Exception(INSERT_LAUNCH_LIST_FAILED)
+                }
+                else -> {
+                    results[item.index] = 1
+                    fakeLaunchDatabase.launchList.add(item.value)
+                }
+            }
+        }
+        return results
+    }
+
+    override suspend fun searchLaunchList(
+        year: String,
+        order: String,
+        isLaunchSuccess: Boolean?,
+        page: Int
+    ): List<LaunchDomainEntity> {
+        if (year == FORCE_SEARCH_LAUNCH_EXCEPTION) {
+            throw Exception("Something went searching the cache for launch items.")
+        }
+        val results: ArrayList<LaunchDomainEntity> = ArrayList()
+        for (item in fakeLaunchDatabase.launchList) {
+            if (item.launchYear.contains(year)) {
+                results.add(item)
+            } else if (item.isLaunchSuccess == isLaunchSuccess) {
+                results.add(item)
+            }
+            if (results.size > (page * LAUNCH_PAGINATION_PAGE_SIZE)) {
+                break
+            }
         }
         return results
     }

@@ -47,6 +47,7 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 * Add timestamps to cached data to prevent unnecessary network calls as the SpaceX data doesnt change frequently. Check the timestamps, if more than 7 days old then do a new network call.
 * Add a no results found animation
 * Design a landscape tablet layout
+* Use Paging3 Jetpack library
 
 
 ## Acknowledgements

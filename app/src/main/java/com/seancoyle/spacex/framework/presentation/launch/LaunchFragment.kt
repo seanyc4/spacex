@@ -36,9 +36,9 @@ import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import com.seancoyle.spacex.framework.presentation.launch.state.*
 import com.seancoyle.spacex.util.AndroidTestUtils
+import com.seancoyle.spacex.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -389,7 +389,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     }
 
     private fun startNewSearch() {
-        Timber.e("DCM", "start new search")
+        printLogDebug("DCM", "start new search")
         viewModel.clearList()
         viewModel.loadFirstPage()
     }

@@ -55,13 +55,13 @@ class InsertCompanyInfoToCacheTest {
     fun insertCompanyInfo_success() = runBlocking {
 
         val newCompanyInfo = infoFactory.createCompanyInfo(
-            id = "1",
-            employees = UUID.randomUUID().hashCode(),
+            id = UUID.randomUUID().toString(),
+            employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
-            valuation = UUID.randomUUID().hashCode().toLong(),
+            valuation = UUID.randomUUID().hashCode().toString(),
         )
 
         insertCompanyInfoToCache.execute(
@@ -86,12 +86,12 @@ class InsertCompanyInfoToCacheTest {
 
         val newCompanyInfo = infoFactory.createCompanyInfo(
             id = com.seancoyle.spacex.business.data.cache.company.FORCE_GENERAL_FAILURE,
-            employees = UUID.randomUUID().hashCode(),
+            employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
-            valuation = UUID.randomUUID().hashCode().toLong(),
+            valuation = UUID.randomUUID().hashCode().toString(),
         )
 
         insertCompanyInfoToCache.execute(
@@ -106,9 +106,9 @@ class InsertCompanyInfoToCacheTest {
             )
         }
 
-        // confirm cache was not changed
+        // confirm new data does not match whats in the db
         val cachedCompanyData = cacheDataSource.getCompanyInfo()
-        assertTrue { cachedCompanyData == null }
+        assertTrue { cachedCompanyData != newCompanyInfo }
     }
 
     @Test
@@ -116,12 +116,12 @@ class InsertCompanyInfoToCacheTest {
 
         val newCompanyInfo = infoFactory.createCompanyInfo(
             id = FORCE_NEW_COMPANY_INFO_EXCEPTION,
-            employees = UUID.randomUUID().hashCode(),
+            employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
-            valuation = UUID.randomUUID().hashCode().toLong(),
+            valuation = UUID.randomUUID().hashCode().toString(),
         )
 
         insertCompanyInfoToCache.execute(
@@ -136,9 +136,9 @@ class InsertCompanyInfoToCacheTest {
             )
         }
 
-        // confirm cache was not changed
+        // confirm new data does not match whats in the db
         val cachedCompanyInfo = cacheDataSource.getCompanyInfo()
-        assertTrue { cachedCompanyInfo == null }
+        assertTrue { cachedCompanyInfo != newCompanyInfo }
     }
 }
 

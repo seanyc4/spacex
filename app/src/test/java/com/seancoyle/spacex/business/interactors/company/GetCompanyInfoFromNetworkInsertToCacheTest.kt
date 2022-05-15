@@ -35,7 +35,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
     private lateinit var api: FakeCompanyInfoNetworkDataSourceImpl
     private lateinit var dao: FakeCompanyInfoCacheDataSourceImpl
     private lateinit var infoFactory: CompanyInfoFactory
-    private val networkMapper = CompanyInfoNetworkMapper()
+    private lateinit var networkMapper: CompanyInfoNetworkMapper
 
     @BeforeEach
     fun setup() {
@@ -43,6 +43,11 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         mockWebServer = MockWebServer()
         mockWebServer.start()
         baseUrl = mockWebServer.url("v3/launches/")
+
+        networkMapper = CompanyInfoNetworkMapper(
+            numberFormatter = dependencyContainer.numberFormatter
+        )
+
         api = FakeCompanyInfoNetworkDataSourceImpl(
             baseUrl = baseUrl,
             networkMapper = networkMapper
@@ -69,7 +74,6 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
      */
     @Test
     fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
-        var result: CompanyInfoDomainEntity? = null
 
         // condition the response
         mockWebServer.enqueue(
@@ -91,7 +95,8 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
             )
         }
 
-        result = dao.getCompanyInfo()
+        // get items inserted from network
+        val result = dao.getCompanyInfo()
 
         // confirm the cache is no longer empty
         assert(result != null)

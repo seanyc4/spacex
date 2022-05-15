@@ -21,7 +21,7 @@ Test cases:
     c) confirm cache was updated with new launch list
 2. insertLaunchList_fail()
     a) insert a new launch list
-    b) force a failure (return -1 from db operation)
+    b) force a failure (return empty long array from db operation)
     c) listen for INSERT_LAUNCH_LIST_FAILED emission from flow
     e) confirm cache was not updated
 3. throwException_checkGenericError()
@@ -70,7 +70,7 @@ class InsertLaunchListToCacheTest {
 
         // confirm cache was updated
         val cachedLaunchList = cacheDataSource.getAll()
-        assertTrue { cachedLaunchList == newLaunchList }
+        assertTrue { cachedLaunchList?.containsAll(newLaunchList) == true }
     }
 
     @Test
@@ -95,7 +95,7 @@ class InsertLaunchListToCacheTest {
 
         // confirm cache was not changed
         val cachedData = cacheDataSource.getAll()
-        assertTrue { cachedData == null }
+        assertTrue { cachedData?.containsAll(newLaunchList) == false }
     }
 
     @Test
@@ -120,7 +120,7 @@ class InsertLaunchListToCacheTest {
 
         // confirm cache was not changed
         val cachedData = cacheDataSource.getAll()
-        assertTrue { cachedData == null }
+        assertTrue { cachedData?.containsAll(newLaunchList) == false }
     }
 }
 

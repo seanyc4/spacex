@@ -132,7 +132,7 @@ sealed class LaunchStateEvent : StateEvent {
             return "SearchLaunchListEvent"
         }
 
-        override fun shouldDisplayProgressBar() = false
+        override fun shouldDisplayProgressBar() = true
     }
 
     class CreateStateMessageEvent(

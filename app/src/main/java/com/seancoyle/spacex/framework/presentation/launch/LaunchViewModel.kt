@@ -15,10 +15,10 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_D
 import com.seancoyle.spacex.framework.presentation.common.BaseViewModel
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
+import com.seancoyle.spacex.util.printLogDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -177,7 +177,7 @@ constructor(
         setQueryExhausted(false)
         resetPage()
         setStateEvent(SearchLaunchListEvent())
-        Timber.e(
+        printLogDebug(
             "LaunchListViewModel",
             "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}"
         )
@@ -185,7 +185,7 @@ constructor(
 
     fun nextPage() {
         if (!isQueryExhausted()) {
-            Timber.e("LaunchListViewModel", "attempting to load next page...")
+            printLogDebug("LaunchListViewModel", "attempting to load next page...")
             clearLayoutManagerState()
             incrementPageNumber()
             setStateEvent(SearchLaunchListEvent())

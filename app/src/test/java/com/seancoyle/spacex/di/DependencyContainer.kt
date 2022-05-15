@@ -10,6 +10,7 @@ import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.spacex.util.isUnitTest
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -23,6 +24,7 @@ class DependencyContainer {
 
     val dateFormatter = DateFormatterImpl(dateFormat)
     val dateTransformer = DateTransformerImpl()
+    val numberFormatter = NumberFormatterImpl()
     lateinit var launchCacheDataSource: LaunchCacheDataSource
     lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
     lateinit var launchFactory: LaunchFactory

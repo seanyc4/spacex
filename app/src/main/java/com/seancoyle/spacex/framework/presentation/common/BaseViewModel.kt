@@ -3,7 +3,7 @@ package com.seancoyle.spacex.framework.presentation.common
 import androidx.lifecycle.*
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.data.util.GenericErrors
-import com.seancoyle.spacex.util.printLogD
+import com.seancoyle.spacex.util.printLogDebug
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -82,7 +82,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
     }
 
     fun clearStateMessage(index: Int = 0){
-        printLogD("BaseViewModel", "clearStateMessage")
+        printLogDebug("BaseViewModel", "clearStateMessage")
         dataChannelManager.clearStateMessage(index)
     }
 

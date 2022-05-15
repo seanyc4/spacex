@@ -77,13 +77,13 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :query
+        WHERE launchYear = :year
         AND isLaunchSuccess = :isLaunchSuccess
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
-        query: String?,
+        year: String?,
         isLaunchSuccess: Boolean?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
@@ -92,13 +92,13 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :query
+        WHERE launchYear = :year
         AND isLaunchSuccess = :isLaunchSuccess
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
-        query: String?,
+        year: String?,
         isLaunchSuccess: Boolean?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
@@ -107,12 +107,12 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :query
+        WHERE launchYear = :year
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsOrderByYearDESC(
-        query: String?,
+        year: String?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -120,12 +120,12 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :query
+        WHERE launchYear = :year
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsOrderByYearASC(
-        query: String?,
+        year: String?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -155,7 +155,7 @@ interface LaunchDao {
 }
 
 suspend fun LaunchDao.returnOrderedQuery(
-    query: String?,
+    year: String?,
     order: String,
     isLaunchSuccess: Boolean?,
     page: Int
@@ -163,44 +163,44 @@ suspend fun LaunchDao.returnOrderedQuery(
 
     when {
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) && query.isNullOrEmpty() -> {
+        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearDESC(
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )
         }
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) && query.isNullOrEmpty() -> {
+        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearASC(
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )
         }
 
-        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && isLaunchSuccess == null -> {
+        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && isLaunchSuccess == null -> {
             return searchLaunchItemsOrderByYearDESC(
-                query = query,
+                year = year,
                 page = page
             )
         }
 
-        !query.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && isLaunchSuccess == null -> {
+        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && isLaunchSuccess == null -> {
             return searchLaunchItemsOrderByYearASC(
-                query = query,
+                year = year,
                 page = page
             )
         }
 
-        !query.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) ->
+        !year.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) ->
             return searchLaunchItemsWithSuccessOrderByYearASC(
-                query = query,
+                year = year,
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )
 
-        !query.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) ->
+        !year.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) ->
             return searchLaunchItemsWithSuccessOrderByYearDESC(
-                query = query,
+                year = year,
                 isLaunchSuccess = isLaunchSuccess,
                 page = page
             )

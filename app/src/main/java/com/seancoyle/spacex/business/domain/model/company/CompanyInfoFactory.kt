@@ -16,7 +16,7 @@ class CompanyInfoFactory {
         valuation: String
     ): CompanyInfoDomainEntity {
         return CompanyInfoDomainEntity(
-            id = id?: UUID.randomUUID().toString(),
+            id = id ?: UUID.randomUUID().toString(),
             employees = employees,
             founded = founded,
             founder = founder,

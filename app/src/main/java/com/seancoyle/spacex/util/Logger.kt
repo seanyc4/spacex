@@ -1,14 +1,13 @@
 package com.seancoyle.spacex.util
 
-import android.util.Log
 import com.seancoyle.spacex.util.Constants.DEBUG
-import com.seancoyle.spacex.util.Constants.TAG
+import timber.log.Timber
 
 var isUnitTest = false
 
-fun printLogD(className: String?, message: String ) {
+fun printLogDebug(className: String?, message: String ) {
     if (DEBUG && !isUnitTest) {
-        Log.d(TAG, "$className: $message")
+        Timber.d("$className: $message")
     }
     else if(DEBUG && isUnitTest){
         println("$className: $message")

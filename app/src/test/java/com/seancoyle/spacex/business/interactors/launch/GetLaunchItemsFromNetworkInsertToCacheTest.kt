@@ -75,7 +75,6 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
      */
     @Test
     fun getLaunchItemsFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
-        var launchResult: List<LaunchDomainEntity>? = null
 
         // condition the response
         mockWebServer.enqueue(
@@ -94,19 +93,17 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
             assertEquals(
                 value?.stateMessage?.response?.message,
                 LAUNCH_INSERT_SUCCESS
-            ).also {
-                launchResult = value?.data?.launchList
-            }
+            )
         }
 
-        // confirm the cache is no longer empty
-        assert(dao.getAll().isNotEmpty())
+        // get items inserted from network
+        val results = dao.getAll()
 
-        // Launch Result should contain a list of launch items
-        assert(launchResult?.size ?: 0 > 0)
+        // results should contain a list of launch items
+        assert(results.isNotEmpty())
 
         // confirm they are actually LaunchDomainEntity objects
-        assert(launchResult?.get(index = 0) is LaunchDomainEntity)
+        assert(results.get(index =0) is LaunchDomainEntity)
 
     }
 

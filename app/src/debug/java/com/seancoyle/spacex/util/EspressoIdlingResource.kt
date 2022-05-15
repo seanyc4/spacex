@@ -12,13 +12,13 @@ object EspressoIdlingResource {
     @JvmField val countingIdlingResource = CountingIdlingResource(RESOURCE)
 
     fun increment() {
-        printLogD(CLASS_NAME, "INCREMENTING.")
+        printLogDebug(CLASS_NAME, "INCREMENTING.")
         countingIdlingResource.increment()
     }
 
     fun decrement() {
         if (!countingIdlingResource.isIdleNow) {
-            printLogD(CLASS_NAME, "DECREMENTING.")
+            printLogDebug(CLASS_NAME, "DECREMENTING.")
             countingIdlingResource.decrement()
         }
     }

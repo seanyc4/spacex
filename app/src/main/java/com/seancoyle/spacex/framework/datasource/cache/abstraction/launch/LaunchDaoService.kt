@@ -21,22 +21,8 @@ interface LaunchDaoService {
 
     suspend fun getTotalEntries(): Int
 
-    suspend fun searchLaunchItemsOrderByYearDESC(
-        query: String,
-        isLaunchSuccess: Boolean,
-        page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchDomainEntity>
-
-    suspend fun searchLaunchItemsOrderByYearASC(
-        query: String,
-        isLaunchSuccess: Boolean,
-        page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchDomainEntity>
-
     suspend fun returnOrderedQuery(
-        query: String?,
+        year: String?,
         order: String,
         isLaunchSuccess: Boolean?,
         page: Int

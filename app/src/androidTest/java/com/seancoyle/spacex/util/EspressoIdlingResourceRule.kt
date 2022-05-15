@@ -11,13 +11,13 @@ class EspressoIdlingResourceRule : TestWatcher(){
     private val idlingResource = EspressoIdlingResource.countingIdlingResource
 
     override fun finished(description: Description?) {
-        printLogD(CLASS_NAME, "FINISHED")
+        printLogDebug(CLASS_NAME, "FINISHED")
         IdlingRegistry.getInstance().unregister(idlingResource)
         super.finished(description)
     }
 
     override fun starting(description: Description?) {
-        printLogD(CLASS_NAME, "STARTING")
+        printLogDebug(CLASS_NAME, "STARTING")
         IdlingRegistry.getInstance().register(idlingResource)
         super.starting(description)
     }

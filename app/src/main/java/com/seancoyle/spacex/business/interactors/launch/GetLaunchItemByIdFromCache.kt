@@ -57,7 +57,8 @@ class GetLaunchItemByIdFromCache(
 
     companion object {
         const val GET_LAUNCH_ITEM_BY_ID_SUCCESS = "Successfully retrieved launch item by id"
-        const val GET_LAUNCH_ITEM_BY_ID_NO_MATCHING_RESULTS = "There are no launch items that match that query."
+        const val GET_LAUNCH_ITEM_BY_ID_NO_MATCHING_RESULTS =
+            "There are no launch items that match that query."
     }
 }
 

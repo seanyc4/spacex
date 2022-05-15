@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.domain.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.seancoyle.spacex.util.printLogD
+import com.seancoyle.spacex.util.printLogDebug
 import kotlinx.parcelize.IgnoredOnParcel
 import java.lang.IndexOutOfBoundsException
 
@@ -47,7 +47,7 @@ class MessageStack: ArrayList<StateMessage>() {
                 setStateMessage(stateMessage = this[0])
             }
             else{
-                printLogD("MessageStack", "stack is empty: ")
+                printLogDebug("MessageStack", "stack is empty: ")
                 setStateMessage(null)
             }
             return transaction
