@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/filter_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorSecondary"
     android:paddingStart="@dimen/_4sdp"
-    android:paddingEnd="@dimen/_4sdp"
-    android:background="@color/colorSecondary">
+    android:paddingEnd="@dimen/_4sdp">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/title"
+        android:id="@+id/filter_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_view_margin"
@@ -29,8 +29,8 @@
         android:layout_marginTop="@dimen/_6sdp"
         android:textColorHint="@color/colorAccent"
         app:hintTextColor="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintStart_toStartOf="@+id/filter_title"
+        app:layout_constraintTop_toBottomOf="@+id/filter_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_query"
@@ -55,7 +55,7 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/filter_title"
         app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
 
     <RadioGroup
@@ -107,26 +107,26 @@
     </RadioGroup>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/negative_button"
+        android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_70sdp"
         android:text="@string/text_cancel"
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/text_size_subHeading"
-        app:layout_constraintBottom_toBottomOf="@+id/positive_button"
-        app:layout_constraintEnd_toStartOf="@+id/positive_button"
-        app:layout_constraintTop_toTopOf="@+id/positive_button" />
+        app:layout_constraintBottom_toBottomOf="@+id/apply_btn"
+        app:layout_constraintEnd_toStartOf="@+id/apply_btn"
+        app:layout_constraintTop_toTopOf="@+id/apply_btn" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/positive_button"
+        android:id="@+id/apply_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16sdp"
         android:text="@string/text_apply"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_subHeading"
-        app:layout_constraintEnd_toEndOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/filter_title"
         app:layout_constraintTop_toBottomOf="@+id/order_switch" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -138,7 +138,7 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/filter_title"
         app:layout_constraintTop_toBottomOf="@+id/filter_group" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial

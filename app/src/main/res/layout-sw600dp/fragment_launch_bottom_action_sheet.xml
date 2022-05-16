@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mainContainer"
+    android:id="@+id/links_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/actionCv"
+        android:id="@+id/links_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_bottom_sheet_view_margin_tablet"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvHeading"
+                android:id="@+id/links_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_bottom_sheet_margin_tablet"
@@ -45,10 +45,10 @@
                 android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvHeading" />
+                app:layout_constraintTop_toBottomOf="@id/links_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvArticle"
+                android:id="@+id/article_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -70,10 +70,10 @@
                 android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvArticle" />
+                app:layout_constraintTop_toBottomOf="@id/article_link" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvYoutube"
+                android:id="@+id/youtube_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -95,10 +95,10 @@
                 android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvYoutube" />
+                app:layout_constraintTop_toBottomOf="@id/youtube_link" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvWiki"
+                android:id="@+id/wiki_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -118,7 +118,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/exitBtn"
+        android:id="@+id/exit_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginStart="@dimen/default_bottom_sheet_view_margin_tablet"
@@ -136,6 +136,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actionCv"
+        app:layout_constraintTop_toBottomOf="@+id/links_cv"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

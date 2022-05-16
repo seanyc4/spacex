@@ -8,7 +8,6 @@ import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
-import com.seancoyle.spacex.framework.presentation.BaseApplication
 import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel
 import com.seancoyle.spacex.util.AndroidTestUtils
 import dagger.Module

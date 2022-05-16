@@ -7,7 +7,6 @@ import com.seancoyle.spacex.framework.datasource.network.abstraction.numberforma
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.model.launch.*
-import com.seancoyle.spacex.framework.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext

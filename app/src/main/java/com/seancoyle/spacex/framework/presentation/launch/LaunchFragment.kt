@@ -375,7 +375,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 }
             }
 
-            view.findViewById<TextView>(R.id.positive_button).setOnClickListener {
+            view.findViewById<TextView>(R.id.apply_btn).setOnClickListener {
 
                 val newFilter =
                     when (view.findViewById<RadioGroup>(R.id.filter_group).checkedRadioButtonId) {
@@ -407,7 +407,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 dialog.dismiss()
             }
 
-            view.findViewById<TextView>(R.id.negative_button).setOnClickListener {
+            view.findViewById<TextView>(R.id.cancel_btn).setOnClickListener {
                 dialog.dismiss()
             }
 

@@ -46,17 +46,17 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
             // hide links which are null or empty
             if (links?.articleLink.isNullOrEmpty()) {
-                tvArticle.gone()
+                articleLink.gone()
                 divider2.gone()
             }
 
             if (links?.videoLink.isNullOrEmpty()) {
-                tvYoutube.gone()
+                youtubeLink.gone()
                 divider3.gone()
             }
 
             if (links?.wikipedia.isNullOrEmpty()) {
-                tvWiki.gone()
+                wikiLink.gone()
                 divider3.gone()
             }
 
@@ -71,17 +71,17 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
             }
 
             // Send the result back to the fragment
-            tvArticle.setOnClickListener {
+            articleLink.setOnClickListener {
                 setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.articleLink))
                 dismiss()
             }
 
-            tvYoutube.setOnClickListener {
+            youtubeLink.setOnClickListener {
                 setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.videoLink))
                 dismiss()
             }
 
-            tvWiki.setOnClickListener {
+            wikiLink.setOnClickListener {
                 setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.wikipedia))
                 dismiss()
             }
