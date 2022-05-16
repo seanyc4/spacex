@@ -18,10 +18,13 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.gson.Gson
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
 import com.seancoyle.spacex.business.domain.model.launch.Links
+import com.seancoyle.spacex.business.domain.model.launch.Rocket
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
@@ -31,10 +34,7 @@ import com.seancoyle.spacex.business.interactors.launch.SearchLaunchItemsInCache
 import com.seancoyle.spacex.databinding.FragmentLaunchBinding
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
-import com.seancoyle.spacex.framework.datasource.network.model.launch.Options
-import com.seancoyle.spacex.framework.datasource.network.model.launch.Populate
-import com.seancoyle.spacex.framework.datasource.network.model.launch.Select
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
 import com.seancoyle.spacex.framework.presentation.common.BaseFragment
 import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
@@ -43,6 +43,8 @@ import com.seancoyle.spacex.util.AndroidTestUtils
 import com.seancoyle.spacex.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -72,6 +74,30 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         setupSwipeRefresh()
         subscribeObservers()
         restoreInstanceState(savedInstanceState)
+
+        val gson = Gson()
+        var jsonString = gson.toJson(LaunchDomainEntity(
+            id = id ,
+            launchDate = UUID.randomUUID().toString(),
+            launchDateLocalDateTime = LocalDateTime.now(),
+            isLaunchSuccess = LAUNCH_SUCCESS,
+            launchSuccessIcon = R.drawable.ic_launch_success,
+            launchYear = UUID.randomUUID().toString(),
+            links = Links(
+                missionImage = DEFAULT_LAUNCH_IMAGE,
+                articleLink = "https://www.google.com",
+                videoLink = "https://www.youtube.com",
+                wikipedia = "https://www.wikipedia.com"
+            ),
+            missionName = UUID.randomUUID().toString(),
+            rocket = Rocket(
+                rocketNameAndType = UUID.randomUUID().toString()
+            ),
+            daysToFromTitle = UUID.randomUUID().hashCode(),
+            launchDaysDifference = UUID.randomUUID().toString(),
+            type = LaunchType.TYPE_LAUNCH
+        ))
+        printLogDebug("json",jsonString)
     }
 
     override fun onPause() {
@@ -263,7 +289,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
-    private fun GetTotalNumEntriesInLaunchCacheEvent(){
+    private fun GetTotalNumEntriesInLaunchCacheEvent() {
         viewModel.retrieveNumLaunchItemsInCache()
     }
 
@@ -298,7 +324,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         listAdapter = null // can leak memory
     }
 
-    private fun getLaunchListFromNetworkAndInsertToCacheEvent(){
+    private fun getLaunchListFromNetworkAndInsertToCacheEvent() {
         viewModel.setStateEvent(
             LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
                 launchOptions = viewModel.launchOptions
@@ -350,7 +376,17 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
             val view = dialog.getCustomView()
             val order = viewModel.getOrder()
+            val filter = viewModel.getFilter()
             var newOrder: String? = null
+
+            view.findViewById<RadioGroup>(R.id.filter_group).apply {
+                when (filter) {
+                    null -> check(R.id.filter_all)
+                    LAUNCH_SUCCESS -> check(R.id.filter_success)
+                    LAUNCH_FAILED -> check(R.id.filter_failure)
+                    LAUNCH_UNKNOWN -> check(R.id.filter_unknown)
+                }
+            }
 
             // set switch to on/off based on state
             val orderSwitch = view.findViewById<SwitchMaterial>(R.id.order_switch).apply {
@@ -368,13 +404,14 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 }
             }
 
-
             view.findViewById<TextView>(R.id.positive_button).setOnClickListener {
 
-                val isSuccess =
-                    when (view.findViewById<RadioGroup>(R.id.success_group).checkedRadioButtonId) {
-                        R.id.filter_success -> true
-                        R.id.filter_failure -> false
+                val newFilter =
+                    when (view.findViewById<RadioGroup>(R.id.filter_group).checkedRadioButtonId) {
+                        R.id.filter_success -> LAUNCH_SUCCESS
+                        R.id.filter_failure -> LAUNCH_FAILED
+                        R.id.filter_unknown -> LAUNCH_UNKNOWN
+                        R.id.filter_all -> LAUNCH_ALL
                         else -> null
                     }
 
@@ -387,8 +424,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         saveOrder(order)
                         setLaunchOrder(newOrder)
                     }
+                    newFilter?.let { filter ->
+                        saveFilter(filter)
+                        setLaunchFilter(newFilter)
+                    }
                     setQuery(searchQuery)
-                    setIsLaunchSuccess(isSuccess)
+
                 }
 
                 startNewSearch()

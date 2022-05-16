@@ -43,6 +43,9 @@ object TestLaunchListInteractorsModule {
                 cacheDataSource = launchCacheDataSource,
                 factory = launchFactory
             ),
+            searchLaunchItemsInCache = SearchLaunchItemsInCache(
+                cacheDataSource = launchCacheDataSource
+            )
         )
     }
 

@@ -55,7 +55,7 @@ interface LaunchDao {
         """
     )
     suspend fun launchItemsWithSuccessOrderByYearDESC(
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -68,7 +68,7 @@ interface LaunchDao {
         """
     )
     suspend fun launchItemsWithSuccessOrderByYearASC(
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -84,7 +84,7 @@ interface LaunchDao {
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
         year: String?,
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -99,7 +99,7 @@ interface LaunchDao {
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
         year: String?,
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchCacheEntity>
@@ -157,7 +157,7 @@ interface LaunchDao {
 suspend fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
-    isLaunchSuccess: Boolean?,
+    isLaunchSuccess: Int?,
     page: Int
 ): List<LaunchCacheEntity>? {
 

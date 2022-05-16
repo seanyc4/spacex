@@ -3,6 +3,7 @@ package com.seancoyle.spacex.business.domain.model.launch
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
 import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Singleton
@@ -15,7 +16,7 @@ class LaunchFactory {
         id: Int,
         launchDate: String,
         launchDateLocalDateTime: LocalDateTime,
-        isLaunchSuccess: Boolean,
+        isLaunchSuccess: Int?,
         launchSuccessIcon: Int,
         launchYear: String,
         links: Links,
@@ -77,7 +78,7 @@ class LaunchFactory {
                     id = id ?: UUID.randomUUID().hashCode(),
                     launchDate = UUID.randomUUID().toString(),
                     launchDateLocalDateTime = LocalDateTime.now(),
-                    isLaunchSuccess = true,
+                    isLaunchSuccess = LAUNCH_SUCCESS,
                     launchSuccessIcon = R.drawable.ic_launch_success,
                     launchYear = UUID.randomUUID().toString(),
                     links = Links(

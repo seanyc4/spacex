@@ -46,33 +46,50 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <RadioGroup
-        android:id="@+id/success_group"
+        android:id="@+id/filter_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
         android:layout_marginStart="@dimen/_minus4sdp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/year_input_layout"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/launch_success_title"
         app:layout_constraintTop_toBottomOf="@+id/launch_success_title">
 
         <RadioButton
+            android:id="@+id/filter_all"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
+            android:checked="false"
+            android:text="@string/all"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/text_size_medium" />
+
+        <RadioButton
             android:id="@+id/filter_success"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
             android:checked="false"
             android:text="@string/success"
             android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/text_size_xs" />
+            android:textSize="@dimen/text_size_medium" />
 
         <RadioButton
             android:id="@+id/filter_failure"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
             android:checked="false"
             android:text="@string/failure"
             android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/text_size_xs" />
+            android:textSize="@dimen/text_size_medium" />
+
+        <RadioButton
+            android:id="@+id/filter_unknown"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
+            android:checked="false"
+            android:text="@string/unknown"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/text_size_medium" />
 
     </RadioGroup>
 
@@ -116,7 +133,7 @@
         android:id="@+id/order_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/asc_desc_title"
         app:layout_constraintStart_toEndOf="@+id/asc_desc_title"
         app:layout_constraintTop_toTopOf="@+id/asc_desc_title" />

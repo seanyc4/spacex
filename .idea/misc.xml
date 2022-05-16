@@ -20,14 +20,17 @@
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/rv_movie_list.xml" value="0.1" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/toolbar_home.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/toolbar_movie_detail.xml" value="0.2546875" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable-v24/empty_drawable.xml" value="0.182" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2005" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.1555" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/empty_drawable.xml" value="0.144" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_filter_list.xml" value="0.1555" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_launch_fail.xml" value="0.2005" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_launch_success.xml" value="0.2005" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-land/dialog_filter.xml" value="0.31801801801801804" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-land/fragment_launch.xml" value="0.28229166666666666" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-land/fragment_launch_bottom_action_sheet.xml" value="0.176" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-sw600dp-land/dialog_filter.xml" value="0.264" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-sw600dp/dialog_filter.xml" value="0.176" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-sw600dp/fragment_launch.xml" value="0.11611842105263158" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout-sw600dp/fragment_launch_bottom_action_sheet.xml" value="0.4" />

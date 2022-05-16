@@ -24,7 +24,7 @@ interface LaunchDaoService {
     suspend fun returnOrderedQuery(
         year: String?,
         order: String,
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int
     ): List<LaunchDomainEntity>?
 

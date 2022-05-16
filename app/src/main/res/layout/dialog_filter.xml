@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/default_view_margin"
         android:text="@string/filter_by_year"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
+        android:textSize="@dimen/text_size_heading"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         android:id="@+id/year_input_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_6sdp"
         android:textColorHint="@color/colorAccent"
         app:hintTextColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="@+id/title"
@@ -34,7 +34,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_query"
-            android:layout_width="@dimen/_140sdp"
+            android:layout_width="@dimen/_116sdp"
             android:layout_height="@dimen/_50sdp"
             android:gravity="center_horizontal"
             android:hint="@string/year"
@@ -50,27 +50,37 @@
         android:id="@+id/launch_success_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:text="@string/launch_status"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
+        android:textSize="@dimen/text_size_heading"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
 
     <RadioGroup
-        android:id="@+id/success_group"
+        android:id="@+id/filter_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_minus4sdp"
-        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/launch_success_title"
         app:layout_constraintTop_toBottomOf="@+id/launch_success_title">
 
         <RadioButton
+            android:id="@+id/filter_all"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
+            android:checked="false"
+            android:text="@string/all"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/text_size_medium" />
+
+        <RadioButton
             android:id="@+id/filter_success"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
             android:checked="false"
             android:text="@string/success"
             android:textColor="@color/textColorPrimary"
@@ -79,9 +89,18 @@
         <RadioButton
             android:id="@+id/filter_failure"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
             android:checked="false"
             android:text="@string/failure"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/text_size_medium" />
+
+        <RadioButton
+            android:id="@+id/filter_unknown"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_btn_size"
+            android:checked="false"
+            android:text="@string/unknown"
             android:textColor="@color/textColorPrimary"
             android:textSize="@dimen/text_size_medium" />
 
@@ -103,7 +122,7 @@
         android:id="@+id/positive_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:text="@string/text_apply"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_subHeading"
@@ -114,13 +133,13 @@
         android:id="@+id/asc_desc_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/asc_desc"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/text_size_xl"
+        android:textSize="@dimen/text_size_heading"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/success_group" />
+        app:layout_constraintTop_toBottomOf="@+id/filter_group" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/order_switch"

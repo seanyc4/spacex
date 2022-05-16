@@ -12,7 +12,7 @@ data class LaunchDomainEntity(
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
     val launchYear: String,
-    val isLaunchSuccess: Boolean,
+    val isLaunchSuccess: Int?,
     @DrawableRes
     val launchSuccessIcon: Int,
     val links: Links,

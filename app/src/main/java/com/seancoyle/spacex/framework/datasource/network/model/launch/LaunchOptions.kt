@@ -11,7 +11,9 @@ data class Options(
     @Expose
     val limit: Int,
     @Expose
-    val populate: List<Populate>
+    val populate: List<Populate>,
+    @Expose
+    val sort: Sort
 )
 
 data class Populate(
@@ -27,3 +29,9 @@ data class Select(
     @Expose
     val type: Int
 )
+
+data class Sort(
+    @Expose
+    val flight_number: String
+)
+

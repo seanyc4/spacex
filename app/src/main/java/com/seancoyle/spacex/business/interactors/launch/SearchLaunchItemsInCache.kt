@@ -17,7 +17,7 @@ class SearchLaunchItemsInCache(
     fun execute(
         query: String,
         order: String,
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {

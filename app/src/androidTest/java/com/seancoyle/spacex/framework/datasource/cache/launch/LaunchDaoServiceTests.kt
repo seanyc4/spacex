@@ -120,7 +120,7 @@ class LaunchDaoServiceTests : BaseTest() {
             id = 1,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
-            isLaunchSuccess = true,
+            isLaunchSuccess = 2,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
             links = Links(
@@ -173,7 +173,7 @@ class LaunchDaoServiceTests : BaseTest() {
             id = 2,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
-            isLaunchSuccess = true,
+            isLaunchSuccess = 1,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
             links = Links(

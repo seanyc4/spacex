@@ -12,6 +12,7 @@ import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.CompanyInfoInteractors
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.common.BaseViewModel
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
@@ -40,10 +41,17 @@ constructor(
 
         setLaunchOrder(
             sharedPreferences.getString(
-                LAUNCH_ORDER,
-                LAUNCH_ORDER_DESC
+                LAUNCH_ORDER, LAUNCH_ORDER_DESC
             )
         )
+
+        if (sharedPreferences.contains(LAUNCH_FILTER)) {
+            setLaunchFilter(
+                sharedPreferences.getInt(
+                    LAUNCH_FILTER, 2
+                )
+            )
+        }
     }
 
     override fun handleNewData(data: LaunchViewState) {
@@ -99,7 +107,7 @@ constructor(
                 launchInteractors.searchLaunchItemsInCache.execute(
                     query = getSearchQuery(),
                     order = getOrder(),
-                    isLaunchSuccess = getIsLaunchSuccess(),
+                    isLaunchSuccess = getFilter(),
                     page = getPage(),
                     stateEvent = stateEvent
                 )
@@ -155,7 +163,7 @@ constructor(
 
     private fun getNumLunchItemsInCache() = getCurrentViewStateOrNew().numLaunchItemsInCache ?: 0
 
-    fun isPaginationExhausted(): Boolean{
+    fun isPaginationExhausted(): Boolean {
         printLogDebug(
             "LaunchListViewModel",
             "isPaginationExhausted: ${getLaunchListSize()}, ${getNumLunchItemsInCache()}"
@@ -169,12 +177,12 @@ constructor(
         setViewState(update)
     }
 
-    fun isQueryExhausted(): Boolean{
+    fun isQueryExhausted(): Boolean {
         printLogDebug(
             "LaunchListViewModel",
             "isQueryExhausted: ${getCurrentViewStateOrNew().isQueryExhausted}"
         )
-        return getCurrentViewStateOrNew().isQueryExhausted?: false
+        return getCurrentViewStateOrNew().isQueryExhausted ?: false
     }
 
     // for debugging
@@ -241,28 +249,28 @@ constructor(
 
         val consolidatedList = mutableListOf<LaunchType>()
 
-            consolidatedList.add(
-                SectionTitle(
-                    title = "COMPANY",
-                    type = LaunchType.TYPE_TITLE
-                )
+        consolidatedList.add(
+            SectionTitle(
+                title = "COMPANY",
+                type = LaunchType.TYPE_TITLE
             )
-            consolidatedList.add(
-                CompanySummary(
-                    summary = companySummary ?: "",
-                    type = LaunchType.TYPE_COMPANY
-                )
+        )
+        consolidatedList.add(
+            CompanySummary(
+                summary = companySummary ?: "",
+                type = LaunchType.TYPE_COMPANY
             )
-            consolidatedList.add(
-                SectionTitle(
-                    title = "LAUNCH",
-                    type = LaunchType.TYPE_TITLE
-                )
+        )
+        consolidatedList.add(
+            SectionTitle(
+                title = "LAUNCH",
+                type = LaunchType.TYPE_TITLE
             )
-            getLaunchList()?.map { launchItems ->
-                consolidatedList.add(
-                    launchItems
-                )
+        )
+        getLaunchList()?.map { launchItems ->
+            consolidatedList.add(
+                launchItems
+            )
 
         }
 
@@ -270,13 +278,21 @@ constructor(
     }
 
     fun getOrder() = getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_ASC
-    private fun getIsLaunchSuccess() = getCurrentViewStateOrNew().isLaunchSuccess
     private fun getSearchQuery() = getCurrentViewStateOrNew().searchQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
 
-    fun clearQueryParameters(){
+    fun getFilter(): Int? {
+        return if (getCurrentViewStateOrNew().launchFilter == LAUNCH_ALL) {
+            setLaunchFilter(null)
+            getCurrentViewStateOrNew().launchFilter
+        } else {
+            getCurrentViewStateOrNew().launchFilter
+        }
+    }
+
+    fun clearQueryParameters() {
         setQuery(null)
-        setIsLaunchSuccess(null)
+        setLaunchFilter(null)
         resetPage()
     }
 
@@ -292,12 +308,6 @@ constructor(
         setViewState(update)
     }
 
-    fun setIsLaunchSuccess(filter: Boolean?) {
-        val update = getCurrentViewStateOrNew()
-        update.isLaunchSuccess = filter
-        setViewState(update)
-    }
-
     fun setLaunchOrder(order: String?) {
         val update = getCurrentViewStateOrNew()
         update.order = order
@@ -309,6 +319,17 @@ constructor(
         editor.apply()
     }
 
+    fun setLaunchFilter(filter: Int?) {
+        val update = getCurrentViewStateOrNew()
+        update.launchFilter = filter
+        setViewState(update)
+    }
+
+    fun saveFilter(filter: Int) {
+        editor.putInt(LAUNCH_FILTER, filter)
+        editor.apply()
+    }
+
     companion object {
 
         // Shared Preference Files:
@@ -316,6 +337,7 @@ constructor(
 
         // Shared Preference Keys
         const val LAUNCH_ORDER: String = "${LAUNCH_PREFERENCES}.LAUNCH_ORDER"
+        const val LAUNCH_FILTER: String = "${LAUNCH_PREFERENCES}.LAUNCH_FILTER"
 
     }
 

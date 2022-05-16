@@ -9,6 +9,10 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 const val DEFAULT_LAUNCH_IMAGE = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png"
+const val LAUNCH_UNKNOWN = 0
+const val LAUNCH_FAILED = 1
+const val LAUNCH_SUCCESS = 2
+const val LAUNCH_ALL = 3
 
 class LaunchNetworkMapper
 @Inject
@@ -20,14 +24,14 @@ constructor(
     fun mapEntityToList(entity: LaunchNetworkEntity): List<LaunchDomainEntity> {
         return entity.docs.map { item ->
             val localDateTime = dateFormatter.formatDate(item.launchDate.orEmpty())
-            val launchSuccess = item.isLaunchSuccess ?: false
+            val launchSuccess = item.isLaunchSuccess
 
             LaunchDomainEntity(
                 id = item.flightNumber ?: 0,
                 launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                 launchDateLocalDateTime = localDateTime,
-                isLaunchSuccess = item.isLaunchSuccess ?: false,
-                launchSuccessIcon = isLaunchSuccess(launchSuccess),
+                isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),
+                launchSuccessIcon = setIsLaunchSuccessIcon(launchSuccess),
                 launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                 links = Links(
                     missionImage = item.links.patch.missionImage ?: DEFAULT_LAUNCH_IMAGE,
@@ -35,7 +39,7 @@ constructor(
                     videoLink = item.links.videoLink.orEmpty(),
                     wikipedia = item.links.wikipedia.orEmpty(),
                 ),
-                missionName =item. missionName.orEmpty(),
+                missionName = item.missionName.orEmpty(),
                 rocket = Rocket(
                     rocketNameAndType = "${item.rocket.name}/${item.rocket.type}",
                 ),
@@ -46,11 +50,30 @@ constructor(
         }
     }
 
-    private fun isLaunchSuccess(isLaunchSuccess: Boolean) =
-        if (isLaunchSuccess) {
-            R.drawable.ic_launch_success
-        } else {
-            R.drawable.ic_launch_fail
+    private fun mapIsLaunchSuccessToInt(isLaunchSuccess: Boolean?) =
+        when (isLaunchSuccess) {
+            true -> {
+                LAUNCH_SUCCESS
+            }
+            false -> {
+                LAUNCH_FAILED
+            }
+            else -> {
+                LAUNCH_UNKNOWN
+            }
+        }
+
+    private fun setIsLaunchSuccessIcon(isLaunchSuccess: Boolean?) =
+        when (isLaunchSuccess) {
+            true -> {
+                R.drawable.ic_launch_success
+            }
+            false -> {
+                R.drawable.ic_launch_fail
+            }
+            else -> {
+                R.drawable.empty_drawable
+            }
         }
 
     private fun setCorrectLaunchText(localDateTime: LocalDateTime) =
@@ -60,8 +83,8 @@ constructor(
             R.string.days_from_now
         }
 
-    private fun isLaunchPastOrFuture(localDateTime: LocalDateTime)
-            = dateTransformer.isPastLaunch(localDateTime)
+    private fun isLaunchPastOrFuture(localDateTime: LocalDateTime) =
+        dateTransformer.isPastLaunch(localDateTime)
 
 }
 

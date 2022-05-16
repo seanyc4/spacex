@@ -15,7 +15,7 @@ import com.seancoyle.spacex.framework.datasource.cache.typeconverters.LocalDateT
         LaunchCacheEntity::class,
         CompanyInfoCacheEntity::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(
     LocalDateTimeTypeConverter::class

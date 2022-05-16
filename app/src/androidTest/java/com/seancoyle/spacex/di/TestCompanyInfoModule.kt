@@ -11,6 +11,7 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDa
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoCacheMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
+import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
 import com.seancoyle.spacex.framework.datasource.network.implementation.company.CompanyInfoRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
@@ -60,8 +61,12 @@ object TestCompanyInfoModule {
 
     @Singleton
     @Provides
-    fun provideCompanyInfoNetworkMapper(): CompanyInfoNetworkMapper {
-        return CompanyInfoNetworkMapper()
+    fun provideCompanyInfoNetworkMapper(
+        numberFormatter: NumberFormatter
+    ): CompanyInfoNetworkMapper {
+        return CompanyInfoNetworkMapper(
+            numberFormatter = numberFormatter
+        )
     }
 
     @Singleton

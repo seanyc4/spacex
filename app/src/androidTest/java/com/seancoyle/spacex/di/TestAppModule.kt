@@ -3,11 +3,15 @@ package com.seancoyle.spacex.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
+import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.model.launch.*
 import com.seancoyle.spacex.framework.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,8 +32,8 @@ object TestAppModule {
 
     @Singleton
     @Provides
-    fun provideApplication(@ApplicationContext app: Context): BaseApplication {
-        return app as BaseApplication
+    fun provideApplication(@ApplicationContext app: Context): HiltTestApplication {
+        return app as HiltTestApplication
     }
 
     @Singleton
@@ -63,8 +67,36 @@ object TestAppModule {
 
     @Singleton
     @Provides
+    fun provideNumberFormatter(): NumberFormatter {
+        return NumberFormatterImpl()
+    }
+
+    @Singleton
+    @Provides
     fun provideDateTransformer(): DateTransformerImpl {
         return DateTransformerImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchOptions(): LaunchOptions {
+        return LaunchOptions(
+            options = Options(
+                populate = listOf(
+                    Populate(
+                        path = LAUNCH_OPTIONS_ROCKET,
+                        select = Select(
+                            name = 1,
+                            type =2
+                        )
+                    )
+                ),
+                sort = Sort(
+                    flight_number = LAUNCH_OPTIONS_SORT,
+                ),
+                limit =500
+            )
+        )
     }
 
 }

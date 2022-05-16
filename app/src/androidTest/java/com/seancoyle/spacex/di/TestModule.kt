@@ -38,7 +38,7 @@ object TestModule {
     @Singleton
     @Provides
     fun provideSharedPreferences(
-        application: BaseApplication
+        application: HiltTestApplication
     ): SharedPreferences {
         return application
             .getSharedPreferences(

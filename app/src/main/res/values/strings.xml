@@ -50,5 +50,7 @@
     <string name="text_apply">Apply</string>
     <string name="text_filter">Filter</string>
     <string name="text_search">Search</string>
+    <string name="unknown">UNKNOWN</string>
+    <string name="all">ALL</string>
 
 </resources>

@@ -89,12 +89,12 @@ class CompanyInfoDaoServiceTests : BaseTest() {
 
         val newCompanyInfo = companyInfoFactory.createCompanyInfo(
             id = "1",
-            employees = UUID.randomUUID().hashCode(),
+            employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
-            valuation = UUID.randomUUID().hashCode().toLong(),
+            valuation = UUID.randomUUID().toString(),
         )
 
         daoService.insert(newCompanyInfo)

@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.seancoyle.spacex.business.domain.model.launch.*
 import java.io.IOException
 import java.io.InputStream
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
@@ -36,8 +37,7 @@ constructor(
     }
 
     private fun readJSONFromAsset(fileName: String): String? {
-        var json: String? = null
-        json = try {
+        val json: String? = try {
             val inputStream: InputStream = (application.assets as AssetManager).open(fileName)
             inputStream.bufferedReader().use { it.readText() }
         } catch (ex: IOException) {
@@ -50,7 +50,9 @@ constructor(
     fun createSingleLaunch(
         id: Int,
         launchDate: String,
+        isLaunchSuccess: Int,
         launchSuccessIcon: Int,
+        launchDateLocalDateTime: LocalDateTime,
         launchYear: String,
         links: Links,
         missionName: String,
@@ -61,14 +63,17 @@ constructor(
     ) = factory.createLaunchItem(
         id = id,
         launchDate = launchDate,
+        isLaunchSuccess = isLaunchSuccess,
         launchSuccessIcon = launchSuccessIcon,
+        launchDateLocalDateTime = launchDateLocalDateTime,
         launchYear = launchYear,
         links = links,
         missionName = missionName,
         rocket = rocket,
         daysToFromTitle = daysToFromTitle,
         launchDaysDifference = launchDaysDifference,
-        type = type
+        type = type,
+
     )
 
     fun createLaunchList(num: Int) = factory.createLaunchListTest(num)

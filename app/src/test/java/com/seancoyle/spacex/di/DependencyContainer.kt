@@ -11,6 +11,7 @@ import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
+import com.seancoyle.spacex.framework.datasource.network.model.launch.*
 import com.seancoyle.spacex.util.isUnitTest
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -31,6 +32,7 @@ class DependencyContainer {
     lateinit var companyInfoFactory: CompanyInfoFactory
     lateinit var launchDataFactory: LaunchDataFactory
     lateinit var companyInfoDataFactory: CompanyInfoDataFactory
+    lateinit var launchOptions: LaunchOptions
 
     init {
         isUnitTest = true // for Logger.kt
@@ -58,6 +60,25 @@ class DependencyContainer {
         companyInfoCacheDataSource = FakeCompanyInfoCacheDataSourceImpl(
             fakeCompanyInfoDatabase = companyInfoDataFactory.produceFakeCompanyInfoDatabase(
                 companyInfoDataFactory.produceCompanyInfo()
+            )
+        )
+
+        // Launch options dependency
+        launchOptions = LaunchOptions(
+            options = Options(
+                populate = listOf(
+                    Populate(
+                        path = LAUNCH_OPTIONS_ROCKET,
+                        select = Select(
+                            name = 1,
+                            type =2
+                        )
+                    )
+                ),
+                sort = Sort(
+                    flight_number = LAUNCH_OPTIONS_SORT,
+                ),
+                limit =500
             )
         )
     }

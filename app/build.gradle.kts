@@ -110,13 +110,14 @@ dependencies {
     implementation(Kotlin.coroutines_android)
     implementation(Kotlin.datetime)
 
-    //debugImplementation(LeakCanary.leak_canary)
+    //debugImplementation(Square.leak_canary)
     implementation(MaterialDialogs.material_dialogs)
 
-    implementation(Retrofit.ok_http)
-    testImplementation(Retrofit.mock_web_server)
-    implementation(Retrofit.retrofit)
-    implementation(Retrofit.retrofit_gson)
+    implementation(Square.ok_http)
+    testImplementation(Square.mock_web_server)
+    implementation(Square.retrofit)
+    implementation(Square.retrofit_gson)
+    implementation(Square.interceptor)
 
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)

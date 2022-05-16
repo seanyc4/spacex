@@ -88,7 +88,10 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
-            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+            launchOptions = dependencyContainer.launchOptions,
+            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+                launchOptions = dependencyContainer.launchOptions
+            )
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -103,7 +106,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assert(results.isNotEmpty())
 
         // confirm they are actually LaunchDomainEntity objects
-        assert(results.get(index =0) is LaunchDomainEntity)
+        assert(results.get(index = 0) is LaunchDomainEntity)
 
     }
 
@@ -122,7 +125,10 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
-            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+            launchOptions = dependencyContainer.launchOptions,
+            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+                launchOptions = dependencyContainer.launchOptions
+            )
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,

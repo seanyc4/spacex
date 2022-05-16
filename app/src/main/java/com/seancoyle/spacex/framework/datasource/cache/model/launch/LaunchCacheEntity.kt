@@ -15,7 +15,7 @@ data class LaunchCacheEntity(
     val launchDate: String,
     @TypeConverters(LocalDateTimeTypeConverter::class)
     val launchDateLocalDateTime: LocalDateTime,
-    val isLaunchSuccess: Boolean,
+    val isLaunchSuccess: Int?,
     @DrawableRes
     val launchSuccessIcon: Int,
     val launchYear: String,

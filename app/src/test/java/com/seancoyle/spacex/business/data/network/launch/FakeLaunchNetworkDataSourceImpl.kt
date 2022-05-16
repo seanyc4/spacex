@@ -5,6 +5,7 @@ import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetwo
 import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,10 +22,9 @@ constructor(
         .build()
         .create(LaunchService::class.java)
 
-
-    override suspend fun getLaunchList(): List<LaunchDomainEntity> {
-        return networkMapper.entityListToDomainList(
-            service.getLaunchList(null)
+    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<LaunchDomainEntity> {
+        return networkMapper.mapEntityToList(
+            service.getLaunchList(options = launchOptions)
         )
     }
 

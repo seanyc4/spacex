@@ -34,7 +34,7 @@ constructor(
             failOrSuccess = if (fakeLaunchDatabase.launchList.removeIf { it.id == item.id }) {
                 1 // return 1 for success
             } else {
-                -1 // mark for failure
+                -1 // fail
             }
         }
         return failOrSuccess
@@ -47,9 +47,9 @@ constructor(
             throw Exception("Something went wrong deleting the item.")
         }
         return if (fakeLaunchDatabase.launchList.removeIf { it.id == id }) {
-            1
+            1 // return 1 for success
         } else {
-            -1
+            -1 // fail
         }
     }
 
@@ -72,18 +72,21 @@ constructor(
     override suspend fun insertLaunchList(launchList: List<LaunchDomainEntity>): LongArray {
         var results = LongArray(launchList.size)
         for (item in launchList.withIndex()) {
-
             when (item.value.id) {
+
                 FORCE_GENERAL_FAILURE -> {
                     results = LongArray(0)
                 }
+
                 FORCE_NEW_LAUNCH_EXCEPTION -> {
                     throw Exception(INSERT_LAUNCH_LIST_FAILED)
                 }
+
                 else -> {
                     results[item.index] = 1
                     fakeLaunchDatabase.launchList.add(item.value)
                 }
+
             }
         }
         return results
@@ -92,7 +95,7 @@ constructor(
     override suspend fun searchLaunchList(
         year: String,
         order: String,
-        isLaunchSuccess: Boolean?,
+        isLaunchSuccess: Int?,
         page: Int
     ): List<LaunchDomainEntity> {
         if (year == FORCE_SEARCH_LAUNCH_EXCEPTION) {
@@ -100,7 +103,7 @@ constructor(
         }
         val results: ArrayList<LaunchDomainEntity> = ArrayList()
         for (item in fakeLaunchDatabase.launchList) {
-            if (item.launchYear.contains(year)) {
+            if (item.launchYear == year) {
                 results.add(item)
             } else if (item.isLaunchSuccess == isLaunchSuccess) {
                 results.add(item)
