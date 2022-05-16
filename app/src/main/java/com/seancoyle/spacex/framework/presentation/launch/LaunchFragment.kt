@@ -18,13 +18,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.google.gson.Gson
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
 import com.seancoyle.spacex.business.domain.model.launch.Links
-import com.seancoyle.spacex.business.domain.model.launch.Rocket
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
@@ -43,8 +40,6 @@ import com.seancoyle.spacex.util.AndroidTestUtils
 import com.seancoyle.spacex.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -74,30 +69,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         setupSwipeRefresh()
         subscribeObservers()
         restoreInstanceState(savedInstanceState)
-
-        val gson = Gson()
-        var jsonString = gson.toJson(LaunchDomainEntity(
-            id = id ,
-            launchDate = UUID.randomUUID().toString(),
-            launchDateLocalDateTime = LocalDateTime.now(),
-            isLaunchSuccess = LAUNCH_SUCCESS,
-            launchSuccessIcon = R.drawable.ic_launch_success,
-            launchYear = UUID.randomUUID().toString(),
-            links = Links(
-                missionImage = DEFAULT_LAUNCH_IMAGE,
-                articleLink = "https://www.google.com",
-                videoLink = "https://www.youtube.com",
-                wikipedia = "https://www.wikipedia.com"
-            ),
-            missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
-                rocketNameAndType = UUID.randomUUID().toString()
-            ),
-            daysToFromTitle = UUID.randomUUID().hashCode(),
-            launchDaysDifference = UUID.randomUUID().toString(),
-            type = LaunchType.TYPE_LAUNCH
-        ))
-        printLogDebug("json",jsonString)
     }
 
     override fun onPause() {
@@ -137,7 +108,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onResume() {
         super.onResume()
         if (viewModel.getLaunchList() != null) {
-            GetTotalNumEntriesInLaunchCacheEvent()
+            getTotalNumEntriesInLaunchCacheEvent()
             viewModel.refreshSearchQuery()
         }
     }
@@ -195,7 +166,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                     GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
-                        GetTotalNumEntriesInLaunchCacheEvent()
+                        getTotalNumEntriesInLaunchCacheEvent()
                         searchLaunchDataFromCacheEvent()
                     }
 
@@ -289,7 +260,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
-    private fun GetTotalNumEntriesInLaunchCacheEvent() {
+    private fun getTotalNumEntriesInLaunchCacheEvent() {
         viewModel.retrieveNumLaunchItemsInCache()
     }
 

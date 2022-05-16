@@ -54,12 +54,15 @@ class InsertLaunchListToCacheTest {
     @Test
     fun insertLaunchList_success() = runBlocking {
 
-        val newLaunchList = factory.createLaunchListTest(100)
+        val newLaunchList = factory.createLaunchListTest(
+            num = 100,
+            id = null
+        )
 
         insertLaunchListToCache.execute(
             launchList = newLaunchList,
             stateEvent = InsertLaunchListToCacheEvent(
-               launchList = newLaunchList
+                launchList = newLaunchList
             )
         ).collect { value ->
             assertEquals(

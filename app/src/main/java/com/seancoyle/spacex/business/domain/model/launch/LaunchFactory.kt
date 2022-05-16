@@ -69,7 +69,7 @@ class LaunchFactory {
 
     fun createLaunchListTest(
         num: Int,
-        id: Int? = UUID.randomUUID().hashCode()
+        id: Int?
     ): List<LaunchDomainEntity> {
         val list: ArrayList<LaunchDomainEntity> = ArrayList()
         for (item in 0 until num) {

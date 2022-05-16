@@ -74,9 +74,15 @@ constructor(
         launchDaysDifference = launchDaysDifference,
         type = type,
 
-    )
+        )
 
-    fun createLaunchList(num: Int) = factory.createLaunchListTest(num)
+    fun createLaunchList(
+        num: Int,
+        id: Int
+    ) = factory.createLaunchListTest(
+        num = num,
+        id = id
+    )
 }
 
 

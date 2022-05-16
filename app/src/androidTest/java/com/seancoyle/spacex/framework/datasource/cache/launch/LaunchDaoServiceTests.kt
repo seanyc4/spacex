@@ -147,7 +147,10 @@ class LaunchDaoServiceTests : BaseTest() {
     @Test
     fun insertLaunchList_CBS() = runBlocking {
 
-        val launchList = launchFactory.createLaunchListTest(10)
+        val launchList = launchFactory.createLaunchListTest(
+            num = 10,
+            null
+        )
         launchDaoService.insertList(launchList)
 
         val cachedLaunchList = launchDaoService.getAll()
@@ -160,7 +163,10 @@ class LaunchDaoServiceTests : BaseTest() {
         val currentNumLaunchItems = launchDaoService.getTotalEntries()
 
         // insert 1000 launch items
-        val launchList = launchFactory.createLaunchListTest(1000)
+        val launchList = launchFactory.createLaunchListTest(
+            num = 1000,
+            null
+        )
         launchDaoService.insertList(launchList)
 
         val cachedLaunchList = launchDaoService.getTotalEntries()
