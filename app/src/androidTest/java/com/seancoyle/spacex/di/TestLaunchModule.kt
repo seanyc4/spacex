@@ -110,7 +110,7 @@ object TestLaunchModule {
     ): LaunchDaoService {
         return LaunchDaoServiceImpl(
             dao = dao,
-            cacheMapper = launchEntityMapper
+            entityMapper = launchEntityMapper
         )
     }
 

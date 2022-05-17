@@ -81,7 +81,7 @@ class LaunchDaoServiceTests : BaseTest() {
         insertTestData()
         launchDaoService = LaunchDaoServiceImpl(
             dao = dao,
-            cacheMapper = launchEntityMapper
+            entityMapper = launchEntityMapper
         )
     }
 

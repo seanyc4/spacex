@@ -12,7 +12,7 @@ import com.seancoyle.spacex.framework.datasource.cache.implementation.company.Co
 import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
-import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
+import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.implementation.company.CompanyInfoRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.Module
@@ -42,11 +42,11 @@ object TestCompanyInfoModule {
     @Singleton
     @Provides
     fun provideCompanyInfoRetrofitService(
-        service: CompanyInfoService,
+        retrofitServiceImpl: CompanyInfoApi,
         networkMapper: CompanyInfoNetworkMapper
     ): CompanyInfoRetrofitService {
         return CompanyInfoRetrofitServiceImpl(
-            service = service,
+            api = retrofitServiceImpl,
             networkMapper = networkMapper
         )
     }
@@ -55,8 +55,8 @@ object TestCompanyInfoModule {
     @Provides
     fun provideCompanyInfoApi(
         retrofit: Retrofit
-    ): CompanyInfoService {
-        return retrofit.create(CompanyInfoService::class.java)
+    ): CompanyInfoApi {
+        return retrofit.create(CompanyInfoApi::class.java)
     }
 
     @Singleton
@@ -95,7 +95,7 @@ object TestCompanyInfoModule {
     ): CompanyInfoDaoService {
         return CompanyInfoDaoServiceImpl(
             dao = dao,
-            cacheMapper = companyInfoEntityMapper
+            entityMapper = companyInfoEntityMapper
         )
     }
 

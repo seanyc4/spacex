@@ -23,6 +23,9 @@ constructor(
         return daoService.getCompanyInfo()
     }
 
+    override suspend fun deleteAll() {
+        return daoService.deleteAll()
+    }
 }
 
 

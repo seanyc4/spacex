@@ -8,6 +8,8 @@ interface CompanyInfoCacheDataSource {
 
     suspend fun getCompanyInfo(): CompanyInfoModel?
 
+    suspend fun deleteAll()
+
 }
 
 

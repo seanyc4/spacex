@@ -29,6 +29,9 @@ constructor(
         }
     }
 
+    override suspend fun deleteAll() {
+        return dao.deleteAll()
+    }
 }
 
 

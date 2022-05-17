@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.interactors.launch
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.interactors.launch.GetNumLaunchItemsFromCache.Companion.GET_NUM_LAUNCH_ITEMS_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
+import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -24,14 +24,14 @@ class GetNumLaunchItemsFromCacheTest {
     private val getNumLaunchItemsFromCache: GetNumLaunchItemsFromCache
 
     // dependencies
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
+    private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private val cacheDataSource: LaunchCacheDataSource
     private val factory: LaunchFactory
 
     init {
-        dependencyContainer.build()
-        cacheDataSource = dependencyContainer.launchCacheDataSource
-        factory = dependencyContainer.launchFactory
+        launchDependencies.build()
+        cacheDataSource = launchDependencies.launchCacheDataSource
+        factory = launchDependencies.launchFactory
         getNumLaunchItemsFromCache = GetNumLaunchItemsFromCache(
             cacheDataSource = cacheDataSource
         )

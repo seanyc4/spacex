@@ -4,7 +4,7 @@ import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoC
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache.Companion.GET_COMPANY_INFO_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
+import com.seancoyle.spacex.di.CompanyDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -25,14 +25,15 @@ class GetCompanyInfoFromCacheTest {
     private val getCompanyInfo: GetCompanyInfoFromCache
 
     // dependencies
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
+    private val dependencies: CompanyDependencies = CompanyDependencies()
     private val cacheDataSource: CompanyInfoCacheDataSource
     private val infoFactory: CompanyInfoFactory
 
+
     init {
-        dependencyContainer.build()
-        cacheDataSource = dependencyContainer.companyInfoCacheDataSource
-        infoFactory = dependencyContainer.companyInfoFactory
+        dependencies.build()
+        cacheDataSource = dependencies.companyInfoCacheDataSource
+        infoFactory = dependencies.companyInfoFactory
         getCompanyInfo = GetCompanyInfoFromCache(
             cacheDataSource = cacheDataSource
         )

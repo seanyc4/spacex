@@ -1,19 +1,16 @@
 package com.seancoyle.spacex.business.interactors.launch
 
-import com.seancoyle.spacex.business.data.cache.launch.FakeLaunchDatabase
-import com.seancoyle.spacex.business.data.cache.launch.FakeLaunchCacheDataSourceImpl
-import com.seancoyle.spacex.business.data.network.launch.FakeLaunchNetworkDataSourceImpl
+import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.launch.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
-import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
@@ -23,47 +20,28 @@ import java.net.HttpURLConnection
 
 class GetLaunchItemsFromNetworkInsertToCacheTest {
 
-    private val fakeLaunchListDatabase = FakeLaunchDatabase()
-    private lateinit var mockWebServer: MockWebServer
-    private lateinit var baseUrl: HttpUrl
-
     // system in test
     private lateinit var getLaunchListFromNetworkAndInsertToCache: GetLaunchListFromNetworkAndInsertToCache
 
     // dependencies
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
-    private lateinit var api: FakeLaunchNetworkDataSourceImpl
-    private lateinit var dao: FakeLaunchCacheDataSourceImpl
+    private val dependencies: LaunchDependencies = LaunchDependencies()
+    private lateinit var cacheDataSource: LaunchCacheDataSource
+    private lateinit var networkDataSource: LaunchNetworkDataSource
     private lateinit var factory: LaunchFactory
-    private lateinit var networkMapper: LaunchNetworkMapper
+    private lateinit var mockWebServer: MockWebServer
 
     @BeforeEach
     fun setup() {
-        dependencyContainer.build()
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
-        baseUrl = mockWebServer.url("v3/launches/")
-
-        networkMapper = LaunchNetworkMapper(
-            dateFormatter = dependencyContainer.dateFormatter,
-            dateTransformer = dependencyContainer.dateTransformer
-        )
-
-        api = FakeLaunchNetworkDataSourceImpl(
-            baseUrl = baseUrl,
-            networkMapper = networkMapper
-        )
-
-        dao = FakeLaunchCacheDataSourceImpl(
-            fakeLaunchDatabase = fakeLaunchListDatabase
-        )
-
-        factory = dependencyContainer.launchFactory
+        dependencies.build()
+        cacheDataSource = dependencies.launchCacheDataSource
+        networkDataSource = dependencies.networkDataSource
+        factory = dependencies.launchFactory
+        mockWebServer = dependencies.mockWebServer
 
         // instantiate the system in test
         getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
-            cacheDataSource = dao,
-            launchNetworkDataSource = api,
+            cacheDataSource = cacheDataSource,
+            launchNetworkDataSource = networkDataSource,
             factory = factory
         )
     }
@@ -84,13 +62,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
 
         // confirm the cache is empty to start
-        assert(dao.getAll().isEmpty())
+        cacheDataSource.deleteAll()
+        assert(cacheDataSource.getAll()?.isEmpty() == true)
 
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
-            launchOptions = dependencyContainer.launchOptions,
+            launchOptions = dependencies.launchOptions,
             stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = dependencyContainer.launchOptions
+                launchOptions = dependencies.launchOptions
             )
         ).collect { value ->
             assertEquals(
@@ -100,13 +79,13 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         }
 
         // get items inserted from network
-        val results = dao.getAll()
+        val results = cacheDataSource.getAll()
 
         // results should contain a list of launch items
-        assert(results.isNotEmpty())
+        assert(results?.isNotEmpty() == true)
 
         // confirm they are actually LaunchModel objects
-        assert(results.get(index = 0) is LaunchModel)
+        assert(results?.get(index = 0) is LaunchModel)
 
     }
 
@@ -125,9 +104,9 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
-            launchOptions = dependencyContainer.launchOptions,
+            launchOptions = dependencies.launchOptions,
             stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = dependencyContainer.launchOptions
+                launchOptions = dependencies.launchOptions
             )
         ).collect { value ->
             assertEquals(

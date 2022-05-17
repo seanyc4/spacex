@@ -6,7 +6,7 @@ import com.seancoyle.spacex.business.data.cache.launch.FORCE_SEARCH_LAUNCH_EXCEP
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_NO_MATCHING_RESULTS
 import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
+import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_FAILED
@@ -24,13 +24,13 @@ import org.junit.jupiter.api.BeforeEach
 class FilterLaunchItemsInCacheTest {
 
     private lateinit var filterLaunchItems: FilterLaunchItemsInCache
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
+    private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
     @BeforeEach
     fun init() {
-        dependencyContainer.build()
-        cacheDataSource = dependencyContainer.launchCacheDataSource
+        launchDependencies.build()
+        cacheDataSource = launchDependencies.launchCacheDataSource
         filterLaunchItems = FilterLaunchItemsInCache(
             cacheDataSource = cacheDataSource
         )

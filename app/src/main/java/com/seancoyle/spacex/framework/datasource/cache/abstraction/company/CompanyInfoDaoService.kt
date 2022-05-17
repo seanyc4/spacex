@@ -8,6 +8,8 @@ interface CompanyInfoDaoService {
 
     suspend fun getCompanyInfo(): CompanyInfoModel?
 
+    suspend fun deleteAll()
+
 }
 
 

@@ -26,6 +26,10 @@ constructor(
     override suspend fun getCompanyInfo(): CompanyInfoModel? {
         return fakeCompanyInfoDatabase.companyInfo
     }
+
+    override suspend fun deleteAll() {
+         fakeCompanyInfoDatabase.companyInfo = null
+    }
 }
 
 

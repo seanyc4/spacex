@@ -6,7 +6,7 @@ import com.seancoyle.spacex.business.data.cache.launch.FORCE_GENERAL_FAILURE
 import com.seancoyle.spacex.business.data.cache.launch.FORCE_NEW_LAUNCH_EXCEPTION
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.interactors.launch.InsertLaunchListToCache.Companion.INSERT_LAUNCH_LIST_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
+import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -37,14 +37,14 @@ class InsertLaunchListToCacheTest {
     private val insertLaunchListToCache: InsertLaunchListToCache
 
     // dependencies
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
+    private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private val cacheDataSource: LaunchCacheDataSource
     private val factory: LaunchFactory
 
     init {
-        dependencyContainer.build()
-        cacheDataSource = dependencyContainer.launchCacheDataSource
-        factory = dependencyContainer.launchFactory
+        launchDependencies.build()
+        cacheDataSource = launchDependencies.launchCacheDataSource
+        factory = launchDependencies.launchFactory
         insertLaunchListToCache = InsertLaunchListToCache(
             cacheDataSource = cacheDataSource,
             factory = factory

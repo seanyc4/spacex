@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.data.network.company
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
+import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
@@ -15,16 +15,16 @@ constructor(
     private val networkMapper: CompanyInfoNetworkMapper
 ) : CompanyInfoNetworkDataSource {
 
-    private val service: CompanyInfoService = Retrofit.Builder()
+    private val companyInfoApi: CompanyInfoApi = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()
-        .create(CompanyInfoService::class.java)
+        .create(CompanyInfoApi::class.java)
 
 
     override suspend fun getCompanyInfo(): CompanyInfoModel {
         return networkMapper.mapFromEntity(
-            service.getCompanyInfo()
+            companyInfoApi.getCompanyInfo()
         )
     }
 

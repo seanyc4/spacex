@@ -4,7 +4,7 @@ import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDa
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemByIdFromCache.Companion.GET_LAUNCH_ITEM_BY_ID_SUCCESS
-import com.seancoyle.spacex.di.DependencyContainer
+import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -25,14 +25,14 @@ class GeLaunchItemByIdFromCacheTest {
     private val getLaunchItemById: GetLaunchItemByIdFromCache
 
     // dependencies
-    private val dependencyContainer: DependencyContainer = DependencyContainer()
+    private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private val cacheDataSource: LaunchCacheDataSource
     private val factory: LaunchFactory
 
     init {
-        dependencyContainer.build()
-        cacheDataSource = dependencyContainer.launchCacheDataSource
-        factory = dependencyContainer.launchFactory
+        launchDependencies.build()
+        cacheDataSource = launchDependencies.launchCacheDataSource
+        factory = launchDependencies.launchFactory
         getLaunchItemById = GetLaunchItemByIdFromCache(
             cacheDataSource = cacheDataSource
         )
