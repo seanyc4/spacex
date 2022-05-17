@@ -72,7 +72,7 @@ class CompanyInfoDaoServiceTests : BaseTest() {
         insertTestData()
         daoService = CompanyInfoDaoServiceImpl(
             dao = dao,
-            cacheMapper = entityMapper
+            entityMapper = entityMapper
         )
     }
 
