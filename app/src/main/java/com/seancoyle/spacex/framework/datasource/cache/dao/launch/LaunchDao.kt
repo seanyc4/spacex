@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.cache.dao.launch
 
 import androidx.room.*
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
 
 const val LAUNCH_ORDER_ASC: String = "ASC"
 const val LAUNCH_ORDER_DESC: String = "DESC"
@@ -11,10 +11,10 @@ const val LAUNCH_PAGINATION_PAGE_SIZE = 30
 interface LaunchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(launch: LaunchCacheEntity): Long
+    suspend fun insert(launch: LaunchEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertList(launches: List<LaunchCacheEntity>): LongArray
+    suspend fun insertList(launches: List<LaunchEntity>): LongArray
 
     @Query("DELETE FROM launch WHERE id = :id")
     suspend fun deleteById(id: Int): Int
@@ -33,7 +33,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    suspend fun getById(id: Int): LaunchCacheEntity?
+    suspend fun getById(id: Int): LaunchEntity?
 
     @Query(
         """
@@ -42,7 +42,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    suspend fun getAll(): List<LaunchCacheEntity>?
+    suspend fun getAll(): List<LaunchEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
@@ -58,7 +58,7 @@ interface LaunchDao {
         isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -71,7 +71,7 @@ interface LaunchDao {
         isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
 
     @Query(
@@ -87,7 +87,7 @@ interface LaunchDao {
         isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -102,7 +102,7 @@ interface LaunchDao {
         isLaunchSuccess: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -115,7 +115,7 @@ interface LaunchDao {
         year: String?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -128,7 +128,7 @@ interface LaunchDao {
         year: String?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -139,7 +139,7 @@ interface LaunchDao {
     suspend fun launchItemsOrderByYearDESC(
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -150,7 +150,7 @@ interface LaunchDao {
     suspend fun launchItemsOrderByYearASC(
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
-    ): List<LaunchCacheEntity>
+    ): List<LaunchEntity>
 
 }
 
@@ -159,7 +159,7 @@ suspend fun LaunchDao.returnOrderedQuery(
     order: String,
     isLaunchSuccess: Int?,
     page: Int
-): List<LaunchCacheEntity>? {
+): List<LaunchEntity>? {
 
     when {
 

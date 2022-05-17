@@ -40,7 +40,7 @@ object LaunchInteractorsModule {
                 cacheDataSource = launchCacheDataSource,
                 factory = launchFactory
             ),
-            searchLaunchItemsInCache = SearchLaunchItemsInCache(
+            filterLaunchItemsInCache = FilterLaunchItemsInCache(
                 cacheDataSource = launchCacheDataSource
             )
 

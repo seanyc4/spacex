@@ -2,7 +2,7 @@ package com.seancoyle.spacex.framework.datasource.network.mappers.company
 
 import com.seancoyle.spacex.business.domain.model.company.*
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
-import com.seancoyle.spacex.framework.datasource.network.model.company.CompanyInfoNetworkEntity
+import com.seancoyle.spacex.framework.datasource.network.model.company.CompanyInfoNetworkDto
 import javax.inject.Inject
 
 
@@ -12,9 +12,9 @@ constructor(
     private val numberFormatter: NumberFormatter
 ){
 
-    fun mapFromEntity(entity: CompanyInfoNetworkEntity): CompanyInfoDomainEntity {
-        entity.apply {
-            return CompanyInfoDomainEntity(
+    fun mapFromEntity(dto: CompanyInfoNetworkDto): CompanyInfoModel {
+        dto.apply {
+            return CompanyInfoModel(
                 id = "",
                 employees = numberFormatter.formatNumber(employees?.toLong()),
                 founded = founded ?: 0,

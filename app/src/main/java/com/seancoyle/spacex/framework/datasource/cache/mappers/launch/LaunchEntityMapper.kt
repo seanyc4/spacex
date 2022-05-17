@@ -1,31 +1,31 @@
 package com.seancoyle.spacex.framework.datasource.cache.mappers.launch
 
 import com.seancoyle.spacex.business.domain.model.launch.*
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LinksCache
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.RocketCache
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LinksEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.RocketEntity
 
-class LaunchCacheMapper {
+class LaunchEntityMapper {
 
-    fun entityListToDomainList(entities: List<LaunchCacheEntity>): List<LaunchDomainEntity> {
-        val list: ArrayList<LaunchDomainEntity> = ArrayList()
+    fun entityListToDomainList(entities: List<LaunchEntity>): List<LaunchModel> {
+        val list: ArrayList<LaunchModel> = ArrayList()
         for (entity in entities) {
             list.add(mapFromEntity(entity))
         }
         return list
     }
 
-    fun domainListToEntityList(launchList: List<LaunchDomainEntity>): List<LaunchCacheEntity> {
-        val entities: ArrayList<LaunchCacheEntity> = ArrayList()
+    fun domainListToEntityList(launchList: List<LaunchModel>): List<LaunchEntity> {
+        val entities: ArrayList<LaunchEntity> = ArrayList()
         for (item in launchList) {
             entities.add(mapToEntity(item))
         }
         return entities
     }
 
-    fun mapFromEntity(entity: LaunchCacheEntity): LaunchDomainEntity {
+    fun mapFromEntity(entity: LaunchEntity): LaunchModel {
         entity.apply {
-            return LaunchDomainEntity(
+            return LaunchModel(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
@@ -49,23 +49,23 @@ class LaunchCacheMapper {
         }
     }
 
-    fun mapToEntity(entity: LaunchDomainEntity): LaunchCacheEntity {
+    fun mapToEntity(entity: LaunchModel): LaunchEntity {
         entity.apply {
-            return LaunchCacheEntity(
+            return LaunchEntity(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
                 isLaunchSuccess = isLaunchSuccess,
                 launchSuccessIcon = launchSuccessIcon,
                 launchYear = launchYear,
-                links = LinksCache(
+                links = LinksEntity(
                     missionImage = links.missionImage,
                     articleLink = links.articleLink,
                     videoLink = links.videoLink,
                     wikipedia = links.wikipedia,
                 ),
                 missionName = missionName,
-                rocket = RocketCache(
+                rocket = RocketEntity(
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
                 daysToFromTitle = daysToFromTitle,

@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.interactors.launch
 
 import com.seancoyle.spacex.business.data.cache.CacheResponseHandler
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.data.util.safeCacheCall
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SearchLaunchItemsInCache(
+class FilterLaunchItemsInCache(
     private val cacheDataSource: LaunchCacheDataSource
 ) {
 
     fun execute(
-        query: String,
+        year: String,
         order: String,
         isLaunchSuccess: Int?,
         page: Int,
@@ -28,21 +28,20 @@ class SearchLaunchItemsInCache(
         }
 
         val cacheResult = safeCacheCall(Dispatchers.IO) {
-            cacheDataSource.searchLaunchList(
-                year = query,
+            cacheDataSource.filterLaunchList(
+                year = year,
                 order = order,
                 isLaunchSuccess = isLaunchSuccess,
                 page = updatedPage
             )
         }
 
-        val response = object : CacheResponseHandler<LaunchViewState, List<LaunchDomainEntity>>(
+        val response = object : CacheResponseHandler<LaunchViewState, List<LaunchModel>>(
             response = cacheResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: List<LaunchDomainEntity>): DataState<LaunchViewState> {
-                var message: String? =
-                    SEARCH_LAUNCH_SUCCESS
+            override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchViewState> {
+                var message: String? = SEARCH_LAUNCH_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None
                 if (resultObj.isEmpty()) {
                     message =
@@ -56,7 +55,7 @@ class SearchLaunchItemsInCache(
                         messageType = MessageType.Success
                     ),
                     data = LaunchViewState(
-                        launchList = resultObj as ArrayList<LaunchDomainEntity>?
+                        launchList = resultObj as ArrayList<LaunchModel>?
                     ),
                     stateEvent = stateEvent
                 )

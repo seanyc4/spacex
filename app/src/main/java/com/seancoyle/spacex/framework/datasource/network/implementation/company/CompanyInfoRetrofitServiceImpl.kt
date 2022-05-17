@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.implementation.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
@@ -15,7 +15,7 @@ constructor(
     private val networkMapper: CompanyInfoNetworkMapper
 ) : CompanyInfoRetrofitService {
 
-    override suspend fun getCompanyInfo(): CompanyInfoDomainEntity {
+    override suspend fun getCompanyInfo(): CompanyInfoModel {
         return networkMapper.mapFromEntity(
             service.getCompanyInfo()
         )

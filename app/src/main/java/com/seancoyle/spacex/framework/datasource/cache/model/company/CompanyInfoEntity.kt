@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "company_info")
-data class CompanyInfoCacheEntity(
+data class CompanyInfoEntity(
 
     @PrimaryKey(autoGenerate = false)
     val id: String,

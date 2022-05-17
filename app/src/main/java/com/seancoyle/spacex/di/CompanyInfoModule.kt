@@ -9,7 +9,7 @@ import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.Compa
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
-import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
@@ -80,19 +80,19 @@ object CompanyInfoModule {
 
     @Singleton
     @Provides
-    fun provideCompanyInfoCacheMapper(): CompanyInfoCacheMapper {
-        return CompanyInfoCacheMapper()
+    fun provideCompanyInfoCacheMapper(): CompanyInfoEntityMapper {
+        return CompanyInfoEntityMapper()
     }
 
     @Singleton
     @Provides
     fun provideCompanyInfoDaoService(
         dao: CompanyInfoDao,
-        companyInfoCacheMapper: CompanyInfoCacheMapper
+        companyInfoEntityMapper: CompanyInfoEntityMapper
     ): CompanyInfoDaoService {
         return CompanyInfoDaoServiceImpl(
             dao = dao,
-            cacheMapper = companyInfoCacheMapper
+            entityMapper = companyInfoEntityMapper
         )
     }
 

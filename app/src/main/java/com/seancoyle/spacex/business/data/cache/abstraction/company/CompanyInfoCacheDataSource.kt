@@ -1,12 +1,12 @@
 package com.seancoyle.spacex.business.data.cache.abstraction.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 
 interface CompanyInfoCacheDataSource {
 
-    suspend fun insert(company: CompanyInfoDomainEntity): Long
+    suspend fun insert(company: CompanyInfoModel): Long
 
-    suspend fun getCompanyInfo(): CompanyInfoDomainEntity?
+    suspend fun getCompanyInfo(): CompanyInfoModel?
 
 }
 

@@ -1,14 +1,14 @@
 package com.seancoyle.spacex.framework.presentation.launch.state
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.state.StateEvent
 import com.seancoyle.spacex.business.domain.state.StateMessage
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 
 sealed class LaunchStateEvent : StateEvent {
 
-    class GetLaunchListFromNetworkAndInsertToCacheEvent
+    class GetLaunchItemsFromNetworkAndInsertToCacheEvent
         constructor(
             val launchOptions: LaunchOptions
         ): LaunchStateEvent() {
@@ -18,7 +18,7 @@ sealed class LaunchStateEvent : StateEvent {
         }
 
         override fun eventName(): String {
-            return "GetLaunchListFromNetworkAndInsertToCacheEvent"
+            return "GetLaunchItemsFromNetworkAndInsertToCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = true
@@ -37,14 +37,14 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetAllLaunchDataFromCacheEvent: LaunchStateEvent() {
+    object GetAllLaunchItemsFromCacheEvent: LaunchStateEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch list from cache."
         }
 
         override fun eventName(): String {
-            return "GetAllLaunchDataFromCacheEvent"
+            return "GetAllLaunchItemsFromCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = false
@@ -94,7 +94,7 @@ sealed class LaunchStateEvent : StateEvent {
 
     class InsertCompanyInfoToCacheEvent
         constructor(
-            private val companyInfo: CompanyInfoDomainEntity
+            private val companyInfo: CompanyInfoModel
         ): LaunchStateEvent() {
 
         override fun errorInfo(): String {
@@ -108,9 +108,9 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = false
     }
 
-    class InsertLaunchListToCacheEvent
+    class InsertLaunchItemsToCacheEvent
     constructor(
-        private val launchList: List<LaunchDomainEntity>
+        private val launchList: List<LaunchModel>
     ): LaunchStateEvent() {
 
         override fun errorInfo(): String {
@@ -118,13 +118,13 @@ sealed class LaunchStateEvent : StateEvent {
         }
 
         override fun eventName(): String {
-            return "InsertLaunchListToCacheEvent"
+            return "InsertLaunchItemsToCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = false
     }
 
-    class SearchLaunchListEvent(
+    class FilterLaunchItemsInCacheEvent(
         val clearLayoutManagerState: Boolean = true
     ): LaunchStateEvent(){
 
@@ -133,7 +133,7 @@ sealed class LaunchStateEvent : StateEvent {
         }
 
         override fun eventName(): String {
-            return "SearchLaunchListEvent"
+            return "FilterLaunchItemsInCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = true

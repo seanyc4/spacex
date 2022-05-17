@@ -7,7 +7,7 @@ import com.seancoyle.spacex.framework.datasource.cache.typeconverters.LocalDateT
 import java.time.LocalDateTime
 
 @Entity(tableName = "launch")
-data class LaunchCacheEntity(
+data class LaunchEntity(
 
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
@@ -20,23 +20,23 @@ data class LaunchCacheEntity(
     val launchSuccessIcon: Int,
     val launchYear: String,
     @Embedded
-    val links: LinksCache,
+    val links: LinksEntity,
     val missionName: String,
     @Embedded
-    val rocket: RocketCache,
+    val rocket: RocketEntity,
     @StringRes
     val daysToFromTitle: Int,
     val launchDaysDifference: String
 )
 
-data class LinksCache(
+data class LinksEntity(
     val missionImage: String,
     val articleLink: String,
     val videoLink: String,
     val wikipedia: String,
 )
 
-data class RocketCache(
+data class RocketEntity(
     val rocketNameAndType: String
 )
 

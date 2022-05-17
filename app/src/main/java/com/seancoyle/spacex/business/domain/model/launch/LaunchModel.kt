@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 @Parcelize
-data class LaunchDomainEntity(
+data class LaunchModel(
     val id: Int,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
@@ -28,7 +28,7 @@ data class LaunchDomainEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as LaunchDomainEntity
+        other as LaunchModel
 
         if (id != other.id) return false
         if (launchDate != other.launchDate) return false

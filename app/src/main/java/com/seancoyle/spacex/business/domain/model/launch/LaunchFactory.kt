@@ -25,8 +25,8 @@ class LaunchFactory {
         daysToFromTitle: Int,
         launchDaysDifference: String,
         type: Int
-    ): LaunchDomainEntity {
-        return LaunchDomainEntity(
+    ): LaunchModel {
+        return LaunchModel(
             id = id,
             launchDate = launchDate,
             launchDateLocalDateTime = launchDateLocalDateTime,
@@ -43,9 +43,9 @@ class LaunchFactory {
     }
 
     fun createLaunchList(
-        launchList: List<LaunchDomainEntity>
-    ): List<LaunchDomainEntity> {
-        val list: ArrayList<LaunchDomainEntity> = ArrayList()
+        launchList: List<LaunchModel>
+    ): List<LaunchModel> {
+        val list: ArrayList<LaunchModel> = ArrayList()
         for (item in launchList) {
             list.add(
                 createLaunchItem(
@@ -70,8 +70,8 @@ class LaunchFactory {
     fun createLaunchListTest(
         num: Int,
         id: Int?
-    ): List<LaunchDomainEntity> {
-        val list: ArrayList<LaunchDomainEntity> = ArrayList()
+    ): List<LaunchModel> {
+        val list: ArrayList<LaunchModel> = ArrayList()
         for (item in 0 until num) {
             list.add(
                 createLaunchItem(

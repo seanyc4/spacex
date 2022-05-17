@@ -1,8 +1,5 @@
 package com.seancoyle.spacex.framework.presentation.end_to_end
 
-import android.content.Context
-import android.content.res.Resources
-import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
@@ -12,7 +9,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.platform.app.InstrumentationRegistry
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
@@ -20,16 +16,14 @@ import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetwo
 import com.seancoyle.spacex.di.CompanyInfoModule
 import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
-import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoCacheMapper
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
-import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoCacheEntity
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
+import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
+import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
 import com.seancoyle.spacex.framework.presentation.MainActivity
-import com.seancoyle.spacex.framework.presentation.RecyclerViewItemCountAssertion
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter.*
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -38,7 +32,6 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.containsString
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -71,10 +64,10 @@ class SpaceXFeatureTest : BaseTest() {
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
-    lateinit var launchCacheMapper: LaunchCacheMapper
+    lateinit var launchEntityMapper: LaunchEntityMapper
 
     @Inject
-    lateinit var companyInfoCacheMapper: CompanyInfoCacheMapper
+    lateinit var companyInfoEntityMapper: CompanyInfoEntityMapper
 
     @Inject
     lateinit var launchDataFactory: LaunchDataFactory
@@ -94,16 +87,16 @@ class SpaceXFeatureTest : BaseTest() {
     @Inject
     lateinit var companyInfoNetworkDataSource: CompanyInfoNetworkDataSource
 
-    private lateinit var testLaunchList: List<LaunchCacheEntity>
-    private lateinit var testCompanyInfoList: CompanyInfoCacheEntity
+    private lateinit var testLaunchList: List<LaunchEntity>
+    private lateinit var testCompanyInfoList: CompanyInfoEntity
 
     @Before
     fun init() {
         hiltRule.inject()
-        testLaunchList = launchCacheMapper.domainListToEntityList(
+        testLaunchList = launchEntityMapper.domainListToEntityList(
             launchDataFactory.produceListOfLaunches()
         )
-        testCompanyInfoList = companyInfoCacheMapper.mapToEntity(
+        testCompanyInfoList = companyInfoEntityMapper.mapToEntity(
             companyInfoDataFactory.produceCompanyInfo()
         )
         prepareDataSet()
@@ -119,7 +112,7 @@ class SpaceXFeatureTest : BaseTest() {
     }
 
     @Test
-    fun generalEndToEndTest() = runBlocking {
+    fun generalEndToEndTest()  {
 
         val scenario = launchActivity<MainActivity>()
 
@@ -131,6 +124,10 @@ class SpaceXFeatureTest : BaseTest() {
         // confirm LaunchFragment is in view
         launchListRecyclerView.check(matches(isDisplayed()))
 
+       /* // Scroll to position 20
+        launchListRecyclerView.perform(
+            scrollToPosition<LaunchViewHolder>(20)
+        )*/
 
         // Test filter dialog
         val year = "2020"
@@ -151,37 +148,33 @@ class SpaceXFeatureTest : BaseTest() {
         onView(withId(R.id.filter_dialog_container)).check(doesNotExist())
 
         // Get expected results from the filter - year 2020
-        val expectedSearchResults = launchDao.searchLaunchItemsOrderByYearDESC(
+      /*  val expectedSearchResults = launchDao.searchLaunchItemsOrderByYearDESC(
             year = year,
             1,
             LAUNCH_PAGINATION_PAGE_SIZE
-        )
+        )*/
 
         // Check the date of each item on screen matches the year filter 2020
-        launchListRecyclerView
+      /*  launchListRecyclerView
             .check(RecyclerViewItemCountAssertion(expectedSearchResults.size))
         for (entity in expectedSearchResults) {
             launchListRecyclerView.perform(
                 scrollTo<LaunchViewHolder>(hasDescendant(withText(entity.launchDate)))
             )
-            onView(withText(entity.launchDate)).check(matches(withText(containsString(year))))
-        }
+        //    onView(withText(entity.launchDate)).check(matches(withText(containsString(year))))
+        }*/
 
-        // Scroll to position 20
-        launchListRecyclerView.perform(
-            scrollToPosition<LaunchViewHolder>(5)
-        )
 
         // Select an item from the list
         launchListRecyclerView.perform(
-            actionOnItemAtPosition<LaunchViewHolder>(5, click())
+            actionOnItemAtPosition<LaunchViewHolder>(4, click())
         )
 
         // Verify the modal bottom sheet comes into view
-        val linksBottomSheet = onView(withId(R.id.links_container)).check(matches(isDisplayed()))
+        onView(withId(R.id.links_container)).check(matches(isDisplayed()))
 
         // Verify all three links - Article / youtube/ Wikipedia are displayed & Title "Links"
-
+        onView(withId(R.id.links_title)).check(matches(withText("Links")))
 
     }
 

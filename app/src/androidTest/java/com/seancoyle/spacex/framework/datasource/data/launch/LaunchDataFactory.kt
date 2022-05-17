@@ -20,15 +20,15 @@ constructor(
     private val factory: LaunchFactory
 ) {
 
-    fun produceListOfLaunches(): List<LaunchDomainEntity> {
+    fun produceListOfLaunches(): List<LaunchModel> {
         return Gson()
             .fromJson(
                 getDataFromFile("launch_list.json"),
-                object : TypeToken<List<LaunchDomainEntity>>() {}.type
+                object : TypeToken<List<LaunchModel>>() {}.type
             )
     }
 
-    fun produceEmptyListOfData(): List<LaunchDomainEntity> {
+    fun produceEmptyListOfData(): List<LaunchModel> {
         return ArrayList()
     }
 

@@ -5,15 +5,15 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
-import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoCacheEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
+import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoEntity
 import com.seancoyle.spacex.framework.datasource.cache.typeconverters.LocalDateTimeTypeConverter
 
 @Database(
     entities =
     [
-        LaunchCacheEntity::class,
-        CompanyInfoCacheEntity::class
+        LaunchEntity::class,
+        CompanyInfoEntity::class
     ],
     version = 2
 )

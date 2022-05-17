@@ -3,7 +3,6 @@ package com.seancoyle.spacex.framework.presentation.launch
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -13,8 +12,8 @@ import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.di.*
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
-import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchCacheEntity
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
+import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
 import com.seancoyle.spacex.framework.presentation.TestSpaceXFragmentFactory
 import com.seancoyle.spacex.framework.presentation.UIController
@@ -25,7 +24,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -65,7 +63,7 @@ class LaunchFragmentTests: BaseTest() {
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
-    lateinit var launchCacheMapper: LaunchCacheMapper
+    lateinit var launchEntityMapper: LaunchEntityMapper
 
     @Inject
     lateinit var launchDataFactory: LaunchDataFactory
@@ -76,14 +74,14 @@ class LaunchFragmentTests: BaseTest() {
     @Inject
     lateinit var fragmentFactory: TestSpaceXFragmentFactory
 
-    private lateinit var testLaunchList: List<LaunchCacheEntity>
+    private lateinit var testLaunchList: List<LaunchEntity>
     private val uiController = mockk<UIController>(relaxed = true)
     private val navController = mockk<NavController>(relaxed = true)
 
     @Before
     fun before(){
         hiltRule.inject()
-        testLaunchList = launchCacheMapper.domainListToEntityList(
+        testLaunchList = launchEntityMapper.domainListToEntityList(
             launchDataFactory.produceListOfLaunches()
         )
         prepareDataSet(testLaunchList)
@@ -95,7 +93,7 @@ class LaunchFragmentTests: BaseTest() {
     }
 
     // ** Must clear cache so there is no previous state issues **
-    private fun prepareDataSet(testData: List<LaunchCacheEntity>) = runBlocking{
+    private fun prepareDataSet(testData: List<LaunchEntity>) = runBlocking{
         // clear any existing data so recyclerview isn't overwhelmed
         dao.deleteAll()
         dao.insertList(testData)

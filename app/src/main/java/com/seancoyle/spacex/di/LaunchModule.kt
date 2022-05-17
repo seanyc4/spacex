@@ -10,13 +10,11 @@ import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransform
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
-import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.util.Constants
@@ -97,19 +95,19 @@ object LaunchModule {
 
     @Singleton
     @Provides
-    fun provideLaunchCacheMapper(): LaunchCacheMapper {
-        return LaunchCacheMapper()
+    fun provideLaunchCacheMapper(): LaunchEntityMapper {
+        return LaunchEntityMapper()
     }
 
     @Singleton
     @Provides
     fun provideLaunchDaoService(
         dao: LaunchDao,
-        launchCacheMapper: LaunchCacheMapper
+        launchEntityMapper: LaunchEntityMapper
     ): LaunchDaoService {
         return LaunchDaoServiceImpl(
             dao = dao,
-            cacheMapper = launchCacheMapper
+            entityMapper = launchEntityMapper
         )
     }
 

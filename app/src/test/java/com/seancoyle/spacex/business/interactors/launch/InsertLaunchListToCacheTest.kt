@@ -61,7 +61,7 @@ class InsertLaunchListToCacheTest {
 
         insertLaunchListToCache.execute(
             launchList = newLaunchList,
-            stateEvent = InsertLaunchListToCacheEvent(
+            stateEvent = InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->
@@ -86,7 +86,7 @@ class InsertLaunchListToCacheTest {
 
         insertLaunchListToCache.execute(
             launchList = newLaunchList,
-            stateEvent = InsertLaunchListToCacheEvent(
+            stateEvent = InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->
@@ -111,7 +111,7 @@ class InsertLaunchListToCacheTest {
 
         insertLaunchListToCache.execute(
             launchList = newLaunchList,
-            stateEvent = InsertLaunchListToCacheEvent(
+            stateEvent = InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->

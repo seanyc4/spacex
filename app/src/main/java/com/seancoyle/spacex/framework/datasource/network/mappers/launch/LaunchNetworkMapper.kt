@@ -4,7 +4,7 @@ import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchNetworkEntity
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchDto
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -21,12 +21,12 @@ constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun mapEntityToList(entity: LaunchNetworkEntity): List<LaunchDomainEntity> {
+    fun mapEntityToList(entity: LaunchDto): List<LaunchModel> {
         return entity.docs.map { item ->
             val localDateTime = dateFormatter.formatDate(item.launchDate.orEmpty())
             val launchSuccess = item.isLaunchSuccess
 
-            LaunchDomainEntity(
+            LaunchModel(
                 id = item.flightNumber ?: 0,
                 launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                 launchDateLocalDateTime = localDateTime,

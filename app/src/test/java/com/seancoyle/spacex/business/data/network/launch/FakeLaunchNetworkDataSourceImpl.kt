@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.data.network.launch
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
@@ -22,7 +22,7 @@ constructor(
         .build()
         .create(LaunchService::class.java)
 
-    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<LaunchDomainEntity> {
+    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<LaunchModel> {
         return networkMapper.mapEntityToList(
             service.getLaunchList(options = launchOptions)
         )

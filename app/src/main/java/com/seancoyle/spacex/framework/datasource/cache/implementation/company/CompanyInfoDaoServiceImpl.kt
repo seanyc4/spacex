@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.framework.datasource.cache.implementation.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
-import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,20 +12,20 @@ class CompanyInfoDaoServiceImpl
 @Inject
 constructor(
     private val dao: CompanyInfoDao,
-    private val cacheMapper: CompanyInfoCacheMapper
+    private val entityMapper: CompanyInfoEntityMapper
 ) : CompanyInfoDaoService {
 
-    override suspend fun insert(company: CompanyInfoDomainEntity): Long {
+    override suspend fun insert(company: CompanyInfoModel): Long {
         return dao.insert(
-            cacheMapper.mapToEntity(
+            entityMapper.mapToEntity(
                 domainModel = company
             )
         )
     }
 
-    override suspend fun getCompanyInfo(): CompanyInfoDomainEntity? {
+    override suspend fun getCompanyInfo(): CompanyInfoModel? {
         return dao.getCompanyInfo()?.let {
-            cacheMapper.mapFromEntity(it)
+            entityMapper.mapFromEntity(it)
         }
     }
 

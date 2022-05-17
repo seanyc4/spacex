@@ -3,7 +3,7 @@ package com.seancoyle.spacex.framework.datasource.cache.launch
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.business.domain.model.launch.Links
@@ -14,7 +14,7 @@ import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -70,17 +70,10 @@ class LaunchDaoServiceTests : BaseTest() {
     private lateinit var launchDaoService: LaunchDaoService
 
     // dependencies
-    @Inject
-    lateinit var dao: LaunchDao
-
-    @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
-
-    @Inject
-    lateinit var launchFactory: LaunchFactory
-
-    @Inject
-    lateinit var launchCacheMapper: LaunchCacheMapper
+    @Inject lateinit var dao: LaunchDao
+    @Inject lateinit var launchDataFactory: LaunchDataFactory
+    @Inject lateinit var launchFactory: LaunchFactory
+    @Inject lateinit var launchEntityMapper: LaunchEntityMapper
 
     @Before
     fun setup() {
@@ -88,13 +81,13 @@ class LaunchDaoServiceTests : BaseTest() {
         insertTestData()
         launchDaoService = LaunchDaoServiceImpl(
             dao = dao,
-            cacheMapper = launchCacheMapper
+            cacheMapper = launchEntityMapper
         )
     }
 
 
     private fun insertTestData() = runBlocking {
-        val entityList = launchCacheMapper.domainListToEntityList(
+        val entityList = launchEntityMapper.domainListToEntityList(
             launchDataFactory.produceListOfLaunches()
         )
         dao.insertList(entityList)
@@ -208,10 +201,10 @@ class LaunchDaoServiceTests : BaseTest() {
 
     @Test
     fun deleteLaunchList_confirmDeleted() = runBlocking {
-        val launchList: ArrayList<LaunchDomainEntity> = ArrayList(launchDaoService.getAll())
+        val launchList: ArrayList<LaunchModel> = ArrayList(launchDaoService.getAll())
 
         // select some random launch for deleting
-        val launchesToDelete: ArrayList<LaunchDomainEntity> = ArrayList()
+        val launchesToDelete: ArrayList<LaunchModel> = ArrayList()
 
         // 1st
         var launchItemToDelete = launchList[Random.nextInt(0, launchList.size - 1) + 1]

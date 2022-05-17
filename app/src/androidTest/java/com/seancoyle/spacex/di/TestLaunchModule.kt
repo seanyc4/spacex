@@ -11,7 +11,7 @@ import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
@@ -98,19 +98,19 @@ object TestLaunchModule {
 
     @Singleton
     @Provides
-    fun provideLaunchCacheMapper(): LaunchCacheMapper {
-        return LaunchCacheMapper()
+    fun provideLaunchCacheMapper(): LaunchEntityMapper {
+        return LaunchEntityMapper()
     }
 
     @Singleton
     @Provides
     fun provideLaunchDaoService(
         dao: LaunchDao,
-        launchCacheMapper: LaunchCacheMapper
+        launchEntityMapper: LaunchEntityMapper
     ): LaunchDaoService {
         return LaunchDaoServiceImpl(
             dao = dao,
-            cacheMapper = launchCacheMapper
+            cacheMapper = launchEntityMapper
         )
     }
 

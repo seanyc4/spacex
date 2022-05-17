@@ -6,7 +6,7 @@ import com.seancoyle.spacex.business.data.network.ApiResponseHandler
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.util.safeApiCall
 import com.seancoyle.spacex.business.data.util.safeCacheCall
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
@@ -29,11 +29,11 @@ constructor(
             networkDataSource.getCompanyInfo()
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchViewState, CompanyInfoDomainEntity?>(
+        val networkResponse = object : ApiResponseHandler<LaunchViewState, CompanyInfoModel?>(
             response = networkResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoDomainEntity?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
                     val viewState =
                         LaunchViewState(

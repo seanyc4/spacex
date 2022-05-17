@@ -3,14 +3,14 @@ package com.seancoyle.spacex.framework.datasource.network.model.launch
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class LaunchNetworkEntity(
+data class LaunchDto(
 
     @Expose
     @SerializedName("docs")
-    val docs: List<Docs>,
+    val docs: List<DocsDto>,
     )
 
-data class Docs(
+data class DocsDto(
 
     @Expose
     @SerializedName("flight_number")
@@ -21,14 +21,14 @@ data class Docs(
     val launchDate: String?,
 
     @Expose
-    val links: LinksNetwork,
+    val links: LinksDto,
 
     @Expose
     @SerializedName("name")
     val missionName: String?,
 
     @Expose
-    val rocket: RocketNetwork,
+    val rocket: RocketDto,
 
     @Expose
     @SerializedName("success")
@@ -36,9 +36,9 @@ data class Docs(
 
     )
 
-data class LinksNetwork(
+data class LinksDto(
     @Expose
-    val patch: PatchNetwork,
+    val patch: PatchDto,
 
     @Expose
     @SerializedName("article")
@@ -53,7 +53,7 @@ data class LinksNetwork(
 
     )
 
-data class RocketNetwork(
+data class RocketDto(
     @Expose
     val name: String?,
 
@@ -61,7 +61,7 @@ data class RocketNetwork(
     val type: String?,
 )
 
-data class PatchNetwork(
+data class PatchDto(
     @Expose
     @SerializedName("small")
     val missionImage: String?

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.*
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
 import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.model.launch.SectionTitle
@@ -115,8 +115,8 @@ constructor(
             }
 
             is LaunchViewHolder -> {
-                val launchItem: LaunchDomainEntity =
-                    differ.currentList[position] as LaunchDomainEntity
+                val launchItem: LaunchModel =
+                    differ.currentList[position] as LaunchModel
                 holder.bind(launchItem)
             }
         }
@@ -145,7 +145,7 @@ constructor(
         private val interaction: Interaction?,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: LaunchDomainEntity) = with(itemView) {
+        fun bind(item: LaunchModel) = with(itemView) {
             with(binding) {
 
                 launchImage.glideLoadLaunchImage(item.links.missionImage, true)

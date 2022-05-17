@@ -1,10 +1,10 @@
 package com.seancoyle.spacex.framework.datasource.cache.implementation.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.returnOrderedQuery
-import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,26 +13,26 @@ class LaunchDaoServiceImpl
 @Inject
 constructor(
     private val dao: LaunchDao,
-    private val cacheMapper: LaunchCacheMapper
+    private val entityMapper: LaunchEntityMapper
 ) : LaunchDaoService {
 
-    override suspend fun insert(launch: LaunchDomainEntity): Long {
+    override suspend fun insert(launch: LaunchModel): Long {
         return dao.insert(
-            cacheMapper.mapToEntity(
+            entityMapper.mapToEntity(
                 entity = launch
             )
         )
     }
 
-    override suspend fun insertList(launchList: List<LaunchDomainEntity>): LongArray {
+    override suspend fun insertList(launchList: List<LaunchModel>): LongArray {
         return dao.insertList(
-            cacheMapper.domainListToEntityList(
+            entityMapper.domainListToEntityList(
                 launchList = launchList
             )
         )
     }
 
-    override suspend fun deleteList(launchList: List<LaunchDomainEntity>): Int {
+    override suspend fun deleteList(launchList: List<LaunchModel>): Int {
         val ids = launchList.mapIndexed { _, item -> item.id }
         return dao.deleteList(
             ids = ids
@@ -49,15 +49,15 @@ constructor(
         )
     }
 
-    override suspend fun getById(id: Int): LaunchDomainEntity? {
+    override suspend fun getById(id: Int): LaunchModel? {
         return dao.getById(id = id)?.let {
-            cacheMapper.mapFromEntity(it)
+            entityMapper.mapFromEntity(it)
         }
     }
 
-    override suspend fun getAll(): List<LaunchDomainEntity>? {
+    override suspend fun getAll(): List<LaunchModel>? {
         return dao.getAll()?.let {
-            cacheMapper.entityListToDomainList(it)
+            entityMapper.entityListToDomainList(it)
         }
     }
 
@@ -65,19 +65,19 @@ constructor(
         return dao.getTotalEntries()
     }
 
-    override suspend fun returnOrderedQuery(
+    override suspend fun filterLaunchList(
         year: String?,
         order: String,
         isLaunchSuccess: Int?,
         page: Int
-    ): List<LaunchDomainEntity>? {
+    ): List<LaunchModel>? {
         return dao.returnOrderedQuery(
             year = year,
             isLaunchSuccess = isLaunchSuccess,
             page = page,
             order = order
         )?.let {
-            cacheMapper.entityListToDomainList(it)
+            entityMapper.entityListToDomainList(it)
         }
 
     }

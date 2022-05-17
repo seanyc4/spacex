@@ -4,7 +4,7 @@ import com.seancoyle.spacex.business.data.cache.CacheResponseHandler
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.data.util.safeCacheCall
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,11 +17,11 @@ class InsertCompanyInfoToCache(
 ) {
 
     fun execute(
-        companyInfo: CompanyInfoDomainEntity,
+        companyInfo: CompanyInfoModel,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
-        val newCompanyInfo: CompanyInfoDomainEntity
+        val newCompanyInfo: CompanyInfoModel
 
         companyInfo.apply {
             newCompanyInfo = factory.createCompanyInfo(

@@ -19,7 +19,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
 import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.state.*
@@ -27,7 +27,7 @@ import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
 import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache
-import com.seancoyle.spacex.business.interactors.launch.SearchLaunchItemsInCache
+import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache
 import com.seancoyle.spacex.databinding.FragmentLaunchBinding
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
@@ -170,7 +170,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         searchLaunchDataFromCacheEvent()
                     }
 
-                    SearchLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
+                    FilterLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
                         viewModel.clearStateMessage()
                         submitList()
                     }
@@ -250,7 +250,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     private fun searchLaunchDataFromCacheEvent() {
         viewModel.setStateEvent(
-            LaunchStateEvent.SearchLaunchListEvent()
+            LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         )
     }
 
@@ -272,7 +272,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
-    private fun buildCompanyInfoString(companyInfo: CompanyInfoDomainEntity) = String.format(
+    private fun buildCompanyInfoString(companyInfo: CompanyInfoModel) = String.format(
         getString(R.string.company_info),
         companyInfo.name,
         companyInfo.founder,
@@ -297,7 +297,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     private fun getLaunchListFromNetworkAndInsertToCacheEvent() {
         viewModel.setStateEvent(
-            LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+            LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = viewModel.launchOptions
             )
         )

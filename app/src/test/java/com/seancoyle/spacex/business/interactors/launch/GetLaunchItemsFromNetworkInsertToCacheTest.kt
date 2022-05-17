@@ -5,7 +5,7 @@ import com.seancoyle.spacex.business.data.cache.launch.FakeLaunchCacheDataSource
 import com.seancoyle.spacex.business.data.network.launch.FakeLaunchNetworkDataSourceImpl
 import com.seancoyle.spacex.business.data.network.launch.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.spacex.di.DependencyContainer
@@ -71,7 +71,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     /**
      * 1. Are the launch retrieved from the network?
      * 2. Are the launch inserted into the cache?
-     * 3. Check the list of launch items are valid LaunchDomainEntity?
+     * 3. Check the list of launch items are valid LaunchModel?
      */
     @Test
     fun getLaunchItemsFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
@@ -89,7 +89,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
             launchOptions = dependencyContainer.launchOptions,
-            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+            stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencyContainer.launchOptions
             )
         ).collect { value ->
@@ -105,8 +105,8 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         // results should contain a list of launch items
         assert(results.isNotEmpty())
 
-        // confirm they are actually LaunchDomainEntity objects
-        assert(results.get(index = 0) is LaunchDomainEntity)
+        // confirm they are actually LaunchModel objects
+        assert(results.get(index = 0) is LaunchModel)
 
     }
 
@@ -126,7 +126,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
             launchOptions = dependencyContainer.launchOptions,
-            stateEvent = LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent(
+            stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencyContainer.launchOptions
             )
         ).collect { value ->

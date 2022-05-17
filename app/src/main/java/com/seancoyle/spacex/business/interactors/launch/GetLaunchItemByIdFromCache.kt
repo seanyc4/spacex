@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.interactors.launch
 
 import com.seancoyle.spacex.business.data.cache.CacheResponseHandler
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.data.util.safeCacheCall
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
@@ -25,11 +25,11 @@ class GetLaunchItemByIdFromCache(
             )
         }
 
-        val response = object : CacheResponseHandler<LaunchViewState, LaunchDomainEntity?>(
+        val response = object : CacheResponseHandler<LaunchViewState, LaunchModel?>(
             response = cacheResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: LaunchDomainEntity?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: LaunchModel?): DataState<LaunchViewState> {
                 var message: String? =
                     GET_LAUNCH_ITEM_BY_ID_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None

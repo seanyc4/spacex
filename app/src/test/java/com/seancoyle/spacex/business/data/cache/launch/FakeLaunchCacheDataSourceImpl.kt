@@ -1,9 +1,12 @@
 package com.seancoyle.spacex.business.data.cache.launch
 
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.InsertLaunchListToCache.Companion.INSERT_LAUNCH_LIST_FAILED
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_PAGINATION_PAGE_SIZE
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_ALL
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
 const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
@@ -17,7 +20,7 @@ constructor(
     private val fakeLaunchDatabase: FakeLaunchDatabase
 ) : LaunchCacheDataSource {
 
-    override suspend fun insert(launch: LaunchDomainEntity): Long {
+    override suspend fun insert(launch: LaunchModel): Long {
         if (launch.id == FORCE_NEW_LAUNCH_EXCEPTION) {
             throw Exception("Something went wrong inserting the launch.")
         }
@@ -28,7 +31,7 @@ constructor(
         return 1 // success
     }
 
-    override suspend fun deleteList(launchList: List<LaunchDomainEntity>): Int {
+    override suspend fun deleteList(launchList: List<LaunchModel>): Int {
         var failOrSuccess = 1
         for (item in launchList) {
             failOrSuccess = if (fakeLaunchDatabase.launchList.removeIf { it.id == item.id }) {
@@ -57,11 +60,11 @@ constructor(
         fakeLaunchDatabase.launchList.clear()
     }
 
-    override suspend fun getById(id: Int): LaunchDomainEntity? {
+    override suspend fun getById(id: Int): LaunchModel? {
         return fakeLaunchDatabase.launchList.find { it.id == id }
     }
 
-    override suspend fun getAll(): List<LaunchDomainEntity> {
+    override suspend fun getAll(): List<LaunchModel> {
         return fakeLaunchDatabase.launchList
     }
 
@@ -69,7 +72,7 @@ constructor(
         return fakeLaunchDatabase.launchList.size
     }
 
-    override suspend fun insertLaunchList(launchList: List<LaunchDomainEntity>): LongArray {
+    override suspend fun insertLaunchList(launchList: List<LaunchModel>): LongArray {
         var results = LongArray(launchList.size)
         for (item in launchList.withIndex()) {
             when (item.value.id) {
@@ -92,26 +95,64 @@ constructor(
         return results
     }
 
-    override suspend fun searchLaunchList(
+    override suspend fun filterLaunchList(
         year: String,
         order: String,
         isLaunchSuccess: Int?,
         page: Int
-    ): List<LaunchDomainEntity> {
+    ): List<LaunchModel> {
         if (year == FORCE_SEARCH_LAUNCH_EXCEPTION) {
             throw Exception("Something went searching the cache for launch items.")
         }
-        val results: ArrayList<LaunchDomainEntity> = ArrayList()
+        val results: ArrayList<LaunchModel> = ArrayList()
         for (item in fakeLaunchDatabase.launchList) {
-            if (item.launchYear == year) {
-                results.add(item)
-            } else if (item.isLaunchSuccess == isLaunchSuccess) {
-                results.add(item)
+
+            when {
+
+                year.isNotEmpty() && isLaunchSuccess == LAUNCH_ALL -> {
+                    results.add(item)
+                }
+
+                isLaunchSuccess == LAUNCH_ALL -> {
+                    results.add(item)
+                }
+
+                isLaunchSuccess != null && year.isEmpty() -> {
+                    if (item.isLaunchSuccess == isLaunchSuccess) {
+                        results.add(item)
+                    }
+                }
+
+                year.isNotEmpty() && isLaunchSuccess == null -> {
+                    if (item.launchYear == year) {
+                        results.add(item)
+                    }
+                }
+
+                year.isNotEmpty() && isLaunchSuccess != null ->
+                    if (item.launchYear == year && item.isLaunchSuccess == isLaunchSuccess) {
+                        results.add(item)
+                    }
+
+                else -> results.add(item)
+
             }
-            if (results.size > (page * LAUNCH_PAGINATION_PAGE_SIZE)) {
-                break
+
+            if (isLaunchSuccess != LAUNCH_ALL) {
+                if (results.size > (page * LAUNCH_PAGINATION_PAGE_SIZE)) {
+                    break
+                }
             }
+
         }
+
+        // Apply filter to data
+        if (order == LAUNCH_ORDER_DESC) {
+            results.sortByDescending { it.launchYear }
+        } else {
+            results.sortBy { it.launchYear }
+        }
+
         return results
     }
 }

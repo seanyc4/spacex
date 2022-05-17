@@ -4,7 +4,7 @@ import com.seancoyle.spacex.business.data.cache.company.FakeCompanyInfoCacheData
 import com.seancoyle.spacex.business.data.cache.company.FakeCompanyInfoDatabase
 import com.seancoyle.spacex.business.data.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import com.seancoyle.spacex.business.data.network.company.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_ERROR
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_INSERT_SUCCESS
@@ -70,7 +70,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
     /**
      * 1. Is the company info retrieved from the network?
      * 2. Is the company info inserted into the cache?
-     * 3. Check the company info is valid CompanyInfoDomainEntity?
+     * 3. Check the company info is valid CompanyInfoModel?
      */
     @Test
     fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
@@ -101,8 +101,8 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         // confirm the cache is no longer empty
         assert(result != null)
 
-        // confirm the data is a CompanyInfoDomainEntity object
-        assert(result is CompanyInfoDomainEntity)
+        // confirm the data is a CompanyInfoModel object
+        assert(result is CompanyInfoModel)
 
     }
 

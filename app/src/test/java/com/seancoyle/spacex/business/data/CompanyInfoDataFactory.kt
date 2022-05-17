@@ -3,21 +3,21 @@ package com.seancoyle.spacex.business.data
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.spacex.business.data.cache.company.FakeCompanyInfoDatabase
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 
 class CompanyInfoDataFactory(
     private val testClassLoader: ClassLoader
 ) {
 
-    fun produceCompanyInfo(): CompanyInfoDomainEntity {
+    fun produceCompanyInfo(): CompanyInfoModel {
         return Gson()
             .fromJson(
                 getDataFromFile("company_info.json"),
-                object : TypeToken<CompanyInfoDomainEntity>() {}.type
+                object : TypeToken<CompanyInfoModel>() {}.type
             )
     }
 
-    fun produceFakeCompanyInfoDatabase(companyInfo: CompanyInfoDomainEntity): FakeCompanyInfoDatabase {
+    fun produceFakeCompanyInfoDatabase(companyInfo: CompanyInfoModel): FakeCompanyInfoDatabase {
         val db = FakeCompanyInfoDatabase()
         db.companyInfo = companyInfo
         return db

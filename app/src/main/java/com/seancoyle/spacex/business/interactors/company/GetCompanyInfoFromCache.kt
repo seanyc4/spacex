@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.interactors.company
 
 import com.seancoyle.spacex.business.data.cache.CacheResponseHandler
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.data.util.safeCacheCall
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
@@ -22,11 +22,11 @@ class GetCompanyInfoFromCache(
             cacheDataSource.getCompanyInfo()
         }
 
-        val response = object : CacheResponseHandler<LaunchViewState, CompanyInfoDomainEntity?>(
+        val response = object : CacheResponseHandler<LaunchViewState, CompanyInfoModel?>(
             response = cacheResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoDomainEntity?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 var message: String? =
                     GET_COMPANY_INFO_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None

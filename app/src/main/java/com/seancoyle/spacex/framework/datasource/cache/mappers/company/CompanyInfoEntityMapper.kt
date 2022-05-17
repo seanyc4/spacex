@@ -1,14 +1,13 @@
 package com.seancoyle.spacex.framework.datasource.cache.mappers.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
-import com.seancoyle.spacex.business.domain.util.EntityMapper
-import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoCacheEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoEntity
 
-class CompanyInfoCacheMapper : EntityMapper<CompanyInfoCacheEntity, CompanyInfoDomainEntity> {
+class CompanyInfoEntityMapper {
 
-    override fun mapFromEntity(entity: CompanyInfoCacheEntity): CompanyInfoDomainEntity {
+     fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfoModel {
         entity.apply {
-            return CompanyInfoDomainEntity(
+            return CompanyInfoModel(
                 id = id,
                 employees = employees,
                 founded = founded,
@@ -20,9 +19,9 @@ class CompanyInfoCacheMapper : EntityMapper<CompanyInfoCacheEntity, CompanyInfoD
         }
     }
 
-    override fun mapToEntity(domainModel: CompanyInfoDomainEntity): CompanyInfoCacheEntity {
+     fun mapToEntity(domainModel: CompanyInfoModel): CompanyInfoEntity {
         domainModel.apply {
-            return CompanyInfoCacheEntity(
+            return CompanyInfoEntity(
                 id = id,
                 employees = employees,
                 founded = founded,

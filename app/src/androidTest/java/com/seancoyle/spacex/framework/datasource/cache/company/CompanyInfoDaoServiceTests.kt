@@ -9,7 +9,7 @@ import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
-import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoCacheMapper
+import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -64,7 +64,7 @@ class CompanyInfoDaoServiceTests : BaseTest() {
     lateinit var companyInfoFactory: CompanyInfoFactory
 
     @Inject
-    lateinit var cacheMapper: CompanyInfoCacheMapper
+    lateinit var entityMapper: CompanyInfoEntityMapper
 
     @Before
     fun init() {
@@ -72,12 +72,12 @@ class CompanyInfoDaoServiceTests : BaseTest() {
         insertTestData()
         daoService = CompanyInfoDaoServiceImpl(
             dao = dao,
-            cacheMapper = cacheMapper
+            cacheMapper = entityMapper
         )
     }
 
     private fun insertTestData() = runBlocking {
-        val entity = cacheMapper.mapToEntity(
+        val entity = entityMapper.mapToEntity(
             dataFactory.produceCompanyInfo()
         )
         dao.insert(entity)

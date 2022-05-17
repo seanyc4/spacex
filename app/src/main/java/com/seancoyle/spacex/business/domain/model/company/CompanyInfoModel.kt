@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class CompanyInfoDomainEntity(
+data class CompanyInfoModel(
     val id: String,
     val employees: String,
     val founded: Int,
@@ -17,7 +17,7 @@ data class CompanyInfoDomainEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CompanyInfoDomainEntity
+        other as CompanyInfoModel
 
         if (id != other.id) return false
         if (employees != other.employees) return false

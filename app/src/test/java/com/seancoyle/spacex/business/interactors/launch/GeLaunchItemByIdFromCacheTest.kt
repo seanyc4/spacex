@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.interactors.launch
 
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchItemByIdFromCache.Companion.GET_LAUNCH_ITEM_BY_ID_SUCCESS
 import com.seancoyle.spacex.di.DependencyContainer
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
@@ -42,7 +42,7 @@ class GeLaunchItemByIdFromCacheTest {
     fun getLaunchItemsByIdFromCache_success_confirmCorrect() = runBlocking {
 
         val id = 1
-        var retrievedLaunch: LaunchDomainEntity? = null
+        var retrievedLaunch: LaunchModel? = null
 
         getLaunchItemById.execute(
             id = id,

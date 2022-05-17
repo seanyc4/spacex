@@ -3,7 +3,7 @@ package com.seancoyle.spacex.framework.datasource.network.model.company
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class CompanyInfoNetworkEntity(
+data class CompanyInfoNetworkDto(
     @Expose
     @SerializedName("ceo")
     val ceo: String?,

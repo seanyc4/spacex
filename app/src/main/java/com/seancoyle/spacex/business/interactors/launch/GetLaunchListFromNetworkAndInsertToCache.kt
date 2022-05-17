@@ -6,7 +6,7 @@ import com.seancoyle.spacex.business.data.network.ApiResponseHandler
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.util.safeApiCall
 import com.seancoyle.spacex.business.data.util.safeCacheCall
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
@@ -31,11 +31,11 @@ constructor(
             launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchViewState, List<LaunchDomainEntity>?>(
+        val networkResponse = object : ApiResponseHandler<LaunchViewState, List<LaunchModel>?>(
             response = networkResult,
             stateEvent = stateEvent
         ) {
-            override suspend fun handleSuccess(resultObj: List<LaunchDomainEntity>?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: List<LaunchModel>?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
                     val viewState =
                         LaunchViewState(

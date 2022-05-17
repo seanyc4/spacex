@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.framework.datasource.network.abstraction.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 
 interface CompanyInfoRetrofitService {
 
-    suspend fun getCompanyInfo(): CompanyInfoDomainEntity
+    suspend fun getCompanyInfo(): CompanyInfoModel
 
 }

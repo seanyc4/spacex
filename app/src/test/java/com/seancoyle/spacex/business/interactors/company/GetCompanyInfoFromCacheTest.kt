@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.business.interactors.company
 
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache.Companion.GET_COMPANY_INFO_SUCCESS
 import com.seancoyle.spacex.di.DependencyContainer
@@ -41,7 +41,7 @@ class GetCompanyInfoFromCacheTest {
     @Test
     fun getCompanyInfoFromCache_success_confirmCorrect() = runBlocking {
 
-        var result: CompanyInfoDomainEntity? = null
+        var result: CompanyInfoModel? = null
 
         getCompanyInfo.execute(
             stateEvent = GetCompanyInfoFromCacheEvent

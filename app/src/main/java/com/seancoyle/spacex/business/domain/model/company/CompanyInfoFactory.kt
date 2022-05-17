@@ -14,8 +14,8 @@ class CompanyInfoFactory {
         launchSites: Int,
         name: String,
         valuation: String
-    ): CompanyInfoDomainEntity {
-        return CompanyInfoDomainEntity(
+    ): CompanyInfoModel {
+        return CompanyInfoModel(
             id = id ?: UUID.randomUUID().toString(),
             employees = employees,
             founded = founded,

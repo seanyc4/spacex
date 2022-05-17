@@ -4,13 +4,12 @@ import android.app.Application
 import android.content.res.AssetManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 @Singleton
 class CompanyInfoDataFactory
@@ -20,11 +19,11 @@ constructor(
     private val infoFactory: CompanyInfoFactory
 ) {
 
-    fun produceCompanyInfo(): CompanyInfoDomainEntity {
+    fun produceCompanyInfo(): CompanyInfoModel {
         return Gson()
             .fromJson(
                 getDataFromFile("company_info.json"),
-                object : TypeToken<CompanyInfoDomainEntity>() {}.type
+                object : TypeToken<CompanyInfoModel>() {}.type
             )
     }
 

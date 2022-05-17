@@ -2,9 +2,9 @@ package com.seancoyle.spacex.framework.presentation.launch
 
 import android.content.SharedPreferences
 import android.os.Parcelable
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
-import com.seancoyle.spacex.business.domain.model.launch.LaunchDomainEntity
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType
 import com.seancoyle.spacex.business.domain.model.launch.SectionTitle
 import com.seancoyle.spacex.business.interactors.launch.LaunchInteractors
@@ -75,14 +75,14 @@ constructor(
 
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
-            is GetLaunchListFromNetworkAndInsertToCacheEvent -> {
+            is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
                 launchInteractors.getLaunchListFromNetworkAndInsertToCache.execute(
                     launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
 
-            is GetAllLaunchDataFromCacheEvent -> {
+            is GetAllLaunchItemsFromCacheEvent -> {
                 launchInteractors.getAllLaunchItemsFromCache.execute(
                     stateEvent = stateEvent
                 )
@@ -100,12 +100,12 @@ constructor(
                 )
             }
 
-            is SearchLaunchListEvent -> {
+            is FilterLaunchItemsInCacheEvent -> {
                 if (stateEvent.clearLayoutManagerState) {
                     clearLayoutManagerState()
                 }
-                launchInteractors.searchLaunchItemsInCache.execute(
-                    query = getSearchQuery(),
+                launchInteractors.filterLaunchItemsInCache.execute(
+                    year = getSearchQuery(),
                     order = getOrder(),
                     isLaunchSuccess = getFilter(),
                     page = getPage(),
@@ -137,7 +137,7 @@ constructor(
         return LaunchViewState()
     }
 
-    private fun setLaunchList(launchList: List<LaunchDomainEntity>) {
+    private fun setLaunchList(launchList: List<LaunchModel>) {
         val update = getCurrentViewStateOrNew()
         update.launchList = launchList
         setViewState(update)
@@ -145,7 +145,7 @@ constructor(
 
     fun getLaunchList() = getCurrentViewStateOrNew().launchList
 
-    private fun setCompanyInfo(companyInfo: CompanyInfoDomainEntity) {
+    private fun setCompanyInfo(companyInfo: CompanyInfoModel) {
         val update = getCurrentViewStateOrNew()
         update.company = companyInfo
         setViewState(update)
@@ -197,7 +197,7 @@ constructor(
     fun loadFirstPage() {
         setQueryExhausted(false)
         resetPage()
-        setStateEvent(SearchLaunchListEvent())
+        setStateEvent(FilterLaunchItemsInCacheEvent())
         printLogDebug(
             "LaunchListViewModel",
             "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}"
@@ -209,13 +209,13 @@ constructor(
             printLogDebug("LaunchListViewModel", "attempting to load next page...")
             clearLayoutManagerState()
             incrementPageNumber()
-            setStateEvent(SearchLaunchListEvent())
+            setStateEvent(FilterLaunchItemsInCacheEvent())
         }
     }
 
     fun refreshSearchQuery() {
         setQueryExhausted(false)
-        setStateEvent(SearchLaunchListEvent(false))
+        setStateEvent(FilterLaunchItemsInCacheEvent(false))
     }
 
     private fun incrementPageNumber() {

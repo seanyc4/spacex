@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.data.network.company
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoDomainEntity
+import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoService
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import okhttp3.HttpUrl
@@ -22,7 +22,7 @@ constructor(
         .create(CompanyInfoService::class.java)
 
 
-    override suspend fun getCompanyInfo(): CompanyInfoDomainEntity {
+    override suspend fun getCompanyInfo(): CompanyInfoModel {
         return networkMapper.mapFromEntity(
             service.getCompanyInfo()
         )
