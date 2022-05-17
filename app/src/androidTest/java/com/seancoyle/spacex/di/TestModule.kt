@@ -55,24 +55,6 @@ object TestModule {
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun provideLaunchDataFactory(
-        application: HiltTestApplication,
-        launchFactory: LaunchFactory
-    ): LaunchDataFactory {
-        return LaunchDataFactory(application, launchFactory)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCompanyInfoDataFactory(
-        application: HiltTestApplication,
-        companyInfoFactory: CompanyInfoFactory
-    ): CompanyInfoDataFactory {
-        return CompanyInfoDataFactory(application, companyInfoFactory)
-    }
-
 }
 
 

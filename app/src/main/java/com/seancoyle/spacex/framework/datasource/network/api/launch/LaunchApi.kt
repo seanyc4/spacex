@@ -5,7 +5,7 @@ import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOpti
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface LaunchService {
+interface LaunchApi {
 
     @POST("/v4/launches/query")
     suspend fun getLaunchList(

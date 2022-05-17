@@ -14,7 +14,7 @@ import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.Lau
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
+import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
 import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.util.Constants
@@ -43,11 +43,11 @@ object LaunchModule {
     @Singleton
     @Provides
     fun provideLaunchRetrofitService(
-        service: LaunchService,
+        api: LaunchApi,
         networkMapper: LaunchNetworkMapper
     ): LaunchRetrofitService {
         return LaunchRetrofitServiceImpl(
-            service = service,
+            api = api,
             networkMapper = networkMapper
         )
     }
@@ -56,8 +56,8 @@ object LaunchModule {
     @Provides
     fun provideLaunchApi(
         retrofit: Retrofit
-    ): LaunchService {
-        return retrofit.create(LaunchService::class.java)
+    ): LaunchApi {
+        return retrofit.create(LaunchApi::class.java)
     }
 
     @Singleton

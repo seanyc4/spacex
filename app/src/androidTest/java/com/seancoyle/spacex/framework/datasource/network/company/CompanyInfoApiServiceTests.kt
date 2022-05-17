@@ -61,7 +61,7 @@ class CompanyInfoApiServiceTests : BaseTest() {
     }
 
     @Test
-    fun getCompanyInfoFromNetwork() = runBlocking {
+    fun getCompanyInfoFromNetwork_confirmExpectedResult() = runBlocking {
 
         val expectedResult = dataFactory.createCompanyInfo(
             id = "",

@@ -12,14 +12,16 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
+import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchService
+import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.util.Constants
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import retrofit2.Retrofit
@@ -46,11 +48,11 @@ object TestLaunchModule {
     @Singleton
     @Provides
     fun provideLaunchRetrofitService(
-        service: LaunchService,
+        api: LaunchApi,
         networkMapper: LaunchNetworkMapper
     ): LaunchRetrofitService {
         return LaunchRetrofitServiceImpl(
-            service = service,
+            api = api,
             networkMapper = networkMapper
         )
     }
@@ -59,8 +61,8 @@ object TestLaunchModule {
     @Provides
     fun provideLaunchApi(
         retrofit: Retrofit
-    ): LaunchService {
-        return retrofit.create(LaunchService::class.java)
+    ): LaunchApi {
+        return retrofit.create(LaunchApi::class.java)
     }
 
     @Singleton
@@ -122,6 +124,15 @@ object TestLaunchModule {
         return LaunchCacheDataSourceImpl(
             daoService = daoService
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchDataFactory(
+        application: HiltTestApplication,
+        launchFactory: LaunchFactory
+    ): LaunchDataFactory {
+        return LaunchDataFactory(application, launchFactory)
     }
 
 }

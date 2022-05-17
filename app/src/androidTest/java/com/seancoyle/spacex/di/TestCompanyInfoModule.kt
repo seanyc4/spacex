@@ -10,6 +10,7 @@ import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
+import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
@@ -17,6 +18,7 @@ import com.seancoyle.spacex.framework.datasource.network.implementation.company.
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import retrofit2.Retrofit
@@ -107,6 +109,15 @@ object TestCompanyInfoModule {
         return CompanyInfoCacheDataSourceImpl(
             daoService = daoService
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideCompanyInfoDataFactory(
+        application: HiltTestApplication,
+        companyInfoFactory: CompanyInfoFactory
+    ): CompanyInfoDataFactory {
+        return CompanyInfoDataFactory(application, companyInfoFactory)
     }
 
 }
