@@ -65,6 +65,9 @@ android {
         // Fix for mock issue on >= API 28
         packagingOptions.jniLibs.useLegacyPackaging = true
 
+        // To prevent textUtils error with espresso idling resource
+        unitTests.isReturnDefaultValues = true
+
         unitTests.all {
             it.useJUnitPlatform()
         }
@@ -143,7 +146,8 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.mockk_android)
     androidTestImplementation(AndroidTestDependencies.test_rules)
     androidTestImplementation(AndroidTestDependencies.test_runner)
-    androidTestImplementation(AndroidTestDependencies.text_core_ktx)
+    androidTestImplementation(AndroidTestDependencies.test_core_ktx)
+    androidTestImplementation(AndroidTestDependencies.test_arch_core)
 
 }
 

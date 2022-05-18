@@ -28,9 +28,6 @@ object TestLaunchListInteractorsModule {
             getAllLaunchItemsFromCache = GetAllLaunchItemsFromCache(
                 cacheDataSource = launchCacheDataSource
             ),
-            getLaunchItemByIdFromCache = GetLaunchItemByIdFromCache(
-                cacheDataSource = launchCacheDataSource
-            ),
             getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
                 cacheDataSource = launchCacheDataSource,
                 launchNetworkDataSource = launchNetworkDataSource,
@@ -38,10 +35,6 @@ object TestLaunchListInteractorsModule {
             ),
             getNumLaunchItemsFromCache = GetNumLaunchItemsFromCache(
                 cacheDataSource = launchCacheDataSource
-            ),
-            insertLaunchListToCache = InsertLaunchListToCache(
-                cacheDataSource = launchCacheDataSource,
-                factory = launchFactory
             ),
             filterLaunchItemsInCache = FilterLaunchItemsInCache(
                 cacheDataSource = launchCacheDataSource

@@ -10,5 +10,6 @@ object AndroidTestDependencies{
     const val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
     const val test_rules = "androidx.test:rules:${Versions.test_runner}"
     const val test_runner = "androidx.test:runner:${Versions.test_runner}"
-    const val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
+    const val test_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
+    const val test_arch_core = "androidx.arch.core:core-testing:${Versions.test_arch_core}"
 }

@@ -59,7 +59,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        // Check all items retrieved have a launch year of 2020"
+        // Check all items retrieved have a launch year of 2020
         assertTrue { launchList?.all { it.launchYear == launchYear } == true }
     }
 

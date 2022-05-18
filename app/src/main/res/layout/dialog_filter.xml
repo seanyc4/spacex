@@ -47,7 +47,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/launch_success_title"
+        android:id="@+id/launch_status_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_12sdp"
@@ -65,8 +65,8 @@
         android:layout_marginStart="@dimen/_minus4sdp"
         android:layout_marginTop="@dimen/_6sdp"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/launch_success_title"
-        app:layout_constraintTop_toBottomOf="@+id/launch_success_title">
+        app:layout_constraintStart_toStartOf="@+id/launch_status_title"
+        app:layout_constraintTop_toBottomOf="@+id/launch_status_title">
 
         <RadioButton
             android:id="@+id/filter_all"

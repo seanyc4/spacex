@@ -10,7 +10,6 @@ class RecyclerViewItemCountAssertion(
     private val expectedCount: Int
 ) : ViewAssertion {
 
-    // Remove 3 of the item count to compensate for the 3 header items above the launch list
     override fun check(
         view: View,
         noViewFoundException: NoMatchingViewException?
@@ -20,7 +19,8 @@ class RecyclerViewItemCountAssertion(
         }
         val recyclerView = view as RecyclerView
         val adapter = recyclerView.adapter
-        assertTrue { adapter!!.itemCount.minus(3) == expectedCount }
+        // minus for the 3 header items which are added to the top of the adapter list
+        assertTrue { adapter?.itemCount?.minus(3) == expectedCount }
     }
 
 }

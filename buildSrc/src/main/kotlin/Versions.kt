@@ -8,5 +8,6 @@ object Versions {
     const val mockk_version = "1.10.0"
     const val test_core = "1.3.0"
     const val test_runner = "1.2.0"
+    const val test_arch_core = "2.1.0"
 
 }

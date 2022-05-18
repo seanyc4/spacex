@@ -22,7 +22,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 import kotlin.random.Random
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
