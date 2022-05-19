@@ -15,8 +15,10 @@ import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDa
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
+import com.seancoyle.spacex.di.AppModule
 import com.seancoyle.spacex.di.CompanyInfoModule
 import com.seancoyle.spacex.di.LaunchModule
+import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
@@ -63,7 +65,8 @@ const val HEADER_COUNT = 3
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
-    CompanyInfoModule::class
+    CompanyInfoModule::class,
+    AppModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 class SpaceXFeatureTest : BaseTest() {
@@ -88,6 +91,9 @@ class SpaceXFeatureTest : BaseTest() {
 
     @Inject
     lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
+
+    @Inject
+    lateinit var dateTransformer: DateTransformer
 
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
@@ -408,98 +414,133 @@ class SpaceXFeatureTest : BaseTest() {
 
 
         /** filterLaunchItemsByYear_andLaunchStatusSuccess_verifyResultsAndDescOrderState */
-            // We don't use the random list here as some years don't have any successful launches
-            // This will cause the test to fail
-            year = "2021"
+        // We don't use the random list here as some years don't have any successful launches
+        // This will cause the test to fail
+        year = "2021"
 
-            launchesFragmentTestHelper {
-                performClick(filterButtonViewMatcher)
-                checkViewIsDisplayed(filterDialogViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
-                verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
-                verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-                performTypeText(filterYearViewMatcher, text = year)
-                performClick(filterLaunchStatusSuccessViewMatcher)
-                performClick(filterApplyButtonViewMatcher)
-                checkViewIsNotDisplayed(filterDialogViewMatcher)
-            }
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
 
-            runBlocking {
-                expectedFilterResults = getFilteredLaunchItemsFromCache(
-                    year = year,
-                    order = LAUNCH_ORDER_DESC,
-                    isLaunchSuccess = LAUNCH_SUCCESS
-                )
-            }
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC,
+                isLaunchSuccess = LAUNCH_SUCCESS
+            )
+        }
 
-            assertTrue(!expectedFilterResults.isNullOrEmpty())
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
 
-            // Check the date of each item on screen matches the year filter 2021
-            launchesFragmentTestHelper {
-                checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-                    expectedFilterResults = expectedFilterResults!!,
-                    year = year,
-                    launchSuccessIcon = R.drawable.ic_launch_success
-                )
+        // Check the date of each item on screen matches the year filter 2021
+        launchesFragmentTestHelper {
+            checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
+                expectedFilterResults = expectedFilterResults!!,
+                year = year,
+                launchSuccessIcon = R.drawable.ic_launch_success
+            )
 
-                // Check ASC/DESC is still set to DESC after the filter is completed
-                // Check Launch Status: SUCCESS is checked
-                // These views should remember their state
-                performClick(filterButtonViewMatcher)
-                checkViewIsDisplayed(filterDialogViewMatcher)
-                verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-                verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
-                performClick(filterCancelButtonViewMatcher)
-            }
+            // Check ASC/DESC is still set to DESC after the filter is completed
+            // Check Launch Status: SUCCESS is checked
+            // These views should remember their state
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
+        }
 
         /** filterLaunchItemsByYear_andLaunchStatusFailure_verifyResultsAndDescOrderState */
-            // We don't use the random list here as some years don't have any successful launches
-            // This will cause the test to fail
-            year = "2006"
+        // We don't use the random list here as some years don't have any successful launches
+        // This will cause the test to fail
+        year = "2006"
 
-            launchesFragmentTestHelper {
-                performClick(filterButtonViewMatcher)
-                checkViewIsDisplayed(filterDialogViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
-                verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
-                verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
-                verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-                performTypeText(filterYearViewMatcher, text = year)
-                performClick(filterLaunchStatusFailureViewMatcher)
-                performClick(filterApplyButtonViewMatcher)
-                checkViewIsNotDisplayed(filterDialogViewMatcher)
-            }
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusFailureViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
 
-            runBlocking {
-                expectedFilterResults = getFilteredLaunchItemsFromCache(
-                    year = year,
-                    order = LAUNCH_ORDER_DESC,
-                    isLaunchSuccess = LAUNCH_FAILED
-                )
-            }
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC,
+                isLaunchSuccess = LAUNCH_FAILED
+            )
+        }
 
-            assertTrue(!expectedFilterResults.isNullOrEmpty())
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
 
-            // Check the date of each item on screen matches the year filter 2006
-            launchesFragmentTestHelper {
-                checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-                    expectedFilterResults = expectedFilterResults!!,
-                    year = year,
-                    launchSuccessIcon = R.drawable.ic_launch_fail
-                )
+        // Check the date of each item on screen matches the year filter 2006
+        launchesFragmentTestHelper {
+            checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
+                expectedFilterResults = expectedFilterResults!!,
+                year = year,
+                launchSuccessIcon = R.drawable.ic_launch_fail
+            )
 
-                // Check ASC/DESC is still set to DESC after the filter is completed
-                // Check Launch Status: SUCCESS is checked
-                // These views should remember their state
-                performClick(filterButtonViewMatcher)
-                checkViewIsDisplayed(filterDialogViewMatcher)
-                verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-                verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
-                performClick(filterCancelButtonViewMatcher)
-            }
+            // Check ASC/DESC is still set to DESC after the filter is completed
+            // Check Launch Status: SUCCESS is checked
+            // These views should remember their state
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
+        }
+
+        /** testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate */
+
+        // Only 2022 launches have "days from now" data
+        year = "2022"
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusAllViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC
+            )
+        }
+
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
+
+        launchesFragmentTestHelper {
+            checkRecyclerItemsDaysSinceDisplaysCorrectly(
+                expectedFilterResults = expectedFilterResults!!,
+                dateTransformer = dateTransformer
+            )
+        }
 
     }
 

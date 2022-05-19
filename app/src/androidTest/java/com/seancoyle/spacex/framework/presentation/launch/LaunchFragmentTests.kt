@@ -16,6 +16,7 @@ import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
 import com.seancoyle.spacex.di.*
+import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
@@ -26,7 +27,18 @@ import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_S
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_UNKNOWN
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterApplyButtonViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterAscDescSwitchViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterButtonViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterCancelButtonViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterDialogViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusAllViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusFailureViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusSuccessViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusUnknownViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterYearViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.recyclerViewMatcher
 import com.seancoyle.spacex.util.launchesFragmentTestHelper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -50,7 +62,8 @@ import kotlin.test.assertTrue
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
-    CompanyInfoModule::class
+    CompanyInfoModule::class,
+    AppModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchFragmentTests : BaseTest() {
@@ -75,6 +88,9 @@ class LaunchFragmentTests : BaseTest() {
 
     @Inject
     lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
+
+    @Inject
+    lateinit var dateTransformer: DateTransformer
 
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
@@ -104,31 +120,31 @@ class LaunchFragmentTests : BaseTest() {
     @Test
     fun verifyTestDataIsVisible() {
         // Wait for LaunchFragment to come into view
-        waitViewShown(LaunchFragmentTestHelper.recyclerViewMatcher)
+        waitViewShown(recyclerViewMatcher)
 
         launchesFragmentTestHelper {
             verifyCorrectTextIsDisplayed(
-                LaunchFragmentTestHelper.appTitleViewMatcher,
+                appTitleViewMatcher,
                 text = R.string.app_name
             )
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.recyclerViewMatcher)
+            checkViewIsDisplayed(filterButtonViewMatcher)
+            checkViewIsDisplayed(recyclerViewMatcher)
         }
     }
 
     @Test
     fun verifyFilterViewIsDisplayingWithCorrectData() {
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
             verifyAllFilterDialogsTextViewsDisplayCorrectText()
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
     }
 
@@ -138,11 +154,11 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            performTypeText(LaunchFragmentTestHelper.filterYearViewMatcher, text = year)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -163,10 +179,10 @@ class LaunchFragmentTests : BaseTest() {
 
             // Check ASC/DESC is still set to DESC after the filter is completed
             // It should remember its state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -176,18 +192,18 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performTypeText(LaunchFragmentTestHelper.filterYearViewMatcher, text = year)
-            performClick(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterAscDescSwitchViewMatcher)
+            verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -208,10 +224,10 @@ class LaunchFragmentTests : BaseTest() {
 
             // Check ASC/DESC is still set to ASC after the filter is completed
             // It should remember its state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -221,18 +237,18 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performTypeText(LaunchFragmentTestHelper.filterYearViewMatcher, text = year)
-            performClick(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterAscDescSwitchViewMatcher)
+            verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -256,17 +272,17 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -287,10 +303,10 @@ class LaunchFragmentTests : BaseTest() {
 
             // Check Launch Status is still set to SUCCESS after the filter is completed
             // It should remember its state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -299,17 +315,17 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -330,10 +346,10 @@ class LaunchFragmentTests : BaseTest() {
 
             // Check Launch Status is still set to FAILURE after the filter is completed
             // It should remember its state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -357,17 +373,17 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performClick(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -389,10 +405,10 @@ class LaunchFragmentTests : BaseTest() {
 
             // Check Launch Status is still set to UNKNOWN after the filter is completed
             // It should remember its state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -404,17 +420,17 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performTypeText(LaunchFragmentTestHelper.filterYearViewMatcher, text = year)
-            performClick(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -438,11 +454,11 @@ class LaunchFragmentTests : BaseTest() {
             // Check ASC/DESC is still set to DESC after the filter is completed
             // Check Launch Status: SUCCESS is checked
             // These views should remember their state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
     }
 
@@ -454,17 +470,17 @@ class LaunchFragmentTests : BaseTest() {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(LaunchFragmentTestHelper.filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            performTypeText(LaunchFragmentTestHelper.filterYearViewMatcher, text = year)
-            performClick(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusFailureViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -488,12 +504,50 @@ class LaunchFragmentTests : BaseTest() {
             // Check ASC/DESC is still set to DESC after the filter is completed
             // Check Launch Status: SUCCESS is checked
             // These views should remember their state
-            performClick(LaunchFragmentTestHelper.filterButtonViewMatcher)
-            checkViewIsDisplayed(LaunchFragmentTestHelper.filterDialogViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterAscDescSwitchViewMatcher)
-            verifyViewIsChecked(LaunchFragmentTestHelper.filterLaunchStatusFailureViewMatcher)
-            performClick(LaunchFragmentTestHelper.filterCancelButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            performClick(filterCancelButtonViewMatcher)
         }
+    }
+
+    @Test
+    fun testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate() {
+
+        // Only 2022 launches have "days from now" data
+        val year ="2022"
+        val expectedFilterResults: List<LaunchModel>?
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC
+            )
+        }
+
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
+
+        launchesFragmentTestHelper {
+            checkRecyclerItemsDaysSinceDisplaysCorrectly(
+                expectedFilterResults = expectedFilterResults,
+                dateTransformer = dateTransformer
+            )
+        }
+
+
     }
 
     private suspend fun getFilteredLaunchItemsFromCache(

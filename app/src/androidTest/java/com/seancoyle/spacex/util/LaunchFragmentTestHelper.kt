@@ -11,6 +11,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.presentation.end_to_end.HEADER_COUNT
 import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel.Companion.LAUNCH_PREFERENCES
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
@@ -28,6 +29,40 @@ fun launchesFragmentTestHelper(func: LaunchFragmentTestHelper.() -> Unit) =
 @FlowPreview
 class LaunchFragmentTestHelper {
 
+    fun checkRecyclerItemsDaysSinceDisplaysCorrectly(
+        expectedFilterResults: List<LaunchModel>,
+        dateTransformer: DateTransformer
+    ) {
+        launchesFragmentTestHelper {
+            Espresso.onView(recyclerViewMatcher)
+                .check(RecyclerViewItemCountAssertion(expectedFilterResults.size))
+            for (entity in expectedFilterResults) {
+                scrollToRecyclerViewItemWithText(recyclerViewMatcher, entity.missionName)
+
+                // Checks each view holder and verifies the correct
+                // launch "days from now" or "days since now"
+                // Checks the launch LocalDateTime and determines if a past date or not : true/false
+                // Verifies text based on past/future
+
+                if(dateTransformer.isPastLaunch(entity.launchDateLocalDateTime)){
+                    Espresso.onView(
+                        withRecyclerView(R.id.rv_launch).atPositionOnView(
+                            expectedFilterResults.indexOf(entity).plus(HEADER_COUNT),
+                            R.id.days_title
+                        )
+                    ).check(ViewAssertions.matches(withText(R.string.days_since_now)))
+                } else {
+                    Espresso.onView(
+                        withRecyclerView(R.id.rv_launch).atPositionOnView(
+                            expectedFilterResults.indexOf(entity).plus(HEADER_COUNT),
+                            R.id.days_title
+                        )
+                    ).check(ViewAssertions.matches(withText(R.string.days_from_now)))
+                }
+            }
+        }
+    }
+
     fun checkRecyclerItemsDateMatchesFilteredDate(
         expectedFilterResults: List<LaunchModel>,
         year: String? = ""
@@ -37,8 +72,16 @@ class LaunchFragmentTestHelper {
                 .check(RecyclerViewItemCountAssertion(expectedFilterResults.size))
             for (entity in expectedFilterResults) {
                 scrollToRecyclerViewItemWithText(recyclerViewMatcher, entity.missionName)
-                Espresso.onView(withText(entity.launchDate))
-                    .check(ViewAssertions.matches(withText(CoreMatchers.containsString(year))))
+
+                // Checks each view holder and verifies the correct
+                // launch date is displayed
+                Espresso.onView(
+                    withRecyclerView(R.id.rv_launch).atPositionOnView(
+                        expectedFilterResults.indexOf(entity).plus(HEADER_COUNT),
+                        R.id.date_time_data
+                    )
+                ).check(ViewAssertions.matches(withText(CoreMatchers.containsString(year))))
+
             }
         }
     }
@@ -77,8 +120,16 @@ class LaunchFragmentTestHelper {
                 .check(RecyclerViewItemCountAssertion(expectedFilterResults.size))
             for (entity in expectedFilterResults) {
                 scrollToRecyclerViewItemWithText(recyclerViewMatcher, entity.missionName)
-                Espresso.onView(withText(entity.launchDate))
-                    .check(ViewAssertions.matches(withText(CoreMatchers.containsString(year))))
+
+                // Checks each view holder and verifies the correct
+                // launch date is displayed
+                Espresso.onView(
+                    withRecyclerView(R.id.rv_launch).atPositionOnView(
+                        expectedFilterResults.indexOf(entity).plus(HEADER_COUNT),
+                        R.id.date_time_data
+                    )
+                ).check(ViewAssertions.matches(withText(CoreMatchers.containsString(year))))
+
                 // Checks each view holder and verifies the correct
                 // launch image is displayed
                 Espresso.onView(
