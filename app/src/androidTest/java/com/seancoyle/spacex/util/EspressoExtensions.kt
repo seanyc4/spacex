@@ -18,11 +18,13 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+
 /**
  *  https://gist.github.com/reza-id/d7a5f0f93bdd8c445cfbacf915daa978
  *  https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/RecyclerViewMatcher.java
  *  Edited slightly for my use case
  */
+
 
 fun matchDrawable(@DrawableRes resourceId: Int): Matcher<View> {
     return object : BoundedMatcher<View, ImageView>(ImageView::class.java) {

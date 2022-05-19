@@ -320,5 +320,9 @@ class LaunchFragmentTestHelper {
         val bottomSheetYoutubeTitleViewMatcher: Matcher<View> = withId(R.id.youtube_link)
         val bottomSheetWikipediaTitleViewMatcher: Matcher<View> = withId(R.id.wiki_link)
         val bottomSheetCancelButtonViewMatcher: Matcher<View> = withId(R.id.exit_btn)
+        val materialDialogViewMatcher: Matcher<View> = withId(R.id.md_content_layout)
+        val materialDialogTitleViewMatcher: Matcher<View> = withId(R.id.md_text_title)
+        val materialDialogMessageViewMatcher: Matcher<View> = withId(R.id.md_text_message)
+        val materialDialogPositiveBtnViewMatcher: Matcher<View> = withId(R.id.md_button_positive)
     }
 }

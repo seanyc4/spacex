@@ -3,11 +3,10 @@ package com.seancoyle.spacex.framework.presentation.end_to_end
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.rule.ActivityTestRule
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
@@ -47,7 +46,6 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -74,8 +72,8 @@ class SpaceXFeatureTest : BaseTest() {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get: Rule(order = 1)
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, true)
+    @get:Rule(order = 1)
+    val intentsTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @get: Rule(order = 2)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
@@ -291,9 +289,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         // Check toast is displayed with error message
         Espresso.onView(ViewMatchers.withText(GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS))
-            .inRoot(
-                RootMatchers.withDecorView(not(activityTestRule.activity.window.decorView))
-            ).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .inRoot(ToastMatcher()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
 
         /** filterByLaunchStatusSuccess_verifyResultsAndDescOrderState */

@@ -3,18 +3,17 @@ package com.seancoyle.spacex.framework.presentation.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.rule.ActivityTestRule
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
+import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache.Companion.GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS
 import com.seancoyle.spacex.di.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
@@ -28,6 +27,7 @@ import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_U
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterApplyButtonViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterAscDescSwitchViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterButtonViewMatcher
@@ -38,7 +38,12 @@ import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunch
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusSuccessViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusUnknownViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterYearViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogMessageViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogPositiveBtnViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogTitleViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.recyclerViewMatcher
+import com.seancoyle.spacex.util.ToastMatcher
 import com.seancoyle.spacex.util.launchesFragmentTestHelper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -46,7 +51,6 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -55,6 +59,7 @@ import org.junit.runner.RunWith
 import javax.inject.Inject
 import kotlin.random.Random
 import kotlin.test.assertTrue
+
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -71,8 +76,8 @@ class LaunchFragmentTests : BaseTest() {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get: Rule(order = 1)
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, true)
+    @get:Rule(order = 1)
+    val intentsTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @get: Rule(order = 2)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
@@ -142,6 +147,43 @@ class LaunchFragmentTests : BaseTest() {
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
             checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+    }
+
+    @Test
+    fun testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate() {
+
+        // Only 2022 launches have "days from now" data
+        val year = "2022"
+        val expectedFilterResults: List<LaunchModel>?
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC
+            )
+        }
+
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
+
+        launchesFragmentTestHelper {
+            checkRecyclerItemsDaysSinceDisplaysCorrectly(
+                expectedFilterResults = expectedFilterResults,
+                dateTransformer = dateTransformer
+            )
         }
     }
 
@@ -258,10 +300,9 @@ class LaunchFragmentTests : BaseTest() {
         assertTrue(expectedFilterResults.isNullOrEmpty())
 
         // Check toast is displayed with error message
-        onView(withText(GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS)).inRoot(
-            RootMatchers.withDecorView(CoreMatchers.not(activityTestRule.activity.window.decorView))
-        )
-            .check(matches(isDisplayed()))
+       onView(withText(GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS))
+            .inRoot(ToastMatcher()).check(matches(isDisplayed()))
+
     }
 
     @Test
@@ -509,44 +550,37 @@ class LaunchFragmentTests : BaseTest() {
         }
     }
 
+   /* @Test
+    fun recyclerViewOnClickDisplayBottomSheet_isSuccess(){
+
+        launchesFragmentTestHelper {
+
+            performRecyclerViewClick(recyclerViewMatcher, 20)
+            checkViewIsDisplayed(bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+            performClick(bottomSheetArticleTitleViewMatcher)
+            Espresso.pressBack()
+
+        }
+    }*/
+
     @Test
-    fun testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate() {
-
-        // Only 2022 launches have "days from now" data
-        val year ="2022"
-        val expectedFilterResults: List<LaunchModel>?
-
+    fun recyclerViewOnClickDisplayBottomSheet_isFail_verifyDialogDisplayWithText(){
+        // Select an item with no media links
+        // verify a dialog is displayed - also very the title and message
+        // Click ok button - check dialog has dismissed
         launchesFragmentTestHelper {
-            performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-            performTypeText(filterYearViewMatcher, text = year)
-            performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            performRecyclerViewClick(recyclerViewMatcher, 5)
+            checkViewIsNotDisplayed(bottomSheetViewMatcher)
+            checkViewIsDisplayed(materialDialogViewMatcher)
+            verifyCorrectTextIsDisplayed(materialDialogTitleViewMatcher, text = R.string.text_info)
+            verifyCorrectTextIsDisplayed(materialDialogMessageViewMatcher, text = R.string.no_links)
+            performClick(materialDialogPositiveBtnViewMatcher)
+            checkViewIsNotDisplayed(materialDialogViewMatcher)
         }
-
-        runBlocking {
-            expectedFilterResults = getFilteredLaunchItemsFromCache(
-                year = year,
-                order = LAUNCH_ORDER_DESC
-            )
-        }
-
-        assertTrue(!expectedFilterResults.isNullOrEmpty())
-
-        launchesFragmentTestHelper {
-            checkRecyclerItemsDaysSinceDisplaysCorrectly(
-                expectedFilterResults = expectedFilterResults,
-                dateTransformer = dateTransformer
-            )
-        }
-
-
     }
+
+
 
     private suspend fun getFilteredLaunchItemsFromCache(
         year: String? = "",
