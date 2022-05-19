@@ -13,6 +13,7 @@ const val LAUNCH_UNKNOWN = 0
 const val LAUNCH_FAILED = 1
 const val LAUNCH_SUCCESS = 2
 const val LAUNCH_ALL = 3
+const val LAUNCH_EXCEPTION = -1
 
 class LaunchNetworkMapper
 @Inject
@@ -72,7 +73,7 @@ constructor(
                 R.drawable.ic_launch_fail
             }
             else -> {
-                R.drawable.empty_drawable
+                R.drawable.ic_launch_unknown
             }
         }
 
