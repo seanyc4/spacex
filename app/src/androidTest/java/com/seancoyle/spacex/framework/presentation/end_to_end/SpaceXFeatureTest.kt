@@ -95,9 +95,11 @@ class SpaceXFeatureTest : BaseTest() {
     @Inject
     lateinit var dateTransformer: DateTransformer
 
+    @Inject
+    lateinit var validLaunchYears: List<String>
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
-    private lateinit var validLaunchYears: List<String>
 
     @Before
     fun init() {
@@ -106,10 +108,6 @@ class SpaceXFeatureTest : BaseTest() {
         testCompanyInfoList = companyInfoDataFactory.produceCompanyInfo()
         prepareDataSet()
 
-        validLaunchYears = listOf(
-            "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
-            "2012", "2010", "2009", "2008", "2007", "2006"
-        ).shuffled()
     }
 
     private fun prepareDataSet() = runBlocking {
@@ -118,18 +116,6 @@ class SpaceXFeatureTest : BaseTest() {
         launchCacheDataSource.insertLaunchList(testLaunchList)
         companyInfoCacheDataSource.deleteAll()
         companyInfoCacheDataSource.insert(testCompanyInfoList)
-    }
-
-    @Test
-    fun verifyTestDataIsVisible() {
-        // Wait for LaunchFragment to come into view
-        waitViewShown(recyclerViewMatcher)
-
-        launchesFragmentTestHelper {
-            verifyCorrectTextIsDisplayed(appTitleViewMatcher, text = R.string.app_name)
-            checkViewIsDisplayed(filterButtonViewMatcher)
-            checkViewIsDisplayed(recyclerViewMatcher)
-        }
     }
 
     @Test
@@ -162,10 +148,45 @@ class SpaceXFeatureTest : BaseTest() {
             checkViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
+        /** testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate */
+
+        // Only 2022 launches have "days from now" data
+        var year = "2022"
+        var expectedFilterResults: List<LaunchModel>?
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusAllViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            checkViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC
+            )
+        }
+
+        assertTrue(!expectedFilterResults.isNullOrEmpty())
+
+        launchesFragmentTestHelper {
+            checkRecyclerItemsDaysSinceDisplaysCorrectly(
+                expectedFilterResults = expectedFilterResults!!,
+                dateTransformer = dateTransformer
+            )
+        }
 
         /** filterLaunchItemsByYearDesc_verifyResultsAndDescOrderState */
-        var year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
-        var expectedFilterResults: List<LaunchModel>?
+        year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
+
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -505,41 +526,6 @@ class SpaceXFeatureTest : BaseTest() {
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterCancelButtonViewMatcher)
-        }
-
-        /** testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate */
-
-        // Only 2022 launches have "days from now" data
-        year = "2022"
-
-        launchesFragmentTestHelper {
-            performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
-            performTypeText(filterYearViewMatcher, text = year)
-            performClick(filterLaunchStatusAllViewMatcher)
-            performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
-        }
-
-        runBlocking {
-            expectedFilterResults = getFilteredLaunchItemsFromCache(
-                year = year,
-                order = LAUNCH_ORDER_DESC
-            )
-        }
-
-        assertTrue(!expectedFilterResults.isNullOrEmpty())
-
-        launchesFragmentTestHelper {
-            checkRecyclerItemsDaysSinceDisplaysCorrectly(
-                expectedFilterResults = expectedFilterResults!!,
-                dateTransformer = dateTransformer
-            )
         }
 
     }

@@ -92,9 +92,11 @@ class LaunchFragmentTests : BaseTest() {
     @Inject
     lateinit var dateTransformer: DateTransformer
 
+    @Inject
+    lateinit var validLaunchYears: List<String>
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
-    private lateinit var validLaunchYears: List<String>
 
     @Before
     fun init() {
@@ -102,11 +104,6 @@ class LaunchFragmentTests : BaseTest() {
         testLaunchList = launchDataFactory.produceListOfLaunches()
         testCompanyInfoList = companyInfoDataFactory.produceCompanyInfo()
         prepareDataSet()
-
-        validLaunchYears = listOf(
-            "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
-            "2012", "2010", "2009", "2008", "2007", "2006"
-        ).shuffled()
     }
 
     private fun prepareDataSet() = runBlocking {
@@ -504,6 +501,7 @@ class LaunchFragmentTests : BaseTest() {
             // Check ASC/DESC is still set to DESC after the filter is completed
             // Check Launch Status: SUCCESS is checked
             // These views should remember their state
+            performClick(filterButtonViewMatcher)
             checkViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
