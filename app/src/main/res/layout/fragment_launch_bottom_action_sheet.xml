@@ -73,13 +73,13 @@
                 app:layout_constraintTop_toBottomOf="@id/article_link" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/youtube_link"
+                android:id="@+id/webcast_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_horizontal"
-                android:text="@string/youtube"
+                android:text="@string/webcast"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_heading"
                 android:padding="@dimen/default_bottom_sheet_margin"
@@ -95,7 +95,7 @@
                 android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/youtube_link" />
+                app:layout_constraintTop_toBottomOf="@id/webcast_link" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/wiki_link"

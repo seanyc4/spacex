@@ -24,6 +24,9 @@ object AndroidX {
     const val fragment_version = "1.4.1"
     const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
 
+    private const val desurgar_version = "1.1.5"
+    const val desurgar = "com.android.tools:desugar_jdk_libs:$desurgar_version"
+
 }
 
 object AndroidXTest {

@@ -157,51 +157,51 @@ interface LaunchDao {
 suspend fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
-    isLaunchSuccess: Int?,
+    launchFilter: Int?,
     page: Int
 ): List<LaunchEntity>? {
 
     when {
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) && year.isNullOrEmpty() -> {
+        launchFilter != null && order.contains(LAUNCH_ORDER_DESC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearDESC(
-                isLaunchSuccess = isLaunchSuccess,
+                isLaunchSuccess = launchFilter,
                 page = page
             )
         }
 
-        isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) && year.isNullOrEmpty() -> {
+        launchFilter != null && order.contains(LAUNCH_ORDER_ASC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearASC(
-                isLaunchSuccess = isLaunchSuccess,
+                isLaunchSuccess = launchFilter,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && isLaunchSuccess == null -> {
+        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && launchFilter == null -> {
             return searchLaunchItemsOrderByYearDESC(
                 year = year,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && isLaunchSuccess == null -> {
+        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && launchFilter == null -> {
             return searchLaunchItemsOrderByYearASC(
                 year = year,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_ASC) ->
+        !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_ASC) ->
             return searchLaunchItemsWithSuccessOrderByYearASC(
                 year = year,
-                isLaunchSuccess = isLaunchSuccess,
+                isLaunchSuccess = launchFilter,
                 page = page
             )
 
-        !year.isNullOrEmpty() && isLaunchSuccess != null && order.contains(LAUNCH_ORDER_DESC) ->
+        !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_DESC) ->
             return searchLaunchItemsWithSuccessOrderByYearDESC(
                 year = year,
-                isLaunchSuccess = isLaunchSuccess,
+                isLaunchSuccess = launchFilter,
                 page = page
             )
 

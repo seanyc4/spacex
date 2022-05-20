@@ -51,7 +51,7 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
             }
 
             if (links?.videoLink.isNullOrEmpty()) {
-                youtubeLink.gone()
+                webcastLink.gone()
                 divider3.gone()
             }
 
@@ -76,7 +76,7 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
                 dismiss()
             }
 
-            youtubeLink.setOnClickListener {
+            webcastLink.setOnClickListener {
                 setFragmentResult(LINKS_KEY, bundleOf(LINKS_KEY to links!!.videoLink))
                 dismiss()
             }

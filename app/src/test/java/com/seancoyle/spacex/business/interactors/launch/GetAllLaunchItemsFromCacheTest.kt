@@ -40,10 +40,10 @@ class GetAllLaunchItemsFromCacheTest {
 
 
     @Test
-    fun getAllLaunchItemsFromCache_success_confirmCorrect() = runBlocking {
+    fun `Get All Launch Items From Cache - success - confirm correct`() = runBlocking {
 
         val numTotal = cacheDataSource.getTotalEntries()
-        var results: ArrayList<LaunchModel>? = null
+        var results = emptyList<LaunchModel>()
 
         getAllLaunchItems.execute(
             stateEvent = GetAllLaunchItemsFromCacheEvent
@@ -54,15 +54,23 @@ class GetAllLaunchItemsFromCacheTest {
             )
 
             value?.data?.launchList?.let { list ->
-                results = ArrayList(list)
+                results = list
             }
         }
 
         // confirm launch items were retrieved
-        assertTrue { results != null }
+        assertTrue { results.isNotEmpty() }
 
         // confirm launch items retrieved matches total number
-        assertTrue { results?.size == numTotal }
+        assertTrue { results.size == numTotal }
+    }
+
+    @Test
+    fun `Check All Launch Items Have A Valid Patch Image URL`() = runBlocking {
+
+        val launchList = cacheDataSource.getAll()
+        assertTrue { !launchList.isNullOrEmpty() }
+        assertTrue(launchList?.all { it.links.missionImage.isNotEmpty() } == true )
     }
 
 }

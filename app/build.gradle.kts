@@ -81,9 +81,9 @@ android {
 
 dependencies {
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
+    coreLibraryDesugaring(AndroidX.desurgar)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)
@@ -141,6 +141,7 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.coroutines_test)
     androidTestImplementation(AndroidTestDependencies.espresso_contrib)
     androidTestImplementation(AndroidTestDependencies.espresso_core)
+    androidTestImplementation(AndroidTestDependencies.espresso_intents)
     androidTestImplementation(AndroidTestDependencies.idling_resource)
     androidTestImplementation(AndroidTestDependencies.kotlin_test)
     androidTestImplementation(AndroidTestDependencies.mockk_android)

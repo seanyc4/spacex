@@ -4,6 +4,7 @@ object AndroidTestDependencies{
     const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.coroutines_core_version}"
     const val espresso_contrib = "androidx.test.espresso:espresso-contrib:${Versions.espresso_core}"
     const val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
+    const val espresso_intents = "androidx.test.espresso:espresso-intents:${Versions.espresso_core}"
     const val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
     const val instrumentation_runner = "com.seancoyle.spacex.framework.HiltTestRunner"
     const val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Kotlin.version}"

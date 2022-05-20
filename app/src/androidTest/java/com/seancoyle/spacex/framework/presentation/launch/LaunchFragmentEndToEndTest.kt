@@ -1,8 +1,12 @@
-package com.seancoyle.spacex.framework.presentation.end_to_end
+package com.seancoyle.spacex.framework.presentation.launch
 
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
@@ -22,13 +26,11 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_A
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_EXCEPTION
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_FAILED
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_UNKNOWN
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.*
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
+import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetCancelButtonViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterApplyButtonViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterAscDescSwitchViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterButtonViewMatcher
@@ -46,6 +48,7 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -67,7 +70,7 @@ const val HEADER_COUNT = 3
     AppModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
-class SpaceXFeatureTest : BaseTest() {
+class LaunchFragmentEndToEndTest : BaseTest() {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -102,6 +105,7 @@ class SpaceXFeatureTest : BaseTest() {
     @Before
     fun init() {
         hiltRule.inject()
+        Intents.init()
         testLaunchList = launchDataFactory.produceListOfLaunches()
         testCompanyInfoList = companyInfoDataFactory.produceCompanyInfo()
         prepareDataSet()
@@ -128,14 +132,14 @@ class SpaceXFeatureTest : BaseTest() {
                 appTitleViewMatcher,
                 text = R.string.app_name
             )
-            checkViewIsDisplayed(filterButtonViewMatcher)
-            checkViewIsDisplayed(recyclerViewMatcher)
+            verifyViewIsDisplayed(filterButtonViewMatcher)
+            verifyViewIsDisplayed(recyclerViewMatcher)
         }
 
         /** verifyFilterViewIsDisplayingWithCorrectData */
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyAllFilterDialogsTextViewsDisplayCorrectText()
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
@@ -143,7 +147,7 @@ class SpaceXFeatureTest : BaseTest() {
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         /** testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate */
@@ -154,7 +158,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -163,7 +167,7 @@ class SpaceXFeatureTest : BaseTest() {
             performTypeText(filterYearViewMatcher, text = year)
             performClick(filterLaunchStatusAllViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -188,10 +192,10 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             performTypeText(filterYearViewMatcher, text = year)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -213,7 +217,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check ASC/DESC is still set to DESC after the filter is completed
             // It should remember its state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
@@ -223,7 +227,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -233,7 +237,7 @@ class SpaceXFeatureTest : BaseTest() {
             performClick(filterAscDescSwitchViewMatcher)
             verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -255,7 +259,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check ASC/DESC is still set to ASC after the filter is completed
             // It should remember its state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
@@ -266,7 +270,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -275,7 +279,7 @@ class SpaceXFeatureTest : BaseTest() {
             performTypeText(filterYearViewMatcher, text = year)
             verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
@@ -296,7 +300,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -306,12 +310,12 @@ class SpaceXFeatureTest : BaseTest() {
             performClick(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_SUCCESS,
+                launchFilter = LAUNCH_SUCCESS,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -328,7 +332,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check Launch Status is still set to SUCCESS after the filter is completed
             // It should remember its state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
@@ -338,7 +342,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -347,12 +351,12 @@ class SpaceXFeatureTest : BaseTest() {
             performClick(filterLaunchStatusFailureViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_FAILED,
+                launchFilter = LAUNCH_FAILED,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -369,7 +373,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check Launch Status is still set to FAILURE after the filter is completed
             // It should remember its state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
@@ -380,7 +384,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_EXCEPTION,
+                launchFilter = LAUNCH_EXCEPTION,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -392,7 +396,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
@@ -401,12 +405,12 @@ class SpaceXFeatureTest : BaseTest() {
             performClick(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_UNKNOWN,
+                launchFilter = LAUNCH_UNKNOWN,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -424,7 +428,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check Launch Status is still set to UNKNOWN after the filter is completed
             // It should remember its state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
@@ -437,7 +441,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -446,14 +450,14 @@ class SpaceXFeatureTest : BaseTest() {
             performTypeText(filterYearViewMatcher, text = year)
             performClick(filterLaunchStatusSuccessViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
                 year = year,
                 order = LAUNCH_ORDER_DESC,
-                isLaunchSuccess = LAUNCH_SUCCESS
+                launchFilter = LAUNCH_SUCCESS
             )
         }
 
@@ -471,7 +475,7 @@ class SpaceXFeatureTest : BaseTest() {
             // Check Launch Status: SUCCESS is checked
             // These views should remember their state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterCancelButtonViewMatcher)
@@ -484,7 +488,7 @@ class SpaceXFeatureTest : BaseTest() {
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
@@ -493,14 +497,14 @@ class SpaceXFeatureTest : BaseTest() {
             performTypeText(filterYearViewMatcher, text = year)
             performClick(filterLaunchStatusFailureViewMatcher)
             performClick(filterApplyButtonViewMatcher)
-            checkViewIsNotDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
                 year = year,
                 order = LAUNCH_ORDER_DESC,
-                isLaunchSuccess = LAUNCH_FAILED
+                launchFilter = LAUNCH_FAILED
             )
         }
 
@@ -518,11 +522,171 @@ class SpaceXFeatureTest : BaseTest() {
             // Check Launch Status: SUCCESS is checked
             // These views should remember their state
             performClick(filterButtonViewMatcher)
-            checkViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
+
+
+        /** resetFilteredSearchResults */
+
+        year = ""
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusAllViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC,
+                launchFilter = LAUNCH_ALL
+            )
+        }
+
+
+        /** recyclerViewOnClickDisplayBottomSheet_isSuccess */
+
+        // Not all items have links, - no links will display an info dialog
+        // so much hard code a position which guarantees links
+        var position = 24
+
+        launchesFragmentTestHelper {
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+            performClick(bottomSheetCancelButtonViewMatcher)
+        }
+
+
+        /** bottomSheetClickArticleLink_isSuccess() */
+
+        val articleLink =
+            "https://spaceflightnow.com/2022/03/19/spacex-stretches-rocket-reuse-record-with-another-starlink-launch/"
+
+        launchesFragmentTestHelper {
+
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+
+            // Build intent to replicate the data equal to the POSITION clicked
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(articleLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetArticleTitleViewMatcher)
+            Intents.intended(expectedIntent)
+
+        }
+
+
+        /** bottomSheetClickVideoLink_isSuccess */
+
+        val videoLink = "https://youtu.be/0giA6VZOICs"
+
+        launchesFragmentTestHelper {
+
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+
+            // Build intent to replicate the data equal to the POSITION clicked
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(videoLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetWebcastTitleViewMatcher)
+            Intents.intended(expectedIntent)
+
+        }
+
+
+        /** bottomSheetClickWikiLink_isSuccess */
+
+        val wikiLink = "https://en.wikipedia.org/wiki/Starlink"
+
+        launchesFragmentTestHelper {
+
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+
+            // Build intent to replicate the data equal to the POSITION clicked
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(wikiLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetWikipediaTitleViewMatcher)
+            Intents.intended(expectedIntent)
+
+        }
+
+
+        /** bottomSheetClickCancel_isSuccess */
+
+        launchesFragmentTestHelper {
+
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+            performClick(bottomSheetCancelButtonViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+
+        }
+
+
+        /** bottomSheetNoArticleOrWikiLink_isSuccess */
+
+        // This item has no article or wiki link in its data
+        // Therefore these links should not be visible on screen
+        position = 13
+
+        launchesFragmentTestHelper {
+            performRecyclerViewClick(recyclerViewMatcher, position)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyViewIsNotVisible(LaunchFragmentTestHelper.bottomSheetArticleTitleViewMatcher)
+            verifyViewIsNotVisible(LaunchFragmentTestHelper.bottomSheetWikipediaTitleViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetWebcastTitleViewMatcher)
+            performClick(bottomSheetCancelButtonViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+        }
+
+
+        /** recyclerViewOnClickDisplayBottomSheet_isFail_verifyDialogDisplayWithText */
+        // Select an item with no media links
+        // verify a dialog is displayed - also very the title and message
+        // Click ok button - check dialog has dismissed
+        launchesFragmentTestHelper {
+            performRecyclerViewClick(recyclerViewMatcher, 5)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.materialDialogViewMatcher)
+            verifyCorrectTextIsDisplayed(
+                LaunchFragmentTestHelper.materialDialogTitleViewMatcher,
+                text = R.string.text_info
+            )
+            verifyCorrectTextIsDisplayed(
+                LaunchFragmentTestHelper.materialDialogMessageViewMatcher,
+                text = R.string.no_links
+            )
+            performClick(LaunchFragmentTestHelper.materialDialogPositiveBtnViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.materialDialogViewMatcher)
+        }
+
 
     }
 
@@ -530,12 +694,12 @@ class SpaceXFeatureTest : BaseTest() {
     private suspend fun getFilteredLaunchItemsFromCache(
         year: String? = "",
         order: String? = LAUNCH_ORDER_DESC,
-        isLaunchSuccess: Int? = null
+        launchFilter: Int? = null
     ): List<LaunchModel> {
         return launchCacheDataSource.filterLaunchList(
             year = year ?: "",
             order = order ?: LAUNCH_ORDER_DESC,
-            isLaunchSuccess = isLaunchSuccess,
+            launchFilter = launchFilter,
             page = 1
         ) ?: emptyList()
 
@@ -546,6 +710,7 @@ class SpaceXFeatureTest : BaseTest() {
         launchesFragmentTestHelper {
             clearSharedPreferences(ApplicationProvider.getApplicationContext())
         }
+        Intents.release()
     }
 
 }

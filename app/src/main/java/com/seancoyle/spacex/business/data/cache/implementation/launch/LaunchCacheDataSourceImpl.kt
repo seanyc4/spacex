@@ -58,13 +58,13 @@ constructor(
     override suspend fun filterLaunchList(
         year: String,
         order: String,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int
     ): List<LaunchModel>? {
         return daoService.filterLaunchList(
             year = year,
             order = order,
-            isLaunchSuccess = isLaunchSuccess,
+            launchFilter = launchFilter,
             page = page
         )
     }

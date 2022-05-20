@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -12,12 +13,13 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
-import com.seancoyle.spacex.framework.presentation.end_to_end.HEADER_COUNT
+import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
 import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel.Companion.LAUNCH_PREFERENCES
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 
 @ExperimentalCoroutinesApi
@@ -44,7 +46,7 @@ class LaunchFragmentTestHelper {
                 // Checks the launch LocalDateTime and determines if a past date or not : true/false
                 // Verifies text based on past/future
 
-                if(dateTransformer.isPastLaunch(entity.launchDateLocalDateTime)){
+                if (dateTransformer.isPastLaunch(entity.launchDateLocalDateTime)) {
                     Espresso.onView(
                         withRecyclerView(R.id.rv_launch).atPositionOnView(
                             expectedFilterResults.indexOf(entity).plus(HEADER_COUNT),
@@ -154,8 +156,8 @@ class LaunchFragmentTestHelper {
                 text = R.string.article
             )
             verifyCorrectTextIsDisplayed(
-                bottomSheetYoutubeTitleViewMatcher,
-                text = R.string.youtube
+                bottomSheetWebcastTitleViewMatcher,
+                text = R.string.webcast
             )
             verifyCorrectTextIsDisplayed(
                 bottomSheetWikipediaTitleViewMatcher,
@@ -233,7 +235,7 @@ class LaunchFragmentTestHelper {
         Espresso.onView(view).perform(ViewActions.typeText(text))
     }
 
-    fun checkViewIsDisplayed(view: Matcher<View>) = apply {
+    fun verifyViewIsDisplayed(view: Matcher<View>) = apply {
         Espresso.onView(view).check(
             ViewAssertions.matches(
                 isDisplayed()
@@ -241,7 +243,17 @@ class LaunchFragmentTestHelper {
         )
     }
 
-    fun checkViewIsNotDisplayed(view: Matcher<View>) = apply {
+    fun verifyViewIsNotVisible(view: Matcher<View>) = apply {
+        Espresso.onView(view).check(
+            ViewAssertions.matches(
+                not(
+                    isDisplayed()
+                )
+            )
+        )
+    }
+
+    fun verifyViewIsNotDisplayed(view: Matcher<View>) = apply {
         Espresso.onView(view).check(
             ViewAssertions.doesNotExist()
         )
@@ -254,6 +266,7 @@ class LaunchFragmentTestHelper {
             )
         )
     }
+
 
     fun verifyViewIsChecked(view: Matcher<View>) = apply {
         Espresso.onView(view).check(
@@ -283,7 +296,7 @@ class LaunchFragmentTestHelper {
         )
     }
 
-    fun clearSharedPreferences(context: Context){
+    fun clearSharedPreferences(context: Context) {
         val preferences = context.getSharedPreferences(
             LAUNCH_PREFERENCES,
             Context.MODE_PRIVATE
@@ -300,7 +313,6 @@ class LaunchFragmentTestHelper {
         val filterButtonViewMatcher: Matcher<View> = withId(R.id.filter_btn)
         val recyclerviewHeadingTitleMatcher: Matcher<View> = withId(R.id.section_title)
         val companyInfoMatcher: Matcher<View> = withId(R.id.company_info)
-        const val recyclerViewId = R.id.rv_launch
         val recyclerViewMatcher: Matcher<View> = withId(R.id.rv_launch)
         val filterDialogViewMatcher: Matcher<View> = withId(R.id.filter_dialog_container)
         val filterYearViewMatcher: Matcher<View> = withId(R.id.search_query)
@@ -317,7 +329,7 @@ class LaunchFragmentTestHelper {
         val bottomSheetViewMatcher: Matcher<View> = withId(R.id.links_container)
         val bottomSheetLinksTitleViewMatcher: Matcher<View> = withId(R.id.links_title)
         val bottomSheetArticleTitleViewMatcher: Matcher<View> = withId(R.id.article_link)
-        val bottomSheetYoutubeTitleViewMatcher: Matcher<View> = withId(R.id.youtube_link)
+        val bottomSheetWebcastTitleViewMatcher: Matcher<View> = withId(R.id.webcast_link)
         val bottomSheetWikipediaTitleViewMatcher: Matcher<View> = withId(R.id.wiki_link)
         val bottomSheetCancelButtonViewMatcher: Matcher<View> = withId(R.id.exit_btn)
         val materialDialogViewMatcher: Matcher<View> = withId(R.id.md_content_layout)

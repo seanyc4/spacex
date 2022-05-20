@@ -10,7 +10,6 @@ import com.seancoyle.spacex.business.domain.model.launch.SectionTitle
 import com.seancoyle.spacex.business.interactors.launch.LaunchInteractors
 import com.seancoyle.spacex.business.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.CompanyInfoInteractors
-import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
@@ -41,14 +40,14 @@ constructor(
 
         setLaunchOrder(
             sharedPreferences.getString(
-                LAUNCH_ORDER, LAUNCH_ORDER_DESC
+                LAUNCH_ORDER, LAUNCH_ORDER_DESC,
             )
         )
 
         if (sharedPreferences.contains(LAUNCH_FILTER)) {
             setLaunchFilter(
                 sharedPreferences.getInt(
-                    LAUNCH_FILTER, 2
+                    LAUNCH_FILTER, LAUNCH_ALL
                 )
             )
         }
@@ -107,7 +106,7 @@ constructor(
                 launchInteractors.filterLaunchItemsInCache.execute(
                     year = getSearchQuery(),
                     order = getOrder(),
-                    isLaunchSuccess = getFilter(),
+                    launchFilter = getFilter(),
                     page = getPage(),
                     stateEvent = stateEvent
                 )
@@ -277,9 +276,12 @@ constructor(
         return consolidatedList
     }
 
-    fun getOrder() = getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_ASC
     private fun getSearchQuery() = getCurrentViewStateOrNew().searchQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
+
+    fun getOrder(): String{
+        return getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_DESC
+    }
 
     fun getFilter(): Int? {
         return if (getCurrentViewStateOrNew().launchFilter == LAUNCH_ALL) {

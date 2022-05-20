@@ -16,7 +16,7 @@
     <!-- Bottom Action Sheet -->
     <string name="links">Links</string>
     <string name="article">Article</string>
-    <string name="youtube">Youtube</string>
+    <string name="webcast">Webcast</string>
     <string name="wikipedia">Wikipedia</string>
 
     <!-- Filter Dialog -->

@@ -17,7 +17,7 @@ class FilterLaunchItemsInCache(
     fun execute(
         year: String,
         order: String,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
@@ -31,7 +31,7 @@ class FilterLaunchItemsInCache(
             cacheDataSource.filterLaunchList(
                 year = year,
                 order = order,
-                isLaunchSuccess = isLaunchSuccess,
+                launchFilter = launchFilter,
                 page = updatedPage
             )
         }

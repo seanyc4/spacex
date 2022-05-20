@@ -11,7 +11,6 @@ import com.seancoyle.spacex.framework.datasource.network.implementation.dateform
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.datasource.network.model.launch.*
 import com.seancoyle.spacex.util.isUnitTest
-
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 import java.time.ZoneId
@@ -24,8 +23,8 @@ class LaunchDependencies {
         YYYY_MM_DD_HH_MM_SS, Locale.ENGLISH
     ).withZone(ZoneId.systemDefault())
 
-    val dateFormatter = DateFormatterImpl(dateFormat)
-    val dateTransformer = DateTransformerImpl()
+    private val dateFormatter = DateFormatterImpl(dateFormat)
+    private val dateTransformer = DateTransformerImpl()
     lateinit var launchCacheDataSource: LaunchCacheDataSource
     lateinit var launchFactory: LaunchFactory
     lateinit var launchDataFactory: LaunchDataFactory
@@ -85,6 +84,11 @@ class LaunchDependencies {
         )
 
     }
+
+    fun provideValidFilterYearDates() = listOf(
+        "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
+        "2012", "2010", "2009", "2008", "2007", "2006"
+    ).shuffled()
 
 }
 

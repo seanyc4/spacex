@@ -23,7 +23,7 @@ interface LaunchDaoService {
     suspend fun filterLaunchList(
         year: String?,
         order: String,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int
     ): List<LaunchModel>?
 

@@ -8,6 +8,7 @@ import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache
 import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_FAILED
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
+import kotlin.random.Random
 
 @InternalCoroutinesApi
 class FilterLaunchItemsInCacheTest {
@@ -26,6 +28,7 @@ class FilterLaunchItemsInCacheTest {
     private lateinit var filterLaunchItems: FilterLaunchItemsInCache
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private lateinit var cacheDataSource: LaunchCacheDataSource
+    private var validLaunchYears = launchDependencies.provideValidFilterYearDates()
 
     @BeforeEach
     fun init() {
@@ -37,15 +40,14 @@ class FilterLaunchItemsInCacheTest {
     }
 
     @Test
-    fun filterLaunchItemsByYear_success() = runBlocking {
+    fun `Order All Launch Items By Date Ascending - success`() = runBlocking {
 
-        var launchList: List<LaunchModel>? = null
-        val launchYear = "2020"
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
-            year = launchYear,
+            year = "",
             order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = null,
+            launchFilter = LAUNCH_ALL,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -59,20 +61,74 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        // Check all items retrieved have a launch year of 2020
-        assertTrue { launchList?.all { it.launchYear == launchYear } == true }
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderAscending(launchList)
     }
 
     @Test
-    fun filterLaunchItemsByYear_noResultsFound() = runBlocking {
+    fun `Order All Launch Items By Date Descending - success`() = runBlocking {
 
-        var launchList: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
+
+        filterLaunchItems.execute(
+            year = "",
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_ALL,
+            page = 1,
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                SEARCH_LAUNCH_SUCCESS
+            )
+
+            value?.data?.launchList?.let {
+                launchList = it
+            }
+        }
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+    }
+
+    @Test
+    fun `filter launch items by year and date order ASC - success`() = runBlocking {
+
+        var launchList = emptyList<LaunchModel>()
+        val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
+
+        filterLaunchItems.execute(
+            year = launchYear,
+            order = LAUNCH_ORDER_ASC,
+            launchFilter = null,
+            page = 1,
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+        ).collect { value ->
+            assertEquals(
+                value?.stateMessage?.response?.message,
+                SEARCH_LAUNCH_SUCCESS
+            )
+
+            value?.data?.launchList?.let {
+                launchList = it
+            }
+        }
+
+        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue { launchList.all { it.launchYear == launchYear } }
+        checkDateOrderAscending(launchList)
+    }
+
+    @Test
+    fun `Filter Launch Items By Year - No Results Found`() = runBlocking {
+
+        var launchList = emptyList<LaunchModel>()
         val launchYear = "1000"
 
         filterLaunchItems.execute(
             year = launchYear,
             order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = null,
+            launchFilter = null,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -87,18 +143,18 @@ class FilterLaunchItemsInCacheTest {
         }
 
         // No items should be returned with a launchYear of 1000
-        assertTrue { launchList?.isEmpty() == true }
+        assertTrue { launchList.isEmpty() }
     }
 
     @Test
-    fun filterLaunchItemsBy_isLaunchSuccess_launchSuccess() = runBlocking {
+    fun `Filter Launch Items By Launch Status LAUNCH_SUCCESS - success`() = runBlocking {
 
-        var launchList: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
             year = "",
-            order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = LAUNCH_SUCCESS,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -112,19 +168,20 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        // Check all items retrieved were successfully launched
-        assertTrue { launchList?.all { it.isLaunchSuccess == LAUNCH_SUCCESS } == true }
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_SUCCESS } }
     }
 
     @Test
-    fun filterLaunchItemsBy_isLaunchSuccess_launchFailed() = runBlocking {
+    fun `Filter Launch Items By Launch Status LAUNCH_FAILED - success`() = runBlocking {
 
-        var launchList: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
             year = "",
             order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = LAUNCH_FAILED,
+            launchFilter = LAUNCH_FAILED,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -138,20 +195,21 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        // Check all items retrieved were successfully launched
-        assertTrue { launchList?.all { it.isLaunchSuccess == LAUNCH_FAILED } == true }
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderAscending(launchList)
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_FAILED } }
     }
 
     @Test
-    fun filterLaunchItemsBy_all() = runBlocking {
+    fun `Filter Launch Items By Launch Status ALL - success`() = runBlocking {
 
-        var filteredLaunchItems: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
         val allLaunchItems = cacheDataSource.getAll()
 
         filterLaunchItems.execute(
             year = "",
-            order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = LAUNCH_ALL,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_ALL,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -161,27 +219,29 @@ class FilterLaunchItemsInCacheTest {
             )
 
             value?.data?.launchList?.let {
-                filteredLaunchItems = it
+                launchList = it
             }
         }
 
         // Check allLaunchItems is not null
         assertTrue(allLaunchItems != null)
 
+        checkDateOrderDescending(launchList)
+
         // Check allLaunchItems matches filteredLaunchItems
-        assertTrue { filteredLaunchItems?.containsAll(allLaunchItems!!) == true }
+        assertTrue { launchList.containsAll(allLaunchItems!!) }
 
     }
 
     @Test
-    fun filterLaunchItemsBy_unknown() = runBlocking {
+    fun `Filter Launch Items By Launch Status UNKOWN - success`() = runBlocking {
 
-        var filteredLaunchItems: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
             year = "",
-            order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = LAUNCH_UNKNOWN,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_UNKNOWN,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -191,24 +251,25 @@ class FilterLaunchItemsInCacheTest {
             )
 
             value?.data?.launchList?.let {
-                filteredLaunchItems = it
+                launchList = it
             }
         }
 
-        // Check allLaunchItems matches filteredLaunchItems
-        assertTrue { filteredLaunchItems?.all { it.isLaunchSuccess == LAUNCH_UNKNOWN } == true }
+        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_UNKNOWN } }
 
     }
 
     @Test
-    fun filterLaunchItemsBy_isLaunchSuccess_noResultsFound() = runBlocking {
-
-        var launchList: List<LaunchModel>? = null
+    fun `Filter Launch Items By isLaunchSuccess - no results found`() = runBlocking {
+        // Year set to 2006 as there were only launch failures that year
+        val year = "2006"
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
-            year = "2006",
-            order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = LAUNCH_SUCCESS,
+            year = year,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -223,18 +284,18 @@ class FilterLaunchItemsInCacheTest {
         }
 
         // No items should be returned with a launchYear of 2006 and LAUNCH_SUCCESS
-        assertTrue { launchList?.isEmpty() == true }
+        assertTrue { launchList.isEmpty() }
     }
 
     @Test
-    fun filterLaunchItemsFail_noResultsFound() = runBlocking {
+    fun `Filter Launch Items Fail - no results found`() = runBlocking {
 
-        var launchList: List<LaunchModel>? = null
+        var launchList = emptyList<LaunchModel>()
 
         filterLaunchItems.execute(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
-            order = LAUNCH_ORDER_ASC,
-            isLaunchSuccess = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = null,
             page = 1,
             stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
@@ -249,12 +310,32 @@ class FilterLaunchItemsInCacheTest {
         }
 
         // confirm nothing was retrieved
-        assertTrue { launchList == null }
+        assertTrue { launchList.isEmpty() }
 
         // confirm there are launch items in the cache
         val notesInCache = cacheDataSource.getAll()
         if (notesInCache != null) {
             assertTrue { notesInCache.isNotEmpty() }
+        }
+    }
+
+    private fun checkDateOrderAscending(launchList: List<LaunchModel>) {
+        // Check the list and verify the date is less than the next index
+        for (item in 0..launchList.size.minus(2)) {
+            assertTrue(
+                launchList[item].launchDateLocalDateTime <=
+                        launchList[item.plus(1)].launchDateLocalDateTime
+            )
+        }
+    }
+
+    private fun checkDateOrderDescending(launchList: List<LaunchModel>) {
+        // Check the list and verify the date is greater than the next index
+        for (item in 0..launchList.size.minus(2)) {
+            assertTrue(
+                launchList[item].launchDateLocalDateTime >=
+                        launchList[item.plus(1)].launchDateLocalDateTime
+            )
         }
     }
 

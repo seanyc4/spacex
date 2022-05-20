@@ -97,7 +97,7 @@ constructor(
     override suspend fun filterLaunchList(
         year: String,
         order: String,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int
     ): List<LaunchModel> {
         if (year == FORCE_SEARCH_LAUNCH_EXCEPTION) {
@@ -108,28 +108,28 @@ constructor(
 
             when {
 
-                year.isNotEmpty() && isLaunchSuccess == LAUNCH_ALL -> {
+                year.isNotEmpty() && launchFilter == LAUNCH_ALL -> {
                     results.add(item)
                 }
 
-                isLaunchSuccess == LAUNCH_ALL -> {
+                launchFilter == LAUNCH_ALL -> {
                     results.add(item)
                 }
 
-                isLaunchSuccess != null && year.isEmpty() -> {
-                    if (item.isLaunchSuccess == isLaunchSuccess) {
+                launchFilter != null && year.isEmpty() -> {
+                    if (item.isLaunchSuccess == launchFilter) {
                         results.add(item)
                     }
                 }
 
-                year.isNotEmpty() && isLaunchSuccess == null -> {
+                year.isNotEmpty() && launchFilter == null -> {
                     if (item.launchYear == year) {
                         results.add(item)
                     }
                 }
 
-                year.isNotEmpty() && isLaunchSuccess != null ->
-                    if (item.launchYear == year && item.isLaunchSuccess == isLaunchSuccess) {
+                year.isNotEmpty() && launchFilter != null ->
+                    if (item.launchYear == year && item.isLaunchSuccess == launchFilter) {
                         results.add(item)
                     }
 
@@ -137,7 +137,7 @@ constructor(
 
             }
 
-            if (isLaunchSuccess != LAUNCH_ALL) {
+            if (launchFilter != LAUNCH_ALL) {
                 if (results.size > (page * LAUNCH_PAGINATION_PAGE_SIZE)) {
                     break
                 }
@@ -147,9 +147,9 @@ constructor(
 
         // Apply filter to data
         if (order == LAUNCH_ORDER_DESC) {
-            results.sortByDescending { it.launchYear }
+            results.sortByDescending { it.launchDateLocalDateTime }
         } else {
-            results.sortBy { it.launchYear }
+            results.sortBy { it.launchDateLocalDateTime }
         }
 
         return results
