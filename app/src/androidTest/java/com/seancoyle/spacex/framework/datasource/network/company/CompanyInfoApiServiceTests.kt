@@ -3,10 +3,10 @@ package com.seancoyle.spacex.framework.datasource.network.company
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.di.CompanyInfoModule
+import com.seancoyle.spacex.di.ProductionModule
+import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
-import com.seancoyle.spacex.framework.datasource.network.implementation.company.CompanyInfoRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -26,6 +26,10 @@ import javax.inject.Inject
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@UninstallModules(
+    CompanyInfoModule::class,
+    ProductionModule::class
+)
 @HiltAndroidTest
 class CompanyInfoApiServiceTests : BaseTest() {
 
@@ -35,9 +39,8 @@ class CompanyInfoApiServiceTests : BaseTest() {
     // system in test
     private lateinit var apiService: CompanyInfoRetrofitService
 
-    // dependencies
     @Inject
-    lateinit var api: CompanyInfoApi
+    lateinit var fakeApi: FakeCompanyInfoApi
 
     @Inject
     lateinit var networkMapper: CompanyInfoNetworkMapper
@@ -49,8 +52,8 @@ class CompanyInfoApiServiceTests : BaseTest() {
     @Before
     fun init() {
         hiltRule.inject()
-        apiService = CompanyInfoRetrofitServiceImpl(
-            api = api,
+        apiService = FakeCompanyInfoRetrofitServiceImpl(
+            fakeApi = fakeApi,
             networkMapper = networkMapper
         )
     }

@@ -1,11 +1,11 @@
 package com.seancoyle.spacex.di
 
-import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.cache.implementation.launch.LaunchCacheDataSourceImpl
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.implementation.launch.LaunchNetworkDataSourceImpl
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
@@ -15,18 +15,15 @@ import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEnti
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
-import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
+import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.datasource.network.model.launch.*
-import com.seancoyle.spacex.util.Constants
+import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 const val LAUNCH_OPTIONS_ROCKET = "rocket"
@@ -52,10 +49,10 @@ object TestLaunchModule {
     @Singleton
     @Provides
     fun provideLaunchRetrofitService(
-        api: LaunchApi,
+        api: FakeLaunchApi,
         networkMapper: LaunchNetworkMapper
     ): LaunchRetrofitService {
-        return LaunchRetrofitServiceImpl(
+        return FakeLaunchRetrofitServiceImpl(
             api = api,
             networkMapper = networkMapper
         )
@@ -63,10 +60,12 @@ object TestLaunchModule {
 
     @Singleton
     @Provides
-    fun provideLaunchApi(
-        retrofit: Retrofit
-    ): LaunchApi {
-        return retrofit.create(LaunchApi::class.java)
+    fun provideFakeLaunchApi(
+        jsonFileReader: JsonFileReader
+    ): FakeLaunchApi {
+        return FakeLaunchApi(
+            jsonFileReader = jsonFileReader
+        )
     }
 
     @Singleton
@@ -140,14 +139,14 @@ object TestLaunchModule {
                         path = LAUNCH_OPTIONS_ROCKET,
                         select = Select(
                             name = 1,
-                            type =2
+                            type = 2
                         )
                     )
                 ),
                 sort = Sort(
                     flight_number = LAUNCH_OPTIONS_SORT,
                 ),
-                limit =500
+                limit = 500
             )
         )
     }
@@ -155,8 +154,8 @@ object TestLaunchModule {
     @Singleton
     @Provides
     fun provideValidFilterYearDates() = listOf(
-            "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
-            "2012", "2010", "2009", "2008", "2007", "2006"
-        ).shuffled()
+        "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
+        "2012", "2010", "2009", "2008", "2007", "2006"
+    ).shuffled()
 
 }

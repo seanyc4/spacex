@@ -24,12 +24,13 @@ import com.seancoyle.spacex.di.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
-import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
+import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
+import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_EXCEPTION
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_FAILED
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_UNKNOWN
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
@@ -93,12 +94,6 @@ class LaunchFragmentTests : BaseTest() {
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
-
-    @Inject
-    lateinit var companyInfoDataFactory: CompanyInfoDataFactory
-
-    @Inject
     lateinit var launchCacheDataSource: LaunchCacheDataSource
 
     @Inject
@@ -110,24 +105,36 @@ class LaunchFragmentTests : BaseTest() {
     @Inject
     lateinit var validLaunchYears: List<String>
 
+    @Inject
+    lateinit var launchRetrofitService: LaunchRetrofitService
+
+    @Inject
+    lateinit var companyInfoRetrofitService: CompanyInfoRetrofitService
+
+    @Inject
+    lateinit var launchOptions: LaunchOptions
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
 
-
     @Before
-    fun init() {
+    fun init(){
         hiltRule.inject()
         Intents.init()
-        testLaunchList = launchDataFactory.produceListOfLaunches()
-        testCompanyInfoList = companyInfoDataFactory.produceCompanyInfo()
         prepareDataSet()
     }
 
     private fun prepareDataSet() = runBlocking {
         // clear any existing data so recyclerview isn't overwhelmed
         launchCacheDataSource.deleteAll()
-        launchCacheDataSource.insertLaunchList(testLaunchList)
         companyInfoCacheDataSource.deleteAll()
+
+        // Get fake network data
+        testLaunchList = launchRetrofitService.getLaunchList(launchOptions = launchOptions)
+        testCompanyInfoList = companyInfoRetrofitService.getCompanyInfo()
+
+        // Insert data to fake in memory room database
+        launchCacheDataSource.insertLaunchList(testLaunchList)
         companyInfoCacheDataSource.insert(testCompanyInfoList)
     }
 

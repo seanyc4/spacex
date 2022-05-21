@@ -4,10 +4,9 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.di.LaunchModule
-import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
+import com.seancoyle.spacex.di.ProductionModule
+import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
-import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -28,7 +27,8 @@ import kotlin.test.assertTrue
 @FlowPreview
 @HiltAndroidTest
 @UninstallModules(
-    LaunchModule::class
+    LaunchModule::class,
+    ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchRetrofitServiceTests : BaseTest() {
@@ -39,44 +39,31 @@ class LaunchRetrofitServiceTests : BaseTest() {
     // system in test
     private lateinit var apiService: LaunchRetrofitService
 
-    // dependencies
-    @Inject
-    lateinit var api: LaunchApi
-
     @Inject
     lateinit var networkMapper: LaunchNetworkMapper
-
-    @Inject
-    lateinit var dataFactory: LaunchDataFactory
 
     @Inject
     lateinit var launchOptions: LaunchOptions
 
     @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
+    lateinit var fakeApi: FakeLaunchApi
 
 
     @Before
     fun init() {
         hiltRule.inject()
-        apiService = LaunchRetrofitServiceImpl(
-            api = api,
+        apiService = FakeLaunchRetrofitServiceImpl(
+            api = fakeApi,
             networkMapper = networkMapper
         )
     }
 
     @Test
-    fun getLaunchItemsFromNetwork_confirmExpectedResult() = runBlocking {
-
-        val expectedResult = launchDataFactory.produceListOfLaunches()
+    fun getLaunchItems_confirmExpectedResult() = runBlocking {
 
         val result = apiService.getLaunchList(launchOptions = launchOptions)
-
         assertTrue(result.isNotEmpty())
-
-        assertTrue(actual = result[Random.nextInt(0, result.size)] is LaunchModel)
-
-      //  assertEquals(result, expectedResult)
+        assertTrue(result[Random.nextInt(0, result.size)] is LaunchModel)
     }
 
 }

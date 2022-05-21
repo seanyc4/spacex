@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel
 import com.seancoyle.spacex.util.AndroidTestUtils
+import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -56,6 +57,14 @@ object TestModule {
                 LaunchViewModel.LAUNCH_PREFERENCES,
                 Context.MODE_PRIVATE
             )
+    }
+
+    @Singleton
+    @Provides
+    fun providesJsonFileReader(application: HiltTestApplication): JsonFileReader{
+        return JsonFileReader(
+            application =application
+        )
     }
 
 }

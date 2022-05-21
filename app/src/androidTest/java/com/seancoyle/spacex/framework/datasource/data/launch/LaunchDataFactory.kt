@@ -5,6 +5,8 @@ import android.content.res.AssetManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.spacex.business.domain.model.launch.*
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchDto
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import java.io.IOException
 import java.io.InputStream
 import java.time.LocalDateTime
@@ -25,6 +27,14 @@ constructor(
             .fromJson(
                 getDataFromFile("launch_list.json"),
                 object : TypeToken<List<LaunchModel>>() {}.type
+            )
+    }
+
+    fun getLaunchList(launchOptions: LaunchOptions) : LaunchDto {
+        return Gson()
+            .fromJson(
+                getDataFromFile("launch_list_raw.json"),
+                object : TypeToken<LaunchDto>() {}.type
             )
     }
 
