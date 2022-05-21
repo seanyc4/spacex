@@ -3,14 +3,11 @@ package com.seancoyle.spacex.framework.datasource.cache.company
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
-import com.seancoyle.spacex.di.AppModule
-import com.seancoyle.spacex.di.CompanyInfoModule
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
-import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -25,16 +22,9 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import java.util.*
 import javax.inject.Inject
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-/*
-    LEGEND:
-    1. CBS = "Confirm by searching"
-
-    Test cases:
-    1. confirm company_info database table empty to start (should be test data inserted from CacheTest.kt)
-    2. insert new company info, CBS
-
- */
 @ExperimentalCoroutinesApi
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -51,12 +41,8 @@ class CompanyInfoDaoServiceTests : BaseTest() {
     // system in test
     private lateinit var daoService: CompanyInfoDaoService
 
-    // dependencies
     @Inject
     lateinit var dao: CompanyInfoDao
-
-    @Inject
-    lateinit var dataFactory: CompanyInfoDataFactory
 
     @Inject
     lateinit var companyInfoFactory: CompanyInfoFactory
@@ -64,27 +50,20 @@ class CompanyInfoDaoServiceTests : BaseTest() {
     @Inject
     lateinit var entityMapper: CompanyInfoEntityMapper
 
+
     @Before
     fun init() {
         hiltRule.inject()
-        insertTestData()
         daoService = CompanyInfoDaoServiceImpl(
             dao = dao,
             entityMapper = entityMapper
         )
     }
 
-    private fun insertTestData() = runBlocking {
-        val entity = entityMapper.mapToEntity(
-            dataFactory.produceCompanyInfo()
-        )
-        dao.insert(entity)
-    }
-
-
     @Test
-    fun insertCompanyInfo_CBS() = runBlocking {
+    fun insertCompanyInfo_getCompanyInfo_deleteCompanyInfo_confirmSuccess() = runBlocking {
 
+        // Create CompanyInfoModel
         val newCompanyInfo = companyInfoFactory.createCompanyInfo(
             id = "1",
             employees = UUID.randomUUID().toString(),
@@ -95,10 +74,21 @@ class CompanyInfoDaoServiceTests : BaseTest() {
             valuation = UUID.randomUUID().toString(),
         )
 
+        // Insert to fake database
         daoService.insert(newCompanyInfo)
 
+        // Get from fake database
         val companyInfoFromCache = daoService.getCompanyInfo()
-        assert(companyInfoFromCache == newCompanyInfo)
+
+        // Confirm what was inserted matches what was retrieved
+        assertEquals(companyInfoFromCache, newCompanyInfo)
+
+        // Delete data
+        daoService.deleteAll()
+
+        // Confirm table is empty
+        val emptyTable = daoService.getCompanyInfo()
+        assertTrue(emptyTable == null)
     }
 
 }
