@@ -7,6 +7,7 @@ object Versions {
     const val junit_jupiter_version = "5.6.0"
     const val mockk_version = "1.10.0"
     const val test_core = "1.4.0"
+    const val test_orchestrator = "1.4.1"
     const val test_runner = "1.4.0"
     const val test_arch_core = "2.1.0"
 

@@ -65,6 +65,9 @@ android {
         // Fix for mock issue on >= API 28
         packagingOptions.jniLibs.useLegacyPackaging = true
 
+        // Enable test orchestrator
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
         // To prevent textUtils error with espresso idling resource
         unitTests.isReturnDefaultValues = true
 
@@ -145,6 +148,7 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.idling_resource)
     androidTestImplementation(AndroidTestDependencies.kotlin_test)
     androidTestImplementation(AndroidTestDependencies.mockk_android)
+    androidTestUtil(AndroidTestDependencies.test_orchestrator)
     androidTestImplementation(AndroidTestDependencies.test_rules)
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)

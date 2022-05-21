@@ -3,13 +3,10 @@ package com.seancoyle.spacex.framework.presentation.launch
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -19,7 +16,6 @@ import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoC
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache.Companion.GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS
 import com.seancoyle.spacex.di.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
@@ -54,7 +50,6 @@ import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDial
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogTitleViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.recyclerViewMatcher
-import com.seancoyle.spacex.util.ToastMatcher
 import com.seancoyle.spacex.util.launchesFragmentTestHelper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -79,6 +74,7 @@ import kotlin.test.assertTrue
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
+    CompanyInfoModule::class,
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -125,13 +121,13 @@ class LaunchFragmentTests : BaseTest() {
     }
 
     private fun prepareDataSet() = runBlocking {
-        // clear any existing data so recyclerview isn't overwhelmed
-        launchCacheDataSource.deleteAll()
-        companyInfoCacheDataSource.deleteAll()
-
         // Get fake network data
         testLaunchList = launchRetrofitService.getLaunchList(launchOptions = launchOptions)
         testCompanyInfoList = companyInfoRetrofitService.getCompanyInfo()
+
+        // clear any existing data so recyclerview isn't overwhelmed
+        launchCacheDataSource.deleteAll()
+        companyInfoCacheDataSource.deleteAll()
 
         // Insert data to fake in memory room database
         launchCacheDataSource.insertLaunchList(testLaunchList)
@@ -290,7 +286,7 @@ class LaunchFragmentTests : BaseTest() {
     }
 
     @Test
-    fun filterLaunchItemsByInvalidYear_verifyNoResults_toastMessageDisplayedWithError() {
+    fun filterLaunchItemsByInvalidYear_verifyNoResults() {
         val year = "1000"
         val expectedFilterResults: List<LaunchModel>?
 
@@ -317,10 +313,6 @@ class LaunchFragmentTests : BaseTest() {
         }
 
         assertTrue(expectedFilterResults.isNullOrEmpty())
-
-        // Check toast is displayed with error message
-        onView(withText(GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS))
-            .inRoot(ToastMatcher()).check(matches(isDisplayed()))
 
     }
 

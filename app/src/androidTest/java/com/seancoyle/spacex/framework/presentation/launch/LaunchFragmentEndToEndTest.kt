@@ -3,11 +3,8 @@ package com.seancoyle.spacex.framework.presentation.launch
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -17,15 +14,16 @@ import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoC
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
+import com.seancoyle.spacex.di.CompanyInfoModule
 import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.spacex.framework.datasource.data.company.CompanyInfoDataFactory
-import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
+import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
+import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
+import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.*
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
@@ -65,6 +63,7 @@ const val HEADER_COUNT = 3
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
+    CompanyInfoModule::class,
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -80,12 +79,6 @@ class LaunchFragmentEndToEndTest : BaseTest() {
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
-
-    @Inject
-    lateinit var companyInfoDataFactory: CompanyInfoDataFactory
-
-    @Inject
     lateinit var launchCacheDataSource: LaunchCacheDataSource
 
     @Inject
@@ -97,6 +90,15 @@ class LaunchFragmentEndToEndTest : BaseTest() {
     @Inject
     lateinit var validLaunchYears: List<String>
 
+    @Inject
+    lateinit var launchRetrofitService: LaunchRetrofitService
+
+    @Inject
+    lateinit var companyInfoRetrofitService: CompanyInfoRetrofitService
+
+    @Inject
+    lateinit var launchOptions: LaunchOptions
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
 
@@ -104,17 +106,21 @@ class LaunchFragmentEndToEndTest : BaseTest() {
     fun init() {
         hiltRule.inject()
         Intents.init()
-        testLaunchList = launchDataFactory.produceListOfLaunches()
-        testCompanyInfoList = companyInfoDataFactory.produceCompanyInfo()
         prepareDataSet()
 
     }
 
     private fun prepareDataSet() = runBlocking {
+        // Get fake network data
+        testLaunchList = launchRetrofitService.getLaunchList(launchOptions = launchOptions)
+        testCompanyInfoList = companyInfoRetrofitService.getCompanyInfo()
+
         // clear any existing data so recyclerview isn't overwhelmed
         launchCacheDataSource.deleteAll()
-        launchCacheDataSource.insertLaunchList(testLaunchList)
         companyInfoCacheDataSource.deleteAll()
+
+        // Insert data to fake in memory room database
+        launchCacheDataSource.insertLaunchList(testLaunchList)
         companyInfoCacheDataSource.insert(testCompanyInfoList)
     }
 
@@ -263,7 +269,7 @@ class LaunchFragmentEndToEndTest : BaseTest() {
         }
 
 
-        /** filterLaunchItemsByInvalidYear_verifyNoResults_toastMessageDisplayedWithError */
+        /** filterLaunchItemsByInvalidYear_verifyNoResults*/
         year = "1000"
 
         launchesFragmentTestHelper {
@@ -288,10 +294,6 @@ class LaunchFragmentEndToEndTest : BaseTest() {
         }
 
         assertTrue(expectedFilterResults.isNullOrEmpty())
-
-        // Check toast is displayed with error message
-        Espresso.onView(ViewMatchers.withText(GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_NO_MATCHING_RESULTS))
-            .inRoot(ToastMatcher()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
 
         /** filterByLaunchStatusSuccess_verifyResultsAndDescOrderState */

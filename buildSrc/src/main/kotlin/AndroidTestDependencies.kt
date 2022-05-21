@@ -13,4 +13,5 @@ object AndroidTestDependencies{
     const val test_runner = "androidx.test:runner:${Versions.test_runner}"
     const val test_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
     const val test_arch_core = "androidx.arch.core:core-testing:${Versions.test_arch_core}"
+    const val test_orchestrator ="androidx.test:orchestrator:${Versions.test_orchestrator}"
 }
