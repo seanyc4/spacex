@@ -9,11 +9,12 @@ import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetwork
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
@@ -63,7 +64,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         // confirm the cache is empty to start
         cacheDataSource.deleteAll()
-        assert(cacheDataSource.getAll()?.isEmpty() == true)
+        assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
 
         // execute use case
         getLaunchListFromNetworkAndInsertToCache.execute(
@@ -82,10 +83,10 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         val results = cacheDataSource.getAll()
 
         // results should contain a list of launch items
-        assert(results?.isNotEmpty() == true)
+        assertTrue(results?.isNotEmpty() == true)
 
         // confirm they are actually LaunchModel objects
-        assert(results?.get(index = 0) is LaunchModel)
+        assertTrue(results?.get(index = 0) is LaunchModel)
 
     }
 

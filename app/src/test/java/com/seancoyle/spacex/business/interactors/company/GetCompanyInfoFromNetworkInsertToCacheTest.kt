@@ -9,11 +9,12 @@ import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetwo
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.spacex.di.CompanyDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
@@ -80,10 +81,10 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         val result = cacheDataSource.getCompanyInfo()
 
         // confirm the cache is no longer empty
-        assert(result != null)
+        assertTrue(result != null)
 
         // confirm the data is a CompanyInfoModel object
-        assert(result is CompanyInfoModel)
+        assertTrue(result is CompanyInfoModel)
 
     }
 
