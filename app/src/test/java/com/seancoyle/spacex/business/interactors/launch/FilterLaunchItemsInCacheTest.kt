@@ -313,9 +313,9 @@ class FilterLaunchItemsInCacheTest {
         assertTrue { launchList.isEmpty() }
 
         // confirm there are launch items in the cache
-        val notesInCache = cacheDataSource.getAll()
-        if (notesInCache != null) {
-            assertTrue { notesInCache.isNotEmpty() }
+        val launchItemsInCache = cacheDataSource.getAll()
+        if (launchItemsInCache != null) {
+            assertTrue { launchItemsInCache.isNotEmpty() }
         }
     }
 

@@ -50,12 +50,12 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE isLaunchSuccess = :isLaunchSuccess
+        WHERE isLaunchSuccess = :launchFilter
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
     suspend fun launchItemsWithSuccessOrderByYearDESC(
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -63,12 +63,12 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE isLaunchSuccess = :isLaunchSuccess
+        WHERE isLaunchSuccess = :launchFilter
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
     suspend fun launchItemsWithSuccessOrderByYearASC(
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -78,13 +78,13 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launchYear = :year
-        AND isLaunchSuccess = :isLaunchSuccess
+        AND isLaunchSuccess = :launchFilter
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
         year: String?,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -93,13 +93,13 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launchYear = :year
-        AND isLaunchSuccess = :isLaunchSuccess
+        AND isLaunchSuccess = :launchFilter
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
     suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
         year: String?,
-        isLaunchSuccess: Int?,
+        launchFilter: Int?,
         page: Int,
         pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -165,14 +165,14 @@ suspend fun LaunchDao.returnOrderedQuery(
 
         launchFilter != null && order.contains(LAUNCH_ORDER_DESC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearDESC(
-                isLaunchSuccess = launchFilter,
+                launchFilter = launchFilter,
                 page = page
             )
         }
 
         launchFilter != null && order.contains(LAUNCH_ORDER_ASC) && year.isNullOrEmpty() -> {
             return launchItemsWithSuccessOrderByYearASC(
-                isLaunchSuccess = launchFilter,
+                launchFilter = launchFilter,
                 page = page
             )
         }
@@ -194,14 +194,14 @@ suspend fun LaunchDao.returnOrderedQuery(
         !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_ASC) ->
             return searchLaunchItemsWithSuccessOrderByYearASC(
                 year = year,
-                isLaunchSuccess = launchFilter,
+                launchFilter = launchFilter,
                 page = page
             )
 
         !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_DESC) ->
             return searchLaunchItemsWithSuccessOrderByYearDESC(
                 year = year,
-                isLaunchSuccess = launchFilter,
+                launchFilter = launchFilter,
                 page = page
             )
 

@@ -3,20 +3,21 @@ package com.seancoyle.spacex.framework.datasource.cache.launch
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.model.launch.Rocket
-import com.seancoyle.spacex.di.AppModule
 import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -32,25 +33,13 @@ import org.junit.runners.MethodSorters
 import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-/*
-    LEGEND:
-    1. CBS = "Confirm by searching"
+const val PAGE_ALL = 100000
 
-    Test cases:
-    1. confirm launch database is empty to start (should be test data inserted from CacheTest.kt)
-    2. insert a launch, CBS
-    3. insert a list of launches, CBS
-    4. insert 1000 new launches, confirm db size increased
-    5. delete new launch, confirm deleted
-    6. delete list of launches, CBS
-
- */
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
@@ -68,11 +57,20 @@ class LaunchDaoServiceTests : BaseTest() {
     // system in test
     private lateinit var launchDaoService: LaunchDaoService
 
-    // dependencies
-    @Inject lateinit var dao: LaunchDao
-    @Inject lateinit var launchDataFactory: LaunchDataFactory
-    @Inject lateinit var launchFactory: LaunchFactory
-    @Inject lateinit var launchEntityMapper: LaunchEntityMapper
+    @Inject
+    lateinit var dao: LaunchDao
+
+    @Inject
+    lateinit var launchDataFactory: LaunchDataFactory
+
+    @Inject
+    lateinit var launchFactory: LaunchFactory
+
+    @Inject
+    lateinit var launchEntityMapper: LaunchEntityMapper
+
+    @Inject
+    lateinit var validLaunchYears: List<String>
 
     @Before
     fun setup() {
@@ -106,7 +104,7 @@ class LaunchDaoServiceTests : BaseTest() {
     }
 
     @Test
-    fun insertLaunchItem_CBS() = runBlocking {
+    fun insertLaunchItem_getLaunchItem_success() = runBlocking {
 
         val newLaunchItem = launchFactory.createLaunchItem(
             id = 1,
@@ -133,11 +131,11 @@ class LaunchDaoServiceTests : BaseTest() {
         launchDaoService.insert(newLaunchItem)
 
         val cachedLaunchItem = launchDaoService.getById(1)
-        assert(cachedLaunchItem == newLaunchItem)
+        assertEquals(cachedLaunchItem, newLaunchItem)
     }
 
     @Test
-    fun insertLaunchList_CBS() = runBlocking {
+    fun insertLaunchList_getLaunchItem_success() = runBlocking {
 
         val launchList = launchFactory.createLaunchListTest(
             num = 10,
@@ -231,6 +229,202 @@ class LaunchDaoServiceTests : BaseTest() {
         val searchResults = launchDaoService.getAll()
         assertFalse { searchResults == launchesToDelete }
     }
+
+    @Test
+    fun orderAllLaunchItemsByDateASC_confirm() = runBlocking {
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_ASC,
+            launchFilter = LAUNCH_SUCCESS,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderAscending(launchList = launchList)
+    }
+
+    @Test
+    fun orderAllLaunchItemsByDateDESC_confirm() = runBlocking {
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList = launchList)
+    }
+
+    @Test
+    fun filterLaunchItemsByYearAndDateOrderASC_success() = runBlocking {
+
+        val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = launchYear,
+            order = LAUNCH_ORDER_ASC,
+            launchFilter = null,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue { launchList.all { it.launchYear == launchYear } }
+        checkDateOrderAscending(launchList = launchList)
+    }
+
+    @Test
+    fun filterLaunchItemsByYearAndDateOrderDESC_success() = runBlocking {
+
+        val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = launchYear,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = null,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue { launchList.all { it.launchYear == launchYear } }
+        checkDateOrderDescending(launchList = launchList)
+    }
+
+    @Test
+    fun filterLaunchItemsByYear_noResultsFound() = runBlocking {
+
+        val launchYear = "1000"
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = launchYear,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = null,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(launchList?.isEmpty() == true)
+    }
+
+    @Test
+    fun filterLaunchItemsByLaunchStatus_launchSuccess() = runBlocking {
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_SUCCESS } }
+    }
+
+    @Test
+    fun filterLaunchItemsByLaunchStatus_launchFailed() = runBlocking {
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_FAILED,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_FAILED } }
+    }
+
+    @Test
+    fun filterLaunchItemsByLaunchStatus_launchAll() = runBlocking {
+
+        val allLaunchItems = launchDaoService.getAll()
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = null,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+        assertTrue { launchList.containsAll(allLaunchItems!!) }
+    }
+
+    @Test
+    fun filterLaunchItemsByLaunchStatus_unknown() = runBlocking {
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = null,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_UNKNOWN,
+            page = PAGE_ALL,
+        )
+
+        assertTrue(!launchList.isNullOrEmpty())
+        checkDateOrderDescending(launchList)
+        assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_UNKNOWN } }
+    }
+
+    @Test
+    fun filterLaunchItemsByLaunchStatus_noResultsFound() = runBlocking {
+        // Year set to 2006 as there were only launch failures that year
+        val year = "2006"
+
+        val launchList = launchDaoService.filterLaunchList(
+            year = year,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
+            page = PAGE_ALL,
+        )
+
+        // No items should be returned with a launchYear of 2006 and LAUNCH_SUCCESS
+        assertTrue { launchList?.isEmpty() == true }
+    }
+
+    @Test
+    fun filterLaunchItemsFail_noResultsFound() = runBlocking {
+        val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
+        val launchList = launchDaoService.filterLaunchList(
+            year = FORCE_SEARCH_LAUNCH_EXCEPTION,
+            order = LAUNCH_ORDER_DESC,
+            launchFilter = LAUNCH_SUCCESS,
+            page = PAGE_ALL,
+        )
+
+        assertTrue { launchList?.isEmpty() == true }
+
+        // confirm there are launch items in the cache
+        val launchItemsInCache = launchDaoService.getAll()
+        if (launchItemsInCache != null) {
+            assertTrue { launchItemsInCache.isNotEmpty() }
+        }
+    }
+
+
+    private fun checkDateOrderAscending(launchList: List<LaunchModel>) {
+        // Check the list and verify the date is less than the next index
+        for (item in 0..launchList.size.minus(2)) {
+            assertTrue(
+                launchList[item].launchDateLocalDateTime <=
+                        launchList[item.plus(1)].launchDateLocalDateTime
+            )
+        }
+    }
+
+    private fun checkDateOrderDescending(launchList: List<LaunchModel>) {
+        // Check the list and verify the date is greater than the next index
+        for (item in 0..launchList.size.minus(2)) {
+            assertTrue(
+                launchList[item].launchDateLocalDateTime >=
+                        launchList[item.plus(1)].launchDateLocalDateTime
+            )
+        }
+    }
+
 
 }
 
