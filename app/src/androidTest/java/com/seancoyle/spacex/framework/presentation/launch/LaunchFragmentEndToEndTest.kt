@@ -18,9 +18,8 @@ import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDa
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
-import com.seancoyle.spacex.di.AppModule
-import com.seancoyle.spacex.di.CompanyInfoModule
 import com.seancoyle.spacex.di.LaunchModule
+import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
@@ -66,8 +65,7 @@ const val HEADER_COUNT = 3
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
-    CompanyInfoModule::class,
-    AppModule::class
+    ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchFragmentEndToEndTest : BaseTest() {

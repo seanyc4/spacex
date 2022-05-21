@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions

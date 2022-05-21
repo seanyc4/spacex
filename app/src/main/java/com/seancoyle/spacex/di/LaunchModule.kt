@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.di
 
-import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.cache.implementation.launch.LaunchCacheDataSourceImpl
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
@@ -17,14 +16,16 @@ import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.Laun
 import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
 import com.seancoyle.spacex.framework.datasource.network.implementation.launch.LaunchRetrofitServiceImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.util.Constants
+import com.seancoyle.spacex.framework.datasource.network.model.launch.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+
+const val LAUNCH_OPTIONS_ROCKET = "rocket"
+const val LAUNCH_OPTIONS_SORT = "desc"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -58,15 +59,6 @@ object LaunchModule {
         retrofit: Retrofit
     ): LaunchApi {
         return retrofit.create(LaunchApi::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideLaunchRetrofitBuilder(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .build()
     }
 
     @Singleton
@@ -118,6 +110,28 @@ object LaunchModule {
     ): LaunchCacheDataSource {
         return LaunchCacheDataSourceImpl(
             daoService = daoService
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchOptions(): LaunchOptions {
+        return LaunchOptions(
+            options = Options(
+                populate = listOf(
+                    Populate(
+                        path = LAUNCH_OPTIONS_ROCKET,
+                        select = Select(
+                            name = 1,
+                            type =2
+                        )
+                    )
+                ),
+                sort = Sort(
+                    flight_number = LAUNCH_OPTIONS_SORT,
+                ),
+                limit =500
+            )
         )
     }
 

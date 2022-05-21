@@ -56,7 +56,6 @@ import kotlin.test.assertTrue
 @HiltAndroidTest
 @UninstallModules(
     LaunchModule::class,
-    AppModule::class,
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)

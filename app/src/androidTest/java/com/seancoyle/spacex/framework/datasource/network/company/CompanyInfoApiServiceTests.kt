@@ -27,9 +27,6 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @HiltAndroidTest
-@UninstallModules(
-    CompanyInfoModule::class
-)
 class CompanyInfoApiServiceTests : BaseTest() {
 
     @get:Rule(order = 0)

@@ -8,6 +8,7 @@ import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel
 import com.seancoyle.spacex.util.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
@@ -26,6 +27,21 @@ object TestModule {
 
     @Singleton
     @Provides
+    fun provideApplication(@ApplicationContext app: Context): HiltTestApplication {
+        return app as HiltTestApplication
+    }
+
+    @Singleton
+    @Provides
+    fun provideSpaceXDb(app: HiltTestApplication): Database {
+        return Room
+            .inMemoryDatabaseBuilder(app, Database::class.java)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Singleton
+    @Provides
     fun provideAndroidTestUtils(): AndroidTestUtils {
         return AndroidTestUtils(true)
     }
@@ -40,15 +56,6 @@ object TestModule {
                 LaunchViewModel.LAUNCH_PREFERENCES,
                 Context.MODE_PRIVATE
             )
-    }
-
-    @Singleton
-    @Provides
-    fun provideSpaceXDb(app: HiltTestApplication): Database {
-        return Room
-            .inMemoryDatabaseBuilder(app, Database::class.java)
-            .fallbackToDestructiveMigration()
-            .build()
     }
 
 }

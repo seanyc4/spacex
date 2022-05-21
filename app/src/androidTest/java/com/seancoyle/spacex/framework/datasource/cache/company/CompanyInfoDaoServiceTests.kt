@@ -41,8 +41,6 @@ import javax.inject.Inject
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @HiltAndroidTest
 @UninstallModules(
-    CompanyInfoModule::class,
-    AppModule::class,
     ProductionModule::class
 )
 class CompanyInfoDaoServiceTests : BaseTest() {

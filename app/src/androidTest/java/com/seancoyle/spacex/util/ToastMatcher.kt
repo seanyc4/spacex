@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.util
 
-import android.os.IBinder
 import android.view.WindowManager
 import androidx.test.espresso.Root
 import org.hamcrest.Description

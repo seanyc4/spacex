@@ -78,8 +78,7 @@ import kotlin.test.assertTrue
 @LargeTest
 @UninstallModules(
     LaunchModule::class,
-    CompanyInfoModule::class,
-    AppModule::class
+    ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchFragmentTests : BaseTest() {
