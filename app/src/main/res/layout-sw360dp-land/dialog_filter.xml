@@ -19,25 +19,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/search_query"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/year_input_layout"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:background="@color/textColorPrimary"
-        android:gravity="center_vertical|center"
-        android:hint="@string/year"
-        android:inputType="number"
-        android:maxLength="4"
-        android:maxLines="1"
-        android:textColor="@color/colorAccent"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginTop="@dimen/small_view_margins_8dp"
         android:textColorHint="@color/colorAccent"
-        android:textSize="@dimen/text_size_small"
+        app:hintTextColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="@+id/filter_title"
         app:layout_constraintStart_toStartOf="@+id/filter_title"
-        app:layout_constraintTop_toBottomOf="@+id/filter_title"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/filter_title">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:hint="@string/year"
+            android:inputType="number"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="@dimen/text_size_small"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <RadioGroup
         android:id="@+id/filter_group"
@@ -103,8 +110,8 @@
         android:id="@+id/apply_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_24sdp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/text_apply"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_subHeading"
@@ -115,27 +122,28 @@
         android:id="@+id/asc_desc_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/asc_desc"
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/filter_title"
-        app:layout_constraintTop_toBottomOf="@+id/search_query" />
+        app:layout_constraintTop_toBottomOf="@+id/year_input_layout" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/order_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/asc_desc_title"
-        app:layout_constraintStart_toStartOf="@+id/asc_desc_title"
-        app:layout_constraintTop_toBottomOf="@+id/asc_desc_title" />
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/asc_desc_title"
+        app:layout_constraintStart_toEndOf="@+id/asc_desc_title"
+        app:layout_constraintTop_toTopOf="@+id/asc_desc_title" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/launch_status_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_36sdp"
+        android:layout_marginStart="@dimen/_28sdp"
         android:text="@string/launch_status"
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/text_size_medium"

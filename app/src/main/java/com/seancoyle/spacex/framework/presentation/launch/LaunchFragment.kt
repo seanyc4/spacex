@@ -74,6 +74,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onPause() {
         super.onPause()
         saveLayoutManagerState()
+        viewModel.clearAllStateMessages()
     }
 
     private fun restoreInstanceState(savedInstanceState: Bundle?) {
