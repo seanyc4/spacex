@@ -15,7 +15,7 @@ import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_D
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.launch.LaunchEntityMapper
-import com.seancoyle.spacex.framework.datasource.data.launch.LaunchDataFactory
+import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

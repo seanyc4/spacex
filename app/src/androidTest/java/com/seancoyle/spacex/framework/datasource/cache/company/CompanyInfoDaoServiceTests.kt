@@ -50,7 +50,6 @@ class CompanyInfoDaoServiceTests : BaseTest() {
     @Inject
     lateinit var entityMapper: CompanyInfoEntityMapper
 
-
     @Before
     fun init() {
         hiltRule.inject()
