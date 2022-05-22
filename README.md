@@ -16,6 +16,7 @@ SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 
 * Clean Architecture
 * Coroutines
+* Datastore
 * Flows and channels
 * Glide
 * Hilt Dependency Injection
