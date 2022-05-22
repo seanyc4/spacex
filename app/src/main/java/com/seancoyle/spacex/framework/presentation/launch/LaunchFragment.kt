@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -111,6 +112,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         if (viewModel.getLaunchList() != null) {
             getTotalNumEntriesInLaunchCacheEvent()
             viewModel.refreshSearchQuery()
+        }
+        if(viewModel.getIsDialogFilterDisplayed() == true){
+            displayFilterDialog()
         }
     }
 
@@ -287,7 +291,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     private fun setListeners() {
         with(binding) {
             toolbar.filterBtn.setOnClickListener {
-                showFilterDialog()
+                viewModel.setIsDialogFilterDisplayed(true)
+                displayFilterDialog()
             }
         }
     }
@@ -339,11 +344,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
-    private fun showFilterDialog() {
+    private fun displayFilterDialog() {
 
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
+                .onDismiss { viewModel.setIsDialogFilterDisplayed(false) }
                 .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 

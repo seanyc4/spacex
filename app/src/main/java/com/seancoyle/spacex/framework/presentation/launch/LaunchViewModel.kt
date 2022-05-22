@@ -275,10 +275,7 @@ constructor(
 
     private fun getSearchQuery() = getCurrentViewStateOrNew().yearQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
-
-    fun getOrder(): String{
-        return getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_DESC
-    }
+    fun getOrder() = getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_DESC
 
     fun getFilter(): Int? {
         return if (getCurrentViewStateOrNew().launchFilter == LAUNCH_ALL) {
@@ -320,6 +317,14 @@ constructor(
         setViewState(update)
         saveFilter(filter?: LAUNCH_ALL)
     }
+
+    fun setIsDialogFilterDisplayed(isDisplayed: Boolean?) {
+        val update = getCurrentViewStateOrNew()
+        update.isDialogFilterDisplayed = isDisplayed
+        setViewState(update)
+    }
+
+    fun getIsDialogFilterDisplayed() = getCurrentViewStateOrNew().isDialogFilterDisplayed
 
     private fun saveOrder(order: String) {
         viewModelScope.launch {

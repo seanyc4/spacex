@@ -18,6 +18,7 @@ data class LaunchViewState(
     var numLaunchItemsInCache: Int? = null,
     var page: Int? = null,
     var isQueryExhausted: Boolean? = null,
+    var isDialogFilterDisplayed: Boolean? = null,
     var launchFilter: Int? = null,
     var order: String? = null,
     var yearQuery: String? = null,
