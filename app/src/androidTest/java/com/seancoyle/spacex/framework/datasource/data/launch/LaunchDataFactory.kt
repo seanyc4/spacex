@@ -1,48 +1,35 @@
 package com.seancoyle.spacex.framework.datasource.data.launch
 
-import android.app.Application
-import android.content.res.AssetManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.*
-import java.io.IOException
-import java.io.InputStream
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
+import com.seancoyle.spacex.util.JsonFileReader
 import java.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 
 @Singleton
 class LaunchDataFactory
 @Inject
 constructor(
-    private val application: Application,
+    private val jsonFileReader: JsonFileReader,
     private val factory: LaunchFactory
 ) {
 
     fun produceListOfLaunches(): List<LaunchModel> {
         return Gson()
             .fromJson(
-                getDataFromFile("launch_list.json"),
+                jsonFileReader.readJSONFromAsset("launch_list.json"),
                 object : TypeToken<List<LaunchModel>>() {}.type
             )
     }
 
-    private fun getDataFromFile(fileName: String): String? {
-        return readJSONFromAsset(fileName)
-    }
-
-    private fun readJSONFromAsset(fileName: String): String? {
-        val json: String? = try {
-            val inputStream: InputStream = (application.assets as AssetManager).open(fileName)
-            inputStream.bufferedReader().use { it.readText() }
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        return json
-    }
-
-    fun createSingleLaunch(
+    fun createLaunchItem(
         id: Int,
         launchDate: String,
         isLaunchSuccess: Int,
@@ -78,6 +65,39 @@ constructor(
         num = num,
         id = id
     )
+
+    fun createLaunchListTest(
+        num: Int,
+        id: Int?
+    ): List<LaunchModel> {
+        val list: ArrayList<LaunchModel> = ArrayList()
+        for (item in 0 until num) {
+            list.add(
+                createLaunchItem(
+                    id = id ?: UUID.randomUUID().hashCode(),
+                    launchDate = UUID.randomUUID().toString(),
+                    launchDateLocalDateTime = LocalDateTime.now(),
+                    isLaunchSuccess = LAUNCH_SUCCESS,
+                    launchSuccessIcon = R.drawable.ic_launch_success,
+                    launchYear = UUID.randomUUID().toString(),
+                    links = Links(
+                        missionImage = DEFAULT_LAUNCH_IMAGE,
+                        articleLink = "https://www.google.com",
+                        videoLink = "https://www.youtube.com",
+                        wikipedia = "https://www.wikipedia.com"
+                    ),
+                    missionName = UUID.randomUUID().toString(),
+                    rocket = Rocket(
+                        rocketNameAndType = UUID.randomUUID().toString()
+                    ),
+                    daysToFromTitle = UUID.randomUUID().hashCode(),
+                    launchDaysDifference = UUID.randomUUID().toString(),
+                    type = LaunchType.TYPE_LAUNCH
+                )
+            )
+        }
+        return list
+    }
 }
 
 

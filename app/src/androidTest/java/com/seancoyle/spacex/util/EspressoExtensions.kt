@@ -18,7 +18,6 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
-
 /**
  *  https://gist.github.com/reza-id/d7a5f0f93bdd8c445cfbacf915daa978
  *  https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/RecyclerViewMatcher.java
@@ -95,11 +94,7 @@ class RecyclerViewMatcher(val recyclerViewId: Int) {
                 resources = view?.resources
                 if (childView == null) {
                     val recyclerView = view?.rootView?.findViewById(recyclerViewId) as RecyclerView
-                    childView = if (recyclerView != null) {
-                        recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-                    } else {
-                        return false
-                    }
+                    childView = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
                 }
                 return if (targetViewId == -1) {
                     view === childView

@@ -21,7 +21,6 @@ import com.seancoyle.spacex.framework.datasource.network.model.launch.*
 import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
@@ -123,10 +122,13 @@ object TestLaunchModule {
     @Singleton
     @Provides
     fun provideLaunchDataFactory(
-        application: HiltTestApplication,
+        jsonFileReader: JsonFileReader,
         launchFactory: LaunchFactory
     ): LaunchDataFactory {
-        return LaunchDataFactory(application, launchFactory)
+        return LaunchDataFactory(
+            jsonFileReader = jsonFileReader,
+            factory = launchFactory
+        )
     }
 
     @Singleton

@@ -3,7 +3,6 @@ package com.seancoyle.spacex.framework.datasource.cache.launch
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.business.domain.model.launch.Links
@@ -64,9 +63,6 @@ class LaunchDaoServiceTests : BaseTest() {
     lateinit var launchDataFactory: LaunchDataFactory
 
     @Inject
-    lateinit var launchFactory: LaunchFactory
-
-    @Inject
     lateinit var launchEntityMapper: LaunchEntityMapper
 
     @Inject
@@ -106,7 +102,7 @@ class LaunchDaoServiceTests : BaseTest() {
     @Test
     fun insertLaunchItem_getLaunchItem_success() = runBlocking {
 
-        val newLaunchItem = launchFactory.createLaunchItem(
+        val newLaunchItem = launchDataFactory.createLaunchItem(
             id = 1,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
@@ -137,7 +133,7 @@ class LaunchDaoServiceTests : BaseTest() {
     @Test
     fun insertLaunchList_getLaunchItem_success() = runBlocking {
 
-        val launchList = launchFactory.createLaunchListTest(
+        val launchList = launchDataFactory.createLaunchListTest(
             num = 10,
             null
         )
@@ -153,7 +149,7 @@ class LaunchDaoServiceTests : BaseTest() {
         val currentNumLaunchItems = launchDaoService.getTotalEntries()
 
         // insert 1000 launch items
-        val launchList = launchFactory.createLaunchListTest(
+        val launchList = launchDataFactory.createLaunchListTest(
             num = 1000,
             null
         )
@@ -165,7 +161,7 @@ class LaunchDaoServiceTests : BaseTest() {
 
     @Test
     fun insertLaunch_deleteLaunch_confirmDeleted() = runBlocking {
-        val newLaunchItem = launchFactory.createLaunchItem(
+        val newLaunchItem = launchDataFactory.createLaunchItem(
             id = 2,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
@@ -198,7 +194,7 @@ class LaunchDaoServiceTests : BaseTest() {
 
     @Test
     fun deleteLaunchList_confirmDeleted() = runBlocking {
-        val launchList: ArrayList<LaunchModel> = ArrayList(launchDaoService.getAll())
+        val launchList: ArrayList<LaunchModel> = ArrayList(launchDaoService.getAll()!!)
 
         // select some random launch for deleting
         val launchesToDelete: ArrayList<LaunchModel> = ArrayList()

@@ -27,7 +27,7 @@ constructor(
             )
     }
 
-    fun getDataFromFile(fileName: String): String? {
+    private fun getDataFromFile(fileName: String): String? {
         return readJSONFromAsset(fileName)
     }
 
