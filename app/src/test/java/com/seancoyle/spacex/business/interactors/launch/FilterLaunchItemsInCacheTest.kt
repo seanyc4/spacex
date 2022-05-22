@@ -61,7 +61,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         checkDateOrderAscending(launchList)
     }
 
@@ -87,7 +87,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         checkDateOrderDescending(launchList)
     }
 
@@ -114,7 +114,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         assertTrue { launchList.all { it.launchYear == launchYear } }
         checkDateOrderAscending(launchList)
     }
@@ -168,7 +168,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         checkDateOrderDescending(launchList)
         assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_SUCCESS } }
     }
@@ -195,7 +195,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         checkDateOrderAscending(launchList)
         assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_FAILED } }
     }
@@ -255,7 +255,7 @@ class FilterLaunchItemsInCacheTest {
             }
         }
 
-        assertTrue(!launchList.isNullOrEmpty())
+        assertTrue(launchList.isNotEmpty())
         assertTrue { launchList.all { it.isLaunchSuccess == LAUNCH_UNKNOWN } }
 
     }

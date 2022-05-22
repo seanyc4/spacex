@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
@@ -19,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
-import kotlin.random.Random
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -62,7 +60,7 @@ class LaunchRetrofitServiceTests {
 
         val result = apiService.getLaunchList(launchOptions = launchOptions)
         assertTrue(result.isNotEmpty())
-        assertTrue(result[Random.nextInt(0, result.size)] is LaunchModel)
+
     }
 
 }
