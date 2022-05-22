@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.cache.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
@@ -33,7 +32,7 @@ import kotlin.test.assertTrue
 @UninstallModules(
     ProductionModule::class
 )
-class CompanyInfoDaoServiceTests : BaseTest() {
+class CompanyInfoDaoServiceTests {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

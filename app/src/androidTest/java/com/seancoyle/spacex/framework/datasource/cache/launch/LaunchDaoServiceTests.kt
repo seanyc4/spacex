@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.cache.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
@@ -48,7 +47,7 @@ const val PAGE_ALL = 100000
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class LaunchDaoServiceTests : BaseTest() {
+class LaunchDaoServiceTests {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

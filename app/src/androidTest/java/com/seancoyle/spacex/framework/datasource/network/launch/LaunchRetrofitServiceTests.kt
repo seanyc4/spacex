@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.di.ProductionModule
@@ -31,7 +30,7 @@ import kotlin.test.assertTrue
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
-class LaunchRetrofitServiceTests : BaseTest() {
+class LaunchRetrofitServiceTests {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

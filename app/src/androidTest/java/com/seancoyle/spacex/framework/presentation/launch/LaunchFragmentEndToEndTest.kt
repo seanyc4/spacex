@@ -7,7 +7,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
@@ -67,7 +66,7 @@ const val HEADER_COUNT = 3
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
-class LaunchFragmentEndToEndTest : BaseTest() {
+class LaunchFragmentEndToEndTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -131,10 +130,9 @@ class LaunchFragmentEndToEndTest : BaseTest() {
     fun generalEndToEndTest() {
 
         /** verifyTestDataIsVisible */
-        // Wait for LaunchFragment to come into view
-        waitViewShown(recyclerViewMatcher)
-
         launchesFragmentTestHelper {
+            // Wait for LaunchFragment to come into view
+            waitViewShown(recyclerViewMatcher)
             verifyCorrectTextIsDisplayed(
                 appTitleViewMatcher,
                 text = R.string.app_name

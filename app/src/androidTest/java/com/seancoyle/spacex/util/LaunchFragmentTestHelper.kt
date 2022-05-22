@@ -3,6 +3,8 @@ package com.seancoyle.spacex.util
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -27,6 +29,16 @@ fun launchesFragmentTestHelper(func: LaunchFragmentTestHelper.() -> Unit) =
 @ExperimentalCoroutinesApi
 @FlowPreview
 class LaunchFragmentTestHelper {
+
+    fun waitViewShown(matcher: Matcher<View>) {
+        val idlingResource: IdlingResource = ViewShownIdlingResource(matcher, isDisplayed())
+        try {
+            IdlingRegistry.getInstance().register(idlingResource)
+            Espresso.onView(withId(0)).check(ViewAssertions.doesNotExist())
+        } finally {
+            IdlingRegistry.getInstance().unregister(idlingResource)
+        }
+    }
 
     fun checkRecyclerItemsDaysSinceDisplaysCorrectly(
         expectedFilterResults: List<LaunchModel>,

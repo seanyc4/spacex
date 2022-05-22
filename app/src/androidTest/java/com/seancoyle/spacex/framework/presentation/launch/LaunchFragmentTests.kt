@@ -9,7 +9,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
@@ -78,7 +77,7 @@ import kotlin.test.assertTrue
     ProductionModule::class
 )
 @RunWith(AndroidJUnit4ClassRunner::class)
-class LaunchFragmentTests : BaseTest() {
+class LaunchFragmentTests {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -139,10 +138,10 @@ class LaunchFragmentTests : BaseTest() {
 
     @Test
     fun verifyTestDataIsVisible() {
-        // Wait for LaunchFragment to come into view
-        waitViewShown(recyclerViewMatcher)
 
         launchesFragmentTestHelper {
+            // Wait for LaunchFragment to come into view
+            waitViewShown(recyclerViewMatcher)
             verifyCorrectTextIsDisplayed(
                 appTitleViewMatcher,
                 text = R.string.app_name
