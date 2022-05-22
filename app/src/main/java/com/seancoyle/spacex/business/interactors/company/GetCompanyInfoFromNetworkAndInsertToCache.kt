@@ -61,7 +61,7 @@ constructor(
                 return DataState.error(
                     response = Response(
                         message = COMPANY_INFO_ERROR,
-                        uiComponentType = UIComponentType.Toast,
+                        uiComponentType = UIComponentType.Dialog,
                         messageType = MessageType.Error
                     ),
                     stateEvent = stateEvent
@@ -124,7 +124,7 @@ constructor(
 
     companion object {
         const val COMPANY_INFO_EMPTY = "No data returned from network."
-        const val COMPANY_INFO_ERROR = "Error updating company info from network.\n\nReason: Network error"
+        const val COMPANY_INFO_ERROR = "Please check your internet connection and try again.\n\nReason: Network error"
         const val COMPANY_INFO_INSERT_SUCCESS = "Successfully inserted company info from network."
         const val COMPANY_INFO_INSERT_FAILED = "Failed to insert company info from network."
     }

@@ -181,9 +181,6 @@ constructor(
         return getCurrentViewStateOrNew().isQueryExhausted ?: false
     }
 
-    // for debugging
-    fun getActiveJobs() = dataChannelManager.getActiveJobs()
-
     fun clearList() {
         val update = getCurrentViewStateOrNew()
         update.launchList = ArrayList()

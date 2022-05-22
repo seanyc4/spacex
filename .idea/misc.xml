@@ -22,6 +22,7 @@
         <entry key="..\:/Users/Sean/StudioProjects/Movies/app/src/main/res/layout/toolbar_movie_detail.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable-v24/empty_drawable.xml" value="0.182" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2005" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/app_icon.xml" value="0.16" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.1555" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/empty_drawable.xml" value="0.144" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/drawable/ic_filter_list.xml" value="0.1555" />
@@ -52,6 +53,8 @@
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/toolbar_home.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/toolbar_launch_fragment.xml" value="0.2546875" />
         <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/layout/toolbar_movie_detail.xml" value="0.2046875" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.16" />
+        <entry key="..\:/Users/Sean/StudioProjects/SpaceX/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.16" />
       </map>
     </option>
   </component>

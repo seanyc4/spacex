@@ -6,11 +6,9 @@ import androidx.room.*
 import com.seancoyle.spacex.framework.datasource.cache.typeconverters.LocalDateTimeTypeConverter
 import java.time.LocalDateTime
 
-@Entity(tableName = "launch")
+@Entity(tableName = "launch", primaryKeys = ["id", "missionName"])
 data class LaunchEntity(
 
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "id")
     val id: Int,
     val launchDate: String,
     @TypeConverters(LocalDateTimeTypeConverter::class)

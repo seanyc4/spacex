@@ -113,7 +113,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             getTotalNumEntriesInLaunchCacheEvent()
             viewModel.refreshSearchQuery()
         }
-        if(viewModel.getIsDialogFilterDisplayed() == true){
+        if (viewModel.getIsDialogFilterDisplayed() == true) {
             displayFilterDialog()
         }
     }
@@ -136,8 +136,10 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         super.onScrollStateChanged(recyclerView, newState)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                         val lastPosition = layoutManager.findLastVisibleItemPosition()
-                        if (lastPosition == listAdapter?.itemCount?.minus(1)) {
-                            viewModel.nextPage()
+                        if (listAdapter?.itemCount!! > 0) {
+                            if (lastPosition == listAdapter?.itemCount?.minus(1)) {
+                                viewModel.nextPage()
+                            }
                         }
                     }
                 })
@@ -171,8 +173,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                     GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
+                        filterLaunchItemsInCacheEvent()
                         getTotalNumEntriesInLaunchCacheEvent()
-                        searchLaunchDataFromCacheEvent()
                     }
 
                     FilterLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
@@ -198,11 +200,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         when (response.message) {
                             // Check cache for data if net connection fails
                             GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
-                                searchLaunchDataFromCacheEvent()
+                                getTotalNumEntriesInLaunchCacheEvent()
+                                filterLaunchItemsInCacheEvent()
                             }
 
                             GetLaunchListFromNetworkAndInsertToCache.LAUNCH_ERROR -> {
-                                searchLaunchDataFromCacheEvent()
+                                getTotalNumEntriesInLaunchCacheEvent()
+                                filterLaunchItemsInCacheEvent()
                             }
 
                             GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_INSERT_FAILED -> {
@@ -253,7 +257,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
-    private fun searchLaunchDataFromCacheEvent() {
+    private fun filterLaunchItemsInCacheEvent() {
         viewModel.setStateEvent(
             LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         )
@@ -271,11 +275,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     @Suppress("UNCHECKED_CAST")
     private fun submitList() {
-        listAdapter?.submitList(
-            viewModel.createLaunchData(
-                viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
-            ) as List<LaunchType>
-        )
+        if (viewModel.getLaunchList()?.isNotEmpty() == true) {
+            listAdapter?.submitList(
+                viewModel.createLaunchData(
+                    viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
+                ) as List<LaunchType>
+            )
+        }
     }
 
     private fun buildCompanyInfoString(companyInfo: CompanyInfoModel) = String.format(
@@ -310,12 +316,18 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         )
     }
 
+    private fun getCompanyInfoFromNetworkAndInsertToCacheEvent() {
+        viewModel.setStateEvent(
+            LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+        )
+    }
+
     private fun setupSwipeRefresh() {
         with(binding) {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 viewModel.clearQueryParameters()
-                getLaunchListFromNetworkAndInsertToCacheEvent()
+                getCompanyInfoFromNetworkAndInsertToCacheEvent()
             }
         }
     }

@@ -12,6 +12,7 @@
     <!-- Error Messages-->
     <string name="no_links">This launch event has no media links</string>
     <string name="error_links">Unable to load link</string>
+    <string name="no_internet">Please check your internet connection and try again</string>
 
     <!-- Bottom Action Sheet -->
     <string name="links">Links</string>

@@ -29,8 +29,6 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -96,6 +94,7 @@ dependencies {
     implementation(AndroidX.navigation_fragment)
     implementation(AndroidX.navigation_ui)
     kapt(AndroidX.lifecycle_compiler)
+    implementation(AndroidX.splash_screen)
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
@@ -117,20 +116,19 @@ dependencies {
     implementation(Kotlin.coroutines_android)
     implementation(Kotlin.datetime)
 
-    //debugImplementation(Square.leak_canary)
     implementation(MaterialDialogs.material_dialogs)
 
-    implementation(Square.ok_http)
+    //debugImplementation(Square.leak_canary)
+    implementation(Square.interceptor)
     testImplementation(Square.mock_web_server)
+    implementation(Square.ok_http)
     implementation(Square.retrofit)
     implementation(Square.retrofit_gson)
-    implementation(Square.interceptor)
 
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
     kapt(Room.room_compiler)
 
-    implementation(SplashScreen.splash_screen)
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)
 

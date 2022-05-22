@@ -120,7 +120,7 @@ constructor(
 
     companion object {
         const val LAUNCH_NETWORK_EMPTY = "No data returned from network."
-        const val LAUNCH_ERROR = "Error getting launch items from network.\n\nReason: Network error"
+        const val LAUNCH_ERROR = "Error updating launch items from network.\n\nReason: Network error"
         const val LAUNCH_INSERT_SUCCESS = "Successfully inserted launch items from network."
         const val LAUNCH_INSERT_FAILED = "Failed to insert launch items from network."
     }

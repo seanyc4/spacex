@@ -13,6 +13,12 @@ object AndroidX {
     private const val data_store_version = "1.0.0"
     const val data_store = "androidx.datastore:datastore-preferences:$data_store_version"
 
+    private const val desurgar_version = "1.1.5"
+    const val desurgar = "com.android.tools:desugar_jdk_libs:$desurgar_version"
+
+    const val fragment_version = "1.4.1"
+    const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
+
     const val navigation_version = "2.4.2"
     const val navigation_dynamic =
         "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
@@ -25,11 +31,8 @@ object AndroidX {
     const val lifecycle_saved_state = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     const val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:${lifecycle_version}"
 
-    const val fragment_version = "1.4.1"
-    const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
-
-    private const val desurgar_version = "1.1.5"
-    const val desurgar = "com.android.tools:desugar_jdk_libs:$desurgar_version"
+    private const val splash_version = "1.0.0-beta02"
+    const val splash_screen = "androidx.core:core-splashscreen:$splash_version"
 
 }
 
