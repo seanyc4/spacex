@@ -56,9 +56,6 @@ class GetCompanyInfoFromCache(
         const val GET_COMPANY_INFO_SUCCESS = "Successfully retrieved company info"
         const val GET_COMPANY_INFO_NO_MATCHING_RESULTS =
             "There is no company info that matches that query."
-        const val GET_COMPANY_INFO_FAILED = "Failed to retrieve company info."
-        const val GET_COMPANY_INFO_NO_DATA =
-            "Error getting company info from cache.\n\nReason: Cache data is null."
     }
 }
 

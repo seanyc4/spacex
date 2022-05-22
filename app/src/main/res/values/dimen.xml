@@ -14,6 +14,7 @@
     <dimen name="default_bottom_sheet_margin">@dimen/_10sdp</dimen>
     <dimen name="default_bottom_sheet_margin_tablet">@dimen/_7sdp</dimen>
     <dimen name="default_bottom_sheet_view_margin_tablet">@dimen/_70sdp</dimen>
+    <dimen name="default_bottom_sheet_view_margin_tablet_landscape">@dimen/_150sdp</dimen>
     <dimen name="default_bottom_sheet_margin_landscape">@dimen/_120sdp</dimen>
     <dimen name="small_view_margins_8dp">@dimen/_8sdp</dimen>
     <dimen name="scrollview_bottom_margin">80dp</dimen>

@@ -339,7 +339,7 @@ constructor(
     companion object {
 
         // Shared Preference Files:
-        const val LAUNCH_PREFERENCES: String = "com.seancoyle.spacex"
+        private const val LAUNCH_PREFERENCES: String = "com.seancoyle.spacex"
 
         // Shared Preference Keys
         const val LAUNCH_ORDER: String = "${LAUNCH_PREFERENCES}.LAUNCH_ORDER"

@@ -289,7 +289,7 @@ class LaunchFragmentTestHelper {
         )
     }
 
-    private fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
+    fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
         Espresso.onView(view).perform(
             scrollTo<LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withText(text))
@@ -309,8 +309,6 @@ class LaunchFragmentTestHelper {
 
         val appTitleViewMatcher: Matcher<View> = withId(R.id.toolbar_title)
         val filterButtonViewMatcher: Matcher<View> = withId(R.id.filter_btn)
-        val recyclerviewHeadingTitleMatcher: Matcher<View> = withId(R.id.section_title)
-        val companyInfoMatcher: Matcher<View> = withId(R.id.company_info)
         val recyclerViewMatcher: Matcher<View> = withId(R.id.rv_launch)
         val filterDialogViewMatcher: Matcher<View> = withId(R.id.filter_dialog_container)
         val filterYearViewMatcher: Matcher<View> = withId(R.id.year_query)

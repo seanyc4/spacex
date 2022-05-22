@@ -78,8 +78,6 @@ class MainActivity :
             }
 
             is None -> {
-                // This would be a good place to send to your Error Reporting
-                // software of choice (ex: Firebase crash reporting)
                 printLogDebug("onResponseReceived: ", response.message.orEmpty())
                 stateMessageCallback.removeMessageFromStack()
             }

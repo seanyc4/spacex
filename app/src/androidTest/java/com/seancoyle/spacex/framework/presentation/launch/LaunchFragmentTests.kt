@@ -141,7 +141,6 @@ class LaunchFragmentTests {
 
         launchesFragmentTestHelper {
             // Wait for LaunchFragment to come into view
-            waitViewShown(recyclerViewMatcher)
             verifyCorrectTextIsDisplayed(
                 appTitleViewMatcher,
                 text = R.string.app_name
@@ -323,6 +322,7 @@ class LaunchFragmentTests {
         val expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
+  //
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
@@ -585,7 +585,7 @@ class LaunchFragmentTests {
             "https://spaceflightnow.com/2022/03/19/spacex-stretches-rocket-reuse-record-with-another-starlink-launch/"
 
         launchesFragmentTestHelper {
-
+            waitViewShown(recyclerViewMatcher)
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
@@ -606,7 +606,7 @@ class LaunchFragmentTests {
         val videoLink = "https://youtu.be/0giA6VZOICs"
 
         launchesFragmentTestHelper {
-
+            waitViewShown(recyclerViewMatcher)
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
@@ -627,7 +627,6 @@ class LaunchFragmentTests {
         val wikiLink = "https://en.wikipedia.org/wiki/Starlink"
 
         launchesFragmentTestHelper {
-
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
@@ -647,6 +646,7 @@ class LaunchFragmentTests {
         val position = 24
 
         launchesFragmentTestHelper {
+            waitViewShown(recyclerViewMatcher)
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
@@ -663,6 +663,7 @@ class LaunchFragmentTests {
         val position = 13
 
         launchesFragmentTestHelper {
+            waitViewShown(recyclerViewMatcher)
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyViewIsNotVisible(bottomSheetArticleTitleViewMatcher)

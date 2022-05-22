@@ -69,8 +69,6 @@ class FilterLaunchItemsInCache(
         const val SEARCH_LAUNCH_SUCCESS = "Successfully retrieved list of launch items."
         const val SEARCH_LAUNCH_NO_MATCHING_RESULTS =
             "There are no launch items that match that query."
-        const val SEARCH_LAUNCH_FAILED = "Failed to retrieve the list of launch items."
-
     }
 }
 

@@ -7,8 +7,8 @@ import androidx.test.espresso.IdlingResource.ResourceCallback
 import androidx.test.espresso.ViewFinder
 import org.hamcrest.Matcher
 
-/*
-    Author: https://stackoverflow.com/questions/50628219/is-it-possible-to-use-espressos-idlingresource-to-wait-until-a-certain-view-app
+/**
+ * Author: https://stackoverflow.com/questions/50628219/is-it-possible-to-use-espressos-idlingresource-to-wait-until-a-certain-view-app
  */
 class ViewShownIdlingResource(
     private val viewMatcher: Matcher<View>,

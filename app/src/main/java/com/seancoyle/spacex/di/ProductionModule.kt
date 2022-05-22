@@ -2,13 +2,11 @@ package com.seancoyle.spacex.di
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.room.Room
 import com.seancoyle.spacex.business.datastore.AppDataStore
 import com.seancoyle.spacex.business.datastore.AppDataStoreManager
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.presentation.BaseApplication
-import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel.Companion.LAUNCH_PREFERENCES
 import com.seancoyle.spacex.util.AndroidTestUtils
 import dagger.Module
 import dagger.Provides

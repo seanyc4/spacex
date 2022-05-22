@@ -688,9 +688,7 @@ class LaunchFragmentEndToEndTest {
             verifyViewIsNotDisplayed(LaunchFragmentTestHelper.materialDialogViewMatcher)
         }
 
-
     }
-
 
     private suspend fun getFilteredLaunchItemsFromCache(
         year: String? = "",
