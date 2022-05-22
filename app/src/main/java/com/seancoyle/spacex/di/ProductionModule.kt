@@ -1,8 +1,11 @@
 package com.seancoyle.spacex.di
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.seancoyle.spacex.business.datastore.AppDataStore
+import com.seancoyle.spacex.business.datastore.AppDataStoreManager
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
 import com.seancoyle.spacex.framework.presentation.BaseApplication
 import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel.Companion.LAUNCH_PREFERENCES
@@ -35,6 +38,14 @@ object ProductionModule {
 
     @Singleton
     @Provides
+    fun provideDataStoreManager(
+        application: Application
+    ): AppDataStore {
+        return AppDataStoreManager(application)
+    }
+
+    @Singleton
+    @Provides
     fun provideSpaceXDb(app: BaseApplication): Database {
         return Room
             .databaseBuilder(app, Database::class.java, Database.DATABASE_NAME)
@@ -46,18 +57,6 @@ object ProductionModule {
     @Provides
     fun provideAndroidTestUtils(): AndroidTestUtils {
         return AndroidTestUtils(false)
-    }
-
-    @Singleton
-    @Provides
-    fun provideSharedPreferences(
-        application: BaseApplication
-    ): SharedPreferences {
-        return application
-            .getSharedPreferences(
-                LAUNCH_PREFERENCES,
-                Context.MODE_PRIVATE
-            )
     }
 
 }

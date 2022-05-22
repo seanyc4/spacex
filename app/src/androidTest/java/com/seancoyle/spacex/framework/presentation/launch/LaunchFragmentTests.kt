@@ -2,7 +2,6 @@ package com.seancoyle.spacex.framework.presentation.launch
 
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
@@ -14,6 +13,7 @@ import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.spacex.business.datastore.AppDataStore
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.di.*
@@ -110,11 +110,14 @@ class LaunchFragmentTests : BaseTest() {
     @Inject
     lateinit var launchOptions: LaunchOptions
 
+    @Inject
+    lateinit var dataStore: AppDataStore
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
 
     @Before
-    fun init(){
+    fun init() {
         hiltRule.inject()
         Intents.init()
         prepareDataSet()
@@ -645,13 +648,11 @@ class LaunchFragmentTests : BaseTest() {
         val position = 24
 
         launchesFragmentTestHelper {
-
             performRecyclerViewClick(recyclerViewMatcher, position)
             verifyViewIsDisplayed(bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
             performClick(bottomSheetCancelButtonViewMatcher)
             verifyViewIsNotDisplayed(bottomSheetViewMatcher)
-
         }
     }
 
@@ -704,11 +705,13 @@ class LaunchFragmentTests : BaseTest() {
 
     }
 
+    private fun clearDataStore() = runBlocking {
+        dataStore.clearData()
+    }
+
     @After
     fun teardown() {
-        launchesFragmentTestHelper {
-            clearSharedPreferences(ApplicationProvider.getApplicationContext())
-        }
+        clearDataStore()
         Intents.release()
     }
 }

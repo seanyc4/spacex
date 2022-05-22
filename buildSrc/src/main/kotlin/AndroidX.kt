@@ -3,11 +3,15 @@ import AndroidX.fragment_version
 import AndroidX.navigation_version
 
 object AndroidX {
-    private const val core_ktx_version = "1.7.0"
-    const val core_ktx = "androidx.core:core-ktx:$core_ktx_version"
 
     private const val app_compat_version = "1.4.1"
     const val app_compat = "androidx.appcompat:appcompat:$app_compat_version"
+
+    private const val core_ktx_version = "1.7.0"
+    const val core_ktx = "androidx.core:core-ktx:$core_ktx_version"
+
+    private const val data_store_version = "1.0.0"
+    const val data_store = "androidx.datastore:datastore-preferences:$data_store_version"
 
     const val navigation_version = "2.4.2"
     const val navigation_dynamic =

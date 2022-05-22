@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.di
 
-import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.BuildConfig
 import com.seancoyle.spacex.business.data.network.NetworkConstants.NETWORK_TIMEOUT
@@ -54,14 +53,6 @@ object AppModule {
             readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
             connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
         }
-
-    @Singleton
-    @Provides
-    fun provideSharedPrefsEditor(
-        sharedPreferences: SharedPreferences
-    ): SharedPreferences.Editor {
-        return sharedPreferences.edit()
-    }
 
     @Singleton
     @Provides

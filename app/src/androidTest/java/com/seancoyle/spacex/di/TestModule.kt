@@ -1,10 +1,11 @@
 package com.seancoyle.spacex.di
 
+import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.room.Room
+import com.seancoyle.spacex.business.datastore.AppDataStore
+import com.seancoyle.spacex.business.datastore.AppDataStoreManager
 import com.seancoyle.spacex.framework.datasource.cache.database.Database
-import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel
 import com.seancoyle.spacex.util.AndroidTestUtils
 import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module
@@ -34,6 +35,14 @@ object TestModule {
 
     @Singleton
     @Provides
+    fun provideDataStoreManager(
+        application: Application
+    ): AppDataStore {
+        return AppDataStoreManager(application)
+    }
+
+    @Singleton
+    @Provides
     fun provideSpaceXDb(app: HiltTestApplication): Database {
         return Room
             .inMemoryDatabaseBuilder(app, Database::class.java)
@@ -49,21 +58,9 @@ object TestModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(
-        application: HiltTestApplication
-    ): SharedPreferences {
-        return application
-            .getSharedPreferences(
-                LaunchViewModel.LAUNCH_PREFERENCES,
-                Context.MODE_PRIVATE
-            )
-    }
-
-    @Singleton
-    @Provides
-    fun providesJsonFileReader(application: HiltTestApplication): JsonFileReader{
+    fun providesJsonFileReader(application: HiltTestApplication): JsonFileReader {
         return JsonFileReader(
-            application =application
+            application = application
         )
     }
 

@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/search_query"
+        android:id="@+id/year_query"
         android:layout_width="0dp"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginTop="@dimen/_6sdp"
@@ -121,7 +121,7 @@
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/filter_title"
-        app:layout_constraintTop_toBottomOf="@+id/search_query" />
+        app:layout_constraintTop_toBottomOf="@+id/year_query" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/order_switch"

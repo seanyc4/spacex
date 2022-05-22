@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/filter_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_query"
+            android:id="@+id/year_query"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_35sdp"
             android:gravity="center_horizontal"

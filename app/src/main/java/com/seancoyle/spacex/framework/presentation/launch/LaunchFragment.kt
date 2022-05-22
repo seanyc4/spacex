@@ -265,6 +265,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         viewModel.retrieveNumLaunchItemsInCache()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun submitList() {
         listAdapter?.submitList(
             viewModel.createLaunchData(
@@ -387,21 +388,17 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         else -> null
                     }
 
-                val searchQuery = view.findViewById<EditText>(R.id.search_query).text.toString()
-
+                val yearQuery = view.findViewById<EditText>(R.id.year_query).text.toString()
 
                 // Save data to view model
                 viewModel.apply {
                     newOrder?.let { order ->
-                        saveOrder(order)
-                        setLaunchOrder(newOrder)
+                        setLaunchOrder(order)
                     }
                     newFilter?.let { filter ->
-                        saveFilter(filter)
-                        setLaunchFilter(newFilter)
+                        setLaunchFilter(filter)
                     }
-                    setQuery(searchQuery)
-
+                    setQuery(yearQuery)
                 }
 
                 startNewSearch()

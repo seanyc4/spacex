@@ -1,7 +1,8 @@
 package com.seancoyle.spacex.framework.presentation.launch
 
-import android.content.SharedPreferences
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
+import com.seancoyle.spacex.business.datastore.AppDataStore
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.company.CompanySummary
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
@@ -31,24 +32,20 @@ constructor(
     private val launchInteractors: LaunchInteractors,
     private val companyInfoInteractors: CompanyInfoInteractors,
     val launchOptions: LaunchOptions,
-    private val editor: SharedPreferences.Editor,
-    sharedPreferences: SharedPreferences
+    private val appDataStoreManager: AppDataStore,
 ) : BaseViewModel<LaunchViewState>() {
 
     init {
         setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
 
-        setLaunchOrder(
-            sharedPreferences.getString(
-                LAUNCH_ORDER, LAUNCH_ORDER_DESC,
+        // Get filter and order from datastore if available
+        // And update state accordingly
+        viewModelScope.launch {
+            setLaunchOrder(
+                appDataStoreManager.readStringValue(LAUNCH_ORDER)
             )
-        )
-
-        if (sharedPreferences.contains(LAUNCH_FILTER)) {
             setLaunchFilter(
-                sharedPreferences.getInt(
-                    LAUNCH_FILTER, LAUNCH_ALL
-                )
+                appDataStoreManager.readIntValue(LAUNCH_FILTER)
             )
         }
     }
@@ -199,7 +196,7 @@ constructor(
         setStateEvent(FilterLaunchItemsInCacheEvent())
         printLogDebug(
             "LaunchListViewModel",
-            "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}"
+            "loadFirstPage: ${getCurrentViewStateOrNew().yearQuery}"
         )
     }
 
@@ -276,7 +273,7 @@ constructor(
         return consolidatedList
     }
 
-    private fun getSearchQuery() = getCurrentViewStateOrNew().searchQuery ?: ""
+    private fun getSearchQuery() = getCurrentViewStateOrNew().yearQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
 
     fun getOrder(): String{
@@ -306,7 +303,7 @@ constructor(
 
     fun setQuery(query: String?) {
         val update = getCurrentViewStateOrNew()
-        update.searchQuery = query
+        update.yearQuery = query
         setViewState(update)
     }
 
@@ -314,23 +311,28 @@ constructor(
         val update = getCurrentViewStateOrNew()
         update.order = order
         setViewState(update)
-    }
-
-    fun saveOrder(order: String) {
-        editor.putString(LAUNCH_ORDER, order)
-        editor.apply()
+        saveOrder(order?: LAUNCH_ORDER_DESC)
     }
 
     fun setLaunchFilter(filter: Int?) {
         val update = getCurrentViewStateOrNew()
         update.launchFilter = filter
         setViewState(update)
+        saveFilter(filter?: LAUNCH_ALL)
     }
 
-    fun saveFilter(filter: Int) {
-        editor.putInt(LAUNCH_FILTER, filter)
-        editor.apply()
+    private fun saveOrder(order: String) {
+        viewModelScope.launch {
+            appDataStoreManager.setStringValue(LAUNCH_ORDER, order)
+        }
     }
+
+    private fun saveFilter(filter: Int) {
+        viewModelScope.launch {
+            appDataStoreManager.setIntValue(LAUNCH_FILTER, filter)
+        }
+    }
+
 
     companion object {
 

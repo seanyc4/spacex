@@ -2,7 +2,6 @@ package com.seancoyle.spacex.framework.presentation.launch
 
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -12,6 +11,7 @@ import com.seancoyle.spacex.BaseTest
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.spacex.business.datastore.AppDataStore
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.di.CompanyInfoModule
@@ -98,6 +98,9 @@ class LaunchFragmentEndToEndTest : BaseTest() {
 
     @Inject
     lateinit var launchOptions: LaunchOptions
+
+    @Inject
+    lateinit var dataStore: AppDataStore
 
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
@@ -705,11 +708,13 @@ class LaunchFragmentEndToEndTest : BaseTest() {
 
     }
 
+    private fun clearDataStore() = runBlocking {
+        dataStore.clearData()
+    }
+
     @After
     fun teardown() {
-        launchesFragmentTestHelper {
-            clearSharedPreferences(ApplicationProvider.getApplicationContext())
-        }
+        clearDataStore()
         Intents.release()
     }
 

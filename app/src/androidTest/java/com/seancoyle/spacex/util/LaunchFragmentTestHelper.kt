@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.util
 
-import android.content.Context
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.test.espresso.Espresso
@@ -13,7 +12,6 @@ import com.seancoyle.spacex.R
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
-import com.seancoyle.spacex.framework.presentation.launch.LaunchViewModel.Companion.LAUNCH_PREFERENCES
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -279,7 +277,7 @@ class LaunchFragmentTestHelper {
         )
     }
 
-    fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
+    private fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
         Espresso.onView(view).perform(
             scrollTo<LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withText(text))
@@ -295,17 +293,6 @@ class LaunchFragmentTestHelper {
         )
     }
 
-    fun clearSharedPreferences(context: Context) {
-        val preferences = context.getSharedPreferences(
-            LAUNCH_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
-        val editor = preferences.edit()
-        editor.clear()
-        editor.commit()
-    }
-
-
     companion object {
 
         val appTitleViewMatcher: Matcher<View> = withId(R.id.toolbar_title)
@@ -314,7 +301,7 @@ class LaunchFragmentTestHelper {
         val companyInfoMatcher: Matcher<View> = withId(R.id.company_info)
         val recyclerViewMatcher: Matcher<View> = withId(R.id.rv_launch)
         val filterDialogViewMatcher: Matcher<View> = withId(R.id.filter_dialog_container)
-        val filterYearViewMatcher: Matcher<View> = withId(R.id.search_query)
+        val filterYearViewMatcher: Matcher<View> = withId(R.id.year_query)
         val filterByYearTitleViewMatcher: Matcher<View> = withId(R.id.filter_title)
         val launchStatusTitleViewMatcher: Matcher<View> = withId(R.id.launch_status_title)
         val ascDescTitleViewMatcher: Matcher<View> = withId(R.id.asc_desc_title)

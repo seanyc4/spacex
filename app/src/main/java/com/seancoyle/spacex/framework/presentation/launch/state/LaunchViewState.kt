@@ -18,10 +18,9 @@ data class LaunchViewState(
     var numLaunchItemsInCache: Int? = null,
     var page: Int? = null,
     var isQueryExhausted: Boolean? = null,
-    var launchFilter: Int? = LAUNCH_ALL,
-    var filter: String? = null,
-    var order: String? = LAUNCH_ORDER_DESC,
-    var searchQuery: String? = null,
+    var launchFilter: Int? = null,
+    var order: String? = null,
+    var yearQuery: String? = null,
 
     ): Parcelable, ViewState
 

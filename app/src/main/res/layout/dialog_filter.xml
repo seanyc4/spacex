@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_query"
+            android:id="@+id/year_query"
             android:layout_width="@dimen/_116sdp"
             android:layout_height="@dimen/_35sdp"
             android:gravity="center_vertical|center"
@@ -49,7 +49,7 @@
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/filter_title"
-        app:layout_constraintTop_toBottomOf="@+id/search_query" />
+        app:layout_constraintTop_toBottomOf="@+id/year_query" />
 
     <RadioGroup
         android:id="@+id/filter_group"

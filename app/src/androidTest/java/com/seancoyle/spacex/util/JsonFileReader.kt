@@ -12,8 +12,7 @@ constructor(
     private val application: Application
 ) {
     fun readJSONFromAsset(fileName: String): String? {
-        var json: String? = null
-        json = try {
+        val json: String? = try {
             val inputStream: InputStream = (application.assets as AssetManager).open(fileName)
             inputStream.bufferedReader().use { it.readText() }
         } catch (ex: IOException) {

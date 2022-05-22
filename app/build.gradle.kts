@@ -86,6 +86,7 @@ dependencies {
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
+    implementation(AndroidX.data_store)
     coreLibraryDesugaring(AndroidX.desurgar)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
