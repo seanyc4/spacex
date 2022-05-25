@@ -16,6 +16,7 @@ import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
@@ -78,9 +79,6 @@ class LaunchFragmentEndToEndTest {
     lateinit var dateTransformer: DateTransformer
 
     @Inject
-    lateinit var validLaunchYears: List<String>
-
-    @Inject
     lateinit var launchRetrofitService: LaunchRetrofitService
 
     @Inject
@@ -92,14 +90,19 @@ class LaunchFragmentEndToEndTest {
     @Inject
     lateinit var dataStore: AppDataStore
 
+    @Inject
+    lateinit var launchDataFactory: LaunchDataFactory
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
+    lateinit var validLaunchYears: List<String>
 
     @Before
     fun init() {
         hiltRule.inject()
         Intents.init()
         prepareDataSet()
+        validLaunchYears = launchDataFactory.provideValidFilterYearDates()
 
     }
 

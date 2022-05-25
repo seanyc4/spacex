@@ -2,14 +2,11 @@ package com.seancoyle.spacex.framework.datasource.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
-import com.seancoyle.spacex.di.CompanyInfoModule
-import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -25,10 +22,6 @@ import javax.inject.Inject
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@UninstallModules(
-    CompanyInfoModule::class,
-    ProductionModule::class
-)
 @HiltAndroidTest
 class CompanyInfoApiServiceTests {
 

@@ -2,14 +2,12 @@ package com.seancoyle.spacex.framework.datasource.cache.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
-import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.company.CompanyInfoDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
 import com.seancoyle.spacex.framework.datasource.cache.mappers.company.CompanyInfoEntityMapper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -29,9 +27,6 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @HiltAndroidTest
-@UninstallModules(
-    ProductionModule::class
-)
 class CompanyInfoDaoServiceTests {
 
     @get:Rule(order = 0)

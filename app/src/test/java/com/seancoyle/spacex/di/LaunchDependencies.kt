@@ -6,6 +6,8 @@ import com.seancoyle.spacex.business.data.cache.launch.FakeLaunchCacheDataSource
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.launch.FakeLaunchNetworkDataSourceImpl
 import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.spacex.di.data.network.launch.LAUNCH_OPTIONS_ROCKET
+import com.seancoyle.spacex.di.data.network.launch.LAUNCH_OPTIONS_SORT
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
@@ -84,11 +86,6 @@ class LaunchDependencies {
         )
 
     }
-
-    fun provideValidFilterYearDates() = listOf(
-        "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
-        "2012", "2010", "2009", "2008", "2007", "2006"
-    ).shuffled()
 
 }
 

@@ -6,8 +6,6 @@ import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.spacex.business.domain.model.launch.Links
 import com.seancoyle.spacex.business.domain.model.launch.Rocket
-import com.seancoyle.spacex.di.LaunchModule
-import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
@@ -18,7 +16,6 @@ import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -41,10 +38,6 @@ const val PAGE_ALL = 100000
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
-@UninstallModules(
-    LaunchModule::class,
-    ProductionModule::class
-)
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class LaunchDaoServiceTests {
@@ -64,7 +57,6 @@ class LaunchDaoServiceTests {
     @Inject
     lateinit var launchEntityMapper: LaunchEntityMapper
 
-    @Inject
     lateinit var validLaunchYears: List<String>
 
     @Before
@@ -75,6 +67,7 @@ class LaunchDaoServiceTests {
             dao = dao,
             entityMapper = launchEntityMapper
         )
+        validLaunchYears = launchDataFactory.provideValidFilterYearDates()
     }
 
 

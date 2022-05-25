@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.seancoyle.spacex.business.datastore.AppDataStore
@@ -36,7 +35,7 @@ object TestModule {
     @Singleton
     @Provides
     fun provideDataStoreManager(
-        application: Application
+        application: HiltTestApplication
     ): AppDataStore {
         return AppDataStoreManager(application)
     }

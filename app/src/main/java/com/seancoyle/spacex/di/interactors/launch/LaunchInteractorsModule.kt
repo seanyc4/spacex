@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.spacex.di.interactors.launch
 
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource

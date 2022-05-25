@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.di.LaunchModule
 import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
@@ -23,10 +22,6 @@ import kotlin.test.assertTrue
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
-@UninstallModules(
-    LaunchModule::class,
-    ProductionModule::class
-)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchRetrofitServiceTests {
 

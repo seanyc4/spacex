@@ -28,11 +28,12 @@ class FilterLaunchItemsInCacheTest {
     private lateinit var filterLaunchItems: FilterLaunchItemsInCache
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private lateinit var cacheDataSource: LaunchCacheDataSource
-    private var validLaunchYears = launchDependencies.provideValidFilterYearDates()
+    lateinit var validLaunchYears: List<String>
 
     @BeforeEach
     fun init() {
         launchDependencies.build()
+        validLaunchYears = launchDependencies.launchDataFactory.provideValidFilterYearDates()
         cacheDataSource = launchDependencies.launchCacheDataSource
         filterLaunchItems = FilterLaunchItemsInCache(
             cacheDataSource = cacheDataSource

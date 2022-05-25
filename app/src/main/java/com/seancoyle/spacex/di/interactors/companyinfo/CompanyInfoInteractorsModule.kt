@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.spacex.di.interactors.companyinfo
 
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
