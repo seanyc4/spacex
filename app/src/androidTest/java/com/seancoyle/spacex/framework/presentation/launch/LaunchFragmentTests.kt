@@ -15,7 +15,6 @@ import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDa
 import com.seancoyle.spacex.business.datastore.AppDataStore
 import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.di.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
@@ -52,7 +51,6 @@ import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.recyclerView
 import com.seancoyle.spacex.util.launchesFragmentTestHelper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -71,11 +69,6 @@ import kotlin.test.assertTrue
 @FlowPreview
 @HiltAndroidTest
 @LargeTest
-@UninstallModules(
-    LaunchModule::class,
-    CompanyInfoModule::class,
-    ProductionModule::class
-)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LaunchFragmentTests {
 
