@@ -284,8 +284,10 @@ constructor(
     }
 
     fun clearQueryParameters() {
+        clearList()
         setQuery(null)
         setLaunchFilter(null)
+        setQueryExhausted(false)
         resetPage()
     }
 
