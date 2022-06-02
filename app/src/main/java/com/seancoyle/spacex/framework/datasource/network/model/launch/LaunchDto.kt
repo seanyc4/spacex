@@ -21,14 +21,16 @@ data class DocsDto(
     val launchDate: String?,
 
     @Expose
-    val links: LinksDto,
+    @SerializedName("links")
+    val links: LinksDto?,
 
     @Expose
     @SerializedName("name")
     val missionName: String?,
 
     @Expose
-    val rocket: RocketDto,
+    @SerializedName("rocket")
+    val rocket: RocketDto?,
 
     @Expose
     @SerializedName("success")
@@ -38,7 +40,8 @@ data class DocsDto(
 
 data class LinksDto(
     @Expose
-    val patch: PatchDto,
+    @SerializedName("patch")
+    val patch: PatchDto?,
 
     @Expose
     @SerializedName("article")
@@ -49,15 +52,18 @@ data class LinksDto(
     val videoLink: String?,
 
     @Expose
+    @SerializedName("wikipedia")
     val wikipedia: String?,
 
     )
 
 data class RocketDto(
     @Expose
+    @SerializedName("name")
     val name: String?,
 
     @Expose
+    @SerializedName("type")
     val type: String?,
 )
 

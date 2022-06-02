@@ -23,7 +23,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
         }
     }
 
-    val viewState: MutableLiveData<ViewState?>
+    val viewState: LiveData<ViewState?>
         get() = _viewState
 
     val shouldDisplayProgressBar: LiveData<Boolean>
