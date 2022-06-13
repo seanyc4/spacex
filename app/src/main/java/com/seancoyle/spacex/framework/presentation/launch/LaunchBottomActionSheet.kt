@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.Links
+import com.seancoyle.launch_domain.model.launch.Links
 import com.seancoyle.spacex.databinding.FragmentLaunchBottomActionSheetBinding
 import com.seancoyle.spacex.framework.presentation.common.gone
 import com.seancoyle.spacex.framework.presentation.common.viewBinding

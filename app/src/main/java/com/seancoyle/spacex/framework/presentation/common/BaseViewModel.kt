@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.framework.presentation.common
 
 import androidx.lifecycle.*
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.core.domain.state.*
 import com.seancoyle.spacex.business.data.util.GenericErrors
-import com.seancoyle.spacex.util.printLogDebug
+import com.seancoyle.core.domain.util.printLogDebug
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

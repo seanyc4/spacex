@@ -9,14 +9,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.viewbinding.ViewBinding
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.seancoyle.spacex.business.domain.state.*
-import com.seancoyle.spacex.business.domain.state.UIComponentType.*
+import com.seancoyle.core.domain.state.*
+import com.seancoyle.core.domain.state.UIComponentType.*
 import com.seancoyle.spacex.framework.presentation.common.displayToast
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
 import com.seancoyle.spacex.framework.presentation.common.gone
 import com.seancoyle.spacex.framework.presentation.common.visible
-import com.seancoyle.spacex.util.printLogDebug
+import com.seancoyle.core.domain.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

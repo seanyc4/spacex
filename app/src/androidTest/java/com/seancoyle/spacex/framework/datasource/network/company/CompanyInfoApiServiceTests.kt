@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper

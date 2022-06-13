@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di.domain.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module

@@ -82,6 +82,9 @@ android {
 
 dependencies {
 
+    implementation(project(Modules.core))
+    implementation(project(Modules.launchDomain))
+
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.data_store)

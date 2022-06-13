@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.cache.mappers.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.*
+import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.spacex.framework.datasource.cache.model.launch.LaunchEntity
 import com.seancoyle.spacex.framework.datasource.cache.model.launch.LinksEntity
 import com.seancoyle.spacex.framework.datasource.cache.model.launch.RocketEntity

@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.presentation
 
-import com.seancoyle.spacex.business.domain.state.Response
-import com.seancoyle.spacex.business.domain.state.StateMessageCallback
+import com.seancoyle.core.domain.state.Response
+import com.seancoyle.core.domain.state.StateMessageCallback
 
 
 interface UIController {

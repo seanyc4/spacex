@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.interactors.launch
 
 import com.seancoyle.spacex.business.data.cache.CacheResponseHandler
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.core.domain.state.*
 import com.seancoyle.spacex.business.data.util.safeCacheCall
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
 import kotlinx.coroutines.Dispatchers.IO

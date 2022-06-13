@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.business.data.cache
 
 import com.seancoyle.spacex.business.data.cache.CacheErrors.CACHE_DATA_NULL
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.core.domain.state.*
 
 
 abstract class CacheResponseHandler <ViewState, Data>(

@@ -3,7 +3,7 @@ package com.seancoyle.spacex.framework.datasource.data
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.*
+import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
 import com.seancoyle.spacex.util.JsonFileReader

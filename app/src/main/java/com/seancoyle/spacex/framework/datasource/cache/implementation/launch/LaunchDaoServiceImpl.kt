@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.cache.implementation.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.dao.launch.returnOrderedQuery

@@ -3,8 +3,8 @@ package com.seancoyle.spacex.business.interactors.company
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.network.company.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_ERROR
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.spacex.di.CompanyDependencies

@@ -3,8 +3,8 @@ package com.seancoyle.spacex.business.interactors.launch
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.launch.MockWebServerResponseLaunchList.launchList
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchFactory
+import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
 import com.seancoyle.spacex.business.interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies

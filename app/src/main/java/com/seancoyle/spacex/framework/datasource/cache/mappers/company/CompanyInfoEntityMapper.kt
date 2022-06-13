@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.cache.mappers.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.cache.model.company.CompanyInfoEntity
 
 class CompanyInfoEntityMapper {

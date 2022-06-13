@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.mappers.company
 
-import com.seancoyle.spacex.business.domain.model.company.*
+import com.seancoyle.launch_domain.model.company.*
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.model.company.CompanyInfoDto
 import javax.inject.Inject

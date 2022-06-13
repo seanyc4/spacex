@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.framework.presentation.launch.state
 
 import android.os.Parcelable
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.business.domain.state.ViewState
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.core.domain.state.ViewState
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

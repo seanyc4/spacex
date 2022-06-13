@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.mappers.launch
 
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.launch.*
+import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchDto

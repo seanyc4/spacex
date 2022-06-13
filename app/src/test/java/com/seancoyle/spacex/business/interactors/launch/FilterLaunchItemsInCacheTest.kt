@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.interactors.launch
 import com.seancoyle.spacex.business.data.cache.CacheErrors
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.cache.launch.FORCE_SEARCH_LAUNCH_EXCEPTION
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_NO_MATCHING_RESULTS
 import com.seancoyle.spacex.business.interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies

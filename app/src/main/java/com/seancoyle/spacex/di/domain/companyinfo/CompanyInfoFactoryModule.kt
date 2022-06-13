@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di.domain.companyinfo
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

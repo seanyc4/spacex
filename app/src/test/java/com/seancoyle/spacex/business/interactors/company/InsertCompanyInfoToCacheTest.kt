@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.interactors.company
 import com.seancoyle.spacex.business.data.cache.CacheErrors
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.spacex.business.data.cache.company.FORCE_NEW_COMPANY_INFO_EXCEPTION
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.business.interactors.company.InsertCompanyInfoToCache.Companion.INSERT_COMPANY_INFO_SUCCESS
 import com.seancoyle.spacex.di.CompanyDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent

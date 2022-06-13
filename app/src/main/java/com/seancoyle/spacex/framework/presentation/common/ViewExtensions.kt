@@ -3,7 +3,7 @@ package com.seancoyle.spacex.framework.presentation.common
 import android.app.Activity
 import android.view.View
 import android.widget.Toast
-import com.seancoyle.spacex.business.domain.state.StateMessageCallback
+import com.seancoyle.core.domain.state.StateMessageCallback
 
 fun View.visible() {
     visibility = View.VISIBLE

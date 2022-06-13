@@ -3,16 +3,16 @@ package com.seancoyle.spacex.framework.presentation.launch.adapter
 import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.*
-import com.seancoyle.spacex.business.domain.model.company.CompanySummary
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.business.domain.model.launch.LaunchType
-import com.seancoyle.spacex.business.domain.model.launch.Links
-import com.seancoyle.spacex.business.domain.model.launch.SectionTitle
+import com.seancoyle.launch_domain.model.company.CompanySummary
+import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchType
+import com.seancoyle.launch_domain.model.launch.Links
+import com.seancoyle.launch_domain.model.launch.SectionTitle
 import com.seancoyle.spacex.databinding.RvCompanyInfoItemBinding
 import com.seancoyle.spacex.databinding.RvLaunchItemBinding
 import com.seancoyle.spacex.databinding.RvSectionTitleItemBinding
 import com.seancoyle.spacex.framework.presentation.launch.glideLoadLaunchImage
-import com.seancoyle.spacex.util.printLogDebug
+import com.seancoyle.core.domain.util.printLogDebug
 
 class LaunchAdapter
 constructor(

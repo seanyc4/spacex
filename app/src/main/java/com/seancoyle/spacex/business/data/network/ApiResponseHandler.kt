@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.business.data.network
 
 import com.seancoyle.spacex.business.data.network.NetworkErrors.NETWORK_DATA_NULL
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.core.domain.state.*
 
 
 abstract class ApiResponseHandler <ViewState, Data>(

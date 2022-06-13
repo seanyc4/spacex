@@ -20,10 +20,10 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.business.domain.model.launch.LaunchType
-import com.seancoyle.spacex.business.domain.model.launch.Links
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.launch.LaunchType
+import com.seancoyle.launch_domain.model.launch.Links
+import com.seancoyle.core.domain.state.*
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromCache
 import com.seancoyle.spacex.business.interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
 import com.seancoyle.spacex.business.interactors.launch.GetAllLaunchItemsFromCache
@@ -38,7 +38,7 @@ import com.seancoyle.spacex.framework.presentation.common.viewBinding
 import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
 import com.seancoyle.spacex.framework.presentation.launch.state.*
 import com.seancoyle.spacex.util.AndroidTestUtils
-import com.seancoyle.spacex.util.printLogDebug
+import com.seancoyle.core.domain.util.printLogDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject

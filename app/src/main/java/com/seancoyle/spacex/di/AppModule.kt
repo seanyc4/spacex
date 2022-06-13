@@ -9,7 +9,7 @@ import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatt
 import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
-import com.seancoyle.spacex.util.Constants
+import com.seancoyle.core.domain.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

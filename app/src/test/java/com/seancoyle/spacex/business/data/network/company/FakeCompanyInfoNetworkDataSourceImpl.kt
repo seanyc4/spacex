@@ -2,7 +2,7 @@ package com.seancoyle.spacex.business.data.network.company
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
 import okhttp3.HttpUrl

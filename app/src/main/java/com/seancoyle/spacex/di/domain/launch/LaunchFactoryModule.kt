@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di.domain.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

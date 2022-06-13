@@ -5,10 +5,10 @@ import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoC
 import com.seancoyle.spacex.business.data.cache.company.FakeCompanyInfoCacheDataSourceImpl
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.network.company.FakeCompanyInfoNetworkDataSourceImpl
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
-import com.seancoyle.spacex.util.isUnitTest
+import com.seancoyle.core.domain.util.isUnitTest
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 

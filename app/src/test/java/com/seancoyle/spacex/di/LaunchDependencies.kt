@@ -5,14 +5,14 @@ import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDa
 import com.seancoyle.spacex.business.data.cache.launch.FakeLaunchCacheDataSourceImpl
 import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.launch.FakeLaunchNetworkDataSourceImpl
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.di.data.network.launch.LAUNCH_OPTIONS_ROCKET
 import com.seancoyle.spacex.di.data.network.launch.LAUNCH_OPTIONS_SORT
 import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.spacex.framework.datasource.network.model.launch.*
-import com.seancoyle.spacex.util.isUnitTest
+import com.seancoyle.core.domain.util.isUnitTest
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 import java.time.ZoneId

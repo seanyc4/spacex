@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.business.data.cache.company
 
 import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 
 const val FORCE_NEW_COMPANY_INFO_EXCEPTION = "FORCE_NEW_COMPANY_INFO_EXCEPTION"
 const val FORCE_GENERAL_FAILURE = "FORCE_GENERAL_FAILURE"

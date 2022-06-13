@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.business.data.cache.abstraction.launch
 
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchModel
 
 interface LaunchCacheDataSource {
 

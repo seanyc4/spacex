@@ -4,7 +4,7 @@ import com.seancoyle.spacex.business.data.cache.CacheErrors
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.spacex.business.data.cache.launch.FORCE_GENERAL_FAILURE
 import com.seancoyle.spacex.business.data.cache.launch.FORCE_NEW_LAUNCH_EXCEPTION
-import com.seancoyle.spacex.business.domain.model.launch.LaunchFactory
+import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.business.interactors.launch.InsertLaunchListToCache.Companion.INSERT_LAUNCH_LIST_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchStateEvent.*

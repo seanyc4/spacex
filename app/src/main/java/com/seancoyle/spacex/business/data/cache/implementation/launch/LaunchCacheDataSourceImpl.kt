@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.business.data.cache.implementation.launch
 
 import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
+import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import javax.inject.Inject
 import javax.inject.Singleton

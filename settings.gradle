@@ -9,4 +9,6 @@ dependencyResolutionManagement {
 
 rootProject.name='SpaceX'
 include ':app'
-
+include ':core'
+include ':launch'
+include ':launch:launch-domain'

@@ -1,6 +1,7 @@
 package com.seancoyle.spacex.util
 
 import androidx.test.espresso.IdlingRegistry
+import com.seancoyle.core.domain.util.printLogDebug
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 

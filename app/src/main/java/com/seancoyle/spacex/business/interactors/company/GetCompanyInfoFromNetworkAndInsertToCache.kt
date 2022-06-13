@@ -6,9 +6,9 @@ import com.seancoyle.spacex.business.data.network.ApiResponseHandler
 import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.util.safeApiCall
 import com.seancoyle.spacex.business.data.util.safeCacheCall
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
-import com.seancoyle.spacex.business.domain.state.*
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
+import com.seancoyle.core.domain.state.*
 import com.seancoyle.spacex.framework.presentation.launch.state.LaunchViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

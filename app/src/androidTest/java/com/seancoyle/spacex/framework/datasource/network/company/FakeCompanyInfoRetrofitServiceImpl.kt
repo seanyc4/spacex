@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
