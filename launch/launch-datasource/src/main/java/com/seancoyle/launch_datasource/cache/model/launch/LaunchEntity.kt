@@ -1,0 +1,40 @@
+package com.seancoyle.launch_datasource.cache.model.launch
+
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.room.*
+import com.seancoyle.launch_datasource.cache.typeconverters.LocalDateTimeTypeConverter
+import java.time.LocalDateTime
+
+@Entity(tableName = "launch", primaryKeys = ["id", "missionName"])
+data class LaunchEntity(
+
+    val id: Int,
+    val launchDate: String,
+    @TypeConverters(LocalDateTimeTypeConverter::class)
+    val launchDateLocalDateTime: LocalDateTime,
+    val isLaunchSuccess: Int?,
+    @DrawableRes
+    val launchSuccessIcon: Int,
+    val launchYear: String,
+    @Embedded
+    val links: LinksEntity,
+    val missionName: String,
+    @Embedded
+    val rocket: RocketEntity,
+    @StringRes
+    val daysToFromTitle: Int,
+    val launchDaysDifference: String
+)
+
+data class LinksEntity(
+    val missionImage: String,
+    val articleLink: String,
+    val videoLink: String,
+    val wikipedia: String,
+)
+
+data class RocketEntity(
+    val rocketNameAndType: String
+)
+

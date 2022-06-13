@@ -1,11 +1,11 @@
 package com.seancoyle.spacex.business.data.network.launch
 
 import com.google.gson.GsonBuilder
-import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
+import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.launch_datasource.network.api.launch.LaunchApi
+import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.launch_domain.model.launch.LaunchOptions
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

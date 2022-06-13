@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.spacex.R
 import com.seancoyle.launch_domain.model.launch.*
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
+import com.seancoyle.launch_datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_SUCCESS
 import com.seancoyle.spacex.util.JsonFileReader
 import java.time.LocalDateTime
 import java.util.*

@@ -1,10 +1,10 @@
 package com.seancoyle.spacex.business.data.network.company
 
 import com.google.gson.GsonBuilder
-import com.seancoyle.spacex.business.data.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
-import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
+import com.seancoyle.launch_datasource.network.api.company.CompanyInfoApi
+import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

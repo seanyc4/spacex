@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="SpaceX.app" target="11" />
+      <module name="spacex.buildSrc" target="11" />
+      <module name="spacex.buildSrc.main" target="11" />
+      <module name="spacex.buildSrc.test" target="11" />
+      <module name="SpaceX.core" target="11" />
+      <module name="SpaceX.launch.launch-datasource" target="11" />
+      <module name="SpaceX.launch.launch-domain" target="11" />
+      <module name="SpaceX.launch.launch-interactors" target="11" />
+      <module name="SpaceX.launch.launch-viewstate" target="11" />
+      <module name="SpaceX.launch.ui-launch" target="11" />
+      <module name="SpaceX.ui-base" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

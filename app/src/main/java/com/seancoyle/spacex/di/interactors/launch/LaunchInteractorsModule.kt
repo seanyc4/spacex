@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.di.interactors.launch
 
-import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.data.network.abstraction.launch.LaunchNetworkDataSource
+import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_domain.model.launch.LaunchFactory
-import com.seancoyle.spacex.business.interactors.launch.*
+import com.seancoyle.launch_interactors.launch.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

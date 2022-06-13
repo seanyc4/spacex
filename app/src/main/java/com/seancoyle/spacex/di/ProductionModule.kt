@@ -5,9 +5,9 @@ import android.content.Context
 import androidx.room.Room
 import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.core.datastore.AppDataStoreManager
-import com.seancoyle.spacex.framework.datasource.cache.database.Database
+import com.seancoyle.launch_datasource.cache.database.Database
 import com.seancoyle.spacex.framework.presentation.BaseApplication
-import com.seancoyle.spacex.util.AndroidTestUtils
+import com.seancoyle.ui_base.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

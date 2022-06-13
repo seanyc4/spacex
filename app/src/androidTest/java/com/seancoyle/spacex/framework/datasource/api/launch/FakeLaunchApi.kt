@@ -2,9 +2,9 @@ package com.seancoyle.spacex.framework.datasource.api.launch
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.spacex.framework.datasource.network.api.launch.LaunchApi
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchDto
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.launch_datasource.network.api.launch.LaunchApi
+import com.seancoyle.launch_datasource.network.model.launch.LaunchDto
+import com.seancoyle.launch_domain.model.launch.LaunchOptions
 import com.seancoyle.spacex.util.JsonFileReader
 import javax.inject.Singleton
 

@@ -4,7 +4,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
+import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

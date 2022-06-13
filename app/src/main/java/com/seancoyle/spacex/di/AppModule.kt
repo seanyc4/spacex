@@ -2,13 +2,13 @@ package com.seancoyle.spacex.di
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.spacex.BuildConfig
-import com.seancoyle.spacex.business.data.network.NetworkConstants.NETWORK_TIMEOUT
-import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
-import com.seancoyle.spacex.framework.datasource.cache.implementation.datetransformer.DateTransformerImpl
-import com.seancoyle.spacex.framework.datasource.network.abstraction.dateformatter.DateFormatter
-import com.seancoyle.spacex.framework.datasource.network.abstraction.numberformatter.NumberFormatter
-import com.seancoyle.spacex.framework.datasource.network.implementation.dateformatter.DateFormatterImpl
-import com.seancoyle.spacex.framework.datasource.network.implementation.numberformatter.NumberFormatterImpl
+import com.seancoyle.launch_datasource.network.NetworkConstants.NETWORK_TIMEOUT
+import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
+import com.seancoyle.launch_datasource.network.implementation.datetransformer.DateTransformerImpl
+import com.seancoyle.launch_datasource.network.abstraction.dateformatter.DateFormatter
+import com.seancoyle.launch_datasource.network.abstraction.numberformatter.NumberFormatter
+import com.seancoyle.launch_datasource.network.implementation.dateformatter.DateFormatterImpl
+import com.seancoyle.launch_datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.core.domain.util.Constants
 import dagger.Module
 import dagger.Provides

@@ -12,9 +12,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.spacex.R
 import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
+import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
-import com.seancoyle.spacex.framework.presentation.launch.adapter.LaunchAdapter
+import com.seancoyle.ui_launch.adapter.LaunchAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.CoreMatchers
@@ -230,7 +230,7 @@ class LaunchFragmentTestHelper {
         position: Int
     ) = apply {
         Espresso.onView(view).perform(
-            RecyclerViewActions.actionOnItemAtPosition<LaunchAdapter.LaunchViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<com.seancoyle.ui_launch.adapter.LaunchAdapter.LaunchViewHolder>(
                 position,
                 ViewActions.click()
             )
@@ -291,7 +291,7 @@ class LaunchFragmentTestHelper {
 
     fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
         Espresso.onView(view).perform(
-            scrollTo<LaunchAdapter.LaunchViewHolder>(
+            scrollTo<com.seancoyle.ui_launch.adapter.LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withText(text))
             )
         )
@@ -299,7 +299,7 @@ class LaunchFragmentTestHelper {
 
     fun scrollToRecyclerViewItemWithId(view: Matcher<View>, id: Int) = apply {
         Espresso.onView(view).perform(
-            scrollTo<LaunchAdapter.LaunchViewHolder>(
+            scrollTo<com.seancoyle.ui_launch.adapter.LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withId(id))
             )
         )

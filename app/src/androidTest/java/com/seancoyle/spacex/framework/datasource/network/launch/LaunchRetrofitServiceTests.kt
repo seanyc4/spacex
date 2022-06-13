@@ -1,14 +1,12 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.di.ProductionModule
 import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.launch_domain.model.launch.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking

@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.core.datastore.AppDataStoreManager
-import com.seancoyle.spacex.framework.datasource.cache.database.Database
-import com.seancoyle.spacex.util.AndroidTestUtils
+import com.seancoyle.launch_datasource.cache.database.Database
+import com.seancoyle.ui_base.AndroidTestUtils
 import com.seancoyle.spacex.util.JsonFileReader
 import dagger.Module
 import dagger.Provides

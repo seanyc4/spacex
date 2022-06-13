@@ -2,8 +2,8 @@ package com.seancoyle.spacex.framework.datasource.api.company
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.spacex.framework.datasource.network.api.company.CompanyInfoApi
-import com.seancoyle.spacex.framework.datasource.network.model.company.CompanyInfoDto
+import com.seancoyle.launch_datasource.network.api.company.CompanyInfoApi
+import com.seancoyle.launch_datasource.network.model.company.CompanyInfoDto
 import com.seancoyle.spacex.util.JsonFileReader
 import javax.inject.Singleton
 
