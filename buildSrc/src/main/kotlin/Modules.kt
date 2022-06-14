@@ -9,4 +9,5 @@ object Modules {
     const val launchInteractors = ":launch:launch-interactors"
     const val launchViewState = ":launch:launch-viewstate"
     const val uiBase = ":ui-base"
+    const val uiLaunch = ":launch:ui-launch"
 }

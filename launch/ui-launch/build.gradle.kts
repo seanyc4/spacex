@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -77,6 +77,7 @@ android {
 
 dependencies {
 
+    implementation(project(Modules.constants))
     implementation(project(Modules.core))
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))
@@ -111,6 +112,8 @@ dependencies {
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)
+    androidTestImplementation(HiltTest.hilt_android_testing)
+    kaptAndroidTest(Hilt.compiler)
 
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)

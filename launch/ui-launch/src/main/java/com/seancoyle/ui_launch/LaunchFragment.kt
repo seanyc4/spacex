@@ -35,7 +35,7 @@ import com.seancoyle.ui_launch.adapter.LaunchAdapter
 import com.seancoyle.core.domain.util.printLogDebug
 import com.seancoyle.ui_launch.state.LaunchStateEvent
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.ui_base.BaseFragment
+import com.seancoyle.ui_launch.common.BaseFragment
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*

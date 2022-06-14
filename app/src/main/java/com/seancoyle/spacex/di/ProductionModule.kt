@@ -7,7 +7,7 @@ import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.core.datastore.AppDataStoreManager
 import com.seancoyle.launch_datasource.cache.database.Database
 import com.seancoyle.spacex.framework.presentation.BaseApplication
-import com.seancoyle.ui_base.AndroidTestUtils
+import com.seancoyle.ui_launch.common.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

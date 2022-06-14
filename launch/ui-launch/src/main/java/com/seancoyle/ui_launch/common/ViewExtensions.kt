@@ -1,4 +1,4 @@
-package com.seancoyle.ui_base
+package com.seancoyle.core
 
 import android.app.Activity
 import android.view.View

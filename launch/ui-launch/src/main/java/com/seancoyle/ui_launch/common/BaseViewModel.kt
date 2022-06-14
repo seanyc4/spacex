@@ -1,4 +1,4 @@
-package com.seancoyle.ui_base
+package com.seancoyle.ui_launch.common
 
 import androidx.lifecycle.*
 import com.seancoyle.constants.GenericErrors

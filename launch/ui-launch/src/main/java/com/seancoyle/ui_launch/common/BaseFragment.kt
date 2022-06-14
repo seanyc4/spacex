@@ -1,4 +1,4 @@
-package com.seancoyle.ui_base
+package com.seancoyle.ui_launch.common
 
 import android.content.Context
 import android.os.Bundle
@@ -30,10 +30,10 @@ constructor(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        setUIController(null) // null in production
+        setUIController(null, context) // null in production
     }
 
-    fun setUIController(mockController: UIController?) {
+    fun setUIController(mockController: UIController?, context: Context) {
 
         // TEST: Set interface from mock
         if (mockController != null) {
@@ -41,7 +41,7 @@ constructor(
         } else { // PRODUCTION: if no mock, get from context
             activity?.let {
                 try {
-                    uiController = requireActivity() as UIController
+                    uiController = context as UIController
                 } catch (e: ClassCastException) {
                     e.printStackTrace()
                 }

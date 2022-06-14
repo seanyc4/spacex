@@ -3,7 +3,6 @@ plugins {
     kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
@@ -87,6 +86,8 @@ dependencies {
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))
     implementation(project(Modules.launchInteractors))
+    implementation(project(Modules.launchViewState))
+    implementation(project(Modules.uiLaunch))
     implementation(project(Modules.uiBase))
 
     implementation(AndroidX.app_compat)
