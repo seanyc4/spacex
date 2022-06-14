@@ -8,7 +8,7 @@ import com.seancoyle.spacex.business.data.network.company.FakeCompanyInfoNetwork
 import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.launch_datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
-import com.seancoyle.core.domain.util.isUnitTest
+import com.seancoyle.core.util.isUnitTest
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 

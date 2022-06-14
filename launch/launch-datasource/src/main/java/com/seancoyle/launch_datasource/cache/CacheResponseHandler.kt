@@ -1,7 +1,7 @@
 package com.seancoyle.launch_datasource.cache
 
+import com.seancoyle.core.state.*
 import com.seancoyle.launch_datasource.cache.CacheErrors.CACHE_DATA_NULL
-import com.seancoyle.core.domain.state.*
 
 
 abstract class CacheResponseHandler <ViewState, Data>(

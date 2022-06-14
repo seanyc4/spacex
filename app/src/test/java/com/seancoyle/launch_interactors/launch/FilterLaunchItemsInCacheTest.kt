@@ -7,13 +7,12 @@ import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.launch_interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_NO_MATCHING_RESULTS
 import com.seancoyle.launch_interactors.launch.FilterLaunchItemsInCache.Companion.SEARCH_LAUNCH_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_ASC
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_FAILED
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_SUCCESS
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_UNKNOWN
-import com.seancoyle.ui_launch.state.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test

@@ -25,7 +25,9 @@ android {
 dependencies {
     implementation(project(Modules.constants))
     implementation(project(Modules.core))
+    implementation(project(Modules.database))
     implementation(project(Modules.launchDomain))
+
     coreLibraryDesugaring(AndroidX.desurgar)
 
     implementation(Hilt.android)

@@ -1,7 +1,7 @@
 package com.seancoyle.launch_datasource.network
 
+import com.seancoyle.core.state.*
 import com.seancoyle.launch_datasource.network.NetworkErrors.NETWORK_DATA_NULL
-import com.seancoyle.core.domain.state.*
 
 
 abstract class ApiResponseHandler <ViewState, Data>(

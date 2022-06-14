@@ -14,8 +14,8 @@ import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_ASC
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService

@@ -4,7 +4,6 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
-    kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
 
 android {
@@ -55,7 +54,7 @@ android {
     }
 
     testOptions {
-        // Fix for mock issue on >= API 28
+        // Fix for espresso issue on >= API 28
         packagingOptions.jniLibs.useLegacyPackaging = true
 
         // Enable test orchestrator
@@ -77,9 +76,8 @@ android {
 
 dependencies {
 
-    implementation(project(Modules.constants))
     implementation(project(Modules.core))
-    implementation(project(Modules.launchDataSource))
+    implementation(project(Modules.constants))
     implementation(project(Modules.launchDomain))
     implementation(project(Modules.launchInteractors))
     implementation(project(Modules.uiBase))
@@ -97,7 +95,6 @@ dependencies {
     implementation(AndroidX.navigation_fragment)
     implementation(AndroidX.navigation_ui)
     kapt(AndroidX.lifecycle_compiler)
-    implementation(AndroidX.splash_screen)
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 

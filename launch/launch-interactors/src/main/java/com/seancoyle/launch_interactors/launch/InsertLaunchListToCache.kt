@@ -1,6 +1,6 @@
 package com.seancoyle.launch_interactors.launch
 
-import com.seancoyle.core.domain.state.*
+import com.seancoyle.core.state.*
 import com.seancoyle.launch_datasource.cache.CacheResponseHandler
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_datasource.util.safeCacheCall

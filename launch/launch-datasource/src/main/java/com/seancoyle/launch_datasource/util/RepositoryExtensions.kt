@@ -1,6 +1,6 @@
 package com.seancoyle.launch_datasource.util
 
-import com.seancoyle.constants.GenericErrors.ERROR_UNKNOWN
+import com.seancoyle.core.util.GenericErrors.ERROR_UNKNOWN
 import com.seancoyle.launch_datasource.cache.CacheConstants.CACHE_TIMEOUT
 import com.seancoyle.launch_datasource.cache.CacheErrors.CACHE_ERROR_TIMEOUT
 import com.seancoyle.launch_datasource.cache.CacheErrors.CACHE_ERROR_UNKNOWN

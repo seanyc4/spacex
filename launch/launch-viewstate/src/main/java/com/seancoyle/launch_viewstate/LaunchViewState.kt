@@ -1,9 +1,9 @@
 package com.seancoyle.launch_viewstate
 
 import android.os.Parcelable
+import com.seancoyle.core.state.ViewState
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.core.domain.state.ViewState
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

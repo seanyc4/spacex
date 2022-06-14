@@ -1,5 +1,9 @@
 package com.seancoyle.launch_datasource.network.mappers.launch
 
+import com.seancoyle.constants.LaunchNetworkMapperConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch_datasource.R
 import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.launch_datasource.network.abstraction.dateformatter.DateFormatter
@@ -7,13 +11,6 @@ import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateT
 import com.seancoyle.launch_datasource.network.model.launch.LaunchDto
 import java.time.LocalDateTime
 import javax.inject.Inject
-
-const val DEFAULT_LAUNCH_IMAGE = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png"
-const val LAUNCH_UNKNOWN = 0
-const val LAUNCH_FAILED = 1
-const val LAUNCH_SUCCESS = 2
-const val LAUNCH_ALL = 3
-const val LAUNCH_EXCEPTION = -1
 
 class LaunchNetworkMapper
 @Inject

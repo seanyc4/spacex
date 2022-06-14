@@ -2,6 +2,8 @@ package com.seancoyle.ui_launch
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
 import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.company.CompanySummary
@@ -9,15 +11,13 @@ import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.launch_domain.model.launch.LaunchType
 import com.seancoyle.launch_domain.model.launch.SectionTitle
 import com.seancoyle.launch_interactors.launch.LaunchInteractors
-import com.seancoyle.core.domain.state.*
+import com.seancoyle.core.state.*
 import com.seancoyle.launch_interactors.company.CompanyInfoInteractors
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_ALL
 import com.seancoyle.launch_domain.model.launch.LaunchOptions
 import com.seancoyle.ui_launch.state.LaunchStateEvent.*
-import com.seancoyle.core.domain.util.printLogDebug
+import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.ui_launch.common.BaseViewModel
+import com.seancoyle.ui_base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow

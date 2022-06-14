@@ -39,10 +39,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-
-        // Enable Java 8 time below api 26
-        isCoreLibraryDesugaringEnabled = true
-
     }
 
     kotlinOptions {
@@ -81,8 +77,8 @@ android {
 
 dependencies {
 
-
     implementation(project(Modules.core))
+    implementation(project(Modules.database))
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))
     implementation(project(Modules.launchInteractors))
@@ -92,8 +88,7 @@ dependencies {
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
-    implementation(AndroidX.data_store)
-    coreLibraryDesugaring(AndroidX.desurgar)
+
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)
@@ -106,36 +101,20 @@ dependencies {
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
-    implementation(Glide.glide)
-    kapt(Glide.glide_compiler)
-
-    implementation(Google.constraint_layout)
-    implementation(Google.card_view)
-    implementation(Google.material)
-    implementation(Google.recycler_view)
-    implementation(Google.swipe_refresh_layout)
-
     implementation(Hilt.android)
     kapt(Hilt.compiler)
     androidTestImplementation(HiltTest.hilt_android_testing)
     kaptAndroidTest(Hilt.compiler)
 
-    implementation(Kotlin.coroutines_core)
-    implementation(Kotlin.coroutines_android)
-    implementation(Kotlin.datetime)
-
     implementation(MaterialDialogs.material_dialogs)
 
     //debugImplementation(Square.leak_canary)
-    implementation(Square.interceptor)
-    testImplementation(Square.mock_web_server)
-    implementation(Square.ok_http)
-    implementation(Square.retrofit)
-    implementation(Square.retrofit_gson)
 
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
     kapt(Room.room_compiler)
+
+    implementation(Room.room_ktx)
 
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)

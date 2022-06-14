@@ -7,8 +7,8 @@ import com.seancoyle.launch_domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.launch_domain.model.launch.Links
 import com.seancoyle.launch_domain.model.launch.Rocket
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_ASC
-import com.seancoyle.launch_datasource.cache.dao.launch.LAUNCH_ORDER_DESC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
+import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.launch_datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.spacex.framework.datasource.cache.implementation.launch.LaunchDaoServiceImpl
 import com.seancoyle.launch_datasource.cache.mappers.launch.LaunchEntityMapper

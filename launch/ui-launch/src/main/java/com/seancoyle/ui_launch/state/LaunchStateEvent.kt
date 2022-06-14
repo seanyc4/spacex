@@ -1,9 +1,9 @@
 package com.seancoyle.ui_launch.state
 
+import com.seancoyle.core.state.StateEvent
+import com.seancoyle.core.state.StateMessage
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.core.domain.state.StateEvent
-import com.seancoyle.core.domain.state.StateMessage
 import com.seancoyle.launch_domain.model.launch.LaunchOptions
 
 sealed class LaunchStateEvent : StateEvent {

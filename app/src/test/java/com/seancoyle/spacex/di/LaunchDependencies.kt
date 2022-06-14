@@ -10,7 +10,7 @@ import com.seancoyle.launch_datasource.di.network.launch.LAUNCH_OPTIONS_SORT
 import com.seancoyle.launch_datasource.network.implementation.datetransformer.DateTransformerImpl
 import com.seancoyle.launch_datasource.network.implementation.dateformatter.DateFormatterImpl
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.core.domain.util.isUnitTest
+import com.seancoyle.core.util.isUnitTest
 import com.seancoyle.launch_domain.model.launch.*
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
