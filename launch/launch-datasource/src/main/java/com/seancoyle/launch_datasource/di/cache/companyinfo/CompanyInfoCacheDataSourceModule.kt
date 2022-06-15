@@ -1,7 +1,7 @@
 package com.seancoyle.launch_datasource.di.cache.companyinfo
 
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.cache.dao.company.CompanyInfoDao
+import com.seancoyle.data.daos.CompanyInfoDao
 import com.seancoyle.launch_datasource.cache.implementation.company.CompanyInfoCacheDataSourceImpl
 import com.seancoyle.launch_datasource.cache.mappers.company.CompanyInfoEntityMapper
 import dagger.Module
@@ -17,7 +17,7 @@ object CompanyInfoCacheDataSourceModule {
     @Singleton
     @Provides
     fun provideCompanyInfoCacheDataSource(
-        dao: CompanyInfoDao,
+        dao:CompanyInfoDao,
         companyInfoEntityMapper: CompanyInfoEntityMapper
     ): CompanyInfoCacheDataSource {
         return CompanyInfoCacheDataSourceImpl(

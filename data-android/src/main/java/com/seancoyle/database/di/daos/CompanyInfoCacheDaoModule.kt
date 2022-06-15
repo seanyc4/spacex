@@ -1,7 +1,7 @@
-package com.seancoyle.launch_datasource.di.cache.companyinfo
+package com.seancoyle.database.di.daos
 
-import com.seancoyle.launch_datasource.cache.Database
-import com.seancoyle.launch_datasource.cache.dao.company.CompanyInfoDao
+import com.seancoyle.database.Database
+import com.seancoyle.data.daos.CompanyInfoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

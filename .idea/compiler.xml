@@ -7,7 +7,10 @@
       <module name="spacex.buildSrc.main" target="11" />
       <module name="spacex.buildSrc.test" target="11" />
       <module name="SpaceX.core" target="11" />
-      <module name="SpaceX.database" target="11" />
+      <module name="SpaceX.data" target="11" />
+      <module name="SpaceX.data-android" target="11" />
+      <module name="SpaceX.data.main" target="11" />
+      <module name="SpaceX.data.test" target="11" />
       <module name="SpaceX.launch.launch-datasource" target="11" />
       <module name="SpaceX.launch.launch-domain" target="11" />
       <module name="SpaceX.launch.launch-interactors" target="11" />

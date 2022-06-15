@@ -1,4 +1,4 @@
-package com.seancoyle.launch_datasource.cache.entities.company
+package com.seancoyle.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

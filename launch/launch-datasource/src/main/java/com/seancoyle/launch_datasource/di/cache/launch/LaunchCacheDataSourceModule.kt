@@ -1,7 +1,7 @@
 package com.seancoyle.launch_datasource.di.cache.launch
 
+import com.seancoyle.data.daos.LaunchDao
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.cache.dao.launch.LaunchDao
 import com.seancoyle.launch_datasource.cache.implementation.launch.LaunchCacheDataSourceImpl
 import com.seancoyle.launch_datasource.cache.mappers.launch.LaunchEntityMapper
 import dagger.Module

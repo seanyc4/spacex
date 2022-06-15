@@ -1,7 +1,7 @@
-package com.seancoyle.launch_datasource.cache.dao.company
+package com.seancoyle.data.daos
 
 import androidx.room.*
-import com.seancoyle.launch_datasource.cache.entities.company.CompanyInfoEntity
+import com.seancoyle.data.entities.CompanyInfoEntity
 
 @Dao
 interface CompanyInfoDao {

@@ -18,15 +18,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        // Enable Java 8 time below api 26
-        isCoreLibraryDesugaringEnabled = true
     }
 }
 
 dependencies {
 
     implementation(AndroidX.data_store)
-    coreLibraryDesugaring(AndroidX.desurgar)
     implementation(Hilt.android)
     kapt(Hilt.compiler)
     implementation(Timber.timber)

@@ -1,13 +1,13 @@
-package com.seancoyle.launch_datasource.cache
+package com.seancoyle.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.seancoyle.launch_datasource.cache.dao.company.CompanyInfoDao
-import com.seancoyle.launch_datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.launch_datasource.cache.entities.company.CompanyInfoEntity
-import com.seancoyle.launch_datasource.cache.entities.launch.LaunchEntity
-import com.seancoyle.launch_datasource.cache.typeconverters.LocalDateTimeTypeConverter
+import com.seancoyle.data.daos.CompanyInfoDao
+import com.seancoyle.data.daos.LaunchDao
+import com.seancoyle.data.entities.CompanyInfoEntity
+import com.seancoyle.data.entities.LaunchEntity
+import com.seancoyle.data.typeconverters.LocalDateTimeTypeConverter
 
 @Database(
     entities =

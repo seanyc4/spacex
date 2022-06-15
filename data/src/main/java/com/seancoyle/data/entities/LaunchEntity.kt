@@ -1,9 +1,9 @@
-package com.seancoyle.launch_datasource.cache.entities.launch
+package com.seancoyle.data.entities
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.room.*
-import com.seancoyle.launch_datasource.cache.typeconverters.LocalDateTimeTypeConverter
+import com.seancoyle.data.typeconverters.LocalDateTimeTypeConverter
 import java.time.LocalDateTime
 
 @Entity(tableName = "launch", primaryKeys = ["id", "missionName"])

@@ -1,8 +1,8 @@
 package com.seancoyle.launch_datasource.cache.implementation.launch
 
+import com.seancoyle.data.daos.LaunchDao
+import com.seancoyle.data.daos.returnOrderedQuery
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.cache.dao.launch.LaunchDao
-import com.seancoyle.launch_datasource.cache.dao.launch.returnOrderedQuery
 import com.seancoyle.launch_datasource.cache.mappers.launch.LaunchEntityMapper
 import com.seancoyle.launch_domain.model.launch.LaunchModel
 import javax.inject.Inject

@@ -77,8 +77,10 @@ android {
 
 dependencies {
 
+    implementation(project(Modules.constants))
     implementation(project(Modules.core))
-    implementation(project(Modules.database))
+    implementation(project(Modules.data))
+    implementation(project(Modules.dataAndroid))
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))
     implementation(project(Modules.launchInteractors))

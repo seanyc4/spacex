@@ -1,10 +1,11 @@
-package com.seancoyle.launch_datasource.cache.dao.launch
+package com.seancoyle.data.daos
 
 import androidx.room.*
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
-import com.seancoyle.launch_datasource.cache.entities.launch.LaunchEntity
+import com.seancoyle.data.entities.LaunchEntity
+
 
 @Dao
 interface LaunchDao {

@@ -1,4 +1,4 @@
-package com.seancoyle.launch_datasource.cache.typeconverters
+package com.seancoyle.data.typeconverters
 
 import androidx.room.TypeConverter
 import java.time.Instant

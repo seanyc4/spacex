@@ -1,8 +1,8 @@
 package com.seancoyle.launch_datasource.cache.mappers.launch
 
-import com.seancoyle.launch_datasource.cache.entities.launch.LaunchEntity
-import com.seancoyle.launch_datasource.cache.entities.launch.LinksEntity
-import com.seancoyle.launch_datasource.cache.entities.launch.RocketEntity
+import com.seancoyle.data.entities.LaunchEntity
+import com.seancoyle.data.entities.LinksEntity
+import com.seancoyle.data.entities.RocketEntity
 import com.seancoyle.launch_domain.model.launch.*
 
 class LaunchEntityMapper {

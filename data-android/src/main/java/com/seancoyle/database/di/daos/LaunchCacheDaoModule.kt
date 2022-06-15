@@ -1,7 +1,7 @@
-package com.seancoyle.launch_datasource.di.cache.launch
+package com.seancoyle.database.di.daos
 
-import com.seancoyle.launch_datasource.cache.Database
-import com.seancoyle.launch_datasource.cache.dao.launch.LaunchDao
+import com.seancoyle.data.daos.LaunchDao
+import com.seancoyle.database.Database
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

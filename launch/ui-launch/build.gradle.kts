@@ -34,10 +34,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-
-        // Enable Java 8 time below api 26
-        isCoreLibraryDesugaringEnabled = true
-
     }
 
     kotlinOptions {
@@ -86,7 +82,6 @@ dependencies {
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.data_store)
-    coreLibraryDesugaring(AndroidX.desurgar)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)

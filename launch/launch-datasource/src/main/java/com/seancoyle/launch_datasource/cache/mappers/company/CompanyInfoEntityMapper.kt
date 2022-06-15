@@ -1,6 +1,6 @@
 package com.seancoyle.launch_datasource.cache.mappers.company
 
-import com.seancoyle.launch_datasource.cache.entities.company.CompanyInfoEntity
+import com.seancoyle.data.entities.CompanyInfoEntity
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 
 class CompanyInfoEntityMapper {
