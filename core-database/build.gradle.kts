@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -20,23 +21,12 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.constants))
-    implementation(project(Modules.core))
-    api(project(Modules.coreDatabase))
-    api(project(Modules.launchDomain))
 
+    implementation(project(Modules.constants))
     implementation(Hilt.android)
     kapt(Hilt.compiler)
-
-    implementation(Kotlin.coroutines_core)
-    implementation(Kotlin.coroutines_android)
-
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
     kapt(Room.room_compiler)
 
-    implementation(Square.interceptor)
-    implementation(Square.ok_http)
-    implementation(Square.retrofit)
-    implementation(Square.retrofit_gson)
 }

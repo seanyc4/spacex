@@ -12,7 +12,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.R
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.core.datastore.AppDataStore
+import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer

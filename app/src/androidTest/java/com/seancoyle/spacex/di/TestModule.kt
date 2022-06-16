@@ -2,8 +2,8 @@ package com.seancoyle.spacex.di
 
 import android.content.Context
 import androidx.room.Room
-import com.seancoyle.core.datastore.AppDataStore
-import com.seancoyle.core.datastore.AppDataStoreManager
+import com.seancoyle.core_datastore.AppDataStore
+import com.seancoyle.core_datastore.AppDataStoreManager
 import com.seancoyle.database.Database
 import com.seancoyle.ui_base.AndroidTestUtils
 import com.seancoyle.spacex.util.JsonFileReader

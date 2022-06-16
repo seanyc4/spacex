@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
-import com.seancoyle.core.datastore.AppDataStore
 import com.seancoyle.launch_domain.model.company.CompanyInfoModel
 import com.seancoyle.launch_domain.model.company.CompanySummary
 import com.seancoyle.launch_domain.model.launch.LaunchModel
@@ -32,7 +31,7 @@ constructor(
     private val launchInteractors: LaunchInteractors,
     private val companyInfoInteractors: CompanyInfoInteractors,
     val launchOptions: LaunchOptions,
-    private val appDataStoreManager: AppDataStore,
+    private val appDataStoreManager: com.seancoyle.core_datastore.AppDataStore,
 ) : BaseViewModel<LaunchViewState>() {
 
     init {

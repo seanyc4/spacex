@@ -15,8 +15,8 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/constants" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/data" />
-            <option value="$PROJECT_DIR$/data-android" />
+            <option value="$PROJECT_DIR$/core-database" />
+            <option value="$PROJECT_DIR$/core-datastore" />
             <option value="$PROJECT_DIR$/launch" />
             <option value="$PROJECT_DIR$/launch/launch-datasource" />
             <option value="$PROJECT_DIR$/launch/launch-domain" />

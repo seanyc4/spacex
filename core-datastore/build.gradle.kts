@@ -2,7 +2,6 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -20,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation(Kotlin.coroutines_android)
-    implementation(AndroidX.lifecycle_live_data_ktx)
-    implementation(Timber.timber)
+
+    implementation(AndroidX.data_store)
+
 }

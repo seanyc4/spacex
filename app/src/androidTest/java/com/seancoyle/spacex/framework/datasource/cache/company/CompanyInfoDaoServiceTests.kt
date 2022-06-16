@@ -1,6 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.cache.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.database.daos.CompanyInfoDao
 import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
@@ -35,7 +36,7 @@ class CompanyInfoDaoServiceTests {
     private lateinit var daoService: CompanyInfoDaoService
 
     @Inject
-    lateinit var dao: com.seancoyle.data.daos.CompanyInfoDao
+    lateinit var dao: CompanyInfoDao
 
     @Inject
     lateinit var companyInfoFactory: CompanyInfoFactory
