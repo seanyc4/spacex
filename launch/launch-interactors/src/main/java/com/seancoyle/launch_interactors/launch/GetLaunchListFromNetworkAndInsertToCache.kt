@@ -1,7 +1,6 @@
 package com.seancoyle.launch_interactors.launch
 
 import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import com.seancoyle.core.state.*
 import com.seancoyle.launch_datasource.cache.CacheResponseHandler
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
@@ -18,8 +17,7 @@ import kotlinx.coroutines.flow.flow
 class GetLaunchListFromNetworkAndInsertToCache
 constructor(
     private val cacheDataSource: LaunchCacheDataSource,
-    private val launchNetworkDataSource: LaunchNetworkDataSource,
-    private val factory: LaunchFactory
+    private val launchNetworkDataSource: LaunchNetworkDataSource
 ) {
 
     operator fun invoke(
@@ -76,11 +74,9 @@ constructor(
         }
 
         // Insert to Cache
-        if (networkResponse?.data != null) {
+        if (networkResponse?.data?.launchList != null) {
 
-            val launchList = factory.createLaunchList(
-                networkResponse.data?.launchList!!
-            )
+            val launchList = networkResponse.data?.launchList!!
 
             val cacheResult = safeCacheCall(Dispatchers.IO) {
                 cacheDataSource.insertLaunchList(launchList)

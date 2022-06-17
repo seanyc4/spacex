@@ -18,17 +18,15 @@ object LaunchInteractorsModule {
     @Provides
     fun provideLaunchInteractors(
         launchCacheDataSource: LaunchCacheDataSource,
-        launchNetworkDataSource: LaunchNetworkDataSource,
-        launchFactory: LaunchFactory
+        launchNetworkDataSource: LaunchNetworkDataSource
     ): LaunchInteractors {
         return LaunchInteractors(
             getAllLaunchItemsFromCache = GetAllLaunchItemsFromCache(
                 cacheDataSource = launchCacheDataSource
             ),
             getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
-                cacheDataSource = launchCacheDataSource,
                 launchNetworkDataSource = launchNetworkDataSource,
-                factory = launchFactory
+                cacheDataSource = launchCacheDataSource
             ),
             getNumLaunchItemsFromCache = GetNumLaunchItemsFromCache(
                 cacheDataSource = launchCacheDataSource

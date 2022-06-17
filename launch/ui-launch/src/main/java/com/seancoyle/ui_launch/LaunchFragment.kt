@@ -36,12 +36,15 @@ import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsert
 import com.seancoyle.launch_interactors.launch.FilterLaunchItemsInCache
 import com.seancoyle.ui_launch.adapter.LaunchAdapter
 import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.launch_interactors.launch.InsertLaunchListToCache
 import com.seancoyle.ui_launch.state.LaunchStateEvent
 import com.seancoyle.launch_viewstate.LaunchViewState
+import com.seancoyle.ui_base.AndroidTestUtils
 import com.seancoyle.ui_base.BaseFragment
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 const val LINKS_KEY = "links"
@@ -54,8 +57,8 @@ const val LAUNCH_STATE_BUNDLE_KEY =
 class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     LaunchAdapter.Interaction {
 
-    /*@Inject
-    lateinit var androidTestUtils: AndroidTestUtils*/
+    @Inject
+    lateinit var androidTestUtils: AndroidTestUtils
 
     private var _binding :FragmentLaunchBinding? = null
     private val binding get() = _binding!!
@@ -181,7 +184,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
-                    GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
+                    InsertLaunchListToCache.INSERT_LAUNCH_LIST_SUCCESS -> {
                         viewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
                         getTotalNumEntriesInLaunchCacheEvent()
@@ -209,7 +212,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
+                            InsertLaunchListToCache.INSERT_LAUNCH_LIST_FAILED -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }

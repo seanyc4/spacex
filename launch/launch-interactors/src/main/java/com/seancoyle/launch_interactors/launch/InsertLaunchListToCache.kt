@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class InsertLaunchListToCache(
-    private val cacheDataSource: LaunchCacheDataSource,
-    private val factory: LaunchFactory
+    private val cacheDataSource: LaunchCacheDataSource
 ) {
 
     operator fun invoke(
@@ -21,12 +20,9 @@ class InsertLaunchListToCache(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
-        val newLaunchList = factory.createLaunchList(
-            launchList
-        )
 
         val cacheResult = safeCacheCall(IO) {
-            cacheDataSource.insertLaunchList(newLaunchList)
+            cacheDataSource.insertLaunchList(launchList)
         }
 
         val cacheResponse = object : CacheResponseHandler<LaunchViewState, LongArray>(
@@ -37,7 +33,7 @@ class InsertLaunchListToCache(
                 return if (resultObj.isNotEmpty()) {
                     val viewState =
                         LaunchViewState(
-                            launchList = newLaunchList
+                            launchList = launchList
                         )
                     DataState.data(
                         response = Response(

@@ -39,31 +39,6 @@ class LaunchFactory {
         )
     }
 
-    fun createLaunchList(
-        launchList: List<LaunchModel>
-    ): List<LaunchModel> {
-        val list: ArrayList<LaunchModel> = ArrayList()
-        for (item in launchList) {
-            list.add(
-                createLaunchItem(
-                    id = item.id,
-                    launchDate = item.launchDate,
-                    launchDateLocalDateTime = item.launchDateLocalDateTime,
-                    isLaunchSuccess = item.isLaunchSuccess,
-                    launchSuccessIcon = item.launchSuccessIcon,
-                    launchYear = item.launchYear,
-                    links = item.links,
-                    missionName = item.missionName,
-                    rocket = item.rocket,
-                    daysToFromTitle = item.daysToFromTitle,
-                    launchDaysDifference = item.launchDaysDifference,
-                    type = item.type
-                )
-            )
-        }
-        return list
-    }
-
     fun createLaunchListTest(
         num: Int,
         id: Int?
