@@ -16,7 +16,7 @@ class InsertLaunchListToCache(
     private val factory: LaunchFactory
 ) {
 
-    fun execute(
+    operator fun invoke(
         launchList: List<LaunchModel>,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {

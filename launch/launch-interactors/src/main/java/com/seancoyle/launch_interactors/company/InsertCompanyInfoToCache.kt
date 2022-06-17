@@ -16,7 +16,7 @@ class InsertCompanyInfoToCache(
     private val factory: CompanyInfoFactory
 ) {
 
-    fun execute(
+    operator fun invoke(
         companyInfo: CompanyInfoModel,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {

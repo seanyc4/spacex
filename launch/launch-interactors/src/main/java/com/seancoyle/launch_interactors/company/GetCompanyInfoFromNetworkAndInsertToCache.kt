@@ -21,7 +21,7 @@ constructor(
     private val factory: CompanyInfoFactory
 ) {
 
-    fun execute(
+    operator fun invoke(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 

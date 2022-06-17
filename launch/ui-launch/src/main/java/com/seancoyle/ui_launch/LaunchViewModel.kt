@@ -71,26 +71,26 @@ constructor(
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
             is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
-                launchInteractors.getLaunchListFromNetworkAndInsertToCache.execute(
+                launchInteractors.getLaunchListFromNetworkAndInsertToCache.invoke(
                     launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
 
             is GetAllLaunchItemsFromCacheEvent -> {
-                launchInteractors.getAllLaunchItemsFromCache.execute(
+                launchInteractors.getAllLaunchItemsFromCache.invoke(
                     stateEvent = stateEvent
                 )
             }
 
             is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
-                companyInfoInteractors.getCompanyInfoFromNetworkAndInsertToCache.execute(
+                companyInfoInteractors.getCompanyInfoFromNetworkAndInsertToCache.invoke(
                     stateEvent = stateEvent
                 )
             }
 
             is GetCompanyInfoFromCacheEvent -> {
-                companyInfoInteractors.getCompanyInfoFromCache.execute(
+                companyInfoInteractors.getCompanyInfoFromCache.invoke(
                     stateEvent = stateEvent
                 )
             }
@@ -99,7 +99,7 @@ constructor(
                 if (stateEvent.clearLayoutManagerState) {
                     clearLayoutManagerState()
                 }
-                launchInteractors.filterLaunchItemsInCache.execute(
+                launchInteractors.filterLaunchItemsInCache.invoke(
                     year = getSearchQuery(),
                     order = getOrder(),
                     launchFilter = getFilter(),
@@ -109,7 +109,7 @@ constructor(
             }
 
             is GetNumLaunchItemsInCacheEvent -> {
-                launchInteractors.getNumLaunchItemsFromCache.execute(
+                launchInteractors.getNumLaunchItemsFromCache.invoke(
                     stateEvent = stateEvent
                 )
             }

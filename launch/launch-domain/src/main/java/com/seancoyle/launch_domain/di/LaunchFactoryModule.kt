@@ -1,4 +1,4 @@
-package com.seancoyle.launch_domain.model.di
+package com.seancoyle.launch_domain.di
 
 import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import dagger.Module

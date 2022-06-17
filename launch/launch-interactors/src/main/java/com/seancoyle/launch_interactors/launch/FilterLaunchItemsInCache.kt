@@ -14,7 +14,7 @@ class FilterLaunchItemsInCache(
     private val cacheDataSource: LaunchCacheDataSource
 ) {
 
-    fun execute(
+    operator fun invoke(
         year: String,
         order: String,
         launchFilter: Int?,

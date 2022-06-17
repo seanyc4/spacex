@@ -14,7 +14,7 @@ class GetCompanyInfoFromCache(
     private val cacheDataSource: CompanyInfoCacheDataSource
 ) {
 
-    fun execute(
+    operator fun invoke(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 

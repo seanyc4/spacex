@@ -14,7 +14,7 @@ class GetAllLaunchItemsFromCache(
     private val cacheDataSource: LaunchCacheDataSource
 ){
 
-    fun execute(
+    operator fun invoke(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 

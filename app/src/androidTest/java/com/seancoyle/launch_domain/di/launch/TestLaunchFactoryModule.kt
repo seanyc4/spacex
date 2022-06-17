@@ -1,6 +1,6 @@
-package com.seancoyle.launch_domain.model.di.launch
+package com.seancoyle.launch_domain.di.launch
 
-import com.seancoyle.launch_domain.model.di.LaunchFactoryModule
+import com.seancoyle.launch_domain.di.LaunchFactoryModule
 import com.seancoyle.launch_domain.model.launch.LaunchFactory
 import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.util.JsonFileReader
