@@ -184,7 +184,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                         getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
-                    InsertLaunchListToCache.INSERT_LAUNCH_LIST_SUCCESS -> {
+                    GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
                         getTotalNumEntriesInLaunchCacheEvent()
@@ -212,7 +212,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            InsertLaunchListToCache.INSERT_LAUNCH_LIST_FAILED -> {
+                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }
