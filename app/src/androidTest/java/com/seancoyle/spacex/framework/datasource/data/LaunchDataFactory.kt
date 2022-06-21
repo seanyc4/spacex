@@ -6,6 +6,7 @@ import com.seancoyle.spacex.R
 import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.launch_datasource.network.mappers.launch.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_SUCCESS
+import com.seancoyle.launch_models.model.launch.*
 import com.seancoyle.spacex.util.JsonFileReader
 import java.time.LocalDateTime
 import java.util.*

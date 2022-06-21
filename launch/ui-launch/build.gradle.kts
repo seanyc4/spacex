@@ -74,9 +74,9 @@ dependencies {
 
     implementation(project(Modules.core))
     implementation(project(Modules.coreDatastore))
-    implementation(project(Modules.constants))
-    implementation(project(Modules.launchDomain))
-    implementation(project(Modules.launchInteractors))
+    implementation(project(Modules.launchConstants))
+    implementation(project(Modules.launchModels))
+    implementation(project(Modules.launchUseCases))
     implementation(project(Modules.uiBase))
     implementation(project(Modules.launchViewState))
 

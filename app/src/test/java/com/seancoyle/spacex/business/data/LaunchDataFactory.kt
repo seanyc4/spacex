@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.business.data
 
-import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.launch_datasource.cache.launch.FakeLaunchDatabase

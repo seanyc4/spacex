@@ -13,8 +13,8 @@
       <module name="SpaceX.data.main" target="11" />
       <module name="SpaceX.data.test" target="11" />
       <module name="SpaceX.launch.launch-datasource" target="11" />
-      <module name="SpaceX.launch.launch-domain" target="11" />
-      <module name="SpaceX.launch.launch-interactors" target="11" />
+      <module name="SpaceX.launch.launch-models" target="11" />
+      <module name="SpaceX.launch.launch-usecases" target="11" />
       <module name="SpaceX.launch.launch-viewstate" target="11" />
       <module name="SpaceX.launch.ui-launch" target="11" />
       <module name="SpaceX.ui-base" target="11" />

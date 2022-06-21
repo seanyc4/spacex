@@ -5,7 +5,7 @@ import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCach
 import com.seancoyle.launch_datasource.cache.company.FakeCompanyInfoCacheDataSourceImpl
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.network.company.FakeCompanyInfoNetworkDataSourceImpl
-import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_datasource.network.implementation.numberformatter.NumberFormatterImpl
 import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
 import com.seancoyle.core.util.isUnitTest

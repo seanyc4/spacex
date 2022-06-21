@@ -3,12 +3,11 @@ package com.seancoyle.launch_interactors.launch
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.spacex.business.data.network.launch.MockWebServerResponseLaunchList.launchList
-import com.seancoyle.launch_domain.model.launch.LaunchFactory
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_ERROR
-import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCache.Companion.LAUNCH_INSERT_SUCCESS
+import com.seancoyle.launch_models.model.launch.LaunchFactory
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase.Companion.LAUNCH_ERROR
+import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
-import com.seancoyle.ui_launch.state.LaunchStateEvent
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -22,7 +21,7 @@ import java.net.HttpURLConnection
 class GetLaunchItemsFromNetworkInsertToCacheTest {
 
     // system in test
-    private lateinit var getLaunchListFromNetworkAndInsertToCache: GetLaunchListFromNetworkAndInsertToCache
+    private lateinit var getLaunchListFromNetworkAndInsertToCacheUseCase: GetLaunchListFromNetworkAndInsertToCacheUseCase
 
     // dependencies
     private val dependencies: LaunchDependencies = LaunchDependencies()
@@ -40,7 +39,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         mockWebServer = dependencies.mockWebServer
 
         // instantiate the system in test
-        getLaunchListFromNetworkAndInsertToCache = GetLaunchListFromNetworkAndInsertToCache(
+        getLaunchListFromNetworkAndInsertToCacheUseCase = GetLaunchListFromNetworkAndInsertToCacheUseCase(
             cacheDataSource = cacheDataSource,
             launchNetworkDataSource = networkDataSource,
             factory = factory
@@ -67,7 +66,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
 
         // execute use case
-        getLaunchListFromNetworkAndInsertToCache.execute(
+        getLaunchListFromNetworkAndInsertToCacheUseCase.execute(
             launchOptions = dependencies.launchOptions,
             stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencies.launchOptions
@@ -104,7 +103,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
 
         // execute use case
-        getLaunchListFromNetworkAndInsertToCache.execute(
+        getLaunchListFromNetworkAndInsertToCacheUseCase.execute(
             launchOptions = dependencies.launchOptions,
             stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencies.launchOptions

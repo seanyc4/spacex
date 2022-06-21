@@ -22,7 +22,7 @@ android {
 
 dependencies {
 
-    implementation(project(Modules.constants))
+    implementation(project(Modules.launchConstants))
     implementation(Hilt.android)
     kapt(Hilt.compiler)
     implementation(Room.room_ktx)

@@ -3,7 +3,7 @@ package com.seancoyle.spacex.business.data
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.launch_datasource.cache.company.FakeCompanyInfoDatabase
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
 
 class CompanyInfoDataFactory(
     private val testClassLoader: ClassLoader

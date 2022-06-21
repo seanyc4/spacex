@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.launch_datasource.network.api.launch.LaunchApi
 import com.seancoyle.launch_datasource.network.model.launch.LaunchDto
-import com.seancoyle.launch_domain.model.launch.LaunchOptions
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.spacex.util.JsonFileReader
 import javax.inject.Singleton
 

@@ -20,10 +20,10 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.constants))
+    implementation(project(Modules.launchConstants))
     implementation(project(Modules.core))
     api(project(Modules.coreDatabase))
-    api(project(Modules.launchDomain))
+    api(project(Modules.launchModels))
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

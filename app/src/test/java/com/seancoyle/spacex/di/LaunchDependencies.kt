@@ -12,6 +12,7 @@ import com.seancoyle.launch_datasource.network.implementation.dateformatter.Date
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
 import com.seancoyle.core.util.isUnitTest
 import com.seancoyle.launch_domain.model.launch.*
+import com.seancoyle.launch_models.model.launch.*
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 import java.time.ZoneId

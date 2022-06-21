@@ -3,7 +3,7 @@ package com.seancoyle.launch_datasource.cache.implementation.company
 import com.seancoyle.database.daos.CompanyInfoDao
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.cache.mappers.company.CompanyInfoEntityMapper
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import javax.inject.Inject
 import javax.inject.Singleton
 

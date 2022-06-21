@@ -5,10 +5,13 @@ import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch_datasource.R
-import com.seancoyle.launch_domain.model.launch.*
 import com.seancoyle.launch_datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
 import com.seancoyle.launch_datasource.network.model.launch.LaunchDto
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchType
+import com.seancoyle.launch_models.model.launch.Links
+import com.seancoyle.launch_models.model.launch.Rocket
 import java.time.LocalDateTime
 import javax.inject.Inject
 

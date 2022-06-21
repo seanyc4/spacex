@@ -4,7 +4,7 @@ plugins {
 }
 dependencies {
 
-    api(project(Modules.constants))
+    api(project(Modules.launchConstants))
     api(Room.room_common)
 
 }

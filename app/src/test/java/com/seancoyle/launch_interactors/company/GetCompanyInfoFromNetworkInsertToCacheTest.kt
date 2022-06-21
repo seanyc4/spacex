@@ -3,12 +3,11 @@ package com.seancoyle.launch_interactors.company
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.spacex.business.data.network.company.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
-import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
-import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_ERROR
-import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCache.Companion.COMPANY_INFO_INSERT_SUCCESS
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.company.CompanyInfoFactory
+import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_ERROR
+import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.spacex.di.CompanyDependencies
-import com.seancoyle.ui_launch.state.LaunchStateEvent
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -22,7 +21,7 @@ import java.net.HttpURLConnection
 class GetCompanyInfoFromNetworkInsertToCacheTest {
 
     // system in test
-    private lateinit var getCompanyInfoFromNetworkInsertToCache: GetCompanyInfoFromNetworkAndInsertToCache
+    private lateinit var getCompanyInfoFromNetworkInsertToCache: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 
     // dependencies
     private val dependencies: CompanyDependencies = CompanyDependencies()
@@ -40,7 +39,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         mockWebServer = dependencies.mockWebServer
 
         // instantiate the system in test
-        getCompanyInfoFromNetworkInsertToCache = GetCompanyInfoFromNetworkAndInsertToCache(
+        getCompanyInfoFromNetworkInsertToCache = GetCompanyInfoFromNetworkAndInsertToCacheUseCase(
             cacheDataSource = cacheDataSource,
             networkDataSource = networkDataSource,
             factory = infoFactory

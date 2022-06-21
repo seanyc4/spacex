@@ -11,8 +11,8 @@ import com.seancoyle.spacex.R
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
-import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
 import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
@@ -20,7 +20,7 @@ import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
 import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.launch_datasource.network.mappers.launch.*
-import com.seancoyle.launch_domain.model.launch.LaunchOptions
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.*
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher

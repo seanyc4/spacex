@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.seancoyle.launch_domain.model.launch.Links
+import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.ui_base.gone
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBottomActionSheetBinding
 

@@ -4,7 +4,7 @@ import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.database.daos.returnOrderedQuery
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_datasource.cache.mappers.launch.LaunchEntityMapper
-import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchModel
 import javax.inject.Inject
 import javax.inject.Singleton
 

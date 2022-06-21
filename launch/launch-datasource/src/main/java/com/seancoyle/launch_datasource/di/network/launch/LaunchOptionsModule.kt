@@ -1,6 +1,6 @@
 package com.seancoyle.launch_datasource.di.network.launch
 
-import com.seancoyle.launch_domain.model.launch.*
+import com.seancoyle.launch_models.model.launch.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

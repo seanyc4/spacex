@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.*
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch_domain.model.company.CompanySummary
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_domain.model.launch.LaunchType
-import com.seancoyle.launch_domain.model.launch.Links
-import com.seancoyle.launch_domain.model.launch.SectionTitle
+import com.seancoyle.launch_models.model.company.CompanySummary
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchType
+import com.seancoyle.launch_models.model.launch.Links
+import com.seancoyle.launch_models.model.launch.SectionTitle
 import com.seancoyle.ui_launch.glideLoadLaunchImage
 import com.seancoyle.ui_launch.databinding.RvCompanyInfoItemBinding
 import com.seancoyle.ui_launch.databinding.RvLaunchItemBinding

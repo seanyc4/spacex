@@ -11,7 +11,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.spacex.R
-import com.seancoyle.launch_domain.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
 import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
 import com.seancoyle.ui_launch.adapter.LaunchAdapter

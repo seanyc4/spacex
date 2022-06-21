@@ -25,18 +25,17 @@ import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
-import com.seancoyle.launch_domain.model.launch.LaunchType
-import com.seancoyle.launch_domain.model.launch.Links
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.launch.LaunchType
+import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.core.state.*
-import com.seancoyle.launch_interactors.company.GetCompanyInfoFromCache
-import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCache
-import com.seancoyle.launch_interactors.launch.GetAllLaunchItemsFromCache
-import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCache
-import com.seancoyle.launch_interactors.launch.FilterLaunchItemsInCache
+import com.seancoyle.launch_interactors.company.GetCompanyInfoFromCacheUseCase
+import com.seancoyle.launch_interactors.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch_interactors.launch.GetAllLaunchItemsFromCacheUseCase
+import com.seancoyle.launch_interactors.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch_interactors.launch.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.ui_launch.adapter.LaunchAdapter
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch_interactors.launch.InsertLaunchListToCache
 import com.seancoyle.ui_launch.state.LaunchStateEvent
 import com.seancoyle.launch_viewstate.LaunchViewState
 import com.seancoyle.ui_base.AndroidTestUtils
@@ -174,28 +173,28 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_INSERT_SUCCESS -> {
+                    GetCompanyInfoFromNetworkAndInsertToCacheUseCase.COMPANY_INFO_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         viewModel.setStateEvent(LaunchStateEvent.GetCompanyInfoFromCacheEvent)
                     }
 
-                    GetCompanyInfoFromCache.GET_COMPANY_INFO_SUCCESS -> {
+                    GetCompanyInfoFromCacheUseCase.GET_COMPANY_INFO_SUCCESS -> {
                         viewModel.clearStateMessage()
                         getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
-                    GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_SUCCESS -> {
+                    GetLaunchListFromNetworkAndInsertToCacheUseCase.LAUNCH_INSERT_SUCCESS -> {
                         viewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
                         getTotalNumEntriesInLaunchCacheEvent()
                     }
 
-                    FilterLaunchItemsInCache.SEARCH_LAUNCH_SUCCESS -> {
+                    FilterLaunchItemsInCacheUseCase.SEARCH_LAUNCH_SUCCESS -> {
                         viewModel.clearStateMessage()
                         submitList()
                     }
 
-                    GetAllLaunchItemsFromCache.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
+                    GetAllLaunchItemsFromCacheUseCase.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
                         viewModel.clearStateMessage()
                         submitList()
                     }
@@ -212,21 +211,21 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_INSERT_FAILED -> {
+                            GetLaunchListFromNetworkAndInsertToCacheUseCase.LAUNCH_INSERT_FAILED -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            GetLaunchListFromNetworkAndInsertToCache.LAUNCH_ERROR -> {
+                            GetLaunchListFromNetworkAndInsertToCacheUseCase.LAUNCH_ERROR -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_INSERT_FAILED -> {
+                            GetCompanyInfoFromNetworkAndInsertToCacheUseCase.COMPANY_INFO_INSERT_FAILED -> {
                                 getCompanyInfoFromCacheEvent()
                             }
 
-                            GetCompanyInfoFromNetworkAndInsertToCache.COMPANY_INFO_ERROR -> {
+                            GetCompanyInfoFromNetworkAndInsertToCacheUseCase.COMPANY_INFO_ERROR -> {
                                 getCompanyInfoFromCacheEvent()
                             }
                         }

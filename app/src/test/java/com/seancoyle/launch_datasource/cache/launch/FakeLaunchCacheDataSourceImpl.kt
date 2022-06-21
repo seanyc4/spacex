@@ -1,8 +1,8 @@
 package com.seancoyle.launch_datasource.cache.launch
 
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_interactors.launch.InsertLaunchListToCache.Companion.INSERT_LAUNCH_LIST_FAILED
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_interactors.launch.InsertLaunchListToCacheUseCase.Companion.INSERT_LAUNCH_LIST_FAILED
 import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
 import com.seancoyle.database.dao.launch.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_ALL

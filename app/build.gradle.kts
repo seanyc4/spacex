@@ -77,13 +77,12 @@ android {
 
 dependencies {
 
-    implementation(project(Modules.constants))
     implementation(project(Modules.core))
     implementation(project(Modules.coreDatabase))
     implementation(project(Modules.coreDatastore))
     implementation(project(Modules.launchDataSource))
-    implementation(project(Modules.launchDomain))
-    implementation(project(Modules.launchInteractors))
+    implementation(project(Modules.launchModels))
+    implementation(project(Modules.launchUseCases))
     implementation(project(Modules.launchViewState))
     implementation(project(Modules.uiLaunch))
     implementation(project(Modules.uiBase))
@@ -111,12 +110,6 @@ dependencies {
     implementation(MaterialDialogs.material_dialogs)
 
     //debugImplementation(Square.leak_canary)
-
-    implementation(Room.room_ktx)
-    implementation(Room.room_runtime)
-    kapt(Room.room_compiler)
-
-    implementation(Room.room_ktx)
 
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)

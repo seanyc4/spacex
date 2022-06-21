@@ -35,10 +35,10 @@
     <string name="launch">Launches</string>
     <string name="title">title</string>
     <string name="launch_image">Launch image</string>
-    <string name="mission">Mission</string>
+    <string name="mission" formatted="false">Mission</string>
     <string name="date_time">Date/time</string>
     <string name="rocket">Rocket</string>
-    <string name="days">Days %s now</string>
+    <string name="days" formatted="false">Days %s now</string>
     <string name="date">Date</string>
 
     <!-- Material Dialog text -->

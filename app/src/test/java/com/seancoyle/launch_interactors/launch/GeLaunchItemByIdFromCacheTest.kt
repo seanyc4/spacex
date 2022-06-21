@@ -1,11 +1,10 @@
 package com.seancoyle.launch_interactors.launch
 
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_domain.model.launch.LaunchFactory
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_interactors.launch.GetLaunchItemByIdFromCache.Companion.GET_LAUNCH_ITEM_BY_ID_SUCCESS
+import com.seancoyle.launch_models.model.launch.LaunchFactory
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_interactors.launch.GetLaunchItemByIdFromCacheUseCase.Companion.GET_LAUNCH_ITEM_BY_ID_SUCCESS
 import com.seancoyle.spacex.di.LaunchDependencies
-import com.seancoyle.ui_launch.state.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
@@ -22,7 +21,7 @@ Test cases:
 class GeLaunchItemByIdFromCacheTest {
 
     // system in test
-    private val getLaunchItemById: GetLaunchItemByIdFromCache
+    private val getLaunchItemById: GetLaunchItemByIdFromCacheUseCase
 
     // dependencies
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
@@ -33,7 +32,7 @@ class GeLaunchItemByIdFromCacheTest {
         launchDependencies.build()
         cacheDataSource = launchDependencies.launchCacheDataSource
         factory = launchDependencies.launchFactory
-        getLaunchItemById = GetLaunchItemByIdFromCache(
+        getLaunchItemById = GetLaunchItemByIdFromCacheUseCase(
             cacheDataSource = cacheDataSource
         )
     }

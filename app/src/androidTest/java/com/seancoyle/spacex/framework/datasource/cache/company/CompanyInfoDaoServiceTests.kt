@@ -2,7 +2,7 @@ package com.seancoyle.spacex.framework.datasource.cache.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.database.daos.CompanyInfoDao
-import com.seancoyle.launch_domain.model.company.CompanyInfoFactory
+import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.company.CompanyInfoDaoService
 import com.seancoyle.spacex.framework.datasource.cache.implementation.company.CompanyInfoDaoServiceImpl
 import com.seancoyle.launch_datasource.cache.mappers.company.CompanyInfoEntityMapper

@@ -1,8 +1,8 @@
 package com.seancoyle.launch_datasource.network.mappers.company
 
-import com.seancoyle.launch_domain.model.company.*
 import com.seancoyle.launch_datasource.network.abstraction.numberformatter.NumberFormatter
 import com.seancoyle.launch_datasource.network.model.company.CompanyInfoDto
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import javax.inject.Inject
 
 

@@ -23,7 +23,7 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
-    implementation(project(Modules.constants))
+ //   implementation(project(Modules.constants))
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

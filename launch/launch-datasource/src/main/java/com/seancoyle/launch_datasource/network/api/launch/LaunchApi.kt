@@ -1,7 +1,7 @@
 package com.seancoyle.launch_datasource.network.api.launch
 
 import com.seancoyle.launch_datasource.network.model.launch.LaunchDto
-import com.seancoyle.launch_domain.model.launch.LaunchOptions
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import retrofit2.http.Body
 import retrofit2.http.POST
 

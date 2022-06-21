@@ -2,10 +2,10 @@ package com.seancoyle.spacex.framework.datasource.cache.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.R
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_domain.model.launch.LaunchType.Companion.TYPE_LAUNCH
-import com.seancoyle.launch_domain.model.launch.Links
-import com.seancoyle.launch_domain.model.launch.Rocket
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch_models.model.launch.Links
+import com.seancoyle.launch_models.model.launch.Rocket
 import com.seancoyle.spacex.framework.datasource.cache.abstraction.launch.LaunchDaoService
 import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
 import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC

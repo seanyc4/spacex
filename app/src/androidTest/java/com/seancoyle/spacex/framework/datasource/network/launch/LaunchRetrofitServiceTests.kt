@@ -4,7 +4,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.launch_domain.model.launch.LaunchOptions
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

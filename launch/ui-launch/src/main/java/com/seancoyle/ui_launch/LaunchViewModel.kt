@@ -4,15 +4,15 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
-import com.seancoyle.launch_domain.model.company.CompanyInfoModel
-import com.seancoyle.launch_domain.model.company.CompanySummary
-import com.seancoyle.launch_domain.model.launch.LaunchModel
-import com.seancoyle.launch_domain.model.launch.LaunchType
-import com.seancoyle.launch_domain.model.launch.SectionTitle
-import com.seancoyle.launch_interactors.launch.LaunchInteractors
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.company.CompanySummary
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchType
+import com.seancoyle.launch_models.model.launch.SectionTitle
+import com.seancoyle.launch_interactors.launch.LaunchUseCase
 import com.seancoyle.core.state.*
-import com.seancoyle.launch_interactors.company.CompanyInfoInteractors
-import com.seancoyle.launch_domain.model.launch.LaunchOptions
+import com.seancoyle.launch_interactors.company.CompanyInfoUseCases
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.ui_launch.state.LaunchStateEvent.*
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
@@ -28,8 +28,8 @@ import javax.inject.Inject
 class LaunchViewModel
 @Inject
 constructor(
-    private val launchInteractors: LaunchInteractors,
-    private val companyInfoInteractors: CompanyInfoInteractors,
+    private val launchUseCase: LaunchUseCase,
+    private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: com.seancoyle.core_datastore.AppDataStore,
 ) : BaseViewModel<LaunchViewState>() {
@@ -71,26 +71,26 @@ constructor(
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
             is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
-                launchInteractors.getLaunchListFromNetworkAndInsertToCache.invoke(
+                launchUseCase.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
                     launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
 
             is GetAllLaunchItemsFromCacheEvent -> {
-                launchInteractors.getAllLaunchItemsFromCache.invoke(
+                launchUseCase.getAllLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
 
             is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
-                companyInfoInteractors.getCompanyInfoFromNetworkAndInsertToCache.invoke(
+                companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
 
             is GetCompanyInfoFromCacheEvent -> {
-                companyInfoInteractors.getCompanyInfoFromCache.invoke(
+                companyInfoUseCases.getCompanyInfoFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
@@ -99,7 +99,7 @@ constructor(
                 if (stateEvent.clearLayoutManagerState) {
                     clearLayoutManagerState()
                 }
-                launchInteractors.filterLaunchItemsInCache.invoke(
+                launchUseCase.filterLaunchItemsInCacheUseCase.invoke(
                     year = getSearchQuery(),
                     order = getOrder(),
                     launchFilter = getFilter(),
@@ -109,7 +109,7 @@ constructor(
             }
 
             is GetNumLaunchItemsInCacheEvent -> {
-                launchInteractors.getNumLaunchItemsFromCache.invoke(
+                launchUseCase.getNumLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
