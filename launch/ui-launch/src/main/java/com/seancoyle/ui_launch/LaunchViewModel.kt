@@ -9,11 +9,11 @@ import com.seancoyle.launch_models.model.company.CompanySummary
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.SectionTitle
-import com.seancoyle.launch_interactors.launch.LaunchUseCase
+import com.seancoyle.launch_usecases.launch.LaunchUseCase
 import com.seancoyle.core.state.*
-import com.seancoyle.launch_interactors.company.CompanyInfoUseCases
+import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
 import com.seancoyle.launch_models.model.launch.LaunchOptions
-import com.seancoyle.ui_launch.state.LaunchStateEvent.*
+import com.seancoyle.launch_viewstate.LaunchStateEvent.*
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
 import com.seancoyle.ui_base.BaseViewModel

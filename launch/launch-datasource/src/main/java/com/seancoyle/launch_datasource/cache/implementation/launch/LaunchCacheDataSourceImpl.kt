@@ -24,7 +24,7 @@ constructor(
         )
     }
 
-    override suspend fun insertLaunchList(launchList: List<LaunchModel>): LongArray {
+    override suspend fun insertList(launchList: List<LaunchModel>): LongArray {
         return dao.insertList(
             entityMapper.domainListToEntityList(
                 launchList = launchList

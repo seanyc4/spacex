@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
-import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
+import com.seancoyle.spacex.launch.HEADER_COUNT
 import kotlin.test.assertTrue
 
 class RecyclerViewItemCountAssertion(

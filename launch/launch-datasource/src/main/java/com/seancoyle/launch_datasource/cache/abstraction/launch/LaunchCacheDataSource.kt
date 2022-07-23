@@ -18,10 +18,10 @@ interface LaunchCacheDataSource {
 
     suspend fun getTotalEntries(): Int
 
-    suspend fun insertLaunchList(launchList: List<LaunchModel>): LongArray
+    suspend fun insertList(launchList: List<LaunchModel>): LongArray
 
     suspend fun filterLaunchList(
-        year: String,
+        year: String?,
         order: String,
         launchFilter: Int?,
         page: Int

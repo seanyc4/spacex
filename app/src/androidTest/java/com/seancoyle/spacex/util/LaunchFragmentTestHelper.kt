@@ -13,8 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.spacex.R
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
-import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
-import com.seancoyle.ui_launch.adapter.LaunchAdapter
+import com.seancoyle.spacex.launch.HEADER_COUNT
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.CoreMatchers
