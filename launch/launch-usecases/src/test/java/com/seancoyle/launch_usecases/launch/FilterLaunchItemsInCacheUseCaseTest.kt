@@ -1,18 +1,18 @@
 package com.seancoyle.launch_usecases.launch
 
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.cache.CacheErrors
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.cache.launch.FORCE_SEARCH_LAUNCH_EXCEPTION
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase.Companion.SEARCH_LAUNCH_NO_MATCHING_RESULTS
 import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase.Companion.SEARCH_LAUNCH_SUCCESS
-import com.seancoyle.spacex.di.LaunchDependencies
-import com.seancoyle.database.dao.launch.LAUNCH_ORDER_ASC
-import com.seancoyle.database.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_ALL
-import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_FAILED
-import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_SUCCESS
-import com.seancoyle.launch_datasource.network.mappers.launch.LAUNCH_UNKNOWN
+import com.seancoyle.launch_datasource_test.LaunchDependencies
+import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -44,12 +44,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -70,12 +70,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -97,12 +97,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
         var launchList = emptyList<LaunchModel>()
         val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = launchYear,
             order = LAUNCH_ORDER_ASC,
             launchFilter = null,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -125,12 +125,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
         var launchList = emptyList<LaunchModel>()
         val launchYear = "1000"
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = launchYear,
             order = LAUNCH_ORDER_ASC,
             launchFilter = null,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -151,12 +151,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -178,12 +178,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_ASC,
             launchFilter = LAUNCH_FAILED,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -206,12 +206,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
         var launchList = emptyList<LaunchModel>()
         val allLaunchItems = cacheDataSource.getAll()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -238,12 +238,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = "",
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_UNKNOWN,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -266,12 +266,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
         val year = "2006"
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = year,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -292,12 +292,12 @@ class FilterLaunchItemsInCacheUseCaseTest {
 
         var launchList = emptyList<LaunchModel>()
 
-        filterLaunchItems.execute(
+        filterLaunchItems(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
             order = LAUNCH_ORDER_DESC,
             launchFilter = null,
             page = 1,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.FilterLaunchItemsInCacheEvent()
+            stateEvent = LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         ).collect { value ->
             assert(
                 value?.stateMessage?.response?.message

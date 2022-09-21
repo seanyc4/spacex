@@ -8,7 +8,7 @@ object Modules {
     const val launchConstants = ":launch:launch-constants"
     const val launchDataSource = ":launch:launch-datasource"
     const val launchDataSourceTest = ":launch:launch-datasource-test"
-    const val launchModels = ":launch:launch-models"
+    const val launchDomain = ":launch:launch-domain"
     const val launchUseCases = ":launch:launch-usecases"
     const val launchViewState = ":launch:launch-viewstate"
     const val uiBase = ":ui-base"

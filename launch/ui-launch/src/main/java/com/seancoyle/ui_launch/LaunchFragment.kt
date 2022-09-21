@@ -21,10 +21,10 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.Links

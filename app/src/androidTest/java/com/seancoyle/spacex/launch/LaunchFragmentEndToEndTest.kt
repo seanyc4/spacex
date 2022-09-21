@@ -9,11 +9,11 @@ import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_ALL
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_EXCEPTION
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_EXCEPTION
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.spacex.R
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
@@ -23,7 +23,6 @@ import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
-import com.seancoyle.launch_datasource.network.mappers.launch.*
 import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.*

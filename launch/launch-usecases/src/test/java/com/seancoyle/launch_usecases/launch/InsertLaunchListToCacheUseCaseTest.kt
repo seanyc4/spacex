@@ -2,19 +2,20 @@ package com.seancoyle.launch_usecases.launch
 
 import com.seancoyle.core.cache.CacheErrors
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.cache.launch.FORCE_GENERAL_FAILURE
-import com.seancoyle.launch_datasource.cache.launch.FORCE_NEW_LAUNCH_EXCEPTION
+import com.seancoyle.launch_datasource_test.LaunchDependencies
 import com.seancoyle.launch_models.model.launch.LaunchFactory
-import com.seancoyle.launch_usecases.di.LaunchDependencies
-import com.seancoyle.launch_usecases.launch.InsertLaunchListToCacheUseCase
 import com.seancoyle.launch_usecases.launch.InsertLaunchListToCacheUseCase.Companion.INSERT_LAUNCH_LIST_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
-import com.seancoyle.spacex.di.LaunchDependencies
-import com.seancoyle.ui_launch.state.LaunchStateEvent.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+
+const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
+const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
+const val FORCE_NEW_LAUNCH_EXCEPTION = -4
+const val FORCE_GENERAL_FAILURE = -5
+const val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
 
 /*
 Test cases:

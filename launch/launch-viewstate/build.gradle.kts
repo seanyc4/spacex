@@ -21,5 +21,5 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
-    implementation(project(Modules.launchModels))
+    implementation(project(Modules.launchDomain))
 }

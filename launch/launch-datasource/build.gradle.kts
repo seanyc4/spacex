@@ -24,7 +24,7 @@ dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.coreTesting))
     api(project(Modules.coreDatabase))
-    api(project(Modules.launchModels))
+    api(project(Modules.launchDomain))
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

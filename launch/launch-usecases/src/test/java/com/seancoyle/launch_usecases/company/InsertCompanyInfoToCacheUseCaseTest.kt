@@ -2,11 +2,12 @@ package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.core.cache.CacheErrors
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.cache.company.FORCE_NEW_COMPANY_INFO_EXCEPTION
+import com.seancoyle.launch_datasource_test.CompanyDependencies
+import com.seancoyle.launch_datasource_test.cache.company.FORCE_GENERAL_FAILURE
+import com.seancoyle.launch_datasource_test.cache.company.FORCE_NEW_COMPANY_INFO_EXCEPTION
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
-import com.seancoyle.launch_usecases.company.InsertCompanyInfoToCacheUseCase
 import com.seancoyle.launch_usecases.company.InsertCompanyInfoToCacheUseCase.Companion.INSERT_COMPANY_INFO_SUCCESS
-import com.seancoyle.spacex.di.CompanyDependencies
+import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
@@ -64,9 +65,9 @@ class InsertCompanyInfoToCacheUseCaseTest {
             valuation = UUID.randomUUID().hashCode().toString(),
         )
 
-        insertCompanyInfoToCacheUseCase.execute(
+        insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->
@@ -85,7 +86,7 @@ class InsertCompanyInfoToCacheUseCaseTest {
     fun insertCompanyInfo_fail() = runBlocking {
 
         val newCompanyInfo = infoFactory.createCompanyInfo(
-            id = com.seancoyle.launch_datasource.cache.company.FORCE_GENERAL_FAILURE,
+            id = FORCE_GENERAL_FAILURE,
             employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
@@ -94,9 +95,9 @@ class InsertCompanyInfoToCacheUseCaseTest {
             valuation = UUID.randomUUID().hashCode().toString(),
         )
 
-        insertCompanyInfoToCacheUseCase.execute(
+        insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->
@@ -124,9 +125,9 @@ class InsertCompanyInfoToCacheUseCaseTest {
             valuation = UUID.randomUUID().hashCode().toString(),
         )
 
-        insertCompanyInfoToCacheUseCase.execute(
+        insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = com.seancoyle.ui_launch.state.LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->

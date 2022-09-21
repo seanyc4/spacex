@@ -88,7 +88,7 @@ dependencies {
     implementation(project(Modules.coreTesting))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchDataSource))
-    implementation(project(Modules.launchModels))
+    implementation(project(Modules.launchDomain))
     implementation(project(Modules.launchUseCases))
     implementation(project(Modules.launchViewState))
     implementation(project(Modules.uiLaunch))
@@ -117,6 +117,7 @@ dependencies {
     implementation(MaterialDialogs.material_dialogs)
 
     //debugImplementation(Square.leak_canary)
+    implementation(Room.room_runtime)
     implementation(Square.retrofit_gson)
 
     implementation(ScalingPixels.scaling_pixels)

@@ -2,12 +2,12 @@ package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_datasource_test.CompanyDependencies
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_ERROR
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.launch_usecases.company.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.launch_usecases.di.CompanyDependencies
 import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse

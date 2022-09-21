@@ -1,9 +1,9 @@
 package com.seancoyle.launch_datasource.network.mappers.launch
 
-import com.seancoyle.constants.LaunchNetworkMapperConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkMapperConstants.LAUNCH_UNKNOWN
+import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch_datasource.R
 import com.seancoyle.launch_datasource.network.abstraction.dateformatter.DateFormatter
 import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
