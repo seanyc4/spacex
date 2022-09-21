@@ -4,8 +4,11 @@
     <bytecodeTargetLevel target="1.7">
       <module name="SpaceX.app" target="11" />
       <module name="spacex.buildSrc" target="11" />
+      <module name="SpaceX.buildSrc" target="11" />
+      <module name="SpaceX.buildSrc.main" target="11" />
       <module name="spacex.buildSrc.main" target="11" />
       <module name="spacex.buildSrc.test" target="11" />
+      <module name="SpaceX.buildSrc.test" target="11" />
       <module name="SpaceX.core" target="11" />
       <module name="SpaceX.core-database" target="11" />
       <module name="SpaceX.core-datastore" target="11" />

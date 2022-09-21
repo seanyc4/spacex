@@ -1,6 +1,6 @@
 object Build {
 
-    private const val gradle_version = "7.2.0"
+    private const val gradle_version = "7.3.0"
     const val gradle = "com.android.tools.build:gradle:$gradle_version"
 
     private const val junit5_version = "1.8.2.0"

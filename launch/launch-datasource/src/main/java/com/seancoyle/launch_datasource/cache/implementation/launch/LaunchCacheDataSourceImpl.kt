@@ -66,7 +66,7 @@ constructor(
     }
 
     override suspend fun filterLaunchList(
-        year: String,
+        year: String?,
         order: String,
         launchFilter: Int?,
         page: Int

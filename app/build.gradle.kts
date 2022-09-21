@@ -69,6 +69,11 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude("META-INF/*")
+
+    }
+
     lint {
         checkDependencies = true
     }
@@ -106,18 +111,19 @@ dependencies {
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)
-   /* androidTestImplementation(HiltTest.hilt_android_testing)
-    kaptAndroidTest(Hilt.compiler)*/
+    androidTestImplementation(HiltTest.hilt_android_testing)
+    kaptAndroidTest(Hilt.compiler)
 
     implementation(MaterialDialogs.material_dialogs)
 
     //debugImplementation(Square.leak_canary)
+    implementation(Square.retrofit_gson)
 
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)
 
     implementation(AndroidTestDependencies.idling_resource)
-    /*testImplementation(TestDependencies.junit4)
+    testImplementation(TestDependencies.junit4)
     testImplementation(TestDependencies.jupiter_api)
     testImplementation(TestDependencies.jupiter_params)
     testImplementation(TestDependencies.mockk)
@@ -135,7 +141,7 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.test_rules)
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)
-    androidTestImplementation(AndroidTestDependencies.test_arch_core)*/
+    androidTestImplementation(AndroidTestDependencies.test_arch_core)
 
 }
 
