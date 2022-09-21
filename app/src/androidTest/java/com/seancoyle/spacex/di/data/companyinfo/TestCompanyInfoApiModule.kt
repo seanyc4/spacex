@@ -1,8 +1,8 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.spacex.di.data.companyinfo
 
 import com.seancoyle.spacex.di.data.network.companyinfo.CompanyInfoApiModule
 import com.seancoyle.core_testing.JsonFileReader
-import com.seancoyle.spacex.datasource.network.company.FakeCompanyInfoApi
+import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

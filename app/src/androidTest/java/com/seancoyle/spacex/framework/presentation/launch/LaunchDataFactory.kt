@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.launch
+package com.seancoyle.spacex.framework.presentation.launch
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

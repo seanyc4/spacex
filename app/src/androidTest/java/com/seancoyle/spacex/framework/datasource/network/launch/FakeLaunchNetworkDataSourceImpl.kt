@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.datasource.network.launch
+package com.seancoyle.spacex.framework.datasource.network.launch
 
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
@@ -11,13 +11,13 @@ import javax.inject.Singleton
 class FakeLaunchNetworkDataSourceImpl
     @Inject
     constructor(
-        private val api: FakeLaunchApi,
+        private val fakeApi: FakeLaunchApi,
         private val networkMapper: LaunchNetworkMapper
     ) : LaunchNetworkDataSource {
 
         override suspend fun getLaunchList(launchOptions: LaunchOptions): List<LaunchModel> {
             return networkMapper.mapEntityToList(
-                api.getLaunchList(options = launchOptions)
+                fakeApi.getLaunchList(options = launchOptions)
             )
         }
 

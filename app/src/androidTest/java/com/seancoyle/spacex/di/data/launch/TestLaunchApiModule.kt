@@ -1,8 +1,8 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.spacex.di.data.launch
 
 import com.seancoyle.spacex.di.data.network.launch.LaunchApiModule
 import com.seancoyle.core_testing.JsonFileReader
-import com.seancoyle.spacex.datasource.network.launch.FakeLaunchApi
+import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

@@ -1,10 +1,10 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.spacex.di.data.launch
 
-import com.seancoyle.spacex.di.data.network.launch.LaunchApiModule
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.datasource.network.launch.FakeLaunchApi
-import com.seancoyle.spacex.datasource.network.launch.FakeLaunchNetworkDataSourceImpl
+import com.seancoyle.spacex.di.data.network.launch.LaunchNetworkDataSourceModule
+import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi
+import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -15,18 +15,18 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [LaunchApiModule::class]
+    replaces = [LaunchNetworkDataSourceModule::class]
 )
 object TestLaunchNetworkDataSourceModule {
 
     @Singleton
     @Provides
     fun provideLaunchNetworkDataSource(
-        api: FakeLaunchApi,
+        fakeApi: FakeLaunchApi,
         networkMapper: LaunchNetworkMapper
     ): LaunchNetworkDataSource {
         return FakeLaunchNetworkDataSourceImpl(
-            api = api,
+            fakeApi = fakeApi,
             networkMapper = networkMapper
         )
     }

@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.datasource.cache
+package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
@@ -86,7 +86,7 @@ class LaunchDaoServiceTests {
      * CacheTest class.
      */
     @Test
-    fun a_searchLaunchTable_confirmDbNotEmpty() = runBlocking {
+    fun searchLaunchTable_confirmDbNotEmpty() = runBlocking {
 
         val totalNum = launchDaoService.getTotalEntries()
 

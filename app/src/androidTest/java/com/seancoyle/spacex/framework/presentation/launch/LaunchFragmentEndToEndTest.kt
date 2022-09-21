@@ -1,16 +1,15 @@
-package com.seancoyle.spacex.launch
+package com.seancoyle.spacex.framework.presentation.launch
 
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.*
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_EXCEPTION
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
@@ -26,13 +25,9 @@ import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNe
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
-import com.seancoyle.spacex.util.EspressoIdlingResourceRule
+import com.seancoyle.spacex.util.*
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetArticleTitleViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetCancelButtonViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetWebcastTitleViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.bottomSheetWikipediaTitleViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterApplyButtonViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterAscDescSwitchViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterButtonViewMatcher
@@ -43,18 +38,13 @@ import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunch
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusSuccessViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterLaunchStatusUnknownViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.filterYearViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogMessageViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogPositiveBtnViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogTitleViewMatcher
-import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.materialDialogViewMatcher
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.recyclerViewMatcher
-import com.seancoyle.spacex.util.launchesFragmentTestHelper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -64,19 +54,20 @@ import javax.inject.Inject
 import kotlin.random.Random
 import kotlin.test.assertTrue
 
+const val HEADER_COUNT = 3
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-class LaunchFragmentTests {
+class LaunchFragmentEndToEndTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
+    val intentsTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @get: Rule(order = 2)
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
@@ -91,9 +82,6 @@ class LaunchFragmentTests {
     lateinit var dateTransformer: DateTransformer
 
     @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
-
-    @Inject
     lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @Inject
@@ -105,9 +93,12 @@ class LaunchFragmentTests {
     @Inject
     lateinit var dataStore: AppDataStore
 
-    lateinit var validLaunchYears: List<String>
+    @Inject
+    lateinit var launchDataFactory: LaunchDataFactory
+
     private lateinit var testLaunchList: List<LaunchModel>
     private lateinit var testCompanyInfoList: CompanyInfoModel
+    lateinit var validLaunchYears: List<String>
 
     @Before
     fun init() {
@@ -115,6 +106,7 @@ class LaunchFragmentTests {
         Intents.init()
         prepareDataSet()
         validLaunchYears = launchDataFactory.provideValidFilterYearDates()
+
     }
 
     private fun prepareDataSet() = runBlocking {
@@ -132,10 +124,12 @@ class LaunchFragmentTests {
     }
 
     @Test
-    fun verifyTestDataIsVisible() {
+    fun generalEndToEndTest() {
 
+        /** verifyTestDataIsVisible */
         launchesFragmentTestHelper {
             // Wait for LaunchFragment to come into view
+            waitViewShown(recyclerViewMatcher)
             verifyCorrectTextIsDisplayed(
                 appTitleViewMatcher,
                 text = R.string.app_name
@@ -143,10 +137,8 @@ class LaunchFragmentTests {
             verifyViewIsDisplayed(filterButtonViewMatcher)
             verifyViewIsDisplayed(recyclerViewMatcher)
         }
-    }
 
-    @Test
-    fun verifyFilterViewIsDisplayingWithCorrectData() {
+        /** verifyFilterViewIsDisplayingWithCorrectData */
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
@@ -159,14 +151,12 @@ class LaunchFragmentTests {
             performClick(filterCancelButtonViewMatcher)
             verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
-    }
 
-    @Test
-    fun testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate() {
+        /** testDaysSinceDisplaysCorrectlyOnLaunchItemsWithAPastDate */
 
         // Only 2022 launches have "days from now" data
-        val year = "2022"
-        val expectedFilterResults: List<LaunchModel>?
+        var year = "2022"
+        var expectedFilterResults: List<LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -177,6 +167,7 @@ class LaunchFragmentTests {
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusAllViewMatcher)
             performClick(filterApplyButtonViewMatcher)
             verifyViewIsNotDisplayed(filterDialogViewMatcher)
         }
@@ -192,16 +183,14 @@ class LaunchFragmentTests {
 
         launchesFragmentTestHelper {
             checkRecyclerItemsDaysSinceDisplaysCorrectly(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 dateTransformer = dateTransformer
             )
         }
-    }
 
-    @Test
-    fun filterLaunchItemsByYearDesc_verifyResultsAndDescOrderState() {
-        val year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
-        val expectedFilterResults: List<LaunchModel>?
+        /** filterLaunchItemsByYearDesc_verifyResultsAndDescOrderState */
+        year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
+
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -223,7 +212,7 @@ class LaunchFragmentTests {
         // Check the date of each item on screen matches the year filter
         launchesFragmentTestHelper {
             checkRecyclerItemsDateMatchesFilteredDate(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 year = year,
             )
 
@@ -234,12 +223,9 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterLaunchItemsByYearAsc_verifyResultsAndAscOrderState() {
-        val year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
-        val expectedFilterResults: List<LaunchModel>?
+        /** filterLaunchItemsByYearAsc_verifyResultsAndAscOrderState */
+        year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -268,7 +254,7 @@ class LaunchFragmentTests {
         // Check the date of each item on screen matches the year filter
         launchesFragmentTestHelper {
             checkRecyclerItemsDateMatchesFilteredDate(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 year = year,
             )
 
@@ -279,12 +265,10 @@ class LaunchFragmentTests {
             verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterLaunchItemsByInvalidYear_verifyNoResults() {
-        val year = "1000"
-        val expectedFilterResults: List<LaunchModel>?
+
+        /** filterLaunchItemsByInvalidYear_verifyNoResults*/
+        year = "1000"
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -293,9 +277,8 @@ class LaunchFragmentTests {
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performTypeText(filterYearViewMatcher, text = year)
-            performClick(filterAscDescSwitchViewMatcher)
             verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterApplyButtonViewMatcher)
             verifyViewIsNotDisplayed(filterDialogViewMatcher)
@@ -304,28 +287,25 @@ class LaunchFragmentTests {
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
                 year = year,
-                order = LAUNCH_ORDER_ASC
+                order = LAUNCH_ORDER_DESC
             )
         }
 
         assertTrue(expectedFilterResults.isNullOrEmpty())
 
-    }
 
-    @Test
-    fun filterByLaunchStatusSuccess_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+        /** filterByLaunchStatusSuccess_verifyResultsAndDescOrderState */
 
         launchesFragmentTestHelper {
-  //
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
             verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
-            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            verifyViewIsNotChecked(filterAscDescSwitchViewMatcher)
             performClick(filterLaunchStatusSuccessViewMatcher)
+            performClick(filterAscDescSwitchViewMatcher)
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterApplyButtonViewMatcher)
             verifyViewIsNotDisplayed(filterDialogViewMatcher)
@@ -333,7 +313,7 @@ class LaunchFragmentTests {
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_SUCCESS,
+                launchFilter = LAUNCH_SUCCESS,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -343,7 +323,7 @@ class LaunchFragmentTests {
         // Check the that each view holder has the R.drawable.ic_launch_success icon
         launchesFragmentTestHelper {
             checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatus(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 launchSuccessIcon = R.drawable.ic_launch_success,
             )
 
@@ -354,17 +334,15 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterByLaunchStatusFailure_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+
+        /** filterByLaunchStatusFailure_verifyResultsAndDescOrderState */
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
@@ -376,7 +354,7 @@ class LaunchFragmentTests {
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_FAILED,
+                launchFilter = LAUNCH_FAILED,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -386,7 +364,7 @@ class LaunchFragmentTests {
         // Check the that each view holder has the R.drawable.ic_launch_fail icon
         launchesFragmentTestHelper {
             checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatus(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 launchSuccessIcon = R.drawable.ic_launch_fail,
             )
 
@@ -397,33 +375,29 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterByLaunchStatus_invalidSearch() {
-        val expectedFilterResults: List<LaunchModel>?
+
+        /** filterByLaunchStatus_invalidSearch */
 
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_EXCEPTION,
+                launchFilter = LAUNCH_EXCEPTION,
                 order = LAUNCH_ORDER_DESC
             )
         }
 
         assertTrue(expectedFilterResults.isNullOrEmpty())
-    }
 
-    @Test
-    fun filterByLaunchStatusUnknown_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+
+        /** filterByLaunchStatusUnknown_verifyResultsAndDescOrderState */
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performClick(filterLaunchStatusUnknownViewMatcher)
@@ -434,7 +408,7 @@ class LaunchFragmentTests {
 
         runBlocking {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
-                isLaunchSuccess = LAUNCH_UNKNOWN,
+                launchFilter = LAUNCH_UNKNOWN,
                 order = LAUNCH_ORDER_DESC
             )
         }
@@ -445,7 +419,7 @@ class LaunchFragmentTests {
         // R.drawable.ic_launch_unknown doesn't display any visible image
         launchesFragmentTestHelper {
             checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatus(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 launchSuccessIcon = R.drawable.ic_launch_unknown,
             )
 
@@ -456,22 +430,20 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterLaunchItemsByYear_andLaunchStatusSuccess_verifyResultsAndDescOrderState() {
+
+        /** filterLaunchItemsByYear_andLaunchStatusSuccess_verifyResultsAndDescOrderState */
         // We don't use the random list here as some years don't have any successful launches
         // This will cause the test to fail
-        val year = "2021"
-        val expectedFilterResults: List<LaunchModel>?
+        year = "2021"
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
             performTypeText(filterYearViewMatcher, text = year)
             performClick(filterLaunchStatusSuccessViewMatcher)
@@ -483,7 +455,7 @@ class LaunchFragmentTests {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
                 year = year,
                 order = LAUNCH_ORDER_DESC,
-                isLaunchSuccess = LAUNCH_SUCCESS
+                launchFilter = LAUNCH_SUCCESS
             )
         }
 
@@ -492,7 +464,7 @@ class LaunchFragmentTests {
         // Check the date of each item on screen matches the year filter 2021
         launchesFragmentTestHelper {
             checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 year = year,
                 launchSuccessIcon = R.drawable.ic_launch_success
             )
@@ -506,20 +478,17 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun filterLaunchItemsByYear_andLaunchStatusFailure_verifyResultsAndDescOrderState() {
+        /** filterLaunchItemsByYear_andLaunchStatusFailure_verifyResultsAndDescOrderState */
         // We don't use the random list here as some years don't have any successful launches
         // This will cause the test to fail
-        val year = "2006"
-        val expectedFilterResults: List<LaunchModel>?
+        year = "2006"
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
             verifyViewIsDisplayed(filterDialogViewMatcher)
-            verifyViewIsChecked(filterLaunchStatusAllViewMatcher)
-            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusSuccessViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusFailureViewMatcher)
             verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
             verifyViewIsChecked(filterAscDescSwitchViewMatcher)
@@ -533,7 +502,7 @@ class LaunchFragmentTests {
             expectedFilterResults = getFilteredLaunchItemsFromCache(
                 year = year,
                 order = LAUNCH_ORDER_DESC,
-                isLaunchSuccess = LAUNCH_FAILED
+                launchFilter = LAUNCH_FAILED
             )
         }
 
@@ -542,7 +511,7 @@ class LaunchFragmentTests {
         // Check the date of each item on screen matches the year filter 2006
         launchesFragmentTestHelper {
             checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-                expectedFilterResults = expectedFilterResults,
+                expectedFilterResults = expectedFilterResults!!,
                 year = year,
                 launchSuccessIcon = R.drawable.ic_launch_fail
             )
@@ -556,145 +525,177 @@ class LaunchFragmentTests {
             verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
             performClick(filterCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun recyclerViewOnClickDisplayBottomSheet_isSuccess() {
+
+        /** resetFilteredSearchResults */
+
+        year = ""
+
+        launchesFragmentTestHelper {
+            performClick(filterButtonViewMatcher)
+            verifyViewIsDisplayed(filterDialogViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusAllViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusSuccessViewMatcher)
+            verifyViewIsChecked(filterLaunchStatusFailureViewMatcher)
+            verifyViewIsNotChecked(filterLaunchStatusUnknownViewMatcher)
+            verifyViewIsChecked(filterAscDescSwitchViewMatcher)
+            performTypeText(filterYearViewMatcher, text = year)
+            performClick(filterLaunchStatusAllViewMatcher)
+            performClick(filterApplyButtonViewMatcher)
+            verifyViewIsNotDisplayed(filterDialogViewMatcher)
+        }
+
+        runBlocking {
+            expectedFilterResults = getFilteredLaunchItemsFromCache(
+                year = year,
+                order = LAUNCH_ORDER_DESC,
+                launchFilter = LAUNCH_ALL
+            )
+        }
+
+
+        /** recyclerViewOnClickDisplayBottomSheet_isSuccess */
 
         // Not all items have links, - no links will display an info dialog
         // so much hard code a position which guarantees links
-        val position = 24
+        var position = 24
 
         launchesFragmentTestHelper {
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
+            performClick(bottomSheetCancelButtonViewMatcher)
         }
-    }
 
-    @Test
-    fun bottomSheetClickArticleLink_isSuccess() {
 
-        val position = 24
+        /** bottomSheetClickArticleLink_isSuccess() */
+
         val articleLink =
             "https://spaceflightnow.com/2022/03/19/spacex-stretches-rocket-reuse-record-with-another-starlink-launch/"
 
         launchesFragmentTestHelper {
-            waitViewShown(recyclerViewMatcher)
+
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
 
             // Build intent to replicate the data equal to the POSITION clicked
-            val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(articleLink))
-            intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
-            performClick(bottomSheetArticleTitleViewMatcher)
-            intended(expectedIntent)
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(articleLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetArticleTitleViewMatcher)
+            Intents.intended(expectedIntent)
 
         }
-    }
 
-    @Test
-    fun bottomSheetClickVideoLink_isSuccess() {
 
-        val position = 24
+        /** bottomSheetClickVideoLink_isSuccess */
+
         val videoLink = "https://youtu.be/0giA6VZOICs"
 
         launchesFragmentTestHelper {
-            waitViewShown(recyclerViewMatcher)
+
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
 
             // Build intent to replicate the data equal to the POSITION clicked
-            val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(videoLink))
-            intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
-            performClick(bottomSheetWebcastTitleViewMatcher)
-            intended(expectedIntent)
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(videoLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetWebcastTitleViewMatcher)
+            Intents.intended(expectedIntent)
 
         }
-    }
 
-    @Test
-    fun bottomSheetClickWikiLink_isSuccess() {
 
-        val position = 24
+        /** bottomSheetClickWikiLink_isSuccess */
+
         val wikiLink = "https://en.wikipedia.org/wiki/Starlink"
 
         launchesFragmentTestHelper {
+
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
 
             // Build intent to replicate the data equal to the POSITION clicked
-            val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(wikiLink))
-            intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
-            performClick(bottomSheetWikipediaTitleViewMatcher)
-            intended(expectedIntent)
+            val expectedIntent = CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(wikiLink)
+            )
+            Intents.intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+            performClick(LaunchFragmentTestHelper.bottomSheetWikipediaTitleViewMatcher)
+            Intents.intended(expectedIntent)
 
         }
-    }
 
-    @Test
-    fun bottomSheetClickCancel_isSuccess() {
 
-        val position = 24
+        /** bottomSheetClickCancel_isSuccess */
 
         launchesFragmentTestHelper {
-            waitViewShown(recyclerViewMatcher)
+
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
             verifyAllBottomSheetTextViewsDisplayCorrectTitles()
             performClick(bottomSheetCancelButtonViewMatcher)
-            verifyViewIsNotDisplayed(bottomSheetViewMatcher)
-        }
-    }
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
 
-    @Test
-    fun bottomSheetNoArticleOrWikiLink_isSuccess() {
+        }
+
+
+        /** bottomSheetNoArticleOrWikiLink_isSuccess */
 
         // This item has no article or wiki link in its data
         // Therefore these links should not be visible on screen
-        val position = 13
+        position = 13
 
         launchesFragmentTestHelper {
-            waitViewShown(recyclerViewMatcher)
             performRecyclerViewClick(recyclerViewMatcher, position)
-            verifyViewIsDisplayed(bottomSheetViewMatcher)
-            verifyViewIsNotVisible(bottomSheetArticleTitleViewMatcher)
-            verifyViewIsNotVisible(bottomSheetWikipediaTitleViewMatcher)
-            verifyViewIsDisplayed(bottomSheetWebcastTitleViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyViewIsNotVisible(LaunchFragmentTestHelper.bottomSheetArticleTitleViewMatcher)
+            verifyViewIsNotVisible(LaunchFragmentTestHelper.bottomSheetWikipediaTitleViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.bottomSheetWebcastTitleViewMatcher)
             performClick(bottomSheetCancelButtonViewMatcher)
-            verifyViewIsNotDisplayed(bottomSheetViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
         }
-    }
 
-    @Test
-    fun recyclerViewOnClickDisplayBottomSheet_isFail_verifyDialogDisplayWithText() {
+
+        /** recyclerViewOnClickDisplayBottomSheet_isFail_verifyDialogDisplayWithText */
         // Select an item with no media links
         // verify a dialog is displayed - also very the title and message
         // Click ok button - check dialog has dismissed
         launchesFragmentTestHelper {
             performRecyclerViewClick(recyclerViewMatcher, 5)
-            verifyViewIsNotDisplayed(bottomSheetViewMatcher)
-            verifyViewIsDisplayed(materialDialogViewMatcher)
-            verifyCorrectTextIsDisplayed(materialDialogTitleViewMatcher, text = R.string.text_info)
-            verifyCorrectTextIsDisplayed(materialDialogMessageViewMatcher, text = R.string.no_links)
-            performClick(materialDialogPositiveBtnViewMatcher)
-            verifyViewIsNotDisplayed(materialDialogViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.bottomSheetViewMatcher)
+            verifyViewIsDisplayed(LaunchFragmentTestHelper.materialDialogViewMatcher)
+            verifyCorrectTextIsDisplayed(
+                LaunchFragmentTestHelper.materialDialogTitleViewMatcher,
+                text = R.string.text_info
+            )
+            verifyCorrectTextIsDisplayed(
+                LaunchFragmentTestHelper.materialDialogMessageViewMatcher,
+                text = R.string.no_links
+            )
+            performClick(LaunchFragmentTestHelper.materialDialogPositiveBtnViewMatcher)
+            verifyViewIsNotDisplayed(LaunchFragmentTestHelper.materialDialogViewMatcher)
         }
-    }
 
+    }
 
     private suspend fun getFilteredLaunchItemsFromCache(
         year: String? = "",
         order: String? = LAUNCH_ORDER_DESC,
-        isLaunchSuccess: Int? = null
+        launchFilter: Int? = null
     ): List<LaunchModel> {
         return launchCacheDataSource.filterLaunchList(
             year = year ?: "",
             order = order ?: LAUNCH_ORDER_DESC,
-            launchFilter = isLaunchSuccess,
+            launchFilter = launchFilter,
             page = 1
         ) ?: emptyList()
 
@@ -709,7 +710,13 @@ class LaunchFragmentTests {
         clearDataStore()
         Intents.release()
     }
+
 }
+
+
+
+
+
 
 
 

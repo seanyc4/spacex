@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.datasource.network.company
+package com.seancoyle.spacex.framework.datasource.network.company
 
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper

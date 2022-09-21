@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.datasource.network.launch
+package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
@@ -42,7 +42,7 @@ class LaunchRetrofitServiceTests {
     fun init() {
         hiltRule.inject()
         apiService = FakeLaunchNetworkDataSourceImpl(
-            api = fakeApi,
+            fakeApi = fakeApi,
             networkMapper = networkMapper
         )
     }
