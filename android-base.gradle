@@ -42,4 +42,8 @@ android {
     lint {
         checkDependencies true
     }
+
+    sourceSets {
+        getByName("test").resources.srcDir("src/test/res")
+    }
 }
