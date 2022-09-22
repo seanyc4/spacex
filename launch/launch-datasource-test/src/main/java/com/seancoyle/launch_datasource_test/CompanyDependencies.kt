@@ -43,16 +43,7 @@ class CompanyDependencies {
 
         companyInfoCacheDataSource = FakeCompanyInfoCacheDataSourceImpl(
             fakeCompanyInfoDatabase = companyInfoDataFactory.produceFakeCompanyInfoDatabase(
-                CompanyInfoModel(
-                    id = "test",
-                    employees = "3",
-                    founded = 1995,
-                    founder = "test1",
-                    launchSites = 5,
-                    name = "test",
-                    valuation = "test"
-                )
-              //  companyInfoDataFactory.produceCompanyInfo()
+               companyInfoDataFactory.produceCompanyInfo()
             )
         )
 

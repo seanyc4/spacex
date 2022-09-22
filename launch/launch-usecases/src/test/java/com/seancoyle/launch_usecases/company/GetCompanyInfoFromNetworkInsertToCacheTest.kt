@@ -12,7 +12,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

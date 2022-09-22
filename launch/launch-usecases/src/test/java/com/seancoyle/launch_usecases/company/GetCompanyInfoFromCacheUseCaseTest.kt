@@ -6,10 +6,9 @@ import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromCacheUseCase.Companion.GET_COMPANY_INFO_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 
@@ -20,7 +19,7 @@ Test cases:
     b) listen for GET_COMPANY_INFO_SUCCESS from flow emission
     c) check the company info is not null
 */
-@InternalCoroutinesApi
+
 class GetCompanyInfoFromCacheUseCaseTest {
 
     // system in test

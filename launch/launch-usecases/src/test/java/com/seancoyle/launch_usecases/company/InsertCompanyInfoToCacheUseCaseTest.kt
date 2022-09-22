@@ -8,7 +8,6 @@ import com.seancoyle.launch_datasource_test.cache.company.FORCE_NEW_COMPANY_INFO
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.InsertCompanyInfoToCacheUseCase.Companion.INSERT_COMPANY_INFO_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

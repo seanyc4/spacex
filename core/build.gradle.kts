@@ -8,4 +8,6 @@ dependencies {
     "implementation"(AndroidX.lifecycle_live_data_ktx)
     "implementation"(Square.retrofit)
     "implementation"(Timber.timber)
+    "implementation"(ScalingPixels.scaling_pixels)
+    "implementation"(Google.material)
 }

@@ -10,9 +10,6 @@ dependencies {
     "api"(project(Modules.coreDatabase))
     "api"(project(Modules.launchDomain))
 
-    "implementation"(Hilt.android)
-    "kapt"(Hilt.compiler)
-
     "implementation"(Kotlin.coroutines_core)
     "implementation"(Kotlin.coroutines_android)
 
