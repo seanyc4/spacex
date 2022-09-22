@@ -9,6 +9,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 /*
@@ -22,14 +23,15 @@ Test cases:
 class GeLaunchItemByIdFromCacheTest {
 
     // system in test
-    private val getLaunchItemById: GetLaunchItemByIdFromCacheUseCase
+    private lateinit var getLaunchItemById: GetLaunchItemByIdFromCacheUseCase
 
     // dependencies
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
-    private val cacheDataSource: LaunchCacheDataSource
-    private val factory: LaunchFactory
+    private lateinit var cacheDataSource: LaunchCacheDataSource
+    private lateinit var factory: LaunchFactory
 
-    init {
+    @BeforeEach
+    fun setup() {
         launchDependencies.build()
         cacheDataSource = launchDependencies.launchCacheDataSource
         factory = launchDependencies.launchFactory

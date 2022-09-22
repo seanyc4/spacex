@@ -11,6 +11,5 @@ object Modules {
     const val launchDomain = ":launch:launch-domain"
     const val launchUseCases = ":launch:launch-usecases"
     const val launchViewState = ":launch:launch-viewstate"
-    const val uiBase = ":ui-base"
     const val uiLaunch = ":launch:ui-launch"
 }

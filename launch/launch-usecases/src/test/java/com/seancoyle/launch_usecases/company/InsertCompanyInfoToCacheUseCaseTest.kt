@@ -11,6 +11,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -31,18 +32,19 @@ Test cases:
     c) listen for CACHE_ERROR_UNKNOWN emission from flow
     e) confirm cache was not updated
  */
-@InternalCoroutinesApi
+
 class InsertCompanyInfoToCacheUseCaseTest {
 
     // system in test
-    private val insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase
+    private lateinit var insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase
 
     // dependencies
     private val dependencies: CompanyDependencies = CompanyDependencies()
-    private val cacheDataSource: CompanyInfoCacheDataSource
-    private val infoFactory: CompanyInfoFactory
+    private lateinit var cacheDataSource: CompanyInfoCacheDataSource
+    private lateinit var infoFactory: CompanyInfoFactory
 
-    init {
+    @BeforeEach
+    fun setup() {
         dependencies.build()
         cacheDataSource = dependencies.companyInfoCacheDataSource
         infoFactory = dependencies.companyInfoFactory

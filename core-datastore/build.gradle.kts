@@ -1,25 +1,10 @@
 
-plugins {
-    id("com.android.library")
-    kotlin("android")
-}
-
-android {
-    compileSdk = Android.compileSdk
-
-    defaultConfig {
-        minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+apply {
+    from("$rootDir/android-base.gradle")
 }
 
 dependencies {
 
-    implementation(AndroidX.data_store)
+    "implementation"(AndroidX.data_store)
 
 }

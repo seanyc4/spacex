@@ -9,13 +9,13 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.seancoyle.core.state.*
 import com.seancoyle.core.state.UIComponentType.*
-import com.seancoyle.ui_base.displayToast
+import com.seancoyle.core.presentation.displayToast
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
-import com.seancoyle.ui_base.gone
-import com.seancoyle.ui_base.visible
+import com.seancoyle.core.presentation.gone
+import com.seancoyle.core.presentation.visible
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.ui_base.UIController
+import com.seancoyle.core.presentation.UIController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

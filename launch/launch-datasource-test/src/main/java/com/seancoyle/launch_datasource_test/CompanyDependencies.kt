@@ -8,6 +8,7 @@ import com.seancoyle.launch_datasource.network.implementation.numberformatter.Nu
 import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
 import com.seancoyle.core.util.isUnitTest
 import com.seancoyle.launch_datasource_test.network.company.FakeCompanyInfoNetworkDataSourceImpl
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 
@@ -42,7 +43,16 @@ class CompanyDependencies {
 
         companyInfoCacheDataSource = FakeCompanyInfoCacheDataSourceImpl(
             fakeCompanyInfoDatabase = companyInfoDataFactory.produceFakeCompanyInfoDatabase(
-                companyInfoDataFactory.produceCompanyInfo()
+                CompanyInfoModel(
+                    id = "test",
+                    employees = "3",
+                    founded = 1995,
+                    founder = "test1",
+                    launchSites = 5,
+                    name = "test",
+                    valuation = "test"
+                )
+              //  companyInfoDataFactory.produceCompanyInfo()
             )
         )
 

@@ -16,7 +16,7 @@ import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.launch_viewstate.LaunchStateEvent.*
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.ui_base.BaseViewModel
+import com.seancoyle.core.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow

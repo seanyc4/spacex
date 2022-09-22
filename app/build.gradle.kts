@@ -39,6 +39,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -81,7 +82,7 @@ android {
 }
 
 dependencies {
-
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation(project(Modules.core))
     implementation(project(Modules.coreDatabase))
     implementation(project(Modules.coreDatastore))
@@ -92,7 +93,6 @@ dependencies {
     implementation(project(Modules.launchUseCases))
     implementation(project(Modules.launchViewState))
     implementation(project(Modules.uiLaunch))
-    implementation(project(Modules.uiBase))
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)

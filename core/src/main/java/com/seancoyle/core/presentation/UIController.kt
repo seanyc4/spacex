@@ -1,4 +1,4 @@
-package com.seancoyle.ui_base
+package com.seancoyle.core.presentation
 
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessageCallback

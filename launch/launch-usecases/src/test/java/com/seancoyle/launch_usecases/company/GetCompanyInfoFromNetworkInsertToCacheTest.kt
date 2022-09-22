@@ -53,7 +53,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
      * 3. Check the company info is valid CompanyInfoModel?
      */
     @Test
-    fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
+    fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache() = runBlocking {
 
         // condition the response
         mockWebServer.enqueue(
@@ -92,7 +92,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
      * Simulate a bad request
      */
     @Test
-    fun getCompanyInfoFromNetwork_emitHttpError(): Unit = runBlocking {
+    fun getCompanyInfoFromNetwork_emitHttpError() = runBlocking {
 
         // condition the response
          mockWebServer.enqueue(

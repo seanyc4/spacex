@@ -9,6 +9,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
@@ -38,14 +39,15 @@ Test cases:
 class InsertLaunchListToCacheUseCaseTest {
 
     // system in test
-    private val insertLaunchListToCacheUseCase: InsertLaunchListToCacheUseCase
+    private lateinit var insertLaunchListToCacheUseCase: InsertLaunchListToCacheUseCase
 
     // dependencies
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
-    private val cacheDataSource: LaunchCacheDataSource
-    private val factory: LaunchFactory
+    private lateinit var cacheDataSource: LaunchCacheDataSource
+    private lateinit var factory: LaunchFactory
 
-    init {
+    @BeforeEach
+    fun setup() {
         launchDependencies.build()
         cacheDataSource = launchDependencies.launchCacheDataSource
         factory = launchDependencies.launchFactory

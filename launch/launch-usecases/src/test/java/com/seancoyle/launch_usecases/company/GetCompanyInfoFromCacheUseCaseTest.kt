@@ -8,9 +8,10 @@ import com.seancoyle.launch_usecases.company.GetCompanyInfoFromCacheUseCase.Comp
 import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 
 /*
 Test cases:
@@ -23,15 +24,16 @@ Test cases:
 class GetCompanyInfoFromCacheUseCaseTest {
 
     // system in test
-    private val getCompanyInfo: GetCompanyInfoFromCacheUseCase
+    private lateinit var getCompanyInfo: GetCompanyInfoFromCacheUseCase
 
     // dependencies
     private val dependencies: CompanyDependencies = CompanyDependencies()
-    private val cacheDataSource: CompanyInfoCacheDataSource
-    private val infoFactory: CompanyInfoFactory
+    private lateinit var cacheDataSource: CompanyInfoCacheDataSource
+    private lateinit var infoFactory: CompanyInfoFactory
 
 
-    init {
+    @BeforeEach
+    fun setup() {
         dependencies.build()
         cacheDataSource = dependencies.companyInfoCacheDataSource
         infoFactory = dependencies.companyInfoFactory
@@ -59,7 +61,7 @@ class GetCompanyInfoFromCacheUseCaseTest {
         }
 
         // confirm company info was was retrieved
-        assertTrue { result != null }
+        assertTrue(result != null)
 
     }
 

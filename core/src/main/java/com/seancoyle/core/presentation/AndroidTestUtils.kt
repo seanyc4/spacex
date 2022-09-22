@@ -1,4 +1,4 @@
-package com.seancoyle.ui_base
+package com.seancoyle.core.presentation
 
 import javax.inject.Inject
 import javax.inject.Singleton

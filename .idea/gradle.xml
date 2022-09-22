@@ -25,7 +25,6 @@
             <option value="$PROJECT_DIR$/launch/launch-usecases" />
             <option value="$PROJECT_DIR$/launch/launch-viewstate" />
             <option value="$PROJECT_DIR$/launch/ui-launch" />
-            <option value="$PROJECT_DIR$/ui-base" />
           </set>
         </option>
       </GradleProjectSettings>
