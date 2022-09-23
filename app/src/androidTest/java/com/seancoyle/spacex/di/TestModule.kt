@@ -32,14 +32,6 @@ object TestModule {
 
     @Singleton
     @Provides
-    fun provideDataStoreManager(
-        application: HiltTestApplication
-    ): AppDataStore {
-        return AppDataStoreManager(application)
-    }
-
-    @Singleton
-    @Provides
     fun provideAndroidTestUtils(): AndroidTestUtils {
         return AndroidTestUtils(true)
     }
