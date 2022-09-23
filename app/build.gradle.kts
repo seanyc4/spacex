@@ -84,7 +84,6 @@ android {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation(project(Modules.core))
-    implementation(project(Modules.coreDatabase))
     implementation(project(Modules.coreDatastore))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchDataSource))

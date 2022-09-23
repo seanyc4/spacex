@@ -16,7 +16,7 @@ class CompanyInfoFactory {
         valuation: String
     ): CompanyInfoModel {
         return CompanyInfoModel(
-            id = id ?: UUID.randomUUID().toString(),
+            id = id ?: "1",
             employees = employees,
             founded = founded,
             founder = founder,

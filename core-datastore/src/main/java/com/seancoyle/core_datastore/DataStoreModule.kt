@@ -1,8 +1,6 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.core_datastore
 
 import android.app.Application
-import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.core_datastore.AppDataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

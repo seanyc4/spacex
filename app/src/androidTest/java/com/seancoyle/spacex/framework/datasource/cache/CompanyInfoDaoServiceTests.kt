@@ -24,9 +24,9 @@ import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @FlowPreview
+@HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@HiltAndroidTest
 class CompanyInfoDaoServiceTests {
 
     @get:Rule(order = 0)
@@ -45,7 +45,7 @@ class CompanyInfoDaoServiceTests {
     lateinit var entityMapper: CompanyInfoEntityMapper
 
     @Before
-    fun init() {
+    fun setup() {
         hiltRule.inject()
         daoService = CompanyInfoCacheDataSourceImpl(
             dao = dao,
