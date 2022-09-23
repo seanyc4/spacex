@@ -2,7 +2,7 @@ package com.seancoyle.spacex.di.data.launch
 
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.di.data.network.launch.LaunchNetworkDataSourceModule
+import com.seancoyle.launch_datasource.di.network.launch.LaunchNetworkDataSourceModule
 import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi
 import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchNetworkDataSourceImpl
 import dagger.Module

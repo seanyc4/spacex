@@ -2,7 +2,7 @@ package com.seancoyle.spacex.di.data.companyinfo
 
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
-import com.seancoyle.spacex.di.data.network.companyinfo.CompanyInfoNetworkDataSourceModule
+import com.seancoyle.launch_datasource.di.network.companyinfo.CompanyInfoNetworkDataSourceModule
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import dagger.Module
