@@ -38,7 +38,7 @@ import com.seancoyle.ui_launch.adapter.LaunchAdapter
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchStateEvent
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.core.presentation.AndroidTestUtils
+import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBinding
 import dagger.hilt.android.AndroidEntryPoint

@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.testing.JsonFileReader
 import com.seancoyle.launch_datasource.R
 import com.seancoyle.launch_models.model.launch.*
 import java.time.LocalDateTime

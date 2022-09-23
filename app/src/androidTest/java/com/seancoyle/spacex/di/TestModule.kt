@@ -3,8 +3,8 @@ package com.seancoyle.spacex.di
 import android.content.Context
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.core_datastore.AppDataStoreManager
-import com.seancoyle.core_testing.JsonFileReader
-import com.seancoyle.core.presentation.AndroidTestUtils
+import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.core.testing.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext

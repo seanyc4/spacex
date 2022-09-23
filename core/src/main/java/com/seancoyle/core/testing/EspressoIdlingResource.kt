@@ -1,4 +1,4 @@
-package com.seancoyle.core.util
+package com.seancoyle.core.testing
 
 object EspressoIdlingResource {
 

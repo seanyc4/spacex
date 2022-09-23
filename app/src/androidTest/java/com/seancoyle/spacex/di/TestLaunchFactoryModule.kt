@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di
 
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.testing.JsonFileReader
 import com.seancoyle.spacex.di.domain.LaunchFactoryModule
 import com.seancoyle.launch_models.model.launch.LaunchFactory
 import com.seancoyle.spacex.LaunchDataFactory

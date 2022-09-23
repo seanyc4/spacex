@@ -1,4 +1,4 @@
-package com.seancoyle.core.presentation
+package com.seancoyle.core.testing
 
 import javax.inject.Inject
 import javax.inject.Singleton

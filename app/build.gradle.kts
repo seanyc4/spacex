@@ -86,7 +86,6 @@ dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.coreDatabase))
     implementation(project(Modules.coreDatastore))
-    implementation(project(Modules.coreTesting))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))
@@ -124,12 +123,6 @@ dependencies {
     implementation(Timber.timber)
 
     implementation(AndroidTestDependencies.idling_resource)
-    testImplementation(TestDependencies.junit4)
-    testImplementation(TestDependencies.jupiter_api)
-    testImplementation(TestDependencies.jupiter_params)
-    testImplementation(TestDependencies.mockk)
-    testRuntimeOnly(TestDependencies.jupiter_engine)
-
     androidTestImplementation(AndroidTestDependencies.androidx_test_ext)
     androidTestImplementation(AndroidTestDependencies.coroutines_test)
     androidTestImplementation(AndroidTestDependencies.espresso_contrib)

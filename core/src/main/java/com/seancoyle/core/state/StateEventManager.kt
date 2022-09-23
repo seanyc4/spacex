@@ -2,7 +2,7 @@ package com.seancoyle.core.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.seancoyle.core.util.EspressoIdlingResource
+import com.seancoyle.core.testing.EspressoIdlingResource
 import com.seancoyle.core.util.printLogDebug
 
 /**

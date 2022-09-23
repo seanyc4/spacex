@@ -1,11 +1,11 @@
 apply {
     from("$rootDir/android-base.gradle")
+    from("$rootDir/hilt.gradle")
 }
 
 dependencies {
 
     "implementation"(project(Modules.core))
-    "implementation"(project(Modules.coreTesting))
     "implementation"(project(Modules.launchConstants))
     "implementation"(project(Modules.launchDataSource))
     "implementation"(project(Modules.launchDomain))
