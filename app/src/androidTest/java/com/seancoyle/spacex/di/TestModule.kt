@@ -1,12 +1,10 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import androidx.room.Room
-import com.seancoyle.spacex.business.datastore.AppDataStore
-import com.seancoyle.spacex.business.datastore.AppDataStoreManager
-import com.seancoyle.spacex.framework.datasource.cache.database.Database
-import com.seancoyle.spacex.util.AndroidTestUtils
-import com.seancoyle.spacex.util.JsonFileReader
+import com.seancoyle.core_datastore.AppDataStore
+import com.seancoyle.core_datastore.AppDataStoreManager
+import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.core.testing.AndroidTestUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -30,23 +28,6 @@ object TestModule {
     @Provides
     fun provideApplication(@ApplicationContext app: Context): HiltTestApplication {
         return app as HiltTestApplication
-    }
-
-    @Singleton
-    @Provides
-    fun provideDataStoreManager(
-        application: HiltTestApplication
-    ): AppDataStore {
-        return AppDataStoreManager(application)
-    }
-
-    @Singleton
-    @Provides
-    fun provideSpaceXDb(app: HiltTestApplication): Database {
-        return Room
-            .inMemoryDatabaseBuilder(app, Database::class.java)
-            .fallbackToDestructiveMigration()
-            .build()
     }
 
     @Singleton

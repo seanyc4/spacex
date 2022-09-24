@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Material TextView Styles. -->
+    <style name="launch_titles_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="launch_data_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="launch_titles_style_tablet" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_xs</item>
+    </style>
+
+    <style name="launch_data_style_tablet" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_size_xs</item>
+    </style>
+
+    <!-- Bottom Sheet Styles. -->
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetBackground</item>
+    </style>
+
+    <style name="bottomSheetBackground" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_background</item>
+    </style>
+
+
+
+</resources>

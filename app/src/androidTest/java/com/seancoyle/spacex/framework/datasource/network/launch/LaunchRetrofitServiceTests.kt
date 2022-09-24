@@ -1,14 +1,11 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.di.ProductionModule
-import com.seancoyle.spacex.framework.datasource.api.launch.FakeLaunchApi
-import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LaunchNetworkMapper
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
+import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -29,7 +26,7 @@ class LaunchRetrofitServiceTests {
     var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private lateinit var apiService: LaunchRetrofitService
+    private lateinit var apiService: LaunchNetworkDataSource
 
     @Inject
     lateinit var networkMapper: LaunchNetworkMapper
@@ -44,8 +41,8 @@ class LaunchRetrofitServiceTests {
     @Before
     fun init() {
         hiltRule.inject()
-        apiService = FakeLaunchRetrofitServiceImpl(
-            api = fakeApi,
+        apiService = FakeLaunchNetworkDataSourceImpl(
+            fakeApi = fakeApi,
             networkMapper = networkMapper
         )
     }

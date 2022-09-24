@@ -1,10 +1,9 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoFactory
-import com.seancoyle.spacex.framework.datasource.api.company.FakeCompanyInfoApi
-import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.mappers.company.CompanyInfoNetworkMapper
+import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_models.model.company.CompanyInfoFactory
+import com.seancoyle.launch_datasource.network.mappers.company.CompanyInfoNetworkMapper
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,7 +28,7 @@ class CompanyInfoApiServiceTests {
     var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private lateinit var apiService: CompanyInfoRetrofitService
+    private lateinit var apiService: CompanyInfoNetworkDataSource
 
     @Inject
     lateinit var fakeApi: FakeCompanyInfoApi
@@ -43,10 +42,10 @@ class CompanyInfoApiServiceTests {
     @Before
     fun init() {
         hiltRule.inject()
-        apiService = FakeCompanyInfoRetrofitServiceImpl(
-            fakeApi = fakeApi,
-            networkMapper = networkMapper
-        )
+        apiService = FakeCompanyInfoNetworkDataSourceImpl(
+                fakeApi = fakeApi,
+                networkMapper = networkMapper
+            )
     }
 
     @Test

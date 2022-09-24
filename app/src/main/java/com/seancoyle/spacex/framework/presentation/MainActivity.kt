@@ -3,20 +3,19 @@ package com.seancoyle.spacex.framework.presentation
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.viewbinding.ViewBinding
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.seancoyle.spacex.business.domain.state.*
-import com.seancoyle.spacex.business.domain.state.UIComponentType.*
-import com.seancoyle.spacex.framework.presentation.common.displayToast
+import com.seancoyle.core.state.*
+import com.seancoyle.core.state.UIComponentType.*
+import com.seancoyle.core.presentation.displayToast
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
-import com.seancoyle.spacex.framework.presentation.common.gone
-import com.seancoyle.spacex.framework.presentation.common.visible
-import com.seancoyle.spacex.util.printLogDebug
+import com.seancoyle.core.presentation.gone
+import com.seancoyle.core.presentation.visible
+import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core.presentation.UIController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -28,21 +27,16 @@ class MainActivity :
     AppCompatActivity(),
     UIController {
 
-    private val binding by viewBinding(ActivityMainBinding::inflate)
+    private lateinit var binding :ActivityMainBinding
     private var dialogInView: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
-    inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
-        crossinline bindingInflater: (LayoutInflater) -> T
-    ) =
-        lazy(LazyThreadSafetyMode.NONE) {
-            bindingInflater.invoke(layoutInflater)
-        }
 
     override fun displayProgressBar(isDisplayed: Boolean) {
         with(binding) {

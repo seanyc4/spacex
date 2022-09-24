@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_launch"
+    app:startDestination="@id/launchFragment">
+
+    <fragment
+        android:id="@+id/launchFragment"
+        android:name="com.seancoyle.ui_launch.ui.LaunchFragment"
+        android:label="LaunchFragment">
+
+        <action
+            android:id="@+id/action_launchFragment_to_launchBottomActionSheet"
+            app:destination="@+id/launchBottomActionSheet" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/launchBottomActionSheet"
+        android:name="com.seancoyle.ui_launch.ui.LaunchBottomActionSheet"
+        android:label="LaunchBottomActionSheet" />
+
+</navigation>

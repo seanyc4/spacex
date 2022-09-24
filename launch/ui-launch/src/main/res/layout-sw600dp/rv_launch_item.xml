@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_8sdp"
+    android:theme="@style/AppTheme"
+    app:cardBackgroundColor="@color/colorSecondary"
+    app:cardCornerRadius="@dimen/_8sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/launch_image"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/launch_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mission_title"
+            style="@style/launch_titles_style_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/mission"
+            app:layout_constraintStart_toEndOf="@+id/launch_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/date_time_title"
+            style="@style/launch_titles_style_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_time"
+            app:layout_constraintStart_toStartOf="@+id/mission_title"
+            app:layout_constraintTop_toTopOf="@+id/date_time_data" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/rocket_title"
+            style="@style/launch_titles_style_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rocket"
+            app:layout_constraintStart_toStartOf="@+id/mission_title"
+            app:layout_constraintTop_toTopOf="@+id/rocket_data" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/days_title"
+            style="@style/launch_titles_style_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:text="@string/days"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/mission_title"
+            app:layout_constraintTop_toBottomOf="@+id/rocket_data" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.45" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mission_data"
+            style="@style/launch_data_style_tablet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:text="@string/mission"
+            app:layout_constraintEnd_toStartOf="@+id/launch_success_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/mission_title" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/date_time_data"
+            style="@style/launch_data_style_tablet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/date"
+            app:layout_constraintEnd_toEndOf="@+id/mission_data"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/mission_data" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/rocket_data"
+            style="@style/launch_data_style_tablet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/rocket"
+            app:layout_constraintEnd_toEndOf="@+id/date_time_data"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/date_time_data" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/days_data"
+            style="@style/launch_data_style_tablet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/days_data"
+            app:layout_constraintEnd_toEndOf="@+id/mission_data"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/rocket_data" />
+
+        <ImageView
+            android:id="@+id/launch_success_image"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/launch_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_launch_fail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+

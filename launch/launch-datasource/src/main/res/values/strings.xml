@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SpaceX</string>
+
+    <!-- Company Info Text -->
+    <string name="company_info">%s was founded by  %s in  %s. It has now  %s employees,  %s launch sites, and is valued at USD  %s</string>
+    <string name="date_data">%s at %s</string>
+    <string name="rocket_data">%s/%s</string>
+    <string name="days_since_now">Days since now</string>
+    <string name="days_from_now">Days from now</string>
+    <string name="days_data">+/- %s</string>
+
+</resources>

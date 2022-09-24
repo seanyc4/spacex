@@ -9,23 +9,22 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_EXCEPTION
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.business.data.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.spacex.business.data.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.spacex.business.datastore.AppDataStore
-import com.seancoyle.spacex.business.domain.model.company.CompanyInfoModel
-import com.seancoyle.spacex.business.domain.model.launch.LaunchModel
-import com.seancoyle.spacex.framework.datasource.cache.abstraction.datetransformer.DateTransformer
-import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_ASC
-import com.seancoyle.spacex.framework.datasource.cache.dao.launch.LAUNCH_ORDER_DESC
-import com.seancoyle.spacex.framework.datasource.data.LaunchDataFactory
-import com.seancoyle.spacex.framework.datasource.network.abstraction.company.CompanyInfoRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.abstraction.launch.LaunchRetrofitService
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_EXCEPTION
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_FAILED
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_SUCCESS
-import com.seancoyle.spacex.framework.datasource.network.mappers.launch.LAUNCH_UNKNOWN
-import com.seancoyle.spacex.framework.datasource.network.model.launch.LaunchOptions
+import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
+import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.core_datastore.AppDataStore
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_datasource.network.abstraction.datetransformer.DateTransformer
+import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
 import com.seancoyle.spacex.util.LaunchFragmentTestHelper.Companion.appTitleViewMatcher
@@ -95,10 +94,10 @@ class LaunchFragmentTests {
     lateinit var launchDataFactory: LaunchDataFactory
 
     @Inject
-    lateinit var launchRetrofitService: LaunchRetrofitService
+    lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @Inject
-    lateinit var companyInfoRetrofitService: CompanyInfoRetrofitService
+    lateinit var companyInfoNetworkDataSource: CompanyInfoNetworkDataSource
 
     @Inject
     lateinit var launchOptions: LaunchOptions
@@ -120,15 +119,15 @@ class LaunchFragmentTests {
 
     private fun prepareDataSet() = runBlocking {
         // Get fake network data
-        testLaunchList = launchRetrofitService.getLaunchList(launchOptions = launchOptions)
-        testCompanyInfoList = companyInfoRetrofitService.getCompanyInfo()
+        testLaunchList = launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
+        testCompanyInfoList = companyInfoNetworkDataSource.getCompanyInfo()
 
         // clear any existing data so recyclerview isn't overwhelmed
         launchCacheDataSource.deleteAll()
         companyInfoCacheDataSource.deleteAll()
 
         // Insert data to fake in memory room database
-        launchCacheDataSource.insertLaunchList(testLaunchList)
+        launchCacheDataSource.insertList(testLaunchList)
         companyInfoCacheDataSource.insert(testCompanyInfoList)
     }
 

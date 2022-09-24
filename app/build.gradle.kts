@@ -3,7 +3,6 @@ plugins {
     kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
@@ -40,10 +39,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-
-        // Enable Java 8 time below api 26
         isCoreLibraryDesugaringEnabled = true
-
     }
 
     kotlinOptions {
@@ -74,6 +70,11 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude("META-INF/*")
+
+    }
+
     lint {
         checkDependencies = true
     }
@@ -81,11 +82,19 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    implementation(project(Modules.core))
+    implementation(project(Modules.coreDatastore))
+    implementation(project(Modules.launchConstants))
+    implementation(project(Modules.launchDataSource))
+    implementation(project(Modules.launchDomain))
+    implementation(project(Modules.launchUseCases))
+    implementation(project(Modules.launchViewState))
+    implementation(project(Modules.uiLaunch))
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
-    implementation(AndroidX.data_store)
-    coreLibraryDesugaring(AndroidX.desurgar)
+
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)
@@ -98,47 +107,21 @@ dependencies {
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
-    implementation(Glide.glide)
-    kapt(Glide.glide_compiler)
-
-    implementation(Google.constraint_layout)
-    implementation(Google.card_view)
-    implementation(Google.material)
-    implementation(Google.recycler_view)
-    implementation(Google.swipe_refresh_layout)
-
     implementation(Hilt.android)
     kapt(Hilt.compiler)
     androidTestImplementation(HiltTest.hilt_android_testing)
     kaptAndroidTest(Hilt.compiler)
 
-    implementation(Kotlin.coroutines_core)
-    implementation(Kotlin.coroutines_android)
-    implementation(Kotlin.datetime)
-
     implementation(MaterialDialogs.material_dialogs)
 
     //debugImplementation(Square.leak_canary)
-    implementation(Square.interceptor)
-    testImplementation(Square.mock_web_server)
-    implementation(Square.ok_http)
-    implementation(Square.retrofit)
-    implementation(Square.retrofit_gson)
-
-    implementation(Room.room_ktx)
     implementation(Room.room_runtime)
-    kapt(Room.room_compiler)
+    implementation(Square.retrofit_gson)
 
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)
 
     implementation(AndroidTestDependencies.idling_resource)
-    testImplementation(TestDependencies.junit4)
-    testImplementation(TestDependencies.jupiter_api)
-    testImplementation(TestDependencies.jupiter_params)
-    testImplementation(TestDependencies.mockk)
-    testRuntimeOnly(TestDependencies.jupiter_engine)
-
     androidTestImplementation(AndroidTestDependencies.androidx_test_ext)
     androidTestImplementation(AndroidTestDependencies.coroutines_test)
     androidTestImplementation(AndroidTestDependencies.espresso_contrib)
