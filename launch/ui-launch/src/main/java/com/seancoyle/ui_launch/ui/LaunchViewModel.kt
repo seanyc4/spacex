@@ -17,6 +17,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent.*
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
 import com.seancoyle.core.presentation.BaseViewModel
+import com.seancoyle.core_datastore.AppDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +32,8 @@ constructor(
     private val launchUseCase: LaunchUseCase,
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
-    private val appDataStoreManager: com.seancoyle.core_datastore.AppDataStore,
+    private val appDataStoreManager: AppDataStore,
+    private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel<LaunchViewState>() {
 
     init {

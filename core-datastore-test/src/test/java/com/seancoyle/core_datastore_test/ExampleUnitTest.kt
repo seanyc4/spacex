@@ -1,4 +1,4 @@
-package com.seancoyle.core_datastore
+package com.seancoyle.core_datastore_test
 
 import org.junit.Test
 

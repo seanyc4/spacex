@@ -45,4 +45,13 @@ dependencies {
     "implementation"(Timber.timber)
 
 
+    "testImplementation"(project(Modules.coreDatastoreTest))
+    "testImplementation"(AndroidTestDependencies.coroutines_test)
+    "testImplementation"(AndroidTestDependencies.mockk_android)
+    "testImplementation"(AndroidTestDependencies.test_arch_core)
+
+    "testImplementation"(TestDependencies.jupiter_engine)
+    "testImplementation"(TestDependencies.jupiter_api)
+    "testImplementation"(TestDependencies.jupiter_params)
+    "testImplementation"(TestDependencies.junit4)
 }
