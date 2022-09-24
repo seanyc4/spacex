@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanySummary
 import com.seancoyle.launch_models.model.launch.LaunchModel
@@ -29,11 +30,11 @@ import javax.inject.Inject
 class LaunchViewModel
 @Inject
 constructor(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val launchUseCase: LaunchUseCase,
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
-    private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel<LaunchViewState>() {
 
     init {
