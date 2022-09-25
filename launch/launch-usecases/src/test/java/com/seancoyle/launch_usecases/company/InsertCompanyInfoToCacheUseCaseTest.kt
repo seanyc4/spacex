@@ -1,6 +1,7 @@
 package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.core.cache.CacheErrors
+import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource_test.CompanyDependencies
 import com.seancoyle.launch_datasource_test.cache.company.FORCE_GENERAL_FAILURE
@@ -8,7 +9,9 @@ import com.seancoyle.launch_datasource_test.cache.company.FORCE_NEW_COMPANY_INFO
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.InsertCompanyInfoToCacheUseCase.Companion.INSERT_COMPANY_INFO_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,7 +35,11 @@ Test cases:
     e) confirm cache was not updated
  */
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class InsertCompanyInfoToCacheUseCaseTest {
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     // system in test
     private lateinit var insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase
@@ -48,6 +55,7 @@ class InsertCompanyInfoToCacheUseCaseTest {
         cacheDataSource = dependencies.companyInfoCacheDataSource
         infoFactory = dependencies.companyInfoFactory
         insertCompanyInfoToCacheUseCase = InsertCompanyInfoToCacheUseCase(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource,
             factory = infoFactory
         )

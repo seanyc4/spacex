@@ -15,7 +15,10 @@ dependencies {
     "implementation"(project(Modules.launchDomain))
     "implementation"(project(Modules.launchViewState))
 
+    "testImplementation"(project(Modules.coreDatastoreTest))
     "testImplementation"(project(Modules.launchDataSourceTest))
+    "testImplementation"(AndroidTestDependencies.test_arch_core)
+
     "testImplementation"(TestDependencies.jupiter_engine)
     "testImplementation"(TestDependencies.jupiter_api)
     "testImplementation"(TestDependencies.jupiter_params)

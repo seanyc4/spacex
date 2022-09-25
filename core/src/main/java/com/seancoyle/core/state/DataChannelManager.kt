@@ -1,14 +1,17 @@
 package com.seancoyle.core.state
 
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.util.printLogDebug
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class DataChannelManager<ViewState> {
+abstract class DataChannelManager<ViewState>
+constructor(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+){
 
     private var channelScope: CoroutineScope? = null
     private val stateEventManager: StateEventManager = StateEventManager()
@@ -46,7 +49,7 @@ abstract class DataChannelManager<ViewState> {
                         }
                     }
                 }
-                .launchIn(getChannelScope())
+                .launchIn(getChannelScope(ioDispatcher))
         }
     }
 
@@ -108,8 +111,8 @@ abstract class DataChannelManager<ViewState> {
         return isStateEventActive(stateEvent)
     }
 
-    fun getChannelScope(): CoroutineScope {
-        return channelScope?: setupNewChannelScope(CoroutineScope(IO))
+    fun getChannelScope(ioDispatcher: CoroutineDispatcher): CoroutineScope {
+        return channelScope?: setupNewChannelScope(CoroutineScope(ioDispatcher))
     }
 
     private fun setupNewChannelScope(coroutineScope: CoroutineScope): CoroutineScope{

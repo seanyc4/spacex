@@ -7,22 +7,27 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.cache.CacheErrors
+import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase.Companion.SEARCH_LAUNCH_NO_MATCHING_RESULTS
 import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase.Companion.SEARCH_LAUNCH_SUCCESS
 import com.seancoyle.launch_datasource_test.LaunchDependencies
 import com.seancoyle.launch_viewstate.LaunchStateEvent
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import kotlin.random.Random
 
-@InternalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 class FilterLaunchItemsInCacheUseCaseTest {
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var filterLaunchItems: FilterLaunchItemsInCacheUseCase
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
@@ -35,6 +40,7 @@ class FilterLaunchItemsInCacheUseCaseTest {
         validLaunchYears = launchDependencies.launchDataFactory.provideValidFilterYearDates()
         cacheDataSource = launchDependencies.launchCacheDataSource
         filterLaunchItems = FilterLaunchItemsInCacheUseCase(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )
     }

@@ -2,16 +2,18 @@ package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.core.state.*
 import com.seancoyle.core.cache.CacheResponseHandler
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_viewstate.LaunchViewState
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class InsertCompanyInfoToCacheUseCase(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: CompanyInfoCacheDataSource,
     private val factory: CompanyInfoFactory
 ) {
@@ -35,7 +37,7 @@ class InsertCompanyInfoToCacheUseCase(
             )
         }
 
-        val cacheResult = safeCacheCall(IO) {
+        val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.insert(newCompanyInfo)
         }
 

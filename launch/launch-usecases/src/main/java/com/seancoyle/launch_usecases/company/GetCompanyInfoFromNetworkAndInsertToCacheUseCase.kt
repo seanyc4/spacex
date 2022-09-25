@@ -4,18 +4,20 @@ import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.core.state.*
 import com.seancoyle.core.cache.CacheResponseHandler
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.core.network.ApiResponseHandler
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.core.network.safeApiCall
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.launch_viewstate.LaunchViewState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 constructor(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: CompanyInfoCacheDataSource,
     private val networkDataSource: CompanyInfoNetworkDataSource,
     private val factory: CompanyInfoFactory
@@ -25,7 +27,7 @@ constructor(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
-        val networkResult = safeApiCall(Dispatchers.IO) {
+        val networkResult = safeApiCall(ioDispatcher) {
             networkDataSource.getCompanyInfo()
         }
 
@@ -86,7 +88,7 @@ constructor(
                 valuation = networkResponse.data?.company?.valuation!!,
             )
 
-            val cacheResult = safeCacheCall(Dispatchers.IO) {
+            val cacheResult = safeCacheCall(ioDispatcher) {
                 cacheDataSource.insert(companyInfo)
             }
 

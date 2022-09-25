@@ -1,5 +1,6 @@
 package com.seancoyle.launch_usecases.launch
 
+import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
 import com.seancoyle.launch_datasource_test.LaunchDependencies
@@ -9,9 +10,11 @@ import com.seancoyle.launch_usecases.launch.GetLaunchListFromNetworkAndInsertToC
 import com.seancoyle.launch_usecases.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.launch_datasource_test.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch_viewstate.LaunchStateEvent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.Rule
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -19,7 +22,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetLaunchItemsFromNetworkInsertToCacheTest {
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     // system in test
     private lateinit var getLaunchListFromNetworkAndInsertToCacheUseCase: GetLaunchListFromNetworkAndInsertToCacheUseCase
@@ -41,6 +48,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         // instantiate the system in test
         getLaunchListFromNetworkAndInsertToCacheUseCase = GetLaunchListFromNetworkAndInsertToCacheUseCase(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource,
             launchNetworkDataSource = networkDataSource
         )

@@ -1,6 +1,7 @@
 package com.seancoyle.core.presentation
 
 import androidx.lifecycle.*
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.state.*
 import com.seancoyle.core.util.GenericErrors
 import com.seancoyle.core.util.printLogDebug
@@ -11,12 +12,15 @@ import kotlinx.coroutines.flow.flow
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class BaseViewModel<ViewState> : ViewModel()
+abstract class BaseViewModel<ViewState>
+    constructor(
+        @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    ): ViewModel()
 {
     private val _viewState: MutableLiveData<ViewState?> = MutableLiveData()
 
     val dataChannelManager: DataChannelManager<ViewState>
-            = object: DataChannelManager<ViewState>(){
+            = object: DataChannelManager<ViewState>(ioDispatcher = ioDispatcher){
 
         override fun handleNewData(data: ViewState) {
             this@BaseViewModel.handleNewData(data)
@@ -78,7 +82,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
     }
 
     fun setViewState(viewState: ViewState){
-        _viewState.value = viewState
+        _viewState.postValue(viewState)
     }
 
     fun clearStateMessage(index: Int = 0){

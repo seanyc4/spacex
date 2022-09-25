@@ -1,4 +1,4 @@
-package com.seancoyle.ui_launch
+package com.seancoyle.core.testing
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -8,9 +8,12 @@ import org.junit.runner.Description
 
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule : TestWatcher() {
+class MainCoroutineRule
+    constructor(
+        val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    ): TestWatcher() {
 
-    val testDispatcher = StandardTestDispatcher()
+    val testScope = TestScope(testDispatcher)
 
     override fun starting(description: Description) {
         super.starting(description)

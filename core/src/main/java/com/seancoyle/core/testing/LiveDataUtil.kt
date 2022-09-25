@@ -1,6 +1,5 @@
-package com.seancoyle.spacex
+package com.seancoyle.core.testing
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.CountDownLatch
@@ -61,6 +60,34 @@ fun <T> LiveData<T>.getOrAwaitValue(
 
     @Suppress("UNCHECKED_CAST")
     return data as T
+}
+
+class LiveDataValueCapture<T> {
+
+    val lock = Any()
+
+    private val _values = mutableListOf<T?>()
+    val values: List<T?>
+        get() = synchronized(lock) {
+            _values.toList() // copy to avoid returning reference to mutable list
+        }
+
+    fun addValue(value: T?) = synchronized(lock) {
+        _values += value
+    }
+}
+
+inline fun <T> LiveData<T>.captureValues(block: LiveDataValueCapture<T>.() -> Unit) {
+    val capture = LiveDataValueCapture<T>()
+    val observer = Observer<T> {
+        capture.addValue(it)
+    }
+    observeForever(observer)
+    try {
+        capture.block()
+    } finally {
+        removeObserver(observer)
+    }
 }
 
 /**

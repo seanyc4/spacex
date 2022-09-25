@@ -35,14 +35,14 @@ constructor(
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
-) : BaseViewModel<LaunchViewState>() {
+) : BaseViewModel<LaunchViewState>(ioDispatcher = ioDispatcher) {
 
     init {
         setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
 
         // Get filter and order from datastore if available
         // And update state accordingly
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             setLaunchOrder(
                 appDataStoreManager.readStringValue(LAUNCH_ORDER)
             )
@@ -328,13 +328,13 @@ constructor(
     fun getIsDialogFilterDisplayed() = getCurrentViewStateOrNew().isDialogFilterDisplayed
 
     private fun saveOrder(order: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             appDataStoreManager.setStringValue(LAUNCH_ORDER, order)
         }
     }
 
     private fun saveFilter(filter: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             appDataStoreManager.setIntValue(LAUNCH_FILTER, filter)
         }
     }

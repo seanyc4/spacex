@@ -3,14 +3,16 @@ package com.seancoyle.launch_usecases.company
 import com.seancoyle.core.state.*
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.core.cache.CacheResponseHandler
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.launch_viewstate.LaunchViewState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetCompanyInfoFromCacheUseCase(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: CompanyInfoCacheDataSource
 ) {
 
@@ -18,7 +20,7 @@ class GetCompanyInfoFromCacheUseCase(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
-        val cacheResult = safeCacheCall(Dispatchers.IO) {
+        val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.getCompanyInfo()
         }
 
