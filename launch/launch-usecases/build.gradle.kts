@@ -15,6 +15,7 @@ dependencies {
     "implementation"(project(Modules.launchDomain))
     "implementation"(project(Modules.launchViewState))
 
+    "testImplementation"(project(Modules.launchDataSourceTest))
     "testImplementation"(TestDependencies.jupiter_engine)
     "testImplementation"(TestDependencies.jupiter_api)
     "testImplementation"(TestDependencies.jupiter_params)

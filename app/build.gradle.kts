@@ -82,7 +82,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(Java8Time.java8Time)
     implementation(project(Modules.core))
     implementation(project(Modules.coreDatastore))
     implementation(project(Modules.launchConstants))

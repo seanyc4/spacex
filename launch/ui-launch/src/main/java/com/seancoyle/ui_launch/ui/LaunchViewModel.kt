@@ -10,7 +10,7 @@ import com.seancoyle.launch_models.model.company.CompanySummary
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.SectionTitle
-import com.seancoyle.launch_usecases.launch.LaunchUseCase
+import com.seancoyle.launch_usecases.launch.LaunchUseCases
 import com.seancoyle.core.state.*
 import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
 import com.seancoyle.launch_models.model.launch.LaunchOptions
@@ -31,7 +31,7 @@ class LaunchViewModel
 @Inject
 constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val launchUseCase: LaunchUseCase,
+    private val launchUseCases: LaunchUseCases,
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
@@ -74,14 +74,14 @@ constructor(
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
             is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
-                launchUseCase.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
+                launchUseCases.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
                     launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
 
             is GetAllLaunchItemsFromCacheEvent -> {
-                launchUseCase.getAllLaunchItemsFromCacheUseCase.invoke(
+                launchUseCases.getAllLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
@@ -102,7 +102,7 @@ constructor(
                 if (stateEvent.clearLayoutManagerState) {
                     clearLayoutManagerState()
                 }
-                launchUseCase.filterLaunchItemsInCacheUseCase.invoke(
+                launchUseCases.filterLaunchItemsInCacheUseCase.invoke(
                     year = getSearchQuery(),
                     order = getOrder(),
                     launchFilter = getFilter(),
@@ -112,7 +112,7 @@ constructor(
             }
 
             is GetNumLaunchItemsInCacheEvent -> {
-                launchUseCase.getNumLaunchItemsFromCacheUseCase.invoke(
+                launchUseCases.getNumLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }

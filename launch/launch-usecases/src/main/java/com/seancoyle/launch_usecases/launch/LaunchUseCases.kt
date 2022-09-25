@@ -1,6 +1,6 @@
 package com.seancoyle.launch_usecases.launch
 
-class LaunchUseCase(
+class LaunchUseCases(
     val getAllLaunchItemsFromCacheUseCase: GetAllLaunchItemsFromCacheUseCase,
     val getLaunchListFromNetworkAndInsertToCacheUseCase: GetLaunchListFromNetworkAndInsertToCacheUseCase,
     val getNumLaunchItemsFromCacheUseCase: GetNumLaunchItemsFromCacheUseCase,

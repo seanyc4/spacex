@@ -1,10 +1,16 @@
+
 apply {
     from("$rootDir/android-base.gradle")
     from("$rootDir/hilt.gradle")
 }
 
+plugins {
+    id("de.mannodermaus.android-junit5")
+}
+
 dependencies {
 
+    "coreLibraryDesugaring"(Java8Time.java8Time)
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.coreDatastore))
     "implementation"(project(Modules.launchConstants))
@@ -46,8 +52,9 @@ dependencies {
 
 
     "testImplementation"(project(Modules.coreDatastoreTest))
+    "testImplementation"(project(Modules.launchDataSourceTest))
     "testImplementation"(AndroidTestDependencies.coroutines_test)
-    "testImplementation"(AndroidTestDependencies.mockk_android)
+    "testImplementation"(AndroidTestDependencies.mockk)
     "testImplementation"(AndroidTestDependencies.test_arch_core)
 
     "testImplementation"(TestDependencies.jupiter_engine)

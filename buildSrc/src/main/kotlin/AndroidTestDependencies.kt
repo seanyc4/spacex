@@ -9,6 +9,7 @@ object AndroidTestDependencies{
     const val instrumentation_runner = "com.seancoyle.spacex.framework.HiltTestRunner"
     const val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Kotlin.version}"
     const val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
+    const val mockk = "io.mockk:mockk:${Versions.mockk_version}"
     const val test_rules = "androidx.test:rules:${Versions.test_runner}"
     const val test_runner = "androidx.test:runner:${Versions.test_runner}"
     const val test_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"

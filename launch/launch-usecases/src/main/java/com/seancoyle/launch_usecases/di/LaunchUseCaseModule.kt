@@ -18,8 +18,8 @@ object LaunchUseCaseModule {
     fun provideLaunchUseCases(
         launchCacheDataSource: LaunchCacheDataSource,
         launchNetworkDataSource: LaunchNetworkDataSource
-    ): LaunchUseCase {
-        return LaunchUseCase(
+    ): LaunchUseCases {
+        return LaunchUseCases(
             getAllLaunchItemsFromCacheUseCase = GetAllLaunchItemsFromCacheUseCase(
                 cacheDataSource = launchCacheDataSource
             ),
