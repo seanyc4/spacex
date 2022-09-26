@@ -29,8 +29,6 @@ dependencies {
     "implementation"(AndroidX.navigation_fragment)
     "implementation"(AndroidX.navigation_ui)
     "kapt"(AndroidX.lifecycle_compiler)
-    "debugImplementation"(AndroidXTest.fragment_testing)
-    "androidTestImplementation"(AndroidXTest.navigation_testing)
 
     "implementation"(Glide.glide)
     "kapt"(Glide.glide_compiler)
@@ -40,10 +38,6 @@ dependencies {
     "implementation"(Google.material)
     "implementation"(Google.recycler_view)
     "implementation"(Google.swipe_refresh_layout)
-
-    "implementation"(Kotlin.coroutines_core)
-    "implementation"(Kotlin.coroutines_android)
-    "implementation"(Kotlin.datetime)
 
     "implementation"(MaterialDialogs.material_dialogs)
 
