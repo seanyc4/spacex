@@ -1,15 +1,18 @@
 package com.seancoyle.launch_datasource.network.model.launch
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class LaunchDto(
 
     @Expose
     @SerializedName("docs")
     val docs: List<DocsDto>,
-    )
+)
 
+@Keep
 data class DocsDto(
 
     @Expose
@@ -35,9 +38,9 @@ data class DocsDto(
     @Expose
     @SerializedName("success")
     val isLaunchSuccess: Boolean?,
+)
 
-    )
-
+@Keep
 data class LinksDto(
     @Expose
     @SerializedName("patch")
@@ -54,9 +57,9 @@ data class LinksDto(
     @Expose
     @SerializedName("wikipedia")
     val wikipedia: String?,
+)
 
-    )
-
+@Keep
 data class RocketDto(
     @Expose
     @SerializedName("name")
@@ -67,6 +70,7 @@ data class RocketDto(
     val type: String?,
 )
 
+@Keep
 data class PatchDto(
     @Expose
     @SerializedName("small")
