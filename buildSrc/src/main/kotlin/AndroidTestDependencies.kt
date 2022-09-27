@@ -7,7 +7,7 @@ object AndroidTestDependencies{
     const val espresso_intents = "androidx.test.espresso:espresso-intents:${Versions.espresso_core}"
     const val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
     const val instrumentation_runner = "com.seancoyle.spacex.framework.HiltTestRunner"
-    const val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Kotlin.version}"
+    const val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Kotlin.kotlin_version}"
     const val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
     const val mockk = "io.mockk:mockk:${Versions.mockk_version}"
     const val test_rules = "androidx.test:rules:${Versions.test_runner}"
