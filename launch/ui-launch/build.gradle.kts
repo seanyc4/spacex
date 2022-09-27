@@ -1,10 +1,16 @@
+
 apply {
     from("$rootDir/android-base.gradle")
     from("$rootDir/hilt.gradle")
 }
 
+plugins {
+    id("de.mannodermaus.android-junit5")
+}
+
 dependencies {
 
+    "coreLibraryDesugaring"(Java8Time.java8Time)
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.coreDatastore))
     "implementation"(project(Modules.launchConstants))
@@ -23,8 +29,6 @@ dependencies {
     "implementation"(AndroidX.navigation_fragment)
     "implementation"(AndroidX.navigation_ui)
     "kapt"(AndroidX.lifecycle_compiler)
-    "debugImplementation"(AndroidXTest.fragment_testing)
-    "androidTestImplementation"(AndroidXTest.navigation_testing)
 
     "implementation"(Glide.glide)
     "kapt"(Glide.glide_compiler)
@@ -35,14 +39,20 @@ dependencies {
     "implementation"(Google.recycler_view)
     "implementation"(Google.swipe_refresh_layout)
 
-    "implementation"(Kotlin.coroutines_core)
-    "implementation"(Kotlin.coroutines_android)
-    "implementation"(Kotlin.datetime)
-
     "implementation"(MaterialDialogs.material_dialogs)
 
     "implementation"(ScalingPixels.scaling_pixels)
     "implementation"(Timber.timber)
 
 
+    "testImplementation"(project(Modules.coreDatastoreTest))
+    "testImplementation"(project(Modules.launchDataSourceTest))
+    "testImplementation"(AndroidTestDependencies.coroutines_test)
+    "testImplementation"(AndroidTestDependencies.mockk)
+    "testImplementation"(AndroidTestDependencies.test_arch_core)
+
+    "testImplementation"(TestDependencies.jupiter_engine)
+    "testImplementation"(TestDependencies.jupiter_api)
+    "testImplementation"(TestDependencies.jupiter_params)
+    "testImplementation"(TestDependencies.junit4)
 }

@@ -3,14 +3,16 @@ package com.seancoyle.launch_usecases.launch
 
 import com.seancoyle.core.state.*
 import com.seancoyle.core.cache.CacheResponseHandler
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.launch_viewstate.LaunchViewState
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetNumLaunchItemsFromCacheUseCase(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: LaunchCacheDataSource
 ) {
 
@@ -18,7 +20,7 @@ class GetNumLaunchItemsFromCacheUseCase(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
-        val cacheResult = safeCacheCall(IO) {
+        val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.getTotalEntries()
         }
         val response = object : CacheResponseHandler<LaunchViewState, Int>(

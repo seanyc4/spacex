@@ -1,13 +1,15 @@
 package com.seancoyle.launch_usecases.launch
 
 import com.seancoyle.core.cache.CacheErrors
+import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.launch_datasource_test.LaunchDependencies
 import com.seancoyle.launch_models.model.launch.LaunchFactory
 import com.seancoyle.launch_usecases.launch.InsertLaunchListToCacheUseCase.Companion.INSERT_LAUNCH_LIST_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,8 +37,11 @@ Test cases:
     c) listen for CACHE_ERROR_UNKNOWN emission from flow
     e) confirm cache was not updated
  */
-@InternalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 class InsertLaunchListToCacheUseCaseTest {
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     // system in test
     private lateinit var insertLaunchListToCacheUseCase: InsertLaunchListToCacheUseCase
@@ -52,6 +57,7 @@ class InsertLaunchListToCacheUseCaseTest {
         cacheDataSource = launchDependencies.launchCacheDataSource
         factory = launchDependencies.launchFactory
         insertLaunchListToCacheUseCase = InsertLaunchListToCacheUseCase(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )
     }

@@ -1,8 +1,10 @@
 package com.seancoyle.launch_datasource.network.model.company
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class CompanyInfoDto(
 
     @Expose

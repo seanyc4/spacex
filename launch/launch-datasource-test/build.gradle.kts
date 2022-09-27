@@ -2,6 +2,15 @@ apply {
     from("$rootDir/android-base.gradle")
     from("$rootDir/hilt.gradle")
 }
+plugins{
+    id("com.android.library")
+}
+
+android{
+    sourceSets {
+        getByName("main").resources.srcDir("src/main/res")
+    }
+}
 
 dependencies {
 

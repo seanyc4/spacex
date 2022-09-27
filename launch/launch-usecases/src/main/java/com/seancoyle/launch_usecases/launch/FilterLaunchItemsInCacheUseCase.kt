@@ -3,14 +3,16 @@ package com.seancoyle.launch_usecases.launch
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.core.state.*
 import com.seancoyle.core.cache.CacheResponseHandler
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.launch_viewstate.LaunchViewState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FilterLaunchItemsInCacheUseCase(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: LaunchCacheDataSource
 ) {
 
@@ -27,7 +29,7 @@ class FilterLaunchItemsInCacheUseCase(
             updatedPage = 1
         }
 
-        val cacheResult = safeCacheCall(Dispatchers.IO) {
+        val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
                 year = year,
                 order = order,

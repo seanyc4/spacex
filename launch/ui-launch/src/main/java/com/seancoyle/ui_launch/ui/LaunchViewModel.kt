@@ -4,12 +4,13 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanySummary
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.SectionTitle
-import com.seancoyle.launch_usecases.launch.LaunchUseCase
+import com.seancoyle.launch_usecases.launch.LaunchUseCases
 import com.seancoyle.core.state.*
 import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
 import com.seancoyle.launch_models.model.launch.LaunchOptions
@@ -17,6 +18,7 @@ import com.seancoyle.launch_viewstate.LaunchStateEvent.*
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
 import com.seancoyle.core.presentation.BaseViewModel
+import com.seancoyle.core_datastore.AppDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -28,18 +30,19 @@ import javax.inject.Inject
 class LaunchViewModel
 @Inject
 constructor(
-    private val launchUseCase: LaunchUseCase,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val launchUseCases: LaunchUseCases,
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
-    private val appDataStoreManager: com.seancoyle.core_datastore.AppDataStore,
-) : BaseViewModel<LaunchViewState>() {
+    private val appDataStoreManager: AppDataStore,
+) : BaseViewModel<LaunchViewState>(ioDispatcher = ioDispatcher) {
 
     init {
         setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
 
         // Get filter and order from datastore if available
         // And update state accordingly
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             setLaunchOrder(
                 appDataStoreManager.readStringValue(LAUNCH_ORDER)
             )
@@ -71,14 +74,14 @@ constructor(
         val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
 
             is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
-                launchUseCase.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
+                launchUseCases.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
                     launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }
 
             is GetAllLaunchItemsFromCacheEvent -> {
-                launchUseCase.getAllLaunchItemsFromCacheUseCase.invoke(
+                launchUseCases.getAllLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
@@ -99,7 +102,7 @@ constructor(
                 if (stateEvent.clearLayoutManagerState) {
                     clearLayoutManagerState()
                 }
-                launchUseCase.filterLaunchItemsInCacheUseCase.invoke(
+                launchUseCases.filterLaunchItemsInCacheUseCase.invoke(
                     year = getSearchQuery(),
                     order = getOrder(),
                     launchFilter = getFilter(),
@@ -109,7 +112,7 @@ constructor(
             }
 
             is GetNumLaunchItemsInCacheEvent -> {
-                launchUseCase.getNumLaunchItemsFromCacheUseCase.invoke(
+                launchUseCases.getNumLaunchItemsFromCacheUseCase.invoke(
                     stateEvent = stateEvent
                 )
             }
@@ -325,13 +328,13 @@ constructor(
     fun getIsDialogFilterDisplayed() = getCurrentViewStateOrNew().isDialogFilterDisplayed
 
     private fun saveOrder(order: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             appDataStoreManager.setStringValue(LAUNCH_ORDER, order)
         }
     }
 
     private fun saveFilter(filter: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             appDataStoreManager.setIntValue(LAUNCH_FILTER, filter)
         }
     }

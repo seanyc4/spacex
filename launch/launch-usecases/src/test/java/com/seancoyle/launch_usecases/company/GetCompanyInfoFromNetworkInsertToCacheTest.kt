@@ -1,5 +1,6 @@
 package com.seancoyle.launch_usecases.company
 
+import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_datasource_test.CompanyDependencies
@@ -9,9 +10,11 @@ import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertT
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.launch_usecases.company.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch_viewstate.LaunchStateEvent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.Rule
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,7 +22,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import java.net.HttpURLConnection
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetCompanyInfoFromNetworkInsertToCacheTest {
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     // system in test
     private lateinit var getCompanyInfoFromNetworkInsertToCache: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
@@ -41,6 +48,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
 
         // instantiate the system in test
         getCompanyInfoFromNetworkInsertToCache = GetCompanyInfoFromNetworkAndInsertToCacheUseCase(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource,
             networkDataSource = networkDataSource,
             factory = infoFactory

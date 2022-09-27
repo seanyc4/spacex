@@ -29,6 +29,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -45,5 +46,20 @@ android {
 
     sourceSets {
         getByName("test").resources.srcDir("src/test/res")
+    }
+
+    testOptions {
+        // Fix for mock issue on >= API 28
+        packagingOptions.jniLibs.useLegacyPackaging = true
+
+        // Enable test orchestrator
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
+        // To prevent textUtils error with espresso idling resource
+        unitTests.returnDefaultValues = true
+
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
     }
 }

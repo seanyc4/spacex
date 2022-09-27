@@ -1,11 +1,13 @@
 package com.seancoyle.database.entities
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.Keep
 import androidx.annotation.StringRes
 import androidx.room.*
 import com.seancoyle.database.typeconverters.LocalDateTimeTypeConverter
 import java.time.LocalDateTime
 
+@Keep
 @Entity(tableName = "launch", primaryKeys = ["id", "missionName"])
 data class LaunchEntity(
 
@@ -45,6 +47,7 @@ data class LaunchEntity(
     val launchDaysDifference: String
 )
 
+@Keep
 data class LinksEntity(
     @ColumnInfo(name="missionImage")
     val missionImage: String,
@@ -59,6 +62,7 @@ data class LinksEntity(
     val wikipedia: String,
 )
 
+@Keep
 data class RocketEntity(
     @ColumnInfo(name="rocketNameAndType")
     val rocketNameAndType: String
