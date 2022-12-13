@@ -15,7 +15,7 @@ dependencies {
     "implementation"(project(Modules.launchDomain))
     "implementation"(project(Modules.launchViewState))
 
-    "testImplementation"(project(Modules.coreDatastoreTest))
+    "testImplementation"(project(Modules.core_datastore_test))
     "testImplementation"(project(Modules.launchDataSourceTest))
     "testImplementation"(AndroidTestDependencies.test_arch_core)
     "testImplementation"(AndroidTestDependencies.coroutines_test)

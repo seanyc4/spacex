@@ -6,7 +6,7 @@ apply {
 dependencies {
     "implementation"(project(Modules.launchConstants))
     "implementation"(project(Modules.core))
-    "api"(project(Modules.coreDatabase))
+    "api"(project(Modules.core_database))
     "api"(project(Modules.launchDomain))
 
     "implementation"(Kotlin.coroutines_core)

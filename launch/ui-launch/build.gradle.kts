@@ -12,7 +12,7 @@ dependencies {
 
     "coreLibraryDesugaring"(Java8Time.java8Time)
     "implementation"(project(Modules.core))
-    "implementation"(project(Modules.coreDatastore))
+    "implementation"(project(Modules.core_datastore))
     "implementation"(project(Modules.launchConstants))
     "implementation"(project(Modules.launchDomain))
     "implementation"(project(Modules.launchUseCases))
@@ -45,7 +45,7 @@ dependencies {
     "implementation"(Timber.timber)
 
 
-    "testImplementation"(project(Modules.coreDatastoreTest))
+    "testImplementation"(project(Modules.core_datastore_test))
     "testImplementation"(project(Modules.launchDataSourceTest))
     "testImplementation"(AndroidTestDependencies.coroutines_test)
     "testImplementation"(AndroidTestDependencies.mockk)

@@ -4,6 +4,6 @@ apply {
 
 dependencies {
 
-    "implementation"(project(Modules.coreDatastore))
+    "implementation"(project(Modules.core_datastore))
 
 }

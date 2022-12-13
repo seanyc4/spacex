@@ -5,23 +5,27 @@ import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.presentation.BaseViewModel
+import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.StateEvent
+import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanySummary
 import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.SectionTitle
-import com.seancoyle.launch_usecases.launch.LaunchUseCases
-import com.seancoyle.core.state.*
 import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
-import com.seancoyle.launch_models.model.launch.LaunchOptions
+import com.seancoyle.launch_usecases.launch.LaunchUseCases
 import com.seancoyle.launch_viewstate.LaunchStateEvent.*
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.core.presentation.BaseViewModel
-import com.seancoyle.core_datastore.AppDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -135,7 +139,7 @@ constructor(
         return LaunchViewState()
     }
 
-    private fun setLaunchList(launchList: List<LaunchModel>) {
+    fun setLaunchList(launchList: List<LaunchModel>) {
         val update = getCurrentViewStateOrNew()
         update.launchList = launchList
         setViewState(update)
@@ -143,7 +147,7 @@ constructor(
 
     fun getLaunchList() = getCurrentViewStateOrNew().launchList
 
-    private fun setCompanyInfo(companyInfo: CompanyInfoModel) {
+    fun setCompanyInfo(companyInfo: CompanyInfoModel) {
         val update = getCurrentViewStateOrNew()
         update.company = companyInfo
         setViewState(update)

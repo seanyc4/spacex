@@ -84,7 +84,7 @@ android {
 dependencies {
     coreLibraryDesugaring(Java8Time.java8Time)
     implementation(project(Modules.core))
-    implementation(project(Modules.coreDatastore))
+    implementation(project(Modules.core_datastore))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchDataSource))
     implementation(project(Modules.launchDomain))

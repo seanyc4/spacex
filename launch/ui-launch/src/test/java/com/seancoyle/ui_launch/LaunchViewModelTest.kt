@@ -3,16 +3,17 @@ package com.seancoyle.ui_launch
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.seancoyle.core.testing.InstantExecutorExtension
 import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.core.testing.getOrAwaitValue
 import com.seancoyle.core_datastore_test.AppDataStoreManagerFake
 import com.seancoyle.launch_datasource_test.CompanyDependencies
 import com.seancoyle.launch_datasource_test.LaunchDependencies
 import com.seancoyle.launch_models.model.launch.LaunchOptions
 import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
 import com.seancoyle.launch_usecases.launch.LaunchUseCases
-import com.seancoyle.core.testing.getOrAwaitValue
 import com.seancoyle.ui_launch.ui.LaunchViewModel
 import io.mockk.mockk
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -67,6 +68,9 @@ class LaunchViewModelTest {
 
         val expectedLaunchList =
             companyDependencyContainer.companyInfoDataFactory.produceCompanyInfo()
+
+        viewModel.setCompanyInfo(expectedLaunchList)
+
         val actualLaunchList = viewModel.viewState.getOrAwaitValue(time = 10)?.company
         assertEquals(actualLaunchList, expectedLaunchList)
 

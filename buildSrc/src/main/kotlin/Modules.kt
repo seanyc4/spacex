@@ -1,9 +1,9 @@
 object Modules {
     const val app = ":app"
     const val core = ":core"
-    const val coreDatabase = ":core-database"
-    const val coreDatastore = ":core-datastore"
-    const val coreDatastoreTest = ":core-datastore-test"
+    const val core_database = ":core-database"
+    const val core_datastore = ":core-datastore"
+    const val core_datastore_test = ":core-datastore-test"
     const val launch = ":launch"
     const val launchConstants = ":launch:launch-constants"
     const val launchDataSource = ":launch:launch-datasource"
