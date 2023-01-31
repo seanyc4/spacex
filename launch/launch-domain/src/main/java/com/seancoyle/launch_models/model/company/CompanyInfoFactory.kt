@@ -1,6 +1,5 @@
 package com.seancoyle.launch_models.model.company
 
-import java.util.*
 import javax.inject.Singleton
 
 @Singleton

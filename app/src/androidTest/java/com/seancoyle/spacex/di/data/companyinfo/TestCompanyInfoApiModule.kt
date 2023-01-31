@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.di.data.companyinfo
 
-import com.seancoyle.launch_datasource.di.network.companyinfo.CompanyInfoApiModule
 import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.launch_datasource.di.network.CompanyInfoApiModule
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi
 import dagger.Module
 import dagger.Provides

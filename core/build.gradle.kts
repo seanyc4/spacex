@@ -14,7 +14,6 @@ dependencies {
     "implementation"(Timber.timber)
     "implementation"(ScalingPixels.scaling_pixels)
     "implementation"(Google.material)
-    "implementation"(Google.material)
 
     "implementation"(AndroidTestDependencies.coroutines_test)
     "implementation"(AndroidTestDependencies.mockk)

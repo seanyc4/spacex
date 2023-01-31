@@ -2,8 +2,8 @@ package com.seancoyle.launch_datasource_test
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.launch_datasource_test.cache.launch.FakeLaunchDatabase
-import com.seancoyle.launch_models.model.launch.*
+import com.seancoyle.launch_datasource_test.cache.FakeLaunchDatabase
+import com.seancoyle.launch_models.model.launch.LaunchModel
 
 class LaunchDataFactory(
     private val testClassLoader: ClassLoader
