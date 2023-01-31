@@ -33,8 +33,6 @@ SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 * Timber
 * Unit tests (Junit5)
 
-![](images/clean_architecture.png)
-
 
 ## Testing
 
@@ -43,7 +41,7 @@ Unit and instrumentation tests can be ran either manually in android studio or e
 
 ## Future updates
 
-* Refactor to modular design pattern
+* Compose
 * Change from XML to compose
 * Add timestamps to cached data to prevent unnecessary network calls as the SpaceX data doesnt change frequently. Check the timestamps, if more than 7 days old then do a new network call.
 * Add a no results found animation
