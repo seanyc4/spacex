@@ -2,10 +2,10 @@ package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.core.cache.CacheErrors
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
+import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSource
 import com.seancoyle.launch_datasource_test.CompanyDependencies
-import com.seancoyle.launch_datasource_test.cache.company.FORCE_GENERAL_FAILURE
-import com.seancoyle.launch_datasource_test.cache.company.FORCE_NEW_COMPANY_INFO_EXCEPTION
+import com.seancoyle.launch_datasource_test.cache.FORCE_GENERAL_FAILURE
+import com.seancoyle.launch_datasource_test.cache.FORCE_NEW_COMPANY_INFO_EXCEPTION
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.InsertCompanyInfoToCacheUseCase.Companion.INSERT_COMPANY_INFO_SUCCESS
 import com.seancoyle.launch_viewstate.LaunchStateEvent
@@ -16,24 +16,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
-
-/*
-Test cases:
-1. insertCompanyInfo_success()
-    a) insert new company info
-    b) listen for INSERT_COMPANY_INFO_SUCCESS emission from flow
-    c) confirm cache was updated with new company info
-2. insertCompanyInfo_fail()
-    a) insert new company info
-    b) force a failure (return -1 from db operation)
-    c) listen for INSERT_COMPANY_INFO_FAILED emission from flow
-    e) confirm cache was not updated
-3. throwException_checkGenericError()
-    a) insert new company info
-    b) force an exception
-    c) listen for CACHE_ERROR_UNKNOWN emission from flow
-    e) confirm cache was not updated
- */
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InsertCompanyInfoToCacheUseCaseTest {

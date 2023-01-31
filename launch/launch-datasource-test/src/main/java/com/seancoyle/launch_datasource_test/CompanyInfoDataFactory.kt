@@ -2,7 +2,7 @@ package com.seancoyle.launch_datasource_test
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.launch_datasource_test.cache.company.FakeCompanyInfoDatabase
+import com.seancoyle.launch_datasource_test.cache.FakeCompanyInfoDatabase
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 
 class CompanyInfoDataFactory(

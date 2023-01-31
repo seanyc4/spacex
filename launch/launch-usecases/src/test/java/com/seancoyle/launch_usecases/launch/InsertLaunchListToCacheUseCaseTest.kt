@@ -2,7 +2,7 @@ package com.seancoyle.launch_usecases.launch
 
 import com.seancoyle.core.cache.CacheErrors
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
+import com.seancoyle.launch_datasource.cache.LaunchCacheDataSource
 import com.seancoyle.launch_datasource_test.LaunchDependencies
 import com.seancoyle.launch_models.model.launch.LaunchFactory
 import com.seancoyle.launch_usecases.launch.InsertLaunchListToCacheUseCase.Companion.INSERT_LAUNCH_LIST_SUCCESS
@@ -14,29 +14,10 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
-const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
 const val FORCE_NEW_LAUNCH_EXCEPTION = -4
 const val FORCE_GENERAL_FAILURE = -5
 const val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
 
-/*
-Test cases:
-1. insertLaunchList_success()
-    a) insert a new launch list
-    b) listen for INSERT_LAUNCH_LIST_SUCCESS emission from flow
-    c) confirm cache was updated with new launch list
-2. insertLaunchList_fail()
-    a) insert a new launch list
-    b) force a failure (return empty long array from db operation)
-    c) listen for INSERT_LAUNCH_LIST_FAILED emission from flow
-    e) confirm cache was not updated
-3. throwException_checkGenericError()
-    a) insert a new launch list
-    b) force an exception
-    c) listen for CACHE_ERROR_UNKNOWN emission from flow
-    e) confirm cache was not updated
- */
 @OptIn(ExperimentalCoroutinesApi::class)
 class InsertLaunchListToCacheUseCaseTest {
 

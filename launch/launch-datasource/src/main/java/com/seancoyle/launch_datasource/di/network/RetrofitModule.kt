@@ -26,17 +26,4 @@ object RetrofitModule {
             .build()
     }
 
-    /*@Singleton
-    @Provides
-    fun provideOkHttpClient() =
-    OkHttpClient.Builder().apply {
-        if (BuildConfig.DEBUG) {
-            val httpLoggingInterceptor = HttpLoggingInterceptor()
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            addInterceptor(httpLoggingInterceptor)
-        }
-        readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-        connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-    }*/
-
 }

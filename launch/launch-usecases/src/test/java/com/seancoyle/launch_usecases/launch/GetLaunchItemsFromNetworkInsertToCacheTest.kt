@@ -1,14 +1,14 @@
 package com.seancoyle.launch_usecases.launch
 
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch_datasource.cache.abstraction.launch.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
+import com.seancoyle.launch_datasource.cache.LaunchCacheDataSource
+import com.seancoyle.launch_datasource.network.LaunchNetworkDataSource
 import com.seancoyle.launch_datasource_test.LaunchDependencies
+import com.seancoyle.launch_datasource_test.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch_models.model.launch.LaunchFactory
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_usecases.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase.Companion.LAUNCH_ERROR
 import com.seancoyle.launch_usecases.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase.Companion.LAUNCH_INSERT_SUCCESS
-import com.seancoyle.launch_datasource_test.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch_viewstate.LaunchStateEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -54,11 +54,6 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
     }
 
-    /**
-     * 1. Are the launch retrieved from the network?
-     * 2. Are the launch inserted into the cache?
-     * 3. Check the list of launch items are valid LaunchModel?
-     */
     @Test
     fun getLaunchItemsFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
 
@@ -97,9 +92,6 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
     }
 
-    /**
-     * Simulate a bad request
-     */
     @Test
     fun getLaunchListFromNetwork_emitHttpError(): Unit = runBlocking {
 

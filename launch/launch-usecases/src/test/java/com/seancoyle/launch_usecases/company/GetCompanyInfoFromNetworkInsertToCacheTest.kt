@@ -1,11 +1,11 @@
 package com.seancoyle.launch_usecases.company
 
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSource
+import com.seancoyle.launch_datasource.network.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_datasource_test.CompanyDependencies
-import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
+import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_ERROR
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.launch_usecases.company.MockWebServerResponseCompanyInfo.companyInfo
@@ -15,11 +15,11 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Rule
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -55,11 +55,6 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         )
     }
 
-    /**
-     * 1. Is the company info retrieved from the network?
-     * 2. Is the company info inserted into the cache?
-     * 3. Check the company info is valid CompanyInfoModel?
-     */
     @Test
     fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache() = runBlocking {
 
@@ -96,9 +91,6 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
 
     }
 
-    /**
-     * Simulate a bad request
-     */
     @Test
     fun getCompanyInfoFromNetwork_emitHttpError() = runBlocking {
 

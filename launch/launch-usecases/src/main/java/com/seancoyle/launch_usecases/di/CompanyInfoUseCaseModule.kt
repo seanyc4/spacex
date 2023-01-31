@@ -1,8 +1,8 @@
 package com.seancoyle.launch_usecases.di
 
 import com.seancoyle.core.di.IODispatcher
-import com.seancoyle.launch_datasource.cache.abstraction.company.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.network.abstraction.company.CompanyInfoNetworkDataSource
+import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSource
+import com.seancoyle.launch_datasource.network.CompanyInfoNetworkDataSource
 import com.seancoyle.launch_models.model.company.CompanyInfoFactory
 import com.seancoyle.launch_usecases.company.CompanyInfoUseCases
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromCacheUseCase

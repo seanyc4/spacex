@@ -1,21 +1,23 @@
 package com.seancoyle.spacex.framework.presentation
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.seancoyle.core.state.*
-import com.seancoyle.core.state.UIComponentType.*
+import com.seancoyle.core.presentation.UIController
 import com.seancoyle.core.presentation.displayToast
-import com.seancoyle.spacex.R
-import com.seancoyle.spacex.databinding.ActivityMainBinding
 import com.seancoyle.core.presentation.gone
 import com.seancoyle.core.presentation.visible
+import com.seancoyle.core.state.MessageType
+import com.seancoyle.core.state.Response
+import com.seancoyle.core.state.StateMessageCallback
+import com.seancoyle.core.state.UIComponentType.*
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.core.presentation.UIController
+import com.seancoyle.spacex.R
+import com.seancoyle.spacex.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -23,8 +25,7 @@ import kotlinx.coroutines.FlowPreview
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity :
-    AppCompatActivity(),
+class MainActivity : AppCompatActivity(),
     UIController {
 
     private lateinit var binding :ActivityMainBinding

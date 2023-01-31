@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
-import com.seancoyle.launch_datasource.network.abstraction.launch.LaunchNetworkDataSource
-import com.seancoyle.launch_datasource.network.mappers.launch.LaunchNetworkMapper
+import com.seancoyle.launch_datasource.network.LaunchNetworkDataSource
+import com.seancoyle.launch_datasource.network.LaunchNetworkMapper
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchOptions
 import javax.inject.Inject

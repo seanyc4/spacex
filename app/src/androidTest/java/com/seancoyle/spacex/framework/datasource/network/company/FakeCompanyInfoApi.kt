@@ -3,8 +3,8 @@ package com.seancoyle.spacex.framework.datasource.network.company
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch_datasource.network.api.company.CompanyInfoApi
-import com.seancoyle.launch_datasource.network.model.company.CompanyInfoDto
+import com.seancoyle.launch_datasource.network.CompanyInfoApi
+import com.seancoyle.launch_datasource.network.CompanyInfoDto
 import javax.inject.Singleton
 
 const val COMPANY_INFO_RAW_JSON_FILE_NAME = "company_info_raw.json"
