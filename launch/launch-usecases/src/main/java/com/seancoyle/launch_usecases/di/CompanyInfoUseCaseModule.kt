@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object CompanyInfoUseCaseModule {
+internal object CompanyInfoUseCaseModule {
 
     @ViewModelScoped
     @Provides

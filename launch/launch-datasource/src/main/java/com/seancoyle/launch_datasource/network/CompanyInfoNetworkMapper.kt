@@ -4,7 +4,6 @@ import com.seancoyle.core.util.NumberFormatter
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import javax.inject.Inject
 
-
 class CompanyInfoNetworkMapper
 @Inject
 constructor(

@@ -11,7 +11,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetCompanyInfoFromCacheUseCase(
+class GetCompanyInfoFromCacheUseCase
+constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: CompanyInfoCacheDataSource
 ) {

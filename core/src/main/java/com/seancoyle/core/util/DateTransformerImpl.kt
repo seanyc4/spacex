@@ -2,11 +2,14 @@ package com.seancoyle.core.util
 
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.days
 
 @Singleton
-class DateTransformerImpl : DateTransformer {
+class DateTransformerImpl
+@Inject
+constructor() : DateTransformer {
 
     private fun Int.addZeroToSingleDateValue(): String {
         return if (this < 10) {
@@ -37,10 +40,12 @@ class DateTransformerImpl : DateTransformer {
     override fun getLaunchDaysDifference(dateTime: LocalDateTime): String {
         return buildString {
             append("+/- ")
-            append(ChronoUnit.DAYS.between(
-                LocalDateTime.now(),
-                dateTime
-            ).days.absoluteValue.toString())
+            append(
+                ChronoUnit.DAYS.between(
+                    LocalDateTime.now(),
+                    dateTime
+                ).days.absoluteValue.toString()
+            )
         }
     }
 

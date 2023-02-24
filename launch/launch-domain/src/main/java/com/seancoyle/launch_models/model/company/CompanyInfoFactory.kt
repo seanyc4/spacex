@@ -1,9 +1,11 @@
 package com.seancoyle.launch_models.model.company
 
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CompanyInfoFactory {
+class CompanyInfoFactory
+@Inject constructor(){
 
     fun createCompanyInfo(
         id: String?,

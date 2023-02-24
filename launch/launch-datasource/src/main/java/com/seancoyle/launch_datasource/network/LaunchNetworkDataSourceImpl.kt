@@ -3,10 +3,7 @@ package com.seancoyle.launch_datasource.network
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchOptions
 import javax.inject.Inject
-import javax.inject.Singleton
 
-
-@Singleton
 class LaunchNetworkDataSourceImpl
 @Inject
 constructor(

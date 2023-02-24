@@ -2,10 +2,7 @@ package com.seancoyle.launch_datasource.network
 
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import javax.inject.Inject
-import javax.inject.Singleton
 
-
-@Singleton
 class CompanyInfoNetworkDataSourceImpl
 @Inject
 constructor(

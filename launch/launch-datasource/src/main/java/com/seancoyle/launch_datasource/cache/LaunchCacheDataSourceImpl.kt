@@ -4,9 +4,7 @@ import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.database.daos.returnOrderedQuery
 import com.seancoyle.launch_models.model.launch.LaunchModel
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class LaunchCacheDataSourceImpl
 @Inject
 constructor(

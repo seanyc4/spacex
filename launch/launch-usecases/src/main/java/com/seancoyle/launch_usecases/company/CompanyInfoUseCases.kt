@@ -1,7 +1,7 @@
 package com.seancoyle.launch_usecases.company
 
-
-class CompanyInfoUseCases(
+class CompanyInfoUseCases
+constructor(
     val getCompanyInfoFromCacheUseCase: GetCompanyInfoFromCacheUseCase,
     val getCompanyInfoFromNetworkAndInsertToCacheUseCase: GetCompanyInfoFromNetworkAndInsertToCacheUseCase,
 )

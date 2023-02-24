@@ -3,11 +3,13 @@ package com.seancoyle.launch_models.model.launch
 import com.seancoyle.launch_models.model.launch.LaunchType.Companion.TYPE_LAUNCH
 import java.time.LocalDateTime
 import java.util.*
+import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 @Singleton
-class LaunchFactory {
+class LaunchFactory
+@Inject
+constructor(){
 
     fun createLaunchItem(
         id: Int,

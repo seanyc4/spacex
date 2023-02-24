@@ -7,8 +7,11 @@ import com.seancoyle.launch_models.model.launch.LaunchModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.launch_models.model.launch.Rocket
+import javax.inject.Inject
 
-class LaunchEntityMapper {
+class LaunchEntityMapper
+@Inject
+constructor(){
 
     fun entityListToDomainList(entities: List<LaunchEntity>): List<LaunchModel> {
         val list: ArrayList<LaunchModel> = ArrayList()

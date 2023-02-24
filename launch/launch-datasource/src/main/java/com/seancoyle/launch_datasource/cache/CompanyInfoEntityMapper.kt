@@ -2,8 +2,11 @@ package com.seancoyle.launch_datasource.cache
 
 import com.seancoyle.database.entities.CompanyInfoEntity
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
+import javax.inject.Inject
 
-class CompanyInfoEntityMapper {
+class CompanyInfoEntityMapper
+@Inject
+constructor(){
 
      fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfoModel {
         entity.apply {

@@ -3,9 +3,7 @@ package com.seancoyle.launch_datasource.cache
 import com.seancoyle.database.daos.CompanyInfoDao
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class CompanyInfoCacheDataSourceImpl
 @Inject
 constructor(

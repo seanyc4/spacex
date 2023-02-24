@@ -3,10 +3,12 @@ package com.seancoyle.core.util
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DateFormatterImpl
+@Inject
 constructor(
     private val dateFormat: DateTimeFormatter
 ): DateFormatter {
