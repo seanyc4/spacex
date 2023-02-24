@@ -1,0 +1,40 @@
+
+android {
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion Compose.compose_compiler_version
+    }
+}
+
+dependencies {
+
+    "implementation"(AndroidX.fragment_ktx)
+    "implementation"(AndroidX.lifecycle_live_data_ktx)
+    "implementation"(AndroidX.lifecycle_vm_ktx)
+    "implementation"(AndroidX.lifecycle_saved_state)
+    "implementation"(AndroidX.navigation_dynamic)
+    "implementation"(AndroidX.navigation_fragment)
+    "implementation"(AndroidX.navigation_ui)
+    "kapt"(AndroidX.lifecycle_compiler)
+
+    "implementation"(Compose.compose_runtime)
+    "implementation"(Compose.compose_preview)
+    "implementation"(Compose.compose_ui)
+    "implementation"(Compose.compose_foundation)
+    "implementation"(Compose.compose_layout)
+    "implementation"(Compose.compose_material)
+    "implementation"(Compose.compose_livedata)
+    "debugImplementation"(Compose.compose_tooling)
+
+    "implementation"(Google.constraint_layout)
+    "implementation"(Google.card_view)
+    "implementation"(Google.material)
+    "implementation"(Google.recycler_view)
+
+    "implementation"(MaterialDialogs.material_dialogs)
+
+}

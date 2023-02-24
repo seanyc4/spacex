@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.MaterialTheme
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.core.presentation.gone
+import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.ui_launch.R
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBottomActionSheetBinding
+import com.seancoyle.ui_launch.ui.composables.LaunchBottomSheetTitles
 
 
 class LaunchBottomActionSheet : BottomSheetDialogFragment() {
@@ -44,6 +46,12 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         with(binding) {
 
             links = arguments?.getParcelable(LINKS_KEY)
+
+           linksTitle.setContent {
+                    MaterialTheme {
+                        LaunchBottomSheetTitles(name = "TEST")
+                    }
+            }
 
             // hide links which are null or empty
             if (links?.articleLink.isNullOrEmpty()) {

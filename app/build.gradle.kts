@@ -1,3 +1,7 @@
+apply {
+    from("$rootDir/hilt.gradle")
+}
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -42,13 +46,17 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = Compose.compose_compiler_version
+    }
+
     kotlinOptions {
         jvmTarget = Java.java_version
     }
 
     buildFeatures {
         viewBinding = true
-        dataBinding = false
+        compose = true
     }
 
     sourceSets {
@@ -71,8 +79,7 @@ android {
     }
 
     packagingOptions {
-        exclude("META-INF/*")
-
+        resources.excludes.add("META-INF/*")
     }
 
     lint {
@@ -107,8 +114,8 @@ dependencies {
     debugImplementation(AndroidXTest.fragment_testing)
     androidTestImplementation(AndroidXTest.navigation_testing)
 
-    implementation(Hilt.android)
-    kapt(Hilt.compiler)
+    implementation(Compose.compose_runtime)
+
     androidTestImplementation(HiltTest.hilt_android_testing)
     kaptAndroidTest(Hilt.compiler)
 
@@ -135,9 +142,4 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)
     androidTestImplementation(AndroidTestDependencies.test_arch_core)
-
-}
-
-kapt {
-    correctErrorTypes = true
 }
