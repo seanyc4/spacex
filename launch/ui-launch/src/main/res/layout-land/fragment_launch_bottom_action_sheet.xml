@@ -5,20 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/links_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_bottom_sheet_margin_landscape"
-        android:layout_marginEnd="@dimen/default_bottom_sheet_margin_landscape"
-        android:visibility="visible"
-        app:cardBackgroundColor="@color/colorSecondary"
-        app:cardCornerRadius="@dimen/default_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -30,32 +25,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <!-- <com.google.android.material.textview.MaterialTextView
-                 android:id="@+id/links_title"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_margin="@dimen/default_bottom_sheet_margin"
-                 android:gravity="center_horizontal"
-                 android:text="@string/links"
-                 android:fontFamily="@font/orbitron"
-                 android:textColor="@color/textColorPrimary"
-                 android:textSize="@dimen/text_size_medium"
-                 android:textStyle="bold"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toTopOf="parent" />-->
-
-            <View
+           <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/default_bottom_sheet_margin"
-                android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/links_title" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/article_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,16 +50,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
-            <View
+           <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/article_link" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/webcast_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,16 +74,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-            <View
+           <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/divider3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/webcast_link" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/wiki_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,25 +99,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </androidx.compose.ui.platform.ComposeView>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/exit_btn"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/default_bottom_sheet_margin"
-        android:layout_marginStart="@dimen/default_bottom_sheet_margin_landscape"
-        android:layout_marginEnd="@dimen/default_bottom_sheet_margin_landscape"
-        android:backgroundTint="@color/colorSecondary"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/text_cancel"
-        android:textAllCaps="false"
-        android:textColor="@color/colorError"
-        android:textSize="@dimen/text_size_heading"
-        android:textStyle="bold"
-        app:cornerRadius="@dimen/default_corner_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,11 +1,16 @@
 package com.seancoyle.core.presentation
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.state.*
 import com.seancoyle.core.util.GenericErrors
 import com.seancoyle.core.util.printLogDebug
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -13,14 +18,16 @@ import kotlinx.coroutines.flow.flow
 @FlowPreview
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel<ViewState>
-    constructor(
-        @IODispatcher private val ioDispatcher: CoroutineDispatcher
-    ): ViewModel()
-{
+constructor(
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+) : ViewModel() {
     private val _viewState: MutableLiveData<ViewState?> = MutableLiveData()
 
-    val dataChannelManager: DataChannelManager<ViewState>
-            = object: DataChannelManager<ViewState>(ioDispatcher = ioDispatcher){
+    private val dataChannelManager: DataChannelManager<ViewState> = object : DataChannelManager<ViewState>(
+        ioDispatcher = ioDispatcher,
+        mainDispatcher = mainDispatcher
+    ) {
 
         override fun handleNewData(data: ViewState) {
             this@BaseViewModel.handleNewData(data)
@@ -30,14 +37,13 @@ abstract class BaseViewModel<ViewState>
     val viewState: LiveData<ViewState?>
         get() = _viewState
 
-    val shouldDisplayProgressBar: LiveData<Boolean>
-            = dataChannelManager.shouldDisplayProgressBar
+    val shouldDisplayProgressBar: LiveData<Boolean> = dataChannelManager.shouldDisplayProgressBar
 
     val stateMessage: LiveData<StateMessage?>
         get() = dataChannelManager.messageStack.stateMessage
 
     // FOR DEBUGGING
-    fun getMessageStackSize(): Int{
+    fun getMessageStackSize(): Int {
         return dataChannelManager.messageStack.size
     }
 
@@ -50,7 +56,7 @@ abstract class BaseViewModel<ViewState>
     fun emitStateMessageEvent(
         stateMessage: StateMessage,
         stateEvent: StateEvent
-    ) = flow{
+    ) = flow {
         emit(
             DataState.error<ViewState>(
                 response = stateMessage.response,
@@ -77,15 +83,15 @@ abstract class BaseViewModel<ViewState>
         jobFunction: Flow<DataState<ViewState>?>
     ) = dataChannelManager.launchJob(stateEvent, jobFunction)
 
-    fun getCurrentViewStateOrNew(): ViewState{
+    fun getCurrentViewStateOrNew(): ViewState {
         return viewState.value ?: initNewViewState()
     }
 
-    fun setViewState(viewState: ViewState){
+    fun setViewState(viewState: ViewState) {
         _viewState.postValue(viewState)
     }
 
-    fun clearStateMessage(index: Int = 0){
+    fun clearStateMessage(index: Int = 0) {
         printLogDebug("BaseViewModel", "clearStateMessage")
         dataChannelManager.clearStateMessage(index)
     }

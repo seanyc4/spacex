@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.StateEvent
@@ -35,11 +36,15 @@ class LaunchViewModel
 @Inject
 constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val launchUseCases: LaunchUseCases,
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
-) : BaseViewModel<LaunchViewState>(ioDispatcher = ioDispatcher) {
+) : BaseViewModel<LaunchViewState>(
+    ioDispatcher = ioDispatcher,
+    mainDispatcher = mainDispatcher
+) {
 
     init {
         setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
@@ -313,14 +318,14 @@ constructor(
         val update = getCurrentViewStateOrNew()
         update.order = order
         setViewState(update)
-        saveOrder(order?: LAUNCH_ORDER_DESC)
+        saveOrder(order ?: LAUNCH_ORDER_DESC)
     }
 
     fun setLaunchFilter(filter: Int?) {
         val update = getCurrentViewStateOrNew()
         update.launchFilter = filter
         setViewState(update)
-        saveFilter(filter?: LAUNCH_ALL)
+        saveFilter(filter ?: LAUNCH_ALL)
     }
 
     fun setIsDialogFilterDisplayed(isDisplayed: Boolean?) {

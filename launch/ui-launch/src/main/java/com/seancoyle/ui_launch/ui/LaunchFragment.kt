@@ -25,27 +25,26 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.core.presentation.BaseFragment
+import com.seancoyle.core.state.*
+import com.seancoyle.core.testing.AndroidTestUtils
+import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
 import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.Links
-import com.seancoyle.core.state.*
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch_usecases.launch.GetAllLaunchItemsFromCacheUseCase
 import com.seancoyle.launch_usecases.launch.GetLaunchListFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch_usecases.launch.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.ui_launch.ui.adapter.LaunchAdapter
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_viewstate.LaunchStateEvent
 import com.seancoyle.launch_viewstate.LaunchViewState
-import com.seancoyle.core.testing.AndroidTestUtils
-import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.ui_launch.R
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBinding
+import com.seancoyle.ui_launch.ui.adapter.LaunchAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 const val LINKS_KEY = "links"
 const val LAUNCH_STATE_BUNDLE_KEY =
@@ -77,7 +76,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setListeners()
         setupRecyclerView()
         setupSwipeRefresh()

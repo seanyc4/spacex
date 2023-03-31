@@ -1,16 +1,19 @@
 package com.seancoyle.core.state
 
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.util.printLogDebug
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 abstract class DataChannelManager<ViewState>
 constructor(
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ){
 
     private var channelScope: CoroutineScope? = null
@@ -36,7 +39,7 @@ constructor(
             jobFunction
                 .onEach { dataState ->
                     dataState?.let {
-                        withContext(Main){
+                        withContext(mainDispatcher){
                             dataState.data?.let { data ->
                                 handleNewData(data)
                             }
