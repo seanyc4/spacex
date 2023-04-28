@@ -58,8 +58,8 @@ constructor(){
                     links = Links(
                         missionImage = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png",
                         articleLink = "https://www.google.com",
-                        videoLink = "https://www.youtube.com",
-                        wikipedia = "https://www.wikipedia.com"
+                        webcastLink = "https://www.youtube.com",
+                        wikiLink = "https://www.wikipedia.com"
                     ),
                     missionName = UUID.randomUUID().toString(),
                     rocket = Rocket(

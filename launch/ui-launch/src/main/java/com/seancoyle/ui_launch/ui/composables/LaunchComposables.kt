@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.seancoyle.launch_models.model.launch.LinkType
 import com.seancoyle.ui_launch.R
 
 @Composable
@@ -34,13 +35,7 @@ fun LaunchBottomSheetDivider() {
 
 @Composable
 fun LaunchBottomSheetCard(
-    articleLink: String?,
-    webcastLink: String?,
-    wikiLink: String?,
-    onArticleLinkClick: () -> Unit,
-    onWebcastLinkClick: () -> Unit,
-    onWikiLinkClick: () -> Unit,
-    onExitBtn: () -> Unit
+    linkTypes: List<LinkType>?
 ) {
     Card(
         modifier = Modifier
@@ -58,25 +53,16 @@ fun LaunchBottomSheetCard(
         ) {
             LaunchBottomSheetHeader()
             LaunchBottomSheetDivider()
-            if(!articleLink.isNullOrEmpty()) {
-                LaunchBottomSheetTitle(
-                    name = stringResource(id = R.string.article),
-                    onArticleLinkClick
-                )
-                LaunchBottomSheetDivider()
-            }
-            if(!webcastLink.isNullOrEmpty()) {
-                LaunchBottomSheetTitle(
-                    name = stringResource(id = R.string.webcast),
-                    onWebcastLinkClick
-                )
-                LaunchBottomSheetDivider()
-            }
-            if(!wikiLink.isNullOrEmpty()) {
-                LaunchBottomSheetTitle(
-                    name = stringResource(id = R.string.wikipedia),
-                    onWikiLinkClick
-                )
+            linkTypes?.forEachIndexed { index, linkType ->
+                if (!linkType.link.isNullOrEmpty()) {
+                    LaunchBottomSheetTitle(
+                        name = stringResource(id = linkType.nameResId),
+                        onClick = linkType.onClick
+                    )
+                    if (index < linkTypes.lastIndex && linkTypes.size > 1) {
+                        LaunchBottomSheetDivider()
+                    }
+                }
             }
         }
     }

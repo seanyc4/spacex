@@ -9,18 +9,18 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.seancoyle.launch_models.model.launch.LinkType
 import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.ui_launch.R
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBottomActionSheetBinding
 import com.seancoyle.ui_launch.ui.composables.LaunchBottomSheetCard
 import com.seancoyle.ui_launch.ui.composables.LaunchBottomSheetExitButton
 
-
 class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
     private var _binding: FragmentLaunchBottomActionSheetBinding? = null
     private val binding get() = _binding!!
-    private var links: Links? = null
+    private var linkTypes: List<LinkType>? = null
 
     @Override
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,144 +39,42 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        setListeners()
     }
 
     private fun setupUI() {
         with(binding) {
 
-            links = arguments?.getParcelable(LINKS_KEY)
+           val links: Links? = arguments?.getParcelable(LINKS_KEY)
+            links?.apply {
+                 linkTypes = listOfNotNull(
+                    articleLink?.let { LinkType(R.string.article, it) { onLinkClicked(it) } },
+                    webcastLink?.let { LinkType(R.string.webcast, it) { onLinkClicked(it) } },
+                    wikiLink?.let { LinkType(R.string.wikipedia, it) { onLinkClicked(it) } }
+                )
+            }
 
             linksCv.setContent {
                 MaterialTheme {
                     LaunchBottomSheetCard(
-                        articleLink = links?.articleLink,
-                        webcastLink = links?.videoLink,
-                        wikiLink = links?.wikipedia,
-                        onArticleLinkClick = { onArticleClick() },
-                        onWebcastLinkClick = { onWebClick() },
-                        onWikiLinkClick = { onWikiLinkClicked() },
-                        onExitBtn = { dismiss() }
+                        linkTypes = linkTypes
                     )
                 }
             }
 
             exitBtn.setContent {
                 MaterialTheme {
-                    LaunchBottomSheetExitButton{
+                    LaunchBottomSheetExitButton {
                         dismiss()
                     }
                 }
             }
-
-            /*linksTitle.setContent {
-                MaterialTheme {
-                    LaunchBottomSheetHeader()
-                }
-            }
-
-            articleLink.setContent{
-                MaterialTheme {
-                    LaunchBottomSheetTitle(name = getString(R.string.article))
-                }
-            }
-
-            webcastLink.setContent{
-                MaterialTheme {
-                    LaunchBottomSheetTitle(name = getString(R.string.webcast))
-                }
-            }
-
-            wikiLink.setContent{
-                MaterialTheme {
-                    LaunchBottomSheetTitle(name = getString(R.string.wikipedia))
-                }
-            }
-
-            exitBtn.setContent {
-                MaterialTheme {
-                    LaunchBottomSheetExitButton{
-                        dismiss()
-                    }
-                }
-            }
-
-            divider1.setContent {
-                MaterialTheme {
-                    LaunchBottomSheetDivider()
-                }
-            }
-
-            divider2.setContent {
-                MaterialTheme {
-                    LaunchBottomSheetDivider()
-                }
-            }
-
-            divider3.setContent {
-                MaterialTheme {
-                    LaunchBottomSheetDivider()
-                }
-            }*/
-
-            // hide links which are null or empty
-          /*  if (links?.articleLink.isNullOrEmpty()) {
-                articleLink.gone()
-                divider2.gone()
-            }
-
-            if (links?.videoLink.isNullOrEmpty()) {
-                webcastLink.gone()
-                divider3.gone()
-            }
-
-            if (links?.wikipedia.isNullOrEmpty()) {
-                wikiLink.gone()
-                divider3.gone()
-            }*/
-
         }
     }
 
-    private fun setListeners() {
-        with(binding) {
-
-            // Send the result back to the fragment
-           /* articleLink.setOnClickListener {
-                onArticleClick()
-            }
-
-            webcastLink.setOnClickListener {
-                onWebClick()
-            }
-
-            wikiLink.setOnClickListener {
-                onWikiLinkClicked()
-            }*/
-
-        }
-    }
-
-    private fun onWikiLinkClicked() {
+    private fun onLinkClicked(link: String?) {
         setFragmentResult(
             LINKS_KEY,
-            bundleOf(LINKS_KEY to links!!.wikipedia)
-        )
-        dismiss()
-    }
-
-    private fun onWebClick() {
-        setFragmentResult(
-            LINKS_KEY,
-            bundleOf(LINKS_KEY to links!!.videoLink)
-        )
-        dismiss()
-    }
-
-    private fun onArticleClick() {
-        setFragmentResult(
-            LINKS_KEY,
-            bundleOf(LINKS_KEY to links!!.articleLink)
+            bundleOf(LINKS_KEY to link)
         )
         dismiss()
     }

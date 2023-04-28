@@ -36,9 +36,9 @@ constructor(
                 launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                 links = Links(
                     missionImage = item.links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
-                    articleLink = item.links?.articleLink.orEmpty(),
-                    videoLink = item.links?.videoLink.orEmpty(),
-                    wikipedia = item.links?.wikipedia.orEmpty(),
+                    articleLink = item.links?.articleLink,
+                    webcastLink = item.links?.videoLink,
+                    wikiLink = item.links?.wikipedia,
                 ),
                 missionName = item.missionName.orEmpty(),
                 rocket = Rocket(

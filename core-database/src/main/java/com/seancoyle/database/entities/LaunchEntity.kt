@@ -53,13 +53,13 @@ data class LinksEntity(
     val missionImage: String,
 
     @ColumnInfo(name="articleLink")
-    val articleLink: String,
+    val articleLink: String?,
 
     @ColumnInfo(name="videoLink")
-    val videoLink: String,
+    val videoLink: String?,
 
     @ColumnInfo(name="wikipedia")
-    val wikipedia: String,
+    val wikipedia: String?,
 )
 
 @Keep

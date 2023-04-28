@@ -11,7 +11,6 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 @Singleton
 class LaunchDataFactory
@@ -79,8 +78,8 @@ constructor(
                     links = Links(
                         missionImage = DEFAULT_LAUNCH_IMAGE,
                         articleLink = "https://www.google.com",
-                        videoLink = "https://www.youtube.com",
-                        wikipedia = "https://www.wikipedia.com"
+                        webcastLink = "https://www.youtube.com",
+                        wikiLink = "https://www.wikipedia.com"
                     ),
                     missionName = UUID.randomUUID().toString(),
                     rocket = Rocket(

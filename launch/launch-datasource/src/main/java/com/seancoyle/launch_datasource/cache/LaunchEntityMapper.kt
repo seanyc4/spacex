@@ -41,8 +41,8 @@ constructor(){
                 links = Links(
                     missionImage = links.missionImage,
                     articleLink = links.articleLink,
-                    videoLink = links.videoLink,
-                    wikipedia = links.wikipedia
+                    webcastLink = links.videoLink,
+                    wikiLink = links.wikipedia
                 ),
                 missionName = missionName,
                 rocket = Rocket(
@@ -67,8 +67,8 @@ constructor(){
                 links = LinksEntity(
                     missionImage = links.missionImage,
                     articleLink = links.articleLink,
-                    videoLink = links.videoLink,
-                    wikipedia = links.wikipedia,
+                    videoLink = links.webcastLink,
+                    wikipedia = links.wikiLink,
                 ),
                 missionName = missionName,
                 rocket = RocketEntity(

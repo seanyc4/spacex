@@ -66,9 +66,9 @@ data class LaunchModel(
 @Parcelize
 data class Links(
     val missionImage: String,
-    val articleLink: String,
-    val videoLink: String,
-    val wikipedia: String,
+    val articleLink: String?,
+    val webcastLink: String?,
+    val wikiLink: String?,
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -78,8 +78,8 @@ data class Links(
 
         if (missionImage != other.missionImage) return false
         if (articleLink != other.articleLink) return false
-        if (videoLink != other.videoLink) return false
-        if (wikipedia != other.wikipedia) return false
+        if (webcastLink != other.webcastLink) return false
+        if (wikiLink != other.wikiLink) return false
 
         return true
     }
@@ -87,11 +87,18 @@ data class Links(
     override fun hashCode(): Int {
         var result = missionImage.hashCode()
         result = 31 * result + articleLink.hashCode()
-        result = 31 * result + videoLink.hashCode()
-        result = 31 * result + wikipedia.hashCode()
+        result = 31 * result + webcastLink.hashCode()
+        result = 31 * result + wikiLink.hashCode()
         return result
     }
 }
+
+@Parcelize
+data class LinkType(
+    @StringRes val nameResId: Int,
+    val link: String?,
+    val onClick: () -> Unit
+) : Parcelable
 
 @Parcelize
 data class Rocket(

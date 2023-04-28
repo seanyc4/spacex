@@ -355,8 +355,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     private fun isLinksNullOrEmpty() =
         links?.articleLink.isNullOrEmpty() &&
-                links?.videoLink.isNullOrEmpty() &&
-                links?.wikipedia.isNullOrEmpty()
+                links?.webcastLink.isNullOrEmpty() &&
+                links?.wikiLink.isNullOrEmpty()
 
 
     private fun displayBottomActionSheet(launchLinks: Links) {
