@@ -16,7 +16,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,8 +47,8 @@ fun LaunchBottomSheetCard(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LaunchBottomSheetHeader()
             LaunchBottomSheetDivider()
@@ -72,7 +71,6 @@ fun LaunchBottomSheetCard(
 fun LaunchBottomSheetHeader() {
     Text(
         text = stringResource(id = R.string.links),
-        textAlign = TextAlign.Center,
         style = TextStyle(
             fontFamily = FontFamily(
                 Font(R.font.orbitron)
@@ -82,7 +80,6 @@ fun LaunchBottomSheetHeader() {
             color = colorResource(id = R.color.textColorPrimary)
         ),
         modifier = Modifier
-            .wrapContentWidth(align = Alignment.CenterHorizontally)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin))
             .focusable(enabled = true)
     )
@@ -95,7 +92,6 @@ fun LaunchBottomSheetTitle(
 ) {
     Text(
         text = name,
-        textAlign = TextAlign.Center,
         style = TextStyle(
             fontFamily = FontFamily(
                 Font(R.font.space_grotesk)
@@ -104,7 +100,6 @@ fun LaunchBottomSheetTitle(
             color = colorResource(id = R.color.colorAccent)
         ),
         modifier = Modifier
-            .wrapContentWidth(align = Alignment.CenterHorizontally)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin))
             .focusable(enabled = true)
             .clickable {
@@ -133,6 +128,15 @@ fun LaunchBottomSheetExitButton(
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+@Preview
+@Composable
+fun LaunchBottomSheetTitlePreview() {
+    LaunchBottomSheetTitle(
+        name = "Example Title",
+        onClick = {}
+    )
 }
 
 @Preview
