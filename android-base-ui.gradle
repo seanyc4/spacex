@@ -28,6 +28,7 @@ dependencies {
     "implementation"(Compose.compose_layout)
     "implementation"(Compose.compose_material)
     "implementation"(Compose.compose_livedata)
+    "implementation"(Compose.compose_constraint_layout)
     "debugImplementation"(Compose.compose_tooling)
 
     "implementation"(Google.constraint_layout)

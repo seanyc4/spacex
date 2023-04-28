@@ -8,11 +8,12 @@ import android.view.*
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -30,7 +31,6 @@ import com.seancoyle.core.state.*
 import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch_models.model.company.CompanyInfoModel
-import com.seancoyle.launch_models.model.launch.LaunchType
 import com.seancoyle.launch_models.model.launch.Links
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch_usecases.company.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
@@ -42,6 +42,7 @@ import com.seancoyle.launch_viewstate.LaunchViewState
 import com.seancoyle.ui_launch.R
 import com.seancoyle.ui_launch.databinding.FragmentLaunchBinding
 import com.seancoyle.ui_launch.ui.adapter.LaunchAdapter
+import com.seancoyle.ui_launch.ui.composables.LaunchCard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -59,7 +60,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     @Inject
     lateinit var androidTestUtils: AndroidTestUtils
 
-    private var _binding :FragmentLaunchBinding? = null
+    private var _binding: FragmentLaunchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LaunchViewModel by viewModels()
     private var listAdapter: LaunchAdapter? = null
@@ -77,10 +78,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-        setupRecyclerView()
+        //  setupRecyclerView()
         setupSwipeRefresh()
         subscribeObservers()
         restoreInstanceState(savedInstanceState)
+
+
     }
 
     override fun onPause() {
@@ -130,13 +133,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     }
 
     private fun saveLayoutManagerState() {
-        binding.rvLaunch.layoutManager?.onSaveInstanceState()?.let { lmState ->
+       /* binding.rvLaunch.layoutManager?.onSaveInstanceState()?.let { lmState ->
             viewModel.setLayoutManagerState(lmState)
-        }
+        }*/
     }
 
     private fun setupRecyclerView() {
-        with(binding) {
+      /*  with(binding) {
             rvLaunch.apply {
 
                 listAdapter = LaunchAdapter(
@@ -159,7 +162,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 listAdapter?.stateRestorationPolicy =
                     RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-        }
+        }*/
     }
 
     private fun subscribeObservers() {
@@ -286,12 +289,33 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     @Suppress("UNCHECKED_CAST")
     private fun submitList() {
-        if (viewModel.getLaunchList()?.isNotEmpty() == true) {
-            listAdapter?.submitList(
+        val launchItems = viewModel.getLaunchList()
+        if (launchItems?.isNotEmpty() == true) {
+            binding.rvLaunch.setContent {
+                LazyColumn {
+                    itemsIndexed(
+                        items = launchItems
+                    ) { index, launchItem ->
+                        LaunchCard(
+                            launchItem = launchItem,
+                            onClick = { onCardClicked(launchItem.links) })
+                    }
+                }
+            }
+            /*listAdapter?.submitList(
                 viewModel.createLaunchData(
                     viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
                 ) as List<LaunchType>
-            )
+            )*/
+        }
+    }
+
+    fun onCardClicked(launchLinks: Links) {
+        links = launchLinks
+        if (isLinksNullOrEmpty()) {
+            displayErrorDialogNoLinks()
+        } else {
+            displayBottomActionSheet(launchLinks)
         }
     }
 

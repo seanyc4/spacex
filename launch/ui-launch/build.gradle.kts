@@ -24,6 +24,7 @@ dependencies {
     "implementation"(AndroidX.data_store)
 
     "implementation"(Glide.glide)
+    "implementation"(Glide.glide_compose)
     "kapt"(Glide.glide_compiler)
 
     "implementation"(Google.swipe_refresh_layout)

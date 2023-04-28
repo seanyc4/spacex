@@ -17,4 +17,7 @@ object Compose {
     private const val compose_theme_adapter_version = "1.2.1"
     const val compose_theme_adapter =
         "com.google.android.material:compose-theme-adapter:$compose_theme_adapter_version"
+
+    private const val compose_constraint_layout_version = "1.0.1"
+    const val compose_constraint_layout = "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout_version"
 }

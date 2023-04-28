@@ -3,9 +3,17 @@ package com.seancoyle.ui_launch.ui.composables
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +66,7 @@ fun LaunchBottomSheetCard(
                         name = stringResource(id = linkType.nameResId),
                         onClick = linkType.onClick
                     )
-                    if (index < linkTypes.lastIndex && linkTypes.size > 1) {
+                    if (index < linkTypes.lastIndex) {
                         LaunchBottomSheetDivider()
                     }
                 }
