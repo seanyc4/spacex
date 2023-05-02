@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.di.database
+package com.seancoyle.spacex.di
 
 
 import android.content.Context

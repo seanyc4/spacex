@@ -8,10 +8,6 @@ object Kotlin {
     const val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_core_version"
     const val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_core_version"
 
-    // Used for setting room exported schema in database gradle
-    const val ksp_version = "1.7.10-1.0.6"
-    const val ksp = "com.google.devtools.ksp:symbol-processing-api:$ksp_version"
-
     // Need for tests. Plugin doesn't work.
     private const val serialization_version = "1.4.1"
     const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"

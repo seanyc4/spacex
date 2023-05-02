@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class LaunchNetworkDataSourceModule {
+abstract class LaunchNetworkDataSourceModule {
 
     @Singleton
     @Binds

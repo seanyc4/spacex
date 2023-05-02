@@ -31,11 +31,17 @@ import com.seancoyle.core.state.*
 import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.model.CompanySummary
+import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.model.LaunchType
 import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
+import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.databinding.FragmentLaunchBinding
+import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
+import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -126,36 +132,36 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     }
 
     private fun saveLayoutManagerState() {
-       /* binding.rvLaunch.layoutManager?.onSaveInstanceState()?.let { lmState ->
-            viewModel.setLayoutManagerState(lmState)
-        }*/
+        /* binding.rvLaunch.layoutManager?.onSaveInstanceState()?.let { lmState ->
+             viewModel.setLayoutManagerState(lmState)
+         }*/
     }
 
     private fun setupRecyclerView() {
-      /*  with(binding) {
-            rvLaunch.apply {
+        /*  with(binding) {
+              rvLaunch.apply {
 
-                listAdapter = LaunchAdapter(
-                    interaction = this@LaunchFragment,
-                )
-                addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        super.onScrollStateChanged(recyclerView, newState)
-                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                        val lastPosition = layoutManager.findLastVisibleItemPosition()
-                        if (listAdapter?.itemCount!! > 0) {
-                            if (lastPosition == listAdapter?.itemCount?.minus(1)) {
-                                viewModel.nextPage()
-                            }
-                        }
-                    }
-                })
+                  listAdapter = LaunchAdapter(
+                      interaction = this@LaunchFragment,
+                  )
+                  addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                          super.onScrollStateChanged(recyclerView, newState)
+                          val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                          val lastPosition = layoutManager.findLastVisibleItemPosition()
+                          if (listAdapter?.itemCount!! > 0) {
+                              if (lastPosition == listAdapter?.itemCount?.minus(1)) {
+                                  viewModel.nextPage()
+                              }
+                          }
+                      }
+                  })
 
-                adapter = listAdapter
-                listAdapter?.stateRestorationPolicy =
-                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-            }
-        }*/
+                  adapter = listAdapter
+                  listAdapter?.stateRestorationPolicy =
+                      RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+              }
+          }*/
     }
 
     private fun subscribeObservers() {
@@ -282,28 +288,43 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     @Suppress("UNCHECKED_CAST")
     private fun submitList() {
-        val launchItems = viewModel.getLaunchList()
-        if (launchItems?.isNotEmpty() == true) {
+       // val launchItems = viewModel.getLaunchList()
+
+        val launchItems =  viewModel.createLaunchData(
+            viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
+        ) as List<LaunchType>
+
+        if (launchItems.isNotEmpty()) {
             binding.rvLaunch.setContent {
                 LazyColumn {
                     itemsIndexed(
                         items = launchItems
                     ) { index, launchItem ->
-                        LaunchCard(
-                            launchItem = launchItem,
-                            onClick = { onCardClicked(launchItem.links) })
+                        when (launchItem.type) {
+                            LaunchType.TYPE_TITLE -> {
+                                LaunchHeading(launchItem as SectionTitle)
+                            }
+
+                            LaunchType.TYPE_COMPANY -> {
+                                CompanySummaryCard(launchItem as CompanySummary)
+                            }
+
+                            LaunchType.TYPE_LAUNCH -> {
+                                LaunchCard(
+                                    launchItem = launchItem as LaunchModel,
+                                    onClick = { onCardClicked(launchItem.links) }
+                                )
+                            }
+
+                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                        }
                     }
                 }
             }
-            /*listAdapter?.submitList(
-                viewModel.createLaunchData(
-                    viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
-                ) as List<LaunchType>
-            )*/
         }
     }
 
-    fun onCardClicked(launchLinks: Links) {
+    private fun onCardClicked(launchLinks: Links) {
         links = launchLinks
         if (isLinksNullOrEmpty()) {
             displayErrorDialogNoLinks()

@@ -1,5 +1,8 @@
 package com.seancoyle.spacex.di.data.companyinfo
 
+import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
+import com.seancoyle.launch.implementation.di.CompanyInfoNetworkDataSourceModule
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import dagger.Module
@@ -11,7 +14,7 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [com.seancoyle.launch.implementation.di.CompanyInfoNetworkDataSourceModule::class]
+    replaces = [CompanyInfoNetworkDataSourceModule::class]
 )
 object TestCompanyInfoNetworkDataSourceModule {
 
@@ -19,8 +22,8 @@ object TestCompanyInfoNetworkDataSourceModule {
     @Provides
     fun provideCompanyInfoNetworkDataSource(
         fakeApi: FakeCompanyInfoApi,
-        networkMapper: com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
-    ): com.seancoyle.launch.api.CompanyInfoNetworkDataSource {
+        networkMapper: CompanyInfoNetworkMapper
+    ): CompanyInfoNetworkDataSource {
         return FakeCompanyInfoNetworkDataSourceImpl(
             fakeApi = fakeApi,
             networkMapper = networkMapper

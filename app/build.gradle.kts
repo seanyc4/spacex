@@ -89,6 +89,7 @@ android {
 dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.core_datastore))
+    implementation(project(Modules.core_database))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchApi))
     implementation(project(Modules.launchImpl))
