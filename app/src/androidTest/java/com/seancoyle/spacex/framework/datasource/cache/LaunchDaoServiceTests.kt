@@ -1,21 +1,18 @@
 package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.database.daos.LaunchDao
+import com.seancoyle.launch.api.LaunchModel
+import com.seancoyle.launch.api.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch.api.Links
+import com.seancoyle.launch.api.Rocket
+import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_ASC
+import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch_datasource.R
-import com.seancoyle.launch_datasource.cache.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.cache.LaunchCacheDataSourceImpl
-import com.seancoyle.launch_datasource.cache.LaunchEntityMapper
-import com.seancoyle.launch_models.model.launch.LaunchModel
-import com.seancoyle.launch_models.model.launch.LaunchType.Companion.TYPE_LAUNCH
-import com.seancoyle.launch_models.model.launch.Links
-import com.seancoyle.launch_models.model.launch.Rocket
 import com.seancoyle.spacex.LaunchDataFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -49,7 +46,7 @@ class LaunchDaoServiceTests {
     var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private lateinit var launchDaoService: LaunchCacheDataSource
+    private lateinit var launchDaoService: com.seancoyle.launch.api.LaunchCacheDataSource
 
     @Inject
     lateinit var dao: LaunchDao
@@ -58,7 +55,7 @@ class LaunchDaoServiceTests {
     lateinit var launchDataFactory: LaunchDataFactory
 
     @Inject
-    lateinit var launchEntityMapper: LaunchEntityMapper
+    lateinit var launchEntityMapper: com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
 
     lateinit var validLaunchYears: List<String>
 
@@ -66,7 +63,7 @@ class LaunchDaoServiceTests {
     fun setup() {
         hiltRule.inject()
         insertTestData()
-        launchDaoService = LaunchCacheDataSourceImpl(
+        launchDaoService = com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl(
             dao = dao,
             entityMapper = launchEntityMapper
         )
@@ -104,14 +101,14 @@ class LaunchDaoServiceTests {
             isLaunchSuccess = 2,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
-            links = Links(
+            links = com.seancoyle.launch.api.Links(
                 missionImage = DEFAULT_LAUNCH_IMAGE,
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
                 wikiLink = "https://www.wikipedia.com"
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
+            rocket = com.seancoyle.launch.api.Rocket(
                 rocketNameAndType = UUID.randomUUID().toString()
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
@@ -163,14 +160,14 @@ class LaunchDaoServiceTests {
             isLaunchSuccess = 1,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
-            links = Links(
+            links = com.seancoyle.launch.api.Links(
                 missionImage = DEFAULT_LAUNCH_IMAGE,
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
                 wikiLink = "https://www.wikipedia.com"
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
+            rocket = com.seancoyle.launch.api.Rocket(
                 rocketNameAndType = UUID.randomUUID().toString()
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
@@ -189,10 +186,10 @@ class LaunchDaoServiceTests {
 
     @Test
     fun deleteLaunchList_confirmDeleted() = runBlocking {
-        val launchList: ArrayList<LaunchModel> = ArrayList(launchDaoService.getAll()!!)
+        val launchList: ArrayList<com.seancoyle.launch.api.LaunchModel> = ArrayList(launchDaoService.getAll()!!)
 
         // select some random launch for deleting
-        val launchesToDelete: ArrayList<LaunchModel> = ArrayList()
+        val launchesToDelete: ArrayList<com.seancoyle.launch.api.LaunchModel> = ArrayList()
 
         // 1st
         var launchItemToDelete = launchList[Random.nextInt(0, launchList.size - 1) + 1]
@@ -396,7 +393,7 @@ class LaunchDaoServiceTests {
     }
 
 
-    private fun checkDateOrderAscending(launchList: List<LaunchModel>) {
+    private fun checkDateOrderAscending(launchList: List<com.seancoyle.launch.api.LaunchModel>) {
         // Check the list and verify the date is less than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(
@@ -406,7 +403,7 @@ class LaunchDaoServiceTests {
         }
     }
 
-    private fun checkDateOrderDescending(launchList: List<LaunchModel>) {
+    private fun checkDateOrderDescending(launchList: List<com.seancoyle.launch.api.LaunchModel>) {
         // Check the list and verify the date is greater than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(

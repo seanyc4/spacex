@@ -18,13 +18,9 @@
             <option value="$PROJECT_DIR$/core-datastore" />
             <option value="$PROJECT_DIR$/core-datastore-test" />
             <option value="$PROJECT_DIR$/launch" />
+            <option value="$PROJECT_DIR$/launch/api" />
+            <option value="$PROJECT_DIR$/launch/implementation" />
             <option value="$PROJECT_DIR$/launch/launch-constants" />
-            <option value="$PROJECT_DIR$/launch/launch-datasource" />
-            <option value="$PROJECT_DIR$/launch/launch-datasource-test" />
-            <option value="$PROJECT_DIR$/launch/launch-domain" />
-            <option value="$PROJECT_DIR$/launch/launch-usecases" />
-            <option value="$PROJECT_DIR$/launch/launch-viewstate" />
-            <option value="$PROJECT_DIR$/launch/ui-launch" />
           </set>
         </option>
       </GradleProjectSettings>

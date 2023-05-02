@@ -2,10 +2,7 @@ package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.database.daos.CompanyInfoDao
-import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSourceImpl
-import com.seancoyle.launch_datasource.cache.CompanyInfoEntityMapper
-import com.seancoyle.launch_models.model.company.CompanyInfoFactory
+import com.seancoyle.launch.api.CompanyInfoFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,21 +30,21 @@ class CompanyInfoDaoServiceTests {
     var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private lateinit var daoService: CompanyInfoCacheDataSource
+    private lateinit var daoService: com.seancoyle.launch.api.CompanyInfoCacheDataSource
 
     @Inject
     lateinit var dao: CompanyInfoDao
 
     @Inject
-    lateinit var companyInfoFactory: CompanyInfoFactory
+    lateinit var companyInfoFactory: com.seancoyle.launch.api.CompanyInfoFactory
 
     @Inject
-    lateinit var entityMapper: CompanyInfoEntityMapper
+    lateinit var entityMapper: com.seancoyle.launch.implementation.data.cache.CompanyInfoEntityMapper
 
     @Before
     fun setup() {
         hiltRule.inject()
-        daoService = CompanyInfoCacheDataSourceImpl(
+        daoService = com.seancoyle.launch.implementation.data.cache.CompanyInfoCacheDataSourceImpl(
             dao = dao,
             entityMapper = entityMapper
         )

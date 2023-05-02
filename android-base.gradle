@@ -29,7 +29,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -56,6 +55,7 @@ android {
 
         unitTests.all {
             it.useJUnitPlatform()
+            jvmArgs += "--add-opens=java.base/java.time=ALL-UNNAMED"
         }
     }
 }

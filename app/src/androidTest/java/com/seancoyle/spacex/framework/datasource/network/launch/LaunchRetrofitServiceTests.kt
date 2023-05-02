@@ -1,9 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.launch_datasource.network.LaunchNetworkDataSource
-import com.seancoyle.launch_datasource.network.LaunchNetworkMapper
-import com.seancoyle.launch_models.model.launch.LaunchOptions
+import com.seancoyle.launch.api.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,13 +24,13 @@ class LaunchRetrofitServiceTests {
     var hiltRule = HiltAndroidRule(this)
 
     // system in test
-    private lateinit var apiService: LaunchNetworkDataSource
+    private lateinit var apiService: com.seancoyle.launch.api.LaunchNetworkDataSource
 
     @Inject
-    lateinit var networkMapper: LaunchNetworkMapper
+    lateinit var networkMapper: com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 
     @Inject
-    lateinit var launchOptions: LaunchOptions
+    lateinit var launchOptions: com.seancoyle.launch.api.LaunchOptions
 
     @Inject
     lateinit var fakeApi: FakeLaunchApi

@@ -9,21 +9,17 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_EXCEPTION
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.util.DateTransformer
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch_datasource.cache.CompanyInfoCacheDataSource
-import com.seancoyle.launch_datasource.cache.LaunchCacheDataSource
-import com.seancoyle.launch_datasource.network.CompanyInfoNetworkDataSource
-import com.seancoyle.launch_datasource.network.LaunchNetworkDataSource
-import com.seancoyle.launch_models.model.company.CompanyInfoModel
-import com.seancoyle.launch_models.model.launch.LaunchModel
-import com.seancoyle.launch_models.model.launch.LaunchOptions
+import com.seancoyle.launch.api.CompanyInfoModel
+import com.seancoyle.launch.api.LaunchModel
+import com.seancoyle.launch.api.LaunchOptions
+import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_ASC
+import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_EXCEPTION
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.framework.presentation.MainActivity
 import com.seancoyle.spacex.util.EspressoIdlingResourceRule
@@ -82,10 +78,10 @@ class LaunchFragmentTests {
     val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
-    lateinit var launchCacheDataSource: LaunchCacheDataSource
+    lateinit var launchCacheDataSource: com.seancoyle.launch.api.LaunchCacheDataSource
 
     @Inject
-    lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
+    lateinit var companyInfoCacheDataSource: com.seancoyle.launch.api.CompanyInfoCacheDataSource
 
     @Inject
     lateinit var dateTransformer: DateTransformer
@@ -94,20 +90,20 @@ class LaunchFragmentTests {
     lateinit var launchDataFactory: LaunchDataFactory
 
     @Inject
-    lateinit var launchNetworkDataSource: LaunchNetworkDataSource
+    lateinit var launchNetworkDataSource: com.seancoyle.launch.api.LaunchNetworkDataSource
 
     @Inject
-    lateinit var companyInfoNetworkDataSource: CompanyInfoNetworkDataSource
+    lateinit var companyInfoNetworkDataSource: com.seancoyle.launch.api.CompanyInfoNetworkDataSource
 
     @Inject
-    lateinit var launchOptions: LaunchOptions
+    lateinit var launchOptions: com.seancoyle.launch.api.LaunchOptions
 
     @Inject
     lateinit var dataStore: AppDataStore
 
     lateinit var validLaunchYears: List<String>
-    private lateinit var testLaunchList: List<LaunchModel>
-    private lateinit var testCompanyInfoList: CompanyInfoModel
+    private lateinit var testLaunchList: List<com.seancoyle.launch.api.LaunchModel>
+    private lateinit var testCompanyInfoList: com.seancoyle.launch.api.CompanyInfoModel
 
     @Before
     fun init() {
@@ -166,7 +162,7 @@ class LaunchFragmentTests {
 
         // Only 2022 launches have "days from now" data
         val year = "2022"
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -201,7 +197,7 @@ class LaunchFragmentTests {
     @Test
     fun filterLaunchItemsByYearDesc_verifyResultsAndDescOrderState() {
         val year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -239,7 +235,7 @@ class LaunchFragmentTests {
     @Test
     fun filterLaunchItemsByYearAsc_verifyResultsAndAscOrderState() {
         val year = validLaunchYears.get(index = Random.nextInt(validLaunchYears.size))
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -284,7 +280,7 @@ class LaunchFragmentTests {
     @Test
     fun filterLaunchItemsByInvalidYear_verifyNoResults() {
         val year = "1000"
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -314,7 +310,7 @@ class LaunchFragmentTests {
 
     @Test
     fun filterByLaunchStatusSuccess_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
   //
@@ -358,7 +354,7 @@ class LaunchFragmentTests {
 
     @Test
     fun filterByLaunchStatusFailure_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -401,7 +397,7 @@ class LaunchFragmentTests {
 
     @Test
     fun filterByLaunchStatus_invalidSearch() {
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
 
         runBlocking {
@@ -416,7 +412,7 @@ class LaunchFragmentTests {
 
     @Test
     fun filterByLaunchStatusUnknown_verifyResultsAndDescOrderState() {
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -463,7 +459,7 @@ class LaunchFragmentTests {
         // We don't use the random list here as some years don't have any successful launches
         // This will cause the test to fail
         val year = "2021"
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -513,7 +509,7 @@ class LaunchFragmentTests {
         // We don't use the random list here as some years don't have any successful launches
         // This will cause the test to fail
         val year = "2006"
-        val expectedFilterResults: List<LaunchModel>?
+        val expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>?
 
         launchesFragmentTestHelper {
             performClick(filterButtonViewMatcher)
@@ -690,7 +686,7 @@ class LaunchFragmentTests {
         year: String? = "",
         order: String? = LAUNCH_ORDER_DESC,
         isLaunchSuccess: Int? = null
-    ): List<LaunchModel> {
+    ): List<com.seancoyle.launch.api.LaunchModel> {
         return launchCacheDataSource.filterLaunchList(
             year = year ?: "",
             order = order ?: LAUNCH_ORDER_DESC,

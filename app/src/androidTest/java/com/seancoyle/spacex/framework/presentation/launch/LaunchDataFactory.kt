@@ -5,10 +5,14 @@ import com.google.gson.reflect.TypeToken
 import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch_models.model.launch.*
+import com.seancoyle.launch.api.model.LaunchFactory
+import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.model.LaunchType
+import com.seancoyle.launch.api.model.Links
+import com.seancoyle.launch.api.model.Rocket
 import com.seancoyle.spacex.R
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 

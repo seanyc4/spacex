@@ -43,7 +43,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        isCoreLibraryDesugaringEnabled = true
     }
 
     composeOptions {
@@ -85,19 +84,14 @@ android {
     lint {
         checkDependencies = true
     }
-
 }
 
 dependencies {
-    coreLibraryDesugaring(Java8Time.java8Time)
     implementation(project(Modules.core))
     implementation(project(Modules.core_datastore))
     implementation(project(Modules.launchConstants))
-    implementation(project(Modules.launchDataSource))
-    implementation(project(Modules.launchDomain))
-    implementation(project(Modules.launchUseCases))
-    implementation(project(Modules.launchViewState))
-    implementation(project(Modules.uiLaunch))
+    implementation(project(Modules.launchApi))
+    implementation(project(Modules.launchImpl))
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)

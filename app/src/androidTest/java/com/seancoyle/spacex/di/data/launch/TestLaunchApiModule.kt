@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.di.data.launch
 
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch_datasource.di.network.LaunchApiModule
 import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi
 import dagger.Module
 import dagger.Provides
@@ -13,7 +12,7 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [LaunchApiModule::class]
+    replaces = [com.seancoyle.launch.implementation.di.LaunchApiModule::class]
 )
 object TestLaunchApiModule {
 

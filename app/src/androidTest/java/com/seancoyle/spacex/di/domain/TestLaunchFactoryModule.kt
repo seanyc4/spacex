@@ -1,8 +1,8 @@
 package com.seancoyle.spacex.di.domain
 
 import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.launch.api.LaunchFactory
 import com.seancoyle.launch_models.model.di.LaunchFactoryModule
-import com.seancoyle.launch_models.model.launch.LaunchFactory
 import com.seancoyle.spacex.LaunchDataFactory
 import dagger.Module
 import dagger.Provides
@@ -21,15 +21,15 @@ object TestLaunchFactoryModule {
 
     @Singleton
     @Provides
-    fun provideLaunchFactory(): LaunchFactory {
-        return LaunchFactory()
+    fun provideLaunchFactory(): com.seancoyle.launch.api.LaunchFactory {
+        return com.seancoyle.launch.api.LaunchFactory()
     }
 
     @Singleton
     @Provides
     fun provideLaunchDataFactory(
         jsonFileReader: JsonFileReader,
-        launchFactory: LaunchFactory
+        launchFactory: com.seancoyle.launch.api.LaunchFactory
     ): LaunchDataFactory {
         return LaunchDataFactory(
             jsonFileReader = jsonFileReader,

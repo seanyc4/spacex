@@ -17,6 +17,8 @@
       <module name="SpaceX.data" target="11" />
       <module name="SpaceX.data.main" target="11" />
       <module name="SpaceX.data.test" target="11" />
+      <module name="SpaceX.launch.api" target="17" />
+      <module name="SpaceX.launch.implementation" target="17" />
       <module name="SpaceX.launch.launch-datasource" target="17" />
       <module name="SpaceX.launch.launch-datasource-test" target="17" />
       <module name="SpaceX.launch.launch-domain" target="17" />

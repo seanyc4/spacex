@@ -11,10 +11,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.seancoyle.core.util.DateTransformer
-import com.seancoyle.launch_models.model.launch.LaunchModel
+import com.seancoyle.launch.api.LaunchModel
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
-import com.seancoyle.ui_launch.ui.adapter.LaunchAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.CoreMatchers
@@ -41,7 +40,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsDaysSinceDisplaysCorrectly(
-        expectedFilterResults: List<LaunchModel>,
+        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
         dateTransformer: DateTransformer
     ) {
         launchesFragmentTestHelper {
@@ -75,7 +74,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsDateMatchesFilteredDate(
-        expectedFilterResults: List<LaunchModel>,
+        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
         year: String? = ""
     ) {
         launchesFragmentTestHelper {
@@ -98,7 +97,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatus(
-        expectedFilterResults: List<LaunchModel>,
+        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
         @DrawableRes launchSuccessIcon: Int
     ) {
         launchesFragmentTestHelper {
@@ -121,7 +120,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-        expectedFilterResults: List<LaunchModel>,
+        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
         year: String,
         @DrawableRes launchSuccessIcon: Int
     ) {
@@ -230,7 +229,7 @@ class LaunchFragmentTestHelper {
         position: Int
     ) = apply {
         Espresso.onView(view).perform(
-            RecyclerViewActions.actionOnItemAtPosition<LaunchAdapter.LaunchViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<com.seancoyle.launch.implementation.presentation.LaunchAdapter.LaunchViewHolder>(
                 position,
                 ViewActions.click()
             )
@@ -291,7 +290,7 @@ class LaunchFragmentTestHelper {
 
     fun scrollToRecyclerViewItemWithText(view: Matcher<View>, text: String) = apply {
         Espresso.onView(view).perform(
-            scrollTo<LaunchAdapter.LaunchViewHolder>(
+            scrollTo<com.seancoyle.launch.implementation.presentation.LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withText(text))
             )
         )
@@ -299,7 +298,7 @@ class LaunchFragmentTestHelper {
 
     fun scrollToRecyclerViewItemWithId(view: Matcher<View>, id: Int) = apply {
         Espresso.onView(view).perform(
-            scrollTo<LaunchAdapter.LaunchViewHolder>(
+            scrollTo<com.seancoyle.launch.implementation.presentation.LaunchAdapter.LaunchViewHolder>(
                 hasDescendant(withId(id))
             )
         )
