@@ -1,5 +1,6 @@
 package com.seancoyle.launch.api.model
 
+
 abstract class LaunchType {
     abstract val type: Int
 

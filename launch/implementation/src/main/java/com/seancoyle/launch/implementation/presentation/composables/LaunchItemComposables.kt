@@ -32,7 +32,8 @@ import com.seancoyle.launch.implementation.R
 
 @Composable
 fun LaunchHeading(
-    launchHeading: SectionTitle
+    launchHeading: SectionTitle,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = launchHeading.title,
@@ -46,7 +47,7 @@ fun LaunchHeading(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen._8sdp))
     )
@@ -54,14 +55,15 @@ fun LaunchHeading(
 
 @Composable
 fun CompanySummaryCard(
-    summary: CompanySummary
+    summary: CompanySummary,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         backgroundColor = colorResource(id = R.color.colorSecondary),
         elevation = 4.dp,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
         border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.colorAccent)),
-        modifier = Modifier.padding(8.dp)
+        modifier = modifier.padding(8.dp)
     ) {
         Text(
             text = summary.summary,
@@ -73,7 +75,7 @@ fun CompanySummaryCard(
                 color = colorResource(id = R.color.textColorPrimary),
                 textAlign = TextAlign.Start
             ),
-            modifier = Modifier
+            modifier = modifier
                 .padding(dimensionResource(R.dimen.default_view_margin))
         )
     }
@@ -82,10 +84,11 @@ fun CompanySummaryCard(
 @Composable
 fun LaunchCard(
     launchItem: LaunchModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
@@ -93,12 +96,12 @@ fun LaunchCard(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
         ) {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth(0.20f)
                     .padding(end = dimensionResource(id = R.dimen.small_view_margins_8dp))
                     .align(Alignment.CenterVertically)
@@ -108,7 +111,7 @@ fun LaunchCard(
 
 
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth(0.40f)
             ) {
                 LaunchCardDefaultText(title = R.string.mission)
@@ -118,7 +121,7 @@ fun LaunchCard(
             }
 
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth(1f)
             ) {
                 LaunchCardDynamicText(title = launchItem.missionName)
@@ -133,12 +136,13 @@ fun LaunchCard(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LaunchCardImage(
+    modifier: Modifier = Modifier,
     imageUrl: String
 ) {
     GlideImage(
         model = imageUrl,
         contentDescription = stringResource(id = R.string.launch_image),
-        modifier = Modifier
+        modifier = modifier
             .size(60.dp)
             .padding(dimensionResource(id = R.dimen._4sdp))
 

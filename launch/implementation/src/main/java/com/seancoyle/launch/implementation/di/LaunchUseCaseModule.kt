@@ -1,9 +1,11 @@
 package com.seancoyle.launch.implementation.di
 
+import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
 import com.seancoyle.launch.api.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.api.usecase.GetAllLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.implementation.domain.CreateMergedListUseCaseImpl
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetAllLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
@@ -40,6 +42,11 @@ internal abstract class LaunchUseCaseModule {
     abstract fun bindsFilterLaunchItemsInCacheUseCase(
         impl: FilterLaunchItemsInCacheUseCaseImpl
     ): FilterLaunchItemsInCacheUseCase
+
+    @Binds
+    abstract fun bindsCreateMergedListUseCase(
+        impl: CreateMergedListUseCaseImpl
+    ): CreateMergedListUseCase
 
     companion object {
         @ViewModelScoped

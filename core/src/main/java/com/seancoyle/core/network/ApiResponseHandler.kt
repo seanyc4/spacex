@@ -1,8 +1,7 @@
 package com.seancoyle.core.network
 
-import com.seancoyle.core.state.*
 import com.seancoyle.core.network.NetworkErrors.NETWORK_DATA_NULL
-
+import com.seancoyle.core.state.*
 
 abstract class ApiResponseHandler <ViewState, Data>(
     private val response: ApiResult<Data?>,

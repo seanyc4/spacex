@@ -1,7 +1,6 @@
 package com.seancoyle.core.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
@@ -12,6 +11,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
 
@@ -22,7 +23,13 @@ constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _viewState: MutableLiveData<ViewState?> = MutableLiveData()
+
+    private val _viewState : MutableStateFlow<ViewState> by lazy {
+        MutableStateFlow(initNewViewState())
+    }
+
+    val viewState: StateFlow<ViewState>
+        get() = _viewState
 
     private val dataChannelManager: DataChannelManager<ViewState> = object : DataChannelManager<ViewState>(
         ioDispatcher = ioDispatcher,
@@ -33,9 +40,6 @@ constructor(
             this@BaseViewModel.handleNewData(data)
         }
     }
-
-    val viewState: LiveData<ViewState?>
-        get() = _viewState
 
     val shouldDisplayProgressBar: LiveData<Boolean> = dataChannelManager.shouldDisplayProgressBar
 
@@ -88,7 +92,7 @@ constructor(
     }
 
     fun setViewState(viewState: ViewState) {
-        _viewState.postValue(viewState)
+        _viewState.value = viewState
     }
 
     fun clearStateMessage(index: Int = 0) {

@@ -12,12 +12,11 @@ import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.model.CompanyInfoModel
-import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.model.LaunchType
 import com.seancoyle.launch.api.model.LaunchViewState
-import com.seancoyle.launch.api.model.SectionTitle
+import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.CreateStateMessageEvent
@@ -47,6 +46,7 @@ constructor(
     private val companyInfoUseCases: CompanyInfoUseCases,
     val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
+    private val createMergedListUseCase: CreateMergedListUseCase
 ) : BaseViewModel<LaunchViewState>(
     ioDispatcher = ioDispatcher,
     mainDispatcher = mainDispatcher
@@ -72,6 +72,12 @@ constructor(
         data.let { viewState ->
             viewState.launchList?.let { launchList ->
                 setLaunchList(launchList)
+                setMergedList(
+                    createMergedListUseCase.createLaunchData(
+                        companyInfo = getCompanyInfo(),
+                        launchList = launchList
+                    )
+                )
             }
 
             viewState.company?.let { companyInfo ->
@@ -82,6 +88,10 @@ constructor(
                 setNumLaunchItemsInCache(numItems)
             }
         }
+    }
+
+    private fun setMergedList(list: List<LaunchType>) {
+        setViewState(getCurrentViewStateOrNew().copy(mergedList = list))
     }
 
     override fun setStateEvent(stateEvent: StateEvent) {
@@ -255,38 +265,6 @@ constructor(
         setViewState(update)
     }
 
-    fun createLaunchData(companySummary: String?): List<Any> {
-
-        val consolidatedList = mutableListOf<LaunchType>()
-
-        consolidatedList.add(
-            SectionTitle(
-                title = "COMPANY",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        consolidatedList.add(
-            CompanySummary(
-                summary = companySummary ?: "",
-                type = LaunchType.TYPE_COMPANY
-            )
-        )
-        consolidatedList.add(
-            SectionTitle(
-                title = "LAUNCH",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        getLaunchList()?.map { launchItems ->
-            consolidatedList.add(
-                launchItems
-            )
-
-        }
-
-        return consolidatedList
-    }
-
     private fun getSearchQuery() = getCurrentViewStateOrNew().yearQuery ?: ""
     private fun getPage() = getCurrentViewStateOrNew().page ?: 1
     fun getOrder() = getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_DESC
@@ -355,14 +333,12 @@ constructor(
     }
 
     companion object {
-
         // Shared Preference Files:
         private const val LAUNCH_PREFERENCES: String = "com.seancoyle.spacex"
 
         // Shared Preference Keys
         const val LAUNCH_ORDER: String = "$LAUNCH_PREFERENCES.LAUNCH_ORDER"
         const val LAUNCH_FILTER: String = "$LAUNCH_PREFERENCES.LAUNCH_FILTER"
-
     }
 
 }

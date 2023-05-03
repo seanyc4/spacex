@@ -8,13 +8,23 @@ import android.view.*
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
@@ -30,7 +40,6 @@ import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.core.state.*
 import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
@@ -38,80 +47,99 @@ import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.databinding.FragmentLaunchBinding
+import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetAllLaunchItemsFromCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
+import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
+import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 const val LINKS_KEY = "links"
-const val LAUNCH_STATE_BUNDLE_KEY =
-    "com.seancoyle.launch.framework.presentation.launch.state"
+const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.state"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment : BaseFragment(R.layout.fragment_launch),
-    LaunchAdapter.Interaction {
+class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
     @Inject
     lateinit var androidTestUtils: AndroidTestUtils
-
-    private var _binding: FragmentLaunchBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: LaunchViewModel by viewModels()
-    private var listAdapter: LaunchAdapter? = null
+    private val launchViewModel by viewModels<LaunchViewModel>()
     private var links: Links? = null
 
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLaunchBinding.inflate(layoutInflater)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+
+                val scaffoldState = rememberScaffoldState()
+            //    val loading = launchViewModel.shouldDisplayProgressBar.value ?: false
+
+                AppTheme(
+                    darkTheme = false,
+                    displayProgressBar = false,
+                    scaffoldState = scaffoldState
+                ) {
+                    Scaffold(
+                        topBar = {
+                            HomeAppBar(
+                                title = { stringResource(id = R.string.app_name) },
+                                onClick = {
+                                    launchViewModel.setIsDialogFilterDisplayed(true)
+                                    displayFilterDialog()
+                                }
+                            )
+                        },
+                        scaffoldState = scaffoldState
+                    ) { padding ->
+                        LaunchScreen(
+                            Modifier.padding(padding),
+                            viewModel = launchViewModel
+                        )
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setListeners()
-        //  setupRecyclerView()
         setupSwipeRefresh()
         subscribeObservers()
         restoreInstanceState(savedInstanceState)
-
-
     }
 
     override fun onPause() {
         super.onPause()
-        saveLayoutManagerState()
-        viewModel.clearAllStateMessages()
+        launchViewModel.clearAllStateMessages()
     }
 
     private fun restoreInstanceState(savedInstanceState: Bundle?) {
         savedInstanceState?.let { inState ->
             (inState[LAUNCH_STATE_BUNDLE_KEY] as LaunchViewState?)?.let { viewState ->
-                viewModel.setViewState(viewState)
+                launchViewModel.setViewState(viewState)
             }
         }
     }
 
-    override fun restoreListPosition() {
-        viewModel.getLayoutManagerState()?.let { lmState ->
-            view?.findViewById<RecyclerView>(R.id.rv_launch)?.layoutManager?.onRestoreInstanceState(
-                lmState
-            )
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        val viewState = viewModel.viewState.value
+        val viewState = launchViewModel.viewState.value
 
         //clear the list. Don't save a large list to bundle.
-        viewState?.launchList = ArrayList()
+        viewState.launchList = ArrayList()
+        viewState.mergedList = ArrayList()
 
         outState.putParcelable(
             LAUNCH_STATE_BUNDLE_KEY,
@@ -122,82 +150,47 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.getLaunchList() != null) {
+        if (launchViewModel.getLaunchList() != null) {
             getTotalNumEntriesInLaunchCacheEvent()
-            viewModel.refreshSearchQuery()
+            launchViewModel.refreshSearchQuery()
         }
-        if (viewModel.getIsDialogFilterDisplayed() == true) {
+        if (launchViewModel.getIsDialogFilterDisplayed() == true) {
             displayFilterDialog()
         }
     }
 
-    private fun saveLayoutManagerState() {
-        /* binding.rvLaunch.layoutManager?.onSaveInstanceState()?.let { lmState ->
-             viewModel.setLayoutManagerState(lmState)
-         }*/
-    }
-
-    private fun setupRecyclerView() {
-        /*  with(binding) {
-              rvLaunch.apply {
-
-                  listAdapter = LaunchAdapter(
-                      interaction = this@LaunchFragment,
-                  )
-                  addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                          super.onScrollStateChanged(recyclerView, newState)
-                          val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                          val lastPosition = layoutManager.findLastVisibleItemPosition()
-                          if (listAdapter?.itemCount!! > 0) {
-                              if (lastPosition == listAdapter?.itemCount?.minus(1)) {
-                                  viewModel.nextPage()
-                              }
-                          }
-                      }
-                  })
-
-                  adapter = listAdapter
-                  listAdapter?.stateRestorationPolicy =
-                      RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-              }
-          }*/
-    }
-
     private fun subscribeObservers() {
 
-        viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
+        launchViewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
             uiController.displayProgressBar(it)
         }
 
-        viewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
+        launchViewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_SUCCESS -> {
-                        viewModel.clearStateMessage()
-                        viewModel.setStateEvent(LaunchStateEvent.GetCompanyInfoFromCacheEvent)
+                    GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_SUCCESS -> {
+                        launchViewModel.clearStateMessage()
+                        launchViewModel.setStateEvent(LaunchStateEvent.GetCompanyInfoFromCacheEvent)
                     }
 
-                    com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl.GET_COMPANY_INFO_SUCCESS -> {
-                        viewModel.clearStateMessage()
+                    GetCompanyInfoFromCacheUseCaseImpl.GET_COMPANY_INFO_SUCCESS -> {
+                        launchViewModel.clearStateMessage()
                         getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
-                    com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
-                        viewModel.clearStateMessage()
+                    GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
+                        launchViewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
                         getTotalNumEntriesInLaunchCacheEvent()
                     }
 
-                    com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl.SEARCH_LAUNCH_SUCCESS -> {
-                        viewModel.clearStateMessage()
-                        submitList()
+                    FilterLaunchItemsInCacheUseCaseImpl.SEARCH_LAUNCH_SUCCESS -> {
+                        launchViewModel.clearStateMessage()
                     }
 
-                    com.seancoyle.launch.implementation.domain.GetAllLaunchItemsFromCacheUseCaseImpl.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
-                        viewModel.clearStateMessage()
-                        submitList()
+                    GetAllLaunchItemsFromCacheUseCaseImpl.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
+                        launchViewModel.clearStateMessage()
                     }
 
                     else -> {
@@ -205,28 +198,28 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                             response = stateMessage.response,
                             stateMessageCallback = object : StateMessageCallback {
                                 override fun removeMessageFromStack() {
-                                    viewModel.clearStateMessage()
+                                    launchViewModel.clearStateMessage()
                                 }
                             }
                         )
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
+                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
+                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
+                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
                                 getCompanyInfoFromCacheEvent()
                             }
 
-                            com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_ERROR -> {
+                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_ERROR -> {
                                 getCompanyInfoFromCacheEvent()
                             }
                         }
@@ -236,14 +229,23 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
 
         // Update UI when list size changes
-        viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
+        /*launchViewModel.viewState.observe(viewLifecycleOwner) { viewState ->
 
             if (viewState != null) {
                 viewState.launchList?.let { _ ->
-                    if (viewModel.isPaginationExhausted() && !viewModel.isQueryExhausted()) {
-                        viewModel.setQueryExhausted(true)
+                    if (launchViewModel.isPaginationExhausted() && !launchViewModel.isQueryExhausted()) {
+                        launchViewModel.setQueryExhausted(true)
                     }
-                    submitList()
+                }
+            }
+        }*/
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launchViewModel.viewState.collect { viewState ->
+                viewState.launchList?.let { _ ->
+                    if (launchViewModel.isPaginationExhausted() && !launchViewModel.isQueryExhausted()) {
+                        launchViewModel.setQueryExhausted(true)
+                    }
                 }
             }
         }
@@ -271,57 +273,19 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     }
 
     private fun filterLaunchItemsInCacheEvent() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             LaunchStateEvent.FilterLaunchItemsInCacheEvent()
         )
     }
 
     private fun getCompanyInfoFromCacheEvent() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             LaunchStateEvent.GetCompanyInfoFromCacheEvent
         )
     }
 
     private fun getTotalNumEntriesInLaunchCacheEvent() {
-        viewModel.retrieveNumLaunchItemsInCache()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun submitList() {
-       // val launchItems = viewModel.getLaunchList()
-
-        val launchItems =  viewModel.createLaunchData(
-            viewModel.getCompanyInfo()?.let { buildCompanyInfoString(it) }
-        ) as List<LaunchType>
-
-        if (launchItems.isNotEmpty()) {
-            binding.rvLaunch.setContent {
-                LazyColumn {
-                    itemsIndexed(
-                        items = launchItems
-                    ) { index, launchItem ->
-                        when (launchItem.type) {
-                            LaunchType.TYPE_TITLE -> {
-                                LaunchHeading(launchItem as SectionTitle)
-                            }
-
-                            LaunchType.TYPE_COMPANY -> {
-                                CompanySummaryCard(launchItem as CompanySummary)
-                            }
-
-                            LaunchType.TYPE_LAUNCH -> {
-                                LaunchCard(
-                                    launchItem = launchItem as LaunchModel,
-                                    onClick = { onCardClicked(launchItem.links) }
-                                )
-                            }
-
-                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
-                        }
-                    }
-                }
-            }
-        }
+        launchViewModel.retrieveNumLaunchItemsInCache()
     }
 
     private fun onCardClicked(launchLinks: Links) {
@@ -333,62 +297,28 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         }
     }
 
-    private fun buildCompanyInfoString(companyInfo: CompanyInfoModel) = String.format(
-        getString(R.string.company_info),
-        companyInfo.name,
-        companyInfo.founder,
-        companyInfo.founded,
-        companyInfo.employees,
-        companyInfo.launchSites,
-        companyInfo.valuation
-    )
-
-    private fun setListeners() {
-        with(binding) {
-            toolbar.filterBtn.setOnClickListener {
-                viewModel.setIsDialogFilterDisplayed(true)
-                displayFilterDialog()
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        listAdapter = null // can leak memory
-        _binding = null
-    }
-
     private fun getLaunchListFromNetworkAndInsertToCacheEvent() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = viewModel.launchOptions
+                launchOptions = launchViewModel.launchOptions
             )
         )
     }
 
     private fun getCompanyInfoFromNetworkAndInsertToCacheEvent() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
         )
     }
 
     private fun setupSwipeRefresh() {
-        with(binding) {
-            swipeRefresh.setOnRefreshListener {
-                swipeRefresh.isRefreshing = false
-                viewModel.clearQueryParameters()
-                getCompanyInfoFromNetworkAndInsertToCacheEvent()
-            }
-        }
-    }
-
-    override fun onItemSelected(position: Int, launchLinks: Links) {
-        links = launchLinks
-        if (isLinksNullOrEmpty()) {
-            displayErrorDialogNoLinks()
-        } else {
-            displayBottomActionSheet(launchLinks)
-        }
+        /*  with(binding) {
+              swipeRefresh.setOnRefreshListener {
+                  swipeRefresh.isRefreshing = false
+                  viewModel.clearQueryParameters()
+                  getCompanyInfoFromNetworkAndInsertToCacheEvent()
+              }
+          }*/
     }
 
     private fun isLinksNullOrEmpty() =
@@ -411,13 +341,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
-                .onDismiss { viewModel.setIsDialogFilterDisplayed(false) }
+                .onDismiss { launchViewModel.setIsDialogFilterDisplayed(false) }
                 .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 
             val view = dialog.getCustomView()
-            val order = viewModel.getOrder()
-            val filter = viewModel.getFilter()
+            val order = launchViewModel.getOrder()
+            val filter = launchViewModel.getFilter()
             var newOrder: String? = null
 
             view.findViewById<RadioGroup>(R.id.filter_group).apply {
@@ -459,7 +389,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 val yearQuery = view.findViewById<EditText>(R.id.year_query).text.toString()
 
                 // Save data to view model
-                viewModel.apply {
+                launchViewModel.apply {
                     newOrder?.let { order ->
                         setLaunchOrder(order)
                     }
@@ -483,12 +413,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
 
     private fun startNewSearch() {
         printLogDebug("DCM", "start new search")
-        viewModel.clearList()
-        viewModel.loadFirstPage()
+        launchViewModel.clearList()
+        launchViewModel.loadFirstPage()
     }
 
     private fun displayErrorDialogNoLinks() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             stateEvent = LaunchStateEvent.CreateStateMessageEvent(
                 StateMessage(
                     response = Response(
@@ -502,7 +432,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
     }
 
     private fun displayErrorDialogUnableToLoadLink() {
-        viewModel.setStateEvent(
+        launchViewModel.setStateEvent(
             stateEvent = LaunchStateEvent.CreateStateMessageEvent(
                 StateMessage(
                     response = Response(
@@ -513,6 +443,49 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch),
                 )
             )
         )
+    }
+
+    @Composable
+    fun LaunchScreen(
+        modifier: Modifier = Modifier,
+        viewModel: LaunchViewModel
+    ) {
+        val viewState = viewModel.viewState.collectAsState()
+        LaunchContent(viewState.value.mergedList ?: emptyList())
+    }
+
+    @Composable
+    private fun LaunchContent(launchItems: List<LaunchType>) {
+        if (launchItems.isNotEmpty()) {
+            Box(
+
+            ) {
+                LazyColumn {
+                    itemsIndexed(
+                        items = launchItems
+                    ) { index, launchItem ->
+                        when (launchItem.type) {
+                            LaunchType.TYPE_TITLE -> {
+                                LaunchHeading(launchItem as SectionTitle)
+                            }
+
+                            LaunchType.TYPE_COMPANY -> {
+                                CompanySummaryCard(launchItem as CompanySummary)
+                            }
+
+                            LaunchType.TYPE_LAUNCH -> {
+                                LaunchCard(
+                                    launchItem = launchItem as LaunchModel,
+                                    onClick = { onCardClicked(launchItem.links) }
+                                )
+                            }
+
+                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

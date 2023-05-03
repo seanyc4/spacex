@@ -25,11 +25,12 @@ object AndroidX {
     const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     const val navigation_ui = "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
-    private const val lifecycle_version = "2.5.1"
+    private const val lifecycle_version = "2.6.0-beta01"
     const val lifecycle_vm_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     const val lifecycle_live_data_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     const val lifecycle_saved_state = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
-    const val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:${lifecycle_version}"
+    const val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    const val lifecycle_compose_viewmodel ="androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
 
     private const val splash_version = "1.0.0"
     const val splash_screen = "androidx.core:core-splashscreen:$splash_version"

@@ -1,7 +1,7 @@
 object Compose {
 
     const val compose_compiler_version = "1.4.3"
-    private const val compose_version = "1.3.3"
+    private const val compose_version = "1.4.2"
 
     const val compose_runtime = "androidx.compose.runtime:runtime:$compose_version"
     const val compose_ui = "androidx.compose.ui:ui:$compose_version"

@@ -31,9 +31,11 @@ import com.seancoyle.launch.api.model.LinkType
 import com.seancoyle.launch.implementation.R
 
 @Composable
-fun LaunchBottomSheetDivider() {
+fun LaunchBottomSheetDivider(
+    modifier: Modifier = Modifier,
+) {
     Box(
-        Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(1.dp)
             .background(colorResource(id = R.color.colorAccent))
@@ -42,10 +44,11 @@ fun LaunchBottomSheetDivider() {
 
 @Composable
 fun LaunchBottomSheetCard(
+    modifier: Modifier = Modifier,
     linkTypes: List<LinkType>?
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 start = dimensionResource(id = R.dimen.small_view_margins_8dp),
@@ -76,7 +79,9 @@ fun LaunchBottomSheetCard(
 }
 
 @Composable
-fun LaunchBottomSheetHeader() {
+fun LaunchBottomSheetHeader(
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = stringResource(id = R.string.links),
         style = TextStyle(
@@ -87,7 +92,7 @@ fun LaunchBottomSheetHeader() {
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.textColorPrimary)
         ),
-        modifier = Modifier
+        modifier = modifier
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin))
             .focusable(enabled = true)
     )
@@ -95,6 +100,7 @@ fun LaunchBottomSheetHeader() {
 
 @Composable
 fun LaunchBottomSheetTitle(
+    modifier: Modifier = Modifier,
     name: String,
     onClick: () -> Unit
 ) {
@@ -107,7 +113,7 @@ fun LaunchBottomSheetTitle(
             fontSize = dimensionResource(id = R.dimen.text_size_heading).value.sp,
             color = colorResource(id = R.color.colorAccent)
         ),
-        modifier = Modifier
+        modifier = modifier
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin))
             .focusable(enabled = true)
             .clickable {
@@ -118,11 +124,12 @@ fun LaunchBottomSheetTitle(
 
 @Composable
 fun LaunchBottomSheetExitButton(
+    modifier: Modifier = Modifier,
     onExitBtn: () -> Unit
 ) {
     Button(
         onClick = onExitBtn,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(height = 80.dp)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin)),

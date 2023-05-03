@@ -3,10 +3,12 @@ package com.seancoyle.launch.api.model
 import android.os.Parcelable
 import com.seancoyle.core.state.ViewState
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class LaunchViewState(
 
+    var mergedList: @RawValue List<LaunchType>? = null,
     var launchList: List<LaunchModel>? = null,
     var launch: LaunchModel? = null,
     var company: CompanyInfoModel? = null,

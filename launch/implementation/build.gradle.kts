@@ -18,6 +18,7 @@ dependencies {
     "implementation"(AndroidX.app_compat)
     "implementation"(AndroidX.core_ktx)
     "implementation"(AndroidX.data_store)
+    "implementation"(AndroidX.lifecycle_compose_viewmodel)
     "implementation"(Glide.glide)
     "implementation"(Glide.glide_compose)
     "kapt"(Glide.glide_compiler)

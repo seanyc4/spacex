@@ -26,9 +26,9 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyInfoCacheDataSource,
     private val networkDataSource: CompanyInfoNetworkDataSource,
     private val factory: CompanyInfoFactory
-): GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
+) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
-   override operator fun invoke(
+    override operator fun invoke(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 
@@ -68,7 +68,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 return DataState.error(
                     response = Response(
                         message = COMPANY_INFO_ERROR,
-                        uiComponentType = UIComponentType.Dialog,
+                        uiComponentType = UIComponentType.Toast,
                         messageType = MessageType.Error
                     ),
                     stateEvent = stateEvent
@@ -131,7 +131,8 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
     companion object {
         const val COMPANY_INFO_EMPTY = "No data returned from network."
-        const val COMPANY_INFO_ERROR = "Please check your internet connection and try again.\n\nReason: Network error"
+        const val COMPANY_INFO_ERROR =
+            "Please check your internet connection and try again.\n\nReason: Network error"
         const val COMPANY_INFO_INSERT_SUCCESS = "Successfully inserted company info from network."
         const val COMPANY_INFO_INSERT_FAILED = "Failed to insert company info from network."
     }

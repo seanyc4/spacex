@@ -101,6 +101,7 @@ dependencies {
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)
     implementation(AndroidX.lifecycle_saved_state)
+    implementation(AndroidX.lifecycle_compose_viewmodel)
     implementation(AndroidX.navigation_dynamic)
     implementation(AndroidX.navigation_fragment)
     implementation(AndroidX.navigation_ui)
