@@ -24,11 +24,11 @@ import javax.inject.Inject
 class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: LaunchCacheDataSource,
-    private val launchNetworkDataSource: LaunchNetworkDataSource
+    private val launchNetworkDataSource: LaunchNetworkDataSource,
+    private val launchOptions: LaunchOptions
 ) : GetLaunchListFromNetworkAndInsertToCacheUseCase {
 
     override operator fun invoke(
-        launchOptions: LaunchOptions,
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
 

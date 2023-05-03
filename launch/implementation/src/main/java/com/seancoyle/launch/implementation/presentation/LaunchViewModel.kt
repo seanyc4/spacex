@@ -13,7 +13,6 @@ import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.model.LaunchType
 import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
@@ -44,7 +43,6 @@ constructor(
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val launchUseCases: LaunchUseCases,
     private val companyInfoUseCases: CompanyInfoUseCases,
-    val launchOptions: LaunchOptions,
     private val appDataStoreManager: AppDataStore,
     private val createMergedListUseCase: CreateMergedListUseCase
 ) : BaseViewModel<LaunchViewState>(
@@ -100,7 +98,6 @@ constructor(
 
             is GetLaunchItemsFromNetworkAndInsertToCacheEvent -> {
                 launchUseCases.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
-                    launchOptions = stateEvent.launchOptions,
                     stateEvent = stateEvent
                 )
             }

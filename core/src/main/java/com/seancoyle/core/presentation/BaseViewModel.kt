@@ -46,7 +46,6 @@ constructor(
     val stateMessage: LiveData<StateMessage?>
         get() = dataChannelManager.messageStack.stateMessage
 
-    // FOR DEBUGGING
     fun getMessageStackSize(): Int {
         return dataChannelManager.messageStack.size
     }

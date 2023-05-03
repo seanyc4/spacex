@@ -2,13 +2,15 @@ package com.seancoyle.launch.api.model
 
 import android.os.Parcelable
 import com.seancoyle.core.state.ViewState
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class LaunchViewState(
 
-    var mergedList: @RawValue List<LaunchType>? = null,
+    @IgnoredOnParcel
+    var mergedList: List<LaunchType>? = null,
+    @IgnoredOnParcel
     var launchList: List<LaunchModel>? = null,
     var launch: LaunchModel? = null,
     var company: CompanyInfoModel? = null,
@@ -21,7 +23,7 @@ data class LaunchViewState(
     var order: String? = null,
     var yearQuery: String? = null,
 
-    ): Parcelable, ViewState
+    ) : Parcelable, ViewState
 
 
 

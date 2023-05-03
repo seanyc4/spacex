@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -94,7 +93,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                     Scaffold(
                         topBar = {
                             HomeAppBar(
-                                title = { stringResource(id = R.string.app_name) },
                                 onClick = {
                                     launchViewModel.setIsDialogFilterDisplayed(true)
                                     displayFilterDialog()
@@ -299,9 +297,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
     private fun getLaunchListFromNetworkAndInsertToCacheEvent() {
         launchViewModel.setStateEvent(
-            LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = launchViewModel.launchOptions
-            )
+            LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent
         )
     }
 

@@ -4,14 +4,10 @@ import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.StateMessage
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchOptions
 
 sealed class LaunchStateEvent : StateEvent {
 
-    class GetLaunchItemsFromNetworkAndInsertToCacheEvent
-        constructor(
-            val launchOptions: LaunchOptions
-        ): LaunchStateEvent() {
+    object GetLaunchItemsFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch from network."
