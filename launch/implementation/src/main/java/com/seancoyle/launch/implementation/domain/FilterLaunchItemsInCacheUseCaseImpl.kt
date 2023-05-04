@@ -4,9 +4,9 @@ import com.seancoyle.core.cache.CacheResponseHandler
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchModel
@@ -27,45 +27,40 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int,
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
-
-        var updatedPage = page
-        if (page <= 0) {
-            updatedPage = 1
-        }
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
                 year = year,
                 order = order,
                 launchFilter = launchFilter,
-                page = updatedPage
+                page = page
             )
         }
 
         val response = object : CacheResponseHandler<LaunchViewState, List<LaunchModel>>(
             response = cacheResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchViewState> {
-                var message: String? = SEARCH_LAUNCH_SUCCESS
-                var uiComponentType: UIComponentType? = UIComponentType.None
-                if (resultObj.isEmpty()) {
-                    message =
-                        SEARCH_LAUNCH_NO_MATCHING_RESULTS
-                    uiComponentType = UIComponentType.Toast
+                val message = if (resultObj.isEmpty()) {
+                    SEARCH_LAUNCH_NO_MATCHING_RESULTS
+                } else {
+                    SEARCH_LAUNCH_SUCCESS
                 }
+                val uiComponentType = if (resultObj.isEmpty()) UIComponentType.Toast else UIComponentType.None
+
                 return DataState.data(
                     response = Response(
                         message = message,
-                        uiComponentType = uiComponentType as UIComponentType,
+                        uiComponentType = uiComponentType,
                         messageType = MessageType.Success
                     ),
                     data = LaunchViewState(
-                        launchList = resultObj as ArrayList<LaunchModel>?
+                        launchList = resultObj
                     ),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 

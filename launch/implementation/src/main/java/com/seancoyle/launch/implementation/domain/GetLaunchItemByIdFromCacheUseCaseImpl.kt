@@ -4,9 +4,9 @@ import com.seancoyle.core.cache.CacheResponseHandler
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchModel
@@ -24,7 +24,7 @@ class GetLaunchItemByIdFromCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         id: Int,
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
@@ -35,7 +35,7 @@ class GetLaunchItemByIdFromCacheUseCaseImpl @Inject constructor(
 
         val response = object : CacheResponseHandler<LaunchViewState, LaunchModel?>(
             response = cacheResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: LaunchModel?): DataState<LaunchViewState> {
                 var message: String? =
@@ -55,7 +55,7 @@ class GetLaunchItemByIdFromCacheUseCaseImpl @Inject constructor(
                     data = LaunchViewState(
                         launch = resultObj
                     ),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
         }.getResult()

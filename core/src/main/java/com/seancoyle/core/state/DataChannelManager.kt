@@ -16,44 +16,41 @@ import kotlinx.coroutines.withContext
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class DataChannelManager<ViewState>
-constructor(
+abstract class DataChannelManager<ViewState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
-){
+) {
 
     private var channelScope: CoroutineScope? = null
-    private val stateEventManager: StateEventManager = StateEventManager()
-
+    private val eventManager: EventManager = EventManager()
     val messageStack = MessageStack()
+    val loading = eventManager.loading
 
-    val loading = stateEventManager.shouldDisplayProgressBar
-
-    fun setupChannel(){
+    fun setupChannel() {
         cancelJobs()
     }
 
-    abstract fun handleNewData(data: ViewState)
+    abstract fun setUpdatedState(data: ViewState)
 
     fun launchJob(
-        stateEvent: StateEvent,
+        event: Event,
         jobFunction: Flow<DataState<ViewState>?>
-    ){
-        if(canExecuteNewStateEvent(stateEvent)){
-            printLogDebug("DCM", "launching job: ${stateEvent.eventName()}")
-            addStateEvent(stateEvent)
+    ) {
+        if (canExecuteNewEvent(event)) {
+            printLogDebug("DCM", "launching job: ${event.eventName()}")
+            addEvent(event)
             jobFunction
                 .onEach { dataState ->
                     dataState?.let {
-                        withContext(mainDispatcher){
+                        withContext(mainDispatcher) {
                             dataState.data?.let { data ->
-                                handleNewData(data)
+                                setUpdatedState(data)
                             }
                             dataState.stateMessage?.let { stateMessage ->
                                 handleNewStateMessage(stateMessage)
                             }
-                            dataState.stateEvent?.let { stateEvent ->
-                                removeStateEvent(stateEvent)
+                            dataState.event?.let { stateEvent ->
+                                removeEvent(stateEvent)
                             }
                         }
                     }
@@ -62,25 +59,25 @@ constructor(
         }
     }
 
-    private fun canExecuteNewStateEvent(stateEvent: StateEvent): Boolean{
+    private fun canExecuteNewEvent(event: Event): Boolean {
         // If a job is already active, do not allow duplication
-        if(isJobAlreadyActive(stateEvent)){
+        if (isJobAlreadyActive(event)) {
             return false
         }
         // Check the top of the stack, if a dialog is showing, do not allow new StateEvents
-        if(!isMessageStackEmpty()){
-            if(messageStack[0].response.uiComponentType == UIComponentType.Dialog){
+        if (!isMessageStackEmpty()) {
+            if (messageStack[0].response.uiComponentType == UIComponentType.Dialog) {
                 return false
             }
         }
         return true
     }
 
-    fun isMessageStackEmpty(): Boolean {
+    private fun isMessageStackEmpty(): Boolean {
         return messageStack.isStackEmpty()
     }
 
-    private fun handleNewStateMessage(stateMessage: StateMessage){
+    private fun handleNewStateMessage(stateMessage: StateMessage) {
         appendStateMessage(stateMessage)
     }
 
@@ -88,55 +85,50 @@ constructor(
         messageStack.add(stateMessage)
     }
 
-    fun clearStateMessage(index: Int = 0){
+    fun clearStateMessage(index: Int = 0) {
         printLogDebug("DataChannelManager", "clear state message")
         messageStack.removeAt(index)
     }
 
     fun clearAllStateMessages() = messageStack.clear()
 
-    fun printStateMessages(){
-        for(message in messageStack){
+    fun printStateMessages() {
+        for (message in messageStack) {
             printLogDebug("DCM", "${message.response.message}")
         }
     }
 
-    // for debugging
-    fun getActiveJobs() = stateEventManager.getActiveJobNames()
+    fun getActiveJobs() = eventManager.getActiveJobNames()
 
-    fun clearActiveStateEventCounter()
-            = stateEventManager.clearActiveStateEventCounter()
+    fun clearActiveEventCounter() = eventManager.clearActiveEventCounter()
 
-    fun addStateEvent(stateEvent: StateEvent)
-            = stateEventManager.addStateEvent(stateEvent)
+    private fun addEvent(event: Event) = eventManager.addEvent(event)
 
-    fun removeStateEvent(stateEvent: StateEvent?)
-            = stateEventManager.removeStateEvent(stateEvent)
+    private fun removeEvent(event: Event?) = eventManager.removeEvent(event)
 
-    private fun isStateEventActive(stateEvent: StateEvent)
-            = stateEventManager.isStateEventActive(stateEvent)
+    private fun isEventActive(event: Event) = eventManager.isEventActive(event)
 
-    fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
-        return isStateEventActive(stateEvent)
+    private fun isJobAlreadyActive(event: Event): Boolean {
+        return isEventActive(event)
     }
 
-    fun getChannelScope(ioDispatcher: CoroutineDispatcher): CoroutineScope {
-        return channelScope?: setupNewChannelScope(CoroutineScope(ioDispatcher))
+    private fun getChannelScope(ioDispatcher: CoroutineDispatcher): CoroutineScope {
+        return channelScope ?: setupNewChannelScope(CoroutineScope(ioDispatcher))
     }
 
-    private fun setupNewChannelScope(coroutineScope: CoroutineScope): CoroutineScope{
+    private fun setupNewChannelScope(coroutineScope: CoroutineScope): CoroutineScope {
         channelScope = coroutineScope
         return channelScope as CoroutineScope
     }
 
-    fun cancelJobs(){
-        if(channelScope != null){
-            if(channelScope?.isActive == true){
+    fun cancelJobs() {
+        if (channelScope != null) {
+            if (channelScope?.isActive == true) {
                 channelScope?.cancel()
             }
             channelScope = null
         }
-        clearActiveStateEventCounter()
+        clearActiveEventCounter()
     }
 
 }

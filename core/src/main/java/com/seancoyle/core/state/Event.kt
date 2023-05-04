@@ -1,6 +1,6 @@
 package com.seancoyle.core.state
 
-interface StateEvent {
+interface Event {
 
     fun errorInfo(): String
 

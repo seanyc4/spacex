@@ -6,9 +6,9 @@ import com.seancoyle.core.network.ApiResponseHandler
 import com.seancoyle.core.network.safeApiCall
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.LaunchNetworkDataSource
@@ -31,7 +31,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private var launchList: List<LaunchModel> = emptyList()
 
     override operator fun invoke(
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val networkResult = safeApiCall(ioDispatcher) {
@@ -40,7 +40,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
         val networkResponse = object : ApiResponseHandler<LaunchViewState, List<LaunchModel>?>(
             response = networkResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: List<LaunchModel>?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
@@ -48,7 +48,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                     DataState.data(
                         response = null,
                         data = null,
-                        stateEvent = null
+                        event = null
                     )
                 } else {
                     DataState.data(
@@ -58,7 +58,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                             messageType = MessageType.Error
                         ),
                         data = null,
-                        stateEvent = stateEvent
+                        event = event
                     )
                 }
             }
@@ -70,7 +70,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                         uiComponentType = UIComponentType.Toast,
                         messageType = MessageType.Error
                     ),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
         }.getResult()
@@ -90,7 +90,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
             val cacheResponse = object : CacheResponseHandler<LaunchViewState, LongArray>(
                 response = cacheResult,
-                stateEvent = stateEvent
+                event = event
             ) {
                 override suspend fun handleSuccess(resultObj: LongArray): DataState<LaunchViewState> {
                     return if (resultObj.isNotEmpty()) {
@@ -100,7 +100,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Success
                             ),
-                            stateEvent = stateEvent
+                            event = event
                         )
                     } else {
                         DataState.data(
@@ -109,7 +109,7 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Error
                             ),
-                            stateEvent = stateEvent
+                            event = event
                         )
                     }
                 }

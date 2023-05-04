@@ -5,7 +5,7 @@ import com.seancoyle.core.state.*
 
 abstract class ApiResponseHandler <ViewState, Data>(
     private val response: ApiResult<Data?>,
-    private val stateEvent: StateEvent?
+    private val event: Event?
 ){
 
     suspend fun getResult(): DataState<ViewState>? {
@@ -24,11 +24,11 @@ abstract class ApiResponseHandler <ViewState, Data>(
                 if(response.value == null){
                     DataState.error(
                         response = Response(
-                            message = "${stateEvent?.errorInfo()}\n\nReason: ${NETWORK_DATA_NULL}.",
+                            message = "${event?.errorInfo()}\n\nReason: ${NETWORK_DATA_NULL}.",
                             uiComponentType = UIComponentType.Dialog,
                             messageType = MessageType.Error
                         ),
-                        stateEvent = stateEvent
+                        event = event
                     )
                 }
                 else{

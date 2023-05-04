@@ -8,7 +8,7 @@ import com.seancoyle.launch.api.usecase.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl.Companion.GET_COMPANY_INFO_SUCCESS
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -45,7 +45,7 @@ class GetCompanyInfoFromCacheUseCaseImplTest {
         var result: CompanyInfoModel? = null
 
         underTest(
-            stateEvent = LaunchStateEvent.GetCompanyInfoFromCacheEvent
+            stateEvent = LaunchEvent.GetCompanyInfoFromCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,

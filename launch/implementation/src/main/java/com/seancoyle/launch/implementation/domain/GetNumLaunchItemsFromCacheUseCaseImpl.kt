@@ -5,9 +5,9 @@ import com.seancoyle.core.cache.CacheResponseHandler
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchViewState
@@ -23,7 +23,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
 ) : GetNumLaunchItemsFromCacheUseCase {
 
     override operator fun invoke(
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
@@ -31,7 +31,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
         }
         val response = object : CacheResponseHandler<LaunchViewState, Int>(
             response = cacheResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: Int): DataState<LaunchViewState> {
                 val viewState = LaunchViewState(
@@ -44,7 +44,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
                         messageType = MessageType.Success
                     ),
                     data = viewState,
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
         }.getResult()

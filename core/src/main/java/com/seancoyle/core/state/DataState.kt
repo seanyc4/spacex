@@ -4,28 +4,28 @@ package com.seancoyle.core.state
 data class DataState<T>(
     var stateMessage: StateMessage? = null,
     var data: T? = null,
-    var stateEvent: StateEvent? = null
+    var event: Event? = null
 ) {
 
     companion object {
 
         fun <T> error(
             response: Response,
-            stateEvent: StateEvent?
+            event: Event?
         ): DataState<T> {
             return DataState(
                 stateMessage = StateMessage(
                     response
                 ),
                 data = null,
-                stateEvent = stateEvent
+                event = event
             )
         }
 
         fun <T> data(
             response: Response?,
             data: T? = null,
-            stateEvent: StateEvent?
+            event: Event?
         ): DataState<T> {
             return DataState(
                 stateMessage = response?.let {
@@ -34,7 +34,7 @@ data class DataState<T>(
                     )
                 },
                 data = data,
-                stateEvent = stateEvent
+                event = event
             )
         }
     }

@@ -1,13 +1,13 @@
 package com.seancoyle.launch.implementation.presentation
 
-import com.seancoyle.core.state.StateEvent
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.StateMessage
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchModel
 
-sealed class LaunchStateEvent : StateEvent {
+sealed class LaunchEvent : Event {
 
-    object GetLaunchListFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
+    object GetLaunchListFromNetworkAndInsertToCacheEvent : LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch from network."
@@ -20,7 +20,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetCompanyInfoFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
+    object GetCompanyInfoFromNetworkAndInsertToCacheEvent : LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting company info from network."
@@ -33,7 +33,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetAllLaunchItemsFromCacheEvent: LaunchStateEvent() {
+    object GetAllLaunchItemsFromCacheEvent: LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch list from cache."
@@ -49,7 +49,7 @@ sealed class LaunchStateEvent : StateEvent {
     class GetLaunchItemFromCacheEvent
         constructor(
             private val id: Int
-        ): LaunchStateEvent() {
+        ): LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch item from cache."
@@ -62,7 +62,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = false
     }
 
-    object GetCompanyInfoFromCacheEvent: LaunchStateEvent() {
+    object GetCompanyInfoFromCacheEvent: LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting company info from cache."
@@ -75,7 +75,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = false
     }
 
-    object GetNumLaunchItemsInCacheEvent : LaunchStateEvent() {
+    object GetNumLaunchItemsInCacheEvent : LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error getting the number of launch items from the cache."
@@ -91,7 +91,7 @@ sealed class LaunchStateEvent : StateEvent {
     class InsertCompanyInfoToCacheEvent
         constructor(
             private val companyInfo: CompanyInfoModel
-        ): LaunchStateEvent() {
+        ): LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error inserting company info."
@@ -107,7 +107,7 @@ sealed class LaunchStateEvent : StateEvent {
     class InsertLaunchItemsToCacheEvent
     constructor(
         private val launchList: List<LaunchModel>
-    ): LaunchStateEvent() {
+    ): LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error inserting launch list."
@@ -120,7 +120,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = false
     }
 
-    object FilterLaunchItemsInCacheEvent: LaunchStateEvent(){
+    object FilterLaunchItemsInCacheEvent: LaunchEvent(){
 
         override fun errorInfo(): String {
             return "Error getting list of launch items."
@@ -133,9 +133,9 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
-    class CreateStateMessageEvent(
+    class CreateMessageEvent(
         val stateMessage: StateMessage
-    ) : LaunchStateEvent() {
+    ) : LaunchEvent() {
 
         override fun errorInfo(): String {
             return "Error creating a new state message."

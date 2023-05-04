@@ -10,7 +10,7 @@ import com.seancoyle.launch.implementation.data.cache.FORCE_NEW_COMPANY_INFO_EXC
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.InsertCompanyInfoToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.InsertCompanyInfoToCacheUseCaseImpl.Companion.INSERT_COMPANY_INFO_SUCCESS
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -58,7 +58,7 @@ class InsertCompanyInfoToCacheUseCaseImplTest {
 
         insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->
@@ -87,7 +87,7 @@ class InsertCompanyInfoToCacheUseCaseImplTest {
 
         insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->
@@ -116,7 +116,7 @@ class InsertCompanyInfoToCacheUseCaseImplTest {
 
         insertCompanyInfoToCacheUseCase(
             companyInfo = newCompanyInfo,
-            stateEvent = LaunchStateEvent.InsertCompanyInfoToCacheEvent(
+            stateEvent = LaunchEvent.InsertCompanyInfoToCacheEvent(
                 companyInfo = newCompanyInfo
             )
         ).collect { value ->

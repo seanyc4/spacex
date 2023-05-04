@@ -39,7 +39,6 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.core.state.*
-import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
@@ -48,9 +47,6 @@ import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetAllLaunchItemsFromCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
@@ -60,7 +56,6 @@ import com.seancoyle.launch.implementation.presentation.composables.LaunchHeadin
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 const val LINKS_KEY = "links"
 const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.state"
@@ -70,8 +65,6 @@ const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.st
 @AndroidEntryPoint
 class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
-    @Inject
-    lateinit var androidTestUtils: AndroidTestUtils
     private val launchViewModel by viewModels<LaunchViewModel>()
     private var links: Links? = null
 
@@ -128,15 +121,14 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     private fun restoreInstanceState(savedInstanceState: Bundle?) {
         savedInstanceState?.let { inState ->
             (inState[LAUNCH_STATE_BUNDLE_KEY] as LaunchViewState?)?.let { viewState ->
-                launchViewModel.setViewState(viewState)
+                launchViewModel.setState(viewState)
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val viewState = launchViewModel.viewState.value
+        val viewState = launchViewModel.uiState.value
 
-        //clear the list. Don't save a large list to bundle.
         viewState.launchList = ArrayList()
         viewState.mergedList = ArrayList()
 
@@ -150,7 +142,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     override fun onResume() {
         super.onResume()
         if (!launchViewModel.getLaunchList().isNullOrEmpty()) {
-            getTotalNumEntriesInLaunchCacheEvent()
             launchViewModel.refreshSearchQueryEvent()
         }
         if (launchViewModel.getIsDialogFilterDisplayed()) {
@@ -168,26 +159,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             stateMessage?.response?.let { response ->
                 when (response.message) {
 
-                    GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
-                    }
-
-                    GetCompanyInfoFromCacheUseCaseImpl.GET_COMPANY_INFO_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
-                    }
-
                     GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
                         launchViewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
-                        getTotalNumEntriesInLaunchCacheEvent()
-                    }
-
-                    FilterLaunchItemsInCacheUseCaseImpl.SEARCH_LAUNCH_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
-                    }
-
-                    GetAllLaunchItemsFromCacheUseCaseImpl.GET_ALL_LAUNCH_ITEMS_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
                     }
 
                     else -> {
@@ -203,13 +177,11 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                         when (response.message) {
                             // Check cache for data if net connection fails
                             GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
-                                getTotalNumEntriesInLaunchCacheEvent()
-                 //               filterLaunchItemsInCacheEvent()
+                                filterLaunchItemsInCacheEvent()
                             }
 
                             GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
-                                getTotalNumEntriesInLaunchCacheEvent()
-                 //               filterLaunchItemsInCacheEvent()
+                                filterLaunchItemsInCacheEvent()
                             }
 
                             GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
@@ -238,7 +210,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         modifier: Modifier = Modifier,
         viewModel: LaunchViewModel
     ) {
-        val viewState = viewModel.viewState.collectAsState()
+        val viewState = viewModel.uiState.collectAsState()
         printLogDebug("RECOMPOSING", "RECOMPOSING $viewState" )
         LaunchContent(
             launchItems = viewState.value.mergedList ?: emptyList(),
@@ -427,24 +399,20 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
     private fun filterLaunchItemsInCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.FilterLaunchItemsInCacheEvent
+        launchViewModel.setEvent(
+            LaunchEvent.FilterLaunchItemsInCacheEvent
         )
     }
 
     private fun getCompanyInfoFromCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.GetCompanyInfoFromCacheEvent
+        launchViewModel.setEvent(
+            LaunchEvent.GetCompanyInfoFromCacheEvent
         )
     }
 
-    private fun getTotalNumEntriesInLaunchCacheEvent() {
-        launchViewModel.retrieveNumLaunchItemsInCache()
-    }
-
     private fun displayErrorDialogNoLinks() {
-        launchViewModel.setStateEvent(
-            stateEvent = LaunchStateEvent.CreateStateMessageEvent(
+        launchViewModel.setEvent(
+            event = LaunchEvent.CreateMessageEvent(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Info,
@@ -457,8 +425,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
     private fun displayErrorDialogUnableToLoadLink() {
-        launchViewModel.setStateEvent(
-            stateEvent = LaunchStateEvent.CreateStateMessageEvent(
+        launchViewModel.setEvent(
+            event = LaunchEvent.CreateMessageEvent(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Error,

@@ -11,7 +11,7 @@ import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.Companion.COMPANY_INFO_ERROR
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.Companion.COMPANY_INFO_INSERT_SUCCESS
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -67,7 +67,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         assert(cacheDataSource.getCompanyInfo() == null)
 
         underTest(
-            stateEvent = LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+            stateEvent = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -90,7 +90,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
          )
 
         underTest(
-            stateEvent = LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+            stateEvent = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,

@@ -8,7 +8,7 @@ import com.seancoyle.launch.api.usecase.GetLaunchItemByIdFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.GetLaunchItemByIdFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetLaunchItemByIdFromCacheUseCaseImpl.Companion.GET_LAUNCH_ITEM_BY_ID_SUCCESS
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -47,7 +47,7 @@ class GeLaunchItemByIdFromCacheTest {
 
         underTest(
             id = id,
-            stateEvent = LaunchStateEvent.GetLaunchItemFromCacheEvent(
+            stateEvent = LaunchEvent.GetLaunchItemFromCacheEvent(
                 id = id
             )
         ).collect { value ->

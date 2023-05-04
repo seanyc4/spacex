@@ -6,9 +6,9 @@ import com.seancoyle.core.network.ApiResponseHandler
 import com.seancoyle.core.network.safeApiCall
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
@@ -30,7 +30,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private var viewState: LaunchViewState = LaunchViewState()
 
     override operator fun invoke(
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val networkResult = safeApiCall(ioDispatcher) {
@@ -39,7 +39,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
         val networkResponse = object : ApiResponseHandler<LaunchViewState, CompanyInfoModel?>(
             response = networkResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
@@ -48,7 +48,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                     DataState.data(
                         response = null,
                         data = null,
-                        stateEvent = null
+                        event = null
                     )
                 } else {
                     DataState.data(
@@ -58,7 +58,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                             messageType = MessageType.Error
                         ),
                         data = null,
-                        stateEvent = stateEvent
+                        event = event
                     )
                 }
             }
@@ -70,7 +70,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                         uiComponentType = UIComponentType.Toast,
                         messageType = MessageType.Error
                     ),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
         }.getResult()
@@ -90,7 +90,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
             val cacheResponse = object : CacheResponseHandler<LaunchViewState, Long>(
                 response = cacheResult,
-                stateEvent = stateEvent
+                event = event
             ) {
                 override suspend fun handleSuccess(resultObj: Long): DataState<LaunchViewState> {
                     return if (resultObj > 0) {
@@ -101,7 +101,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 messageType = MessageType.Success
                             ),
                             data = viewState,
-                            stateEvent = stateEvent
+                            event = event
                         )
                     } else {
                         DataState.data(
@@ -111,7 +111,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 messageType = MessageType.Error
                             ),
                             data = null,
-                            stateEvent = stateEvent
+                            event = event
                         )
                     }
                 }

@@ -4,9 +4,9 @@ import com.seancoyle.core.cache.CacheResponseHandler
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.model.CompanyInfoModel
@@ -23,7 +23,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyInfoFromCacheUseCase {
 
     override operator fun invoke(
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
@@ -32,7 +32,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
 
         val response = object : CacheResponseHandler<LaunchViewState, CompanyInfoModel?>(
             response = cacheResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 var message: String? =
@@ -52,7 +52,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
                     data = LaunchViewState(
                         company = resultObj
                     ),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
         }.getResult()

@@ -4,9 +4,9 @@ import com.seancoyle.core.cache.CacheResponseHandler
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchModel
@@ -24,7 +24,7 @@ class InsertLaunchListToCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         launchList: List<LaunchModel>,
-        stateEvent: StateEvent
+        event: Event
     ): Flow<DataState<LaunchViewState>?> = flow {
 
 
@@ -34,7 +34,7 @@ class InsertLaunchListToCacheUseCaseImpl @Inject constructor(
 
         val cacheResponse = object : CacheResponseHandler<LaunchViewState, LongArray>(
             response = cacheResult,
-            stateEvent = stateEvent
+            event = event
         ) {
             override suspend fun handleSuccess(resultObj: LongArray): DataState<LaunchViewState> {
                 return if (resultObj.isNotEmpty()) {
@@ -49,7 +49,7 @@ class InsertLaunchListToCacheUseCaseImpl @Inject constructor(
                             messageType = MessageType.Success
                         ),
                         data = viewState,
-                        stateEvent = stateEvent
+                        event = event
                     )
                 } else {
                     DataState.data(
@@ -59,7 +59,7 @@ class InsertLaunchListToCacheUseCaseImpl @Inject constructor(
                             messageType = MessageType.Error
                         ),
                         data = null,
-                        stateEvent = stateEvent
+                        event = event
                     )
                 }
             }

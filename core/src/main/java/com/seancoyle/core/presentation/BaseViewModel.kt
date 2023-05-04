@@ -4,7 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
-import com.seancoyle.core.state.*
+import com.seancoyle.core.state.DataChannelManager
+import com.seancoyle.core.state.DataState
+import com.seancoyle.core.state.Event
+import com.seancoyle.core.state.MessageType
+import com.seancoyle.core.state.Response
+import com.seancoyle.core.state.StateMessage
+import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors
 import com.seancoyle.core.util.printLogDebug
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,29 +21,28 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
-
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class BaseViewModel<ViewState>
+abstract class BaseViewModel<UiState>
 constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _viewState : MutableStateFlow<ViewState> by lazy {
-        MutableStateFlow(initNewViewState())
+    private val _uiState : MutableStateFlow<UiState> by lazy {
+        MutableStateFlow(initNewUiState())
     }
 
-    val viewState: StateFlow<ViewState>
-        get() = _viewState
+    val uiState: StateFlow<UiState>
+        get() = _uiState
 
-    private val dataChannelManager: DataChannelManager<ViewState> = object : DataChannelManager<ViewState>(
+    private val dataChannelManager: DataChannelManager<UiState> = object : DataChannelManager<UiState>(
         ioDispatcher = ioDispatcher,
         mainDispatcher = mainDispatcher
     ) {
 
-        override fun handleNewData(data: ViewState) {
-            this@BaseViewModel.handleNewData(data)
+        override fun setUpdatedState(data: UiState) {
+            this@BaseViewModel.setUpdatedState(data)
         }
     }
 
@@ -52,46 +57,46 @@ constructor(
 
     fun setupChannel() = dataChannelManager.setupChannel()
 
-    abstract fun handleNewData(data: ViewState)
+    abstract fun setUpdatedState(data: UiState)
 
-    abstract fun setStateEvent(stateEvent: StateEvent)
+    abstract fun setEvent(event: Event)
 
     fun emitStateMessageEvent(
         stateMessage: StateMessage,
-        stateEvent: StateEvent
+        event: Event
     ) = flow {
         emit(
-            DataState.error<ViewState>(
+            DataState.error<UiState>(
                 response = stateMessage.response,
-                stateEvent = stateEvent
+                event = event
             )
         )
     }
 
-    fun emitInvalidStateEvent(stateEvent: StateEvent) = flow {
+    fun emitInvalidEvent(event: Event) = flow {
         emit(
-            DataState.error<ViewState>(
+            DataState.error<UiState>(
                 response = Response(
                     message = GenericErrors.INVALID_STATE_EVENT,
                     uiComponentType = UIComponentType.None,
                     messageType = MessageType.Error
                 ),
-                stateEvent = stateEvent
+                event = event
             )
         )
     }
 
     fun launchJob(
-        stateEvent: StateEvent,
-        jobFunction: Flow<DataState<ViewState>?>
-    ) = dataChannelManager.launchJob(stateEvent, jobFunction)
+        event: Event,
+        jobFunction: Flow<DataState<UiState>?>
+    ) = dataChannelManager.launchJob(event, jobFunction)
 
-    fun getCurrentViewStateOrNew(): ViewState {
-        return viewState.value ?: initNewViewState()
+    fun getCurrentStateOrNew(): UiState {
+        return uiState.value ?: initNewUiState()
     }
 
-    fun setViewState(viewState: ViewState) {
-        _viewState.value = viewState
+    fun setState(viewState: UiState) {
+        _uiState.value = viewState
     }
 
     fun clearStateMessage(index: Int = 0) {
@@ -99,7 +104,7 @@ constructor(
         dataChannelManager.clearStateMessage(index)
     }
 
-    fun clearActiveStateEvents() = dataChannelManager.clearActiveStateEventCounter()
+    fun clearActiveEvents() = dataChannelManager.clearActiveEventCounter()
 
     fun clearAllStateMessages() = dataChannelManager.clearAllStateMessages()
 
@@ -107,7 +112,7 @@ constructor(
 
     fun cancelActiveJobs() = dataChannelManager.cancelJobs()
 
-    abstract fun initNewViewState(): ViewState
+    abstract fun initNewUiState(): UiState
 
 }
 

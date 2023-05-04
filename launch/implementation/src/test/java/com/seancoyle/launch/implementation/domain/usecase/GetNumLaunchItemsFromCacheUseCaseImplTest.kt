@@ -7,7 +7,7 @@ import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl.Companion.GET_NUM_LAUNCH_ITEMS_SUCCESS
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -43,7 +43,7 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
 
         var numItems = 0
         underTest(
-            stateEvent = LaunchStateEvent.GetNumLaunchItemsInCacheEvent
+            stateEvent = LaunchEvent.GetNumLaunchItemsInCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,

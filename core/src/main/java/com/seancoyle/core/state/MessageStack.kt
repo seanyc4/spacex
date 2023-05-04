@@ -5,11 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.seancoyle.core.util.printLogDebug
 import kotlinx.parcelize.IgnoredOnParcel
-import java.lang.IndexOutOfBoundsException
 
-const val MESSAGE_STACK_BUNDLE_KEY = "com.seancoyle.launch.util.MessageStack"
-
-class MessageStack: ArrayList<StateMessage>() {
+class MessageStack : ArrayList<StateMessage>() {
 
     @IgnoredOnParcel
     private val _stateMessage: MutableLiveData<StateMessage?> = MutableLiveData()
@@ -18,79 +15,50 @@ class MessageStack: ArrayList<StateMessage>() {
     val stateMessage: LiveData<StateMessage?>
         get() = _stateMessage
 
-    fun isStackEmpty(): Boolean{
-        return size == 0
+    fun isStackEmpty(): Boolean {
+        return isEmpty()
     }
 
     override fun addAll(elements: Collection<StateMessage>): Boolean {
-        for(element in elements){
-            add(element)
-        }
-        return true // always return true. We don't care about result bool.
+        elements.forEach { add(it) }
+        return true
     }
 
     override fun add(element: StateMessage): Boolean {
-        if(this.contains(element)){ // prevent duplicate errors added to stack
+        if (contains(element)) { // prevent duplicate errors added to stack
             return false
         }
         val transaction = super.add(element)
-        if(this.size == 1){
+        if (size == 1) {
             setStateMessage(stateMessage = element)
         }
         return transaction
     }
 
     override fun removeAt(index: Int): StateMessage {
-        try{
+        return try {
             val transaction = super.removeAt(index)
-            if(this.size > 0){
+            if (isNotEmpty()) {
                 setStateMessage(stateMessage = this[0])
-            }
-            else{
-                printLogDebug("MessageStack", "stack is empty: ")
+            } else {
+                printLogDebug("MessageStack", "stack is empty")
                 setStateMessage(null)
             }
-            return transaction
-        }catch (e: IndexOutOfBoundsException){
+            transaction
+        } catch (e: IndexOutOfBoundsException) {
             setStateMessage(null)
             e.printStackTrace()
-        }
-        return StateMessage( // this does nothing
-            Response(
-                message = "does nothing",
-                uiComponentType = UIComponentType.None,
-                messageType = MessageType.None
+            StateMessage(
+                Response(
+                    message = "does nothing",
+                    uiComponentType = UIComponentType.None,
+                    messageType = MessageType.None
+                )
             )
-        )
+        }
     }
 
-    private fun setStateMessage(stateMessage: StateMessage?){
+    private fun setStateMessage(stateMessage: StateMessage?) {
         _stateMessage.value = stateMessage
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

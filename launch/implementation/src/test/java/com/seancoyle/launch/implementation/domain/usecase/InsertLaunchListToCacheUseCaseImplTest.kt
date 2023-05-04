@@ -8,7 +8,7 @@ import com.seancoyle.launch.api.usecase.InsertLaunchListToCacheUseCase
 import com.seancoyle.launch.implementation.domain.InsertLaunchListToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.InsertLaunchListToCacheUseCaseImpl.Companion.INSERT_LAUNCH_LIST_SUCCESS
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -53,7 +53,7 @@ class InsertLaunchListToCacheUseCaseImplTest {
 
         underTest(
             launchList = newLaunchList,
-            stateEvent = LaunchStateEvent.InsertLaunchItemsToCacheEvent(
+            stateEvent = LaunchEvent.InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->
@@ -77,7 +77,7 @@ class InsertLaunchListToCacheUseCaseImplTest {
 
         underTest(
             launchList = newLaunchList,
-            stateEvent = LaunchStateEvent.InsertLaunchItemsToCacheEvent(
+            stateEvent = LaunchEvent.InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->
@@ -101,7 +101,7 @@ class InsertLaunchListToCacheUseCaseImplTest {
 
         underTest(
             launchList = newLaunchList,
-            stateEvent = LaunchStateEvent.InsertLaunchItemsToCacheEvent(
+            stateEvent = LaunchEvent.InsertLaunchItemsToCacheEvent(
                 launchList = newLaunchList
             )
         ).collect { value ->

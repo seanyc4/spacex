@@ -11,7 +11,7 @@ import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndIns
 import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.Companion.LAUNCH_ERROR
 import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -67,7 +67,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         underTest(
             launchOptions = dependencies.launchOptions,
-            stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
+            stateEvent = LaunchEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencies.launchOptions
             )
         ).collect { value ->
@@ -99,7 +99,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         underTest(
             launchOptions = dependencies.launchOptions,
-            stateEvent = LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
+            stateEvent = LaunchEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
                 launchOptions = dependencies.launchOptions
             )
         ).collect { value ->

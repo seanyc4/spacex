@@ -3,13 +3,12 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.state.DataState
-import com.seancoyle.core.state.StateEvent
+import com.seancoyle.core.state.Event
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.model.CompanyInfoModel
@@ -19,13 +18,13 @@ import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.CreateStateMessageEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.FilterLaunchItemsInCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.GetAllLaunchItemsFromCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.GetCompanyInfoFromCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchStateEvent.GetNumLaunchItemsInCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.CreateMessageEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.FilterLaunchItemsInCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetAllLaunchItemsFromCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetNumLaunchItemsInCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,8 +50,8 @@ class LaunchViewModel @Inject constructor(
 ) {
 
     init {
-        setStateEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
-        setStateEvent(GetLaunchListFromNetworkAndInsertToCacheEvent)
+        setEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
+        setEvent(GetLaunchListFromNetworkAndInsertToCacheEvent)
 
         // Get filter and order from datastore if available
         // And update state accordingly
@@ -66,12 +65,12 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    override fun handleNewData(data: LaunchViewState) {
+    override fun setUpdatedState(data: LaunchViewState) {
 
         data.let { viewState ->
             viewState.launchList?.let { launchList ->
                 setLaunchList(launchList)
-                printLogDebug("CurrentState", ": ${getCurrentViewStateOrNew()}")
+                printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
                 if (launchList.isNotEmpty()) {
                     setMergedList(
                         createMergedListUseCase.createLaunchData(
@@ -84,7 +83,7 @@ class LaunchViewModel @Inject constructor(
 
             viewState.company?.let { companyInfo ->
                 setCompanyInfo(companyInfo)
-                printLogDebug("CurrentState", ": ${getCurrentViewStateOrNew()}")
+                printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
             }
 
             viewState.numLaunchItemsInCache?.let { numItems ->
@@ -93,31 +92,31 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    override fun setStateEvent(stateEvent: StateEvent) {
+    override fun setEvent(event: Event) {
 
-        val job: Flow<DataState<LaunchViewState>?> = when (stateEvent) {
+        val job: Flow<DataState<LaunchViewState>?> = when (event) {
 
             is GetLaunchListFromNetworkAndInsertToCacheEvent -> {
                 launchUseCases.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
             is GetAllLaunchItemsFromCacheEvent -> {
                 launchUseCases.getAllLaunchItemsFromCacheUseCase.invoke(
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
             is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
                 companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke(
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
             is GetCompanyInfoFromCacheEvent -> {
                 companyInfoUseCases.getCompanyInfoFromCacheUseCase.invoke(
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
@@ -127,100 +126,97 @@ class LaunchViewModel @Inject constructor(
                     order = getOrder(),
                     launchFilter = getFilter(),
                     page = getPage(),
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
             is GetNumLaunchItemsInCacheEvent -> {
                 launchUseCases.getNumLaunchItemsFromCacheUseCase.invoke(
-                    stateEvent = stateEvent
+                    event = event
                 )
             }
 
-            is CreateStateMessageEvent -> {
+            is CreateMessageEvent -> {
                 emitStateMessageEvent(
-                    stateMessage = stateEvent.stateMessage,
-                    stateEvent = stateEvent
+                    stateMessage = event.stateMessage,
+                    event = event
                 )
             }
 
             else -> {
-                emitInvalidStateEvent(stateEvent)
+                emitInvalidEvent(event)
             }
         }
-        launchJob(stateEvent, job)
+        launchJob(event, job)
     }
 
-    override fun initNewViewState(): LaunchViewState {
+    override fun initNewUiState(): LaunchViewState {
         return LaunchViewState()
     }
 
     private fun setLaunchList(launchList: List<LaunchModel>) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.launchList = launchList
-        setViewState(currentState)
+        setState(currentState)
     }
 
-    fun getLaunchList() = getCurrentViewStateOrNew().launchList
+    fun getLaunchList() = getCurrentStateOrNew().launchList
 
     fun setCompanyInfo(companyInfo: CompanyInfoModel) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.company = companyInfo
-        setViewState(currentState)
+        setState(currentState)
     }
 
-    fun getCompanyInfo() = getCurrentViewStateOrNew().company
+    fun getCompanyInfo() = getCurrentStateOrNew().company
 
     private fun setNumLaunchItemsInCache(numItems: Int) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.numLaunchItemsInCache = numItems
-        setViewState(currentState)
+        setState(currentState)
     }
 
     private fun resetPage() {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.page = 1
-        setViewState(currentState)
+        setState(currentState)
     }
 
     fun clearList() {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.launchList = ArrayList()
-        setViewState(currentState)
+        setState(currentState)
     }
 
     fun loadFirstPage() {
         resetPage()
-        setStateEvent(FilterLaunchItemsInCacheEvent)
+        setEvent(FilterLaunchItemsInCacheEvent)
         printLogDebug(
-            "LaunchListViewModel", "loadFirstPage: ${getCurrentViewStateOrNew().yearQuery}"
+            "LaunchListViewModel", "loadFirstPage: ${getCurrentStateOrNew().yearQuery}"
         )
     }
 
     fun nextPage() {
-        if ((getScrollPositionState()?.plus(1))!! >= (getPage().times(LAUNCH_PAGINATION_PAGE_SIZE))) {
-            incrementPage()
-            printLogDebug("LaunchListViewModel", "nextPage: triggered: ${getPage()}")
-
-            if (getPage() > 1) {
-                setStateEvent(FilterLaunchItemsInCacheEvent)
-            }
+        incrementPage()
+        if (getPage() > 1) {
+            setEvent(FilterLaunchItemsInCacheEvent)
         }
+        printLogDebug("LaunchListViewModel", "nextPage: triggered: ${getPage()}")
     }
 
-    private fun getScrollPositionState() = getCurrentViewStateOrNew().scrollPosition ?: 0
-    private fun getSearchQuery() = getCurrentViewStateOrNew().yearQuery ?: ""
-    fun getPage() = getCurrentViewStateOrNew().page ?: 1
-    fun getOrder() = getCurrentViewStateOrNew().order ?: LAUNCH_ORDER_DESC
-    fun getIsDialogFilterDisplayed() = getCurrentViewStateOrNew().isDialogFilterDisplayed ?: false
+    private fun getScrollPositionState() = getCurrentStateOrNew().scrollPosition ?: 0
+    private fun getSearchQuery() = getCurrentStateOrNew().yearQuery ?: ""
+    fun getPage() = getCurrentStateOrNew().page ?: 1
+    fun getOrder() = getCurrentStateOrNew().order ?: LAUNCH_ORDER_DESC
+    fun getIsDialogFilterDisplayed() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
 
 
     fun getFilter(): Int? {
-        return if (getCurrentViewStateOrNew().launchFilter == LAUNCH_ALL) {
+        return if (getCurrentStateOrNew().launchFilter == LAUNCH_ALL) {
             setLaunchFilter(null)
-            getCurrentViewStateOrNew().launchFilter
+            getCurrentStateOrNew().launchFilter
         } else {
-            getCurrentViewStateOrNew().launchFilter
+            getCurrentStateOrNew().launchFilter
         }
     }
 
@@ -233,47 +229,48 @@ class LaunchViewModel @Inject constructor(
 
 
     private fun setMergedList(list: List<LaunchType>) {
-        setViewState(getCurrentViewStateOrNew().copy(mergedList = list))
-        printLogDebug("CurrentState", " after merge: ${getCurrentViewStateOrNew()}")
+        setState(getCurrentStateOrNew().copy(mergedList = list))
+        printLogDebug("CurrentState", " after merge: ${getCurrentStateOrNew()}")
     }
+
     fun setQuery(query: String?) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.yearQuery = query
-        setViewState(currentState)
+        setState(currentState)
     }
 
     fun setLaunchOrder(order: String?) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.order = order
-        setViewState(currentState)
+        setState(currentState)
         saveOrder(order ?: LAUNCH_ORDER_DESC)
     }
 
     fun setLaunchFilter(filter: Int?) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.launchFilter = filter
-        setViewState(currentState)
+        setState(currentState)
         saveFilter(filter ?: LAUNCH_ALL)
     }
 
     fun setIsDialogFilterDisplayed(isDisplayed: Boolean?) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.isDialogFilterDisplayed = isDisplayed
-        setViewState(currentState)
+        setState(currentState)
     }
 
     private fun incrementPage() {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         val newPageState = (currentState.page ?: 1) + 1
         currentState.page = newPageState
-        setViewState(currentState)
+        setState(currentState)
         savedStateHandle[STATE_KEY_PAGE] = newPageState
     }
 
     fun setScrollPosition(position: Int) {
-        val currentState = getCurrentViewStateOrNew()
+        val currentState = getCurrentStateOrNew()
         currentState.scrollPosition = position
-        setViewState(currentState)
+        setState(currentState)
         savedStateHandle[STATE_KEY_LIST_POSITION] = position
     }
 
@@ -289,12 +286,8 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun retrieveNumLaunchItemsInCache() {
-        setStateEvent(GetNumLaunchItemsInCacheEvent)
-    }
-
     fun refreshSearchQueryEvent() {
-        setStateEvent(FilterLaunchItemsInCacheEvent)
+        setEvent(FilterLaunchItemsInCacheEvent)
     }
 
     companion object {

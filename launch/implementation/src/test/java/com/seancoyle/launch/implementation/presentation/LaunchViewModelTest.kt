@@ -71,7 +71,7 @@ class LaunchViewModelTest {
 
         viewModel.setCompanyInfo(expectedLaunchList)
 
-        val actualLaunchList = viewModel.viewState.getOrAwaitValue(time = 10)?.company
+        val actualLaunchList = viewModel.uiState.getOrAwaitValue(time = 10)?.company
         assertEquals(actualLaunchList, expectedLaunchList)
 
     }
