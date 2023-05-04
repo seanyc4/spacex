@@ -28,6 +28,8 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private val launchOptions: LaunchOptions
 ) : GetLaunchListFromNetworkAndInsertToCacheUseCase {
 
+    private var launchList: List<LaunchModel> = emptyList()
+
     override operator fun invoke(
         stateEvent: StateEvent
     ): Flow<DataState<LaunchViewState>?> = flow {
@@ -42,13 +44,10 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
         ) {
             override suspend fun handleSuccess(resultObj: List<LaunchModel>?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
-                    val viewState =
-                        LaunchViewState(
-                            launchList = resultObj
-                        )
+                    launchList = resultObj
                     DataState.data(
                         response = null,
-                        data = viewState,
+                        data = null,
                         stateEvent = null
                     )
                 } else {
@@ -76,14 +75,14 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             }
         }.getResult()
 
-        if (networkResponse?.stateMessage?.response?.message == LAUNCH_ERROR) {
-            emit(networkResponse)
+        networkResponse?.let {
+            if (networkResponse.stateMessage?.response?.message == LAUNCH_ERROR) {
+                emit(networkResponse)
+            }
         }
 
         // Insert to Cache
-        if (networkResponse?.data?.launchList != null) {
-
-            val launchList = networkResponse.data?.launchList!!
+        if (launchList.isNotEmpty()) {
 
             val cacheResult = safeCacheCall(ioDispatcher) {
                 cacheDataSource.insertList(launchList)
@@ -101,7 +100,6 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Success
                             ),
-                            data = null,
                             stateEvent = stateEvent
                         )
                     } else {
@@ -111,7 +109,6 @@ class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Error
                             ),
-                            data = null,
                             stateEvent = stateEvent
                         )
                     }

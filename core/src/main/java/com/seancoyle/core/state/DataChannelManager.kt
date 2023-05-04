@@ -3,10 +3,16 @@ package com.seancoyle.core.state
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.util.printLogDebug
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -21,7 +27,7 @@ constructor(
 
     val messageStack = MessageStack()
 
-    val shouldDisplayProgressBar = stateEventManager.shouldDisplayProgressBar
+    val loading = stateEventManager.shouldDisplayProgressBar
 
     fun setupChannel(){
         cancelJobs()

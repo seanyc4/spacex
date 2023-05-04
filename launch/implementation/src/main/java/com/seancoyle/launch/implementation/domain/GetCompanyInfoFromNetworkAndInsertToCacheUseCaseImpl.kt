@@ -12,7 +12,6 @@ import com.seancoyle.core.state.StateEvent
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.model.CompanyInfoFactory
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
@@ -24,9 +23,11 @@ import javax.inject.Inject
 class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: CompanyInfoCacheDataSource,
-    private val networkDataSource: CompanyInfoNetworkDataSource,
-    private val factory: CompanyInfoFactory
+    private val networkDataSource: CompanyInfoNetworkDataSource
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
+
+    private var companyInfoModel: CompanyInfoModel? = null
+    private var viewState: LaunchViewState = LaunchViewState()
 
     override operator fun invoke(
         stateEvent: StateEvent
@@ -42,13 +43,11 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
         ) {
             override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 return if (resultObj != null) {
-                    val viewState =
-                        LaunchViewState(
-                            company = resultObj
-                        )
+                    companyInfoModel = resultObj
+                    viewState.company = resultObj
                     DataState.data(
                         response = null,
-                        data = viewState,
+                        data = null,
                         stateEvent = null
                     )
                 } else {
@@ -76,25 +75,17 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             }
         }.getResult()
 
-        if (networkResponse?.stateMessage?.response?.message?.equals(COMPANY_INFO_ERROR) == true) {
-            emit(networkResponse)
+        networkResponse?.let {
+            if (networkResponse.stateMessage?.response?.message == COMPANY_INFO_ERROR) {
+                emit(networkResponse)
+            }
         }
 
         // Insert to Cache
-        if (networkResponse?.data != null) {
-
-            val companyInfo = factory.createCompanyInfo(
-                id = null,
-                employees = networkResponse.data?.company?.employees!!,
-                founded = networkResponse.data?.company?.founded!!,
-                founder = networkResponse.data?.company?.founder!!,
-                launchSites = networkResponse.data?.company?.launchSites!!,
-                name = networkResponse.data?.company?.name!!,
-                valuation = networkResponse.data?.company?.valuation!!,
-            )
+        if (companyInfoModel != null) {
 
             val cacheResult = safeCacheCall(ioDispatcher) {
-                cacheDataSource.insert(companyInfo)
+                cacheDataSource.insert(companyInfoModel!!)
             }
 
             val cacheResponse = object : CacheResponseHandler<LaunchViewState, Long>(
@@ -109,7 +100,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Success
                             ),
-                            data = null,
+                            data = viewState,
                             stateEvent = stateEvent
                         )
                     } else {

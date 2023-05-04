@@ -8,11 +8,13 @@ import android.view.*
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -22,7 +24,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -31,6 +32,7 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
@@ -83,7 +85,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             setContent {
 
                 val scaffoldState = rememberScaffoldState()
-            //    val loading = launchViewModel.shouldDisplayProgressBar.value ?: false
 
                 AppTheme(
                     darkTheme = false,
@@ -148,18 +149,18 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
     override fun onResume() {
         super.onResume()
-        if (launchViewModel.getLaunchList() != null) {
+        if (!launchViewModel.getLaunchList().isNullOrEmpty()) {
             getTotalNumEntriesInLaunchCacheEvent()
-            launchViewModel.refreshSearchQuery()
+            launchViewModel.refreshSearchQueryEvent()
         }
-        if (launchViewModel.getIsDialogFilterDisplayed() == true) {
+        if (launchViewModel.getIsDialogFilterDisplayed()) {
             displayFilterDialog()
         }
     }
 
     private fun subscribeObservers() {
 
-        launchViewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner) {
+        launchViewModel.loading.observe(viewLifecycleOwner) {
             uiController.displayProgressBar(it)
         }
 
@@ -169,12 +170,10 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
                     GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_SUCCESS -> {
                         launchViewModel.clearStateMessage()
-                        launchViewModel.setStateEvent(LaunchStateEvent.GetCompanyInfoFromCacheEvent)
                     }
 
                     GetCompanyInfoFromCacheUseCaseImpl.GET_COMPANY_INFO_SUCCESS -> {
                         launchViewModel.clearStateMessage()
-                        getLaunchListFromNetworkAndInsertToCacheEvent()
                     }
 
                     GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
@@ -205,12 +204,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                             // Check cache for data if net connection fails
                             GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
-                                filterLaunchItemsInCacheEvent()
+                 //               filterLaunchItemsInCacheEvent()
                             }
 
                             GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
                                 getTotalNumEntriesInLaunchCacheEvent()
-                                filterLaunchItemsInCacheEvent()
+                 //               filterLaunchItemsInCacheEvent()
                             }
 
                             GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
@@ -226,32 +225,73 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             }
         }
 
-        // Update UI when list size changes
-        /*launchViewModel.viewState.observe(viewLifecycleOwner) { viewState ->
-
-            if (viewState != null) {
-                viewState.launchList?.let { _ ->
-                    if (launchViewModel.isPaginationExhausted() && !launchViewModel.isQueryExhausted()) {
-                        launchViewModel.setQueryExhausted(true)
-                    }
-                }
-            }
-        }*/
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launchViewModel.viewState.collect { viewState ->
-                viewState.launchList?.let { _ ->
-                    if (launchViewModel.isPaginationExhausted() && !launchViewModel.isQueryExhausted()) {
-                        launchViewModel.setQueryExhausted(true)
-                    }
-                }
-            }
-        }
-
         // Get result from bottom action sheet fragment which will be a link type string
         setFragmentResultListener(LINKS_KEY) { key, bundle ->
             if (key == LINKS_KEY) {
                 launchIntent(bundle.getString(LINKS_KEY))
+            }
+        }
+    }
+
+    @Composable
+    fun LaunchScreen(
+        modifier: Modifier = Modifier,
+        viewModel: LaunchViewModel
+    ) {
+        val viewState = viewModel.viewState.collectAsState()
+        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState" )
+        LaunchContent(
+            launchItems = viewState.value.mergedList ?: emptyList(),
+            modifier = modifier,
+            loading = viewModel.loading.value ?: false,
+            onChangeScrollPosition = viewModel::setScrollPosition,
+            onTriggerNextPage = viewModel::nextPage ,
+            page = viewModel.getPage()
+        )
+
+    }
+
+    @Composable
+    private fun LaunchContent(
+        launchItems: List<LaunchType>,
+        loading: Boolean,
+        onChangeScrollPosition: (Int) -> Unit,
+        page: Int,
+        onTriggerNextPage: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+        if (launchItems.isNotEmpty()) {
+            Box(
+                modifier = modifier.background(MaterialTheme.colors.background)
+            ) {
+                LazyColumn {
+                    itemsIndexed(
+                        items = launchItems
+                    ) { index, launchItem ->
+                        onChangeScrollPosition(index)
+                        if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
+                            onTriggerNextPage()
+                        }
+                        when (launchItem.type) {
+                            LaunchType.TYPE_TITLE -> {
+                                LaunchHeading(launchItem as SectionTitle)
+                            }
+
+                            LaunchType.TYPE_COMPANY -> {
+                                CompanySummaryCard(launchItem as CompanySummary)
+                            }
+
+                            LaunchType.TYPE_LAUNCH -> {
+                                LaunchCard(
+                                    launchItem = launchItem as LaunchModel,
+                                    onClick = { onCardClicked(launchItem.links) }
+                                )
+                            }
+
+                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                        }
+                    }
+                }
             }
         }
     }
@@ -270,21 +310,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         }
     }
 
-    private fun filterLaunchItemsInCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.FilterLaunchItemsInCacheEvent()
-        )
-    }
-
-    private fun getCompanyInfoFromCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.GetCompanyInfoFromCacheEvent
-        )
-    }
-
-    private fun getTotalNumEntriesInLaunchCacheEvent() {
-        launchViewModel.retrieveNumLaunchItemsInCache()
-    }
 
     private fun onCardClicked(launchLinks: Links) {
         links = launchLinks
@@ -293,18 +318,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         } else {
             displayBottomActionSheet(launchLinks)
         }
-    }
-
-    private fun getLaunchListFromNetworkAndInsertToCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent
-        )
-    }
-
-    private fun getCompanyInfoFromNetworkAndInsertToCacheEvent() {
-        launchViewModel.setStateEvent(
-            LaunchStateEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
-        )
     }
 
     private fun setupSwipeRefresh() {
@@ -413,6 +426,22 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         launchViewModel.loadFirstPage()
     }
 
+    private fun filterLaunchItemsInCacheEvent() {
+        launchViewModel.setStateEvent(
+            LaunchStateEvent.FilterLaunchItemsInCacheEvent
+        )
+    }
+
+    private fun getCompanyInfoFromCacheEvent() {
+        launchViewModel.setStateEvent(
+            LaunchStateEvent.GetCompanyInfoFromCacheEvent
+        )
+    }
+
+    private fun getTotalNumEntriesInLaunchCacheEvent() {
+        launchViewModel.retrieveNumLaunchItemsInCache()
+    }
+
     private fun displayErrorDialogNoLinks() {
         launchViewModel.setStateEvent(
             stateEvent = LaunchStateEvent.CreateStateMessageEvent(
@@ -439,49 +468,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                 )
             )
         )
-    }
-
-    @Composable
-    fun LaunchScreen(
-        modifier: Modifier = Modifier,
-        viewModel: LaunchViewModel
-    ) {
-        val viewState = viewModel.viewState.collectAsState()
-        LaunchContent(viewState.value.mergedList ?: emptyList())
-    }
-
-    @Composable
-    private fun LaunchContent(launchItems: List<LaunchType>) {
-        if (launchItems.isNotEmpty()) {
-            Box(
-
-            ) {
-                LazyColumn {
-                    itemsIndexed(
-                        items = launchItems
-                    ) { index, launchItem ->
-                        when (launchItem.type) {
-                            LaunchType.TYPE_TITLE -> {
-                                LaunchHeading(launchItem as SectionTitle)
-                            }
-
-                            LaunchType.TYPE_COMPANY -> {
-                                CompanySummaryCard(launchItem as CompanySummary)
-                            }
-
-                            LaunchType.TYPE_LAUNCH -> {
-                                LaunchCard(
-                                    launchItem = launchItem as LaunchModel,
-                                    onClick = { onCardClicked(launchItem.links) }
-                                )
-                            }
-
-                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
-                        }
-                    }
-                }
-            }
-        }
     }
 
 }

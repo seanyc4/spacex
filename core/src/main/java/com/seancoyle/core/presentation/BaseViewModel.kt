@@ -41,7 +41,7 @@ constructor(
         }
     }
 
-    val shouldDisplayProgressBar: LiveData<Boolean> = dataChannelManager.shouldDisplayProgressBar
+    val loading: LiveData<Boolean> = dataChannelManager.loading
 
     val stateMessage: LiveData<StateMessage?>
         get() = dataChannelManager.messageStack.stateMessage

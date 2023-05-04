@@ -25,7 +25,7 @@ constructor(){
      fun mapToEntity(domainModel:CompanyInfoModel): CompanyInfoEntity {
         domainModel.apply {
             return CompanyInfoEntity(
-                id = id,
+                id = "1",
                 employees = employees,
                 founded = founded,
                 founder = founder,

@@ -7,7 +7,7 @@ import com.seancoyle.launch.api.model.LaunchModel
 
 sealed class LaunchStateEvent : StateEvent {
 
-    object GetLaunchItemsFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
+    object GetLaunchListFromNetworkAndInsertToCacheEvent : LaunchStateEvent() {
 
         override fun errorInfo(): String {
             return "Error getting launch from network."
@@ -120,9 +120,7 @@ sealed class LaunchStateEvent : StateEvent {
         override fun shouldDisplayProgressBar() = false
     }
 
-    class FilterLaunchItemsInCacheEvent(
-        val clearLayoutManagerState: Boolean = true
-    ): LaunchStateEvent(){
+    object FilterLaunchItemsInCacheEvent: LaunchStateEvent(){
 
         override fun errorInfo(): String {
             return "Error getting list of launch items."
