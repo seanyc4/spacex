@@ -3,6 +3,7 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
@@ -20,11 +21,9 @@ import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.CreateMessageEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.FilterLaunchItemsInCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetAllLaunchItemsFromCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetNumLaunchItemsInCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -102,12 +101,6 @@ class LaunchViewModel @Inject constructor(
                 )
             }
 
-            is GetAllLaunchItemsFromCacheEvent -> {
-                launchUseCases.getAllLaunchItemsFromCacheUseCase.invoke(
-                    event = event
-                )
-            }
-
             is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
                 companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke(
                     event = event
@@ -126,12 +119,6 @@ class LaunchViewModel @Inject constructor(
                     order = getOrder(),
                     launchFilter = getFilter(),
                     page = getPage(),
-                    event = event
-                )
-            }
-
-            is GetNumLaunchItemsInCacheEvent -> {
-                launchUseCases.getNumLaunchItemsFromCacheUseCase.invoke(
                     event = event
                 )
             }
@@ -183,9 +170,12 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun clearList() {
-        val currentState = getCurrentStateOrNew()
-        currentState.launchList = ArrayList()
-        setState(currentState)
+        setState(
+            getCurrentStateOrNew().copy(
+                launchList = emptyList(),
+                mergedList = emptyList()
+            )
+        )
     }
 
     fun loadFirstPage() {
@@ -197,9 +187,11 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun nextPage() {
-        incrementPage()
-        if (getPage() > 1) {
-            setEvent(FilterLaunchItemsInCacheEvent)
+        if((getScrollPositionState() + 1) >= (getPage() * LAUNCH_PAGINATION_PAGE_SIZE) ) {
+            incrementPage()
+            if (getPage() > 1) {
+                setEvent(FilterLaunchItemsInCacheEvent)
+            }
         }
         printLogDebug("LaunchListViewModel", "nextPage: triggered: ${getPage()}")
     }
@@ -209,7 +201,7 @@ class LaunchViewModel @Inject constructor(
     fun getPage() = getCurrentStateOrNew().page ?: 1
     fun getOrder() = getCurrentStateOrNew().order ?: LAUNCH_ORDER_DESC
     fun getIsDialogFilterDisplayed() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
-
+    fun getRefreshState() = getCurrentStateOrNew().isRefreshing
 
     fun getFilter(): Int? {
         return if (getCurrentStateOrNew().launchFilter == LAUNCH_ALL) {
@@ -226,7 +218,6 @@ class LaunchViewModel @Inject constructor(
         setLaunchFilter(null)
         resetPage()
     }
-
 
     private fun setMergedList(list: List<LaunchType>) {
         setState(getCurrentStateOrNew().copy(mergedList = list))
@@ -304,48 +295,3 @@ class LaunchViewModel @Inject constructor(
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

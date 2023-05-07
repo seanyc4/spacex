@@ -20,7 +20,8 @@ data class LaunchViewState(
     var launchFilter: Int? = null,
     var order: String? = null,
     var yearQuery: String? = "",
-    var scrollPosition: Int? = 0
+    var scrollPosition: Int? = 0,
+    var isRefreshing: Boolean = false
 
 ) : Parcelable, ViewState
 

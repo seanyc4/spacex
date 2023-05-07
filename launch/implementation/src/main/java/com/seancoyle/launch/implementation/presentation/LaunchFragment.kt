@@ -16,6 +16,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -66,7 +69,6 @@ const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.st
 class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
-    private var links: Links? = null
 
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreateView(
@@ -78,6 +80,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             setContent {
 
                 val scaffoldState = rememberScaffoldState()
+                val refreshing = rememberPullRefreshState(
+                    refreshing = launchViewModel.getRefreshState(),
+                    onRefresh = {
+                        launchViewModel.clearQueryParameters()
+                        launchViewModel.setEvent(LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                    })
 
                 AppTheme(
                     darkTheme = false,
@@ -97,7 +105,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                     ) { padding ->
                         LaunchScreen(
                             Modifier.padding(padding),
-                            viewModel = launchViewModel
+                            viewModel = launchViewModel,
+                            refreshState = refreshing
                         )
                     }
                 }
@@ -205,10 +214,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         }
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun LaunchScreen(
         modifier: Modifier = Modifier,
-        viewModel: LaunchViewModel
+        viewModel: LaunchViewModel,
+        refreshState: PullRefreshState
     ) {
         val viewState = viewModel.uiState.collectAsState()
         printLogDebug("RECOMPOSING", "RECOMPOSING $viewState" )
@@ -218,11 +229,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             loading = viewModel.loading.value ?: false,
             onChangeScrollPosition = viewModel::setScrollPosition,
             onTriggerNextPage = viewModel::nextPage ,
-            page = viewModel.getPage()
+            page = viewModel.getPage(),
+            pullRefreshState = refreshState,
+            isRefreshing = viewModel.getRefreshState()
         )
-
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun LaunchContent(
         launchItems: List<LaunchType>,
@@ -230,13 +243,18 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         onChangeScrollPosition: (Int) -> Unit,
         page: Int,
         onTriggerNextPage: () -> Unit,
-        modifier: Modifier = Modifier
+        pullRefreshState: PullRefreshState,
+        modifier: Modifier = Modifier,
+        isRefreshing: Boolean
     ) {
         if (launchItems.isNotEmpty()) {
             Box(
-                modifier = modifier.background(MaterialTheme.colors.background)
+                modifier = modifier
+                    .background(MaterialTheme.colors.background)
             ) {
-                LazyColumn {
+                LazyColumn(
+                    modifier = modifier.pullRefresh(pullRefreshState)
+                ) {
                     itemsIndexed(
                         items = launchItems
                     ) { index, launchItem ->
@@ -244,23 +262,25 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                         if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
                             onTriggerNextPage()
                         }
-                        when (launchItem.type) {
-                            LaunchType.TYPE_TITLE -> {
-                                LaunchHeading(launchItem as SectionTitle)
-                            }
+                        if(!isRefreshing) {
+                            when (launchItem.type) {
+                                LaunchType.TYPE_TITLE -> {
+                                    LaunchHeading(launchItem as SectionTitle)
+                                }
 
-                            LaunchType.TYPE_COMPANY -> {
-                                CompanySummaryCard(launchItem as CompanySummary)
-                            }
+                                LaunchType.TYPE_COMPANY -> {
+                                    CompanySummaryCard(launchItem as CompanySummary)
+                                }
 
-                            LaunchType.TYPE_LAUNCH -> {
-                                LaunchCard(
-                                    launchItem = launchItem as LaunchModel,
-                                    onClick = { onCardClicked(launchItem.links) }
-                                )
-                            }
+                                LaunchType.TYPE_LAUNCH -> {
+                                    LaunchCard(
+                                        launchItem = launchItem as LaunchModel,
+                                        onClick = { onCardClicked(launchItem.links) }
+                                    )
+                                }
 
-                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                                else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                            }
                         }
                     }
                 }
@@ -283,12 +303,11 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
 
-    private fun onCardClicked(launchLinks: Links) {
-        links = launchLinks
-        if (isLinksNullOrEmpty()) {
+    private fun onCardClicked(links: Links) {
+        if (isLinksNullOrEmpty(links)) {
             displayErrorDialogNoLinks()
         } else {
-            displayBottomActionSheet(launchLinks)
+            displayBottomActionSheet(links)
         }
     }
 
@@ -302,17 +321,17 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
           }*/
     }
 
-    private fun isLinksNullOrEmpty() =
-        links?.articleLink.isNullOrEmpty() &&
-                links?.webcastLink.isNullOrEmpty() &&
-                links?.wikiLink.isNullOrEmpty()
+    private fun isLinksNullOrEmpty(links: Links) =
+        links.articleLink.isNullOrEmpty() &&
+                links.webcastLink.isNullOrEmpty() &&
+                links.wikiLink.isNullOrEmpty()
 
 
-    private fun displayBottomActionSheet(launchLinks: Links) {
+    private fun displayBottomActionSheet(links: Links) {
         if (findNavController().currentDestination?.id == R.id.launchFragment) {
             findNavController().navigate(
                 R.id.action_launchFragment_to_launchBottomActionSheet,
-                bundleOf(LINKS_KEY to launchLinks)
+                bundleOf(LINKS_KEY to links)
             )
         }
     }
