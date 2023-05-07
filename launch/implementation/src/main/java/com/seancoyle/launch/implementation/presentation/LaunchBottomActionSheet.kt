@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.seancoyle.core.util.parcelable
 import com.seancoyle.launch.api.model.LinkType
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.implementation.R
@@ -49,7 +50,7 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
     }
 
     private fun getLinksFromBundle() {
-        val links: Links? = arguments?.getParcelable(LINKS_KEY)
+        val links: Links? = arguments?.parcelable(LINKS_KEY)
         links?.let {
             linkTypes = listOfNotNull(
                 createLinkType(R.string.article, it.articleLink),
