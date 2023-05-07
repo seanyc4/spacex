@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/core-database" />
             <option value="$PROJECT_DIR$/core-datastore" />
             <option value="$PROJECT_DIR$/core-datastore-test" />
+            <option value="$PROJECT_DIR$/core-ui" />
             <option value="$PROJECT_DIR$/launch" />
             <option value="$PROJECT_DIR$/launch/api" />
             <option value="$PROJECT_DIR$/launch/implementation" />

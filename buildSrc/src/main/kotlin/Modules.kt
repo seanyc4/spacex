@@ -9,4 +9,5 @@ object Modules {
     const val launchDataSourceTest = ":launch:launch-datasource-test"
     const val launchApi = ":launch:api"
     const val launchImpl = ":launch:implementation"
+    const val core_ui = ":core-ui"
 }

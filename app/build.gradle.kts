@@ -94,6 +94,7 @@ dependencies {
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchApi))
     implementation(project(Modules.launchImpl))
+    implementation(project(Modules.core_ui))
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)

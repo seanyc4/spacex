@@ -16,9 +16,9 @@ import com.seancoyle.core.state.UIComponentType.Dialog
 import com.seancoyle.core.state.UIComponentType.None
 import com.seancoyle.core.state.UIComponentType.Toast
 import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_ui.CircularProgressBar
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
-import com.seancoyle.spacex.framework.presentation.composables.CircularProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -42,7 +42,10 @@ class MainActivity : AppCompatActivity(),
     override fun displayProgressBar(isDisplayed: Boolean) {
         with(binding) {
             progressBar.setContent {
-                CircularProgressBar(isDisplayed = isDisplayed, verticalBias = 0.5f)
+                CircularProgressBar(
+                    isDisplayed = isDisplayed,
+                    verticalBias = 0.5f
+                )
             }
         }
     }
@@ -194,28 +197,3 @@ class MainActivity : AppCompatActivity(),
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
