@@ -1,5 +1,6 @@
 apply {
     from("$rootDir/hilt.gradle")
+    from("$rootDir/android-base-ui.gradle")
 }
 
 plugins {

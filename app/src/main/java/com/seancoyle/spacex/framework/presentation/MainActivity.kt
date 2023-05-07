@@ -9,15 +9,16 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.seancoyle.core.presentation.UIController
 import com.seancoyle.core.presentation.displayToast
-import com.seancoyle.core.presentation.gone
-import com.seancoyle.core.presentation.visible
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessageCallback
-import com.seancoyle.core.state.UIComponentType.*
+import com.seancoyle.core.state.UIComponentType.Dialog
+import com.seancoyle.core.state.UIComponentType.None
+import com.seancoyle.core.state.UIComponentType.Toast
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
+import com.seancoyle.spacex.framework.presentation.composables.CircularProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -38,13 +39,10 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
     }
 
-
     override fun displayProgressBar(isDisplayed: Boolean) {
         with(binding) {
-            if (isDisplayed) {
-                progressBar.visible()
-            } else {
-                progressBar.gone()
+            progressBar.setContent {
+                CircularProgressBar(isDisplayed = isDisplayed, verticalBias = 0.5f)
             }
         }
     }

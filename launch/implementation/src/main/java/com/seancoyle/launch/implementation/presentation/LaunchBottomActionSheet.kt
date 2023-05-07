@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
@@ -53,21 +52,9 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         val links: Links? = arguments?.parcelable(LINKS_KEY)
         links?.let {
             linkTypes = listOfNotNull(
-                createLinkType(R.string.article, it.articleLink),
-                createLinkType(R.string.webcast, it.webcastLink),
-                createLinkType(R.string.wikipedia, it.wikiLink)
-            )
-        }
-    }
-
-    private fun createLinkType(
-        @StringRes titleRes: Int,
-        link: String?
-    ): LinkType? {
-        return link?.let {
-            LinkType(
-                titleRes, it,
-                onClick = { onLinkClicked(link) }
+                createLinkType(titleRes = R.string.article, link = it.articleLink) { link -> onLinkClicked(link) },
+                createLinkType(titleRes = R.string.webcast, link = it.webcastLink) { link -> onLinkClicked(link) },
+                createLinkType(titleRes = R.string.wikipedia, link = it.wikiLink) { link -> onLinkClicked(link) }
             )
         }
     }

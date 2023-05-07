@@ -227,7 +227,7 @@ class LaunchFragment : BaseFragment() {
             modifier = modifier,
             loading = viewModel.loading.value ?: false,
             onChangeScrollPosition = viewModel::setScrollPosition,
-            onTriggerNextPage = viewModel::nextPage,
+            loadNextPage = viewModel::nextPage,
             page = viewModel.getPage(),
             pullRefreshState = refreshState,
             isRefreshing = viewModel.getRefreshState()
@@ -241,7 +241,7 @@ class LaunchFragment : BaseFragment() {
         loading: Boolean,
         onChangeScrollPosition: (Int) -> Unit,
         page: Int,
-        onTriggerNextPage: () -> Unit,
+        loadNextPage: () -> Unit,
         pullRefreshState: PullRefreshState,
         modifier: Modifier = Modifier,
         isRefreshing: Boolean
@@ -259,7 +259,7 @@ class LaunchFragment : BaseFragment() {
                     ) { index, launchItem ->
                         onChangeScrollPosition(index)
                         if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
-                            onTriggerNextPage()
+                            loadNextPage()
                         }
                         if (!isRefreshing) {
                             when (launchItem.type) {
