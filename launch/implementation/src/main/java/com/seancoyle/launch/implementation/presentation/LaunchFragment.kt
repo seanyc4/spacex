@@ -67,7 +67,7 @@ const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.st
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
+class LaunchFragment : BaseFragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
 
@@ -86,7 +86,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                     onRefresh = {
                         launchViewModel.clearQueryParameters()
                         launchViewModel.setEvent(LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
-                    })
+                    }
+                )
 
                 AppTheme(
                     darkTheme = false,

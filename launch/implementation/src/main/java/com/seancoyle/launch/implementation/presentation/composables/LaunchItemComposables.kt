@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.presentation.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -112,7 +114,7 @@ fun LaunchCard(
 
             Column(
                 modifier = modifier
-                    .fillMaxWidth(0.40f)
+                    .fillMaxWidth(0.36f)
             ) {
                 LaunchCardDefaultText(title = R.string.mission)
                 LaunchCardDefaultText(title = R.string.date_time)
@@ -122,12 +124,22 @@ fun LaunchCard(
 
             Column(
                 modifier = modifier
-                    .fillMaxWidth(1f)
+                    .fillMaxWidth(0.9f)
             ) {
                 LaunchCardDynamicText(title = launchItem.missionName)
                 LaunchCardDynamicText(title = launchItem.launchDate)
                 LaunchCardDynamicText(title = launchItem.rocket.rocketNameAndType)
                 LaunchCardDynamicText(title = launchItem.launchDaysDifference)
+            }
+
+            Column(
+                modifier = modifier
+                    .fillMaxWidth(1f)
+            ) {
+                Image(
+                    painter = painterResource(id = launchItem.launchSuccessIcon),
+                    contentDescription = "Success or failure icon"
+                )
             }
         }
     }
