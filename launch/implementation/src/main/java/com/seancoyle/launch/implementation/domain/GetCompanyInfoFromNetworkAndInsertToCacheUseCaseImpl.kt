@@ -10,6 +10,10 @@ import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.UIComponentType
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_EMPTY
+import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.model.CompanyInfoModel
@@ -53,7 +57,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 } else {
                     DataState.data(
                         response = Response(
-                            message = COMPANY_INFO_EMPTY,
+                            message = event.eventName() + EVENT_NETWORK_EMPTY,
                             uiComponentType = UIComponentType.Toast,
                             messageType = MessageType.Error
                         ),
@@ -66,7 +70,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             override suspend fun handleFailure(): DataState<LaunchViewState> {
                 return DataState.error(
                     response = Response(
-                        message = COMPANY_INFO_ERROR,
+                        message = event.eventName() + EVENT_NETWORK_ERROR,
                         uiComponentType = UIComponentType.Toast,
                         messageType = MessageType.Error
                     ),
@@ -76,7 +80,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
         }.getResult()
 
         networkResponse?.let {
-            if (networkResponse.stateMessage?.response?.message == COMPANY_INFO_ERROR) {
+            if (networkResponse.stateMessage?.response?.message == event.eventName() + EVENT_NETWORK_ERROR) {
                 emit(networkResponse)
             }
         }
@@ -96,7 +100,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                     return if (resultObj > 0) {
                         DataState.data(
                             response = Response(
-                                message = COMPANY_INFO_INSERT_SUCCESS,
+                                message = event.eventName() + EVENT_CACHE_INSERT_SUCCESS,
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Success
                             ),
@@ -106,7 +110,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                     } else {
                         DataState.data(
                             response = Response(
-                                message = COMPANY_INFO_INSERT_FAILED,
+                                message = event.eventName() + EVENT_CACHE_INSERT_FAILED,
                                 uiComponentType = UIComponentType.None,
                                 messageType = MessageType.Error
                             ),
@@ -118,13 +122,5 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             }.getResult()
             emit(cacheResponse)
         }
-    }
-
-    companion object {
-        const val COMPANY_INFO_EMPTY = "No data returned from network."
-        const val COMPANY_INFO_ERROR =
-            "Please check your internet connection and try again.\n\nReason: Network error"
-        const val COMPANY_INFO_INSERT_SUCCESS = "Successfully inserted company info from network."
-        const val COMPANY_INFO_INSERT_FAILED = "Failed to insert company info from network."
     }
 }

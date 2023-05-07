@@ -9,6 +9,7 @@ import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.UIComponentType
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
@@ -39,7 +40,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
                 )
                 return DataState.data(
                     response = Response(
-                        message = GET_NUM_LAUNCH_ITEMS_SUCCESS,
+                        message = event.eventName() + EVENT_CACHE_SUCCESS,
                         uiComponentType = UIComponentType.None,
                         messageType = MessageType.Success
                     ),
@@ -48,12 +49,6 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
                 )
             }
         }.getResult()
-
         emit(response)
-    }
-
-    companion object {
-        const val GET_NUM_LAUNCH_ITEMS_SUCCESS =
-            "Successfully retrieved the number of launch items from the cache."
     }
 }

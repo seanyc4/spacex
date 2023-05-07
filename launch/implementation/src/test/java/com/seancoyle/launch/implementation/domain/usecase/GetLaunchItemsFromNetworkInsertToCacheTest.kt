@@ -1,15 +1,16 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.LaunchNetworkDataSource
 import com.seancoyle.launch.api.model.LaunchFactory
 import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.Companion.LAUNCH_ERROR
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.Companion.LAUNCH_INSERT_SUCCESS
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
 import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,6 +36,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     private lateinit var networkDataSource: LaunchNetworkDataSource
     private lateinit var factory: LaunchFactory
     private lateinit var mockWebServer: MockWebServer
+    private lateinit var launchOptions: LaunchOptions
     private lateinit var underTest: GetLaunchListFromNetworkAndInsertToCacheUseCase
 
     @BeforeEach
@@ -44,12 +46,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         networkDataSource = dependencies.networkDataSource
         factory = dependencies.launchFactory
         mockWebServer = dependencies.mockWebServer
+        launchOptions = dependencies.launchOptions
 
         underTest =
-           GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl(
+            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
                 cacheDataSource = cacheDataSource,
-                launchNetworkDataSource = networkDataSource
+                launchNetworkDataSource = networkDataSource,
+                launchOptions = launchOptions
             )
     }
 
@@ -66,14 +70,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
 
         underTest(
-            launchOptions = dependencies.launchOptions,
-            stateEvent = LaunchEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = dependencies.launchOptions
-            )
+            event = LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LAUNCH_INSERT_SUCCESS
+                LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
             )
         }
 
@@ -98,14 +99,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
 
         underTest(
-            launchOptions = dependencies.launchOptions,
-            stateEvent = LaunchEvent.GetLaunchItemsFromNetworkAndInsertToCacheEvent(
-                launchOptions = dependencies.launchOptions
-            )
+            event = LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LAUNCH_ERROR
+                LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
             )
         }
     }

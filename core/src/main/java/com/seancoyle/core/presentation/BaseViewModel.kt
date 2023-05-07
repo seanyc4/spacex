@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
-import com.seancoyle.core.state.DataChannelManager
+import com.seancoyle.core.state.EventExecutor
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
@@ -36,7 +36,7 @@ constructor(
     val uiState: StateFlow<UiState>
         get() = _uiState
 
-    private val dataChannelManager: DataChannelManager<UiState> = object : DataChannelManager<UiState>(
+    private val eventExecutor: EventExecutor<UiState> = object : EventExecutor<UiState>(
         ioDispatcher = ioDispatcher,
         mainDispatcher = mainDispatcher
     ) {
@@ -46,16 +46,16 @@ constructor(
         }
     }
 
-    val loading: LiveData<Boolean> = dataChannelManager.loading
+    val loading: LiveData<Boolean> = eventExecutor.loading
 
     val stateMessage: LiveData<StateMessage?>
-        get() = dataChannelManager.messageStack.stateMessage
+        get() = eventExecutor.messageStack.stateMessage
 
     fun getMessageStackSize(): Int {
-        return dataChannelManager.messageStack.size
+        return eventExecutor.messageStack.size
     }
 
-    fun setupChannel() = dataChannelManager.setupChannel()
+    fun setupChannel() = eventExecutor.cancelCurrentJobs()
 
     abstract fun setUpdatedState(data: UiState)
 
@@ -89,7 +89,7 @@ constructor(
     fun launchJob(
         event: Event,
         jobFunction: Flow<DataState<UiState>?>
-    ) = dataChannelManager.launchJob(event, jobFunction)
+    ) = eventExecutor.launchJob(event, jobFunction)
 
     fun getCurrentStateOrNew(): UiState {
         return uiState.value ?: initNewUiState()
@@ -101,16 +101,16 @@ constructor(
 
     fun clearStateMessage(index: Int = 0) {
         printLogDebug("BaseViewModel", "clearStateMessage")
-        dataChannelManager.clearStateMessage(index)
+        eventExecutor.clearStateMessage(index)
     }
 
-    fun clearActiveEvents() = dataChannelManager.clearActiveEventCounter()
+    fun clearActiveEvents() = eventExecutor.clearActiveEventCounter()
 
-    fun clearAllStateMessages() = dataChannelManager.clearAllStateMessages()
+    fun clearAllStateMessages() = eventExecutor.clearAllStateMessages()
 
-    fun printStateMessages() = dataChannelManager.printStateMessages()
+    fun printStateMessages() = eventExecutor.printStateMessages()
 
-    fun cancelActiveJobs() = dataChannelManager.cancelJobs()
+    fun cancelActiveJobs() = eventExecutor.cancelJobs()
 
     abstract fun initNewUiState(): UiState
 

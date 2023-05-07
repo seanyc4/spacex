@@ -8,6 +8,8 @@ import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.UIComponentType
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_NO_MATCHING_RESULTS
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchViewState
@@ -45,9 +47,9 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         ) {
             override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchViewState> {
                 val message = if (resultObj.isEmpty()) {
-                    SEARCH_LAUNCH_NO_MATCHING_RESULTS
+                    event.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
                 } else {
-                    SEARCH_LAUNCH_SUCCESS
+                    event.eventName() + EVENT_CACHE_SUCCESS
                 }
                 val uiComponentType = if (resultObj.isEmpty()) UIComponentType.Toast else UIComponentType.None
 
@@ -66,12 +68,6 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
 
         }.getResult()
         emit(response)
-    }
-
-    companion object {
-        const val SEARCH_LAUNCH_SUCCESS = "Successfully retrieved list of launch items."
-        const val SEARCH_LAUNCH_NO_MATCHING_RESULTS =
-            "There are no launch items that match that query."
     }
 }
 

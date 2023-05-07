@@ -8,6 +8,8 @@ import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.UIComponentType
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_NO_MATCHING_RESULTS
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchViewState
@@ -36,11 +38,11 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
         ) {
             override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
                 var message: String? =
-                    GET_COMPANY_INFO_SUCCESS
+                   event.eventName() + EVENT_CACHE_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None
                 if (resultObj == null) {
                     message =
-                        GET_COMPANY_INFO_NO_MATCHING_RESULTS
+                        event.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
                     uiComponentType = UIComponentType.Toast
                 }
                 return DataState.data(
@@ -56,14 +58,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
                 )
             }
         }.getResult()
-
         emit(response)
-    }
-
-    companion object {
-        const val GET_COMPANY_INFO_SUCCESS = "Successfully retrieved company info"
-        const val GET_COMPANY_INFO_NO_MATCHING_RESULTS =
-            "There is no company info that matches that query."
     }
 }
 

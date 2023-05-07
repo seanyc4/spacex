@@ -57,6 +57,19 @@ sealed class LaunchEvent : Event {
         override fun shouldDisplayProgressBar() = true
     }
 
+    object GetNumLaunchItemsInCacheEvent : LaunchEvent() {
+
+        override fun errorInfo(): String {
+            return "Error getting the number of launch items from the cache."
+        }
+
+        override fun eventName(): String {
+            return "GetNumLaunchItemsInCacheEvent"
+        }
+
+        override fun shouldDisplayProgressBar() = false
+    }
+
     class CreateMessageEvent(
         val stateMessage: StateMessage
     ) : LaunchEvent() {

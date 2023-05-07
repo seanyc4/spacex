@@ -42,6 +42,9 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.core.state.*
+import com.seancoyle.core.util.GenericErrors.ERROR_UNKNOWN
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
@@ -50,8 +53,6 @@ import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
@@ -112,12 +113,10 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                 }
             }
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupSwipeRefresh()
         subscribeObservers()
         restoreInstanceState(savedInstanceState)
     }
@@ -137,9 +136,8 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = launchViewModel.uiState.value
-
-        viewState.launchList = ArrayList()
-        viewState.mergedList = ArrayList()
+        viewState.launchList = emptyList()
+        viewState.mergedList = emptyList()
 
         outState.putParcelable(
             LAUNCH_STATE_BUNDLE_KEY,
@@ -166,9 +164,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
         launchViewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
             stateMessage?.response?.let { response ->
-                when (response.message) {
 
-                    GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
+                when (response.message) {
+                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
                         launchViewModel.clearStateMessage()
                         filterLaunchItemsInCacheEvent()
                     }
@@ -185,19 +183,19 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
 
                         when (response.message) {
                             // Check cache for data if net connection fails
-                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
+                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
+                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
+                            LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                 getCompanyInfoFromCacheEvent()
                             }
 
-                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_ERROR -> {
+                            LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
                                 getCompanyInfoFromCacheEvent()
                             }
                         }
@@ -206,7 +204,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             }
         }
 
-        // Get result from bottom action sheet fragment which will be a link type string
+        // Get result from bottom action sheet fragment
         setFragmentResultListener(LINKS_KEY) { key, bundle ->
             if (key == LINKS_KEY) {
                 launchIntent(bundle.getString(LINKS_KEY))
@@ -222,13 +220,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         refreshState: PullRefreshState
     ) {
         val viewState = viewModel.uiState.collectAsState()
-        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState" )
+        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
         LaunchContent(
             launchItems = viewState.value.mergedList ?: emptyList(),
             modifier = modifier,
             loading = viewModel.loading.value ?: false,
             onChangeScrollPosition = viewModel::setScrollPosition,
-            onTriggerNextPage = viewModel::nextPage ,
+            onTriggerNextPage = viewModel::nextPage,
             page = viewModel.getPage(),
             pullRefreshState = refreshState,
             isRefreshing = viewModel.getRefreshState()
@@ -262,7 +260,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                         if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
                             onTriggerNextPage()
                         }
-                        if(!isRefreshing) {
+                        if (!isRefreshing) {
                             when (launchItem.type) {
                                 LaunchType.TYPE_TITLE -> {
                                     LaunchHeading(launchItem as SectionTitle)
@@ -309,16 +307,6 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         } else {
             displayBottomActionSheet(links)
         }
-    }
-
-    private fun setupSwipeRefresh() {
-        /*  with(binding) {
-              swipeRefresh.setOnRefreshListener {
-                  swipeRefresh.isRefreshing = false
-                  viewModel.clearQueryParameters()
-                  getCompanyInfoFromNetworkAndInsertToCacheEvent()
-              }
-          }*/
     }
 
     private fun isLinksNullOrEmpty(links: Links) =
@@ -412,7 +400,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
     private fun startNewSearch() {
-        printLogDebug("DCM", "start new search")
+        printLogDebug("EventExecutor", "start new search")
         launchViewModel.clearList()
         launchViewModel.loadFirstPage()
     }

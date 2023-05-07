@@ -20,7 +20,7 @@ class EventManager {
     }
 
     fun clearActiveEventCounter(){
-        printLogDebug("DCM", "Clear active state events")
+        printLogDebug("EventExecutor", "Clear active state events")
         EspressoIdlingResource.clear()
         activeEvents.clear()
         syncNumActiveEvents()
@@ -33,7 +33,7 @@ class EventManager {
     }
 
     fun removeEvent(event: Event?){
-        printLogDebug("DCM", "remove state event: ${event?.eventName()}")
+        printLogDebug("EventExecutor", "remove state event: ${event?.eventName()}")
         event?.let {
             EspressoIdlingResource.decrement()
         }
@@ -42,7 +42,7 @@ class EventManager {
     }
 
     fun isEventActive(event: Event): Boolean{
-        printLogDebug("DCM sem", "is state event active? " +
+        printLogDebug("EventExecutor sem", "is state event active? " +
                 "${activeEvents.containsKey(event.eventName())}")
         return activeEvents.containsKey(event.eventName())
     }
