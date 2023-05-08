@@ -7,12 +7,12 @@ import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.EventExecutor
+import com.seancoyle.core.state.MessageStack
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessage
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors
-import com.seancoyle.core.util.printLogDebug
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -26,7 +26,8 @@ import kotlinx.coroutines.flow.flow
 abstract class BaseViewModel<UiState>
 constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    private val messageStack: MessageStack
 ) : ViewModel() {
 
     private val _uiState : MutableStateFlow<UiState> by lazy {
@@ -38,7 +39,8 @@ constructor(
 
     private val eventExecutor: EventExecutor<UiState> = object : EventExecutor<UiState>(
         ioDispatcher = ioDispatcher,
-        mainDispatcher = mainDispatcher
+        mainDispatcher = mainDispatcher,
+        messageStack = messageStack
     ) {
 
         override fun setUpdatedState(data: UiState) {
@@ -52,7 +54,7 @@ constructor(
         get() = eventExecutor.messageStack.stateMessage
 
     fun getMessageStackSize(): Int {
-        return eventExecutor.messageStack.size
+        return eventExecutor.messageStack.getSize()
     }
 
     fun setupChannel() = eventExecutor.cancelCurrentJobs()
@@ -95,12 +97,11 @@ constructor(
         return uiState.value ?: initNewUiState()
     }
 
-    fun setState(viewState: UiState) {
-        _uiState.value = viewState
+    fun setState(uiState: UiState) {
+        _uiState.value = uiState
     }
 
     fun clearStateMessage(index: Int = 0) {
-        printLogDebug("BaseViewModel", "clearStateMessage")
         eventExecutor.clearStateMessage(index)
     }
 

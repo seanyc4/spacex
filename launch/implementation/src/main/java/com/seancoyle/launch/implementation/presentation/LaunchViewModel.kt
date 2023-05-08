@@ -10,6 +10,7 @@ import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
+import com.seancoyle.core.state.MessageStack
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.model.CompanyInfoModel
@@ -42,10 +43,12 @@ class LaunchViewModel @Inject constructor(
     private val companyInfoUseCases: CompanyInfoUseCases,
     private val appDataStoreManager: AppDataStore,
     private val createMergedListUseCase: CreateMergedListUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    messageStack: MessageStack,
 ) : BaseViewModel<LaunchState>(
     ioDispatcher = ioDispatcher,
-    mainDispatcher = mainDispatcher
+    mainDispatcher = mainDispatcher,
+    messageStack = messageStack
 ) {
 
     init {

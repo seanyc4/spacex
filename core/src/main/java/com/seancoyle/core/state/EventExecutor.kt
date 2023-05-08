@@ -18,12 +18,12 @@ import kotlinx.coroutines.withContext
 @ExperimentalCoroutinesApi
 abstract class EventExecutor<ViewState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    val messageStack: MessageStack
 ) {
 
     private var channelScope: CoroutineScope? = null
     private val eventManager: EventManager = EventManager()
-    val messageStack = MessageStack()
     val loading = eventManager.loading
 
     fun cancelCurrentJobs() {
@@ -93,7 +93,7 @@ abstract class EventExecutor<ViewState>(
     fun clearAllStateMessages() = messageStack.clear()
 
     fun printStateMessages() {
-        for (message in messageStack.allMessages) {
+        for (message in messageStack.getAllMessages()) {
             printLogDebug("EventExecutor", "${message.response.message}")
         }
     }
