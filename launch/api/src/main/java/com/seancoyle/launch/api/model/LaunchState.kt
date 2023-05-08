@@ -1,7 +1,7 @@
 package com.seancoyle.launch.api.model
 
 import android.os.Parcelable
-import com.seancoyle.core.state.ViewState
+import com.seancoyle.core.state.UiState
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
@@ -23,7 +23,7 @@ data class LaunchState(
     var scrollPosition: Int? = 0,
     var isRefreshing: Boolean = false
 
-) : Parcelable, ViewState
+) : Parcelable, UiState
 
 
 
