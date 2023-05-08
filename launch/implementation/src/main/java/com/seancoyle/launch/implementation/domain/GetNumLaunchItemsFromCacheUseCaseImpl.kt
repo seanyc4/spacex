@@ -11,7 +11,7 @@ import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchViewState
+import com.seancoyle.launch.api.model.LaunchState
 import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -25,17 +25,17 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         event: Event
-    ): Flow<DataState<LaunchViewState>?> = flow {
+    ): Flow<DataState<LaunchState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.getTotalEntries()
         }
-        val response = object : CacheResponseHandler<LaunchViewState, Int>(
+        val response = object : CacheResponseHandler<LaunchState, Int>(
             response = cacheResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: Int): DataState<LaunchViewState> {
-                val viewState = LaunchViewState(
+            override suspend fun handleSuccess(resultObj: Int): DataState<LaunchState> {
+                val viewState = LaunchState(
                     numLaunchItemsInCache = resultObj
                 )
                 return DataState.data(

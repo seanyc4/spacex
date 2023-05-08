@@ -12,7 +12,7 @@ import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.model.CompanyInfoModel
-import com.seancoyle.launch.api.model.LaunchViewState
+import com.seancoyle.launch.api.model.LaunchState
 import com.seancoyle.launch.api.usecase.GetCompanyInfoFromCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -26,17 +26,17 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         event: Event
-    ): Flow<DataState<LaunchViewState>?> = flow {
+    ): Flow<DataState<LaunchState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.getCompanyInfo()
         }
 
-        val response = object : CacheResponseHandler<LaunchViewState, CompanyInfoModel?>(
+        val response = object : CacheResponseHandler<LaunchState, CompanyInfoModel?>(
             response = cacheResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchState> {
                 var message: String? =
                    event.eventName() + EVENT_CACHE_SUCCESS
                 var uiComponentType: UIComponentType? = UIComponentType.None
@@ -51,7 +51,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
                         uiComponentType = uiComponentType as UIComponentType,
                         messageType = MessageType.Success
                     ),
-                    data = LaunchViewState(
+                    data = LaunchState(
                         company = resultObj
                     ),
                     event = event

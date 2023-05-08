@@ -49,7 +49,6 @@ import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
-import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
@@ -62,7 +61,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 const val LINKS_KEY = "links"
-const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.state"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -98,7 +96,7 @@ class LaunchFragment : BaseFragment() {
                         topBar = {
                             HomeAppBar(
                                 onClick = {
-                                    launchViewModel.setIsDialogFilterDisplayed(true)
+                                    launchViewModel.setIsDialogFilterDisplayedState(true)
                                     displayFilterDialog()
                                 }
                             )
@@ -119,7 +117,6 @@ class LaunchFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
-        restoreInstanceState(savedInstanceState)
     }
 
     override fun onPause() {
@@ -127,32 +124,17 @@ class LaunchFragment : BaseFragment() {
         launchViewModel.clearAllStateMessages()
     }
 
-    private fun restoreInstanceState(savedInstanceState: Bundle?) {
-        savedInstanceState?.let { inState ->
-            (inState[LAUNCH_STATE_BUNDLE_KEY] as LaunchViewState?)?.let { viewState ->
-                launchViewModel.setState(viewState)
-            }
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        val viewState = launchViewModel.uiState.value
-        viewState.launchList = emptyList()
-        viewState.mergedList = emptyList()
-
-        outState.putParcelable(
-            LAUNCH_STATE_BUNDLE_KEY,
-            viewState
-        )
+        launchViewModel.saveState()
         super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
-        if (!launchViewModel.getLaunchList().isNullOrEmpty()) {
+        if (!launchViewModel.getLaunchListState().isNullOrEmpty()) {
             launchViewModel.refreshSearchQueryEvent()
         }
-        if (launchViewModel.getIsDialogFilterDisplayed()) {
+        if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
         }
     }
@@ -226,9 +208,9 @@ class LaunchFragment : BaseFragment() {
             launchItems = viewState.value.mergedList ?: emptyList(),
             modifier = modifier,
             loading = viewModel.loading.value ?: false,
-            onChangeScrollPosition = viewModel::setScrollPosition,
+            onChangeScrollPosition = viewModel::setScrollPositionState,
             loadNextPage = viewModel::nextPage,
-            page = viewModel.getPage(),
+            page = viewModel.getPageState(),
             pullRefreshState = refreshState,
             isRefreshing = viewModel.getRefreshState()
         )
@@ -330,13 +312,13 @@ class LaunchFragment : BaseFragment() {
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
-                .onDismiss { launchViewModel.setIsDialogFilterDisplayed(false) }
+                .onDismiss { launchViewModel.setIsDialogFilterDisplayedState(false) }
                 .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 
             val view = dialog.getCustomView()
-            val order = launchViewModel.getOrder()
-            val filter = launchViewModel.getFilter()
+            val order = launchViewModel.getOrderState()
+            val filter = launchViewModel.getFilterState()
             var newOrder: String? = null
 
             view.findViewById<RadioGroup>(R.id.filter_group).apply {
@@ -380,12 +362,12 @@ class LaunchFragment : BaseFragment() {
                 // Save data to view model
                 launchViewModel.apply {
                     newOrder?.let { order ->
-                        setLaunchOrder(order)
+                        setLaunchOrderState(order)
                     }
                     newFilter?.let { filter ->
-                        setLaunchFilter(filter)
+                        setLaunchFilterState(filter)
                     }
-                    setQuery(yearQuery)
+                    setQueryState(yearQuery)
                 }
 
                 startNewSearch()
@@ -402,8 +384,8 @@ class LaunchFragment : BaseFragment() {
 
     private fun startNewSearch() {
         printLogDebug("EventExecutor", "start new search")
-        launchViewModel.clearList()
-        launchViewModel.loadFirstPage()
+        launchViewModel.clearListState()
+        launchViewModel.newSearchEvent()
     }
 
     private fun filterLaunchItemsInCacheEvent() {
@@ -447,45 +429,3 @@ class LaunchFragment : BaseFragment() {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -12,7 +12,7 @@ import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchViewState
+import com.seancoyle.launch.api.model.LaunchState
 import com.seancoyle.launch.api.usecase.FilterLaunchItemsInCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +30,7 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         launchFilter: Int?,
         page: Int,
         event: Event
-    ): Flow<DataState<LaunchViewState>?> = flow {
+    ): Flow<DataState<LaunchState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
@@ -41,11 +41,11 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             )
         }
 
-        val response = object : CacheResponseHandler<LaunchViewState, List<LaunchModel>>(
+        val response = object : CacheResponseHandler<LaunchState, List<LaunchModel>>(
             response = cacheResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchState> {
                 val message = if (resultObj.isEmpty()) {
                     event.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
                 } else {
@@ -59,7 +59,7 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
                         uiComponentType = uiComponentType,
                         messageType = MessageType.Success
                     ),
-                    data = LaunchViewState(
+                    data = LaunchState(
                         launchList = resultObj
                     ),
                     event = event

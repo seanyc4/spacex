@@ -17,7 +17,7 @@ import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.model.CompanyInfoModel
-import com.seancoyle.launch.api.model.LaunchViewState
+import com.seancoyle.launch.api.model.LaunchState
 import com.seancoyle.launch.api.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -31,21 +31,21 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
     private var companyInfoModel: CompanyInfoModel? = null
-    private var viewState: LaunchViewState = LaunchViewState()
+    private var viewState: LaunchState = LaunchState()
 
     override operator fun invoke(
         event: Event
-    ): Flow<DataState<LaunchViewState>?> = flow {
+    ): Flow<DataState<LaunchState>?> = flow {
 
         val networkResult = safeApiCall(ioDispatcher) {
             networkDataSource.getCompanyInfo()
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchViewState, CompanyInfoModel?>(
+        val networkResponse = object : ApiResponseHandler<LaunchState, CompanyInfoModel?>(
             response = networkResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchViewState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchState> {
                 return if (resultObj != null) {
                     companyInfoModel = resultObj
                     viewState.company = resultObj
@@ -67,7 +67,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 }
             }
 
-            override suspend fun handleFailure(): DataState<LaunchViewState> {
+            override suspend fun handleFailure(): DataState<LaunchState> {
                 return DataState.error(
                     response = Response(
                         message = event.eventName() + EVENT_NETWORK_ERROR,
@@ -92,11 +92,11 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 cacheDataSource.insert(companyInfoModel!!)
             }
 
-            val cacheResponse = object : CacheResponseHandler<LaunchViewState, Long>(
+            val cacheResponse = object : CacheResponseHandler<LaunchState, Long>(
                 response = cacheResult,
                 event = event
             ) {
-                override suspend fun handleSuccess(resultObj: Long): DataState<LaunchViewState> {
+                override suspend fun handleSuccess(resultObj: Long): DataState<LaunchState> {
                     return if (resultObj > 0) {
                         DataState.data(
                             response = Response(

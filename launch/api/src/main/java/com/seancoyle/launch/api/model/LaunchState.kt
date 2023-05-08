@@ -6,7 +6,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class LaunchViewState(
+data class LaunchState(
 
     @IgnoredOnParcel
     var mergedList: List<LaunchType>? = emptyList(),
