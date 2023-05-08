@@ -3,8 +3,13 @@ apply {
     from("$rootDir/hilt.gradle")
 }
 
-plugins{
+plugins {
     id("de.mannodermaus.android-junit5")
+    id("com.android.library")
+}
+
+android {
+    namespace = "com.seancoyle.core"
 }
 
 dependencies {
@@ -13,7 +18,6 @@ dependencies {
     "implementation"(Square.retrofit)
     "implementation"(Timber.timber)
     "implementation"(ScalingPixels.scaling_pixels)
-    "implementation"(Google.material)
 
     "implementation"(AndroidTestDependencies.coroutines_test)
     "implementation"(AndroidTestDependencies.mockk)

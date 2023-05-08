@@ -8,6 +8,9 @@ plugins {
 }
 
 android {
+
+    namespace = "com.seancoyle.database"
+
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {

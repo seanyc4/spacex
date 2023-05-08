@@ -1,6 +1,9 @@
-package com.seancoyle.launch.api.model
+package com.seancoyle.spacex
 
+import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch.api.model.Links
+import com.seancoyle.launch.api.model.Rocket
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject

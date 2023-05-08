@@ -3,7 +3,6 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchFactory
 import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
@@ -23,14 +22,12 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
 
     private val launchDependencies: LaunchDependencies = LaunchDependencies()
     private lateinit var cacheDataSource: LaunchCacheDataSource
-    private lateinit var factory: LaunchFactory
     private lateinit var underTest: GetNumLaunchItemsFromCacheUseCase
 
     @BeforeEach
     fun setup() {
         launchDependencies.build()
         cacheDataSource = launchDependencies.launchCacheDataSource
-        factory = launchDependencies.launchFactory
         underTest =
             GetNumLaunchItemsFromCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,

@@ -5,7 +5,6 @@ import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchFactory
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
@@ -34,7 +33,6 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     private val dependencies: LaunchDependencies = LaunchDependencies()
     private lateinit var cacheDataSource: LaunchCacheDataSource
     private lateinit var networkDataSource: LaunchNetworkDataSource
-    private lateinit var factory: LaunchFactory
     private lateinit var mockWebServer: MockWebServer
     private lateinit var launchOptions: LaunchOptions
     private lateinit var underTest: GetLaunchListFromNetworkAndInsertToCacheUseCase
@@ -44,7 +42,6 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         dependencies.build()
         cacheDataSource = dependencies.launchCacheDataSource
         networkDataSource = dependencies.networkDataSource
-        factory = dependencies.launchFactory
         mockWebServer = dependencies.mockWebServer
         launchOptions = dependencies.launchOptions
 

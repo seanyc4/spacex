@@ -1,24 +1,17 @@
 package com.seancoyle.core.testing
 
 import android.app.Application
-import android.content.res.AssetManager
-import java.io.IOException
-import java.io.InputStream
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import javax.inject.Inject
 
-class JsonFileReader
-@Inject
-constructor(
+class JsonFileReader @Inject constructor(
     private val application: Application
 ) {
-    fun readJSONFromAsset(fileName: String): String? {
-        val json: String? = try {
-            val inputStream: InputStream = (application.assets as AssetManager).open(fileName)
-            inputStream.bufferedReader().use { it.readText() }
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        return json
+    fun readJSONFromAsset(fileName: String): String {
+        val assetManager = application.assets
+        val inputStream = assetManager.open(fileName)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        return reader.use { it.readText() }
     }
 }

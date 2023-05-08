@@ -16,7 +16,7 @@ import com.seancoyle.core.state.UIComponentType.Dialog
 import com.seancoyle.core.state.UIComponentType.None
 import com.seancoyle.core.state.UIComponentType.Toast
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.core_ui.CircularProgressBar
+import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint

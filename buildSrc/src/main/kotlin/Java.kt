@@ -1,4 +1,4 @@
 object Java {
 
-    const val java_version = "11"
+    const val java_version = "17"
 }

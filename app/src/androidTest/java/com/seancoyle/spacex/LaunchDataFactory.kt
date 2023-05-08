@@ -1,15 +1,14 @@
 package com.seancoyle.spacex
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.api.model.LaunchFactory
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.Rocket
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
@@ -28,12 +27,10 @@ constructor(
         "2012", "2010", "2009", "2008", "2007", "2006"
     ).shuffled()
 
-    fun produceListOfLaunches(): List<LaunchModel> {
-        return Gson()
-            .fromJson(
-                jsonFileReader.readJSONFromAsset("launch_list.json"),
-                object : TypeToken<List<LaunchModel>>() {}.type
-            )
+    fun parseJsonFile(): List<LaunchModel> {
+        val jsonString = jsonFileReader.readJSONFromAsset("launch_list.json")
+        return Json.decodeFromString(jsonString)
+
     }
 
     fun createLaunchItem(
