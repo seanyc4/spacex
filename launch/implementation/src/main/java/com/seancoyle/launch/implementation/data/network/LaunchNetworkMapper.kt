@@ -22,78 +22,53 @@ class LaunchNetworkMapper @Inject constructor(
 
     fun mapEntityToList(entity: LaunchDto): List<LaunchModel> {
         return entity.docs.map { item ->
-            val localDateTime = dateFormatter.formatDate(item.launchDate.orEmpty())
-            val launchSuccess = item.isLaunchSuccess
+            with(item) {
+                val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
+                val launchSuccess = isLaunchSuccess
 
-            LaunchModel(
-                id = item.flightNumber ?: 0,
-                launchDate = dateTransformer.formatDateTimeToString(localDateTime),
-                launchDateLocalDateTime = localDateTime,
-                isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),
-                launchSuccessIcon = setIsLaunchSuccessIcon(launchSuccess),
-                launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
-                links = Links(
-                    missionImage = item.links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
-                    articleLink = item.links?.articleLink,
-                    webcastLink = item.links?.videoLink,
-                    wikiLink = item.links?.wikipedia,
-                ),
-                missionName = item.missionName.orEmpty(),
-                rocket = Rocket(
-                    rocketNameAndType = "${item.rocket?.name}/${item.rocket?.type}",
-                ),
-                daysToFromTitle = setCorrectLaunchText(localDateTime),
-                launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),
-                type = LaunchType.TYPE_LAUNCH
-            )
+                LaunchModel(
+                    id = flightNumber ?: 0,
+                    launchDate = dateTransformer.formatDateTimeToString(localDateTime),
+                    launchDateLocalDateTime = localDateTime,
+                    isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),
+                    launchSuccessIcon = mapIsLaunchSuccessToIcon(launchSuccess),
+                    launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
+                    links = Links(
+                        missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
+                        articleLink = links?.articleLink,
+                        webcastLink = links?.videoLink,
+                        wikiLink = links?.wikipedia,
+                    ),
+                    missionName = missionName.orEmpty(),
+                    rocket = Rocket(
+                        rocketNameAndType = "${rocket?.name}/${rocket?.type}",
+                    ),
+                    daysToFromTitle = mapCorrectLaunchText(localDateTime),
+                    launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),
+                    type = LaunchType.TYPE_LAUNCH
+                )
+            }
         }
     }
 
     private fun mapIsLaunchSuccessToInt(isLaunchSuccess: Boolean?) =
         when (isLaunchSuccess) {
-            true -> {
-                LAUNCH_SUCCESS
-            }
-
-            false -> {
-                LAUNCH_FAILED
-            }
-
-            else -> {
-                LAUNCH_UNKNOWN
-            }
+            true -> { LAUNCH_SUCCESS }
+            false -> { LAUNCH_FAILED }
+            else -> { LAUNCH_UNKNOWN }
         }
 
-    private fun setIsLaunchSuccessIcon(isLaunchSuccess: Boolean?) =
+    private fun mapIsLaunchSuccessToIcon(isLaunchSuccess: Boolean?) =
         when (isLaunchSuccess) {
-            true -> {
-                R.drawable.ic_launch_success
-            }
-
-            false -> {
-                R.drawable.ic_launch_fail
-            }
-
-            else -> {
-                R.drawable.ic_launch_unknown
-            }
+            true -> { R.drawable.ic_launch_success }
+            false -> { R.drawable.ic_launch_fail }
+            else -> { R.drawable.ic_launch_unknown }
         }
 
-    private fun setCorrectLaunchText(localDateTime: LocalDateTime) =
-        if (isLaunchPastOrFuture(localDateTime = localDateTime)) {
+    private fun mapCorrectLaunchText(localDateTime: LocalDateTime) =
+        if (dateTransformer.isPastLaunch(launchDate = localDateTime)) {
             R.string.days_since_now
         } else {
             R.string.days_from_now
         }
-
-    private fun isLaunchPastOrFuture(localDateTime: LocalDateTime) =
-        dateTransformer.isPastLaunch(localDateTime)
-
 }
-
-
-
-
-
-
-

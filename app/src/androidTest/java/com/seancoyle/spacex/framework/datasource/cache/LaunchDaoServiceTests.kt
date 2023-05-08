@@ -57,7 +57,7 @@ class LaunchDaoServiceTests {
     @Inject
     lateinit var launchEntityMapper: LaunchEntityMapper
 
-    lateinit var validLaunchYears: List<String>
+    private lateinit var validLaunchYears: List<String>
 
     private lateinit var underTest: LaunchCacheDataSource
 
@@ -74,7 +74,7 @@ class LaunchDaoServiceTests {
 
 
     private fun insertTestData() = runBlocking {
-        val entityList = launchEntityMapper.domainListToEntityList(
+        val entityList = launchEntityMapper.mapDomainListToEntityList(
             launchDataFactory.parseJsonFile()
         )
         dao.insertList(entityList)

@@ -23,7 +23,7 @@ constructor(
 
     override suspend fun insertList(launchList: List<LaunchModel>): LongArray {
         return dao.insertList(
-            entityMapper.domainListToEntityList(
+            entityMapper.mapDomainListToEntityList(
                 launchList = launchList
             )
         )
@@ -54,7 +54,7 @@ constructor(
 
     override suspend fun getAll(): List<LaunchModel>? {
         return dao.getAll()?.let {
-            entityMapper.entityListToDomainList(it)
+            entityMapper.mapEntityListToDomainList(it)
         }
     }
 
@@ -74,7 +74,7 @@ constructor(
             page = page,
             order = order
         )?.let {
-            entityMapper.entityListToDomainList(it)
+            entityMapper.mapEntityListToDomainList(it)
         }
     }
 

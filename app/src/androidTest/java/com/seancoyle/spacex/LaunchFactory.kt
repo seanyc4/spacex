@@ -1,11 +1,9 @@
 package com.seancoyle.spacex
 
 import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchType.Companion.TYPE_LAUNCH
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.Rocket
 import java.time.LocalDateTime
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,39 +40,6 @@ constructor(){
             launchDaysDifference = launchDaysDifference,
             type = type
         )
-    }
-
-    fun createLaunchListTest(
-        num: Int,
-        id: Int?
-    ): List<LaunchModel> {
-        val list: ArrayList<LaunchModel> = ArrayList()
-        for (item in 0 until num) {
-            list.add(
-                createLaunchItem(
-                    id = id ?: UUID.randomUUID().hashCode(),
-                    launchDate = UUID.randomUUID().toString(),
-                    launchDateLocalDateTime = LocalDateTime.now(),
-                    isLaunchSuccess = 2,
-                    launchSuccessIcon = 0,
-                    launchYear = UUID.randomUUID().toString(),
-                    links = Links(
-                        missionImage = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png",
-                        articleLink = "https://www.google.com",
-                        webcastLink = "https://www.youtube.com",
-                        wikiLink = "https://www.wikipedia.com"
-                    ),
-                    missionName = UUID.randomUUID().toString(),
-                    rocket = Rocket(
-                        rocketNameAndType = UUID.randomUUID().toString()
-                    ),
-                    daysToFromTitle = UUID.randomUUID().hashCode(),
-                    launchDaysDifference = UUID.randomUUID().toString(),
-                    type = TYPE_LAUNCH
-                )
-            )
-        }
-        return list
     }
 }
 

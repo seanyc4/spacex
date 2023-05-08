@@ -9,29 +9,19 @@ import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.Rocket
 import javax.inject.Inject
 
-class LaunchEntityMapper
-@Inject
-constructor(){
+class LaunchEntityMapper @Inject constructor() {
 
-    fun entityListToDomainList(entities: List<LaunchEntity>): List<LaunchModel> {
-        val list: ArrayList<LaunchModel> = ArrayList()
-        for (entity in entities) {
-            list.add(mapFromEntity(entity))
-        }
-        return list
+    fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<LaunchModel> {
+        return entities.map { entity -> mapFromEntity(entity) }
     }
 
-    fun domainListToEntityList(launchList: List<LaunchModel>): List<LaunchEntity> {
-        val entities: ArrayList<LaunchEntity> = ArrayList()
-        for (item in launchList) {
-            entities.add(mapToEntity(item))
-        }
-        return entities
+    fun mapDomainListToEntityList(launchList: List<LaunchModel>): List<LaunchEntity> {
+        return launchList.map { item -> mapToEntity(item) }
     }
 
     fun mapFromEntity(entity: LaunchEntity): LaunchModel {
-        entity.apply {
-            return LaunchModel(
+        return with(entity) {
+            LaunchModel(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
@@ -56,8 +46,8 @@ constructor(){
     }
 
     fun mapToEntity(entity: LaunchModel): LaunchEntity {
-        entity.apply {
-            return LaunchEntity(
+        return with(entity) {
+            LaunchEntity(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
@@ -79,12 +69,4 @@ constructor(){
             )
         }
     }
-
 }
-
-
-
-
-
-
-
