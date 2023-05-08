@@ -27,6 +27,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -145,41 +148,45 @@ class LaunchFragment : BaseFragment() {
             uiController.displayProgressBar(it)
         }
 
-        launchViewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
-            stateMessage?.response?.let { response ->
-
-                when (response.message) {
-                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
-                        filterLaunchItemsInCacheEvent()
-                    }
-
-                    else -> {
-                        uiController.onResponseReceived(
-                            response = stateMessage.response,
-                            stateMessageCallback = object : StateMessageCallback {
-                                override fun removeMessageFromStack() {
-                                    launchViewModel.clearStateMessage()
-                                }
-                            }
-                        )
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launchViewModel.stateMessage.collect { stateMessage ->
+                    stateMessage?.response?.let { response ->
 
                         when (response.message) {
-                            // Check cache for data if net connection fails
-                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
+                                launchViewModel.clearStateMessage()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
-                                filterLaunchItemsInCacheEvent()
-                            }
+                            else -> {
+                                uiController.onResponseReceived(
+                                    response = stateMessage.response,
+                                    stateMessageCallback = object : StateMessageCallback {
+                                        override fun removeMessageFromStack() {
+                                            launchViewModel.clearStateMessage()
+                                        }
+                                    }
+                                )
 
-                            LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
-                                getCompanyInfoFromCacheEvent()
-                            }
+                                when (response.message) {
+                                    // Check cache for data if net connection fails
+                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                        filterLaunchItemsInCacheEvent()
+                                    }
 
-                            LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
-                                getCompanyInfoFromCacheEvent()
+                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                        filterLaunchItemsInCacheEvent()
+                                    }
+
+                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                        getCompanyInfoFromCacheEvent()
+                                    }
+
+                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                        getCompanyInfoFromCacheEvent()
+                                    }
+                                }
                             }
                         }
                     }

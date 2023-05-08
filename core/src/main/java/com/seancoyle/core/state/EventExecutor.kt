@@ -66,7 +66,7 @@ abstract class EventExecutor<ViewState>(
         }
         // Check the top of the stack, if a dialog is showing, do not allow new Events
         if (!isMessageStackEmpty()) {
-            if (messageStack[0].response.uiComponentType == UIComponentType.Dialog) {
+            if (messageStack.getMessageAt(0)?.response?.uiComponentType == UIComponentType.Dialog) {
                 return false
             }
         }
@@ -93,7 +93,7 @@ abstract class EventExecutor<ViewState>(
     fun clearAllStateMessages() = messageStack.clear()
 
     fun printStateMessages() {
-        for (message in messageStack) {
+        for (message in messageStack.allMessages) {
             printLogDebug("EventExecutor", "${message.response.message}")
         }
     }

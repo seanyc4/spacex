@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
-import com.seancoyle.core.state.EventExecutor
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
+import com.seancoyle.core.state.EventExecutor
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessage
@@ -48,7 +48,7 @@ constructor(
 
     val loading: LiveData<Boolean> = eventExecutor.loading
 
-    val stateMessage: LiveData<StateMessage?>
+    val stateMessage: StateFlow<StateMessage?>
         get() = eventExecutor.messageStack.stateMessage
 
     fun getMessageStackSize(): Int {

@@ -1,52 +1,53 @@
 package com.seancoyle.core.state
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.seancoyle.core.util.printLogDebug
-import kotlinx.parcelize.IgnoredOnParcel
+class MessageStack{
 
-class MessageStack : ArrayList<StateMessage>() {
+    private val _stateMessage = MutableStateFlow<StateMessage?>(null)
+    val stateMessage: StateFlow<StateMessage?> = _stateMessage.asStateFlow()
 
-    @IgnoredOnParcel
-    private val _stateMessage: MutableLiveData<StateMessage?> = MutableLiveData()
+    private val messages = mutableListOf<StateMessage>()
 
-    @IgnoredOnParcel
-    val stateMessage: LiveData<StateMessage?>
-        get() = _stateMessage
+    val size: Int
+        get() = messages.size
+
+    val allMessages: List<StateMessage>
+        get() = messages.toList()
 
     fun isStackEmpty(): Boolean {
-        return isEmpty()
+        return messages.isEmpty()
     }
 
-    override fun addAll(elements: Collection<StateMessage>): Boolean {
+    fun addAll(elements: Collection<StateMessage>): Boolean {
         elements.forEach { add(it) }
         return true
     }
 
-    override fun add(element: StateMessage): Boolean {
-        if (contains(element)) { // prevent duplicate errors added to stack
+    fun add(element: StateMessage): Boolean {
+        if (messages.contains(element)) { // prevent duplicate errors added to stack
             return false
         }
-        val transaction = super.add(element)
-        if (size == 1) {
-            setStateMessage(stateMessage = element)
+        val transaction = messages.add(element)
+        if (messages.size == 1) {
+            _stateMessage.value = element
         }
         return transaction
     }
 
-    override fun removeAt(index: Int): StateMessage {
+    fun removeAt(index: Int): StateMessage {
         return try {
-            val transaction = super.removeAt(index)
-            if (isNotEmpty()) {
-                setStateMessage(stateMessage = this[0])
+            val transaction = messages.removeAt(index)
+            if (messages.isNotEmpty()) {
+                _stateMessage.value = messages[0]
             } else {
-                printLogDebug("MessageStack", "stack is empty")
-                setStateMessage(null)
+                _stateMessage.value = null
             }
             transaction
         } catch (e: IndexOutOfBoundsException) {
-            setStateMessage(null)
+            _stateMessage.value = null
             e.printStackTrace()
             StateMessage(
                 Response(
@@ -58,7 +59,16 @@ class MessageStack : ArrayList<StateMessage>() {
         }
     }
 
-    private fun setStateMessage(stateMessage: StateMessage?) {
-        _stateMessage.value = stateMessage
+    fun getMessageAt(index: Int): StateMessage? {
+        return if (index >= 0 && index < messages.size) {
+            messages[index]
+        } else {
+            null
+        }
+    }
+
+    fun clear() {
+        messages.clear()
+        _stateMessage.value = null
     }
 }
