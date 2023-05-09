@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.core.testing.JsonFileReader
 import dagger.Module
 import dagger.Provides
@@ -30,31 +29,9 @@ object TestModule {
 
     @Singleton
     @Provides
-    fun provideAndroidTestUtils(): AndroidTestUtils {
-        return AndroidTestUtils(true)
-    }
-
-    @Singleton
-    @Provides
     fun providesJsonFileReader(application: HiltTestApplication): JsonFileReader {
         return JsonFileReader(
             application = application
         )
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface MessageStack {
 
     val stateMessage: StateFlow<StateMessage?>
+
     fun isStackEmpty(): Boolean
 
     fun addAll(elements: Collection<StateMessage>): Boolean

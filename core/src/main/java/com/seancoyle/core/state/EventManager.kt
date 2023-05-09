@@ -5,7 +5,6 @@ import com.seancoyle.core.util.printLogDebug
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-
 class EventManager {
 
     private val activeEvents = mutableMapOf<String, Event>()
@@ -16,7 +15,7 @@ class EventManager {
 
     fun getActiveEventNames(): Set<String> = activeEvents.keys
 
-    fun clearActiveEventCounter() {
+    fun clearActiveEvents() {
         printLogDebug("EventExecutor", "Clear active state events")
         EspressoIdlingResource.clear()
         activeEvents.clear()

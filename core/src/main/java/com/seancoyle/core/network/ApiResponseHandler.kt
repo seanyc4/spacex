@@ -25,7 +25,7 @@ abstract class ApiResponseHandler <UiState, Data>(
                     DataState.error(
                         response = Response(
                             message = "${event?.errorInfo()}\n\nReason: ${NETWORK_DATA_NULL}.",
-                            uiComponentType = UIComponentType.Dialog,
+                            messageDisplayType = MessageDisplayType.Dialog,
                             messageType = MessageType.Error
                         ),
                         event = event

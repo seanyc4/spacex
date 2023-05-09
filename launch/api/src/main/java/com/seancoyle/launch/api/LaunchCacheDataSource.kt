@@ -8,7 +8,7 @@ interface LaunchCacheDataSource {
 
     suspend fun deleteById(id: Int): Int
 
-    suspend fun deleteList(launchList: List<LaunchModel>): Int
+    suspend fun deleteList(launches: List<LaunchModel>): Int
 
     suspend fun deleteAll()
 
@@ -18,7 +18,7 @@ interface LaunchCacheDataSource {
 
     suspend fun getTotalEntries(): Int
 
-    suspend fun insertList(launchList: List<LaunchModel>): LongArray
+    suspend fun insertList(launches: List<LaunchModel>): LongArray
 
     suspend fun filterLaunchList(
         year: String?,

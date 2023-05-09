@@ -54,7 +54,7 @@ abstract class EventExecutor<UiState>(
     private fun canExecuteNewEvent(event: Event): Boolean {
         return !eventManager.isEventActive(event) &&
                 messageStack.isStackEmpty() ||
-                messageStack.peek()?.response?.uiComponentType != UIComponentType.Dialog
+                messageStack.peek()?.response?.messageDisplayType != MessageDisplayType.Dialog
     }
 
     private fun handleNewStateMessage(stateMessage: StateMessage) {
@@ -74,7 +74,7 @@ abstract class EventExecutor<UiState>(
 
     fun getActiveJobs() = eventManager.getActiveEventNames()
 
-    fun clearActiveEventCounter() = eventManager.clearActiveEventCounter()
+    fun clearActiveEventCounter() = eventManager.clearActiveEvents()
 
     fun printStateMessages() {
         messageStack.getAllMessages().forEach { message ->
@@ -89,6 +89,6 @@ abstract class EventExecutor<UiState>(
     fun cancelJobs() {
         channelScope?.takeIf { it.isActive }?.cancel()
         channelScope = null
-        eventManager.clearActiveEventCounter()
+        eventManager.clearActiveEvents()
     }
 }

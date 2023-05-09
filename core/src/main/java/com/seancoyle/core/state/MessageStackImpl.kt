@@ -48,7 +48,7 @@ class MessageStackImpl @Inject constructor() : MessageStack {
             StateMessage(
                 Response(
                     message = "does nothing",
-                    uiComponentType = UIComponentType.None,
+                    messageDisplayType = MessageDisplayType.None,
                     messageType = MessageType.None
                 )
             )

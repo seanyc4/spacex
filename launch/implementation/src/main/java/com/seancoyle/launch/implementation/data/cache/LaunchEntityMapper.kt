@@ -15,8 +15,8 @@ class LaunchEntityMapper @Inject constructor() {
         return entities.map { entity -> mapFromEntity(entity) }
     }
 
-    fun mapDomainListToEntityList(launchList: List<LaunchModel>): List<LaunchEntity> {
-        return launchList.map { item -> mapToEntity(item) }
+    fun mapDomainListToEntityList(launches: List<LaunchModel>): List<LaunchEntity> {
+        return launches.map { item -> mapToEntity(item) }
     }
 
     fun mapFromEntity(entity: LaunchEntity): LaunchModel {

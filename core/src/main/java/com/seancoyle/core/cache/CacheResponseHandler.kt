@@ -15,7 +15,7 @@ abstract class CacheResponseHandler <UiState, Data>(
                 DataState.error(
                     response = Response(
                         message = "${event?.errorInfo()}\n\nReason: ${response.errorMessage}",
-                        uiComponentType = UIComponentType.None,
+                        messageDisplayType = MessageDisplayType.None,
                         messageType = MessageType.Error
                     ),
                     event = event
@@ -27,7 +27,7 @@ abstract class CacheResponseHandler <UiState, Data>(
                     DataState.error(
                         response = Response(
                             message = "${event?.errorInfo()}\n\nReason: ${CACHE_DATA_NULL}.",
-                            uiComponentType = UIComponentType.None,
+                            messageDisplayType = MessageDisplayType.None,
                             messageType = MessageType.Error
                         ),
                         event = event
