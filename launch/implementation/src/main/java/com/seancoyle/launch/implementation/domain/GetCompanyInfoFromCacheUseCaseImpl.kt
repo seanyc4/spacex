@@ -37,18 +37,16 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
             event = event
         ) {
             override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchState> {
-                var message: String? =
-                   event.eventName() + EVENT_CACHE_SUCCESS
-                var uiComponentType: UIComponentType? = UIComponentType.None
-                if (resultObj == null) {
-                    message =
-                        event.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
-                    uiComponentType = UIComponentType.Toast
+                val (resultMessage, uiComponentType) = if (resultObj == null) {
+                    Pair(EVENT_CACHE_NO_MATCHING_RESULTS, UIComponentType.Toast)
+                } else {
+                    Pair(EVENT_CACHE_SUCCESS, UIComponentType.None)
                 }
+                val message = event.eventName() + resultMessage
                 return DataState.data(
                     response = Response(
                         message = message,
-                        uiComponentType = uiComponentType as UIComponentType,
+                        uiComponentType = uiComponentType,
                         messageType = MessageType.Success
                     ),
                     data = LaunchState(

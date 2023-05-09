@@ -20,4 +20,6 @@ interface MessageStack {
     fun getSize(): Int
 
     fun getAllMessages(): List<StateMessage>
+
+    fun peek(): StateMessage?
 }

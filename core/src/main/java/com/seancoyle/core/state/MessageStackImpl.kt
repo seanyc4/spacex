@@ -12,17 +12,10 @@ class MessageStackImpl @Inject constructor() : MessageStack {
 
     private val messages = mutableListOf<StateMessage>()
 
-    override fun getSize(): Int {
-        return messages.size
-    }
-
-    override fun getAllMessages(): List<StateMessage> {
-        return messages.toList()
-    }
-
-    override fun isStackEmpty(): Boolean {
-        return messages.isEmpty()
-    }
+    override fun getSize() = messages.size
+    override fun getAllMessages() =messages.toList()
+    override fun isStackEmpty() =messages.isEmpty()
+    override fun peek() = messages.firstOrNull()
 
     override fun addAll(elements: Collection<StateMessage>): Boolean {
         elements.forEach { add(it) }

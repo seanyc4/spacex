@@ -90,7 +90,7 @@ class LaunchViewModel @Inject constructor(
 
         data.let { viewState ->
             viewState.launchList?.let { launchList ->
-                setLaunchList(launchList)
+                setLaunchListState(launchList)
                 createMergedList(launchList)
             }
 
@@ -104,10 +104,10 @@ class LaunchViewModel @Inject constructor(
     private fun createMergedList(
         launchList: List<LaunchModel>
     ) {
-        if (launchList.isNotEmpty() && getCompanyInfo() != null) {
-            setMergedList(
+        if (launchList.isNotEmpty() && getCompanyInfoState() != null) {
+            setMergedListState(
                 createMergedListUseCase.createLaunchData(
-                    companyInfo = getCompanyInfo(),
+                    companyInfo = getCompanyInfoState(),
                     launchList = launchList
                 )
             )

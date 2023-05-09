@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class EventExecutor<ViewState>(
+abstract class EventExecutor<UiState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     val messageStack: MessageStack
@@ -26,32 +26,24 @@ abstract class EventExecutor<ViewState>(
     private val eventManager: EventManager = EventManager()
     val loading = eventManager.loading
 
-    fun cancelCurrentJobs() {
-        cancelJobs()
-    }
+    fun cancelCurrentJobs() = cancelJobs()
 
-    abstract fun setUpdatedState(data: ViewState)
+    abstract fun setUpdatedState(data: UiState)
 
     fun launchJob(
         event: Event,
-        jobFunction: Flow<DataState<ViewState>?>
+        jobFunction: Flow<DataState<UiState>?>
     ) {
         if (canExecuteNewEvent(event)) {
             printLogDebug("EventExecutor", "launching job: ${event.eventName()}")
-            addEvent(event)
+            eventManager.addEvent(event)
             jobFunction
                 .onEach { dataState ->
                     dataState?.let {
                         withContext(mainDispatcher) {
-                            dataState.data?.let { data ->
-                                setUpdatedState(data)
-                            }
-                            dataState.stateMessage?.let { stateMessage ->
-                                handleNewStateMessage(stateMessage)
-                            }
-                            dataState.event?.let { stateEvent ->
-                                removeEvent(stateEvent)
-                            }
+                            it.data?.let(::setUpdatedState)
+                            it.stateMessage?.let(messageStack::add)
+                            it.event?.let(eventManager::removeEvent)
                         }
                     }
                 }
@@ -60,21 +52,9 @@ abstract class EventExecutor<ViewState>(
     }
 
     private fun canExecuteNewEvent(event: Event): Boolean {
-        // If a job is already active, do not allow duplication
-        if (isJobAlreadyActive(event)) {
-            return false
-        }
-        // Check the top of the stack, if a dialog is showing, do not allow new Events
-        if (!isMessageStackEmpty()) {
-            if (messageStack.getMessageAt(0)?.response?.uiComponentType == UIComponentType.Dialog) {
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun isMessageStackEmpty(): Boolean {
-        return messageStack.isStackEmpty()
+        return !eventManager.isEventActive(event) &&
+                messageStack.isStackEmpty() ||
+                messageStack.peek()?.response?.uiComponentType != UIComponentType.Dialog
     }
 
     private fun handleNewStateMessage(stateMessage: StateMessage) {
@@ -92,66 +72,23 @@ abstract class EventExecutor<ViewState>(
 
     fun clearAllStateMessages() = messageStack.clear()
 
+    fun getActiveJobs() = eventManager.getActiveEventNames()
+
+    fun clearActiveEventCounter() = eventManager.clearActiveEventCounter()
+
     fun printStateMessages() {
-        for (message in messageStack.getAllMessages()) {
+        messageStack.getAllMessages().forEach { message ->
             printLogDebug("EventExecutor", "${message.response.message}")
         }
     }
 
-    fun getActiveJobs() = eventManager.getActiveJobNames()
-
-    fun clearActiveEventCounter() = eventManager.clearActiveEventCounter()
-
-    private fun addEvent(event: Event) = eventManager.addEvent(event)
-
-    private fun removeEvent(event: Event?) = eventManager.removeEvent(event)
-
-    private fun isEventActive(event: Event) = eventManager.isEventActive(event)
-
-    private fun isJobAlreadyActive(event: Event): Boolean {
-        return isEventActive(event)
-    }
-
     private fun getChannelScope(ioDispatcher: CoroutineDispatcher): CoroutineScope {
-        return channelScope ?: setupNewChannelScope(CoroutineScope(ioDispatcher))
-    }
-
-    private fun setupNewChannelScope(coroutineScope: CoroutineScope): CoroutineScope {
-        channelScope = coroutineScope
-        return channelScope as CoroutineScope
+        return channelScope ?: CoroutineScope(ioDispatcher).also { channelScope = it }
     }
 
     fun cancelJobs() {
-        if (channelScope != null) {
-            if (channelScope?.isActive == true) {
-                channelScope?.cancel()
-            }
-            channelScope = null
-        }
-        clearActiveEventCounter()
+        channelScope?.takeIf { it.isActive }?.cancel()
+        channelScope = null
+        eventManager.clearActiveEventCounter()
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

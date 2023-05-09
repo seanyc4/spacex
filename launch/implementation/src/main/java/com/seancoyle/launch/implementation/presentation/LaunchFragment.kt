@@ -144,8 +144,12 @@ class LaunchFragment : BaseFragment() {
 
     private fun subscribeObservers() {
 
-        launchViewModel.loading.observe(viewLifecycleOwner) {
-            uiController.displayProgressBar(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                launchViewModel.loading.collect{ isLoading ->
+                    uiController.displayProgressBar(isLoading)
+                }
+            }
         }
 
         lifecycleScope.launch {
@@ -210,11 +214,12 @@ class LaunchFragment : BaseFragment() {
         refreshState: PullRefreshState
     ) {
         val viewState = viewModel.uiState.collectAsState()
+        val loading = viewModel.loading.collectAsState()
         printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
         LaunchContent(
             launchItems = viewState.value.mergedList ?: emptyList(),
             modifier = modifier,
-            loading = viewModel.loading.value ?: false,
+            loading = loading.value,
             onChangeScrollPosition = viewModel::setScrollPositionState,
             loadNextPage = viewModel::nextPage,
             page = viewModel.getPageState(),

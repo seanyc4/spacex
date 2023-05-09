@@ -46,12 +46,12 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             event = event
         ) {
             override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchState> {
-                val message = if (resultObj.isEmpty()) {
-                    event.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
+                val (resultMessage, uiComponentType) = if (resultObj.isEmpty()) {
+                    Pair(EVENT_CACHE_NO_MATCHING_RESULTS, UIComponentType.Toast)
                 } else {
-                    event.eventName() + EVENT_CACHE_SUCCESS
+                    Pair(EVENT_CACHE_SUCCESS, UIComponentType.None)
                 }
-                val uiComponentType = if (resultObj.isEmpty()) UIComponentType.Toast else UIComponentType.None
+                val message = event.eventName() + resultMessage
 
                 return DataState.data(
                     response = Response(
@@ -65,7 +65,6 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
                     event = event
                 )
             }
-
         }.getResult()
         emit(response)
     }

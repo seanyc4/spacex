@@ -1,6 +1,5 @@
 package com.seancoyle.core.presentation
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
@@ -48,7 +47,7 @@ constructor(
         }
     }
 
-    val loading: LiveData<Boolean> = eventExecutor.loading
+    val loading: StateFlow<Boolean> = eventExecutor.loading
 
     val stateMessage: StateFlow<StateMessage?>
         get() = eventExecutor.messageStack.stateMessage
