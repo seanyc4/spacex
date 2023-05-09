@@ -1,20 +1,18 @@
 package com.seancoyle.spacex.framework.presentation
 
-import android.content.Context
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.seancoyle.core.presentation.UIController
+import com.seancoyle.core.presentation.UIInteractionHandler
 import com.seancoyle.core.presentation.displayToast
+import com.seancoyle.core.state.MessageDisplayType.Dialog
+import com.seancoyle.core.state.MessageDisplayType.None
+import com.seancoyle.core.state.MessageDisplayType.Toast
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessageCallback
-import com.seancoyle.core.state.UIComponentType.Dialog
-import com.seancoyle.core.state.UIComponentType.None
-import com.seancoyle.core.state.UIComponentType.Toast
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.spacex.R
@@ -27,7 +25,7 @@ import kotlinx.coroutines.FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
-    UIController {
+    UIInteractionHandler {
 
     private lateinit var binding :ActivityMainBinding
     private var dialogInView: MaterialDialog? = null
@@ -54,8 +52,7 @@ class MainActivity : AppCompatActivity(),
         response: Response,
         stateMessageCallback: StateMessageCallback
     ) {
-
-        when (response.uiComponentType) {
+        when (response.messageDisplayType) {
 
             is Toast -> {
                 response.message?.let {
@@ -85,7 +82,6 @@ class MainActivity : AppCompatActivity(),
         stateMessageCallback: StateMessageCallback
     ) {
         response.message?.let { message ->
-
             dialogInView = when (response.messageType) {
 
                 is MessageType.Error -> {
@@ -116,16 +112,6 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         } ?: stateMessageCallback.removeMessageFromStack()
-    }
-
-    override fun hideSoftKeyboard() {
-        if (currentFocus != null) {
-            val inputMethodManager = getSystemService(
-                Context.INPUT_METHOD_SERVICE
-            ) as InputMethodManager
-            inputMethodManager
-                .hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
     }
 
     override fun onPause() {

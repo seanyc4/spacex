@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -43,7 +44,8 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
-import com.seancoyle.core.presentation.BaseFragment
+import com.seancoyle.core.presentation.UIInteractionHandler
+import com.seancoyle.core.presentation.UIInteractionHandlerDelegate
 import com.seancoyle.core.state.*
 import com.seancoyle.core.util.GenericErrors.ERROR_UNKNOWN
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
@@ -68,8 +70,9 @@ const val LINKS_KEY = "links"
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment : BaseFragment() {
+class LaunchFragment: Fragment() {
 
+    private val uiInteractionHandler: UIInteractionHandler by UIInteractionHandlerDelegate()
     private val launchViewModel by viewModels<LaunchViewModel>()
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -147,7 +150,7 @@ class LaunchFragment : BaseFragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 launchViewModel.loading.collect{ isLoading ->
-                    uiController.displayProgressBar(isLoading)
+                    uiInteractionHandler.displayProgressBar(isLoading)
                 }
             }
         }
@@ -164,7 +167,7 @@ class LaunchFragment : BaseFragment() {
                             }
 
                             else -> {
-                                uiController.onResponseReceived(
+                                uiInteractionHandler.onResponseReceived(
                                     response = stateMessage.response,
                                     stateMessageCallback = object : StateMessageCallback {
                                         override fun removeMessageFromStack() {
@@ -419,7 +422,7 @@ class LaunchFragment : BaseFragment() {
                     response = Response(
                         messageType = MessageType.Info,
                         message = getString(R.string.no_links),
-                        uiComponentType = UIComponentType.Dialog
+                        messageDisplayType = MessageDisplayType.Dialog
                     )
                 )
             )
@@ -433,7 +436,7 @@ class LaunchFragment : BaseFragment() {
                     response = Response(
                         messageType = MessageType.Error,
                         message = getString(R.string.error_links),
-                        uiComponentType = UIComponentType.Dialog
+                        messageDisplayType = MessageDisplayType.Dialog
                     )
                 )
             )
