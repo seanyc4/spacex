@@ -70,25 +70,29 @@ class LaunchViewModel @Inject constructor(
         data.let { viewState ->
             viewState.launchList?.let { launchList ->
                 setLaunchList(launchList)
-                printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
-                if (launchList.isNotEmpty()) {
-                    setMergedList(
-                        createMergedListUseCase.createLaunchData(
-                            companyInfo = getCompanyInfo(),
-                            launchList = launchList
-                        )
-                    )
-                }
+                createMergedList(launchList)
             }
 
             viewState.company?.let { companyInfo ->
                 setCompanyInfo(companyInfo)
-                printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
             }
 
             viewState.numLaunchItemsInCache?.let { numItems ->
                 setNumLaunchItemsInCache(numItems)
             }
+        }
+    }
+
+    private fun createMergedList(
+        launchList: List<LaunchModel>
+    ) {
+        if (launchList.isNotEmpty() && getCompanyInfo() != null) {
+            setMergedList(
+                createMergedListUseCase.createLaunchData(
+                    companyInfo = getCompanyInfo(),
+                    launchList = launchList
+                )
+            )
         }
     }
 
@@ -209,6 +213,7 @@ class LaunchViewModel @Inject constructor(
     fun getPage() = getCurrentStateOrNew().page ?: 1
     fun getOrder() = getCurrentStateOrNew().order ?: LAUNCH_ORDER_DESC
     fun getIsDialogFilterDisplayed() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
+    private fun getMergedList() = getCurrentStateOrNew().mergedList ?: emptyList()
 
 
     fun getFilter(): Int? {

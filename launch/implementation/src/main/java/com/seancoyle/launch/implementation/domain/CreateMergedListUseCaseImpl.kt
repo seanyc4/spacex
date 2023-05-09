@@ -18,35 +18,13 @@ class CreateMergedListUseCaseImpl @Inject constructor(
         companyInfo: CompanyInfoModel?,
         launchList: List<LaunchModel>
     ): List<LaunchType> {
-
-        val consolidatedList = mutableListOf<LaunchType>()
-
-        consolidatedList.add(
-            SectionTitle(
-                title = "COMPANY",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        consolidatedList.add(
-            CompanySummary(
-                summary = buildCompanyInfoString(companyInfo),
-                type = LaunchType.TYPE_COMPANY
-            )
-        )
-        consolidatedList.add(
-            SectionTitle(
-                title = "LAUNCH",
-                type = LaunchType.TYPE_TITLE
-            )
-        )
-        launchList.map { launchItems ->
-            consolidatedList.add(
-                launchItems
-            )
-
+        val mergedList = mutableListOf<LaunchType>().apply {
+            add(SectionTitle(title = "COMPANY", type = LaunchType.TYPE_TITLE))
+            add(CompanySummary(summary = buildCompanyInfoString(companyInfo), type = LaunchType.TYPE_COMPANY))
+            add(SectionTitle(title = "LAUNCH", type = LaunchType.TYPE_TITLE))
+            addAll(launchList)
         }
-
-        return consolidatedList
+        return mergedList
     }
 
     private fun buildCompanyInfoString(companyInfo: CompanyInfoModel?) = String.format(
