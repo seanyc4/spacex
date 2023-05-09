@@ -1,12 +1,12 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
+import com.seancoyle.launch.api.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.api.usecase.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
-import com.seancoyle.launch.implementation.domain.CreateMergedListUseCaseImpl
+import com.seancoyle.launch.implementation.domain.CreateMergedLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import dagger.Binds
@@ -22,8 +22,8 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsGetLaunchListFromNetworkAndInsertToCacheUseCase(
-        impl: GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
-    ): GetLaunchListFromNetworkAndInsertToCacheUseCase
+        impl: GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
+    ): GetLaunchesFromNetworkAndInsertToCacheUseCase
 
 
     @Binds
@@ -38,18 +38,18 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsCreateMergedListUseCase(
-        impl: CreateMergedListUseCaseImpl
-    ): CreateMergedListUseCase
+        impl: CreateMergedLaunchesUseCaseImpl
+    ): CreateMergedLaunchesUseCase
 
     companion object {
         @ViewModelScoped
         @Provides
         fun provideLaunchUseCases(
-            getLaunchListFromNetworkAndInsertToCacheUseCase: GetLaunchListFromNetworkAndInsertToCacheUseCase,
+            getLaunchesFromNetworkAndInsertToCacheUseCase: GetLaunchesFromNetworkAndInsertToCacheUseCase,
             filterLaunchItemsInCacheUseCase: FilterLaunchItemsInCacheUseCase
         ): LaunchUseCases {
             return LaunchUseCases(
-                getLaunchListFromNetworkAndInsertToCacheUseCase = getLaunchListFromNetworkAndInsertToCacheUseCase,
+                getLaunchesFromNetworkAndInsertToCacheUseCase = getLaunchesFromNetworkAndInsertToCacheUseCase,
                 filterLaunchItemsInCacheUseCase = filterLaunchItemsInCacheUseCase
             )
         }

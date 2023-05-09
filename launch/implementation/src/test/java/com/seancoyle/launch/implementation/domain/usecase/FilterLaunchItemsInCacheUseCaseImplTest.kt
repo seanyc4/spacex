@@ -66,7 +66,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -92,7 +92,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -119,7 +119,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -147,7 +147,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -172,7 +172,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -199,7 +199,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -227,7 +227,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -254,7 +254,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -281,7 +281,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                 LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }
@@ -306,7 +306,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
                     ?.contains(CacheErrors.CACHE_ERROR_UNKNOWN) ?: false
             )
 
-            value?.data?.launchList?.let {
+            value?.data?.launches?.let {
                 launchList = it
             }
         }

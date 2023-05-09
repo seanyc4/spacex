@@ -5,14 +5,14 @@ import com.seancoyle.core.state.StateMessage
 
 sealed class LaunchEvent : Event {
 
-    object GetLaunchListFromNetworkAndInsertToCacheEvent : LaunchEvent() {
+    object GetLaunchesFromNetworkAndInsertToCacheEvent : LaunchEvent() {
 
         override fun errorInfo(): String {
-            return "Error getting launch list from network."
+            return "Error getting launches from network."
         }
 
         override fun eventName(): String {
-            return "GetLaunchItemsFromNetworkAndInsertToCacheEvent"
+            return "GetLaunchesFromNetworkAndInsertToCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = true
@@ -47,7 +47,7 @@ sealed class LaunchEvent : Event {
     object FilterLaunchItemsInCacheEvent: LaunchEvent(){
 
         override fun errorInfo(): String {
-            return "Error getting list of launch items."
+            return "Error getting filtered launches from cache."
         }
 
         override fun eventName(): String {
@@ -60,11 +60,11 @@ sealed class LaunchEvent : Event {
     object GetNumLaunchItemsInCacheEvent : LaunchEvent() {
 
         override fun errorInfo(): String {
-            return "Error getting the number of launch items from the cache."
+            return "Error getting the number of launches from the cache."
         }
 
         override fun eventName(): String {
-            return "GetNumLaunchItemsInCacheEvent"
+            return "GetNumLaunchesInCacheEvent"
         }
 
         override fun shouldDisplayProgressBar() = false

@@ -7,9 +7,9 @@ import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.LaunchNetworkDataSource
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchOptions
-import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
 import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     private lateinit var networkDataSource: LaunchNetworkDataSource
     private lateinit var mockWebServer: MockWebServer
     private lateinit var launchOptions: LaunchOptions
-    private lateinit var underTest: GetLaunchListFromNetworkAndInsertToCacheUseCase
+    private lateinit var underTest: GetLaunchesFromNetworkAndInsertToCacheUseCase
 
     @BeforeEach
     fun setup() {
@@ -46,7 +46,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         launchOptions = dependencies.launchOptions
 
         underTest =
-            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl(
+            GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
                 cacheDataSource = cacheDataSource,
                 launchNetworkDataSource = networkDataSource,
@@ -67,11 +67,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
 
         underTest(
-            event = LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+            event = LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+                LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
             )
         }
 
@@ -96,11 +96,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
 
         underTest(
-            event = LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+            event = LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
+                LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
             )
         }
     }

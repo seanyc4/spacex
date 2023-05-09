@@ -5,7 +5,7 @@ import com.seancoyle.core.state.Event
 import com.seancoyle.launch.api.model.LaunchState
 import kotlinx.coroutines.flow.Flow
 
-interface GetLaunchListFromNetworkAndInsertToCacheUseCase {
+interface GetLaunchesFromNetworkAndInsertToCacheUseCase {
     operator fun invoke(
         event: Event
     ): Flow<DataState<LaunchState>?>

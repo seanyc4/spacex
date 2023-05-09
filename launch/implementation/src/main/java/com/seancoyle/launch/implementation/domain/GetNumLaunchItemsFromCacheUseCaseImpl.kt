@@ -36,7 +36,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
         ) {
             override suspend fun handleSuccess(resultObj: Int): DataState<LaunchState> {
                 val viewState = LaunchState(
-                    numLaunchItemsInCache = resultObj
+                    numLaunchesInCache = resultObj
                 )
                 return DataState.data(
                     response = Response(

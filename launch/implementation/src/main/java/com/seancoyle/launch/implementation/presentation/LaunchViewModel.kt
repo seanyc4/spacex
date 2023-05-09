@@ -17,14 +17,14 @@ import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchState
 import com.seancoyle.launch.api.model.LaunchType
-import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
+import com.seancoyle.launch.api.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.CreateMessageEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +42,7 @@ class LaunchViewModel @Inject constructor(
     private val launchUseCases: LaunchUseCases,
     private val companyInfoUseCases: CompanyInfoUseCases,
     private val appDataStoreManager: AppDataStore,
-    private val createMergedListUseCase: CreateMergedListUseCase,
+    private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
     private val savedStateHandle: SavedStateHandle,
     messageStack: MessageStack,
 ) : BaseViewModel<LaunchState>(
@@ -65,7 +65,7 @@ class LaunchViewModel @Inject constructor(
         } else {
             //Fresh app launch - get data from network
             setEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
-            setEvent(GetLaunchListFromNetworkAndInsertToCacheEvent)
+            setEvent(GetLaunchesFromNetworkAndInsertToCacheEvent)
         }
     }
 
@@ -89,9 +89,9 @@ class LaunchViewModel @Inject constructor(
     override fun setUpdatedState(data: LaunchState) {
 
         data.let { viewState ->
-            viewState.launchList?.let { launchList ->
-                setLaunchListState(launchList)
-                createMergedList(launchList)
+            viewState.launches?.let { launches ->
+                setLaunchesState(launches)
+                createMergedList(launches)
             }
 
             viewState.company?.let { companyInfo ->
@@ -102,13 +102,13 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun createMergedList(
-        launchList: List<LaunchModel>
+        launches: List<LaunchModel>
     ) {
-        if (launchList.isNotEmpty() && getCompanyInfoState() != null) {
+        if (launches.isNotEmpty() && getCompanyInfoState() != null) {
             setMergedListState(
-                createMergedListUseCase.createLaunchData(
+                createMergedLaunchesUseCase.invoke(
                     companyInfo = getCompanyInfoState(),
-                    launchList = launchList
+                    launches = launches
                 )
             )
         }
@@ -118,8 +118,8 @@ class LaunchViewModel @Inject constructor(
 
         val job: Flow<DataState<LaunchState>?> = when (event) {
 
-            is GetLaunchListFromNetworkAndInsertToCacheEvent -> {
-                launchUseCases.getLaunchListFromNetworkAndInsertToCacheUseCase.invoke(
+            is GetLaunchesFromNetworkAndInsertToCacheEvent -> {
+                launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase.invoke(
                     event = event
                 )
             }
@@ -164,13 +164,13 @@ class LaunchViewModel @Inject constructor(
         return LaunchState()
     }
 
-    private fun setLaunchListState(launchList: List<LaunchModel>) {
+    private fun setLaunchesState(launches: List<LaunchModel>) {
         val currentState = getCurrentStateOrNew()
-        currentState.launchList = launchList
+        currentState.launches = launches
         setState(currentState)
     }
 
-    fun getLaunchListState() = getCurrentStateOrNew().launchList
+    fun getLaunchesState() = getCurrentStateOrNew().launches
 
     private fun setCompanyInfoState(companyInfo: CompanyInfoModel) {
         val currentState = getCurrentStateOrNew()
@@ -189,8 +189,8 @@ class LaunchViewModel @Inject constructor(
     fun clearListState() {
         setState(
             getCurrentStateOrNew().copy(
-                launchList = emptyList(),
-                mergedList = emptyList()
+                launches = emptyList(),
+                mergedLaunches = emptyList()
             )
         )
     }
@@ -198,7 +198,7 @@ class LaunchViewModel @Inject constructor(
     fun newSearchEvent() {
         resetPageState()
         refreshSearchQueryEvent()
-        printLogDebug("LaunchListViewModel", "loadFirstPage: ${getCurrentStateOrNew().yearQuery}")
+        printLogDebug("LaunchViewModel", "loadFirstPage: ${getCurrentStateOrNew().yearQuery}")
     }
 
     fun nextPage() {
@@ -208,7 +208,7 @@ class LaunchViewModel @Inject constructor(
                 setEvent(FilterLaunchItemsInCacheEvent)
             }
         }
-        printLogDebug("LaunchListViewModel", "nextPage: triggered: ${getPageState()}")
+        printLogDebug("LaunchViewModel", "nextPage: triggered: ${getPageState()}")
     }
 
     private fun getScrollPositionState() = getCurrentStateOrNew().scrollPosition ?: 0
@@ -235,7 +235,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun setMergedListState(list: List<LaunchType>) {
-        setState(getCurrentStateOrNew().copy(mergedList = list))
+        setState(getCurrentStateOrNew().copy(mergedLaunches = list))
         printLogDebug("CurrentState", " after merge: ${getCurrentStateOrNew()}")
     }
 

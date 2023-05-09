@@ -86,7 +86,7 @@ class LaunchFragment : BaseFragment() {
                     refreshing = launchViewModel.getRefreshState(),
                     onRefresh = {
                         launchViewModel.clearQueryParameters()
-                        launchViewModel.setEvent(LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                        launchViewModel.setEvent(LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent)
                     }
                 )
 
@@ -134,7 +134,7 @@ class LaunchFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!launchViewModel.getLaunchListState().isNullOrEmpty()) {
+        if (!launchViewModel.getLaunchesState().isNullOrEmpty()) {
             launchViewModel.refreshSearchQueryEvent()
         }
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
@@ -158,7 +158,7 @@ class LaunchFragment : BaseFragment() {
                     stateMessage?.response?.let { response ->
 
                         when (response.message) {
-                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
+                            LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
                                 launchViewModel.clearStateMessage()
                                 filterLaunchItemsInCacheEvent()
                             }
@@ -175,11 +175,11 @@ class LaunchFragment : BaseFragment() {
 
                                 when (response.message) {
                                     // Check cache for data if net connection fails
-                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                    LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
-                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                    LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
@@ -217,7 +217,7 @@ class LaunchFragment : BaseFragment() {
         val loading = viewModel.loading.collectAsState()
         printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
         LaunchContent(
-            launchItems = viewState.value.mergedList ?: emptyList(),
+            launchItems = viewState.value.mergedLaunches ?: emptyList(),
             modifier = modifier,
             loading = loading.value,
             onChangeScrollPosition = viewModel::setScrollPositionState,

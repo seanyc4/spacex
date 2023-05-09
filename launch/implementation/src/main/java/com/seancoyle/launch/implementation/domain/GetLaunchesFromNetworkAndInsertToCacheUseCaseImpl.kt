@@ -19,18 +19,18 @@ import com.seancoyle.launch.api.LaunchNetworkDataSource
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.model.LaunchState
-import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
+class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val cacheDataSource: LaunchCacheDataSource,
     private val launchNetworkDataSource: LaunchNetworkDataSource,
     private val launchOptions: LaunchOptions
-) : GetLaunchListFromNetworkAndInsertToCacheUseCase {
+) : GetLaunchesFromNetworkAndInsertToCacheUseCase {
 
     private var launchList: List<LaunchModel> = emptyList()
 

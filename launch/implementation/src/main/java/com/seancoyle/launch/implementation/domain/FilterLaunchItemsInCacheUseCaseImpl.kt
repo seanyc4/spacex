@@ -60,7 +60,7 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
                         messageType = MessageType.Success
                     ),
                     data = LaunchState(
-                        launchList = resultObj
+                        launches = resultObj
                     ),
                     event = event
                 )

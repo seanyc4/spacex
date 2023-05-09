@@ -1,10 +1,10 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.launch.api.usecase.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.launch.api.usecase.GetLaunchListFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 
 class LaunchUseCases(
-    val getLaunchListFromNetworkAndInsertToCacheUseCase: GetLaunchListFromNetworkAndInsertToCacheUseCase,
+    val getLaunchesFromNetworkAndInsertToCacheUseCase: GetLaunchesFromNetworkAndInsertToCacheUseCase,
     val filterLaunchItemsInCacheUseCase: FilterLaunchItemsInCacheUseCase
 )
 

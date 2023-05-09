@@ -46,7 +46,7 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
                 value?.stateMessage?.response?.message,
                 LaunchEvent.GetNumLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
-            numItems = value?.data?.numLaunchItemsInCache ?: 0
+            numItems = value?.data?.numLaunchesInCache ?: 0
         }
 
         val actualNumItemsInCache = cacheDataSource.getTotalEntries()

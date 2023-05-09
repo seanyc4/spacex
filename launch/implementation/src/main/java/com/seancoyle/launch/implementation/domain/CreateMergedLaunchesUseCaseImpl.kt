@@ -6,28 +6,28 @@ import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
 import com.seancoyle.launch.api.model.SectionTitle
-import com.seancoyle.launch.api.usecase.CreateMergedListUseCase
+import com.seancoyle.launch.api.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
 import javax.inject.Inject
 
-class CreateMergedListUseCaseImpl @Inject constructor(
+class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     private val stringResource: StringResource
-): CreateMergedListUseCase {
+): CreateMergedLaunchesUseCase {
 
-    override fun createLaunchData(
+    override operator fun invoke(
         companyInfo: CompanyInfoModel?,
-        launchList: List<LaunchModel>
+        launches: List<LaunchModel>
     ): List<LaunchType> {
-        val mergedList = mutableListOf<LaunchType>().apply {
+        val mergedLaunches = mutableListOf<LaunchType>().apply {
             add(SectionTitle(title = "COMPANY", type = LaunchType.TYPE_TITLE))
-            add(CompanySummary(summary = buildCompanyInfoString(companyInfo), type = LaunchType.TYPE_COMPANY))
+            add(CompanySummary(summary = buildCompanySummary(companyInfo), type = LaunchType.TYPE_COMPANY))
             add(SectionTitle(title = "LAUNCH", type = LaunchType.TYPE_TITLE))
-            addAll(launchList)
+            addAll(launches)
         }
-        return mergedList
+        return mergedLaunches
     }
 
-    private fun buildCompanyInfoString(companyInfo: CompanyInfoModel?) = String.format(
+    private fun buildCompanySummary(companyInfo: CompanyInfoModel?) = String.format(
         stringResource.getString(R.string.company_info),
         companyInfo?.name,
         companyInfo?.founder,

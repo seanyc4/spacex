@@ -4,9 +4,9 @@ import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
 
-interface CreateMergedListUseCase {
-    fun createLaunchData(
+interface CreateMergedLaunchesUseCase {
+   operator fun invoke(
         companyInfo: CompanyInfoModel?,
-        launchList: List<LaunchModel>
+        launches: List<LaunchModel>
     ): List<LaunchType>
 }
