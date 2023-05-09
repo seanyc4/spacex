@@ -31,11 +31,6 @@ dependencies {
     "implementation"(Compose.compose_constraint_layout)
     "debugImplementation"(Compose.compose_tooling)
 
-    "implementation"(Google.constraint_layout)
-    "implementation"(Google.card_view)
-    "implementation"(Google.material)
-    "implementation"(Google.recycler_view)
-
     "implementation"(MaterialDialogs.material_dialogs)
 
 }

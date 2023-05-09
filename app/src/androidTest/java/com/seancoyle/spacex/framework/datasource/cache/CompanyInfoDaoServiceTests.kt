@@ -2,7 +2,10 @@ package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.database.daos.CompanyInfoDao
-import com.seancoyle.launch.api.CompanyInfoFactory
+import com.seancoyle.launch.api.CompanyInfoCacheDataSource
+import com.seancoyle.launch.implementation.data.cache.CompanyInfoCacheDataSourceImpl
+import com.seancoyle.launch.implementation.data.cache.CompanyInfoEntityMapper
+import com.seancoyle.spacex.CompanyInfoFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,22 +32,21 @@ class CompanyInfoDaoServiceTests {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    // system in test
-    private lateinit var daoService: com.seancoyle.launch.api.CompanyInfoCacheDataSource
-
     @Inject
     lateinit var dao: CompanyInfoDao
 
     @Inject
-    lateinit var companyInfoFactory: com.seancoyle.launch.api.CompanyInfoFactory
+    lateinit var companyInfoFactory: CompanyInfoFactory
 
     @Inject
-    lateinit var entityMapper: com.seancoyle.launch.implementation.data.cache.CompanyInfoEntityMapper
+    lateinit var entityMapper: CompanyInfoEntityMapper
+
+    private lateinit var underTest: CompanyInfoCacheDataSource
 
     @Before
     fun setup() {
         hiltRule.inject()
-        daoService = com.seancoyle.launch.implementation.data.cache.CompanyInfoCacheDataSourceImpl(
+        underTest = CompanyInfoCacheDataSourceImpl(
             dao = dao,
             entityMapper = entityMapper
         )
@@ -65,19 +67,19 @@ class CompanyInfoDaoServiceTests {
         )
 
         // Insert to fake database
-        daoService.insert(newCompanyInfo)
+        underTest.insert(newCompanyInfo)
 
         // Get from fake database
-        val companyInfoFromCache = daoService.getCompanyInfo()
+        val companyInfoFromCache = underTest.getCompanyInfo()
 
         // Confirm what was inserted matches what was retrieved
         assertEquals(companyInfoFromCache, newCompanyInfo)
 
         // Delete data
-        daoService.deleteAll()
+        underTest.deleteAll()
 
         // Confirm table is empty
-        val emptyTable = daoService.getCompanyInfo()
+        val emptyTable = underTest.getCompanyInfo()
         assertTrue(emptyTable == null)
     }
 

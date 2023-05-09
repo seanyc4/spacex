@@ -1,5 +1,6 @@
-package com.seancoyle.launch.api.model
+package com.seancoyle.spacex
 
+import com.seancoyle.launch.api.model.CompanyInfoModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,12 +29,3 @@ class CompanyInfoFactory
     }
 
 }
-
-
-
-
-
-
-
-
-

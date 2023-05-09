@@ -4,13 +4,11 @@ import com.seancoyle.database.entities.CompanyInfoEntity
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import javax.inject.Inject
 
-class CompanyInfoEntityMapper
-@Inject
-constructor(){
+class CompanyInfoEntityMapper @Inject constructor() {
 
-     fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfoModel {
-        entity.apply {
-            return CompanyInfoModel(
+    fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfoModel {
+        return with(entity) {
+            CompanyInfoModel(
                 id = id,
                 employees = employees,
                 founded = founded,
@@ -22,9 +20,9 @@ constructor(){
         }
     }
 
-     fun mapToEntity(domainModel:CompanyInfoModel): CompanyInfoEntity {
-        domainModel.apply {
-            return CompanyInfoEntity(
+    fun mapToEntity(domainModel: CompanyInfoModel): CompanyInfoEntity {
+        return with(domainModel) {
+            CompanyInfoEntity(
                 id = "1",
                 employees = employees,
                 founded = founded,
@@ -35,12 +33,4 @@ constructor(){
             )
         }
     }
-
 }
-
-
-
-
-
-
-

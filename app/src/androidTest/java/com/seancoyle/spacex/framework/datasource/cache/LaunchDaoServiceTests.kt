@@ -1,19 +1,22 @@
 package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
+import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
+import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.database.daos.LaunchDao
-import com.seancoyle.launch.api.LaunchModel
-import com.seancoyle.launch.api.LaunchType.Companion.TYPE_LAUNCH
-import com.seancoyle.launch.api.Links
-import com.seancoyle.launch.api.Rocket
-import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.launch.implementation.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.launch.implementation.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.launch.implementation.LaunchNetworkConstants.LAUNCH_UNKNOWN
-import com.seancoyle.launch_datasource.R
+import com.seancoyle.launch.api.LaunchCacheDataSource
+import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.model.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch.api.model.Links
+import com.seancoyle.launch.api.model.Rocket
+import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
+import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
 import com.seancoyle.spacex.LaunchDataFactory
+import com.seancoyle.spacex.R
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,9 +48,6 @@ class LaunchDaoServiceTests {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    // system in test
-    private lateinit var launchDaoService: com.seancoyle.launch.api.LaunchCacheDataSource
-
     @Inject
     lateinit var dao: LaunchDao
 
@@ -55,15 +55,17 @@ class LaunchDaoServiceTests {
     lateinit var launchDataFactory: LaunchDataFactory
 
     @Inject
-    lateinit var launchEntityMapper: com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
+    lateinit var launchEntityMapper: LaunchEntityMapper
 
-    lateinit var validLaunchYears: List<String>
+    private lateinit var validLaunchYears: List<String>
+
+    private lateinit var underTest: LaunchCacheDataSource
 
     @Before
     fun setup() {
         hiltRule.inject()
         insertTestData()
-        launchDaoService = com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl(
+        underTest = LaunchCacheDataSourceImpl(
             dao = dao,
             entityMapper = launchEntityMapper
         )
@@ -72,8 +74,8 @@ class LaunchDaoServiceTests {
 
 
     private fun insertTestData() = runBlocking {
-        val entityList = launchEntityMapper.domainListToEntityList(
-            launchDataFactory.produceListOfLaunches()
+        val entityList = launchEntityMapper.mapDomainListToEntityList(
+            launchDataFactory.parseJsonFile()
         )
         dao.insertList(entityList)
     }
@@ -85,7 +87,7 @@ class LaunchDaoServiceTests {
     @Test
     fun searchLaunchTable_confirmDbNotEmpty() = runBlocking {
 
-        val totalNum = launchDaoService.getTotalEntries()
+        val totalNum = underTest.getTotalEntries()
 
         assertTrue { totalNum > 0 }
 
@@ -101,14 +103,14 @@ class LaunchDaoServiceTests {
             isLaunchSuccess = 2,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
-            links = com.seancoyle.launch.api.Links(
+            links = Links(
                 missionImage = DEFAULT_LAUNCH_IMAGE,
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
                 wikiLink = "https://www.wikipedia.com"
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = com.seancoyle.launch.api.Rocket(
+            rocket = Rocket(
                 rocketNameAndType = UUID.randomUUID().toString()
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
@@ -116,9 +118,9 @@ class LaunchDaoServiceTests {
             type = TYPE_LAUNCH,
         )
 
-        launchDaoService.insert(newLaunchItem)
+        underTest.insert(newLaunchItem)
 
-        val cachedLaunchItem = launchDaoService.getById(1)
+        val cachedLaunchItem = underTest.getById(1)
         assertEquals(cachedLaunchItem, newLaunchItem)
     }
 
@@ -129,25 +131,25 @@ class LaunchDaoServiceTests {
             num = 10,
             null
         )
-        launchDaoService.insertList(launchList)
+        underTest.insertList(launchList)
 
-        val cachedLaunchList = launchDaoService.getAll()
+        val cachedLaunchList = underTest.getAll()
 
         assertTrue { cachedLaunchList?.containsAll(launchList) == true }
     }
 
     @Test
     fun insert1000LaunchItems_confirmNumLaunchItemsInDb() = runBlocking {
-        val currentNumLaunchItems = launchDaoService.getTotalEntries()
+        val currentNumLaunchItems = underTest.getTotalEntries()
 
         // insert 1000 launch items
         val launchList = launchDataFactory.createLaunchListTest(
             num = 1000,
             null
         )
-        launchDaoService.insertList(launchList)
+        underTest.insertList(launchList)
 
-        val cachedLaunchList = launchDaoService.getTotalEntries()
+        val cachedLaunchList = underTest.getTotalEntries()
         assertEquals(currentNumLaunchItems + 1000, cachedLaunchList)
     }
 
@@ -160,36 +162,36 @@ class LaunchDaoServiceTests {
             isLaunchSuccess = 1,
             launchSuccessIcon = R.drawable.ic_launch_success,
             launchYear = UUID.randomUUID().toString(),
-            links = com.seancoyle.launch.api.Links(
+            links = Links(
                 missionImage = DEFAULT_LAUNCH_IMAGE,
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
                 wikiLink = "https://www.wikipedia.com"
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = com.seancoyle.launch.api.Rocket(
+            rocket = Rocket(
                 rocketNameAndType = UUID.randomUUID().toString()
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
             launchDaysDifference = UUID.randomUUID().toString(),
             type = TYPE_LAUNCH,
         )
-        launchDaoService.insert(newLaunchItem)
+        underTest.insert(newLaunchItem)
 
-        var cachedLaunchItem = launchDaoService.getById(newLaunchItem.id)
+        var cachedLaunchItem = underTest.getById(newLaunchItem.id)
         assert(cachedLaunchItem == newLaunchItem)
 
-        launchDaoService.deleteById(newLaunchItem.id)
-        cachedLaunchItem = launchDaoService.getById(newLaunchItem.id)
+        underTest.deleteById(newLaunchItem.id)
+        cachedLaunchItem = underTest.getById(newLaunchItem.id)
         assert(cachedLaunchItem != newLaunchItem)
     }
 
     @Test
     fun deleteLaunchList_confirmDeleted() = runBlocking {
-        val launchList: ArrayList<com.seancoyle.launch.api.LaunchModel> = ArrayList(launchDaoService.getAll()!!)
+        val launchList: ArrayList<LaunchModel> = ArrayList(underTest.getAll() ?: emptyList())
 
         // select some random launch for deleting
-        val launchesToDelete: ArrayList<com.seancoyle.launch.api.LaunchModel> = ArrayList()
+        val launchesToDelete: ArrayList<LaunchModel> = ArrayList()
 
         // 1st
         var launchItemToDelete = launchList[Random.nextInt(0, launchList.size - 1) + 1]
@@ -211,17 +213,17 @@ class LaunchDaoServiceTests {
         launchList.remove(launchItemToDelete)
         launchesToDelete.add(launchItemToDelete)
 
-        launchDaoService.deleteList(launchesToDelete)
+        underTest.deleteList(launchesToDelete)
 
         // confirm they were deleted
-        val searchResults = launchDaoService.getAll()
+        val searchResults = underTest.getAll()
         assertFalse { searchResults == launchesToDelete }
     }
 
     @Test
     fun orderAllLaunchItemsByDateASC_confirm() = runBlocking {
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
@@ -235,7 +237,7 @@ class LaunchDaoServiceTests {
     @Test
     fun orderAllLaunchItemsByDateDESC_confirm() = runBlocking {
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
@@ -251,7 +253,7 @@ class LaunchDaoServiceTests {
 
         val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = launchYear,
             order = LAUNCH_ORDER_ASC,
             launchFilter = null,
@@ -268,7 +270,7 @@ class LaunchDaoServiceTests {
 
         val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = launchYear,
             order = LAUNCH_ORDER_DESC,
             launchFilter = null,
@@ -285,7 +287,7 @@ class LaunchDaoServiceTests {
 
         val launchYear = "1000"
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = launchYear,
             order = LAUNCH_ORDER_DESC,
             launchFilter = null,
@@ -298,7 +300,7 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsByLaunchStatus_launchSuccess() = runBlocking {
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
@@ -313,7 +315,7 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsByLaunchStatus_launchFailed() = runBlocking {
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_FAILED,
@@ -328,9 +330,9 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsByLaunchStatus_launchAll() = runBlocking {
 
-        val allLaunchItems = launchDaoService.getAll()
+        val allLaunchItems = underTest.getAll()
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_DESC,
             launchFilter = null,
@@ -345,7 +347,7 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsByLaunchStatus_unknown() = runBlocking {
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = null,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_UNKNOWN,
@@ -362,7 +364,7 @@ class LaunchDaoServiceTests {
         // Year set to 2006 as there were only launch failures that year
         val year = "2006"
 
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = year,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
@@ -376,7 +378,7 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsFail_noResultsFound() = runBlocking {
         val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
-        val launchList = launchDaoService.filterLaunchList(
+        val launchList = underTest.filterLaunchList(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
@@ -386,14 +388,14 @@ class LaunchDaoServiceTests {
         assertTrue { launchList?.isEmpty() == true }
 
         // confirm there are launch items in the cache
-        val launchItemsInCache = launchDaoService.getAll()
+        val launchItemsInCache = underTest.getAll()
         if (launchItemsInCache != null) {
             assertTrue { launchItemsInCache.isNotEmpty() }
         }
     }
 
 
-    private fun checkDateOrderAscending(launchList: List<com.seancoyle.launch.api.LaunchModel>) {
+    private fun checkDateOrderAscending(launchList: List<LaunchModel>) {
         // Check the list and verify the date is less than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(
@@ -403,7 +405,7 @@ class LaunchDaoServiceTests {
         }
     }
 
-    private fun checkDateOrderDescending(launchList: List<com.seancoyle.launch.api.LaunchModel>) {
+    private fun checkDateOrderDescending(launchList: List<LaunchModel>) {
         // Check the list and verify the date is greater than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(

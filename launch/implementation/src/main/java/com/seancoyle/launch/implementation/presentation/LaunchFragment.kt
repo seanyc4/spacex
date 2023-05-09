@@ -16,6 +16,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +27,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -39,16 +45,16 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.BaseFragment
 import com.seancoyle.core.state.*
+import com.seancoyle.core.util.GenericErrors.ERROR_UNKNOWN
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.model.CompanySummary
 import com.seancoyle.launch.api.model.LaunchModel
 import com.seancoyle.launch.api.model.LaunchType
-import com.seancoyle.launch.api.model.LaunchViewState
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.api.model.SectionTitle
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
@@ -58,15 +64,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 const val LINKS_KEY = "links"
-const val LAUNCH_STATE_BUNDLE_KEY = "com.seancoyle.launch.presentation.launch.state"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
+class LaunchFragment : BaseFragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
-    private var links: Links? = null
 
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreateView(
@@ -78,6 +82,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             setContent {
 
                 val scaffoldState = rememberScaffoldState()
+                val refreshing = rememberPullRefreshState(
+                    refreshing = launchViewModel.getRefreshState(),
+                    onRefresh = {
+                        launchViewModel.clearQueryParameters()
+                        launchViewModel.setEvent(LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent)
+                    }
+                )
 
                 AppTheme(
                     darkTheme = false,
@@ -88,7 +99,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                         topBar = {
                             HomeAppBar(
                                 onClick = {
-                                    launchViewModel.setIsDialogFilterDisplayed(true)
+                                    launchViewModel.setIsDialogFilterDisplayedState(true)
                                     displayFilterDialog()
                                 }
                             )
@@ -97,20 +108,18 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                     ) { padding ->
                         LaunchScreen(
                             Modifier.padding(padding),
-                            viewModel = launchViewModel
+                            viewModel = launchViewModel,
+                            refreshState = refreshing
                         )
                     }
                 }
             }
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupSwipeRefresh()
         subscribeObservers()
-        restoreInstanceState(savedInstanceState)
     }
 
     override fun onPause() {
@@ -118,33 +127,17 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         launchViewModel.clearAllStateMessages()
     }
 
-    private fun restoreInstanceState(savedInstanceState: Bundle?) {
-        savedInstanceState?.let { inState ->
-            (inState[LAUNCH_STATE_BUNDLE_KEY] as LaunchViewState?)?.let { viewState ->
-                launchViewModel.setState(viewState)
-            }
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        val viewState = launchViewModel.uiState.value
-
-        viewState.launchList = ArrayList()
-        viewState.mergedList = ArrayList()
-
-        outState.putParcelable(
-            LAUNCH_STATE_BUNDLE_KEY,
-            viewState
-        )
+        launchViewModel.saveState()
         super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
-        if (!launchViewModel.getLaunchList().isNullOrEmpty()) {
+        if (!launchViewModel.getLaunchListState().isNullOrEmpty()) {
             launchViewModel.refreshSearchQueryEvent()
         }
-        if (launchViewModel.getIsDialogFilterDisplayed()) {
+        if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
         }
     }
@@ -155,41 +148,45 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             uiController.displayProgressBar(it)
         }
 
-        launchViewModel.stateMessage.observe(viewLifecycleOwner) { stateMessage ->
-            stateMessage?.response?.let { response ->
-                when (response.message) {
-
-                    GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_SUCCESS -> {
-                        launchViewModel.clearStateMessage()
-                        filterLaunchItemsInCacheEvent()
-                    }
-
-                    else -> {
-                        uiController.onResponseReceived(
-                            response = stateMessage.response,
-                            stateMessageCallback = object : StateMessageCallback {
-                                override fun removeMessageFromStack() {
-                                    launchViewModel.clearStateMessage()
-                                }
-                            }
-                        )
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launchViewModel.stateMessage.collect { stateMessage ->
+                    stateMessage?.response?.let { response ->
 
                         when (response.message) {
-                            // Check cache for data if net connection fails
-                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_INSERT_FAILED -> {
+                            LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
+                                launchViewModel.clearStateMessage()
                                 filterLaunchItemsInCacheEvent()
                             }
 
-                            GetLaunchListFromNetworkAndInsertToCacheUseCaseImpl.LAUNCH_ERROR -> {
-                                filterLaunchItemsInCacheEvent()
-                            }
+                            else -> {
+                                uiController.onResponseReceived(
+                                    response = stateMessage.response,
+                                    stateMessageCallback = object : StateMessageCallback {
+                                        override fun removeMessageFromStack() {
+                                            launchViewModel.clearStateMessage()
+                                        }
+                                    }
+                                )
 
-                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_INSERT_FAILED -> {
-                                getCompanyInfoFromCacheEvent()
-                            }
+                                when (response.message) {
+                                    // Check cache for data if net connection fails
+                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                        filterLaunchItemsInCacheEvent()
+                                    }
 
-                            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.COMPANY_INFO_ERROR -> {
-                                getCompanyInfoFromCacheEvent()
+                                    LaunchEvent.GetLaunchListFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                        filterLaunchItemsInCacheEvent()
+                                    }
+
+                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                        getCompanyInfoFromCacheEvent()
+                                    }
+
+                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                        getCompanyInfoFromCacheEvent()
+                                    }
+                                }
                             }
                         }
                     }
@@ -197,7 +194,7 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
             }
         }
 
-        // Get result from bottom action sheet fragment which will be a link type string
+        // Get result from bottom action sheet fragment
         setFragmentResultListener(LINKS_KEY) { key, bundle ->
             if (key == LINKS_KEY) {
                 launchIntent(bundle.getString(LINKS_KEY))
@@ -205,62 +202,73 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         }
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun LaunchScreen(
         modifier: Modifier = Modifier,
-        viewModel: LaunchViewModel
+        viewModel: LaunchViewModel,
+        refreshState: PullRefreshState
     ) {
         val viewState = viewModel.uiState.collectAsState()
-        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState" )
+        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
         LaunchContent(
             launchItems = viewState.value.mergedList ?: emptyList(),
             modifier = modifier,
             loading = viewModel.loading.value ?: false,
-            onChangeScrollPosition = viewModel::setScrollPosition,
-            onTriggerNextPage = viewModel::nextPage ,
-            page = viewModel.getPage()
+            onChangeScrollPosition = viewModel::setScrollPositionState,
+            loadNextPage = viewModel::nextPage,
+            page = viewModel.getPageState(),
+            pullRefreshState = refreshState,
+            isRefreshing = viewModel.getRefreshState()
         )
-
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun LaunchContent(
         launchItems: List<LaunchType>,
         loading: Boolean,
         onChangeScrollPosition: (Int) -> Unit,
         page: Int,
-        onTriggerNextPage: () -> Unit,
-        modifier: Modifier = Modifier
+        loadNextPage: () -> Unit,
+        pullRefreshState: PullRefreshState,
+        modifier: Modifier = Modifier,
+        isRefreshing: Boolean
     ) {
         if (launchItems.isNotEmpty()) {
             Box(
-                modifier = modifier.background(MaterialTheme.colors.background)
+                modifier = modifier
+                    .background(MaterialTheme.colors.background)
             ) {
-                LazyColumn {
+                LazyColumn(
+                    modifier = modifier.pullRefresh(pullRefreshState)
+                ) {
                     itemsIndexed(
                         items = launchItems
                     ) { index, launchItem ->
                         onChangeScrollPosition(index)
                         if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
-                            onTriggerNextPage()
+                            loadNextPage()
                         }
-                        when (launchItem.type) {
-                            LaunchType.TYPE_TITLE -> {
-                                LaunchHeading(launchItem as SectionTitle)
-                            }
+                        if (!isRefreshing) {
+                            when (launchItem.type) {
+                                LaunchType.TYPE_TITLE -> {
+                                    LaunchHeading(launchItem as SectionTitle)
+                                }
 
-                            LaunchType.TYPE_COMPANY -> {
-                                CompanySummaryCard(launchItem as CompanySummary)
-                            }
+                                LaunchType.TYPE_COMPANY -> {
+                                    CompanySummaryCard(launchItem as CompanySummary)
+                                }
 
-                            LaunchType.TYPE_LAUNCH -> {
-                                LaunchCard(
-                                    launchItem = launchItem as LaunchModel,
-                                    onClick = { onCardClicked(launchItem.links) }
-                                )
-                            }
+                                LaunchType.TYPE_LAUNCH -> {
+                                    LaunchCard(
+                                        launchItem = launchItem as LaunchModel,
+                                        onClick = { onCardClicked(launchItem.links) }
+                                    )
+                                }
 
-                            else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                                else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                            }
                         }
                     }
                 }
@@ -283,36 +291,25 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
 
-    private fun onCardClicked(launchLinks: Links) {
-        links = launchLinks
-        if (isLinksNullOrEmpty()) {
+    private fun onCardClicked(links: Links) {
+        if (isLinksNullOrEmpty(links)) {
             displayErrorDialogNoLinks()
         } else {
-            displayBottomActionSheet(launchLinks)
+            displayBottomActionSheet(links)
         }
     }
 
-    private fun setupSwipeRefresh() {
-        /*  with(binding) {
-              swipeRefresh.setOnRefreshListener {
-                  swipeRefresh.isRefreshing = false
-                  viewModel.clearQueryParameters()
-                  getCompanyInfoFromNetworkAndInsertToCacheEvent()
-              }
-          }*/
-    }
-
-    private fun isLinksNullOrEmpty() =
-        links?.articleLink.isNullOrEmpty() &&
-                links?.webcastLink.isNullOrEmpty() &&
-                links?.wikiLink.isNullOrEmpty()
+    private fun isLinksNullOrEmpty(links: Links) =
+        links.articleLink.isNullOrEmpty() &&
+                links.webcastLink.isNullOrEmpty() &&
+                links.wikiLink.isNullOrEmpty()
 
 
-    private fun displayBottomActionSheet(launchLinks: Links) {
+    private fun displayBottomActionSheet(links: Links) {
         if (findNavController().currentDestination?.id == R.id.launchFragment) {
             findNavController().navigate(
                 R.id.action_launchFragment_to_launchBottomActionSheet,
-                bundleOf(LINKS_KEY to launchLinks)
+                bundleOf(LINKS_KEY to links)
             )
         }
     }
@@ -322,13 +319,13 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
-                .onDismiss { launchViewModel.setIsDialogFilterDisplayed(false) }
+                .onDismiss { launchViewModel.setIsDialogFilterDisplayedState(false) }
                 .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 
             val view = dialog.getCustomView()
-            val order = launchViewModel.getOrder()
-            val filter = launchViewModel.getFilter()
+            val order = launchViewModel.getOrderState()
+            val filter = launchViewModel.getFilterState()
             var newOrder: String? = null
 
             view.findViewById<RadioGroup>(R.id.filter_group).apply {
@@ -372,12 +369,12 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
                 // Save data to view model
                 launchViewModel.apply {
                     newOrder?.let { order ->
-                        setLaunchOrder(order)
+                        setLaunchOrderState(order)
                     }
                     newFilter?.let { filter ->
-                        setLaunchFilter(filter)
+                        setLaunchFilterState(filter)
                     }
-                    setQuery(yearQuery)
+                    setQueryState(yearQuery)
                 }
 
                 startNewSearch()
@@ -393,9 +390,9 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
     private fun startNewSearch() {
-        printLogDebug("DCM", "start new search")
-        launchViewModel.clearList()
-        launchViewModel.loadFirstPage()
+        printLogDebug("EventExecutor", "start new search")
+        launchViewModel.clearListState()
+        launchViewModel.newSearchEvent()
     }
 
     private fun filterLaunchItemsInCacheEvent() {
@@ -439,45 +436,3 @@ class LaunchFragment : BaseFragment(R.layout.fragment_launch) {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

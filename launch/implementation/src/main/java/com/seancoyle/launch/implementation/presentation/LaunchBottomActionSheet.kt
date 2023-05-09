@@ -4,22 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.seancoyle.core.util.parcelable
 import com.seancoyle.launch.api.model.LinkType
 import com.seancoyle.launch.api.model.Links
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.databinding.FragmentLaunchBottomActionSheetBinding
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
 
 class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentLaunchBottomActionSheetBinding? = null
-    private val binding get() = _binding!!
     private var linkTypes: List<LinkType>? = null
 
     @Override
@@ -32,57 +31,31 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLaunchBottomActionSheetBinding.inflate(layoutInflater)
-        return binding.root
-    }
+        return ComposeView(requireContext()).apply {
+            getLinksFromBundle()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupUI()
-    }
-
-    private fun setupUI() {
-        with(binding) {
-
-           val links: Links? = arguments?.getParcelable(LINKS_KEY)
-            links?.apply {
-                 linkTypes = listOfNotNull(
-                    articleLink?.let {
-                        LinkType(
-                            R.string.article,
-                            it
-                        ) { onLinkClicked(it) }
-                    },
-                    webcastLink?.let {
-                        LinkType(
-                            R.string.webcast,
-                            it
-                        ) { onLinkClicked(it) }
-                    },
-                    wikiLink?.let {
-                        LinkType(
-                            R.string.wikipedia,
-                            it
-                        ) { onLinkClicked(it) }
-                    }
-                )
-            }
-
-            linksCv.setContent {
-                MaterialTheme {
+            setContent {
+                Column() {
                     LaunchBottomSheetCard(
                         linkTypes = linkTypes
                     )
-                }
-            }
 
-            exitBtn.setContent {
-                MaterialTheme {
                     LaunchBottomSheetExitButton {
                         dismiss()
                     }
                 }
             }
+        }
+    }
+
+    private fun getLinksFromBundle() {
+        val links: Links? = arguments?.parcelable(LINKS_KEY)
+        links?.let {
+            linkTypes = listOfNotNull(
+                createLinkType(titleRes = R.string.article, link = it.articleLink) { link -> onLinkClicked(link) },
+                createLinkType(titleRes = R.string.webcast, link = it.webcastLink) { link -> onLinkClicked(link) },
+                createLinkType(titleRes = R.string.wikipedia, link = it.wikiLink) { link -> onLinkClicked(link) }
+            )
         }
     }
 
@@ -94,8 +67,4 @@ class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         dismiss()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

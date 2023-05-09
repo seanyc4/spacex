@@ -4,7 +4,6 @@ import com.seancoyle.core.util.NumberFormatterImpl
 import com.seancoyle.core.util.isUnitTest
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.model.CompanyInfoFactory
 import com.seancoyle.launch.implementation.data.cache.FakeCompanyInfoCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.launch.implementation.data.network.FakeCompanyInfoNetworkDataSourceImpl
@@ -16,7 +15,6 @@ class CompanyDependencies {
     private val numberFormatter = NumberFormatterImpl()
     lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
     lateinit var companyInfoNetworkSource: CompanyInfoNetworkDataSource
-    lateinit var companyInfoFactory: CompanyInfoFactory
     lateinit var companyInfoDataFactory: CompanyInfoDataFactory
     lateinit var companyInfoNetworkMapper: CompanyInfoNetworkMapper
     lateinit var mockWebServer: MockWebServer
@@ -34,7 +32,6 @@ class CompanyDependencies {
 
         mockWebServer = MockWebServer()
         baseUrl = mockWebServer.url("v3/info/")
-        companyInfoFactory = CompanyInfoFactory()
 
         companyInfoNetworkMapper = CompanyInfoNetworkMapper(
             numberFormatter = numberFormatter

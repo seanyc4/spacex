@@ -8,7 +8,6 @@ import com.seancoyle.core.util.DateTransformerImpl
 import com.seancoyle.core.util.isUnitTest
 import com.seancoyle.launch.api.LaunchCacheDataSource
 import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchFactory
 import com.seancoyle.launch.api.model.LaunchOptions
 import com.seancoyle.launch.api.model.Options
 import com.seancoyle.launch.api.model.Populate
@@ -32,7 +31,6 @@ class LaunchDependencies {
     private val dateFormatter = DateFormatterImpl(dateFormat)
     private val dateTransformer = DateTransformerImpl()
     lateinit var launchCacheDataSource: LaunchCacheDataSource
-    lateinit var launchFactory: LaunchFactory
     lateinit var launchDataFactory: LaunchDataFactory
     lateinit var launchOptions: LaunchOptions
     lateinit var networkDataSource: LaunchNetworkDataSource
@@ -52,7 +50,6 @@ class LaunchDependencies {
 
         mockWebServer = MockWebServer()
         baseUrl = mockWebServer.url("v3/launches/")
-        launchFactory = LaunchFactory()
 
         networkMapper = LaunchNetworkMapper(
             dateFormatter = dateFormatter,

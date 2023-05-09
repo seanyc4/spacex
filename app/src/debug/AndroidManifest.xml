@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.seancoyle.spacex">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
+    <application android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.seancoyle.spacex.HiltTestActivity"
-            android:exported="false"  />
+            android:exported="false" />
     </application>
 
 </manifest>

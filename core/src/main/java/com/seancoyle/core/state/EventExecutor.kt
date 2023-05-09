@@ -16,17 +16,17 @@ import kotlinx.coroutines.withContext
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class DataChannelManager<ViewState>(
+abstract class EventExecutor<ViewState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    val messageStack: MessageStack
 ) {
 
     private var channelScope: CoroutineScope? = null
     private val eventManager: EventManager = EventManager()
-    val messageStack = MessageStack()
     val loading = eventManager.loading
 
-    fun setupChannel() {
+    fun cancelCurrentJobs() {
         cancelJobs()
     }
 
@@ -37,7 +37,7 @@ abstract class DataChannelManager<ViewState>(
         jobFunction: Flow<DataState<ViewState>?>
     ) {
         if (canExecuteNewEvent(event)) {
-            printLogDebug("DCM", "launching job: ${event.eventName()}")
+            printLogDebug("EventExecutor", "launching job: ${event.eventName()}")
             addEvent(event)
             jobFunction
                 .onEach { dataState ->
@@ -64,9 +64,9 @@ abstract class DataChannelManager<ViewState>(
         if (isJobAlreadyActive(event)) {
             return false
         }
-        // Check the top of the stack, if a dialog is showing, do not allow new StateEvents
+        // Check the top of the stack, if a dialog is showing, do not allow new Events
         if (!isMessageStackEmpty()) {
-            if (messageStack[0].response.uiComponentType == UIComponentType.Dialog) {
+            if (messageStack.getMessageAt(0)?.response?.uiComponentType == UIComponentType.Dialog) {
                 return false
             }
         }
@@ -86,15 +86,15 @@ abstract class DataChannelManager<ViewState>(
     }
 
     fun clearStateMessage(index: Int = 0) {
-        printLogDebug("DataChannelManager", "clear state message")
+        printLogDebug("EventExecutor", "clear state message")
         messageStack.removeAt(index)
     }
 
     fun clearAllStateMessages() = messageStack.clear()
 
     fun printStateMessages() {
-        for (message in messageStack) {
-            printLogDebug("DCM", "${message.response.message}")
+        for (message in messageStack.getAllMessages()) {
+            printLogDebug("EventExecutor", "${message.response.message}")
         }
     }
 

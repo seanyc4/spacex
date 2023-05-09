@@ -1,64 +1,23 @@
 package com.seancoyle.core.state
 
+import kotlinx.coroutines.flow.StateFlow
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.seancoyle.core.util.printLogDebug
-import kotlinx.parcelize.IgnoredOnParcel
+interface MessageStack {
 
-class MessageStack : ArrayList<StateMessage>() {
+    val stateMessage: StateFlow<StateMessage?>
+    fun isStackEmpty(): Boolean
 
-    @IgnoredOnParcel
-    private val _stateMessage: MutableLiveData<StateMessage?> = MutableLiveData()
+    fun addAll(elements: Collection<StateMessage>): Boolean
 
-    @IgnoredOnParcel
-    val stateMessage: LiveData<StateMessage?>
-        get() = _stateMessage
+    fun add(element: StateMessage): Boolean
 
-    fun isStackEmpty(): Boolean {
-        return isEmpty()
-    }
+    fun removeAt(index: Int): StateMessage
 
-    override fun addAll(elements: Collection<StateMessage>): Boolean {
-        elements.forEach { add(it) }
-        return true
-    }
+    fun getMessageAt(index: Int): StateMessage?
 
-    override fun add(element: StateMessage): Boolean {
-        if (contains(element)) { // prevent duplicate errors added to stack
-            return false
-        }
-        val transaction = super.add(element)
-        if (size == 1) {
-            setStateMessage(stateMessage = element)
-        }
-        return transaction
-    }
+    fun clear()
 
-    override fun removeAt(index: Int): StateMessage {
-        return try {
-            val transaction = super.removeAt(index)
-            if (isNotEmpty()) {
-                setStateMessage(stateMessage = this[0])
-            } else {
-                printLogDebug("MessageStack", "stack is empty")
-                setStateMessage(null)
-            }
-            transaction
-        } catch (e: IndexOutOfBoundsException) {
-            setStateMessage(null)
-            e.printStackTrace()
-            StateMessage(
-                Response(
-                    message = "does nothing",
-                    uiComponentType = UIComponentType.None,
-                    messageType = MessageType.None
-                )
-            )
-        }
-    }
+    fun getSize(): Int
 
-    private fun setStateMessage(stateMessage: StateMessage?) {
-        _stateMessage.value = stateMessage
-    }
+    fun getAllMessages(): List<StateMessage>
 }

@@ -1,16 +1,15 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.model.CompanyInfoFactory
 import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.api.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.Companion.COMPANY_INFO_ERROR
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl.Companion.COMPANY_INFO_INSERT_SUCCESS
 import com.seancoyle.launch.implementation.presentation.LaunchEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -33,7 +32,6 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
     private val dependencies: CompanyDependencies = CompanyDependencies()
     private lateinit var cacheDataSource: CompanyInfoCacheDataSource
     private lateinit var networkDataSource: CompanyInfoNetworkDataSource
-    private lateinit var infoFactory: CompanyInfoFactory
     private lateinit var mockWebServer: MockWebServer
     private lateinit var underTest: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 
@@ -42,15 +40,13 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         dependencies.build()
         cacheDataSource = dependencies.companyInfoCacheDataSource
         networkDataSource = dependencies.companyInfoNetworkSource
-        infoFactory = dependencies.companyInfoFactory
         mockWebServer = dependencies.mockWebServer
 
         underTest =
             GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
                 cacheDataSource = cacheDataSource,
-                networkDataSource = networkDataSource,
-                factory = infoFactory
+                networkDataSource = networkDataSource
             )
     }
 
@@ -67,11 +63,11 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         assert(cacheDataSource.getCompanyInfo() == null)
 
         underTest(
-            stateEvent = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+            event = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                COMPANY_INFO_INSERT_SUCCESS
+                LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
             )
         }
 
@@ -90,11 +86,11 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
          )
 
         underTest(
-            stateEvent = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
+            event = LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                COMPANY_INFO_ERROR
+                LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
             )
         }
     }

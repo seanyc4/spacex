@@ -1,7 +1,9 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.launch.api.CompanyInfoFactory
+import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
+import com.seancoyle.spacex.CompanyInfoFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,22 +27,21 @@ class CompanyInfoApiServiceTests {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    // system in test
-    private lateinit var apiService: com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-
     @Inject
     lateinit var fakeApi: FakeCompanyInfoApi
 
     @Inject
-    lateinit var networkMapper: com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
+    lateinit var networkMapper: CompanyInfoNetworkMapper
 
     @Inject
-    lateinit var dataFactory: com.seancoyle.launch.api.CompanyInfoFactory
+    lateinit var dataFactory: CompanyInfoFactory
+
+    private lateinit var underTest: CompanyInfoNetworkDataSource
 
     @Before
     fun init() {
         hiltRule.inject()
-        apiService = FakeCompanyInfoNetworkDataSourceImpl(
+        underTest = FakeCompanyInfoNetworkDataSourceImpl(
                 fakeApi = fakeApi,
                 networkMapper = networkMapper
             )
@@ -59,7 +60,7 @@ class CompanyInfoApiServiceTests {
             valuation = "27،500،000،000"
         )
 
-        val result = apiService.getCompanyInfo()
+        val result = underTest.getCompanyInfo()
 
         assert(result == expectedResult)
     }

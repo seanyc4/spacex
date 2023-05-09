@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.7">
-      <module name="SpaceX.app" target="17" />
+    <bytecodeTargetLevel target="17">
       <module name="spacex.buildSrc" target="11" />
-      <module name="SpaceX.buildSrc" target="17" />
-      <module name="SpaceX.buildSrc.main" target="17" />
       <module name="spacex.buildSrc.main" target="11" />
       <module name="spacex.buildSrc.test" target="11" />
-      <module name="SpaceX.buildSrc.test" target="17" />
-      <module name="SpaceX.core" target="17" />
-      <module name="SpaceX.core-database" target="17" />
-      <module name="SpaceX.core-datastore" target="17" />
-      <module name="SpaceX.core-datastore-test" target="17" />
       <module name="SpaceX.core-testing" target="11" />
       <module name="SpaceX.data" target="11" />
       <module name="SpaceX.data.main" target="11" />
       <module name="SpaceX.data.test" target="11" />
-      <module name="SpaceX.launch.api" target="17" />
-      <module name="SpaceX.launch.implementation" target="17" />
-      <module name="SpaceX.launch.launch-datasource" target="17" />
-      <module name="SpaceX.launch.launch-datasource-test" target="17" />
-      <module name="SpaceX.launch.launch-domain" target="17" />
-      <module name="SpaceX.launch.launch-usecases" target="17" />
-      <module name="SpaceX.launch.launch-viewstate" target="17" />
-      <module name="SpaceX.launch.ui-launch" target="17" />
+      <module name="SpaceX.launch.launch-datasource" target="11" />
+      <module name="SpaceX.launch.launch-datasource-test" target="11" />
+      <module name="SpaceX.launch.launch-domain" target="11" />
+      <module name="SpaceX.launch.launch-usecases" target="11" />
+      <module name="SpaceX.launch.launch-viewstate" target="11" />
+      <module name="SpaceX.launch.ui-launch" target="11" />
       <module name="SpaceX.ui-base" target="11" />
     </bytecodeTargetLevel>
   </component>

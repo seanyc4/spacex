@@ -6,7 +6,7 @@ object Modules {
     const val core_datastore_test = ":core-datastore-test"
     const val launch = ":launch"
     const val launchConstants = ":launch:launch-constants"
-    const val launchDataSourceTest = ":launch:launch-datasource-test"
     const val launchApi = ":launch:api"
     const val launchImpl = ":launch:implementation"
+    const val core_ui = ":core-ui"
 }

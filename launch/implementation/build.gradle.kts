@@ -6,6 +6,11 @@ apply {
 
 plugins {
     id("de.mannodermaus.android-junit5")
+    id("com.android.library")
+}
+
+android{
+    namespace = "com.seancoyle.launch.implementation"
 }
 
 dependencies {
@@ -24,7 +29,6 @@ dependencies {
     "kapt"(Glide.glide_compiler)
     "implementation"(Kotlin.coroutines_core)
     "implementation"(Kotlin.coroutines_android)
-    "implementation"(Google.swipe_refresh_layout)
     "implementation"(Room.room_ktx)
     "implementation"(Room.room_runtime)
     "kapt"(Room.room_compiler)

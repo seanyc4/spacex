@@ -1,12 +1,12 @@
 package com.seancoyle.launch.api.model
 
 import android.os.Parcelable
-import com.seancoyle.core.state.ViewState
+import com.seancoyle.core.state.UiState
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class LaunchViewState(
+data class LaunchState(
 
     @IgnoredOnParcel
     var mergedList: List<LaunchType>? = emptyList(),
@@ -20,9 +20,10 @@ data class LaunchViewState(
     var launchFilter: Int? = null,
     var order: String? = null,
     var yearQuery: String? = "",
-    var scrollPosition: Int? = 0
+    var scrollPosition: Int? = 0,
+    var isRefreshing: Boolean = false
 
-) : Parcelable, ViewState
+) : Parcelable, UiState
 
 
 

@@ -3,12 +3,12 @@ package com.seancoyle.core.network
 import com.seancoyle.core.network.NetworkErrors.NETWORK_DATA_NULL
 import com.seancoyle.core.state.*
 
-abstract class ApiResponseHandler <ViewState, Data>(
+abstract class ApiResponseHandler <UiState, Data>(
     private val response: ApiResult<Data?>,
     private val event: Event?
 ){
 
-    suspend fun getResult(): DataState<ViewState>? {
+    suspend fun getResult(): DataState<UiState>? {
 
         return when(response){
 
@@ -39,8 +39,8 @@ abstract class ApiResponseHandler <ViewState, Data>(
         }
     }
 
-    abstract suspend fun handleSuccess(resultObj: Data): DataState<ViewState>?
+    abstract suspend fun handleSuccess(resultObj: Data): DataState<UiState>?
 
-    abstract suspend fun handleFailure(): DataState<ViewState>?
+    abstract suspend fun handleFailure(): DataState<UiState>?
 
 }

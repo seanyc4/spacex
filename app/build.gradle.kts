@@ -1,19 +1,20 @@
 apply {
     from("$rootDir/hilt.gradle")
+    from("$rootDir/android-base-ui.gradle")
 }
 
 plugins {
     id("com.android.application")
-    kotlin("android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
+    kotlin("android")
     kotlin(KotlinPlugins.serialization) version Kotlin.kotlin_version
 }
 
 android {
+    namespace = "com.seancoyle.spacex"
     compileSdk = Android.compileSdk
-    buildToolsVersion = Android.buildTools
 
     defaultConfig {
         applicationId = Android.appId
@@ -41,8 +42,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
@@ -56,6 +57,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     sourceSets {
@@ -77,7 +79,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/*")
     }
 
@@ -87,12 +89,14 @@ android {
 }
 
 dependencies {
+
     implementation(project(Modules.core))
     implementation(project(Modules.core_datastore))
     implementation(project(Modules.core_database))
     implementation(project(Modules.launchConstants))
     implementation(project(Modules.launchApi))
     implementation(project(Modules.launchImpl))
+    implementation(project(Modules.core_ui))
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
@@ -114,6 +118,8 @@ dependencies {
 
     androidTestImplementation(HiltTest.hilt_android_testing)
     kaptAndroidTest(Hilt.compiler)
+
+    implementation(Kotlin.serialization)
 
     implementation(MaterialDialogs.material_dialogs)
 

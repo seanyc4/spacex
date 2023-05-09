@@ -5,15 +5,13 @@ import com.seancoyle.launch.api.model.CompanyInfoModel
 import com.seancoyle.launch.implementation.data.model.CompanyInfoDto
 import javax.inject.Inject
 
-class CompanyInfoNetworkMapper
-@Inject
-constructor(
+class CompanyInfoNetworkMapper @Inject constructor(
     private val numberFormatter: NumberFormatter
-){
+) {
 
     fun mapFromEntity(dto: CompanyInfoDto): CompanyInfoModel {
-        dto.apply {
-            return CompanyInfoModel(
+        return with(dto) {
+            CompanyInfoModel(
                 id = "",
                 employees = numberFormatter.formatNumber(employees?.toLong()),
                 founded = founded ?: 0,
@@ -24,12 +22,4 @@ constructor(
             )
         }
     }
-
 }
-
-
-
-
-
-
-

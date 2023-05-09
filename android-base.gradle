@@ -5,7 +5,6 @@ apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdk Android.compileSdk
-    buildToolsVersion Android.buildTools
 
     defaultConfig {
         minSdk Android.minSdk
@@ -27,8 +26,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
@@ -45,7 +44,7 @@ android {
 
     testOptions {
         // Fix for mock issue on >= API 28
-        packagingOptions.jniLibs.useLegacyPackaging = true
+        packaging.jniLibs.useLegacyPackaging = true
 
         // Enable test orchestrator
         execution = "ANDROIDX_TEST_ORCHESTRATOR"

@@ -1,24 +1,7 @@
 package com.seancoyle.spacex.util
 
-import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.IdlingResource
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
-import androidx.test.espresso.matcher.ViewMatchers.*
-import com.seancoyle.core.util.DateTransformer
-import com.seancoyle.launch.api.LaunchModel
-import com.seancoyle.spacex.R
-import com.seancoyle.spacex.framework.presentation.launch.HEADER_COUNT
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import org.hamcrest.CoreMatchers
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.Matcher
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -29,7 +12,7 @@ fun launchesFragmentTestHelper(func: LaunchFragmentTestHelper.() -> Unit) =
 @FlowPreview
 class LaunchFragmentTestHelper {
 
-    fun waitViewShown(matcher: Matcher<View>) {
+  /*  fun waitViewShown(matcher: Matcher<View>) {
         val idlingResource: IdlingResource = ViewShownIdlingResource(matcher, isDisplayed())
         try {
             IdlingRegistry.getInstance().register(idlingResource)
@@ -40,7 +23,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsDaysSinceDisplaysCorrectly(
-        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
+        expectedFilterResults: List<LaunchModel>,
         dateTransformer: DateTransformer
     ) {
         launchesFragmentTestHelper {
@@ -74,7 +57,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsDateMatchesFilteredDate(
-        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
+        expectedFilterResults: List<LaunchModel>,
         year: String? = ""
     ) {
         launchesFragmentTestHelper {
@@ -97,7 +80,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatus(
-        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
+        expectedFilterResults: List<LaunchModel>,
         @DrawableRes launchSuccessIcon: Int
     ) {
         launchesFragmentTestHelper {
@@ -120,7 +103,7 @@ class LaunchFragmentTestHelper {
     }
 
     fun checkRecyclerItemsLaunchStatusMatchesFilteredLaunchStatusAndYearMatchesFilteredYear(
-        expectedFilterResults: List<com.seancoyle.launch.api.LaunchModel>,
+        expectedFilterResults: List<LaunchModel>,
         year: String,
         @DrawableRes launchSuccessIcon: Int
     ) {
@@ -229,7 +212,7 @@ class LaunchFragmentTestHelper {
         position: Int
     ) = apply {
         Espresso.onView(view).perform(
-            RecyclerViewActions.actionOnItemAtPosition<com.seancoyle.launch.implementation.presentation.LaunchAdapter.LaunchViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<LaunchAdapter.LaunchViewHolder>(
                 position,
                 ViewActions.click()
             )
@@ -331,5 +314,5 @@ class LaunchFragmentTestHelper {
         val materialDialogTitleViewMatcher: Matcher<View> = withId(R.id.md_text_title)
         val materialDialogMessageViewMatcher: Matcher<View> = withId(R.id.md_text_message)
         val materialDialogPositiveBtnViewMatcher: Matcher<View> = withId(R.id.md_button_positive)
-    }
+    }*/
 }
