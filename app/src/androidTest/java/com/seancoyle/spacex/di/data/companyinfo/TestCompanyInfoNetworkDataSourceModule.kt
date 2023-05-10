@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di.data.companyinfo
 
-import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.launch.implementation.di.CompanyInfoNetworkDataSourceModule
 import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi

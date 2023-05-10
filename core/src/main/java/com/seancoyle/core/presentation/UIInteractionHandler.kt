@@ -4,11 +4,9 @@ import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessageCallback
 
 
-interface UIController {
+interface UIInteractionHandler {
 
     fun displayProgressBar(isDisplayed: Boolean)
-
-    fun hideSoftKeyboard()
 
     fun onResponseReceived(
         response: Response,

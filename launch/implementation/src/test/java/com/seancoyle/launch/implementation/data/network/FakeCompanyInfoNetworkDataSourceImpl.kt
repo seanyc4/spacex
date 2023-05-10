@@ -1,7 +1,8 @@
 package com.seancoyle.launch.implementation.data.network
 
 import com.google.gson.GsonBuilder
-import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,7 +11,7 @@ class FakeCompanyInfoNetworkDataSourceImpl
 constructor(
     private val baseUrl: HttpUrl,
     private val networkMapper: CompanyInfoNetworkMapper
-) : com.seancoyle.launch.api.CompanyInfoNetworkDataSource {
+) : CompanyInfoNetworkDataSource {
 
     private val companyInfoApi: CompanyInfoApi = Retrofit.Builder()
         .baseUrl(baseUrl)

@@ -1,12 +1,12 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.util.StringResource
-import com.seancoyle.launch.api.model.CompanyInfoModel
-import com.seancoyle.launch.api.model.CompanySummary
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchType
-import com.seancoyle.launch.api.model.SectionTitle
-import com.seancoyle.launch.api.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanySummary
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchType
+import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
 import javax.inject.Inject
 

@@ -6,11 +6,11 @@ import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
 import com.seancoyle.core.state.EventExecutor
+import com.seancoyle.core.state.MessageDisplayType
 import com.seancoyle.core.state.MessageStack
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
 import com.seancoyle.core.state.StateMessage
-import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.flow
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-abstract class BaseViewModel<UiState>
-constructor(
+abstract class BaseViewModel<UiState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val messageStack: MessageStack
@@ -79,7 +78,7 @@ constructor(
             DataState.error<UiState>(
                 response = Response(
                     message = GenericErrors.INVALID_STATE_EVENT,
-                    uiComponentType = UIComponentType.None,
+                    messageDisplayType = MessageDisplayType.None,
                     messageType = MessageType.Error
                 ),
                 event = event

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.core_datastore_test"
+    namespace = Modules.core_datastore_test_namespace
 }
 
 dependencies {

@@ -1,7 +1,8 @@
-package com.seancoyle.core.util
+package com.seancoyle.spacex.util
 
+import com.seancoyle.core.util.NumberFormatter
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class NumberFormatterImpl

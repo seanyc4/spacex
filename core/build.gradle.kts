@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.core"
+    namespace = Modules.core_namespace
 }
 
 dependencies {

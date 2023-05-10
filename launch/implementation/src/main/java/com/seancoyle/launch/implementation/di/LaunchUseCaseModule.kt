@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.api.usecase.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.CreateMergedLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl

@@ -1,4 +1,4 @@
-package com.seancoyle.launch.api.model
+package com.seancoyle.launch.api.domain.model
 
 data class SectionTitle(
     val title: String,

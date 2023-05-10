@@ -6,13 +6,13 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
+import com.seancoyle.core.state.MessageDisplayType
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchState
-import com.seancoyle.launch.api.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -41,7 +41,7 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
                 return DataState.data(
                     response = Response(
                         message = event.eventName() + EVENT_CACHE_SUCCESS,
-                        uiComponentType = UIComponentType.None,
+                        messageDisplayType = MessageDisplayType.None,
                         messageType = MessageType.Success
                     ),
                     data = viewState,

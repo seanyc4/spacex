@@ -9,7 +9,7 @@ plugins {
 
 android {
 
-    namespace = "com.seancoyle.database"
+    namespace = Modules.core_database_namespace
 
     defaultConfig {
         javaCompileOptions {

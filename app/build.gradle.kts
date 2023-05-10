@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.spacex"
+    namespace = Modules.app_namespace
     compileSdk = Android.compileSdk
 
     defaultConfig {
@@ -42,8 +42,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = Java.java_compile_version
+        targetCompatibility = Java.java_compile_version
     }
 
     composeOptions {

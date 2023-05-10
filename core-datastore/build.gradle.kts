@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.core_datastore"
+    namespace = Modules.core_datastore_namespace
 }
 
 dependencies {

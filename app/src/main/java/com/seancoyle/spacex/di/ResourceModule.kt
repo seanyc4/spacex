@@ -2,7 +2,7 @@ package com.seancoyle.spacex.di
 
 import android.content.Context
 import com.seancoyle.core.util.StringResource
-import com.seancoyle.spacex.presentation.StringResourceImpl
+import com.seancoyle.spacex.util.StringResourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

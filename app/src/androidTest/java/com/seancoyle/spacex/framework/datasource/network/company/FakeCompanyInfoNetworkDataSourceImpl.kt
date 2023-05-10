@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
-import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import javax.inject.Inject
 import javax.inject.Singleton

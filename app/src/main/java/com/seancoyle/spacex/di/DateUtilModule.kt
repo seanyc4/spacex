@@ -1,6 +1,9 @@
 package com.seancoyle.spacex.di
 
 import com.seancoyle.core.util.*
+import com.seancoyle.spacex.util.DateFormatterImpl
+import com.seancoyle.spacex.util.DateTransformerImpl
+import com.seancoyle.spacex.util.NumberFormatterImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

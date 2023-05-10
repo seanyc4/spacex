@@ -3,10 +3,10 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LinksEntity
 import com.seancoyle.database.entities.RocketEntity
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchType
-import com.seancoyle.launch.api.model.Links
-import com.seancoyle.launch.api.model.Rocket
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchType
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
 import javax.inject.Inject
 
 class LaunchEntityMapper @Inject constructor() {
@@ -15,8 +15,8 @@ class LaunchEntityMapper @Inject constructor() {
         return entities.map { entity -> mapFromEntity(entity) }
     }
 
-    fun mapDomainListToEntityList(launchList: List<LaunchModel>): List<LaunchEntity> {
-        return launchList.map { item -> mapToEntity(item) }
+    fun mapDomainListToEntityList(launches: List<LaunchModel>): List<LaunchEntity> {
+        return launches.map { item -> mapToEntity(item) }
     }
 
     fun mapFromEntity(entity: LaunchEntity): LaunchModel {

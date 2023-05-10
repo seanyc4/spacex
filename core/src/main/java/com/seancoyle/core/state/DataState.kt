@@ -14,9 +14,7 @@ data class DataState<T>(
             event: Event?
         ): DataState<T> {
             return DataState(
-                stateMessage = StateMessage(
-                    response
-                ),
+                stateMessage = StateMessage(response),
                 data = null,
                 event = event
             )
@@ -29,9 +27,7 @@ data class DataState<T>(
         ): DataState<T> {
             return DataState(
                 stateMessage = response?.let {
-                    StateMessage(
-                        it
-                    )
+                    StateMessage(it)
                 },
                 data = data,
                 event = event

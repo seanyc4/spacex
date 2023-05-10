@@ -3,11 +3,11 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchOptions
-import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.data.LaunchNetworkDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies

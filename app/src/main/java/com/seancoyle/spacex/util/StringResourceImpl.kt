@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.presentation
+package com.seancoyle.spacex.util
 
 import android.content.Context
 import com.seancoyle.core.util.StringResource

@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.network
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.api.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.data.model.LaunchDto
 import javax.inject.Singleton
 

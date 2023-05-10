@@ -1,8 +1,8 @@
 package com.seancoyle.spacex.framework.datasource.network.launch
 
-import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchOptions
+import com.seancoyle.launch.api.data.LaunchNetworkDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 import javax.inject.Inject
 import javax.inject.Singleton

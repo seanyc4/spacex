@@ -1,23 +1,8 @@
 package com.seancoyle.launch.implementation.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.seancoyle.core.testing.InstantExecutorExtension
-import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.core.testing.getOrAwaitValue
-import com.seancoyle.core_datastore_test.AppDataStoreManagerFake
-import com.seancoyle.launch.api.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.CompanyDependencies
-import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
-import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.domain.LaunchUseCases
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 

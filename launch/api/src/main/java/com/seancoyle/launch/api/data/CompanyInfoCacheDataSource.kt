@@ -1,6 +1,6 @@
-package com.seancoyle.launch.api
+package com.seancoyle.launch.api.data
 
-import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 
 interface CompanyInfoCacheDataSource {
 

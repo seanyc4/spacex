@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.LaunchCacheDataSource
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
 import dagger.Binds
 import dagger.Module

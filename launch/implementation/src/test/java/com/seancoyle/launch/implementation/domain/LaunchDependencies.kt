@@ -3,19 +3,19 @@ package com.seancoyle.launch.implementation.domain
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_OPTIONS_ROCKET
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_OPTIONS_SORT
 import com.seancoyle.core.util.DateFormatConstants.YYYY_MM_DD_HH_MM_SS
-import com.seancoyle.core.util.DateFormatterImpl
-import com.seancoyle.core.util.DateTransformerImpl
 import com.seancoyle.core.util.isUnitTest
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchOptions
-import com.seancoyle.launch.api.model.Options
-import com.seancoyle.launch.api.model.Populate
-import com.seancoyle.launch.api.model.Select
-import com.seancoyle.launch.api.model.Sort
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.data.LaunchNetworkDataSource
+import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.Options
+import com.seancoyle.launch.api.domain.model.Populate
+import com.seancoyle.launch.api.domain.model.Select
+import com.seancoyle.launch.api.domain.model.Sort
 import com.seancoyle.launch.implementation.data.cache.FakeLaunchCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.network.FakeLaunchNetworkDataSourceImpl
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
+import com.seancoyle.spacex.util.DateFormatterImpl
+import com.seancoyle.spacex.util.DateTransformerImpl
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockWebServer
 import java.time.ZoneId
@@ -28,8 +28,8 @@ class LaunchDependencies {
         YYYY_MM_DD_HH_MM_SS, Locale.ENGLISH
     ).withZone(ZoneId.systemDefault())
 
-    private val dateFormatter = DateFormatterImpl(dateFormat)
-    private val dateTransformer = DateTransformerImpl()
+    private val dateFormatter = com.seancoyle.spacex.util.DateFormatterImpl(dateFormat)
+    private val dateTransformer = com.seancoyle.spacex.util.DateTransformerImpl()
     lateinit var launchCacheDataSource: LaunchCacheDataSource
     lateinit var launchDataFactory: LaunchDataFactory
     lateinit var launchOptions: LaunchOptions

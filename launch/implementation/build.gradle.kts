@@ -10,7 +10,7 @@ plugins {
 }
 
 android{
-    namespace = "com.seancoyle.launch.implementation"
+    namespace = Modules.launch_impl_namespace
 }
 
 dependencies {

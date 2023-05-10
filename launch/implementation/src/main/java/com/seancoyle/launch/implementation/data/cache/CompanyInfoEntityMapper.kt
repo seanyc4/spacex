@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.database.entities.CompanyInfoEntity
-import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import javax.inject.Inject
 
 class CompanyInfoEntityMapper @Inject constructor() {

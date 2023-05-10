@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.database.daos.CompanyInfoDao
-import com.seancoyle.launch.api.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.model.CompanyInfoModel
+import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import javax.inject.Inject
 
 class CompanyInfoCacheDataSourceImpl

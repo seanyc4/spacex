@@ -8,11 +8,11 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.database.daos.LaunchDao
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchType.Companion.TYPE_LAUNCH
-import com.seancoyle.launch.api.model.Links
-import com.seancoyle.launch.api.model.Rocket
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
 import com.seancoyle.spacex.LaunchDataFactory

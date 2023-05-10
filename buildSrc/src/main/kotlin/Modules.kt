@@ -2,6 +2,7 @@ object Modules {
     const val app = ":app"
     const val app_namespace = "com.seancoyle.spacex"
     const val core = ":core"
+    const val core_namespace = "com.seancoye.core"
     const val core_database = ":core-database"
     const val core_database_namespace = "com.seancoyle.core_database"
     const val core_datastore = ":core-datastore"

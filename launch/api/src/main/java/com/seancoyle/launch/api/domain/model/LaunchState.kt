@@ -1,4 +1,4 @@
-package com.seancoyle.launch.api.model
+package com.seancoyle.launch.api.domain.model
 
 import android.os.Parcelable
 import com.seancoyle.core.state.UiState

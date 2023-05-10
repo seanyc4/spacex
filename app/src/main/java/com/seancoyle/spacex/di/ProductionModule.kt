@@ -1,7 +1,6 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import com.seancoyle.core.testing.AndroidTestUtils
 import com.seancoyle.spacex.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
@@ -23,10 +22,16 @@ object ProductionModule {
     fun provideApplication(@ApplicationContext context: Context): BaseApplication {
         return context as BaseApplication
     }
-
-    @Singleton
-    @Provides
-    fun provideAndroidTestUtils(): AndroidTestUtils {
-        return AndroidTestUtils(false)
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

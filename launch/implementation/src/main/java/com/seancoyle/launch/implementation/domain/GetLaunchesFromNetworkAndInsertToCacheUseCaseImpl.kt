@@ -7,19 +7,19 @@ import com.seancoyle.core.network.safeApiCall
 import com.seancoyle.core.network.safeCacheCall
 import com.seancoyle.core.state.DataState
 import com.seancoyle.core.state.Event
+import com.seancoyle.core.state.MessageDisplayType
 import com.seancoyle.core.state.MessageType
 import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.UIComponentType
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_EMPTY
 import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.LaunchNetworkDataSource
-import com.seancoyle.launch.api.model.LaunchModel
-import com.seancoyle.launch.api.model.LaunchOptions
-import com.seancoyle.launch.api.model.LaunchState
-import com.seancoyle.launch.api.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.data.LaunchNetworkDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -58,7 +58,7 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                     DataState.data(
                         response = Response(
                             message = event.eventName() + EVENT_NETWORK_EMPTY,
-                            uiComponentType = UIComponentType.Toast,
+                            messageDisplayType = MessageDisplayType.Toast,
                             messageType = MessageType.Error
                         ),
                         data = null,
@@ -71,7 +71,7 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 return DataState.error(
                     response = Response(
                         message = event.eventName() + EVENT_NETWORK_ERROR,
-                        uiComponentType = UIComponentType.Toast,
+                        messageDisplayType = MessageDisplayType.Toast,
                         messageType = MessageType.Error
                     ),
                     event = event
@@ -101,7 +101,7 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                         DataState.data(
                             response = Response(
                                 message = event.eventName() + EVENT_CACHE_INSERT_SUCCESS,
-                                uiComponentType = UIComponentType.None,
+                                messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Success
                             ),
                             event = event
@@ -110,7 +110,7 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                         DataState.data(
                             response = Response(
                                 message = event.eventName() + EVENT_CACHE_INSERT_FAILED,
-                                uiComponentType = UIComponentType.None,
+                                messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Error
                             ),
                             event = event

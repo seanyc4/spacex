@@ -3,10 +3,10 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
-import com.seancoyle.launch.api.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.model.CompanyInfoModel
-import com.seancoyle.launch.api.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl

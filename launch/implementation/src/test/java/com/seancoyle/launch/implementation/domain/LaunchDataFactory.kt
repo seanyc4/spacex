@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.domain
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.implementation.data.cache.FakeLaunchDatabase
 
 class LaunchDataFactory(

@@ -3,8 +3,8 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
 const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
@@ -30,9 +30,9 @@ constructor(
         return 1 // success
     }
 
-    override suspend fun deleteList(launchList: List<LaunchModel>): Int {
+    override suspend fun deleteList(launches: List<LaunchModel>): Int {
         var failOrSuccess = 1
-        for (item in launchList) {
+        for (item in launches) {
             failOrSuccess = if (fakeLaunchDatabase.launchList.removeIf { it.id == item.id }) {
                 1 // return 1 for success
             } else {
@@ -71,9 +71,9 @@ constructor(
         return fakeLaunchDatabase.launchList.size
     }
 
-    override suspend fun insertList(launchList: List<LaunchModel>): LongArray {
-        var results = LongArray(launchList.size)
-        for (item in launchList.withIndex()) {
+    override suspend fun insertList(launches: List<LaunchModel>): LongArray {
+        var results = LongArray(launches.size)
+        for (item in launches.withIndex()) {
             when (item.value.id) {
 
                 FORCE_LAUNCH_GENERAL_FAILURE -> {

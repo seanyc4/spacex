@@ -2,13 +2,11 @@ package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.database.daos.returnOrderedQuery
-import com.seancoyle.launch.api.LaunchCacheDataSource
-import com.seancoyle.launch.api.model.LaunchModel
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.model.LaunchModel
 import javax.inject.Inject
 
-class LaunchCacheDataSourceImpl
-@Inject
-constructor(
+class LaunchCacheDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val entityMapper: LaunchEntityMapper
 ) : LaunchCacheDataSource {
@@ -21,16 +19,16 @@ constructor(
         )
     }
 
-    override suspend fun insertList(launchList: List<LaunchModel>): LongArray {
+    override suspend fun insertList(launches: List<LaunchModel>): LongArray {
         return dao.insertList(
             entityMapper.mapDomainListToEntityList(
-                launchList = launchList
+                launches = launches
             )
         )
     }
 
-    override suspend fun deleteList(launchList: List<LaunchModel>): Int {
-        val ids = launchList.mapIndexed { _, item -> item.id }
+    override suspend fun deleteList(launches: List<LaunchModel>): Int {
+        val ids = launches.mapIndexed { _, item -> item.id }
         return dao.deleteList(
             ids = ids
         )
@@ -77,26 +75,4 @@ constructor(
             entityMapper.mapEntityListToDomainList(it)
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
