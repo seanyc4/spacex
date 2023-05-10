@@ -2,7 +2,6 @@ package com.seancoyle.launch.implementation.presentation.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,7 +34,6 @@ fun LoadingLaunchCardList(
         item { LoadingLaunchHeading() }
         items(itemCount) {
             LoadingLaunchCard()
-            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.presentation
 
-import com.seancoyle.core.state.Event
-import com.seancoyle.core.state.StateMessage
+import com.seancoyle.core.domain.Event
+import com.seancoyle.core.domain.StateMessage
 
 sealed class LaunchEvent : Event {
 

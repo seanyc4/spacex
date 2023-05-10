@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase

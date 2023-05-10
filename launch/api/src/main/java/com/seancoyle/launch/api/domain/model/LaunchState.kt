@@ -1,7 +1,7 @@
 package com.seancoyle.launch.api.domain.model
 
 import android.os.Parcelable
-import com.seancoyle.core.state.UiState
+import com.seancoyle.core.domain.UiState
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 

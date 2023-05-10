@@ -4,8 +4,8 @@ import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
-import com.seancoyle.core.util.DateFormatter
-import com.seancoyle.core.util.DateTransformer
+import com.seancoyle.core.presentation.util.DateFormatter
+import com.seancoyle.core.presentation.util.DateTransformer
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links

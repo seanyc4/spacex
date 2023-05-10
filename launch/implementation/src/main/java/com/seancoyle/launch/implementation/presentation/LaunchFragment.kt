@@ -46,12 +46,15 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
-import com.seancoyle.core.presentation.UIInteractionHandler
-import com.seancoyle.core.presentation.UIInteractionHandlerDelegate
-import com.seancoyle.core.state.*
-import com.seancoyle.core.util.GenericErrors.ERROR_UNKNOWN
-import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_FAILED
-import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.domain.MessageDisplayType
+import com.seancoyle.core.domain.MessageType
+import com.seancoyle.core.domain.Response
+import com.seancoyle.core.domain.StateMessage
+import com.seancoyle.core.domain.StateMessageCallback
+import com.seancoyle.core.domain.UsecaseResponses.ERROR_UNKNOWN
+import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_FAILED
+import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.LaunchModel
@@ -67,6 +70,7 @@ import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunc
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 const val LINKS_KEY = "links"
 
@@ -75,7 +79,8 @@ const val LINKS_KEY = "links"
 @AndroidEntryPoint
 class LaunchFragment : Fragment() {
 
-    private val uiInteractionHandler: UIInteractionHandler by UIInteractionHandlerDelegate()
+    @Inject
+    lateinit var uiInteractionHandler: UIInteractionHandler
     private val launchViewModel by viewModels<LaunchViewModel>()
 
     @OptIn(ExperimentalMaterialApi::class)

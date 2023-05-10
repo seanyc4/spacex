@@ -1,7 +1,7 @@
 package com.seancoyle.core.di
 
-import com.seancoyle.core.state.MessageStack
-import com.seancoyle.core.state.MessageStackImpl
+import com.seancoyle.core.domain.MessageStack
+import com.seancoyle.core.domain.MessageStackImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

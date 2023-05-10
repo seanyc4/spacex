@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
+import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.core.util.GenericErrors.EVENT_CACHE_INSERT_SUCCESS
-import com.seancoyle.core.util.GenericErrors.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.LaunchModel

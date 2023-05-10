@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import com.seancoyle.core.util.StringResource
+import com.seancoyle.core.presentation.util.StringResource
 import com.seancoyle.spacex.util.StringResourceImpl
 import dagger.Module
 import dagger.Provides

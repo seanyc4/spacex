@@ -3,15 +3,15 @@ package com.seancoyle.core.presentation
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
-import com.seancoyle.core.state.DataState
-import com.seancoyle.core.state.Event
-import com.seancoyle.core.state.EventExecutor
-import com.seancoyle.core.state.MessageDisplayType
-import com.seancoyle.core.state.MessageStack
-import com.seancoyle.core.state.MessageType
-import com.seancoyle.core.state.Response
-import com.seancoyle.core.state.StateMessage
-import com.seancoyle.core.util.GenericErrors
+import com.seancoyle.core.domain.DataState
+import com.seancoyle.core.domain.Event
+import com.seancoyle.core.domain.EventExecutor
+import com.seancoyle.core.domain.MessageDisplayType
+import com.seancoyle.core.domain.MessageStack
+import com.seancoyle.core.domain.MessageType
+import com.seancoyle.core.domain.Response
+import com.seancoyle.core.domain.StateMessage
+import com.seancoyle.core.domain.UsecaseResponses
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -77,7 +77,7 @@ abstract class BaseViewModel<UiState>(
         emit(
             DataState.error<UiState>(
                 response = Response(
-                    message = GenericErrors.INVALID_STATE_EVENT,
+                    message = UsecaseResponses.INVALID_STATE_EVENT,
                     messageDisplayType = MessageDisplayType.None,
                     messageType = MessageType.Error
                 ),

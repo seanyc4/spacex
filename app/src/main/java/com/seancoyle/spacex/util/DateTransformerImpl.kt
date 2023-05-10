@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.util
 
-import com.seancoyle.core.util.DateTransformer
+import com.seancoyle.core.presentation.util.DateTransformer
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject

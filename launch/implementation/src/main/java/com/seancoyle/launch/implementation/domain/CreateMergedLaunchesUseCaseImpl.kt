@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain
 
-import com.seancoyle.core.util.StringResource
+import com.seancoyle.core.presentation.util.StringResource
 import com.seancoyle.launch.api.domain.model.CompanyInfoModel
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.LaunchModel
