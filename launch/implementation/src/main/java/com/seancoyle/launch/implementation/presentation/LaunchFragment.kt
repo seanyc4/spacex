@@ -63,6 +63,7 @@ import com.seancoyle.launch.implementation.presentation.composables.CompanySumma
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
+import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -72,7 +73,7 @@ const val LINKS_KEY = "links"
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment: Fragment() {
+class LaunchFragment : Fragment() {
 
     private val uiInteractionHandler: UIInteractionHandler by UIInteractionHandlerDelegate()
     private val launchViewModel by viewModels<LaunchViewModel>()
@@ -132,16 +133,21 @@ class LaunchFragment: Fragment() {
         val viewState = viewModel.uiState.collectAsState()
         val loading = viewModel.loading.collectAsState()
         printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
-        LaunchContent(
-            launchItems = viewState.value.mergedLaunches ?: emptyList(),
-            modifier = modifier,
-            loading = loading.value,
-            onChangeScrollPosition = viewModel::setScrollPositionState,
-            loadNextPage = viewModel::nextPage,
-            page = viewModel.getPageState(),
-            pullRefreshState = refreshState,
-            isRefreshing = viewModel.getRefreshState()
-        )
+
+        if (loading.value && viewState.value.mergedLaunches.isNullOrEmpty()) {
+            LoadingLaunchCardList(itemCount = 10)
+        } else {
+            LaunchContent(
+                launchItems = viewState.value.mergedLaunches ?: emptyList(),
+                modifier = modifier,
+                loading = loading.value,
+                onChangeScrollPosition = viewModel::setScrollPositionState,
+                loadNextPage = viewModel::nextPage,
+                page = viewModel.getPageState(),
+                pullRefreshState = refreshState,
+                isRefreshing = viewModel.getRefreshState()
+            )
+        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -192,7 +198,11 @@ class LaunchFragment: Fragment() {
                         }
                     }
                 }
-                PullRefreshIndicator(launchViewModel.getRefreshState(), pullRefreshState, Modifier.align(Alignment.TopCenter))
+                PullRefreshIndicator(
+                    launchViewModel.getRefreshState(),
+                    pullRefreshState,
+                    Modifier.align(Alignment.TopCenter)
+                )
             }
         }
     }
@@ -225,8 +235,8 @@ class LaunchFragment: Fragment() {
     private fun subscribeObservers() {
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                launchViewModel.loading.collect{ isLoading ->
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launchViewModel.loading.collect { isLoading ->
                     uiInteractionHandler.displayProgressBar(isLoading)
                 }
             }
