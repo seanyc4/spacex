@@ -16,12 +16,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
@@ -120,6 +122,81 @@ class LaunchFragment: Fragment() {
         }
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
+    @Composable
+    fun LaunchScreen(
+        modifier: Modifier = Modifier,
+        viewModel: LaunchViewModel,
+        refreshState: PullRefreshState
+    ) {
+        val viewState = viewModel.uiState.collectAsState()
+        val loading = viewModel.loading.collectAsState()
+        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
+        LaunchContent(
+            launchItems = viewState.value.mergedLaunches ?: emptyList(),
+            modifier = modifier,
+            loading = loading.value,
+            onChangeScrollPosition = viewModel::setScrollPositionState,
+            loadNextPage = viewModel::nextPage,
+            page = viewModel.getPageState(),
+            pullRefreshState = refreshState,
+            isRefreshing = viewModel.getRefreshState()
+        )
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    @Composable
+    private fun LaunchContent(
+        launchItems: List<LaunchType>,
+        loading: Boolean,
+        onChangeScrollPosition: (Int) -> Unit,
+        page: Int,
+        loadNextPage: () -> Unit,
+        pullRefreshState: PullRefreshState,
+        modifier: Modifier = Modifier,
+        isRefreshing: Boolean
+    ) {
+        if (launchItems.isNotEmpty()) {
+            Box(
+                modifier = modifier
+                    .background(MaterialTheme.colors.background)
+                    .pullRefresh(pullRefreshState)
+            ) {
+                LazyColumn {
+                    itemsIndexed(
+                        items = launchItems
+                    ) { index, launchItem ->
+                        onChangeScrollPosition(index)
+                        if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
+                            loadNextPage()
+                        }
+                        if (!isRefreshing) {
+                            when (launchItem.type) {
+                                LaunchType.TYPE_TITLE -> {
+                                    LaunchHeading(launchItem as SectionTitle)
+                                }
+
+                                LaunchType.TYPE_COMPANY -> {
+                                    CompanySummaryCard(launchItem as CompanySummary)
+                                }
+
+                                LaunchType.TYPE_LAUNCH -> {
+                                    LaunchCard(
+                                        launchItem = launchItem as LaunchModel,
+                                        onClick = { onCardClicked(launchItem.links) }
+                                    )
+                                }
+
+                                else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                            }
+                        }
+                    }
+                }
+                PullRefreshIndicator(launchViewModel.getRefreshState(), pullRefreshState, Modifier.align(Alignment.TopCenter))
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
@@ -205,81 +282,6 @@ class LaunchFragment: Fragment() {
         setFragmentResultListener(LINKS_KEY) { key, bundle ->
             if (key == LINKS_KEY) {
                 launchIntent(bundle.getString(LINKS_KEY))
-            }
-        }
-    }
-
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    fun LaunchScreen(
-        modifier: Modifier = Modifier,
-        viewModel: LaunchViewModel,
-        refreshState: PullRefreshState
-    ) {
-        val viewState = viewModel.uiState.collectAsState()
-        val loading = viewModel.loading.collectAsState()
-        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
-        LaunchContent(
-            launchItems = viewState.value.mergedLaunches ?: emptyList(),
-            modifier = modifier,
-            loading = loading.value,
-            onChangeScrollPosition = viewModel::setScrollPositionState,
-            loadNextPage = viewModel::nextPage,
-            page = viewModel.getPageState(),
-            pullRefreshState = refreshState,
-            isRefreshing = viewModel.getRefreshState()
-        )
-    }
-
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    private fun LaunchContent(
-        launchItems: List<LaunchType>,
-        loading: Boolean,
-        onChangeScrollPosition: (Int) -> Unit,
-        page: Int,
-        loadNextPage: () -> Unit,
-        pullRefreshState: PullRefreshState,
-        modifier: Modifier = Modifier,
-        isRefreshing: Boolean
-    ) {
-        if (launchItems.isNotEmpty()) {
-            Box(
-                modifier = modifier
-                    .background(MaterialTheme.colors.background)
-            ) {
-                LazyColumn(
-                    modifier = modifier.pullRefresh(pullRefreshState)
-                ) {
-                    itemsIndexed(
-                        items = launchItems
-                    ) { index, launchItem ->
-                        onChangeScrollPosition(index)
-                        if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
-                            loadNextPage()
-                        }
-                        if (!isRefreshing) {
-                            when (launchItem.type) {
-                                LaunchType.TYPE_TITLE -> {
-                                    LaunchHeading(launchItem as SectionTitle)
-                                }
-
-                                LaunchType.TYPE_COMPANY -> {
-                                    CompanySummaryCard(launchItem as CompanySummary)
-                                }
-
-                                LaunchType.TYPE_LAUNCH -> {
-                                    LaunchCard(
-                                        launchItem = launchItem as LaunchModel,
-                                        onClick = { onCardClicked(launchItem.links) }
-                                    )
-                                }
-
-                                else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
-                            }
-                        }
-                    }
-                }
             }
         }
     }

@@ -34,14 +34,14 @@ fun AppTheme(
 private val LightThemeColors = lightColors(
     primary = primaryColor,
     primaryVariant = primaryColor,
-    onPrimary = primaryColor,
+    onPrimary = white,
     secondary = secondaryColor,
     secondaryVariant = secondaryColor,
     onSecondary = secondaryColor,
     error = errorColor,
     onError = errorColor,
     background = primaryColor,
-    onBackground = primaryColor,
-    surface = secondaryColor,
-    onSurface = secondaryColor,
+    onBackground = white,
+    surface = primaryColor,
+    onSurface = white,
 )
