@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    "implementation"(project(Modules.launchConstants))
+    "implementation"(project(Modules.launch_constants))
     "implementation"(Room.room_ktx)
     "implementation"(Room.room_runtime)
     "kapt"(Room.room_compiler)

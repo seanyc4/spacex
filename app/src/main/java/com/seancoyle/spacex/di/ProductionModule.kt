@@ -1,8 +1,8 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import com.seancoyle.spacex.framework.presentation.BaseApplication
 import com.seancoyle.core.testing.AndroidTestUtils
+import com.seancoyle.spacex.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,13 +12,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
 
-
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Module
 @InstallIn(SingletonComponent::class)
 object ProductionModule {
-
 
     @Singleton
     @Provides
@@ -31,17 +29,4 @@ object ProductionModule {
     fun provideAndroidTestUtils(): AndroidTestUtils {
         return AndroidTestUtils(false)
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

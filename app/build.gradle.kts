@@ -93,9 +93,9 @@ dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.core_datastore))
     implementation(project(Modules.core_database))
-    implementation(project(Modules.launchConstants))
-    implementation(project(Modules.launchApi))
-    implementation(project(Modules.launchImpl))
+    implementation(project(Modules.launch_constants))
+    implementation(project(Modules.launch_api))
+    implementation(project(Modules.launch_impl))
     implementation(project(Modules.core_ui))
 
     implementation(AndroidX.app_compat)

@@ -160,7 +160,7 @@ class LaunchViewModel @Inject constructor(
         launchJob(event, job)
     }
 
-    override fun initNewUiState(): LaunchState {
+    override fun initNewUIState(): LaunchState {
         return LaunchState()
     }
 
@@ -285,6 +285,7 @@ class LaunchViewModel @Inject constructor(
     fun saveState(){
         savedStateHandle[LAUNCH_UI_STATE_KEY] = getCurrentStateOrNew()
     }
+
     private fun saveOrderToDatastore(order: String) {
         viewModelScope.launch(ioDispatcher) {
             appDataStoreManager.setStringValue(LAUNCH_ORDER_KEY, order)

@@ -30,7 +30,7 @@ constructor(
 ) : ViewModel() {
 
     private val _uiState : MutableStateFlow<UiState> by lazy {
-        MutableStateFlow(initNewUiState())
+        MutableStateFlow(initNewUIState())
     }
 
     val uiState: StateFlow<UiState>
@@ -93,7 +93,7 @@ constructor(
     ) = eventExecutor.launchJob(event, jobFunction)
 
     fun getCurrentStateOrNew(): UiState {
-        return uiState.value ?: initNewUiState()
+        return uiState.value ?: initNewUIState()
     }
 
     fun setState(uiState: UiState) {
@@ -112,7 +112,7 @@ constructor(
 
     fun cancelActiveJobs() = eventExecutor.cancelJobs()
 
-    abstract fun initNewUiState(): UiState
+    abstract fun initNewUIState(): UiState
 
 }
 
