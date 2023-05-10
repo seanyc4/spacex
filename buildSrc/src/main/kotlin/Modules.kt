@@ -7,8 +7,6 @@ object Modules {
     const val core_database_namespace = "com.seancoyle.core_database"
     const val core_datastore = ":core-datastore"
     const val core_datastore_namespace = "com.seancoyle.core_datastore"
-    const val core_datastore_test = ":core-datastore-test"
-    const val core_datastore_test_namespace = "com.seancoyle.core_datastore_test"
     const val launch = ":launch"
     const val launch_constants = ":launch:launch-constants"
     const val launch_api = ":launch:api"

@@ -40,7 +40,6 @@ dependencies {
     "implementation"(Square.retrofit_gson)
     "implementation"(Square.mock_web_server)
 
-    "testImplementation"(project(Modules.core_datastore_test))
     "testImplementation"(AndroidTestDependencies.test_arch_core)
     "testImplementation"(AndroidTestDependencies.coroutines_test)
     "testImplementation"(TestDependencies.mockk)

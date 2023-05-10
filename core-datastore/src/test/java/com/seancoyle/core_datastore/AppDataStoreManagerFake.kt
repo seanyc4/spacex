@@ -1,6 +1,4 @@
-package com.seancoyle.core_datastore_test
-
-import com.seancoyle.core_datastore.AppDataStore
+package com.seancoyle.core_datastore
 
 class AppDataStoreManagerFake: AppDataStore {
 
@@ -11,7 +9,7 @@ class AppDataStoreManagerFake: AppDataStore {
     }
 
     override suspend fun readStringValue(key: String): String {
-        return datastore[key].toString()
+        return datastore[key]?.toString().orEmpty()
     }
 
     override suspend fun setIntValue(key: String, value: Int) {
