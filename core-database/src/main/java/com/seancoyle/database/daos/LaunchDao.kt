@@ -1,7 +1,6 @@
 package com.seancoyle.database.daos
 
 import androidx.room.*
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.database.entities.LaunchEntity
@@ -160,76 +159,67 @@ suspend fun LaunchDao.returnOrderedQuery(
     launchFilter: Int?,
     page: Int
 ): List<LaunchEntity>? {
+    val hasYear = !year.isNullOrEmpty()
+    val hasLaunchFilter = launchFilter != null
+    val isOrderDesc = order.contains(LAUNCH_ORDER_DESC)
 
-    when {
+    return when {
 
-        launchFilter != null && order.contains(LAUNCH_ORDER_DESC) && year.isNullOrEmpty() -> {
-            return launchItemsWithSuccessOrderByYearDESC(
+        hasLaunchFilter && isOrderDesc && !hasYear -> {
+            launchItemsWithSuccessOrderByYearDESC(
                 launchFilter = launchFilter,
                 page = page
             )
         }
 
-        launchFilter != null && order.contains(LAUNCH_ORDER_ASC) && year.isNullOrEmpty() -> {
-            return launchItemsWithSuccessOrderByYearASC(
+        hasLaunchFilter && !isOrderDesc && !hasYear -> {
+            launchItemsWithSuccessOrderByYearASC(
                 launchFilter = launchFilter,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_DESC) && launchFilter == null -> {
-            return searchLaunchItemsOrderByYearDESC(
+        hasYear && isOrderDesc && !hasLaunchFilter -> {
+            searchLaunchItemsOrderByYearDESC(
                 year = year,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && order.contains(LAUNCH_ORDER_ASC) && launchFilter == null -> {
-            return searchLaunchItemsOrderByYearASC(
+        hasYear && !isOrderDesc && !hasLaunchFilter -> {
+            searchLaunchItemsOrderByYearASC(
                 year = year,
                 page = page
             )
         }
 
-        !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_ASC) ->
-            return searchLaunchItemsWithSuccessOrderByYearASC(
+        hasYear && hasLaunchFilter && !isOrderDesc ->
+            searchLaunchItemsWithSuccessOrderByYearASC(
                 year = year,
                 launchFilter = launchFilter,
                 page = page
             )
 
-        !year.isNullOrEmpty() && launchFilter != null && order.contains(LAUNCH_ORDER_DESC) ->
-            return searchLaunchItemsWithSuccessOrderByYearDESC(
+        hasYear && hasLaunchFilter && isOrderDesc ->
+            searchLaunchItemsWithSuccessOrderByYearDESC(
                 year = year,
                 launchFilter = launchFilter,
                 page = page
             )
 
-        order.contains(LAUNCH_ORDER_DESC) -> {
-            return launchItemsOrderByYearDESC(
+        isOrderDesc -> {
+            launchItemsOrderByYearDESC(
                 page = page
             )
         }
 
-        order.contains(LAUNCH_ORDER_ASC) -> {
-            return launchItemsOrderByYearASC(
+        !isOrderDesc -> {
+            launchItemsOrderByYearASC(
                 page = page
             )
         }
 
         else ->
-            return getAll()
+            getAll()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

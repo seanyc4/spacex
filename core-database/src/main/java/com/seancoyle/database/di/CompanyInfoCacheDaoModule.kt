@@ -17,5 +17,4 @@ object CompanyInfoCacheDaoModule {
     fun provideCompanyInfoDao(database: Database): CompanyInfoDao {
         return database.companyInfoDao()
     }
-
 }

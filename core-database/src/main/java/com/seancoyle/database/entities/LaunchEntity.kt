@@ -67,4 +67,3 @@ data class RocketEntity(
     @ColumnInfo(name="rocketNameAndType")
     val rocketNameAndType: String
 )
-

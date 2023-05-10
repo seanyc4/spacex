@@ -16,15 +16,3 @@ interface CompanyInfoDao {
     suspend fun deleteAll()
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
