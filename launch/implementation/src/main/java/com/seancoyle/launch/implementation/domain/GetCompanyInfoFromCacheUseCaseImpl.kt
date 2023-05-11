@@ -11,7 +11,7 @@ import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,11 +32,11 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
             cacheDataSource.getCompanyInfo()
         }
 
-        val response = object : CacheResponseHandler<LaunchState, CompanyInfoModel?>(
+        val response = object : CacheResponseHandler<LaunchState, CompanyInfo?>(
             response = cacheResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfo?): DataState<LaunchState> {
                 val (resultMessage, uiComponentType) = if (resultObj == null) {
                     Pair(EVENT_CACHE_NO_MATCHING_RESULTS, MessageDisplayType.Toast)
                 } else {

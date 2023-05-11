@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.network
 
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
 class CompanyInfoNetworkDataSourceImpl
@@ -11,7 +11,7 @@ constructor(
     private val networkMapper: CompanyInfoNetworkMapper
 ) : CompanyInfoNetworkDataSource {
 
-    override suspend fun getCompanyInfo(): CompanyInfoModel {
+    override suspend fun getCompanyInfo(): CompanyInfo {
         return networkMapper.mapFromEntity(
             api.getCompanyInfo()
         )

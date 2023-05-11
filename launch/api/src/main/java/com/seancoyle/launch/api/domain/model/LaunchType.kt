@@ -5,8 +5,10 @@ abstract class LaunchType {
     abstract val type: Int
 
     companion object {
-        const val TYPE_TITLE = 0
-        const val TYPE_COMPANY = 1
-        const val TYPE_LAUNCH = 2
+        const val TYPE_SECTION_TITLE = 0
+        const val TYPE_HEADER = 1
+        const val TYPE_LIST = 2
+        const val TYPE_CAROUSEL = 3
+        const val TYPE_GRID = 4
     }
 }

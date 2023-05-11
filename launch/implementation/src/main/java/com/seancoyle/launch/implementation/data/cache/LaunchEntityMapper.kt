@@ -40,7 +40,7 @@ class LaunchEntityMapper @Inject constructor() {
                 ),
                 daysToFromTitle = daysToFromTitle,
                 launchDaysDifference = launchDaysDifference,
-                type = LaunchType.TYPE_LAUNCH
+                type = LaunchType.TYPE_LIST
             )
         }
     }

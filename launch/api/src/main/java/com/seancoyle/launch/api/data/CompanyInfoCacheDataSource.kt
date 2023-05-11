@@ -1,12 +1,12 @@
 package com.seancoyle.launch.api.data
 
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 
 interface CompanyInfoCacheDataSource {
 
-    suspend fun insert(company: CompanyInfoModel): Long
+    suspend fun insert(company: CompanyInfo): Long
 
-    suspend fun getCompanyInfo(): CompanyInfoModel?
+    suspend fun getCompanyInfo(): CompanyInfo?
 
     suspend fun deleteAll()
 

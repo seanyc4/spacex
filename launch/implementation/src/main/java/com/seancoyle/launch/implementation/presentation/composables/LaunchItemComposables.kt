@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,12 +22,14 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.RocketWithMission
 import com.seancoyle.launch.api.domain.model.SectionTitle
 import com.seancoyle.launch.implementation.R
 
@@ -39,13 +40,13 @@ fun LaunchHeading(
 ) {
     Text(
         text = launchHeading.title,
-        color = colorResource(id = R.color.textColorPrimary),
+        color = MaterialTheme.colors.primary,
         style = TextStyle(
             fontFamily = FontFamily(
                 Font(R.font.orbitron)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_subHeading).value.sp,
-            color = colorResource(id = R.color.textColorPrimary),
+            color = MaterialTheme.colors.primary,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start
         ),
@@ -61,10 +62,10 @@ fun CompanySummaryCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        backgroundColor = colorResource(id = R.color.colorSecondary),
+        backgroundColor = MaterialTheme.colors.surface,
         elevation = 4.dp,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
-        border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.colorAccent)),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primaryVariant),
         modifier = modifier.padding(8.dp)
     ) {
         Text(
@@ -74,7 +75,7 @@ fun CompanySummaryCard(
                     Font(R.font.space_grotesk)
                 ),
                 fontSize = dimensionResource(id = R.dimen.text_size_medium).value.sp,
-                color = colorResource(id = R.color.textColorPrimary),
+                color = MaterialTheme.colors.primary,
                 textAlign = TextAlign.Start
             ),
             modifier = modifier
@@ -94,7 +95,7 @@ fun LaunchCard(
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        backgroundColor = colorResource(id = R.color.colorSecondary),
+        backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Row(
@@ -108,9 +109,11 @@ fun LaunchCard(
                     .padding(end = dimensionResource(id = R.dimen.small_view_margins_8dp))
                     .align(Alignment.CenterVertically)
             ) {
-                LaunchCardImage(imageUrl = launchItem.links.missionImage)
+                LaunchCardImage(
+                    imageUrl = launchItem.links.missionImage,
+                    size = 60.dp
+                )
             }
-
 
             Column(
                 modifier = modifier
@@ -149,13 +152,14 @@ fun LaunchCard(
 @Composable
 fun LaunchCardImage(
     modifier: Modifier = Modifier,
-    imageUrl: String
+    imageUrl: String,
+    size: Dp
 ) {
     GlideImage(
         model = imageUrl,
         contentDescription = stringResource(id = R.string.launch_image),
         modifier = modifier
-            .size(60.dp)
+            .size(size)
             .padding(dimensionResource(id = R.dimen._4sdp))
 
     )
@@ -172,14 +176,15 @@ fun LaunchCardDefaultText(
                 Font(R.font.space_grotesk)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = colorResource(id = R.color.textColorPrimary)
+            color = MaterialTheme.colors.primary
         )
     )
 }
 
 @Composable
 fun LaunchCardDynamicText(
-    title: String
+    title: String,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = title,
@@ -188,7 +193,71 @@ fun LaunchCardDynamicText(
                 Font(R.font.space_grotesk)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = colorResource(id = R.color.colorAccent)
+            color = MaterialTheme.colors.primaryVariant
         )
     )
+}
+
+@Composable
+fun LaunchCarouselCard(
+    launchItem: RocketWithMission,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
+            .clickable { onClick() },
+        backgroundColor = MaterialTheme.colors.surface,
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.default_view_margin)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LaunchCardImage(
+                imageUrl = launchItem.links.missionImage,
+                size = 150.dp
+            )
+            LaunchCardDynamicText(
+                title = launchItem.rocket.rocketNameAndType,
+                modifier = modifier.padding(dimensionResource(id = R.dimen.default_view_margin))
+            )
+        }
+    }
+}
+
+@Composable
+fun LaunchGridCard(
+    launchItem: LaunchModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
+            .clickable { onClick() },
+        backgroundColor = MaterialTheme.colors.surface,
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.default_view_margin)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LaunchCardImage(
+                imageUrl = launchItem.links.missionImage,
+                size = 150.dp
+            )
+            LaunchCardDynamicText(
+                title = launchItem.rocket.rocketNameAndType,
+                modifier = modifier.padding(dimensionResource(id = R.dimen.default_view_margin))
+            )
+        }
+    }
 }

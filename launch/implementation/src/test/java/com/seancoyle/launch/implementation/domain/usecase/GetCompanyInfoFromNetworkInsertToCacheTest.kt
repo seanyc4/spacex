@@ -5,7 +5,7 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
@@ -73,7 +73,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
 
         val result = cacheDataSource.getCompanyInfo()
         assertTrue(result != null)
-        assertTrue(result is CompanyInfoModel)
+        assertTrue(result is CompanyInfo)
     }
 
     @Test

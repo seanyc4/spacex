@@ -1,10 +1,10 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 
 class FakeCompanyInfoDatabase {
 
     // fake for company_info table in local db
-    var companyInfo : CompanyInfoModel? = null
+    var companyInfo : CompanyInfo? = null
 
 }

@@ -12,7 +12,7 @@ data class LaunchState(
     var mergedLaunches: List<LaunchType>? = emptyList(),
     @IgnoredOnParcel
     var launches: List<LaunchModel>? = emptyList(),
-    var company: CompanyInfoModel? = null,
+    var company: CompanyInfo? = null,
     var numLaunchesInCache: Int? = 0,
     var page: Int? = 1,
     var isDialogFilterDisplayed: Boolean? = false,

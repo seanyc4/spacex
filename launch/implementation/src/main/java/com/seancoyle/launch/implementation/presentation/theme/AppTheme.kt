@@ -24,7 +24,7 @@ fun AppTheme(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = primaryColor)
+                .background(color = MaterialTheme.colors.background)
         ){
             content()
         }
@@ -33,15 +33,15 @@ fun AppTheme(
 
 private val LightThemeColors = lightColors(
     primary = primaryColor,
-    primaryVariant = primaryColor,
+    primaryVariant = primaryVariantColor,
     onPrimary = white,
     secondary = secondaryColor,
     secondaryVariant = secondaryColor,
-    onSecondary = secondaryColor,
+    onSecondary = white,
     error = errorColor,
     onError = errorColor,
-    background = primaryColor,
+    background = backgroundColor,
     onBackground = white,
-    surface = primaryColor,
+    surface = surfaceColor,
     onSurface = white,
 )

@@ -13,7 +13,7 @@ import com.seancoyle.core.domain.MessageStack
 import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.model.LaunchType
@@ -172,7 +172,7 @@ class LaunchViewModel @Inject constructor(
 
     fun getLaunchesState() = getCurrentStateOrNew().launches
 
-    private fun setCompanyInfoState(companyInfo: CompanyInfoModel) {
+    private fun setCompanyInfoState(companyInfo: CompanyInfo) {
         val currentState = getCurrentStateOrNew()
         currentState.company = companyInfo
         setState(currentState)

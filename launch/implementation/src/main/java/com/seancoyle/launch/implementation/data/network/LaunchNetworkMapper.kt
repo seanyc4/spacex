@@ -45,7 +45,7 @@ class LaunchNetworkMapper @Inject constructor(
                     ),
                     daysToFromTitle = mapCorrectLaunchText(localDateTime),
                     launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),
-                    type = LaunchType.TYPE_LAUNCH
+                    type = LaunchType.TYPE_LIST
                 )
             }
         }

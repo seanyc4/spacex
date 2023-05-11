@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.CompanyDependencies
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
@@ -39,7 +39,7 @@ class GetCompanyInfoFromCacheUseCaseImplTest {
     @Test
     fun getCompanyInfoFromCache_success_confirmCorrect() = runBlocking {
 
-        var result: CompanyInfoModel? = null
+        var result: CompanyInfo? = null
 
         underTest(
             event = LaunchEvent.GetCompanyInfoFromCacheEvent

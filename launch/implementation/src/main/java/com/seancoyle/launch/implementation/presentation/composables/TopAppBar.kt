@@ -31,15 +31,15 @@ fun HomeAppBar(
 ) {
     TopAppBar(
         elevation = 4.dp,
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.primary
     ) {
         Box(modifier = modifier.fillMaxSize()) {
             Text(
                 text = stringResource(id = R.string.app_name),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
-                    color = colorResource(id = R.color.textColorPrimary),
+                    color = MaterialTheme.colors.primary,
                     fontSize = dimensionResource(id = R.dimen.text_size_heading).value.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily(

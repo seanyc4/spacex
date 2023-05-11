@@ -55,7 +55,7 @@ abstract class BaseViewModel<UiState>(
         return eventExecutor.messageStack.getSize()
     }
 
-    fun setupChannel() = eventExecutor.cancelCurrentJobs()
+    fun cancelCurrentJobs() = eventExecutor.cancelCurrentJobs()
 
     abstract fun setUpdatedState(data: UiState)
 
@@ -114,11 +114,3 @@ abstract class BaseViewModel<UiState>(
     abstract fun initNewUIState(): UiState
 
 }
-
-
-
-
-
-
-
-

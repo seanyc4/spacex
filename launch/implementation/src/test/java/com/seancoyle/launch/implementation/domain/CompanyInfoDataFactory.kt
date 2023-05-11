@@ -2,22 +2,22 @@ package com.seancoyle.launch.implementation.domain
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.implementation.data.cache.FakeCompanyInfoDatabase
 
 class CompanyInfoDataFactory(
     private val testClassLoader: ClassLoader
 ) {
 
-    fun produceCompanyInfo(): CompanyInfoModel {
+    fun produceCompanyInfo(): CompanyInfo {
         return Gson()
             .fromJson(
                 getDataFromFile("company_info.json"),
-                object : TypeToken<CompanyInfoModel>() {}.type
+                object : TypeToken<CompanyInfo>() {}.type
             )
     }
 
-    fun produceFakeCompanyInfoDatabase(companyInfo: CompanyInfoModel): FakeCompanyInfoDatabase {
+    fun produceFakeCompanyInfoDatabase(companyInfo: CompanyInfo): FakeCompanyInfoDatabase {
         val db = FakeCompanyInfoDatabase()
         db.companyInfo = companyInfo
         return db

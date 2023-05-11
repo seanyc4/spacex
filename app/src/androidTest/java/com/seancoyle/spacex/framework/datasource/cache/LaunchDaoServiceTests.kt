@@ -10,7 +10,7 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType.Companion.TYPE_LAUNCH
+import com.seancoyle.launch.api.domain.model.LaunchType.Companion.TYPE_LIST
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
@@ -115,7 +115,7 @@ class LaunchDaoServiceTests {
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
             launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LAUNCH,
+            type = TYPE_LIST,
         )
 
         underTest.insert(newLaunchItem)
@@ -174,7 +174,7 @@ class LaunchDaoServiceTests {
             ),
             daysToFromTitle = UUID.randomUUID().hashCode(),
             launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LAUNCH,
+            type = TYPE_LIST,
         )
         underTest.insert(newLaunchItem)
 

@@ -16,7 +16,7 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_EMPTY
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,7 +30,7 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private val networkDataSource: CompanyInfoNetworkDataSource
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
-    private var companyInfoModel: CompanyInfoModel? = null
+    private var companyInfo: CompanyInfo? = null
     private var viewState: LaunchState = LaunchState()
 
     override operator fun invoke(
@@ -41,13 +41,13 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             networkDataSource.getCompanyInfo()
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchState, CompanyInfoModel?>(
+        val networkResponse = object : ApiResponseHandler<LaunchState, CompanyInfo?>(
             response = networkResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfoModel?): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfo?): DataState<LaunchState> {
                 return if (resultObj != null) {
-                    companyInfoModel = resultObj
+                    companyInfo = resultObj
                     viewState.company = resultObj
                     DataState.data(
                         response = null,
@@ -86,10 +86,10 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
         }
 
         // Insert to Cache
-        if (companyInfoModel != null) {
+        if (companyInfo != null) {
 
             val cacheResult = safeCacheCall(ioDispatcher) {
-                cacheDataSource.insert(companyInfoModel!!)
+                cacheDataSource.insert(companyInfo!!)
             }
 
             val cacheResponse = object : CacheResponseHandler<LaunchState, Long>(

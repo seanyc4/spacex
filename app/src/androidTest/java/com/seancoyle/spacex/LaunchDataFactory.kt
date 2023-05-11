@@ -87,7 +87,7 @@ constructor(
                     ),
                     daysToFromTitle = UUID.randomUUID().hashCode(),
                     launchDaysDifference = UUID.randomUUID().toString(),
-                    type = LaunchType.TYPE_LAUNCH
+                    type = LaunchType.TYPE_LIST
                 )
             )
         }

@@ -1,6 +1,6 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,8 +16,8 @@ class CompanyInfoFactory
         launchSites: Int,
         name: String,
         valuation: String
-    ): CompanyInfoModel {
-        return CompanyInfoModel(
+    ): CompanyInfo {
+        return CompanyInfo(
             id = id ?: "1",
             employees = employees,
             founded = founded,

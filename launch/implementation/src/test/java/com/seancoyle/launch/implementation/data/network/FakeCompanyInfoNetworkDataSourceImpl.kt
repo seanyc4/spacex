@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.data.network
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +20,7 @@ constructor(
         .create(CompanyInfoApi::class.java)
 
 
-    override suspend fun getCompanyInfo(): CompanyInfoModel {
+    override suspend fun getCompanyInfo(): CompanyInfo {
         return networkMapper.mapFromEntity(
             companyInfoApi.getCompanyInfo()
         )

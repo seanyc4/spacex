@@ -1,14 +1,14 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.database.entities.CompanyInfoEntity
-import com.seancoyle.launch.api.domain.model.CompanyInfoModel
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
 class CompanyInfoEntityMapper @Inject constructor() {
 
-    fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfoModel {
+    fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfo {
         return with(entity) {
-            CompanyInfoModel(
+            CompanyInfo(
                 id = id,
                 employees = employees,
                 founded = founded,
@@ -20,7 +20,7 @@ class CompanyInfoEntityMapper @Inject constructor() {
         }
     }
 
-    fun mapToEntity(domainModel: CompanyInfoModel): CompanyInfoEntity {
+    fun mapToEntity(domainModel: CompanyInfo): CompanyInfoEntity {
         return with(domainModel) {
             CompanyInfoEntity(
                 id = "1",

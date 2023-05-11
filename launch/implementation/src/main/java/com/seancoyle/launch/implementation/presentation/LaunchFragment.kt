@@ -12,6 +12,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -57,6 +59,7 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.CompanySummary
+import com.seancoyle.launch.api.domain.model.LaunchCarousel
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
@@ -65,6 +68,7 @@ import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
+import com.seancoyle.launch.implementation.presentation.composables.LaunchCarouselCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
 import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
@@ -177,25 +181,56 @@ class LaunchFragment : Fragment() {
                     itemsIndexed(
                         items = launchItems
                     ) { index, launchItem ->
+                        printLogDebug("Recyclerview", ": index$index")
                         onChangeScrollPosition(index)
                         if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
                             loadNextPage()
                         }
                         if (!isRefreshing) {
                             when (launchItem.type) {
-                                LaunchType.TYPE_TITLE -> {
+                                LaunchType.TYPE_SECTION_TITLE -> {
                                     LaunchHeading(launchItem as SectionTitle)
                                 }
 
-                                LaunchType.TYPE_COMPANY -> {
+                                LaunchType.TYPE_HEADER -> {
                                     CompanySummaryCard(launchItem as CompanySummary)
                                 }
 
-                                LaunchType.TYPE_LAUNCH -> {
+                                LaunchType.TYPE_LIST -> {
                                     LaunchCard(
                                         launchItem = launchItem as LaunchModel,
                                         onClick = { onCardClicked(launchItem.links) }
                                     )
+                                }
+
+                                /*LaunchType.TYPE_GRID -> {
+                                    LazyVerticalGrid(
+                                        columns = GridCells.Adaptive(
+                                            minSize = 90.dp
+                                        )
+                                    ) {
+                                        item(span = {
+                                            GridItemSpan(2)
+                                        }) {
+                                            LaunchGridCard(
+                                                launchItem = launchItem as LaunchModel, onClick = { *//*TODO*//* })
+                                        }
+                                    }
+                                }*/
+
+                                LaunchType.TYPE_CAROUSEL -> {
+                                    val carouselItems = (launchItem as LaunchCarousel).items
+                                    LazyRow {
+                                        items(carouselItems) { carouselItem ->
+                                            printLogDebug(
+                                                "Recyclerview - ROW ",
+                                                ": index${carouselItems.withIndex()}"
+                                            )
+                                            LaunchCarouselCard(
+                                                launchItem = carouselItem,
+                                                onClick = { onCardClicked(carouselItem.links) })
+                                        }
+                                    }
                                 }
 
                                 else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
@@ -203,6 +238,14 @@ class LaunchFragment : Fragment() {
                         }
                     }
                 }
+                /*ScrollToTopButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            // Animate scroll to the first item
+                            listState.animateScrollToItem(index = 0)
+                        }
+                    }
+                )*/
                 PullRefreshIndicator(
                     launchViewModel.getRefreshState(),
                     pullRefreshState,
