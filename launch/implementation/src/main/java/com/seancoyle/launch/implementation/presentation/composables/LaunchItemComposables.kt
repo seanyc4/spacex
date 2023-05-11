@@ -194,7 +194,8 @@ fun LaunchCardDynamicText(
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
             color = MaterialTheme.colors.primaryVariant
-        )
+        ),
+        modifier = modifier
     )
 }
 
@@ -224,7 +225,7 @@ fun LaunchCarouselCard(
             )
             LaunchCardDynamicText(
                 title = launchItem.rocket.rocketNameAndType,
-                modifier = modifier.padding(dimensionResource(id = R.dimen.default_view_margin))
+                modifier = modifier.padding(top = dimensionResource(id = R.dimen._6sdp))
             )
         }
     }

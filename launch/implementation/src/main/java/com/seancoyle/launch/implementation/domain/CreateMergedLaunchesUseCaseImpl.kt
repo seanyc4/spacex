@@ -28,9 +28,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             add(CompanySummary(summary = buildCompanySummary(companyInfo), type = LaunchType.TYPE_HEADER))
             add(SectionTitle(title = "ROCKETS", type = LaunchType.TYPE_SECTION_TITLE))
             add(LaunchCarousel(rocketLaunches, LaunchType.TYPE_CAROUSEL))
-          /*  add(SectionTitle(title = "GRID", type = LaunchType.TYPE_SECTION_TITLE))
-            add(LaunchGrid(launches.take(10), LaunchType.TYPE_GRID))*/
-            add(SectionTitle(title = "LAUNCH", type = LaunchType.TYPE_SECTION_TITLE))
+            add(SectionTitle(title = "LAUNCHES", type = LaunchType.TYPE_SECTION_TITLE))
             addAll(launches)
         }
         return mergedLaunches

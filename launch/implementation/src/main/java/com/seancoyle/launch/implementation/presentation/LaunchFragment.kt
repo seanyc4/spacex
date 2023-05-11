@@ -203,21 +203,6 @@ class LaunchFragment : Fragment() {
                                     )
                                 }
 
-                                /*LaunchType.TYPE_GRID -> {
-                                    LazyVerticalGrid(
-                                        columns = GridCells.Adaptive(
-                                            minSize = 90.dp
-                                        )
-                                    ) {
-                                        item(span = {
-                                            GridItemSpan(2)
-                                        }) {
-                                            LaunchGridCard(
-                                                launchItem = launchItem as LaunchModel, onClick = { *//*TODO*//* })
-                                        }
-                                    }
-                                }*/
-
                                 LaunchType.TYPE_CAROUSEL -> {
                                     val carouselItems = (launchItem as LaunchCarousel).items
                                     LazyRow {
