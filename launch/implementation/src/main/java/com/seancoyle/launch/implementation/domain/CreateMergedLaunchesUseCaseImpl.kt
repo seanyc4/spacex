@@ -4,6 +4,7 @@ import com.seancoyle.core.presentation.util.StringResource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.LaunchCarousel
+import com.seancoyle.launch.api.domain.model.LaunchGrid
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
@@ -29,11 +30,29 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             add(SectionTitle(title = "ROCKETS", type = LaunchType.TYPE_SECTION_TITLE))
             add(LaunchCarousel(rocketLaunches, LaunchType.TYPE_CAROUSEL))
             add(SectionTitle(title = "GRID", type = LaunchType.TYPE_SECTION_TITLE))
-            add(LaunchCarousel(rocketLaunches, LaunchType.TYPE_GRID))
+            addAll(buildGrid(launches))
             add(SectionTitle(title = "LAUNCHES", type = LaunchType.TYPE_SECTION_TITLE))
             addAll(launches)
         }
         return mergedLaunches
+    }
+
+    private fun buildGrid(launches: List<LaunchModel>): List<LaunchGrid>{
+        val num = if (launches.size > 20) 20 else launches.size
+        return launches.shuffled().take(num).map {
+            LaunchGrid(
+                Links(
+                    articleLink = it.links.articleLink,
+                    missionImage = it.links.missionImage,
+                    webcastLink = it.links.webcastLink,
+                    wikiLink = it.links.wikiLink,
+                ),
+                Rocket(
+                    rocketNameAndType = it.rocket.rocketNameAndType
+                ),
+                type = LaunchType.TYPE_GRID
+            )
+        }
     }
 
     private fun buildRockets(launches: List<LaunchModel>): List<RocketWithMission> {

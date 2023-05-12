@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
@@ -61,6 +62,7 @@ import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.LaunchCarousel
+import com.seancoyle.launch.api.domain.model.LaunchGrid
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
@@ -70,6 +72,7 @@ import com.seancoyle.launch.implementation.presentation.composables.CompanySumma
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCarouselCard
+import com.seancoyle.launch.implementation.presentation.composables.LaunchGridCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
 import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
@@ -78,6 +81,7 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 const val LINKS_KEY = "links"
+private const val GRID_COLUMN_SIZE = 2
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -178,9 +182,12 @@ class LaunchFragment : Fragment() {
                     .background(MaterialTheme.colors.background)
                     .pullRefresh(pullRefreshState)
             ) {
-                LazyVerticalGrid(columns = GridCells.Fixed(1)) {
+                LazyVerticalGrid(columns = GridCells.Fixed(GRID_COLUMN_SIZE)) {
                     itemsIndexed(
-                        items = launchItems
+                        items = launchItems,
+                        span = { _, item ->
+                            GridItemSpan(if (item.type == LaunchType.TYPE_GRID) 1 else 2)
+                        }
                     ) { index, launchItem ->
                         printLogDebug("Recyclerview", ": index$index")
                         onChangeScrollPosition(index)
@@ -205,18 +212,9 @@ class LaunchFragment : Fragment() {
                                 }
 
                                 LaunchType.TYPE_GRID -> {
-                                  /*  FlowRow(
-                                        maxItemsInEachRow = 2,
-                                        modifier = Modifier.fillMaxWidth(
-                                        )
-                                    ) {
-                                        val gridItems = (launchItem as LaunchCarousel).items
-                                        gridItems.forEach { item ->
-                                            LaunchGridCard(
-                                                launchItem = item,
-                                                onClick = { *//*TODO*//* })
-                                        }
-                                    }*/
+                                    LaunchGridCard(
+                                        launchItem = launchItem as LaunchGrid,
+                                        onClick = { onCardClicked(launchItem.links) })
                                 }
 
                                 LaunchType.TYPE_CAROUSEL -> {

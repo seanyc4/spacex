@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.api.domain.model.CompanySummary
+import com.seancoyle.launch.api.domain.model.LaunchGrid
 import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.RocketWithMission
 import com.seancoyle.launch.api.domain.model.SectionTitle
@@ -233,7 +234,7 @@ fun LaunchCarouselCard(
 
 @Composable
 fun LaunchGridCard(
-    launchItem: RocketWithMission,
+    launchItem: LaunchGrid,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -245,8 +246,8 @@ fun LaunchGridCard(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Column(
-           /* modifier = modifier
-                .padding(dimensionResource(id = R.dimen.default_view_margin)),*/
+            modifier = modifier
+                .padding(dimensionResource(id = R.dimen.default_view_margin)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LaunchCardImage(
