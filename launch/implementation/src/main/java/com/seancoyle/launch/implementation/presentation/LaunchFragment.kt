@@ -11,10 +11,11 @@ import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -177,7 +178,7 @@ class LaunchFragment : Fragment() {
                     .background(MaterialTheme.colors.background)
                     .pullRefresh(pullRefreshState)
             ) {
-                LazyColumn {
+                LazyVerticalGrid(columns = GridCells.Fixed(1)) {
                     itemsIndexed(
                         items = launchItems
                     ) { index, launchItem ->
@@ -201,6 +202,21 @@ class LaunchFragment : Fragment() {
                                         launchItem = launchItem as LaunchModel,
                                         onClick = { onCardClicked(launchItem.links) }
                                     )
+                                }
+
+                                LaunchType.TYPE_GRID -> {
+                                  /*  FlowRow(
+                                        maxItemsInEachRow = 2,
+                                        modifier = Modifier.fillMaxWidth(
+                                        )
+                                    ) {
+                                        val gridItems = (launchItem as LaunchCarousel).items
+                                        gridItems.forEach { item ->
+                                            LaunchGridCard(
+                                                launchItem = item,
+                                                onClick = { *//*TODO*//* })
+                                        }
+                                    }*/
                                 }
 
                                 LaunchType.TYPE_CAROUSEL -> {

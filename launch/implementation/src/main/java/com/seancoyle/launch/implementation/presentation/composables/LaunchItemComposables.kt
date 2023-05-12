@@ -233,27 +233,25 @@ fun LaunchCarouselCard(
 
 @Composable
 fun LaunchGridCard(
-    launchItem: LaunchModel,
+    launchItem: RocketWithMission,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
         backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.default_view_margin)),
+           /* modifier = modifier
+                .padding(dimensionResource(id = R.dimen.default_view_margin)),*/
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LaunchCardImage(
                 imageUrl = launchItem.links.missionImage,
-                size = 150.dp
+                size = 100.dp
             )
             LaunchCardDynamicText(
                 title = launchItem.rocket.rocketNameAndType,
