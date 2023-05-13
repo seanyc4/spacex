@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.database.daos.returnOrderedQuery
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.LaunchModel
+import com.seancoyle.launch.api.domain.model.ViewModel
 import javax.inject.Inject
 
 class LaunchCacheDataSourceImpl @Inject constructor(
@@ -11,7 +11,7 @@ class LaunchCacheDataSourceImpl @Inject constructor(
     private val entityMapper: LaunchEntityMapper
 ) : LaunchCacheDataSource {
 
-    override suspend fun insert(launch: LaunchModel): Long {
+    override suspend fun insert(launch: ViewModel): Long {
         return dao.insert(
             entityMapper.mapToEntity(
                 entity = launch
@@ -19,7 +19,7 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun insertList(launches: List<LaunchModel>): LongArray {
+    override suspend fun insertList(launches: List<ViewModel>): LongArray {
         return dao.insertList(
             entityMapper.mapDomainListToEntityList(
                 launches = launches
@@ -27,7 +27,7 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun deleteList(launches: List<LaunchModel>): Int {
+    override suspend fun deleteList(launches: List<ViewModel>): Int {
         val ids = launches.mapIndexed { _, item -> item.id }
         return dao.deleteList(
             ids = ids
@@ -44,13 +44,13 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getById(id: Int): LaunchModel? {
+    override suspend fun getById(id: Int): ViewModel? {
         return dao.getById(id = id)?.let {
             entityMapper.mapFromEntity(it)
         }
     }
 
-    override suspend fun getAll(): List<LaunchModel>? {
+    override suspend fun getAll(): List<ViewModel>? {
         return dao.getAll()?.let {
             entityMapper.mapEntityListToDomainList(it)
         }
@@ -65,7 +65,7 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int
-    ): List<LaunchModel>? {
+    ): List<ViewModel>? {
         return dao.returnOrderedQuery(
             year = year,
             launchFilter = launchFilter,

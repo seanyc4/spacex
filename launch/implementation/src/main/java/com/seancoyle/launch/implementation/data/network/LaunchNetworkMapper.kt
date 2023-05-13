@@ -6,10 +6,10 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.util.DateFormatter
 import com.seancoyle.core.presentation.util.DateTransformer
-import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.data.model.LaunchDto
 import java.time.LocalDateTime
@@ -20,13 +20,13 @@ class LaunchNetworkMapper @Inject constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun mapEntityToList(entity: LaunchDto): List<LaunchModel> {
+    fun mapEntityToList(entity: LaunchDto): List<ViewModel> {
         return entity.docs.map { item ->
             with(item) {
                 val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
                 val launchSuccess = isLaunchSuccess
 
-                LaunchModel(
+                ViewModel(
                     id = flightNumber ?: 0,
                     launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                     launchDateLocalDateTime = localDateTime,
@@ -45,7 +45,7 @@ class LaunchNetworkMapper @Inject constructor(
                     ),
                     daysToFromTitle = mapCorrectLaunchText(localDateTime),
                     launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),
-                    type = LaunchType.TYPE_LIST
+                    type = ViewType.TYPE_LIST
                 )
             }
         }

@@ -9,9 +9,9 @@ import kotlinx.parcelize.Parcelize
 data class LaunchState(
 
     @IgnoredOnParcel
-    var mergedLaunches: List<LaunchType>? = emptyList(),
+    var mergedLaunches: List<ViewType>? = emptyList(),
     @IgnoredOnParcel
-    var launches: List<LaunchModel>? = emptyList(),
+    var launches: List<ViewModel>? = emptyList(),
     var company: CompanyInfo? = null,
     var numLaunchesInCache: Int? = 0,
     var page: Int? = 1,

@@ -14,9 +14,9 @@ import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchState
-import com.seancoyle.launch.api.domain.model.LaunchType
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
@@ -102,7 +102,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun createMergedList(
-        launches: List<LaunchModel>
+        launches: List<ViewModel>
     ) {
         if (launches.isNotEmpty() && getCompanyInfoState() != null) {
             setMergedListState(
@@ -164,7 +164,7 @@ class LaunchViewModel @Inject constructor(
         return LaunchState()
     }
 
-    private fun setLaunchesState(launches: List<LaunchModel>) {
+    private fun setLaunchesState(launches: List<ViewModel>) {
         val currentState = getCurrentStateOrNew()
         currentState.launches = launches
         setState(currentState)
@@ -234,7 +234,7 @@ class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
-    private fun setMergedListState(list: List<LaunchType>) {
+    private fun setMergedListState(list: List<ViewType>) {
         setState(getCurrentStateOrNew().copy(mergedLaunches = list))
         printLogDebug("CurrentState", " after merge: ${getCurrentStateOrNew()}")
     }

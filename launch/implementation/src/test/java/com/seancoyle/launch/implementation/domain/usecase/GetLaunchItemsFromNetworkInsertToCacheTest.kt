@@ -5,8 +5,8 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
-import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.ViewModel
 import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
@@ -82,7 +82,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assertTrue(results?.isNotEmpty() == true)
 
         // confirm they are actually LaunchModel objects
-        assertTrue(results?.get(index = 0) is LaunchModel)
+        assertTrue(results?.get(index = 0) is ViewModel)
 
     }
 

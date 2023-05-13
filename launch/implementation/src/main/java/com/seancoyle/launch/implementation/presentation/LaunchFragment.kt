@@ -61,12 +61,12 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.LaunchCarousel
-import com.seancoyle.launch.api.domain.model.LaunchGrid
-import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewCarousel
+import com.seancoyle.launch.api.domain.model.ViewGrid
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
@@ -167,7 +167,7 @@ class LaunchFragment : Fragment() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun LaunchContent(
-        launchItems: List<LaunchType>,
+        launchItems: List<ViewType>,
         loading: Boolean,
         onChangeScrollPosition: (Int) -> Unit,
         page: Int,
@@ -186,7 +186,7 @@ class LaunchFragment : Fragment() {
                     itemsIndexed(
                         items = launchItems,
                         span = { _, item ->
-                            GridItemSpan(if (item.type == LaunchType.TYPE_GRID) 1 else 2)
+                            GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                         }
                     ) { index, launchItem ->
                         printLogDebug("Recyclerview", ": index$index")
@@ -196,29 +196,29 @@ class LaunchFragment : Fragment() {
                         }
                         if (!isRefreshing) {
                             when (launchItem.type) {
-                                LaunchType.TYPE_SECTION_TITLE -> {
+                                ViewType.TYPE_SECTION_TITLE -> {
                                     LaunchHeading(launchItem as SectionTitle)
                                 }
 
-                                LaunchType.TYPE_HEADER -> {
+                                ViewType.TYPE_HEADER -> {
                                     CompanySummaryCard(launchItem as CompanySummary)
                                 }
 
-                                LaunchType.TYPE_LIST -> {
+                                ViewType.TYPE_LIST -> {
                                     LaunchCard(
-                                        launchItem = launchItem as LaunchModel,
+                                        launchItem = launchItem as ViewModel,
                                         onClick = { onCardClicked(launchItem.links) }
                                     )
                                 }
 
-                                LaunchType.TYPE_GRID -> {
+                                ViewType.TYPE_GRID -> {
                                     LaunchGridCard(
-                                        launchItem = launchItem as LaunchGrid,
+                                        launchItem = launchItem as ViewGrid,
                                         onClick = { onCardClicked(launchItem.links) })
                                 }
 
-                                LaunchType.TYPE_CAROUSEL -> {
-                                    val carouselItems = (launchItem as LaunchCarousel).items
+                                ViewType.TYPE_CAROUSEL -> {
+                                    val carouselItems = (launchItem as ViewCarousel).items
                                     LazyRow {
                                         items(carouselItems) { carouselItem ->
                                             printLogDebug(

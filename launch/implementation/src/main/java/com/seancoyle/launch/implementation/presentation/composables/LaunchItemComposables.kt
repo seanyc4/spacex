@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.LaunchGrid
-import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.RocketWithMission
 import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewGrid
+import com.seancoyle.launch.api.domain.model.ViewModel
 import com.seancoyle.launch.implementation.R
 
 @Composable
@@ -87,7 +87,7 @@ fun CompanySummaryCard(
 
 @Composable
 fun LaunchCard(
-    launchItem: LaunchModel,
+    launchItem: ViewModel,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -234,7 +234,7 @@ fun LaunchCarouselCard(
 
 @Composable
 fun LaunchGridCard(
-    launchItem: LaunchGrid,
+    launchItem: ViewGrid,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

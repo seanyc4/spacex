@@ -11,8 +11,8 @@ import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.model.ViewModel
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -41,11 +41,11 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             )
         }
 
-        val response = object : CacheResponseHandler<LaunchState, List<LaunchModel>>(
+        val response = object : CacheResponseHandler<LaunchState, List<ViewModel>>(
             response = cacheResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: List<LaunchModel>): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: List<ViewModel>): DataState<LaunchState> {
                 val (resultMessage, uiComponentType) = if (resultObj.isEmpty()) {
                     Pair(EVENT_CACHE_NO_MATCHING_RESULTS, MessageDisplayType.Toast)
                 } else {

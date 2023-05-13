@@ -3,14 +3,14 @@ package com.seancoyle.launch.implementation.domain
 import com.seancoyle.core.presentation.util.StringResource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.LaunchCarousel
-import com.seancoyle.launch.api.domain.model.LaunchGrid
-import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.RocketWithMission
 import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewCarousel
+import com.seancoyle.launch.api.domain.model.ViewGrid
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
 import javax.inject.Inject
@@ -19,66 +19,68 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     private val stringResource: StringResource
 ) : CreateMergedLaunchesUseCase {
 
+    companion object {
+        private const val MAX_GRID_SIZE = 6
+        private const val MAX_CAROUSEL_SIZE = 20
+    }
+
     override operator fun invoke(
         companyInfo: CompanyInfo?,
-        launches: List<LaunchModel>
-    ): List<LaunchType> {
-        val rocketLaunches = buildRockets(launches)
-        val mergedLaunches = mutableListOf<LaunchType>().apply {
-            add(SectionTitle(title = "COMPANY", type = LaunchType.TYPE_SECTION_TITLE))
-            add(CompanySummary(summary = buildCompanySummary(companyInfo), type = LaunchType.TYPE_HEADER))
-            add(SectionTitle(title = "ROCKETS", type = LaunchType.TYPE_SECTION_TITLE))
-            add(LaunchCarousel(rocketLaunches, LaunchType.TYPE_CAROUSEL))
-            add(SectionTitle(title = "GRID", type = LaunchType.TYPE_SECTION_TITLE))
+        launches: List<ViewModel>
+    ): List<ViewType> {
+        val mergedLaunches = mutableListOf<ViewType>().apply {
+            add(SectionTitle(title = "HEADER", type = ViewType.TYPE_SECTION_TITLE))
+            add(CompanySummary(summary = buildCompanySummary(companyInfo), type = ViewType.TYPE_HEADER))
+            add(SectionTitle(title = "CAROUSEL", type = ViewType.TYPE_SECTION_TITLE))
+            add(buildCarousel(launches))
+            add(SectionTitle(title = "GRID", type = ViewType.TYPE_SECTION_TITLE))
             addAll(buildGrid(launches))
-            add(SectionTitle(title = "LAUNCHES", type = LaunchType.TYPE_SECTION_TITLE))
+            add(SectionTitle(title = "LIST", type = ViewType.TYPE_SECTION_TITLE))
             addAll(launches)
         }
         return mergedLaunches
     }
 
-    private fun buildGrid(launches: List<LaunchModel>): List<LaunchGrid>{
-        val num = if (launches.size > 20) 20 else launches.size
-        return launches.shuffled().take(num).map {
-            LaunchGrid(
-                Links(
-                    articleLink = it.links.articleLink,
-                    missionImage = it.links.missionImage,
-                    webcastLink = it.links.webcastLink,
-                    wikiLink = it.links.wikiLink,
-                ),
-                Rocket(
-                    rocketNameAndType = it.rocket.rocketNameAndType
-                ),
-                type = LaunchType.TYPE_GRID
+    private fun buildGrid(launches: List<ViewModel>): List<ViewGrid> {
+        return launches.shuffled().take(MAX_GRID_SIZE).map { launchModel ->
+            ViewGrid(
+                links = createLinks(launchModel.links),
+                rocket = createRocket(launchModel.rocket),
+                type = ViewType.TYPE_GRID
             )
         }
     }
 
-    private fun buildRockets(launches: List<LaunchModel>): List<RocketWithMission> {
-        val num = if (launches.size > 20) 20 else launches.size
-        return launches.shuffled().take(num).map {
-            RocketWithMission(
-                Links(
-                    articleLink = it.links.articleLink,
-                    missionImage = it.links.missionImage,
-                    webcastLink = it.links.webcastLink,
-                    wikiLink = it.links.wikiLink,
-                ),
-                Rocket(
-                    rocketNameAndType = it.rocket.rocketNameAndType
+    private fun buildCarousel(launches: List<ViewModel>): ViewCarousel {
+        return ViewCarousel(
+            launches.shuffled().take(MAX_CAROUSEL_SIZE).map { launchModel ->
+                RocketWithMission(
+                    createLinks(links = launchModel.links),
+                    createRocket(rocket = launchModel.rocket)
                 )
-            )
-        }
+            },
+            type = ViewType.TYPE_CAROUSEL
+        )
     }
 
-    private fun buildCompanySummary(companyInfo: CompanyInfo?) = String.format(
-        stringResource.getString(R.string.company_info),
-        companyInfo?.name,
-        companyInfo?.founder,
-        companyInfo?.founded,
-        companyInfo?.employees,
-        companyInfo?.launchSites,
-        companyInfo?.valuation
+    private fun buildCompanySummary(companyInfo: CompanyInfo?) = with(stringResource) {
+        getString(R.string.company_info).format(
+            companyInfo?.name,
+            companyInfo?.founder,
+            companyInfo?.founded,
+            companyInfo?.employees,
+            companyInfo?.launchSites,
+            companyInfo?.valuation
+        )
+    }
+
+    private fun createLinks(links: Links) = Links(
+        articleLink = links.articleLink,
+        missionImage = links.missionImage,
+        webcastLink = links.webcastLink,
+        wikiLink = links.wikiLink
     )
+
+    private fun createRocket(rocket: Rocket) = Rocket(rocket.rocketNameAndType)
+
 }

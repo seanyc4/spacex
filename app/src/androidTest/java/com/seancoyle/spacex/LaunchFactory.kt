@@ -1,8 +1,8 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.launch.api.domain.model.LaunchModel
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewModel
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,8 +25,8 @@ constructor(){
         daysToFromTitle: Int,
         launchDaysDifference: String,
         type: Int
-    ): LaunchModel {
-        return LaunchModel(
+    ): ViewModel {
+        return ViewModel(
             id = id,
             launchDate = launchDate,
             launchDateLocalDateTime = launchDateLocalDateTime,

@@ -9,10 +9,10 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType.Companion.TYPE_LIST
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType.Companion.TYPE_LIST
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
 import com.seancoyle.spacex.LaunchDataFactory
@@ -188,10 +188,10 @@ class LaunchDaoServiceTests {
 
     @Test
     fun deleteLaunchList_confirmDeleted() = runBlocking {
-        val launchList: ArrayList<LaunchModel> = ArrayList(underTest.getAll() ?: emptyList())
+        val launchList: ArrayList<ViewModel> = ArrayList(underTest.getAll() ?: emptyList())
 
         // select some random launch for deleting
-        val launchesToDelete: ArrayList<LaunchModel> = ArrayList()
+        val launchesToDelete: ArrayList<ViewModel> = ArrayList()
 
         // 1st
         var launchItemToDelete = launchList[Random.nextInt(0, launchList.size - 1) + 1]
@@ -395,7 +395,7 @@ class LaunchDaoServiceTests {
     }
 
 
-    private fun checkDateOrderAscending(launchList: List<LaunchModel>) {
+    private fun checkDateOrderAscending(launchList: List<ViewModel>) {
         // Check the list and verify the date is less than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(
@@ -405,7 +405,7 @@ class LaunchDaoServiceTests {
         }
     }
 
-    private fun checkDateOrderDescending(launchList: List<LaunchModel>) {
+    private fun checkDateOrderDescending(launchList: List<ViewModel>) {
         // Check the list and verify the date is greater than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(

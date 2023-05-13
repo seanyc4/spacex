@@ -1,9 +1,9 @@
 package com.seancoyle.launch.api.domain.model
 
-data class LaunchCarousel(
+data class ViewCarousel(
     val items: List<RocketWithMission>,
     override val type: Int
-) : LaunchType()
+) : ViewType()
 
 data class RocketWithMission(
     val links: Links,

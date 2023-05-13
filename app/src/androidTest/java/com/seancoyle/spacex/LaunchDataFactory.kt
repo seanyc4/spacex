@@ -3,10 +3,10 @@ package com.seancoyle.spacex
 import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.api.domain.model.LaunchModel
-import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
@@ -27,7 +27,7 @@ constructor(
         "2012", "2010", "2009", "2008", "2007", "2006"
     ).shuffled()
 
-    fun parseJsonFile(): List<LaunchModel> {
+    fun parseJsonFile(): List<ViewModel> {
         val jsonString = jsonFileReader.readJSONFromAsset("launch_list.json")
         return Json.decodeFromString(jsonString)
 
@@ -64,8 +64,8 @@ constructor(
     fun createLaunchListTest(
         num: Int,
         id: Int?
-    ): List<LaunchModel> {
-        val list: ArrayList<LaunchModel> = ArrayList()
+    ): List<ViewModel> {
+        val list: ArrayList<ViewModel> = ArrayList()
         for (item in 0 until num) {
             list.add(
                 createLaunchItem(
@@ -87,7 +87,7 @@ constructor(
                     ),
                     daysToFromTitle = UUID.randomUUID().hashCode(),
                     launchDaysDifference = UUID.randomUUID().toString(),
-                    type = LaunchType.TYPE_LIST
+                    type = ViewType.TYPE_LIST
                 )
             )
         }

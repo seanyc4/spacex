@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 @Parcelize
-data class LaunchModel(
+data class ViewModel(
     val id: Int,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
@@ -23,12 +23,12 @@ data class LaunchModel(
     val launchDaysDifference: String,
     override val type: Int
 ) : Parcelable,
-    LaunchType() {
+    ViewType() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as LaunchModel
+        other as ViewModel
 
         if (id != other.id) return false
         if (launchDate != other.launchDate) return false

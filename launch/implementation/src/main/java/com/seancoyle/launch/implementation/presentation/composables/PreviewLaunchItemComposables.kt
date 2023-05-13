@@ -4,21 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.LaunchType
 import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 
 @Preview
 @Composable
 fun PreviewLaunchHeading() {
-    val launchHeading = SectionTitle("Test title", LaunchType.TYPE_SECTION_TITLE)
+    val launchHeading = SectionTitle("Test title", ViewType.TYPE_SECTION_TITLE)
     LaunchHeading(launchHeading)
 }
 
 @Preview
 @Composable
 fun PreviewCompanySummaryCard() {
-    val companySummary = CompanySummary("Test Summary", LaunchType.TYPE_HEADER)
+    val companySummary = CompanySummary("Test Summary", ViewType.TYPE_HEADER)
     CompanySummaryCard(companySummary)
 }
 
