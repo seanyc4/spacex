@@ -106,7 +106,7 @@ class LaunchFragment : Fragment() {
                     refreshing = launchViewModel.getRefreshState(),
                     onRefresh = {
                         launchViewModel.clearQueryParameters()
-                        launchViewModel.setEvent(LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent)
+                        launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents)
                     }
                 )
 
@@ -295,7 +295,7 @@ class LaunchFragment : Fragment() {
                     stateMessage?.response?.let { response ->
 
                         when (response.message) {
-                            LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
+                            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
                                 launchViewModel.clearStateMessage()
                                 filterLaunchItemsInCacheEvent()
                             }
@@ -312,19 +312,19 @@ class LaunchFragment : Fragment() {
 
                                 when (response.message) {
                                     // Check cache for data if net connection fails
-                                    LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
-                                    LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + ERROR_UNKNOWN -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
-                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                         getCompanyInfoFromCacheEvent()
                                     }
 
-                                    LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
+                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + ERROR_UNKNOWN -> {
                                         getCompanyInfoFromCacheEvent()
                                     }
                                 }
@@ -464,19 +464,19 @@ class LaunchFragment : Fragment() {
 
     private fun filterLaunchItemsInCacheEvent() {
         launchViewModel.setEvent(
-            LaunchEvent.FilterLaunchItemsInCacheEvent
+            LaunchEvents.FilterLaunchItemsInCacheEvents
         )
     }
 
     private fun getCompanyInfoFromCacheEvent() {
         launchViewModel.setEvent(
-            LaunchEvent.GetCompanyInfoFromCacheEvent
+            LaunchEvents.GetCompanyInfoFromCacheEvents
         )
     }
 
     private fun displayErrorDialogNoLinks() {
         launchViewModel.setEvent(
-            event = LaunchEvent.CreateMessageEvent(
+            event = LaunchEvents.CreateMessageEvents(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Info,
@@ -490,7 +490,7 @@ class LaunchFragment : Fragment() {
 
     private fun displayErrorDialogUnableToLoadLink() {
         launchViewModel.setEvent(
-            event = LaunchEvent.CreateMessageEvent(
+            event = LaunchEvents.CreateMessageEvents(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Error,

@@ -4,11 +4,13 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -208,25 +210,24 @@ fun LaunchCarouselCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
+            .size(120.dp)
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
         backgroundColor = MaterialTheme.colors.surface,
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+        shape = CircleShape,
+        elevation = 4.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colors.primaryVariant)
     ) {
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.default_view_margin)),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             LaunchCardImage(
                 imageUrl = launchItem.links.missionImage,
-                size = 150.dp
-            )
-            LaunchCardDynamicText(
-                title = launchItem.rocket.rocketNameAndType,
-                modifier = modifier.padding(top = dimensionResource(id = R.dimen._6sdp))
+                size = 100.dp
             )
         }
     }
@@ -256,7 +257,7 @@ fun LaunchGridCard(
             )
             LaunchCardDynamicText(
                 title = launchItem.rocket.rocketNameAndType,
-                modifier = modifier.padding(dimensionResource(id = R.dimen.default_view_margin))
+                modifier = modifier.padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             )
         }
     }

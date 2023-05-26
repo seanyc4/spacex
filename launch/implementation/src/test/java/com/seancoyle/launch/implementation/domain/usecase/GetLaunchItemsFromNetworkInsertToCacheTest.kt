@@ -11,7 +11,7 @@ import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertTo
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -67,11 +67,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
 
         underTest(
-            event = LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
+            event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+                LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
             )
         }
 
@@ -96,11 +96,11 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         )
 
         underTest(
-            event = LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
+            event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
+                LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
             )
         }
     }

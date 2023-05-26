@@ -20,11 +20,11 @@ import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.CreateMessageEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.FilterLaunchItemsInCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetCompanyInfoFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvent.GetLaunchesFromNetworkAndInsertToCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMessageEvents
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvents
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoFromCacheEvents
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -60,12 +60,12 @@ class LaunchViewModel @Inject constructor(
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
             //Restoring state from cache data
-            setEvent(GetCompanyInfoFromCacheEvent)
-            setEvent(FilterLaunchItemsInCacheEvent)
+            setEvent(GetCompanyInfoFromCacheEvents)
+            setEvent(FilterLaunchItemsInCacheEvents)
         } else {
             //Fresh app launch - get data from network
-            setEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
-            setEvent(GetLaunchesFromNetworkAndInsertToCacheEvent)
+            setEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvents)
+            setEvent(GetLaunchesFromNetworkAndInsertToCacheEvents)
         }
     }
 
@@ -118,25 +118,25 @@ class LaunchViewModel @Inject constructor(
 
         val job: Flow<DataState<LaunchState>?> = when (event) {
 
-            is GetLaunchesFromNetworkAndInsertToCacheEvent -> {
+            is GetLaunchesFromNetworkAndInsertToCacheEvents -> {
                 launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase.invoke(
                     event = event
                 )
             }
 
-            is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
+            is GetCompanyInfoFromNetworkAndInsertToCacheEvents -> {
                 companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke(
                     event = event
                 )
             }
 
-            is GetCompanyInfoFromCacheEvent -> {
+            is GetCompanyInfoFromCacheEvents -> {
                 companyInfoUseCases.getCompanyInfoFromCacheUseCase.invoke(
                     event = event
                 )
             }
 
-            is FilterLaunchItemsInCacheEvent -> {
+            is FilterLaunchItemsInCacheEvents -> {
                 launchUseCases.filterLaunchItemsInCacheUseCase.invoke(
                     year = getSearchQueryState(),
                     order = getOrderState(),
@@ -146,7 +146,7 @@ class LaunchViewModel @Inject constructor(
                 )
             }
 
-            is CreateMessageEvent -> {
+            is CreateMessageEvents -> {
                 emitStateMessageEvent(
                     stateMessage = event.stateMessage,
                     event = event
@@ -205,7 +205,7 @@ class LaunchViewModel @Inject constructor(
         if((getScrollPositionState() + 1) >= (getPageState() * LAUNCH_PAGINATION_PAGE_SIZE) ) {
             incrementPage()
             if (getPageState() > 1) {
-                setEvent(FilterLaunchItemsInCacheEvent)
+                setEvent(FilterLaunchItemsInCacheEvents)
             }
         }
         printLogDebug("LaunchViewModel", "nextPage: triggered: ${getPageState()}")
@@ -299,7 +299,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun refreshSearchQueryEvent() {
-        setEvent(FilterLaunchItemsInCacheEvent)
+        setEvent(FilterLaunchItemsInCacheEvents)
     }
 
     companion object {

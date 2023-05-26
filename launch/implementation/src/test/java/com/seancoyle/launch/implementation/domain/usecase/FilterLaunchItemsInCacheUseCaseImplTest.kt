@@ -16,7 +16,7 @@ import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.data.cache.FORCE_SEARCH_LAUNCH_EXCEPTION
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
-import com.seancoyle.launch.implementation.presentation.LaunchEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -59,11 +59,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -85,11 +85,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -112,11 +112,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_ASC,
             launchFilter = null,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -140,11 +140,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_ASC,
             launchFilter = null,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
             value?.data?.launches?.let {
@@ -165,11 +165,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -192,11 +192,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_ASC,
             launchFilter = LAUNCH_FAILED,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -220,11 +220,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -247,11 +247,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_UNKNOWN,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -274,11 +274,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvent.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
+                LaunchEvents.FilterLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
             value?.data?.launches?.let {
@@ -299,7 +299,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = LAUNCH_ORDER_DESC,
             launchFilter = null,
             page = 1,
-            event = LaunchEvent.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.FilterLaunchItemsInCacheEvents
         ).collect { value ->
             assert(
                 value?.stateMessage?.response?.message
