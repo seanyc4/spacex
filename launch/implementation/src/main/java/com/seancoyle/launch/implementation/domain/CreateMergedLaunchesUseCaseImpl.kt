@@ -1,17 +1,17 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.presentation.util.StringResource
-import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
-import com.seancoyle.launch.api.domain.model.RocketWithMission
-import com.seancoyle.launch.api.domain.model.SectionTitle
-import com.seancoyle.launch.api.domain.model.ViewCarousel
-import com.seancoyle.launch.api.domain.model.ViewGrid
-import com.seancoyle.launch.api.domain.model.ViewModel
-import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.contract.domain.model.CompanySummary
+import com.seancoyle.launch.contract.domain.model.Links
+import com.seancoyle.launch.contract.domain.model.Rocket
+import com.seancoyle.launch.contract.domain.model.RocketWithMission
+import com.seancoyle.launch.contract.domain.model.SectionTitle
+import com.seancoyle.launch.contract.domain.model.ViewCarousel
+import com.seancoyle.launch.contract.domain.model.ViewGrid
+import com.seancoyle.launch.contract.domain.model.ViewModel
+import com.seancoyle.launch.contract.domain.model.ViewType
+import com.seancoyle.launch.contract.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
 import javax.inject.Inject
 

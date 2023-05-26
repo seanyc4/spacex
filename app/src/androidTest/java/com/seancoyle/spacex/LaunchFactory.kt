@@ -1,8 +1,8 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
-import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.contract.domain.model.Links
+import com.seancoyle.launch.contract.domain.model.Rocket
+import com.seancoyle.launch.contract.domain.model.ViewModel
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton

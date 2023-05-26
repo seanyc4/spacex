@@ -2,8 +2,8 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.contract.data.LaunchCacheDataSource
+import com.seancoyle.launch.contract.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies
 import com.seancoyle.launch.implementation.presentation.LaunchEvents

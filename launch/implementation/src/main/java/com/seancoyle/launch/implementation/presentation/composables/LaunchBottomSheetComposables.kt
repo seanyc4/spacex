@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.seancoyle.launch.api.domain.model.LinkType
+import com.seancoyle.launch.contract.domain.model.LinkType
 import com.seancoyle.launch.implementation.R
 
 @Composable

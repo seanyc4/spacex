@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.framework.datasource.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.contract.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.spacex.CompanyInfoFactory
 import dagger.hilt.android.testing.HiltAndroidRule

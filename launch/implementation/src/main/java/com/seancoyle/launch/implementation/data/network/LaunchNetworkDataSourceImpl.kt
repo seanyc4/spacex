@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.data.network
 
-import com.seancoyle.launch.api.data.LaunchNetworkDataSource
-import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.launch.api.domain.model.ViewModel
+import com.seancoyle.launch.contract.data.LaunchNetworkDataSource
+import com.seancoyle.launch.contract.domain.model.LaunchOptions
+import com.seancoyle.launch.contract.domain.model.ViewModel
 import javax.inject.Inject
 
 class LaunchNetworkDataSourceImpl

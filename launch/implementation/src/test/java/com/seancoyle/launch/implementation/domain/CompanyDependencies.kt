@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.util.isUnitTest
-import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.contract.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.contract.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.cache.FakeCompanyInfoCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.launch.implementation.data.network.FakeCompanyInfoNetworkDataSourceImpl

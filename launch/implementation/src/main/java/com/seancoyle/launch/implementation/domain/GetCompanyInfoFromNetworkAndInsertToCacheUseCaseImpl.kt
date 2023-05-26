@@ -14,11 +14,11 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_FAILED
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_EMPTY
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
-import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.LaunchState
-import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.contract.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.contract.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.contract.domain.model.LaunchState
+import com.seancoyle.launch.contract.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
