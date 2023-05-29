@@ -22,17 +22,6 @@ fun PreviewCompanySummaryCard() {
     CompanySummaryCard(companySummary)
 }
 
-/*
-@Preview
-@Composable
-fun PreviewLaunchCard() {
-    val launchItem = LaunchModel(
-        // Fill with appropriate test data
-    )
-    LaunchCard(launchItem = launchItem, onClick = {})
-}
-*/
-
 @Preview
 @Composable
 fun PreviewLaunchCardImage() {
@@ -53,14 +42,3 @@ fun PreviewLaunchCardDefaultText() {
 fun PreviewLaunchCardDynamicText() {
     LaunchCardDynamicText(title = "Test title")
 }
-
-/*
-@Preview
-@Composable
-fun PreviewLaunchCarouselCard() {
-    val rocketWithMission = RocketWithMission(
-        // Fill with appropriate test data
-    )
-    LaunchCarouselCard(launchItem = rocketWithMission, onClick = {})
-}
-*/

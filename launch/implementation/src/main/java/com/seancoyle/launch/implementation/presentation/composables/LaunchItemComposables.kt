@@ -24,16 +24,17 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.contract.domain.model.CompanySummary
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.RocketWithMission
 import com.seancoyle.launch.contract.domain.model.SectionTitle
 import com.seancoyle.launch.contract.domain.model.ViewGrid
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.implementation.R
 
 @Composable
@@ -89,7 +90,7 @@ fun CompanySummaryCard(
 
 @Composable
 fun LaunchCard(
-    launchItem: ViewModel,
+    launchItem: Launch,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -198,6 +199,8 @@ fun LaunchCardDynamicText(
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
             color = MaterialTheme.colors.primaryVariant
         ),
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1,
         modifier = modifier
     )
 }
@@ -257,7 +260,8 @@ fun LaunchGridCard(
             )
             LaunchCardDynamicText(
                 title = launchItem.rocket.rocketNameAndType,
-                modifier = modifier.padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
+                modifier = modifier
+                    .padding(top = dimensionResource(id = R.dimen.small_view_margins_8dp))
             )
         }
     }

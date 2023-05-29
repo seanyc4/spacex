@@ -16,9 +16,9 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_EMPTY
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.contract.data.LaunchCacheDataSource
 import com.seancoyle.launch.contract.data.LaunchNetworkDataSource
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.LaunchOptions
 import com.seancoyle.launch.contract.domain.model.LaunchState
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
     private val launchOptions: LaunchOptions
 ) : GetLaunchesFromNetworkAndInsertToCacheUseCase {
 
-    private var launchList: List<ViewModel> = emptyList()
+    private var launchList: List<Launch> = emptyList()
 
     override operator fun invoke(
         event: Event
@@ -42,11 +42,11 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
             launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchState, List<ViewModel>?>(
+        val networkResponse = object : ApiResponseHandler<LaunchState, List<Launch>?>(
             response = networkResult,
             event = event
         ) {
-            override suspend fun handleSuccess(resultObj: List<ViewModel>?): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: List<Launch>?): DataState<LaunchState> {
                 return if (resultObj != null) {
                     launchList = resultObj
                     DataState.data(

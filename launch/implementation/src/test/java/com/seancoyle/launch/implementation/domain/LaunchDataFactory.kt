@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.domain
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.launch.contract.domain.model.ViewModel
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.implementation.data.cache.FakeLaunchDatabase
 
 class LaunchDataFactory(
@@ -14,15 +14,15 @@ class LaunchDataFactory(
         "2012", "2010", "2009", "2008", "2007", "2006"
     ).shuffled()
 
-    fun produceListOfLaunchItems(): List<ViewModel> {
+    fun produceListOfLaunchItems(): List<Launch> {
         return Gson()
             .fromJson(
                 getDataFromFile("launch_list.json"),
-                object : TypeToken<List<ViewModel>>() {}.type
+                object : TypeToken<List<Launch>>() {}.type
             )
     }
 
-    fun produceFakeAppDatabase(launchList: List<ViewModel>): FakeLaunchDatabase {
+    fun produceFakeAppDatabase(launchList: List<Launch>): FakeLaunchDatabase {
         val database = FakeLaunchDatabase()
         for (item in launchList) {
             database.launchList.add(item)

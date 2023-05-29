@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.data.network
 
 import com.seancoyle.launch.contract.data.LaunchNetworkDataSource
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.LaunchOptions
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import javax.inject.Inject
 
 class LaunchNetworkDataSourceImpl
@@ -12,7 +12,7 @@ constructor(
     private val networkMapper: LaunchNetworkMapper
 ) : LaunchNetworkDataSource {
 
-    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<ViewModel> {
+    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<Launch> {
         return networkMapper.mapEntityToList(
             api.getLaunchList(options = launchOptions)
         )

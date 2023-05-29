@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 @Parcelize
-data class ViewModel(
+data class Launch(
     val id: Int,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
@@ -28,7 +28,7 @@ data class ViewModel(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ViewModel
+        other as Launch
 
         if (id != other.id) return false
         if (launchDate != other.launchDate) return false

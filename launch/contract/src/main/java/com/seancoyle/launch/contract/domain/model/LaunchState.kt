@@ -11,7 +11,7 @@ data class LaunchState(
     @IgnoredOnParcel
     var mergedLaunches: List<ViewType>? = emptyList(),
     @IgnoredOnParcel
-    var launches: List<ViewModel>? = emptyList(),
+    var launches: List<Launch>? = emptyList(),
     var company: CompanyInfo? = null,
     var numLaunchesInCache: Int? = 0,
     var page: Int? = 1,

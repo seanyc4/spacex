@@ -11,7 +11,7 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULT
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.contract.data.LaunchCacheDataSource
-import com.seancoyle.launch.contract.domain.model.ViewModel
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.data.cache.FORCE_SEARCH_LAUNCH_EXCEPTION
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
@@ -52,7 +52,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Order All Launch Items By Date Ascending - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = "",
@@ -78,7 +78,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Order All Launch Items By Date Descending - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = "",
@@ -104,7 +104,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `filter launch items by year and date order ASC - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
         val launchYear = validLaunchYears[Random.nextInt(validLaunchYears.size)]
 
         underTest(
@@ -132,7 +132,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items By Year - No Results Found`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
         val launchYear = "1000"
 
         underTest(
@@ -158,7 +158,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items By Launch Status LAUNCH_SUCCESS - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = "",
@@ -185,7 +185,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items By Launch Status LAUNCH_FAILED - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = "",
@@ -212,7 +212,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items By Launch Status ALL - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
         val allLaunchItems = cacheDataSource.getAll()
 
         underTest(
@@ -240,7 +240,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items By Launch Status UNKOWN - success`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = "",
@@ -267,7 +267,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     fun `Filter Launch Items By isLaunchSuccess - no results found`() = runBlocking {
 
         val year = "2006"
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = year,
@@ -292,7 +292,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @Test
     fun `Filter Launch Items Fail - no results found`() = runBlocking {
 
-        var launchList = emptyList<ViewModel>()
+        var launchList = emptyList<Launch>()
 
         underTest(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
@@ -319,7 +319,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         }
     }
 
-    private fun checkDateOrderAscending(launchList: List<ViewModel>) {
+    private fun checkDateOrderAscending(launchList: List<Launch>) {
         // Check the list and verify the date is less than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(
@@ -329,7 +329,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         }
     }
 
-    private fun checkDateOrderDescending(launchList: List<ViewModel>) {
+    private fun checkDateOrderDescending(launchList: List<Launch>) {
         // Check the list and verify the date is greater than the next index
         for (item in 0..launchList.size.minus(2)) {
             assertTrue(

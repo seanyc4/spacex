@@ -2,8 +2,8 @@ package com.seancoyle.launch.implementation.data.network
 
 import com.google.gson.GsonBuilder
 import com.seancoyle.launch.contract.data.LaunchNetworkDataSource
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.LaunchOptions
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +20,7 @@ constructor(
         .build()
         .create(LaunchApi::class.java)
 
-    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<ViewModel> {
+    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<Launch> {
         return networkMapper.mapEntityToList(
             api.getLaunchList(options = launchOptions)
         )

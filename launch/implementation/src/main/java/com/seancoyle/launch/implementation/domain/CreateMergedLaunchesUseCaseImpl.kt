@@ -3,13 +3,13 @@ package com.seancoyle.launch.implementation.domain
 import com.seancoyle.core.presentation.util.StringResource
 import com.seancoyle.launch.contract.domain.model.CompanyInfo
 import com.seancoyle.launch.contract.domain.model.CompanySummary
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.Links
 import com.seancoyle.launch.contract.domain.model.Rocket
 import com.seancoyle.launch.contract.domain.model.RocketWithMission
 import com.seancoyle.launch.contract.domain.model.SectionTitle
 import com.seancoyle.launch.contract.domain.model.ViewCarousel
 import com.seancoyle.launch.contract.domain.model.ViewGrid
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import com.seancoyle.launch.contract.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
@@ -26,7 +26,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         companyInfo: CompanyInfo?,
-        launches: List<ViewModel>
+        launches: List<Launch>
     ): List<ViewType> {
         val mergedLaunches = mutableListOf<ViewType>().apply {
             add(SectionTitle(title = "HEADER", type = ViewType.TYPE_SECTION_TITLE))
@@ -41,7 +41,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         return mergedLaunches
     }
 
-    private fun buildGrid(launches: List<ViewModel>): List<ViewGrid> {
+    private fun buildGrid(launches: List<Launch>): List<ViewGrid> {
         return launches.shuffled().take(MAX_GRID_SIZE).map { launchModel ->
             ViewGrid(
                 links = createLinks(launchModel.links),
@@ -51,7 +51,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun buildCarousel(launches: List<ViewModel>): ViewCarousel {
+    private fun buildCarousel(launches: List<Launch>): ViewCarousel {
         return ViewCarousel(
             launches.shuffled().take(MAX_CAROUSEL_SIZE).map { launchModel ->
                 RocketWithMission(

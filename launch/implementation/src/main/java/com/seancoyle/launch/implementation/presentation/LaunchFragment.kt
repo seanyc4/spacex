@@ -61,11 +61,11 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.contract.domain.model.CompanySummary
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.Links
 import com.seancoyle.launch.contract.domain.model.SectionTitle
 import com.seancoyle.launch.contract.domain.model.ViewCarousel
 import com.seancoyle.launch.contract.domain.model.ViewGrid
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
@@ -206,7 +206,7 @@ class LaunchFragment : Fragment() {
 
                                 ViewType.TYPE_LIST -> {
                                     LaunchCard(
-                                        launchItem = launchItem as ViewModel,
+                                        launchItem = launchItem as Launch,
                                         onClick = { onCardClicked(launchItem.links) }
                                     )
                                 }

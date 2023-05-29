@@ -114,7 +114,7 @@ fun LoadingLaunchGridCard(modifier: Modifier = Modifier) {
         ) {
             Box(
                 modifier = modifier
-                    .size(180.dp)
+                    .size(170.dp)
                     .background(brush = brush)
             )
         }

@@ -14,8 +14,8 @@ import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.LaunchState
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import com.seancoyle.launch.contract.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
@@ -88,13 +88,13 @@ class LaunchViewModel @Inject constructor(
 
     override fun setUpdatedState(data: LaunchState) {
 
-        data.let { viewState ->
-            viewState.launches?.let { launches ->
+        data.let { uiState ->
+            uiState.launches?.let { launches ->
                 setLaunchesState(launches)
                 createMergedList(launches)
             }
 
-            viewState.company?.let { companyInfo ->
+            uiState.company?.let { companyInfo ->
                 setCompanyInfoState(companyInfo)
                 printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
             }
@@ -102,7 +102,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun createMergedList(
-        launches: List<ViewModel>
+        launches: List<Launch>
     ) {
         if (launches.isNotEmpty() && getCompanyInfoState() != null) {
             setMergedListState(
@@ -164,26 +164,20 @@ class LaunchViewModel @Inject constructor(
         return LaunchState()
     }
 
-    private fun setLaunchesState(launches: List<ViewModel>) {
-        val currentState = getCurrentStateOrNew()
-        currentState.launches = launches
-        setState(currentState)
+    private fun setLaunchesState(launches: List<Launch>) {
+        setState(getCurrentStateOrNew().apply { this.launches = launches })
     }
 
     fun getLaunchesState() = getCurrentStateOrNew().launches
 
     private fun setCompanyInfoState(companyInfo: CompanyInfo) {
-        val currentState = getCurrentStateOrNew()
-        currentState.company = companyInfo
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { company = companyInfo })
     }
 
     private fun getCompanyInfoState() = getCurrentStateOrNew().company
 
     private fun resetPageState() {
-        val currentState = getCurrentStateOrNew()
-        currentState.page = 1
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { page = 1 })
     }
 
     fun clearListState() {
@@ -202,7 +196,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun nextPage() {
-        if((getScrollPositionState() + 1) >= (getPageState() * LAUNCH_PAGINATION_PAGE_SIZE) ) {
+        if ((getScrollPositionState() + 1) >= (getPageState() * LAUNCH_PAGINATION_PAGE_SIZE)) {
             incrementPage()
             if (getPageState() > 1) {
                 setEvent(FilterLaunchItemsInCacheEvents)
@@ -240,29 +234,21 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun setQueryState(query: String?) {
-        val currentState = getCurrentStateOrNew()
-        currentState.yearQuery = query
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { yearQuery = query })
     }
 
     fun setLaunchOrderState(order: String?) {
-        val currentState = getCurrentStateOrNew()
-        currentState.order = order
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { this.order = order })
         saveOrderToDatastore(order ?: LAUNCH_ORDER_DESC)
     }
 
     fun setLaunchFilterState(filter: Int?) {
-        val currentState = getCurrentStateOrNew()
-        currentState.launchFilter = filter
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { launchFilter = filter })
         saveFilterToDataStore(filter ?: LAUNCH_ALL)
     }
 
     fun setIsDialogFilterDisplayedState(isDisplayed: Boolean?) {
-        val currentState = getCurrentStateOrNew()
-        currentState.isDialogFilterDisplayed = isDisplayed
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { isDialogFilterDisplayed = isDisplayed })
     }
 
     private fun incrementPage() {
@@ -277,12 +263,10 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun setScrollPositionState(position: Int) {
-        val currentState = getCurrentStateOrNew()
-        currentState.scrollPosition = position
-        setState(currentState)
+        setState(getCurrentStateOrNew().apply { scrollPosition = position })
     }
 
-    fun saveState(){
+    fun saveState() {
         savedStateHandle[LAUNCH_UI_STATE_KEY] = getCurrentStateOrNew()
     }
 

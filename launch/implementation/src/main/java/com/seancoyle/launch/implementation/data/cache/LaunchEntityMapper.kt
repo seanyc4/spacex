@@ -3,25 +3,25 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LinksEntity
 import com.seancoyle.database.entities.RocketEntity
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.Links
 import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import javax.inject.Inject
 
 class LaunchEntityMapper @Inject constructor() {
 
-    fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<ViewModel> {
+    fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<Launch> {
         return entities.map { entity -> mapFromEntity(entity) }
     }
 
-    fun mapDomainListToEntityList(launches: List<ViewModel>): List<LaunchEntity> {
+    fun mapDomainListToEntityList(launches: List<Launch>): List<LaunchEntity> {
         return launches.map { item -> mapToEntity(item) }
     }
 
-    fun mapFromEntity(entity: LaunchEntity): ViewModel {
+    fun mapFromEntity(entity: LaunchEntity): Launch {
         return with(entity) {
-            ViewModel(
+            Launch(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
@@ -45,7 +45,7 @@ class LaunchEntityMapper @Inject constructor() {
         }
     }
 
-    fun mapToEntity(entity: ViewModel): LaunchEntity {
+    fun mapToEntity(entity: Launch): LaunchEntity {
         return with(entity) {
             LaunchEntity(
                 id = id,

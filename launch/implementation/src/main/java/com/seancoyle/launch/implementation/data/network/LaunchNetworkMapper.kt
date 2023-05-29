@@ -6,9 +6,9 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.util.DateFormatter
 import com.seancoyle.core.presentation.util.DateTransformer
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.Links
 import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.data.model.LaunchDto
@@ -20,13 +20,13 @@ class LaunchNetworkMapper @Inject constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun mapEntityToList(entity: LaunchDto): List<ViewModel> {
+    fun mapEntityToList(entity: LaunchDto): List<Launch> {
         return entity.docs.map { item ->
             with(item) {
                 val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
                 val launchSuccess = isLaunchSuccess
 
-                ViewModel(
+                Launch(
                     id = flightNumber ?: 0,
                     launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                     launchDateLocalDateTime = localDateTime,

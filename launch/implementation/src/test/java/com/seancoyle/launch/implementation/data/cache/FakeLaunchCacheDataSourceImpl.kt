@@ -4,7 +4,7 @@ import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
 import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.contract.data.LaunchCacheDataSource
-import com.seancoyle.launch.contract.domain.model.ViewModel
+import com.seancoyle.launch.contract.domain.model.Launch
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = -2
 const val FORCE_DELETES_LAUNCH_EXCEPTION = -3
@@ -19,7 +19,7 @@ constructor(
     private val fakeLaunchDatabase: FakeLaunchDatabase
 ) : LaunchCacheDataSource {
 
-    override suspend fun insert(launch: ViewModel): Long {
+    override suspend fun insert(launch: Launch): Long {
         if (launch.id == FORCE_NEW_LAUNCH_EXCEPTION) {
             throw Exception("Something went wrong inserting the launch.")
         }
@@ -30,7 +30,7 @@ constructor(
         return 1 // success
     }
 
-    override suspend fun deleteList(launches: List<ViewModel>): Int {
+    override suspend fun deleteList(launches: List<Launch>): Int {
         var failOrSuccess = 1
         for (item in launches) {
             failOrSuccess = if (fakeLaunchDatabase.launchList.removeIf { it.id == item.id }) {
@@ -59,11 +59,11 @@ constructor(
         fakeLaunchDatabase.launchList.clear()
     }
 
-    override suspend fun getById(id: Int): ViewModel? {
+    override suspend fun getById(id: Int): Launch? {
         return fakeLaunchDatabase.launchList.find { it.id == id }
     }
 
-    override suspend fun getAll(): List<ViewModel> {
+    override suspend fun getAll(): List<Launch> {
         return fakeLaunchDatabase.launchList
     }
 
@@ -71,7 +71,7 @@ constructor(
         return fakeLaunchDatabase.launchList.size
     }
 
-    override suspend fun insertList(launches: List<ViewModel>): LongArray {
+    override suspend fun insertList(launches: List<Launch>): LongArray {
         var results = LongArray(launches.size)
         for (item in launches.withIndex()) {
             when (item.value.id) {
@@ -99,11 +99,11 @@ constructor(
         order: String,
         launchFilter: Int?,
         page: Int
-    ): List<ViewModel> {
+    ): List<Launch> {
         if (year == FORCE_SEARCH_LAUNCH_EXCEPTION) {
             throw Exception("Something went searching the cache for launch items.")
         }
-        val results: ArrayList<ViewModel> = ArrayList()
+        val results: ArrayList<Launch> = ArrayList()
         for (item in fakeLaunchDatabase.launchList) {
 
             when {

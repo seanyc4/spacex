@@ -3,9 +3,9 @@ package com.seancoyle.spacex
 import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.launch.contract.domain.model.Launch
 import com.seancoyle.launch.contract.domain.model.Links
 import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewModel
 import com.seancoyle.launch.contract.domain.model.ViewType
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -27,7 +27,7 @@ constructor(
         "2012", "2010", "2009", "2008", "2007", "2006"
     ).shuffled()
 
-    fun parseJsonFile(): List<ViewModel> {
+    fun parseJsonFile(): List<Launch> {
         val jsonString = jsonFileReader.readJSONFromAsset("launch_list.json")
         return Json.decodeFromString(jsonString)
 
@@ -64,8 +64,8 @@ constructor(
     fun createLaunchListTest(
         num: Int,
         id: Int?
-    ): List<ViewModel> {
-        val list: ArrayList<ViewModel> = ArrayList()
+    ): List<Launch> {
+        val list: ArrayList<Launch> = ArrayList()
         for (item in 0 until num) {
             list.add(
                 createLaunchItem(
