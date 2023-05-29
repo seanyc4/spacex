@@ -16,7 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -220,14 +220,11 @@ class LaunchFragment : Fragment() {
                                 ViewType.TYPE_CAROUSEL -> {
                                     val carouselItems = (launchItem as ViewCarousel).items
                                     LazyRow {
-                                        items(carouselItems) { carouselItem ->
-                                            printLogDebug(
-                                                "Recyclerview - ROW ",
-                                                ": index${carouselItems.withIndex()}"
-                                            )
+                                        itemsIndexed(carouselItems) { index, carouselItem ->
                                             LaunchCarouselCard(
                                                 launchItem = carouselItem,
                                                 onClick = { onCardClicked(carouselItem.links) })
+                                            printLogDebug("Recyclerview - ROW ", ": index${index}")
                                         }
                                     }
                                 }
@@ -237,14 +234,6 @@ class LaunchFragment : Fragment() {
                         }
                     }
                 }
-                /*ScrollToTopButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            // Animate scroll to the first item
-                            listState.animateScrollToItem(index = 0)
-                        }
-                    }
-                )*/
                 PullRefreshIndicator(
                     launchViewModel.getRefreshState(),
                     pullRefreshState,
