@@ -206,7 +206,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun getScrollPositionState() = getCurrentStateOrNew().scrollPosition ?: 0
-    private fun getSearchQueryState() = getCurrentStateOrNew().yearQuery ?: ""
+    private fun getSearchQueryState() = getCurrentStateOrNew().yearQuery.orEmpty()
     fun getPageState() = getCurrentStateOrNew().page ?: 1
     fun getOrderState() = getCurrentStateOrNew().order ?: LAUNCH_ORDER_DESC
     fun getIsDialogFilterDisplayedState() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
