@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.contract.domain.usecase.GetCompanyInfoFromCacheUseCase
-import com.seancoyle.launch.contract.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl

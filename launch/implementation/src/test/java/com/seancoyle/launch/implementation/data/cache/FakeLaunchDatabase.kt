@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.contract.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Launch
 
 class FakeLaunchDatabase {
 

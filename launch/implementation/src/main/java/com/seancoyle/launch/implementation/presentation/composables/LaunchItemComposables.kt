@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.seancoyle.launch.contract.domain.model.CompanySummary
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.RocketWithMission
-import com.seancoyle.launch.contract.domain.model.SectionTitle
-import com.seancoyle.launch.contract.domain.model.ViewGrid
+import com.seancoyle.launch.api.domain.model.CompanySummary
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.RocketWithMission
+import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewGrid
 import com.seancoyle.launch.implementation.R
 
 @Composable

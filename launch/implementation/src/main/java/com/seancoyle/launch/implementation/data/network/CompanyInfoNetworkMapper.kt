@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.network
 
 import com.seancoyle.core.presentation.util.NumberFormatter
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.implementation.data.model.CompanyInfoDto
 import javax.inject.Inject
 

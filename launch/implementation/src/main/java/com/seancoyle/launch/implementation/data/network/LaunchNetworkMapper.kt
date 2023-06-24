@@ -6,10 +6,10 @@ import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.core.presentation.util.DateFormatter
 import com.seancoyle.core.presentation.util.DateTransformer
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.Links
-import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.data.model.LaunchDto
 import java.time.LocalDateTime

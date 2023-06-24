@@ -10,9 +10,9 @@ import com.seancoyle.core.data.cache.CacheErrors
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch.contract.data.LaunchCacheDataSource
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.usecase.FilterLaunchItemsInCacheUseCase
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.data.cache.FORCE_SEARCH_LAUNCH_EXCEPTION
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.LaunchDependencies

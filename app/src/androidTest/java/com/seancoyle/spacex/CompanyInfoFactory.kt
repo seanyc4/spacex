@@ -1,6 +1,6 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 

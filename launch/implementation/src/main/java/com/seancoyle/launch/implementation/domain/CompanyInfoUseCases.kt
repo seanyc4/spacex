@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain
 
-import com.seancoyle.launch.contract.domain.usecase.GetCompanyInfoFromCacheUseCase
-import com.seancoyle.launch.contract.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 
 class CompanyInfoUseCases
 constructor(

@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.di.data.launch
 
-import com.seancoyle.launch.contract.data.LaunchNetworkDataSource
+import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 import com.seancoyle.launch.implementation.di.LaunchNetworkDataSourceModule
 import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi

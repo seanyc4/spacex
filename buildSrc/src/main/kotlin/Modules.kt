@@ -9,8 +9,8 @@ object Modules {
     const val core_datastore_namespace = "com.seancoyle.core_datastore"
     const val launch = ":launch"
     const val launch_constants = ":launch:launch-constants"
-    const val launch_contract = ":launch:contract"
-    const val launch_contract_namespace = "com.seancoyle.launch.contract"
+    const val launch_api = ":launch:api"
+    const val launch_api_namespace = "com.seancoyle.launch.api"
     const val launch_impl = ":launch:implementation"
     const val launch_impl_namespace = "com.seancoyle.launch.implementation"
 }
