@@ -2,11 +2,11 @@ package com.seancoyle.launch.implementation.di
 
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_OPTIONS_ROCKET
 import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_OPTIONS_SORT
-import com.seancoyle.launch.contract.domain.model.LaunchOptions
-import com.seancoyle.launch.contract.domain.model.Options
-import com.seancoyle.launch.contract.domain.model.Populate
-import com.seancoyle.launch.contract.domain.model.Select
-import com.seancoyle.launch.contract.domain.model.Sort
+import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.Options
+import com.seancoyle.launch.api.domain.model.Populate
+import com.seancoyle.launch.api.domain.model.Select
+import com.seancoyle.launch.api.domain.model.Sort
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

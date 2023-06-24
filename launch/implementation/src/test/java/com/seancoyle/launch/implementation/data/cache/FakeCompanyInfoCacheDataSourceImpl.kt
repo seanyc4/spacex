@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.contract.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 
 const val FORCE_NEW_COMPANY_INFO_EXCEPTION = "FORCE_NEW_COMPANY_INFO_EXCEPTION"
 const val FORCE_GENERAL_FAILURE = "FORCE_GENERAL_FAILURE"

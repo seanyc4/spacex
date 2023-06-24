@@ -20,7 +20,7 @@ dependencies {
     "implementation"(project(Modules.launch_constants))
     "implementation"(project(Modules.core_datastore))
     "implementation"(project(Modules.core_database))
-    "implementation"(project(Modules.launch_contract))
+    "implementation"(project(Modules.launch_api))
     "implementation"(AndroidX.app_compat)
     "implementation"(AndroidX.core_ktx)
     "implementation"(AndroidX.data_store)

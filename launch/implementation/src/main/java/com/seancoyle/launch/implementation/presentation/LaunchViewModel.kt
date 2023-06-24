@@ -13,11 +13,11 @@ import com.seancoyle.core.domain.MessageStack
 import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.LaunchState
-import com.seancoyle.launch.contract.domain.model.ViewType
-import com.seancoyle.launch.contract.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.api.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMessageEvents

@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.contract.data.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkDataSourceImpl
 import dagger.Binds
 import dagger.Module

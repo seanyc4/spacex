@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.data.network
 
-import com.seancoyle.launch.contract.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.data.model.LaunchDto
 import retrofit2.http.Body
 import retrofit2.http.POST
