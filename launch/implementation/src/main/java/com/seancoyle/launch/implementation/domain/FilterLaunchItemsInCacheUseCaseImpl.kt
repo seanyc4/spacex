@@ -69,10 +69,3 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         emit(response)
     }
 }
-
-
-
-
-
-
-

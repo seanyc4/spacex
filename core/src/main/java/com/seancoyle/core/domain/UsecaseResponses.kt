@@ -10,14 +10,3 @@ object UsecaseResponses {
     const val EVENT_CACHE_SUCCESS = "Successfully retrieved data from cache."
     const val EVENT_CACHE_NO_MATCHING_RESULTS = "There is not data that matches that query."
 }
-
-
-
-
-
-
-
-
-
-
-

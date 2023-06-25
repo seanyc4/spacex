@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation
+package com.seancoyle.launch.implementation.data.network
 
 object MockWebServerResponseCompanyInfo {
 

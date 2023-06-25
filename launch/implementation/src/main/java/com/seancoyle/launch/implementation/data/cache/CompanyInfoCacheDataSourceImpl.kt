@@ -30,24 +30,3 @@ constructor(
         return dao.deleteAll()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -59,10 +59,3 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
         emit(response)
     }
 }
-
-
-
-
-
-
-

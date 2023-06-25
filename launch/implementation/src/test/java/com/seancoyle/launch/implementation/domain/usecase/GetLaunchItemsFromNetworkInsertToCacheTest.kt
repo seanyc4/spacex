@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.domain.DataState
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
@@ -7,11 +8,16 @@ import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.LaunchDependencies
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -23,6 +29,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetLaunchItemsFromNetworkInsertToCacheTest {
@@ -30,21 +37,23 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private val dependencies: LaunchDependencies = LaunchDependencies()
+    @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
+
+    @MockK
     private lateinit var networkDataSource: LaunchNetworkDataSource
-    private lateinit var mockWebServer: MockWebServer
+
+    @MockK
     private lateinit var launchOptions: LaunchOptions
+
+    private lateinit var mockWebServer: MockWebServer
+
     private lateinit var underTest: GetLaunchesFromNetworkAndInsertToCacheUseCase
 
     @BeforeEach
     fun setup() {
-        dependencies.build()
-        cacheDataSource = dependencies.launchCacheDataSource
-        networkDataSource = dependencies.networkDataSource
-        mockWebServer = dependencies.mockWebServer
-        launchOptions = dependencies.launchOptions
-
+        MockKAnnotations.init(this)
+        mockWebServer = MockWebServer()
         underTest =
             GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
@@ -54,60 +63,84 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
             )
     }
 
-    @Test
-    fun getLaunchItemsFromNetwork_InsertToCache_GetFromCache(): Unit = runBlocking {
-
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setBody(launchList)
-        )
-
-        cacheDataSource.deleteAll()
-        assertTrue(cacheDataSource.getAll()?.isEmpty() == true)
-
-        underTest(
-            event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents
-        ).collect { value ->
-            assertEquals(
-                value?.stateMessage?.response?.message,
-                LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
-            )
-        }
-
-        // get items inserted from network
-        val results = cacheDataSource.getAll()
-
-        // results should contain a list of launch items
-        assertTrue(results?.isNotEmpty() == true)
-
-        // confirm they are actually LaunchModel objects
-        assertTrue(results?.get(index = 0) is Launch)
-
-    }
-
-    @Test
-    fun getLaunchListFromNetwork_emitHttpError(): Unit = runBlocking {
-
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST)
-                .setBody("{}")
-        )
-
-        underTest(
-            event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents
-        ).collect { value ->
-            assertEquals(
-                value?.stateMessage?.response?.message,
-                LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
-            )
-        }
-    }
-
     @AfterEach
-    fun teardown() {
+    fun cleanup() {
         mockWebServer.shutdown()
     }
 
+    @Test
+    fun whenGetLaunchItemsFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
+        coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
+        coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
+
+        var result: DataState<LaunchState>? = null
+
+        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents).collect { value ->
+            result = value
+        }
+
+        assertEquals(
+            result?.stateMessage?.response?.message,
+            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
+        )
+    }
+
+    @Test
+    fun whenGetLaunchItemsFromNetwork_thenItemsCanBeRetrievedFromCache(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
+        coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
+        coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
+        coEvery { cacheDataSource.getAll() } returns LAUNCH_LIST
+
+        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents)
+        val results = cacheDataSource.getAll()
+
+        assertTrue(results?.isNotEmpty() == true)
+        assertTrue(results?.get(index = 0) is Launch)
+    }
+
+    @Test
+    fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
+        var result: DataState<LaunchState>? = null
+
+        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents).collect { value ->
+            result = value
+        }
+
+        assertEquals(
+            result?.stateMessage?.response?.message,
+            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
+        )
+    }
+
+    companion object {
+        private val LAUNCH_LIST = listOf(
+            Launch(
+                type = ViewType.TYPE_LIST,
+                daysToFromTitle = 0,
+                isLaunchSuccess = 1,
+                launchDate = "01/01/2023",
+                id = 1,
+                launchDaysDifference = "5 days",
+                launchSuccessIcon = 0,
+                launchYear = "2023",
+                launchDateLocalDateTime = LocalDateTime.now(),
+                links = Links(
+                    articleLink = "articleLink",
+                    missionImage = "missionLink",
+                    webcastLink = "webCastLink",
+                    wikiLink = "wikiLink"
+                ),
+                missionName = "missionName",
+                rocket = Rocket(
+                    rocketNameAndType = "rocketNameAndType"
+                )
+            )
+        )
+    }
 }
