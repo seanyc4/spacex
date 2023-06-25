@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.core.Constants.ORDER_DESC
+import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 
@@ -138,7 +138,7 @@ constructor(
             }
 
             if (launchFilter != LAUNCH_ALL) {
-                if (results.size > (page * LAUNCH_PAGINATION_PAGE_SIZE)) {
+                if (results.size > (page * PAGINATION_PAGE_SIZE)) {
                     break
                 }
             }
@@ -146,7 +146,7 @@ constructor(
         }
 
         // Apply filter to data
-        if (order == LAUNCH_ORDER_DESC) {
+        if (order == ORDER_DESC) {
             results.sortByDescending { it.launchDateLocalDateTime }
         } else {
             results.sortBy { it.launchDateLocalDateTime }

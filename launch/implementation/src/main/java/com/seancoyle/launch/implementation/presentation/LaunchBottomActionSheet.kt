@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.seancoyle.core.presentation.extensions.parcelable
+import com.seancoyle.core_ui.extensions.parcelable
 import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R

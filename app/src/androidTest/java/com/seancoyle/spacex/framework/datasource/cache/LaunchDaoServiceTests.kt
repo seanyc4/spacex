@@ -1,13 +1,13 @@
 package com.seancoyle.spacex.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.core.Constants.ORDER_ASC
+import com.seancoyle.core.Constants.ORDER_DESC
 import com.seancoyle.database.daos.LaunchDao
+import com.seancoyle.launch.api.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
@@ -225,7 +225,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = PAGE_ALL,
         )
@@ -239,7 +239,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = PAGE_ALL,
         )
@@ -255,7 +255,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = launchYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = null,
             page = PAGE_ALL,
         )
@@ -272,7 +272,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = launchYear,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = null,
             page = PAGE_ALL,
         )
@@ -289,7 +289,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = launchYear,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = null,
             page = PAGE_ALL,
         )
@@ -302,7 +302,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = PAGE_ALL,
         )
@@ -317,7 +317,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_FAILED,
             page = PAGE_ALL,
         )
@@ -334,7 +334,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = null,
             page = PAGE_ALL,
         )
@@ -349,7 +349,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = null,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_UNKNOWN,
             page = PAGE_ALL,
         )
@@ -366,7 +366,7 @@ class LaunchDaoServiceTests {
 
         val launchList = underTest.filterLaunchList(
             year = year,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = PAGE_ALL,
         )
@@ -380,7 +380,7 @@ class LaunchDaoServiceTests {
         val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
         val launchList = underTest.filterLaunchList(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_SUCCESS,
             page = PAGE_ALL,
         )

@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.util
 
-import com.seancoyle.core.presentation.util.DateFormatter
+import com.seancoyle.core.domain.DateFormatter
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
