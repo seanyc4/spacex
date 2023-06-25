@@ -1,16 +1,20 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.domain.DataState
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch.implementation.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.launch.implementation.domain.CompanyDependencies
+import com.seancoyle.launch.implementation.data.network.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -29,19 +33,20 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private val dependencies: CompanyDependencies = CompanyDependencies()
+    @MockK
     private lateinit var cacheDataSource: CompanyInfoCacheDataSource
+
+    @MockK
     private lateinit var networkDataSource: CompanyInfoNetworkDataSource
+
     private lateinit var mockWebServer: MockWebServer
+
     private lateinit var underTest: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 
     @BeforeEach
     fun setup() {
-        dependencies.build()
-        cacheDataSource = dependencies.companyInfoCacheDataSource
-        networkDataSource = dependencies.companyInfoNetworkSource
-        mockWebServer = dependencies.mockWebServer
-
+        MockKAnnotations.init(this)
+        mockWebServer = MockWebServer()
         underTest =
             GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
@@ -50,53 +55,70 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
             )
     }
 
-    @Test
-    fun getCompanyInfoFromNetwork_InsertToCache_GetFromCache() = runBlocking {
-
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setBody(companyInfo)
-        )
-
-        cacheDataSource.deleteAll()
-        assert(cacheDataSource.getCompanyInfo() == null)
-
-        underTest(
-            event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents
-        ).collect { value ->
-            assertEquals(
-                value?.stateMessage?.response?.message,
-                LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
-            )
-        }
-
-        val result = cacheDataSource.getCompanyInfo()
-        assertTrue(result != null)
-        assertTrue(result is CompanyInfo)
-    }
-
-    @Test
-    fun getCompanyInfoFromNetwork_emitHttpError() = runBlocking {
-
-         mockWebServer.enqueue(
-             MockResponse()
-                 .setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST)
-                 .setBody("{}")
-         )
-
-        underTest(
-            event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents
-        ).collect { value ->
-            assertEquals(
-                value?.stateMessage?.response?.message,
-                LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
-            )
-        }
-    }
-
     @AfterEach
-    internal fun tearDown() {
+    fun cleanup() {
         mockWebServer.shutdown()
+    }
+
+    @Test
+    fun whenGetCompanyInfoFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
+        coEvery { networkDataSource.getCompanyInfo() } returns COMPANY_INFO
+        coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
+        var result: DataState<LaunchState>? = null
+
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents).collect { value ->
+            result = value
+        }
+
+        assertEquals(
+            result?.stateMessage?.response?.message,
+            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
+        )
+    }
+
+    @Test
+    fun whenGetCompanyInfoFromNetwork_thenItemsCanBeRetrievedFromCache(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
+        coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
+        coEvery { cacheDataSource.getCompanyInfo() } returns COMPANY_INFO
+
+
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents)
+
+        val resultFromCache = cacheDataSource.getCompanyInfo()
+
+        assertTrue(resultFromCache != null)
+        assertTrue(resultFromCache is CompanyInfo)
+    }
+
+    @Test
+    fun whenGetCompanyInfoFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
+
+        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
+        var result: DataState<LaunchState>? = null
+
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents).collect { value ->
+            result = value
+        }
+
+        assertEquals(
+            result?.stateMessage?.response?.message,
+            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
+        )
+    }
+
+    companion object {
+        private val COMPANY_INFO = CompanyInfo(
+            id = "1",
+            employees = "employees",
+            founded = 2000,
+            founder = "founder",
+            launchSites = 4,
+            name = "name",
+            valuation = "valuation"
+        )
     }
 }
