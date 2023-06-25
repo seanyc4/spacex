@@ -1,15 +1,15 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.core.Constants.ORDER_ASC
+import com.seancoyle.core.Constants.ORDER_DESC
 import com.seancoyle.core.data.cache.CacheErrors
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
@@ -64,14 +64,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -101,14 +101,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -139,14 +139,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = launchYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = null,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = launchYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = null,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -177,14 +177,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = givenYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = givenYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -210,7 +210,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         coEvery {
             cacheDataSource.filterLaunchList(
                 year = givenYear,
-                order = LAUNCH_ORDER_ASC,
+                order = ORDER_ASC,
                 launchFilter = LAUNCH_SUCCESS,
                 page = 1
             )
@@ -218,7 +218,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
 
         underTest(
             year = givenYear,
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -243,14 +243,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -281,14 +281,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_FAILED,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_FAILED,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -319,14 +319,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -356,14 +356,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_UNKNOWN,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_UNKNOWN,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -389,14 +389,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         val givenLaunches = emptyList<Launch>()
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
         underTest(
             year = "",
-            order = LAUNCH_ORDER_ASC,
+            order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents
@@ -420,14 +420,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         var expectedResult = emptyList<Launch>()
         coEvery { cacheDataSource.filterLaunchList(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = null,
             page = 1
         ) } throws RuntimeException("Cache error")
 
         underTest(
             year = FORCE_SEARCH_LAUNCH_EXCEPTION,
-            order = LAUNCH_ORDER_DESC,
+            order = ORDER_DESC,
             launchFilter = null,
             page = 1,
             event = LaunchEvents.FilterLaunchItemsInCacheEvents

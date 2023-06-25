@@ -17,7 +17,7 @@ android{
 dependencies {
 
     "implementation"(project(Modules.core))
-    "implementation"(project(Modules.launch_constants))
+    "implementation"(project(Modules.core_ui))
     "implementation"(project(Modules.core_datastore))
     "implementation"(project(Modules.core_database))
     "implementation"(project(Modules.launch_api))

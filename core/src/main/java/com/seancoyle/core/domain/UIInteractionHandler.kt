@@ -1,7 +1,4 @@
-package com.seancoyle.core.presentation.util
-
-import com.seancoyle.core.domain.Response
-import com.seancoyle.core.domain.StateMessageCallback
+package com.seancoyle.core.domain
 
 interface UIInteractionHandler {
     fun displayProgressBar(isDisplayed: Boolean)
