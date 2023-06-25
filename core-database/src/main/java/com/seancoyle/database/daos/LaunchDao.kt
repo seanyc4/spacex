@@ -1,8 +1,8 @@
 package com.seancoyle.database.daos
 
 import androidx.room.*
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
+import com.seancoyle.core.Constants.ORDER_DESC
+import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.database.entities.LaunchEntity
 
 
@@ -56,7 +56,7 @@ interface LaunchDao {
     suspend fun launchItemsWithSuccessOrderByYearDESC(
         launchFilter: Int?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -69,7 +69,7 @@ interface LaunchDao {
     suspend fun launchItemsWithSuccessOrderByYearASC(
         launchFilter: Int?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
 
@@ -85,7 +85,7 @@ interface LaunchDao {
         year: String?,
         launchFilter: Int?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -100,7 +100,7 @@ interface LaunchDao {
         year: String?,
         launchFilter: Int?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -113,7 +113,7 @@ interface LaunchDao {
     suspend fun searchLaunchItemsOrderByYearDESC(
         year: String?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -126,7 +126,7 @@ interface LaunchDao {
     suspend fun searchLaunchItemsOrderByYearASC(
         year: String?,
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -137,7 +137,7 @@ interface LaunchDao {
     )
     suspend fun launchItemsOrderByYearDESC(
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
     @Query(
@@ -148,7 +148,7 @@ interface LaunchDao {
     )
     suspend fun launchItemsOrderByYearASC(
         page: Int,
-        pageSize: Int = LAUNCH_PAGINATION_PAGE_SIZE
+        pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
 }
@@ -161,7 +161,7 @@ suspend fun LaunchDao.returnOrderedQuery(
 ): List<LaunchEntity>? {
     val hasYear = !year.isNullOrEmpty()
     val hasLaunchFilter = launchFilter != null
-    val isOrderDesc = order.contains(LAUNCH_ORDER_DESC)
+    val isOrderDesc = order.contains(ORDER_DESC)
 
     return when {
 

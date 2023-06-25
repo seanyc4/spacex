@@ -1,4 +1,4 @@
-package com.seancoyle.core.presentation.composables
+package com.seancoyle.core_ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

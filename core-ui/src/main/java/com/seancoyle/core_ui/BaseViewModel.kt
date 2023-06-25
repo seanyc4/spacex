@@ -1,4 +1,4 @@
-package com.seancoyle.core.presentation
+package com.seancoyle.core_ui
 
 import androidx.lifecycle.ViewModel
 import com.seancoyle.core.di.IODispatcher

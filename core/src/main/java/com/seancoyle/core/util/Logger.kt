@@ -1,6 +1,6 @@
 package com.seancoyle.core.util
 
-import com.seancoyle.core.testing.Constants.DEBUG
+import com.seancoyle.core.Constants.DEBUG
 import timber.log.Timber
 
 var isUnitTest = false

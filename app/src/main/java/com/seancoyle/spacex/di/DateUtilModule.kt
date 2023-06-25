@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.di
 
-import com.seancoyle.core.presentation.util.DateFormatConstants
-import com.seancoyle.core.presentation.util.DateFormatter
-import com.seancoyle.core.presentation.util.DateTransformer
-import com.seancoyle.core.presentation.util.NumberFormatter
+import com.seancoyle.core.domain.DateFormatConstants
+import com.seancoyle.core.domain.DateFormatter
+import com.seancoyle.core.domain.DateTransformer
+import com.seancoyle.core.domain.NumberFormatter
 import com.seancoyle.core.util.*
 import com.seancoyle.spacex.util.DateFormatterImpl
 import com.seancoyle.spacex.util.DateTransformerImpl

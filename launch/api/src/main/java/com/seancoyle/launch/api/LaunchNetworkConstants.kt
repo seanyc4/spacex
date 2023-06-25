@@ -1,4 +1,4 @@
-package com.seancoyle.constants
+package com.seancoyle.launch.api
 
 object LaunchNetworkConstants {
     const val LAUNCH_OPTIONS_ROCKET = "rocket"

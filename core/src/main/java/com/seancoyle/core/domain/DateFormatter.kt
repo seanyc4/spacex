@@ -1,4 +1,4 @@
-package com.seancoyle.core.presentation.util
+package com.seancoyle.core.domain
 
 import java.time.LocalDateTime
 

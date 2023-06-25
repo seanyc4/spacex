@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.di
 
 import android.app.Activity
-import com.seancoyle.core.presentation.util.UIInteractionHandler
+import com.seancoyle.core.domain.UIInteractionHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

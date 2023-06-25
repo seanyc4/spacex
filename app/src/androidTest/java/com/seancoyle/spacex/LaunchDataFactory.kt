@@ -1,8 +1,8 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
+import com.seancoyle.launch.api.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
