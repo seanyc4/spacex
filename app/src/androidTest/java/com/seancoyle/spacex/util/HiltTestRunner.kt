@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework
+package com.seancoyle.spacex.util
 
 import android.app.Application
 import android.content.Context

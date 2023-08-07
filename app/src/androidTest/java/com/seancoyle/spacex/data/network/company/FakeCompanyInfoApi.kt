@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework.datasource.network.company
+package com.seancoyle.spacex.data.network.company
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

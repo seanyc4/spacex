@@ -5,6 +5,7 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+    enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 }
 
 rootProject.name='SpaceX'

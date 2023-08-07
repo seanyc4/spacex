@@ -5,4 +5,5 @@ import com.seancoyle.launch.api.domain.model.LaunchOptions
 
 interface LaunchNetworkDataSource {
     suspend fun getLaunchList(launchOptions: LaunchOptions): List<Launch>
+
 }

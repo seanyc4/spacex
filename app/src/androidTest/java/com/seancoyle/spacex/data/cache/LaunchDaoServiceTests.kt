@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework.datasource.cache
+package com.seancoyle.spacex.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.Constants.ORDER_ASC
@@ -15,7 +15,7 @@ import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType.Companion.TYPE_LIST
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
-import com.seancoyle.spacex.LaunchDataFactory
+import com.seancoyle.spacex.LaunchFactory
 import com.seancoyle.spacex.R
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -52,10 +52,10 @@ class LaunchDaoServiceTests {
     lateinit var dao: LaunchDao
 
     @Inject
-    lateinit var launchDataFactory: LaunchDataFactory
+    lateinit var launchEntityMapper: LaunchEntityMapper
 
     @Inject
-    lateinit var launchEntityMapper: LaunchEntityMapper
+    lateinit var factory: LaunchFactory
 
     private lateinit var validLaunchYears: List<String>
 
@@ -69,13 +69,13 @@ class LaunchDaoServiceTests {
             dao = dao,
             entityMapper = launchEntityMapper
         )
-        validLaunchYears = launchDataFactory.provideValidFilterYearDates()
+        validLaunchYears = provideValidFilterYearDates()
     }
 
 
     private fun insertTestData() = runBlocking {
         val entityList = launchEntityMapper.mapDomainListToEntityList(
-            launchDataFactory.parseJsonFile()
+            createLaunchListTest(1000)
         )
         dao.insertList(entityList)
     }
@@ -96,7 +96,7 @@ class LaunchDaoServiceTests {
     @Test
     fun insertLaunchItem_getLaunchItem_success() = runBlocking {
 
-        val newLaunchItem = launchDataFactory.createLaunchItem(
+        val newLaunchItem = createLaunchItem(
             id = 1,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
@@ -127,8 +127,8 @@ class LaunchDaoServiceTests {
     @Test
     fun insertLaunchList_getLaunchItem_success() = runBlocking {
 
-        val launchList = launchDataFactory.createLaunchListTest(
-            num = 10,
+        val launchList = createLaunchListTest(
+            num = 1000,
             null
         )
         underTest.insertList(launchList)
@@ -143,7 +143,7 @@ class LaunchDaoServiceTests {
         val currentNumLaunchItems = underTest.getTotalEntries()
 
         // insert 1000 launch items
-        val launchList = launchDataFactory.createLaunchListTest(
+        val launchList = createLaunchListTest(
             num = 1000,
             null
         )
@@ -155,7 +155,7 @@ class LaunchDaoServiceTests {
 
     @Test
     fun insertLaunch_deleteLaunch_confirmDeleted() = runBlocking {
-        val newLaunchItem = launchDataFactory.createLaunchItem(
+        val newLaunchItem = createLaunchItem(
             id = 2,
             launchDate = UUID.randomUUID().toString(),
             launchDateLocalDateTime = LocalDateTime.now(),
@@ -362,7 +362,7 @@ class LaunchDaoServiceTests {
     @Test
     fun filterLaunchItemsByLaunchStatus_noResultsFound() = runBlocking {
         // Year set to 2006 as there were only launch failures that year
-        val year = "2006"
+        val year = "0000"
 
         val launchList = underTest.filterLaunchList(
             year = year,
@@ -415,19 +415,80 @@ class LaunchDaoServiceTests {
         }
     }
 
+    private fun provideValidFilterYearDates() = listOf(
+        "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
+        "2012", "2010", "2009", "2008", "2007", "2006"
+    ).shuffled()
+
+    private fun createLaunchListTest(
+        num: Int,
+        id: Int? = null
+    ): List<Launch> {
+        val list: ArrayList<Launch> = ArrayList()
+
+        for (item in 0 until num) {
+            // Generate a random launch state
+            val randomLaunchState = when (Random.nextInt(3)) {
+                0 -> LAUNCH_SUCCESS
+                1 -> LAUNCH_FAILED
+                else -> LAUNCH_UNKNOWN
+            }
+
+            val launchYear = provideValidFilterYearDates().first()
+
+            list.add(
+                createLaunchItem(
+                    id = id ?: UUID.randomUUID().hashCode(),
+                    launchDate = UUID.randomUUID().toString(),
+                    launchDateLocalDateTime = LocalDateTime.now(),
+                    isLaunchSuccess = randomLaunchState,
+                    launchSuccessIcon = R.drawable.ic_launch_success, // You might want to change icon based on state
+                    launchYear = launchYear,
+                    links = Links(
+                        missionImage = DEFAULT_LAUNCH_IMAGE,
+                        articleLink = "https://www.google.com",
+                        webcastLink = "https://www.youtube.com",
+                        wikiLink = "https://www.wikipedia.com"
+                    ),
+                    missionName = UUID.randomUUID().toString(),
+                    rocket = Rocket(
+                        rocketNameAndType = UUID.randomUUID().toString()
+                    ),
+                    daysToFromTitle = UUID.randomUUID().hashCode(),
+                    launchDaysDifference = UUID.randomUUID().toString(),
+                    type = TYPE_LIST
+                )
+            )
+        }
+        return list
+    }
+
+    private fun createLaunchItem(
+        id: Int,
+        launchDate: String,
+        isLaunchSuccess: Int,
+        launchSuccessIcon: Int,
+        launchDateLocalDateTime: LocalDateTime,
+        launchYear: String,
+        links: Links,
+        missionName: String,
+        rocket: Rocket,
+        daysToFromTitle: Int,
+        launchDaysDifference: String,
+        type: Int
+    ) = factory.createLaunchItem(
+        id = id,
+        launchDate = launchDate,
+        isLaunchSuccess = isLaunchSuccess,
+        launchSuccessIcon = launchSuccessIcon,
+        launchDateLocalDateTime = launchDateLocalDateTime,
+        launchYear = launchYear,
+        links = links,
+        missionName = missionName,
+        rocket = rocket,
+        daysToFromTitle = daysToFromTitle,
+        launchDaysDifference = launchDaysDifference,
+        type = type,
+    )
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

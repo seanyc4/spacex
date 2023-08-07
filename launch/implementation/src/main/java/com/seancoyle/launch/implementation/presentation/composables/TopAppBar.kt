@@ -57,7 +57,7 @@ fun HomeAppBar(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_filter_list),
-                    contentDescription = "Filter List Button",
+                    contentDescription = stringResource(id = R.string.filter_btn_content_desc),
                     tint = colorResource(id = R.color.colorAccent)
                 )
             }

@@ -11,9 +11,3 @@ interface CompanyInfoCacheDataSource {
     suspend fun deleteAll()
 
 }
-
-
-
-
-
-

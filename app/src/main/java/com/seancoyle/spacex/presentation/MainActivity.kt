@@ -13,6 +13,7 @@ import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessageCallback
 import com.seancoyle.core.domain.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.extensions.displayToast
 import com.seancoyle.spacex.R
 import com.seancoyle.spacex.databinding.ActivityMainBinding
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity(),
     override fun displayProgressBar(isDisplayed: Boolean) {
         with(binding) {
             progressBar.setContent {
-                com.seancoyle.core_ui.composables.CircularProgressBar(
+                CircularProgressBar(
                     isDisplayed = isDisplayed,
                     verticalBias = 0.5f
                 )

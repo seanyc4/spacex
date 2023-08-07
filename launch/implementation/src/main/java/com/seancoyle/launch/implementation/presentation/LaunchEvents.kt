@@ -5,7 +5,7 @@ import com.seancoyle.core.domain.StateMessage
 
 sealed class LaunchEvents : Event {
 
-    object GetLaunchesFromNetworkAndInsertToCacheEvents : LaunchEvents() {
+    object GetLaunchesFromNetworkAndInsertToCacheEvent : LaunchEvents() {
         override fun errorInfo(): String {
             return "Error getting launches from network."
         }
@@ -15,7 +15,7 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetCompanyInfoFromNetworkAndInsertToCacheEvents : LaunchEvents() {
+    object GetCompanyInfoFromNetworkAndInsertToCacheEvent : LaunchEvents() {
         override fun errorInfo(): String {
             return "Error getting company info from network."
         }
@@ -25,7 +25,7 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetCompanyInfoFromCacheEvents: LaunchEvents() {
+    object GetCompanyInfoFromCacheEvent: LaunchEvents() {
         override fun errorInfo(): String {
             return "Error getting company info from cache."
         }
@@ -35,7 +35,7 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = false
     }
 
-    object FilterLaunchItemsInCacheEvents: LaunchEvents(){
+    object FilterLaunchItemsInCacheEvent: LaunchEvents(){
         override fun errorInfo(): String {
             return "Error getting filtered launches from cache."
         }
@@ -45,7 +45,7 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = true
     }
 
-    object GetNumLaunchItemsInCacheEvents : LaunchEvents() {
+    object GetNumLaunchItemsInCacheEvent : LaunchEvents() {
         override fun errorInfo(): String {
             return "Error getting the number of launches from the cache."
         }
@@ -55,7 +55,7 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = false
     }
 
-    class CreateMessageEvents(
+    class CreateMessageEvent(
         val stateMessage: StateMessage
     ) : LaunchEvents() {
         override fun errorInfo(): String {

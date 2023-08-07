@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework.datasource.network.company
+package com.seancoyle.spacex.data.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource

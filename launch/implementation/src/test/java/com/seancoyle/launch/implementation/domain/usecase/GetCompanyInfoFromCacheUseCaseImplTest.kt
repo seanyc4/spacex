@@ -46,13 +46,13 @@ class GetCompanyInfoFromCacheUseCaseImplTest {
         coEvery { cacheDataSource.getCompanyInfo() } returns COMPANY_INFO
 
         underTest(
-            event = LaunchEvents.GetCompanyInfoFromCacheEvents
+            event = LaunchEvents.GetCompanyInfoFromCacheEvent
         ).collect { value ->
             result = value?.data?.company
             stateMessage = value?.stateMessage?.response?.message
         }
 
-        val expectedMessage = LaunchEvents.GetCompanyInfoFromCacheEvents.eventName() + EVENT_CACHE_SUCCESS
+        val expectedMessage = LaunchEvents.GetCompanyInfoFromCacheEvent.eventName() + EVENT_CACHE_SUCCESS
         assertEquals(expectedMessage, stateMessage)
         assertNotNull(result)
     }

@@ -1,5 +1,7 @@
 <resources>
+    <!-- App Bar -->
     <string name="app_name">SpaceX</string>
+    <string name="filter_btn_content_desc">Filter List Button</string>
 
     <!-- Company Info Text -->
     <string name="company_info">%s was founded by  %s in  %s. It has now  %s employees,  %s launch sites, and is valued at USD  %s</string>

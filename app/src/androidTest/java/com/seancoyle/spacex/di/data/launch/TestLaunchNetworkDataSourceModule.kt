@@ -3,8 +3,8 @@ package com.seancoyle.spacex.di.data.launch
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 import com.seancoyle.launch.implementation.di.LaunchNetworkDataSourceModule
-import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchApi
-import com.seancoyle.spacex.framework.datasource.network.launch.FakeLaunchNetworkDataSourceImpl
+import com.seancoyle.spacex.data.network.launch.FakeLaunchApi
+import com.seancoyle.spacex.data.network.launch.FakeLaunchNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

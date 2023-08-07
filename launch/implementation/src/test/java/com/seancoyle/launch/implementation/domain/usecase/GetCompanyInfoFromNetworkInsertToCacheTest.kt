@@ -68,13 +68,13 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
         var result: DataState<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents).collect { value ->
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS
+            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
 
@@ -86,7 +86,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         coEvery { cacheDataSource.getCompanyInfo() } returns COMPANY_INFO
 
 
-        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents)
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent)
 
         val resultFromCache = cacheDataSource.getCompanyInfo()
 
@@ -100,13 +100,13 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
         var result: DataState<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents).collect { value ->
+        underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_NETWORK_ERROR
+            LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }
 

@@ -12,7 +12,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -44,13 +44,13 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
         coEvery { cacheDataSource.getTotalEntries() } returns TOTAL_ENTRIES
 
         underTest(
-            event = LaunchEvents.GetNumLaunchItemsInCacheEvents
+            event = LaunchEvents.GetNumLaunchItemsInCacheEvent
         ).collect { value ->
             numItems = value?.data?.numLaunchesInCache ?: 0
             stateMessage = value?.stateMessage?.response?.message
         }
 
-        val expectedMessage = LaunchEvents.GetNumLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
+        val expectedMessage = LaunchEvents.GetNumLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
         assertEquals(expectedMessage, stateMessage)
         assertEquals(TOTAL_ENTRIES, numItems)
     }

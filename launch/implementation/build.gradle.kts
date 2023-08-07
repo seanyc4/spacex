@@ -16,15 +16,18 @@ android{
 
 dependencies {
 
-    implementation(project(Modules.core))
-    implementation(project(Modules.core_ui))
-    implementation(project(Modules.core_datastore))
-    implementation(project(Modules.core_database))
-    implementation(project(Modules.launch_api))
+    implementation(projects.core)
+    implementation(projects.coreUi)
+    implementation(projects.coreDatastore)
+    implementation(projects.coreDatabase)
+    implementation(projects.launch.api)
+
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(Glide.glide)
-    implementation(Glide.glide_compose)
+    implementation(Glide.glide_compose){
+        exclude(group = "androidx.test", module = "core-ktx")
+    }
     "kapt"(Glide.glide_compiler)
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)
@@ -39,13 +42,11 @@ dependencies {
     implementation(Square.mock_web_server)
 
     testImplementation(AndroidTestDependencies.test_arch_core)
-    testImplementation(AndroidTestDependencies.coroutines_test)
-    testImplementation(TestDependencies.mockk)
-    testImplementation(TestDependencies.jupiter_engine)
-    testImplementation(TestDependencies.jupiter_api)
-    testImplementation(TestDependencies.jupiter_params)
-    testImplementation(TestDependencies.junit4)
+    testImplementation(AndroidTestDependencies.mockk)
+    testImplementation(AndroidTestDependencies.jupiter_engine)
+    testImplementation(AndroidTestDependencies.jupiter_api)
+    testImplementation(AndroidTestDependencies.jupiter_params)
+    testImplementation(AndroidTestDependencies.junit4)
+    testImplementation(KotlinTest.coroutines_test)
 
-    androidTestImplementation(ComposeTest.compuse_ui_test)
-    debugImplementation(ComposeTest.compuse_ui_test_manifest)
 }

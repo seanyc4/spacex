@@ -13,8 +13,8 @@ android {
 
 dependencies {
     implementation(Kotlin.coroutines_android)
+    implementation(KotlinTest.coroutines_test)
     implementation(Square.retrofit)
-    implementation(AndroidTestDependencies.coroutines_test)
     implementation(AndroidTestDependencies.test_arch_core)
-    implementation(TestDependencies.jupiter_api)
+    implementation(AndroidTestDependencies.jupiter_api)
 }

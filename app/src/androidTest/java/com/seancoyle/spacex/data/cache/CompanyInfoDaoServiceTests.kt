@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework.datasource.cache
+package com.seancoyle.spacex.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.database.daos.CompanyInfoDao
@@ -84,17 +84,3 @@ class CompanyInfoDaoServiceTests {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

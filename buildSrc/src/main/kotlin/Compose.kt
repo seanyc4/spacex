@@ -32,6 +32,7 @@ object Compose {
 }
 
 object ComposeTest {
-    const val compuse_ui_test ="androidx.compose.ui:ui-test-junit4:$compose_version"
+    const val compuse_ui_test ="androidx.compose.ui:ui-test:$compose_version"
+    const val compuse_ui_test_junit4 ="androidx.compose.ui:ui-test-junit4:$compose_version"
     const val compuse_ui_test_manifest ="androidx.compose.ui:ui-test-manifest:$compose_version"
 }

@@ -68,9 +68,6 @@ android {
         // Fix for mock issue on >= API 28
         packagingOptions.jniLibs.useLegacyPackaging = true
 
-        // Enable test orchestrator
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
-
         // To prevent textUtils error with espresso idling resource
         unitTests.isReturnDefaultValues = true
 
@@ -90,16 +87,15 @@ android {
 
 dependencies {
 
-    implementation(project(Modules.core))
-    implementation(project(Modules.core_datastore))
-    implementation(project(Modules.core_database))
-    implementation(project(Modules.core_ui))
-    implementation(project(Modules.launch_api))
-    implementation(project(Modules.launch_impl))
+    implementation(projects.core)
+    implementation(projects.coreDatastore)
+    implementation(projects.coreDatabase)
+    implementation(projects.coreUi)
+    implementation(projects.launch.api)
+    implementation(projects.launch.implementation)
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
-
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_live_data_ktx)
     implementation(AndroidX.lifecycle_vm_ktx)
@@ -110,37 +106,35 @@ dependencies {
     implementation(AndroidX.navigation_ui)
     kapt(AndroidX.lifecycle_compiler)
     implementation(AndroidX.splash_screen)
-    debugImplementation(AndroidXTest.fragment_testing)
-    androidTestImplementation(AndroidXTest.navigation_testing)
-
     implementation(Compose.compose_runtime)
-
-    androidTestImplementation(HiltTest.hilt_android_testing)
-    kaptAndroidTest(Hilt.compiler)
-
     implementation(Kotlin.serialization)
-
     implementation(MaterialDialogs.material_dialogs)
-
     //debugImplementation(Square.leak_canary)
     implementation(Room.room_runtime)
     implementation(Square.retrofit_gson)
-
     implementation(ScalingPixels.scaling_pixels)
     implementation(Timber.timber)
-
     implementation(AndroidTestDependencies.idling_resource)
+
     androidTestImplementation(AndroidTestDependencies.androidx_test_ext)
-    androidTestImplementation(AndroidTestDependencies.coroutines_test)
-    androidTestImplementation(AndroidTestDependencies.espresso_contrib)
     androidTestImplementation(AndroidTestDependencies.espresso_core)
     androidTestImplementation(AndroidTestDependencies.espresso_intents)
     androidTestImplementation(AndroidTestDependencies.idling_resource)
-    androidTestImplementation(AndroidTestDependencies.kotlin_test)
     androidTestImplementation(AndroidTestDependencies.mockk_android)
-    androidTestUtil(AndroidTestDependencies.test_orchestrator)
     androidTestImplementation(AndroidTestDependencies.test_rules)
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)
     androidTestImplementation(AndroidTestDependencies.test_arch_core)
+    androidTestImplementation(AndroidXTest.navigation_testing)
+    androidTestImplementation(HiltTest.hilt_android_testing)
+    kaptAndroidTest(Hilt.compiler)
+    androidTestImplementation(KotlinTest.coroutines_test)
+    androidTestImplementation(KotlinTest.kotlin_test)
+
+    debugImplementation(AndroidXTest.fragment_testing)
+    debugImplementation(AndroidTestDependencies.test_core_monitor)
+
+    androidTestImplementation(ComposeTest.compuse_ui_test)
+    androidTestImplementation(ComposeTest.compuse_ui_test_junit4)
+    debugImplementation(ComposeTest.compuse_ui_test_manifest)
 }

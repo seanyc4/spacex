@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.framework.datasource.network.launch
+package com.seancoyle.spacex.data.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
@@ -56,40 +56,3 @@ class LaunchRetrofitServiceTests {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

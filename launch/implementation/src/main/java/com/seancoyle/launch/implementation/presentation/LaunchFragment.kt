@@ -4,7 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -77,7 +79,9 @@ import com.seancoyle.launch.implementation.presentation.composables.LaunchHeadin
 import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val LINKS_KEY = "links"
@@ -106,7 +110,7 @@ class LaunchFragment : Fragment() {
                     refreshing = launchViewModel.getRefreshState(),
                     onRefresh = {
                         launchViewModel.clearQueryParameters()
-                        launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents)
+                        launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
                     }
                 )
 
@@ -166,7 +170,7 @@ class LaunchFragment : Fragment() {
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
-    private fun LaunchContent(
+    fun LaunchContent(
         launchItems: List<ViewType>,
         loading: Boolean,
         onChangeScrollPosition: (Int) -> Unit,
@@ -284,7 +288,7 @@ class LaunchFragment : Fragment() {
                     stateMessage?.response?.let { response ->
 
                         when (response.message) {
-                            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
+                            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
                                 launchViewModel.clearStateMessage()
                                 filterLaunchItemsInCacheEvent()
                             }
@@ -301,19 +305,19 @@ class LaunchFragment : Fragment() {
 
                                 when (response.message) {
                                     // Check cache for data if net connection fails
-                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
-                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvents.eventName() + ERROR_UNKNOWN -> {
+                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
                                         filterLaunchItemsInCacheEvent()
                                     }
 
-                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + EVENT_CACHE_INSERT_FAILED -> {
+                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
                                         getCompanyInfoFromCacheEvent()
                                     }
 
-                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvents.eventName() + ERROR_UNKNOWN -> {
+                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
                                         getCompanyInfoFromCacheEvent()
                                     }
                                 }
@@ -453,19 +457,19 @@ class LaunchFragment : Fragment() {
 
     private fun filterLaunchItemsInCacheEvent() {
         launchViewModel.setEvent(
-            LaunchEvents.FilterLaunchItemsInCacheEvents
+            LaunchEvents.FilterLaunchItemsInCacheEvent
         )
     }
 
     private fun getCompanyInfoFromCacheEvent() {
         launchViewModel.setEvent(
-            LaunchEvents.GetCompanyInfoFromCacheEvents
+            LaunchEvents.GetCompanyInfoFromCacheEvent
         )
     }
 
     private fun displayErrorDialogNoLinks() {
         launchViewModel.setEvent(
-            event = LaunchEvents.CreateMessageEvents(
+            event = LaunchEvents.CreateMessageEvent(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Info,
@@ -479,7 +483,7 @@ class LaunchFragment : Fragment() {
 
     private fun displayErrorDialogUnableToLoadLink() {
         launchViewModel.setEvent(
-            event = LaunchEvents.CreateMessageEvents(
+            event = LaunchEvents.CreateMessageEvent(
                 StateMessage(
                     response = Response(
                         messageType = MessageType.Error,

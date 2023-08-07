@@ -1,18 +1,9 @@
 object Modules {
-    const val app = ":app"
     const val app_namespace = "com.seancoyle.spacex"
-    const val core = ":core"
     const val core_namespace = "com.seancoye.core"
-    const val core_database = ":core-database"
     const val core_database_namespace = "com.seancoyle.core_database"
-    const val core_datastore = ":core-datastore"
     const val core_datastore_namespace = "com.seancoyle.core_datastore"
     const val core_ui_namespace = "com.seancoyle.core_ui"
-    const val core_ui = ":core-ui"
-    const val launch = ":launch"
-    const val launch_constants = ":launch:launch-constants"
-    const val launch_api = ":launch:api"
     const val launch_api_namespace = "com.seancoyle.launch.api"
-    const val launch_impl = ":launch:implementation"
     const val launch_impl_namespace = "com.seancoyle.launch.implementation"
 }

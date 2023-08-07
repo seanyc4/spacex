@@ -3,8 +3,8 @@ package com.seancoyle.spacex.di.data.companyinfo
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.launch.implementation.di.CompanyInfoNetworkDataSourceModule
-import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoApi
-import com.seancoyle.spacex.framework.datasource.network.company.FakeCompanyInfoNetworkDataSourceImpl
+import com.seancoyle.spacex.data.network.company.FakeCompanyInfoApi
+import com.seancoyle.spacex.data.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

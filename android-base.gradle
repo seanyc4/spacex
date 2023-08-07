@@ -46,9 +46,6 @@ android {
         // Fix for mock issue on >= API 28
         packaging.jniLibs.useLegacyPackaging = true
 
-        // Enable test orchestrator
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
-
         // To prevent textUtils error with espresso idling resource
         unitTests.returnDefaultValues = true
 
@@ -61,8 +58,8 @@ android {
 
 dependencies {
     implementation(Timber.timber)
-    testImplementation(TestDependencies.jupiter_engine)
-    testImplementation(TestDependencies.jupiter_api)
-    testImplementation(TestDependencies.jupiter_params)
-    testImplementation(TestDependencies.junit4)
+    testImplementation(AndroidTestDependencies.jupiter_engine)
+    testImplementation(AndroidTestDependencies.jupiter_api)
+    testImplementation(AndroidTestDependencies.jupiter_params)
+    testImplementation(AndroidTestDependencies.junit4)
 }
