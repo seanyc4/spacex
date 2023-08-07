@@ -1,6 +1,6 @@
 package com.seancoyle.spacex.util
 
-import com.seancoyle.core.presentation.util.NumberFormatter
+import com.seancoyle.core.domain.NumberFormatter
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject

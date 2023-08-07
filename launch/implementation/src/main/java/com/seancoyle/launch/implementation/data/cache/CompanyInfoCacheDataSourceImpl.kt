@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.database.daos.CompanyInfoDao
-import com.seancoyle.launch.contract.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
+import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
 class CompanyInfoCacheDataSourceImpl
@@ -30,24 +30,3 @@ constructor(
         return dao.deleteAll()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -16,10 +16,10 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core-database" />
             <option value="$PROJECT_DIR$/core-datastore" />
+            <option value="$PROJECT_DIR$/core-ui" />
             <option value="$PROJECT_DIR$/launch" />
-            <option value="$PROJECT_DIR$/launch/contract" />
+            <option value="$PROJECT_DIR$/launch/api" />
             <option value="$PROJECT_DIR$/launch/implementation" />
-            <option value="$PROJECT_DIR$/launch/launch-constants" />
           </set>
         </option>
       </GradleProjectSettings>

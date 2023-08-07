@@ -82,7 +82,6 @@ suspend fun <T> safeCacheCall(
     }
 }
 
-
 private fun convertErrorBody(throwable: HttpException): String? {
     return try {
         throwable.response()?.errorBody()?.string()
@@ -90,26 +89,3 @@ private fun convertErrorBody(throwable: HttpException): String? {
         ERROR_UNKNOWN
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

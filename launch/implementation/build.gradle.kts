@@ -8,7 +8,6 @@ apply {
 plugins {
     id("de.mannodermaus.android-junit5")
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
 }
 
 android{
@@ -18,14 +17,12 @@ android{
 dependencies {
 
     implementation(project(Modules.core))
-    implementation(project(Modules.launch_constants))
+    implementation(project(Modules.core_ui))
     implementation(project(Modules.core_datastore))
     implementation(project(Modules.core_database))
-    implementation(project(Modules.launch_contract))
+    implementation(project(Modules.launch_api))
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
-    implementation(AndroidX.data_store)
-    implementation(AndroidX.lifecycle_compose_viewmodel)
     implementation(Glide.glide)
     implementation(Glide.glide_compose)
     "kapt"(Glide.glide_compiler)

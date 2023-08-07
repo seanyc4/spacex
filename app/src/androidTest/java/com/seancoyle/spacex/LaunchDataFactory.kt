@@ -1,12 +1,12 @@
 package com.seancoyle.spacex
 
-import com.seancoyle.constants.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.Links
-import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewType
+import com.seancoyle.launch.api.LaunchNetworkConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime

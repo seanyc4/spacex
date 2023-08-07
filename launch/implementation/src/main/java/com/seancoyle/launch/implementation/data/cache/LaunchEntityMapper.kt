@@ -3,10 +3,10 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LinksEntity
 import com.seancoyle.database.entities.RocketEntity
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.Links
-import com.seancoyle.launch.contract.domain.model.Rocket
-import com.seancoyle.launch.contract.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import javax.inject.Inject
 
 class LaunchEntityMapper @Inject constructor() {

@@ -2,22 +2,22 @@ package com.seancoyle.launch.implementation.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.core.Constants.ORDER_DESC
+import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.domain.DataState
 import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageStack
-import com.seancoyle.core.presentation.BaseViewModel
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.contract.domain.model.CompanyInfo
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.LaunchState
-import com.seancoyle.launch.contract.domain.model.ViewType
-import com.seancoyle.launch.contract.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.core_ui.BaseViewModel
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.launch.api.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMessageEvents
@@ -196,7 +196,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun nextPage() {
-        if ((getScrollPositionState() + 1) >= (getPageState() * LAUNCH_PAGINATION_PAGE_SIZE)) {
+        if ((getScrollPositionState() + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
             incrementPage()
             if (getPageState() > 1) {
                 setEvent(FilterLaunchItemsInCacheEvents)
@@ -208,7 +208,7 @@ class LaunchViewModel @Inject constructor(
     private fun getScrollPositionState() = getCurrentStateOrNew().scrollPosition ?: 0
     private fun getSearchQueryState() = getCurrentStateOrNew().yearQuery.orEmpty()
     fun getPageState() = getCurrentStateOrNew().page ?: 1
-    fun getOrderState() = getCurrentStateOrNew().order ?: LAUNCH_ORDER_DESC
+    fun getOrderState() = getCurrentStateOrNew().order ?: ORDER_DESC
     fun getIsDialogFilterDisplayedState() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
     fun getRefreshState() = getCurrentStateOrNew().isRefreshing
 
@@ -239,7 +239,7 @@ class LaunchViewModel @Inject constructor(
 
     fun setLaunchOrderState(order: String?) {
         setState(getCurrentStateOrNew().apply { this.order = order })
-        saveOrderToDatastore(order ?: LAUNCH_ORDER_DESC)
+        saveOrderToDatastore(order ?: ORDER_DESC)
     }
 
     fun setLaunchFilterState(filter: Int?) {

@@ -2,11 +2,13 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.core.testing.MainCoroutineRule
-import com.seancoyle.launch.contract.data.LaunchCacheDataSource
-import com.seancoyle.launch.contract.domain.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.api.data.LaunchCacheDataSource
+import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.LaunchDependencies
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -20,52 +22,40 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private val launchDependencies: LaunchDependencies = LaunchDependencies()
+    @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
+
     private lateinit var underTest: GetNumLaunchItemsFromCacheUseCase
 
     @BeforeEach
     fun setup() {
-        launchDependencies.build()
-        cacheDataSource = launchDependencies.launchCacheDataSource
-        underTest =
-            GetNumLaunchItemsFromCacheUseCaseImpl(
-                ioDispatcher = mainCoroutineRule.testDispatcher,
-                cacheDataSource = cacheDataSource
-            )
+        MockKAnnotations.init(this)
+        underTest = GetNumLaunchItemsFromCacheUseCaseImpl(
+            ioDispatcher = mainCoroutineRule.testDispatcher,
+            cacheDataSource = cacheDataSource
+        )
     }
 
     @Test
     fun getNumLaunchItems_success_confirmCorrect() = runBlocking {
 
         var numItems = 0
+        var stateMessage: String? = null
+        coEvery { cacheDataSource.getTotalEntries() } returns TOTAL_ENTRIES
+
         underTest(
             event = LaunchEvents.GetNumLaunchItemsInCacheEvents
         ).collect { value ->
-            assertEquals(
-                value?.stateMessage?.response?.message,
-                LaunchEvents.GetNumLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
-            )
             numItems = value?.data?.numLaunchesInCache ?: 0
+            stateMessage = value?.stateMessage?.response?.message
         }
 
-        val actualNumItemsInCache = cacheDataSource.getTotalEntries()
-        assertTrue { actualNumItemsInCache == numItems }
+        val expectedMessage = LaunchEvents.GetNumLaunchItemsInCacheEvents.eventName() + EVENT_CACHE_SUCCESS
+        assertEquals(expectedMessage, stateMessage)
+        assertEquals(TOTAL_ENTRIES, numItems)
+    }
+
+    companion object {
+        private const val TOTAL_ENTRIES = 10
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

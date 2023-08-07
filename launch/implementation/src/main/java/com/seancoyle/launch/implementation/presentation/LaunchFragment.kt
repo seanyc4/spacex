@@ -43,30 +43,30 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_ASC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_ORDER_DESC
-import com.seancoyle.constants.LaunchDaoConstants.LAUNCH_PAGINATION_PAGE_SIZE
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_ALL
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_FAILED
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_SUCCESS
-import com.seancoyle.constants.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.core.Constants.ORDER_ASC
+import com.seancoyle.core.Constants.ORDER_DESC
+import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessage
 import com.seancoyle.core.domain.StateMessageCallback
+import com.seancoyle.core.domain.UIInteractionHandler
 import com.seancoyle.core.domain.UsecaseResponses.ERROR_UNKNOWN
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_FAILED
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
-import com.seancoyle.core.presentation.util.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch.contract.domain.model.CompanySummary
-import com.seancoyle.launch.contract.domain.model.Launch
-import com.seancoyle.launch.contract.domain.model.Links
-import com.seancoyle.launch.contract.domain.model.SectionTitle
-import com.seancoyle.launch.contract.domain.model.ViewCarousel
-import com.seancoyle.launch.contract.domain.model.ViewGrid
-import com.seancoyle.launch.contract.domain.model.ViewType
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
+import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.launch.api.domain.model.CompanySummary
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.SectionTitle
+import com.seancoyle.launch.api.domain.model.ViewCarousel
+import com.seancoyle.launch.api.domain.model.ViewGrid
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
@@ -191,7 +191,7 @@ class LaunchFragment : Fragment() {
                     ) { index, launchItem ->
                         printLogDebug("Recyclerview", ": index$index")
                         onChangeScrollPosition(index)
-                        if ((index + 1) >= (page * LAUNCH_PAGINATION_PAGE_SIZE) && !loading) {
+                        if ((index + 1) >= (page * PAGINATION_PAGE_SIZE) && !loading) {
                             loadNextPage()
                         }
                         if (!isRefreshing) {
@@ -396,16 +396,16 @@ class LaunchFragment : Fragment() {
             // set switch to on/off based on state
             val orderSwitch = view.findViewById<SwitchMaterial>(R.id.order_switch).apply {
                 when (order) {
-                    LAUNCH_ORDER_ASC -> isChecked = false
-                    LAUNCH_ORDER_DESC -> isChecked = true
+                    ORDER_ASC -> isChecked = false
+                    ORDER_DESC -> isChecked = true
                 }
             }
 
             orderSwitch.setOnCheckedChangeListener { _, isChecked ->
                 newOrder = if (isChecked) {
-                    LAUNCH_ORDER_DESC
+                    ORDER_DESC
                 } else {
-                    LAUNCH_ORDER_ASC
+                    ORDER_ASC
                 }
             }
 
