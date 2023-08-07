@@ -1,5 +1,5 @@
 object Kotlin {
-    const val kotlin_version = "1.8.21"
+    const val kotlin_version = "1.9.0"
 
     private const val kotlinx_datetime_version = "0.4.0"
     const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version"

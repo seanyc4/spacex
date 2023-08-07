@@ -13,13 +13,11 @@ data class Launch(
     val launchDateLocalDateTime: LocalDateTime,
     val launchYear: String,
     val isLaunchSuccess: Int?,
-    @DrawableRes
-    val launchSuccessIcon: Int,
+    @DrawableRes val launchSuccessIcon: Int,
     val links: Links,
     val missionName: String,
     val rocket: Rocket,
-    @StringRes
-    val daysToFromTitle: Int,
+    @StringRes val daysToFromTitle: Int,
     val launchDaysDifference: String,
     override val type: Int
 ) : Parcelable,

@@ -9,13 +9,13 @@ android {
 }
 
 dependencies {
-    "implementation"(Compose.compose_runtime)
-    "implementation"(Compose.compose_preview)
-    "implementation"(Compose.compose_ui)
-    "implementation"(Compose.compose_foundation)
-    "implementation"(Compose.compose_layout)
-    "implementation"(Compose.compose_material)
-    "implementation"(Compose.compose_livedata)
-    "implementation"(Compose.compose_constraint_layout)
-    "debugImplementation"(Compose.compose_tooling)
+    implementation(Compose.compose_runtime)
+    implementation(Compose.compose_preview)
+    implementation(Compose.compose_ui)
+    implementation(Compose.compose_foundation)
+    implementation(Compose.compose_layout)
+    implementation(Compose.compose_material)
+    implementation(Compose.compose_livedata)
+    implementation(Compose.compose_constraint_layout)
+    debugImplementation(Compose.compose_tooling)
 }

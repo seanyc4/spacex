@@ -5,6 +5,7 @@ apply {
 
 plugins {
     id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -12,5 +13,5 @@ android {
 }
 
 dependencies {
-    "api"(project(Modules.core))
+    implementation(project(Modules.core))
 }
