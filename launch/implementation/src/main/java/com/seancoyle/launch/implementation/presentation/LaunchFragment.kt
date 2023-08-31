@@ -198,7 +198,7 @@ class LaunchFragment : Fragment() {
                             GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                         }
                     ) { index, launchItem ->
-                        printLogDebug("Recyclerview", ": index$index")
+                        printLogDebug("LazyVerticalGrid", ": index$index")
                         onChangeScrollPosition(index)
                         if ((index + 1) >= (page * PAGINATION_PAGE_SIZE) && !loading) {
                             loadNextPage()
