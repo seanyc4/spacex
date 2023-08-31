@@ -137,4 +137,6 @@ dependencies {
     androidTestImplementation(ComposeTest.compuse_ui_test)
     androidTestImplementation(ComposeTest.compuse_ui_test_junit4)
     debugImplementation(ComposeTest.compuse_ui_test_manifest)
+
+    androidTestImplementation(projects.coreDatastoreTest)
 }

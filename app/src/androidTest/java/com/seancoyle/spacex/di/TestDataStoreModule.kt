@@ -1,11 +1,10 @@
 package com.seancoyle.spacex.di
 
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.core_datastore.AppDataStoreManager
 import com.seancoyle.core_datastore.DataStoreModule
+import com.seancoyle.core_datastore_test.AppDataStoreManagerFake
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
@@ -19,9 +18,7 @@ object TestDataStoreModule {
 
     @Singleton
     @Provides
-    fun provideDataStoreManager(
-        application: HiltTestApplication
-    ): AppDataStore {
-        return AppDataStoreManager(application)
+    fun provideDataStoreManager(): AppDataStore {
+        return AppDataStoreManagerFake()
     }
 }

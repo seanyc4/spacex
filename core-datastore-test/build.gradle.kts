@@ -9,10 +9,10 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_datastore_namespace
+    namespace = Modules.core_datastore_test_namespace
 }
 
 dependencies {
-    testImplementation(projects.coreDatastoreTest)
+    implementation(projects.coreDatastore)
     implementation(AndroidX.data_store)
 }

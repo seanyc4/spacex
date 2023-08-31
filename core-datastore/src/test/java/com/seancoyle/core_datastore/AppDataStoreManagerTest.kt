@@ -1,5 +1,6 @@
 package com.seancoyle.core_datastore
 
+import com.seancoyle.core_datastore_test.AppDataStoreManagerFake
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -16,7 +16,9 @@ class AppDataStoreManager(
     val context: Application
 ) : AppDataStore {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(APP_DATASTORE)
+    companion object {
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(APP_DATASTORE)
+    }
 
     override suspend fun setStringValue(
         key: String,
