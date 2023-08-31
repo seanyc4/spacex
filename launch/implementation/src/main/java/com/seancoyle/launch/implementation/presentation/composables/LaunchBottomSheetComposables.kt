@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -53,7 +55,8 @@ fun LaunchBottomSheetCard(
             .padding(
                 start = dimensionResource(id = R.dimen.small_view_margins_8dp),
                 end = dimensionResource(id = R.dimen.small_view_margins_8dp)
-            ),
+            )
+            .semantics { testTag = "Launch Bottom Sheet" },
         backgroundColor = colorResource(id = R.color.colorSecondary),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {

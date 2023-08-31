@@ -8,9 +8,10 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.launch.api.domain.model.LinkType
-import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
+import com.seancoyle.spacex.R
+import com.seancoyle.spacex.util.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,10 +22,10 @@ class LaunchBottomSheetTest {
 
     @Test
     fun launchBottomSheetIsDisplayedCorrectly() {
-        val articleString = composeTestRule.activity.getString(R.string.article)
-        val webCastString = composeTestRule.activity.getString(R.string.webcast)
-        val wikiString = composeTestRule.activity.getString(R.string.wikipedia)
-        val linksString = composeTestRule.activity.getString(R.string.links)
+        val articleString by composeTestRule.stringResource(R.string.article)
+        val webCastString by composeTestRule.stringResource(R.string.webcast)
+        val wikiString by composeTestRule.stringResource(R.string.wikipedia)
+        val linksString by composeTestRule.stringResource(R.string.links)
 
         composeTestRule.setContent {
             LaunchBottomSheetCard(linkTypes = LINK_TYPES)

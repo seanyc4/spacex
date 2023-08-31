@@ -32,6 +32,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -186,7 +188,10 @@ class LaunchFragment : Fragment() {
                     .background(MaterialTheme.colors.background)
                     .pullRefresh(pullRefreshState)
             ) {
-                LazyVerticalGrid(columns = GridCells.Fixed(GRID_COLUMN_SIZE)) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(GRID_COLUMN_SIZE),
+                    modifier = modifier.semantics { testTag = "Launch Grid" }
+                ) {
                     itemsIndexed(
                         items = launchItems,
                         span = { _, item ->
