@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         google()
@@ -10,7 +9,7 @@ buildscript {
         classpath(Build.kotlin_gradle_plugin)
         classpath(Build.junit5)
         classpath(Build.hilt_android)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
+        classpath(Build.kotlin_ksp)
     }
 }
 

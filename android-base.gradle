@@ -1,7 +1,6 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
+apply plugin: Plugins.android_library
+apply plugin: Plugins.kotlin
+apply plugin: Plugins.kotlin_parcelize
 
 android {
     compileSdk Android.compileSdk
@@ -32,6 +31,13 @@ android {
 
     kotlinOptions {
         jvmTarget = Java.java_version
+    }
+
+    kotlin {
+        sourceSets {
+            main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+            test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+        }
     }
 
     lint {

@@ -6,8 +6,9 @@ apply {
 }
 
 plugins {
-    id("de.mannodermaus.android-junit5")
-    id("com.android.library")
+    id(Plugins.junit5)
+    id(Plugins.android_library)
+    id(Plugins.ksp)
 }
 
 android{
@@ -28,12 +29,12 @@ dependencies {
     implementation(Glide.glide_compose){
         exclude(group = "androidx.test", module = "core-ktx")
     }
-    "kapt"(Glide.glide_compiler)
+    ksp(Glide.glide_compiler)
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
-    "kapt"(Room.room_compiler)
+    ksp(Room.room_compiler)
     implementation(ScalingPixels.scaling_pixels)
     implementation(Square.interceptor)
     implementation(Square.ok_http)

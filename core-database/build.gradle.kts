@@ -4,7 +4,8 @@ apply {
 }
 
 plugins {
-    id("com.android.library")
+    id(Plugins.android_library)
+    id(Plugins.ksp)
 }
 
 android {
@@ -12,11 +13,11 @@ android {
     namespace = Modules.core_database_namespace
 
     defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
+
     }
 }
 
@@ -24,5 +25,5 @@ dependencies {
     implementation(projects.core)
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
-    "kapt"(Room.room_compiler)
+    ksp(Room.room_compiler)
 }

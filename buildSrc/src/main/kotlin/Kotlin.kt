@@ -3,6 +3,7 @@ import Kotlin.kotlin_version
 
 object Kotlin {
     const val kotlin_version = "1.9.0"
+    const val kotlin_ksp_version = "1.9.0-1.0.12"
 
     private const val kotlinx_datetime_version = "0.4.0"
     const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version"

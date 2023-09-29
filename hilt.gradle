@@ -1,10 +1,7 @@
-apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: Plugins.hilt
+apply plugin: Plugins.ksp
 
 dependencies {
     implementation(Hilt.android)
-    kapt(Hilt.compiler)
-}
-
-kapt {
-    correctErrorTypes = true
+    ksp(Hilt.compiler)
 }

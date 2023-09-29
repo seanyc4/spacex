@@ -4,12 +4,12 @@ apply {
 }
 
 plugins {
-    id("com.android.application")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
-    kotlin("android")
-    kotlin(KotlinPlugins.serialization) version Kotlin.kotlin_version
+    id(Plugins.android_application)
+    id(Plugins.ksp)
+    id(Plugins.kotlin_parcelize)
+    id(Plugins.hilt)
+    kotlin(Plugins.android)
+    kotlin(Plugins.serialization) version Kotlin.kotlin_version
 }
 
 android {
@@ -104,7 +104,7 @@ dependencies {
     implementation(AndroidX.navigation_dynamic)
     implementation(AndroidX.navigation_fragment)
     implementation(AndroidX.navigation_ui)
-    kapt(AndroidX.lifecycle_compiler)
+    ksp(AndroidX.lifecycle_compiler)
     implementation(AndroidX.splash_screen)
     implementation(Compose.compose_runtime)
     implementation(Kotlin.serialization)
@@ -127,7 +127,7 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.test_arch_core)
     androidTestImplementation(AndroidXTest.navigation_testing)
     androidTestImplementation(HiltTest.hilt_android_testing)
-    kaptAndroidTest(Hilt.compiler)
+    kspAndroidTest(Hilt.compiler)
     androidTestImplementation(KotlinTest.coroutines_test)
     androidTestImplementation(KotlinTest.kotlin_test)
 
