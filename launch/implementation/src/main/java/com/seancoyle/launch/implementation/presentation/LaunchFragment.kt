@@ -10,30 +10,14 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -49,7 +33,6 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.core.Constants.ORDER_ASC
 import com.seancoyle.core.Constants.ORDER_DESC
-import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
@@ -64,21 +47,9 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
-import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.SectionTitle
-import com.seancoyle.launch.api.domain.model.ViewCarousel
-import com.seancoyle.launch.api.domain.model.ViewGrid
-import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
-import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchCarouselCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchGridCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
-import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -87,7 +58,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val LINKS_KEY = "links"
-private const val GRID_COLUMN_SIZE = 2
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -109,7 +79,7 @@ class LaunchFragment : Fragment() {
 
                 val scaffoldState = rememberScaffoldState()
                 val refreshing = rememberPullRefreshState(
-                    refreshing = launchViewModel.getRefreshState(),
+                    refreshing = launchViewModel.loading.collectAsState().value,
                     onRefresh = {
                         launchViewModel.clearQueryParameters()
                         launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
@@ -119,7 +89,6 @@ class LaunchFragment : Fragment() {
                 AppTheme(
                     darkTheme = false,
                     displayProgressBar = false,
-                    scaffoldState = scaffoldState
                 ) {
                     Scaffold(
                         topBar = {
@@ -135,7 +104,10 @@ class LaunchFragment : Fragment() {
                         LaunchScreen(
                             Modifier.padding(padding),
                             viewModel = launchViewModel,
-                            refreshState = refreshing
+                            refreshState = refreshing,
+                            onCardClicked = { link ->
+                                onCardClicked(link)
+                            }
                         )
                     }
                 }
@@ -143,114 +115,7 @@ class LaunchFragment : Fragment() {
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    fun LaunchScreen(
-        modifier: Modifier = Modifier,
-        viewModel: LaunchViewModel,
-        refreshState: PullRefreshState
-    ) {
-        val viewState = viewModel.uiState.collectAsState()
-        val loading = viewModel.loading.collectAsState()
-        printLogDebug("RECOMPOSING", "RECOMPOSING $viewState")
 
-        if (loading.value && viewState.value.mergedLaunches.isNullOrEmpty()) {
-            LoadingLaunchCardList(itemCount = 10)
-        } else {
-            LaunchContent(
-                launchItems = viewState.value.mergedLaunches ?: emptyList(),
-                modifier = modifier,
-                loading = loading.value,
-                onChangeScrollPosition = viewModel::setScrollPositionState,
-                loadNextPage = viewModel::nextPage,
-                page = viewModel.getPageState(),
-                pullRefreshState = refreshState,
-                isRefreshing = viewModel.getRefreshState()
-            )
-        }
-    }
-
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    fun LaunchContent(
-        launchItems: List<ViewType>,
-        loading: Boolean,
-        onChangeScrollPosition: (Int) -> Unit,
-        page: Int,
-        loadNextPage: () -> Unit,
-        pullRefreshState: PullRefreshState,
-        modifier: Modifier = Modifier,
-        isRefreshing: Boolean
-    ) {
-        if (launchItems.isNotEmpty()) {
-            Box(
-                modifier = modifier
-                    .background(MaterialTheme.colors.background)
-                    .pullRefresh(pullRefreshState)
-            ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(GRID_COLUMN_SIZE),
-                    modifier = modifier.semantics { testTag = "Launch Grid" }
-                ) {
-                    itemsIndexed(
-                        items = launchItems,
-                        span = { _, item ->
-                            GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
-                        }
-                    ) { index, launchItem ->
-                        printLogDebug("LazyVerticalGrid", ": index$index")
-                        onChangeScrollPosition(index)
-                        if ((index + 1) >= (page * PAGINATION_PAGE_SIZE) && !loading) {
-                            loadNextPage()
-                        }
-                        if (!isRefreshing) {
-                            when (launchItem.type) {
-                                ViewType.TYPE_SECTION_TITLE -> {
-                                    LaunchHeading(launchItem as SectionTitle)
-                                }
-
-                                ViewType.TYPE_HEADER -> {
-                                    CompanySummaryCard(launchItem as CompanySummary)
-                                }
-
-                                ViewType.TYPE_LIST -> {
-                                    LaunchCard(
-                                        launchItem = launchItem as Launch,
-                                        onClick = { onCardClicked(launchItem.links) }
-                                    )
-                                }
-
-                                ViewType.TYPE_GRID -> {
-                                    LaunchGridCard(
-                                        launchItem = launchItem as ViewGrid,
-                                        onClick = { onCardClicked(launchItem.links) })
-                                }
-
-                                ViewType.TYPE_CAROUSEL -> {
-                                    val carouselItems = (launchItem as ViewCarousel).items
-                                    LazyRow {
-                                        itemsIndexed(carouselItems) { index, carouselItem ->
-                                            LaunchCarouselCard(
-                                                launchItem = carouselItem,
-                                                onClick = { onCardClicked(carouselItem.links) })
-                                            printLogDebug("Recyclerview - ROW ", ": index${index}")
-                                        }
-                                    }
-                                }
-
-                                else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
-                            }
-                        }
-                    }
-                }
-                PullRefreshIndicator(
-                    launchViewModel.getRefreshState(),
-                    pullRefreshState,
-                    Modifier.align(Alignment.TopCenter)
-                )
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

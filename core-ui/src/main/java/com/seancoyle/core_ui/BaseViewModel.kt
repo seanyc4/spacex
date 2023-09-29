@@ -13,15 +13,11 @@ import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessage
 import com.seancoyle.core.domain.UsecaseResponses
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 abstract class BaseViewModel<UiState>(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,

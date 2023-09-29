@@ -20,7 +20,6 @@ data class LaunchState(
     var order: String? = null,
     var yearQuery: String? = "",
     var scrollPosition: Int? = 0,
-    var isRefreshing: Boolean = false
 
 ) : Parcelable, UiState
 

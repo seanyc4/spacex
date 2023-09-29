@@ -57,7 +57,7 @@ fun LaunchBottomSheetCard(
                 end = dimensionResource(id = R.dimen.small_view_margins_8dp)
             )
             .semantics { testTag = "Launch Bottom Sheet" },
-        backgroundColor = colorResource(id = R.color.colorSecondary),
+        backgroundColor = colorResource(id = R.color.colorPrimary),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Column(
@@ -136,7 +136,7 @@ fun LaunchBottomSheetExitButton(
             .fillMaxWidth()
             .height(height = 80.dp)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin)),
-        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.colorSecondary)),
+        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.colorPrimary)),
         shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Text(

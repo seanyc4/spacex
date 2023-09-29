@@ -27,14 +27,10 @@ import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyI
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @HiltViewModel
 class LaunchViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -210,7 +206,6 @@ class LaunchViewModel @Inject constructor(
     fun getPageState() = getCurrentStateOrNew().page ?: 1
     fun getOrderState() = getCurrentStateOrNew().order ?: ORDER_DESC
     fun getIsDialogFilterDisplayedState() = getCurrentStateOrNew().isDialogFilterDisplayed ?: false
-    fun getRefreshState() = getCurrentStateOrNew().isRefreshing
 
     fun getFilterState(): Int? {
         return if (getCurrentStateOrNew().launchFilter == LAUNCH_ALL) {
