@@ -13,6 +13,10 @@ object Compose {
     const val compose_activity = "androidx.activity:activity-compose:$compose_version"
     const val compose_viewbinding = "androidx.compose.ui:ui-viewbinding:$compose_version"
 
+    private const val compose_lifecycle_version ="2.6.2"
+    const val compose_lifecycle ="androidx.lifecycle:lifecycle-runtime-compose:$compose_lifecycle_version"
+    const val compose_viewmodel_lifecycle ="androidx.lifecycle:lifecycle-viewmodel-compose:$compose_lifecycle_version"
+
     private const val compose_navigation_version = "2.7.0-rc01"
     const val compose_navigation = "androidx.navigation:navigation-compose:$compose_navigation_version"
 

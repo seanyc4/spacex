@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -79,9 +80,9 @@ class LaunchFragment : Fragment() {
 
                 val scaffoldState = rememberScaffoldState()
                 val refreshing = rememberPullRefreshState(
-                    refreshing = launchViewModel.loading.collectAsState().value,
+                    refreshing = launchViewModel.loading.collectAsStateWithLifecycle().value,
                     onRefresh = {
-                        launchViewModel.clearQueryParameters()
+                        launchViewModel::clearQueryParameters
                         launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
                     }
                 )
@@ -101,7 +102,7 @@ class LaunchFragment : Fragment() {
                         },
                         scaffoldState = scaffoldState
                     ) { padding ->
-                        LaunchScreen(
+                        LaunchRoute(
                             Modifier.padding(padding),
                             viewModel = launchViewModel,
                             refreshState = refreshing,

@@ -14,11 +14,13 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.Constants
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.CompanySummary
@@ -34,30 +36,26 @@ import com.seancoyle.launch.implementation.presentation.composables.LaunchCarous
 import com.seancoyle.launch.implementation.presentation.composables.LaunchGridCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
 import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 
 private const val GRID_COLUMN_SIZE = 2
 
 @OptIn(ExperimentalMaterialApi::class)
-@ExperimentalCoroutinesApi
-@FlowPreview
 @Composable
-fun LaunchScreen(
+internal fun LaunchRoute(
     modifier: Modifier = Modifier,
-    viewModel: LaunchViewModel,
+    viewModel: LaunchViewModel = hiltViewModel(),
     refreshState: PullRefreshState,
     onCardClicked: (links: Links) -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val loading = viewModel.loading.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val loading = viewModel.loading.collectAsStateWithLifecycle()
     printLogDebug("RECOMPOSING", "RECOMPOSING $uiState")
 
-    if (loading.value && uiState.value.mergedLaunches.isNullOrEmpty()) {
+    if (loading.value && uiState.mergedLaunches.isNullOrEmpty()) {
         LoadingLaunchCardList(itemCount = 10)
     } else {
-        LaunchContent(
-            launchItems = uiState.value.mergedLaunches ?: emptyList(),
+        LaunchScreen(
+            launchItems = uiState.mergedLaunches ?: emptyList(),
             modifier = modifier,
             loading = loading.value,
             onChangeScrollPosition = viewModel::setScrollPositionState,
@@ -71,7 +69,7 @@ fun LaunchScreen(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LaunchContent(
+fun LaunchScreen(
     launchItems: List<ViewType>,
     loading: Boolean,
     onChangeScrollPosition: (Int) -> Unit,
