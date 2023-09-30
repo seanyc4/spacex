@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 
+const val TAG_LOADING = "loading"
 @Composable
 fun CircularProgressBar(
     isDisplayed: Boolean,
@@ -28,7 +31,8 @@ fun CircularProgressBar(
             Row(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(top = verticalBias.dp),
+                    .padding(top = verticalBias.dp)
+                    .semantics { testTag = TAG_LOADING },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
