@@ -7,7 +7,7 @@ import com.seancoyle.core.testing.MainCoroutineRule
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.presentation.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.data.network.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl

@@ -2,14 +2,13 @@ package com.seancoyle.core.data.cache
 
 import com.seancoyle.core.data.cache.CacheErrors.CACHE_DATA_NULL
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
+import com.seancoyle.core.domain.Result
 
 abstract class CacheResponseHandler <UiState, Data>(
-    private val response: CacheResult<Data?>,
-    private val event: Event?
+    private val response: CacheResult<Data?>
 ){
     suspend fun getResult(): DataState<UiState>? {
 
@@ -18,11 +17,10 @@ abstract class CacheResponseHandler <UiState, Data>(
             is CacheResult.GenericError -> {
                 DataState.error(
                     response = Response(
-                        message = "${event?.errorInfo()}\n\nReason: ${response.errorMessage}",
+                        message = response.errorMessage,
                         messageDisplayType = MessageDisplayType.None,
                         messageType = MessageType.Error
-                    ),
-                    event = event
+                    )
                 )
             }
 
@@ -30,21 +28,20 @@ abstract class CacheResponseHandler <UiState, Data>(
                 if(response.value == null){
                     DataState.error(
                         response = Response(
-                            message = "${event?.errorInfo()}\n\nReason: ${CACHE_DATA_NULL}.",
+                            message = CACHE_DATA_NULL,
                             messageDisplayType = MessageDisplayType.None,
                             messageType = MessageType.Error
-                        ),
-                        event = event
+                        )
                     )
                 }
                 else{
-                    handleSuccess(resultObj = response.value)
+                    handleSuccess(data = response.value)
                 }
             }
 
         }
     }
 
-    abstract suspend fun handleSuccess(resultObj: Data): DataState<UiState>?
+    abstract suspend fun handleSuccess(data: Data): DataState<UiState>?
 
 }

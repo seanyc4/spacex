@@ -48,16 +48,16 @@ internal fun LaunchRoute(
     onCardClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading = viewModel.loading.collectAsStateWithLifecycle()
+    val loading = false
     printLogDebug("RECOMPOSING", "RECOMPOSING $uiState")
 
-    if (loading.value && uiState.mergedLaunches.isNullOrEmpty()) {
+    if (loading && uiState.mergedLaunches.isNullOrEmpty()) {
         LoadingLaunchCardList(itemCount = 10)
     } else {
         LaunchScreen(
             launchItems = uiState.mergedLaunches ?: emptyList(),
             modifier = modifier,
-            loading = loading.value,
+            loading = loading,
             onChangeScrollPosition = viewModel::setScrollPositionState,
             loadNextPage = viewModel::nextPage,
             page = viewModel.getPageState(),

@@ -80,7 +80,7 @@ class LaunchFragment : Fragment() {
 
                 val scaffoldState = rememberScaffoldState()
                 val refreshing = rememberPullRefreshState(
-                    refreshing = launchViewModel.loading.collectAsStateWithLifecycle().value,
+                    refreshing = false,
                     onRefresh = {
                         launchViewModel::clearQueryParameters
                         launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
@@ -125,7 +125,6 @@ class LaunchFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        launchViewModel.clearAllStateMessages()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -145,17 +144,17 @@ class LaunchFragment : Fragment() {
 
     private fun subscribeObservers() {
 
-        lifecycleScope.launch {
+       /* lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launchViewModel.loading.collect { isLoading ->
                     uiInteractionHandler.displayProgressBar(isLoading)
                 }
             }
-        }
+        }*/
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launchViewModel.stateMessage.collect { stateMessage ->
+                /*launchViewModel.stateMessage.collect { stateMessage ->
                     stateMessage?.response?.let { response ->
 
                         when (response.message) {
@@ -195,7 +194,7 @@ class LaunchFragment : Fragment() {
                             }
                         }
                     }
-                }
+                }*/
             }
         }
 

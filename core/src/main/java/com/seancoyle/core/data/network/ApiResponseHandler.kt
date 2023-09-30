@@ -2,14 +2,12 @@ package com.seancoyle.core.data.network
 
 import com.seancoyle.core.data.network.NetworkErrors.NETWORK_DATA_NULL
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 
 abstract class ApiResponseHandler <UiState, Data>(
-    private val response: ApiResult<Data?>,
-    private val event: Event?
+    private val response: ApiResult<Data?>
 ){
 
     suspend fun getResult(): DataState<UiState>? {
@@ -28,11 +26,10 @@ abstract class ApiResponseHandler <UiState, Data>(
                 if(response.value == null){
                     DataState.error(
                         response = Response(
-                            message = "${event?.errorInfo()}\n\nReason: ${NETWORK_DATA_NULL}.",
+                            message = NETWORK_DATA_NULL,
                             messageDisplayType = MessageDisplayType.Dialog,
                             messageType = MessageType.Error
-                        ),
-                        event = event
+                        )
                     )
                 }
                 else{

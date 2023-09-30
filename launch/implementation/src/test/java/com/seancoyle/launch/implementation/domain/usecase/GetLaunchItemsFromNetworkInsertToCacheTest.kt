@@ -8,7 +8,7 @@ import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.presentation.LaunchState
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType

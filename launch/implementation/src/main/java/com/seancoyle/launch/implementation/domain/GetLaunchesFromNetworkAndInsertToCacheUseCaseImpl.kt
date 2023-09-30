@@ -6,7 +6,6 @@ import com.seancoyle.core.data.network.safeApiCall
 import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
@@ -18,8 +17,8 @@ import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -34,53 +33,47 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 
     private var launchList: List<Launch> = emptyList()
 
-    override operator fun invoke(
-        event: Event
-    ): Flow<DataState<LaunchState>?> = flow {
+    override operator fun invoke(): Flow<DataState<LaunchUiState.LaunchState>?> = flow {
 
         val networkResult = safeApiCall(ioDispatcher) {
             launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchState, List<Launch>?>(
-            response = networkResult,
-            event = event
+        val networkResponse = object : ApiResponseHandler<LaunchUiState.LaunchState, List<Launch>?>(
+            response = networkResult
         ) {
-            override suspend fun handleSuccess(resultObj: List<Launch>?): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: List<Launch>?): DataState<LaunchUiState.LaunchState> {
                 return if (resultObj != null) {
                     launchList = resultObj
-                    DataState.data(
+                    DataState.success(
                         response = null,
-                        data = null,
-                        event = null
+                        data = null
                     )
                 } else {
-                    DataState.data(
+                    DataState.success(
                         response = Response(
-                            message = event.eventName() + EVENT_NETWORK_EMPTY,
+                            message = EVENT_NETWORK_EMPTY,
                             messageDisplayType = MessageDisplayType.Toast,
                             messageType = MessageType.Error
                         ),
-                        data = null,
-                        event = event
+                        data = null
                     )
                 }
             }
 
-            override suspend fun handleFailure(): DataState<LaunchState> {
+            override suspend fun handleFailure(): DataState<LaunchUiState.LaunchState> {
                 return DataState.error(
                     response = Response(
-                        message = event.eventName() + EVENT_NETWORK_ERROR,
+                        message = EVENT_NETWORK_ERROR,
                         messageDisplayType = MessageDisplayType.Toast,
                         messageType = MessageType.Error
-                    ),
-                    event = event
+                    )
                 )
             }
         }.getResult()
 
         networkResponse?.let {
-            if (networkResponse.stateMessage?.response?.message == event.eventName() + EVENT_NETWORK_ERROR) {
+            if (networkResponse.stateMessage?.response?.message == EVENT_NETWORK_ERROR) {
                 emit(networkResponse)
             }
         }
@@ -92,28 +85,25 @@ class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 cacheDataSource.insertList(launchList)
             }
 
-            val cacheResponse = object : CacheResponseHandler<LaunchState, LongArray>(
-                response = cacheResult,
-                event = event
+            val cacheResponse = object : CacheResponseHandler<LaunchUiState.LaunchState, LongArray>(
+                response = cacheResult
             ) {
-                override suspend fun handleSuccess(resultObj: LongArray): DataState<LaunchState> {
-                    return if (resultObj.isNotEmpty()) {
-                        DataState.data(
+                override suspend fun handleSuccess(data: LongArray): DataState<LaunchUiState.LaunchState> {
+                    return if (data.isNotEmpty()) {
+                        DataState.success(
                             response = Response(
-                                message = event.eventName() + EVENT_CACHE_INSERT_SUCCESS,
+                                message = EVENT_CACHE_INSERT_SUCCESS,
                                 messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Success
-                            ),
-                            event = event
+                            )
                         )
                     } else {
-                        DataState.data(
+                        DataState.success(
                             response = Response(
-                                message = event.eventName() + EVENT_CACHE_INSERT_FAILED,
+                                message = EVENT_CACHE_INSERT_FAILED,
                                 messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Error
-                            ),
-                            event = event
+                            )
                         )
                     }
                 }

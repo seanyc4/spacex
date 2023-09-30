@@ -5,14 +5,13 @@ import com.seancoyle.core.data.cache.CacheResponseHandler
 import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,29 +22,25 @@ class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource
 ) : GetNumLaunchItemsFromCacheUseCase {
 
-    override operator fun invoke(
-        event: Event
-    ): Flow<DataState<LaunchState>?> = flow {
+    override operator fun invoke(): Flow<DataState<LaunchUiState.LaunchState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.getTotalEntries()
         }
-        val response = object : CacheResponseHandler<LaunchState, Int>(
-            response = cacheResult,
-            event = event
+        val response = object : CacheResponseHandler<LaunchUiState.LaunchState, Int>(
+            response = cacheResult
         ) {
-            override suspend fun handleSuccess(resultObj: Int): DataState<LaunchState> {
-                val viewState = LaunchState(
+            override suspend fun handleSuccess(resultObj: Int): DataState<LaunchUiState.LaunchState> {
+                val viewState = LaunchUiState.LaunchState(
                     numLaunchesInCache = resultObj
                 )
-                return DataState.data(
+                return DataState.success(
                     response = Response(
-                        message = event.eventName() + EVENT_CACHE_SUCCESS,
+                        message = EVENT_CACHE_SUCCESS,
                         messageDisplayType = MessageDisplayType.None,
                         messageType = MessageType.Success
                     ),
-                    data = viewState,
-                    event = event
+                    data = viewState
                 )
             }
         }.getResult()

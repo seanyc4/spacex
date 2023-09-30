@@ -1,8 +1,7 @@
 package com.seancoyle.launch.api.domain.usecase
 
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
-import com.seancoyle.launch.api.domain.model.LaunchState
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import kotlinx.coroutines.flow.Flow
 
 interface FilterLaunchItemsInCacheUseCase {
@@ -10,7 +9,6 @@ interface FilterLaunchItemsInCacheUseCase {
         year: String,
         order: String,
         launchFilter: Int?,
-        page: Int,
-        event: Event
-    ): Flow<DataState<LaunchState>?>
+        page: Int
+    ): Flow<DataState<LaunchUiState.LaunchState>?>
 }

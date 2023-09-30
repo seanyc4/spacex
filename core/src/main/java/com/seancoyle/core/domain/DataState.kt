@@ -2,36 +2,34 @@ package com.seancoyle.core.domain
 
 
 data class DataState<T>(
-    var stateMessage: StateMessage? = null,
-    var data: T? = null,
-    var event: Event? = null
+    val stateMessage: StateMessage? = null,
+    val data: T? = null,
+    val loading: Boolean = false,
 ) {
 
     companion object {
 
         fun <T> error(
-            response: Response,
-            event: Event?
+            response: Response
         ): DataState<T> {
             return DataState(
                 stateMessage = StateMessage(response),
-                data = null,
-                event = event
+                data = null
             )
         }
 
-        fun <T> data(
+        fun <T> success(
             response: Response?,
-            data: T? = null,
-            event: Event?
+            data: T? = null
         ): DataState<T> {
             return DataState(
                 stateMessage = response?.let {
                     StateMessage(it)
                 },
-                data = data,
-                event = event
+                data = data
             )
         }
+
+        fun <T> loading(): DataState<T> = DataState(loading = true)
     }
 }

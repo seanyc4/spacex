@@ -4,7 +4,6 @@ import com.seancoyle.core.data.cache.CacheResponseHandler
 import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
@@ -12,8 +11,8 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULT
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -28,9 +27,8 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         year: String,
         order: String,
         launchFilter: Int?,
-        page: Int,
-        event: Event
-    ): Flow<DataState<LaunchState>?> = flow {
+        page: Int
+    ): Flow<DataState<LaunchUiState.LaunchState>?> = flow {
 
         val cacheResult = safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
@@ -41,28 +39,26 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             )
         }
 
-        val response = object : CacheResponseHandler<LaunchState, List<Launch>>(
-            response = cacheResult,
-            event = event
+        val response = object : CacheResponseHandler<LaunchUiState.LaunchState, List<Launch>>(
+            response = cacheResult
         ) {
-            override suspend fun handleSuccess(resultObj: List<Launch>): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: List<Launch>): DataState<LaunchUiState.LaunchState> {
                 val (resultMessage, uiComponentType) = if (resultObj.isEmpty()) {
                     Pair(EVENT_CACHE_NO_MATCHING_RESULTS, MessageDisplayType.Toast)
                 } else {
                     Pair(EVENT_CACHE_SUCCESS, MessageDisplayType.None)
                 }
-                val message = event.eventName() + resultMessage
+                val message = resultMessage
 
-                return DataState.data(
+                return DataState.success(
                     response = Response(
                         message = message,
                         messageDisplayType = uiComponentType,
                         messageType = MessageType.Success
                     ),
-                    data = LaunchState(
+                    data = LaunchUiState.LaunchState(
                         launches = resultObj
-                    ),
-                    event = event
+                    )
                 )
             }
         }.getResult()

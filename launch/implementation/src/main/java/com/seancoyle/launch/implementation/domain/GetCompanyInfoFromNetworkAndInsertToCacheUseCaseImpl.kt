@@ -6,7 +6,6 @@ import com.seancoyle.core.data.network.safeApiCall
 import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.Event
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
@@ -17,8 +16,8 @@ import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -31,56 +30,51 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
     private var companyInfo: CompanyInfo? = null
-    private var viewState: LaunchState = LaunchState()
+    private var viewState = LaunchUiState.LaunchState()
 
     override operator fun invoke(
-        event: Event
-    ): Flow<DataState<LaunchState>?> = flow {
+    ): Flow<DataState<LaunchUiState.LaunchState>?> = flow {
 
         val networkResult = safeApiCall(ioDispatcher) {
             networkDataSource.getCompanyInfo()
         }
 
-        val networkResponse = object : ApiResponseHandler<LaunchState, CompanyInfo?>(
-            response = networkResult,
-            event = event
+        val networkResponse = object : ApiResponseHandler<LaunchUiState.LaunchState, CompanyInfo?>(
+            response = networkResult
         ) {
-            override suspend fun handleSuccess(resultObj: CompanyInfo?): DataState<LaunchState> {
+            override suspend fun handleSuccess(resultObj: CompanyInfo?): DataState<LaunchUiState.LaunchState> {
                 return if (resultObj != null) {
                     companyInfo = resultObj
                     viewState.company = resultObj
-                    DataState.data(
+                    DataState.success(
                         response = null,
-                        data = null,
-                        event = null
+                        data = null
                     )
                 } else {
-                    DataState.data(
+                    DataState.success(
                         response = Response(
-                            message = event.eventName() + EVENT_NETWORK_EMPTY,
+                            message = EVENT_NETWORK_EMPTY,
                             messageDisplayType = MessageDisplayType.Toast,
                             messageType = MessageType.Error
                         ),
-                        data = null,
-                        event = event
+                        data = null
                     )
                 }
             }
 
-            override suspend fun handleFailure(): DataState<LaunchState> {
+            override suspend fun handleFailure(): DataState<LaunchUiState.LaunchState> {
                 return DataState.error(
                     response = Response(
-                        message = event.eventName() + EVENT_NETWORK_ERROR,
+                        message = EVENT_NETWORK_ERROR,
                         messageDisplayType = MessageDisplayType.Toast,
                         messageType = MessageType.Error
                     ),
-                    event = event
                 )
             }
         }.getResult()
 
         networkResponse?.let {
-            if (networkResponse.stateMessage?.response?.message == event.eventName() + EVENT_NETWORK_ERROR) {
+            if (networkResponse.stateMessage?.response?.message == EVENT_NETWORK_ERROR) {
                 emit(networkResponse)
             }
         }
@@ -92,30 +86,27 @@ class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
                 cacheDataSource.insert(companyInfo!!)
             }
 
-            val cacheResponse = object : CacheResponseHandler<LaunchState, Long>(
-                response = cacheResult,
-                event = event
+            val cacheResponse = object : CacheResponseHandler<LaunchUiState.LaunchState, Long>(
+                response = cacheResult
             ) {
-                override suspend fun handleSuccess(resultObj: Long): DataState<LaunchState> {
-                    return if (resultObj > 0) {
-                        DataState.data(
+                override suspend fun handleSuccess(data: Long): DataState<LaunchUiState.LaunchState> {
+                    return if (data > 0) {
+                        DataState.success(
                             response = Response(
-                                message = event.eventName() + EVENT_CACHE_INSERT_SUCCESS,
+                                message = EVENT_CACHE_INSERT_SUCCESS,
                                 messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Success
                             ),
-                            data = viewState,
-                            event = event
+                            data = viewState
                         )
                     } else {
-                        DataState.data(
+                        DataState.success(
                             response = Response(
-                                message = event.eventName() + EVENT_CACHE_INSERT_FAILED,
+                                message = EVENT_CACHE_INSERT_FAILED,
                                 messageDisplayType = MessageDisplayType.None,
                                 messageType = MessageType.Error
                             ),
-                            data = null,
-                            event = event
+                            data = null
                         )
                     }
                 }

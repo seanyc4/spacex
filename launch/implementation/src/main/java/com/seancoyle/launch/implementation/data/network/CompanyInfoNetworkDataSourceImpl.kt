@@ -4,9 +4,7 @@ import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
-class CompanyInfoNetworkDataSourceImpl
-@Inject
-constructor(
+class CompanyInfoNetworkDataSourceImpl @Inject constructor(
     private val api: CompanyInfoApi,
     private val networkMapper: CompanyInfoNetworkMapper
 ) : CompanyInfoNetworkDataSource {

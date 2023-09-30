@@ -8,16 +8,15 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.domain.DataState
 import com.seancoyle.core.domain.Event
-import com.seancoyle.core.domain.MessageStack
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.core_ui.BaseViewModel
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.LaunchState
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMessageEvent
@@ -39,12 +38,10 @@ class LaunchViewModel @Inject constructor(
     private val companyInfoUseCases: CompanyInfoUseCases,
     private val appDataStoreManager: AppDataStore,
     private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
-    private val savedStateHandle: SavedStateHandle,
-    messageStack: MessageStack,
-) : BaseViewModel<LaunchState>(
+    private val savedStateHandle: SavedStateHandle
+) : BaseViewModel<LaunchUiState.LaunchState>(
     ioDispatcher = ioDispatcher,
-    mainDispatcher = mainDispatcher,
-    messageStack = messageStack
+    mainDispatcher = mainDispatcher
 ) {
 
     init {
@@ -66,7 +63,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
+        savedStateHandle.get<LaunchUiState.LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
             setState(uiState)
         }
     }
@@ -79,21 +76,6 @@ class LaunchViewModel @Inject constructor(
             setLaunchFilterState(
                 appDataStoreManager.readIntValue(LAUNCH_FILTER_KEY)
             )
-        }
-    }
-
-    override fun setUpdatedState(data: LaunchState) {
-
-        data.let { uiState ->
-            uiState.launches?.let { launches ->
-                setLaunchesState(launches)
-                createMergedList(launches)
-            }
-
-            uiState.company?.let { companyInfo ->
-                setCompanyInfoState(companyInfo)
-                printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
-            }
         }
     }
 
@@ -111,53 +93,58 @@ class LaunchViewModel @Inject constructor(
     }
 
     override fun setEvent(event: Event) {
-
-        val job: Flow<DataState<LaunchState>?> = when (event) {
+        when (event) {
 
             is GetLaunchesFromNetworkAndInsertToCacheEvent -> {
-                launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase.invoke(
-                    event = event
-                )
+                processJob(launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase())
             }
 
             is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
-                companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke(
-                    event = event
-                )
+                processJob(companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase())
             }
 
             is GetCompanyInfoFromCacheEvent -> {
-                companyInfoUseCases.getCompanyInfoFromCacheUseCase.invoke(
-                    event = event
-                )
+                processJob(companyInfoUseCases.getCompanyInfoFromCacheUseCase())
             }
 
             is FilterLaunchItemsInCacheEvent -> {
-                launchUseCases.filterLaunchItemsInCacheUseCase.invoke(
+                val job = launchUseCases.filterLaunchItemsInCacheUseCase(
                     year = getSearchQueryState(),
                     order = getOrderState(),
                     launchFilter = getFilterState(),
-                    page = getPageState(),
-                    event = event
+                    page = getPageState()
                 )
+                processJob(job)
             }
 
             is CreateMessageEvent -> {
                 emitStateMessageEvent(
-                    stateMessage = event.stateMessage,
-                    event = event
+                    stateMessage = event.stateMessage
                 )
             }
-
-            else -> {
-                emitInvalidEvent(event)
-            }
         }
-        launchJob(event, job)
     }
 
-    override fun initNewUIState(): LaunchState {
-        return LaunchState()
+    private fun processJob(job: Flow<DataState<LaunchUiState.LaunchState>?>) {
+        viewModelScope.launch {
+            job.collect { dataState->
+                dataState?.data?.let { uiState ->
+                    uiState.launches?.let { launches ->
+                        setLaunchesState(launches)
+                        createMergedList(launches)
+                    }
+                    uiState.company?.let { companyInfo ->
+                        setCompanyInfoState(companyInfo)
+                        printLogDebug("CurrentState", ": ${getCurrentStateOrNew()}")
+                    }
+                }
+            }
+        }
+    }
+
+
+    override fun initNewUIState(): LaunchUiState.LaunchState {
+        return LaunchUiState.LaunchState()
     }
 
     private fun setLaunchesState(launches: List<Launch>) {
@@ -252,7 +239,7 @@ class LaunchViewModel @Inject constructor(
         setPageState(currentState, newPageState)
     }
 
-    private fun setPageState(currentState: LaunchState, pageNum: Int) {
+    private fun setPageState(currentState: LaunchUiState.LaunchState, pageNum: Int) {
         currentState.page = pageNum
         setState(currentState)
     }
