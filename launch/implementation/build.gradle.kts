@@ -11,7 +11,7 @@ plugins {
     id(Plugins.ksp)
 }
 
-android{
+android {
     namespace = Modules.launch_impl_namespace
 }
 
@@ -26,7 +26,7 @@ dependencies {
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
     implementation(Glide.glide)
-    implementation(Glide.glide_compose){
+    implementation(Glide.glide_compose) {
         exclude(group = "androidx.test", module = "core-ktx")
     }
     ksp(Glide.glide_compiler)

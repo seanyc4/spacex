@@ -6,6 +6,11 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion Compose.compose_compiler_version
     }
+
+    defaultConfig {
+        testInstrumentationRunner =
+                AndroidTestDependencies.instrumentation_runner
+    }
 }
 
 dependencies {

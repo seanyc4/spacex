@@ -11,7 +11,7 @@ import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
 import com.seancoyle.spacex.R
-import com.seancoyle.spacex.util.stringResource
+import com.seancoyle.core.testing.stringResource
 import org.junit.Rule
 import org.junit.Test
 

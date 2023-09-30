@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.util
+package com.seancoyle.core.testing
 
 import android.app.Application
 import android.content.Context
