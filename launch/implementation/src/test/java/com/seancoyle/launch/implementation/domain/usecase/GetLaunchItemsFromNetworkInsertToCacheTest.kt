@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.domain.DataState
+import com.seancoyle.core.domain.Result
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
@@ -76,15 +76,15 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
 
-        var result: DataState<LaunchState>? = null
+        var result: Result<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent).collect { value ->
+        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+            LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
 
@@ -96,7 +96,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
         coEvery { cacheDataSource.getAll() } returns LAUNCH_LIST
 
-        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
+        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent)
         val results = cacheDataSource.getAll()
 
         assertTrue(results?.isNotEmpty() == true)
@@ -107,15 +107,15 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var result: DataState<LaunchState>? = null
+        var result: Result<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent).collect { value ->
+        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_NETWORK_ERROR
+            LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }
 

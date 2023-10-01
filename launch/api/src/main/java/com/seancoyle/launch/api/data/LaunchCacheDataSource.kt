@@ -1,6 +1,7 @@
 package com.seancoyle.launch.api.data
 
 import com.seancoyle.launch.api.domain.model.Launch
+import kotlinx.coroutines.flow.Flow
 
 interface LaunchCacheDataSource {
 
@@ -14,7 +15,7 @@ interface LaunchCacheDataSource {
 
     suspend fun getById(id: Int): Launch?
 
-    suspend fun getAll(): List<Launch>?
+    suspend fun getAll(): Flow<List<Launch>>
 
     suspend fun getTotalEntries(): Int
 
@@ -25,6 +26,6 @@ interface LaunchCacheDataSource {
         order: String,
         launchFilter: Int?,
         page: Int
-    ): List<Launch>?
+    ): Flow<List<Launch>>
 
 }

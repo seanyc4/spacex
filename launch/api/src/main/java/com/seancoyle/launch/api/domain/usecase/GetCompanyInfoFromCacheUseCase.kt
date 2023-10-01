@@ -1,9 +1,8 @@
 package com.seancoyle.launch.api.domain.usecase
 
-import com.seancoyle.core.domain.DataState
-import com.seancoyle.launch.api.presentation.LaunchUiState
+import com.seancoyle.launch.api.domain.model.CompanyInfo
 import kotlinx.coroutines.flow.Flow
 
 interface GetCompanyInfoFromCacheUseCase {
-    operator fun invoke(): Flow<DataState<LaunchUiState.LaunchState>?>
+    suspend operator fun invoke(): Flow<CompanyInfo>
 }

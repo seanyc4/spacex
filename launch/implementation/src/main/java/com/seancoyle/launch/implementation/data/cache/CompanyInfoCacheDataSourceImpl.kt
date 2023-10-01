@@ -3,14 +3,20 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.database.daos.CompanyInfoDao
 import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class CompanyInfoCacheDataSourceImpl
-@Inject
-constructor(
+class CompanyInfoCacheDataSourceImpl @Inject constructor(
     private val dao: CompanyInfoDao,
     private val entityMapper: CompanyInfoEntityMapper
 ) : CompanyInfoCacheDataSource {
+
+    override suspend fun getCompanyInfo(): Flow<CompanyInfo> {
+        return dao.getCompanyInfo().map {
+            entityMapper.mapFromEntity(it)
+        }
+    }
 
     override suspend fun insert(company: CompanyInfo): Long {
         return dao.insert(
@@ -18,12 +24,6 @@ constructor(
                 domainModel = company
             )
         )
-    }
-
-    override suspend fun getCompanyInfo(): CompanyInfo? {
-        return dao.getCompanyInfo()?.let {
-            entityMapper.mapFromEntity(it)
-        }
     }
 
     override suspend fun deleteAll() {

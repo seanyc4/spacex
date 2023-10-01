@@ -15,7 +15,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
@@ -23,7 +22,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -38,11 +36,7 @@ import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessage
-import com.seancoyle.core.domain.StateMessageCallback
 import com.seancoyle.core.domain.UIInteractionHandler
-import com.seancoyle.core.domain.UsecaseResponses.ERROR_UNKNOWN
-import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_FAILED
-import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
@@ -83,7 +77,7 @@ class LaunchFragment : Fragment() {
                     refreshing = false,
                     onRefresh = {
                         launchViewModel::clearQueryParameters
-                        launchViewModel.setEvent(LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent)
+                        launchViewModel.setEvent(LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent)
                     }
                 )
 

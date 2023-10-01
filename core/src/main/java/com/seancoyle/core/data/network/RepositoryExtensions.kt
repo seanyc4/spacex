@@ -33,7 +33,7 @@ suspend fun <T> safeApiCall(
             when (throwable) {
                 is TimeoutCancellationException -> {
                     val code = 408 // timeout error code
-                    ApiResult.GenericError(code, NETWORK_ERROR_TIMEOUT)
+                    ApiResult.Error(code, NETWORK_ERROR_TIMEOUT)
                 }
                 is IOException -> {
                     ApiResult.NetworkError
@@ -41,13 +41,13 @@ suspend fun <T> safeApiCall(
                 is HttpException -> {
                     val code = throwable.code()
                     val errorResponse = convertErrorBody(throwable)
-                    ApiResult.GenericError(
+                    ApiResult.Error(
                         code,
                         errorResponse
                     )
                 }
                 else -> {
-                    ApiResult.GenericError(
+                    ApiResult.Error(
                         null,
                         NETWORK_ERROR_UNKNOWN
                     )
@@ -72,10 +72,10 @@ suspend fun <T> safeCacheCall(
             when (throwable) {
 
                 is TimeoutCancellationException -> {
-                    CacheResult.GenericError(CACHE_ERROR_TIMEOUT)
+                    CacheResult.Error(CACHE_ERROR_TIMEOUT)
                 }
                 else -> {
-                    CacheResult.GenericError(CACHE_ERROR_UNKNOWN)
+                    CacheResult.Error(CACHE_ERROR_UNKNOWN)
                 }
             }
         }

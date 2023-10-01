@@ -1,47 +1,35 @@
 package com.seancoyle.core.data.network
 
 import com.seancoyle.core.data.network.NetworkErrors.NETWORK_DATA_NULL
-import com.seancoyle.core.domain.DataState
-import com.seancoyle.core.domain.MessageDisplayType
-import com.seancoyle.core.domain.MessageType
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.data.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
+import com.seancoyle.core.domain.Result
 
-abstract class ApiResponseHandler <UiState, Data>(
+abstract class ApiResponseHandler<Data>(
     private val response: ApiResult<Data?>
-){
+) {
 
-    suspend fun getResult(): DataState<UiState>? {
+    suspend fun getResult(): Result<Data>? {
 
-        return when(response){
+        return when (response) {
 
-            is ApiResult.GenericError -> {
-                handleFailure()
-            }
-
-            is ApiResult.NetworkError -> {
-                handleFailure()
+            is ApiResult.Error -> {
+                val message = response.errorMessage ?: NETWORK_ERROR_UNKNOWN
+                emitError(message)
             }
 
             is ApiResult.Success -> {
-                if(response.value == null){
-                    DataState.error(
-                        response = Response(
-                            message = NETWORK_DATA_NULL,
-                            messageDisplayType = MessageDisplayType.Dialog,
-                            messageType = MessageType.Error
-                        )
-                    )
-                }
-                else{
-                    handleSuccess(resultObj = response.value)
+                if (response.value == null) {
+                    emitError(NETWORK_DATA_NULL)
+                } else {
+                    emitSuccess(data = response.value)
                 }
             }
 
+            ApiResult.NetworkError -> TODO()
         }
     }
 
-    abstract suspend fun handleSuccess(resultObj: Data): DataState<UiState>?
+    abstract suspend fun emitError(errorMessage: String): Result<Data>?
 
-    abstract suspend fun handleFailure(): DataState<UiState>?
-
+    abstract suspend fun emitSuccess(data: Data): Result<Data>?
 }

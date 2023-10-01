@@ -5,7 +5,7 @@ import com.seancoyle.core.domain.StateMessage
 
 sealed class LaunchEvents : Event {
 
-    object GetLaunchesFromNetworkAndInsertToCacheEvent : LaunchEvents() {
+    object FetchLaunchesAndCacheAndUpdateUiStateEvent : LaunchEvents() {
         override fun errorInfo(): String {
             return "Error getting launches from network."
         }

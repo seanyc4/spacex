@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.domain.DataState
+import com.seancoyle.core.domain.Result
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
@@ -66,7 +66,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
         coEvery { networkDataSource.getCompanyInfo() } returns COMPANY_INFO
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
-        var result: DataState<LaunchState>? = null
+        var result: Result<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent).collect { value ->
             result = value
@@ -98,7 +98,7 @@ class GetCompanyInfoFromNetworkInsertToCacheTest {
     fun whenGetCompanyInfoFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var result: DataState<LaunchState>? = null
+        var result: Result<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent).collect { value ->
             result = value

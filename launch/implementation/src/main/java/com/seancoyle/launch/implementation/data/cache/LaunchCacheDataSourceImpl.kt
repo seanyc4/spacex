@@ -4,6 +4,8 @@ import com.seancoyle.database.daos.LaunchDao
 import com.seancoyle.database.daos.returnOrderedQuery
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LaunchCacheDataSourceImpl @Inject constructor(
@@ -50,8 +52,8 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): List<Launch>? {
-        return dao.getAll()?.let {
+    override suspend fun getAll(): Flow<List<Launch>> {
+        return dao.getAll().map {
             entityMapper.mapEntityListToDomainList(it)
         }
     }
@@ -65,13 +67,13 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int
-    ): List<Launch>? {
+    ): Flow<List<Launch>> {
         return dao.returnOrderedQuery(
             year = year,
             launchFilter = launchFilter,
             page = page,
             order = order
-        )?.let {
+        ).map {
             entityMapper.mapEntityListToDomainList(it)
         }
     }

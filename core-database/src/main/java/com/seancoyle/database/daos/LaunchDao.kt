@@ -4,6 +4,7 @@ import androidx.room.*
 import com.seancoyle.core.Constants.ORDER_DESC
 import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.database.entities.LaunchEntity
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -41,7 +42,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    suspend fun getAll(): List<LaunchEntity>?
+    fun getAll(): Flow<List<LaunchEntity>>
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
@@ -53,11 +54,11 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun launchItemsWithSuccessOrderByYearDESC(
+    fun launchItemsWithSuccessOrderByYearDESC(
         launchFilter: Int?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -66,11 +67,11 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun launchItemsWithSuccessOrderByYearASC(
+    fun launchItemsWithSuccessOrderByYearASC(
         launchFilter: Int?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
 
     @Query(
@@ -81,12 +82,12 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
+    fun searchLaunchItemsWithSuccessOrderByYearDESC(
         year: String?,
         launchFilter: Int?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -96,12 +97,12 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
+    fun searchLaunchItemsWithSuccessOrderByYearASC(
         year: String?,
         launchFilter: Int?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -110,11 +111,11 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun searchLaunchItemsOrderByYearDESC(
+    fun searchLaunchItemsOrderByYearDESC(
         year: String?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -123,11 +124,11 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun searchLaunchItemsOrderByYearASC(
+    fun searchLaunchItemsOrderByYearASC(
         year: String?,
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -135,10 +136,10 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun launchItemsOrderByYearDESC(
+    fun launchItemsOrderByYearDESC(
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
     @Query(
         """
@@ -146,19 +147,19 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime ASC LIMIT (:page * :pageSize)
         """
     )
-    suspend fun launchItemsOrderByYearASC(
+    fun launchItemsOrderByYearASC(
         page: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): List<LaunchEntity>
+    ): Flow<List<LaunchEntity>>
 
 }
 
-suspend fun LaunchDao.returnOrderedQuery(
+fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
     launchFilter: Int?,
     page: Int
-): List<LaunchEntity>? {
+): Flow<List<LaunchEntity>> {
     val hasYear = !year.isNullOrEmpty()
     val hasLaunchFilter = launchFilter != null
     val isOrderDesc = order.contains(ORDER_DESC)
@@ -219,7 +220,6 @@ suspend fun LaunchDao.returnOrderedQuery(
             )
         }
 
-        else ->
-            getAll()
+        else -> getAll()
     }
 }
