@@ -29,6 +29,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -51,33 +54,41 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    private var lastKnownState: Pair<CompanyInfo?, List<Launch>?>? = null
     init {
         restoreFilterAndOrderState()
         restoreStateOnProcessDeath()
         loadDataOnAppLaunchOrRestore()
-
-        updateState()
+        setupListeners()
     }
 
-    private fun updateState() {
+    private fun setupListeners() {
         viewModelScope.launch {
-            combine(
-                _uiState.map { it.company },
-                _uiState.map { it.launches }
-            ) { companyInfo, launches -> companyInfo to launches }
-                .collect { currentState ->
-                    // Only proceed if the current state is different from the last known state
-                    if (currentState != lastKnownState) {
-                        lastKnownState = currentState
-                        val (companyInfo, launches) = currentState
-                        if (companyInfo != null && !launches.isNullOrEmpty()) {
-                            setEvent(LaunchEvents.MergeDataEvent)
-                        }
-                    }
+            _uiState.map { it.company }
+                .distinctUntilChanged()
+                .filterNotNull()
+                .collect {
+                    checkAndMergeData()
+                }
+        }
+
+        viewModelScope.launch {
+            _uiState.map { it.launches }
+                .distinctUntilChanged()
+                .filter { it!!.isNotEmpty() }
+                .collect {
+                    checkAndMergeData()
                 }
         }
     }
+
+    private fun checkAndMergeData() {
+        val currentCompany = _uiState.value.company
+        val currentLaunches = _uiState.value.launches
+        if (currentCompany != null && currentLaunches!!.isNotEmpty()) {
+            setEvent(LaunchEvents.MergeDataEvent)
+        }
+    }
+
 
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
