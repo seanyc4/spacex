@@ -36,14 +36,16 @@ import com.seancoyle.launch.implementation.presentation.composables.LaunchCarous
 import com.seancoyle.launch.implementation.presentation.composables.LaunchGridCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
 import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 private const val GRID_COLUMN_SIZE = 2
 
 @OptIn(ExperimentalMaterialApi::class)
+@ExperimentalCoroutinesApi
 @Composable
 internal fun LaunchRoute(
     modifier: Modifier = Modifier,
-    viewModel: LaunchViewModel = hiltViewModel(),
+    viewModel: LaunchViewModel,
     refreshState: PullRefreshState,
     onCardClicked: (links: Links) -> Unit
 ) {

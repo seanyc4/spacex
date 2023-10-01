@@ -17,18 +17,18 @@ sealed class LaunchUiState {
     data class LaunchState(
 
         @IgnoredOnParcel
-        var mergedLaunches: List<ViewType>? = emptyList(),
+        val mergedLaunches: List<ViewType>? = emptyList(),
         @IgnoredOnParcel
-        var launches: List<Launch>? = emptyList(),
-        var company: CompanyInfo? = null,
-        var numLaunchesInCache: Int? = 0,
-        var page: Int? = 1,
-        var isDialogFilterDisplayed: Boolean? = false,
-        var launchFilter: Int? = null,
-        var order: String? = null,
-        var yearQuery: String? = "",
-        var scrollPosition: Int? = 0,
-        var loading :Boolean = false
+        val launches: List<Launch>? = emptyList(),
+        val company: CompanyInfo? = null,
+        val numLaunchesInCache: Int? = 0,
+        val page: Int? = 1,
+        val isDialogFilterDisplayed: Boolean? = false,
+        val launchFilter: Int? = null,
+        val order: String? = null,
+        val yearQuery: String? = "",
+        val scrollPosition: Int? = 0,
+        val loading :Boolean = false
 
         ) : LaunchUiState(), Parcelable
 

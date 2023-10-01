@@ -28,9 +28,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,10 +51,32 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
+    private var lastKnownState: Pair<CompanyInfo?, List<Launch>?>? = null
     init {
         restoreFilterAndOrderState()
         restoreStateOnProcessDeath()
         loadDataOnAppLaunchOrRestore()
+
+        updateState()
+    }
+
+    private fun updateState() {
+        viewModelScope.launch {
+            combine(
+                _uiState.map { it.company },
+                _uiState.map { it.launches }
+            ) { companyInfo, launches -> companyInfo to launches }
+                .collect { currentState ->
+                    // Only proceed if the current state is different from the last known state
+                    if (currentState != lastKnownState) {
+                        lastKnownState = currentState
+                        val (companyInfo, launches) = currentState
+                        if (companyInfo != null && !launches.isNullOrEmpty()) {
+                            setEvent(LaunchEvents.MergeDataEvent)
+                        }
+                    }
+                }
+        }
     }
 
     private fun loadDataOnAppLaunchOrRestore() {
@@ -82,22 +108,18 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun createMergedList(
-        launches: List<Launch>
-    ) {
-        if (launches.isNotEmpty() && getCompanyInfoState() != null) {
-            setMergedListState(
-                createMergedLaunchesUseCase.invoke(
-                    companyInfo = getCompanyInfoState(),
-                    launches = launches
-                )
-            )
-        }
-    }
-
     override fun setEvent(event: Event) {
         viewModelScope.launch {
             when (event) {
+
+                is LaunchEvents.MergeDataEvent -> {
+                    createMergedLaunchesUseCase(
+                        companyInfo = getCompanyInfoState(),
+                        launches = getLaunchesState()
+                    ).collect { newState ->
+                        _uiState.value = uiState.value.copy(mergedLaunches = newState)
+                    }
+                }
 
                 is GetCompanyInfoFromCacheEvent -> {
                     companyInfoUseCases.getCompanyInfoFromCacheUseCase().asResult()
@@ -114,7 +136,9 @@ class LaunchViewModel @Inject constructor(
                             scope = viewModelScope,
                             started = SharingStarted.WhileSubscribed(5_000),
                             initialValue = LaunchUiState.LaunchState(loading = true)
-                        ).collect()
+                        ).collect { newState ->
+                            _uiState.value = _uiState.value.copy(company = newState.company)
+                        }
                 }
 
                 is FilterLaunchItemsInCacheEvent -> {
@@ -137,21 +161,22 @@ class LaunchViewModel @Inject constructor(
                             scope = viewModelScope,
                             started = SharingStarted.WhileSubscribed(5_000),
                             initialValue = LaunchUiState.LaunchState(loading = true)
-                        ).collect()
+                        ).collect { newState ->
+                            _uiState.value = _uiState.value.copy(launches = newState.launches)
+                        }
                 }
 
                 is FetchLaunchesAndCacheAndUpdateUiStateEvent -> {
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().flatMapLatest {
-                        flowOf(setEvent(FilterLaunchItemsInCacheEvent))
-                    }.stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(5_000),
-                        initialValue = LaunchUiState.LaunchState(loading = true)
-                    ).collect()
+                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().onCompletion {
+                        setEvent(FilterLaunchItemsInCacheEvent)
+                    }.collect()
                 }
 
                 is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
                     companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
+                        .onCompletion {
+                            setEvent(GetCompanyInfoFromCacheEvent)
+                        }.collect()
                 }
             }
         }
@@ -161,21 +186,9 @@ class LaunchViewModel @Inject constructor(
         return LaunchUiState.LaunchState()
     }
 
-    private fun setLaunchesState(launches: List<Launch>) {
-        setState(getCurrentState().apply { this.launches = launches })
-    }
-
-    fun getLaunchesState() = getCurrentState().launches
-
-    private fun setCompanyInfoState(companyInfo: CompanyInfo) {
-        setState(getCurrentState().apply { company = companyInfo })
-    }
+    fun getLaunchesState() = getCurrentState().launches ?: emptyList()
 
     private fun getCompanyInfoState() = getCurrentState().company
-
-    private fun resetPageState() {
-        setState(getCurrentState().apply { page = 1 })
-    }
 
     fun clearListState() {
         setState(
@@ -230,36 +243,47 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun setQueryState(query: String?) {
-        setState(getCurrentState().apply { yearQuery = query })
+        setState(getCurrentState().copy(yearQuery = query))
     }
 
     fun setLaunchOrderState(order: String?) {
-        setState(getCurrentState().apply { this.order = order })
+        setState(getCurrentState().copy(order = order))
         saveOrderToDatastore(order ?: ORDER_DESC)
     }
 
     fun setLaunchFilterState(filter: Int?) {
-        setState(getCurrentState().apply { launchFilter = filter })
+        setState(getCurrentState().copy(launchFilter = filter))
         saveFilterToDataStore(filter ?: LAUNCH_ALL)
     }
 
     fun setIsDialogFilterDisplayedState(isDisplayed: Boolean?) {
-        setState(getCurrentState().apply { isDialogFilterDisplayed = isDisplayed })
+        setState(getCurrentState().copy(isDialogFilterDisplayed = isDisplayed))
+    }
+
+    private fun resetPageState() {
+        setState(getCurrentState().copy(page = 1))
+    }
+
+    private fun setCompanyInfoState(companyInfo: CompanyInfo) {
+        setState(getCurrentState().copy(company = companyInfo))
+    }
+
+    private fun setLaunchesState(launches: List<Launch>) {
+        setState(getCurrentState().copy(launches = launches))
+    }
+
+    private fun setPageState(currentState: LaunchUiState.LaunchState, pageNum: Int) {
+        setState(currentState.copy(page = pageNum))
+    }
+
+    fun setScrollPositionState(position: Int) {
+        setState(getCurrentState().copy(scrollPosition = position))
     }
 
     private fun incrementPage() {
         val currentState = getCurrentState()
         val newPageState = (currentState.page ?: 1) + 1
         setPageState(currentState, newPageState)
-    }
-
-    private fun setPageState(currentState: LaunchUiState.LaunchState, pageNum: Int) {
-        currentState.page = pageNum
-        setState(currentState)
-    }
-
-    fun setScrollPositionState(position: Int) {
-        setState(getCurrentState().apply { scrollPosition = position })
     }
 
     fun saveState() {

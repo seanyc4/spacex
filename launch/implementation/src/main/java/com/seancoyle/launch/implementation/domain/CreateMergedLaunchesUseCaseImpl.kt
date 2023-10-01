@@ -13,6 +13,8 @@ import com.seancoyle.launch.api.domain.model.ViewGrid
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class CreateMergedLaunchesUseCaseImpl @Inject constructor(
@@ -27,7 +29,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     override operator fun invoke(
         companyInfo: CompanyInfo?,
         launches: List<Launch>
-    ): List<ViewType> {
+    ): Flow<List<ViewType>> {
         val mergedLaunches = mutableListOf<ViewType>().apply {
             add(SectionTitle(title = "HEADER", type = ViewType.TYPE_SECTION_TITLE))
             add(CompanySummary(summary = buildCompanySummary(companyInfo), type = ViewType.TYPE_HEADER))
@@ -38,7 +40,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             add(SectionTitle(title = "LIST", type = ViewType.TYPE_SECTION_TITLE))
             addAll(launches)
         }
-        return mergedLaunches
+        return flowOf(mergedLaunches)
     }
 
     private fun buildGrid(launches: List<Launch>): List<ViewGrid> {

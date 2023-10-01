@@ -1,5 +1,8 @@
 package com.seancoyle.launch.api.domain.usecase
 
+import com.seancoyle.launch.api.domain.model.CompanyInfo
+import kotlinx.coroutines.flow.Flow
+
 interface GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
-    suspend operator fun invoke()
+    operator fun invoke(): Flow<CompanyInfo>
 }

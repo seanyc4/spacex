@@ -55,6 +55,16 @@ sealed class LaunchEvents : Event {
         override fun shouldDisplayProgressBar() = false
     }
 
+    object MergeDataEvent : LaunchEvents() {
+        override fun errorInfo(): String {
+            return "Error getting the number of launches from the cache."
+        }
+        override fun eventName(): String {
+            return "MergeDataEvent"
+        }
+        override fun shouldDisplayProgressBar() = false
+    }
+
     class CreateMessageEvent(
         val stateMessage: StateMessage
     ) : LaunchEvents() {
