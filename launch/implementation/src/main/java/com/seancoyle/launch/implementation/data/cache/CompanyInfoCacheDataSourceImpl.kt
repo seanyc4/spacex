@@ -12,10 +12,13 @@ class CompanyInfoCacheDataSourceImpl @Inject constructor(
     private val entityMapper: CompanyInfoEntityMapper
 ) : CompanyInfoCacheDataSource {
 
-    override suspend fun getCompanyInfo(): Flow<CompanyInfo> {
-        return dao.getCompanyInfo().map {
-            entityMapper.mapFromEntity(it)
-        }
+    override fun getCompanyInfo(): Flow<CompanyInfo?> {
+        return dao.getCompanyInfo()
+            .map {
+                it?.let { entity ->
+                    entityMapper.mapFromEntity(entity)
+                }
+            }
     }
 
     override suspend fun insert(company: CompanyInfo): Long {

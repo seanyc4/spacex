@@ -9,4 +9,7 @@ object LaunchNetworkConstants {
     const val LAUNCH_SUCCESS = 2
     const val LAUNCH_ALL = 3
     const val LAUNCH_EXCEPTION = -1
+    const val ORDER_ASC: String = "ASC"
+    const val ORDER_DESC: String = "DESC"
+    const val PAGINATION_PAGE_SIZE = 30
 }

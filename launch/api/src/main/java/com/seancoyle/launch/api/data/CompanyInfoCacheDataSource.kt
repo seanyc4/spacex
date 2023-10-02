@@ -7,7 +7,7 @@ interface CompanyInfoCacheDataSource {
 
     suspend fun insert(company: CompanyInfo): Long
 
-    suspend fun getCompanyInfo(): Flow<CompanyInfo>
+    fun getCompanyInfo(): Flow<CompanyInfo?>
 
     suspend fun deleteAll()
 

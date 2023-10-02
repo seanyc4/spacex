@@ -30,8 +30,6 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.seancoyle.core.Constants.ORDER_ASC
-import com.seancoyle.core.Constants.ORDER_DESC
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
@@ -42,6 +40,8 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
+import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
@@ -77,7 +77,7 @@ class LaunchFragment : Fragment() {
                     refreshing = false,
                     onRefresh = {
                         launchViewModel::clearQueryParameters
-                        launchViewModel.setEvent(LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent)
+                        launchViewModel.setEvent(LaunchEvents.GetLaunchesApiAndCacheEvent)
                     }
                 )
 
@@ -110,8 +110,6 @@ class LaunchFragment : Fragment() {
         }
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
@@ -128,23 +126,15 @@ class LaunchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!launchViewModel.getLaunchesState().isNullOrEmpty()) {
+        /*if (!launchViewModel.uiState.value..isNullOrEmpty()) {
             launchViewModel.refreshSearchQueryEvent()
         }
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
-        }
+        }*/
     }
 
     private fun subscribeObservers() {
-
-       /* lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launchViewModel.loading.collect { isLoading ->
-                    uiInteractionHandler.displayProgressBar(isLoading)
-                }
-            }
-        }*/
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -298,7 +288,7 @@ class LaunchFragment : Fragment() {
                     newFilter?.let { filter ->
                         setLaunchFilterState(filter)
                     }
-                    setQueryState(yearQuery)
+                    setYearState(yearQuery)
                 }
 
                 startNewSearch()

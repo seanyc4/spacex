@@ -10,7 +10,7 @@ class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyInfoCacheDataSource
 ) : GetCompanyInfoFromCacheUseCase {
 
-    override suspend operator fun invoke(): Flow<CompanyInfo> {
+    override operator fun invoke(): Flow<CompanyInfo?> {
        return cacheDataSource.getCompanyInfo()
     }
 

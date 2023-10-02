@@ -5,6 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchCacheDataSource {
 
+    fun filterLaunchList(
+        year: String?,
+        order: String,
+        launchFilter: Int?,
+        page: Int?
+    ): Flow<List<Launch>?>
+
     suspend fun insert(launch: Launch): Long
 
     suspend fun deleteById(id: Int): Int
@@ -15,17 +22,10 @@ interface LaunchCacheDataSource {
 
     suspend fun getById(id: Int): Launch?
 
-    suspend fun getAll(): Flow<List<Launch>>
+    fun getAll(): Flow<List<Launch>?>
 
     suspend fun getTotalEntries(): Int
 
     suspend fun insertList(launches: List<Launch>): LongArray
-
-    suspend fun filterLaunchList(
-        year: String?,
-        order: String,
-        launchFilter: Int?,
-        page: Int
-    ): Flow<List<Launch>>
 
 }

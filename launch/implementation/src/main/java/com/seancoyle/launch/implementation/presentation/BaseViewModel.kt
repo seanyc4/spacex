@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel: ViewModel() {
 
-    protected val _uiState : MutableStateFlow<LaunchUiState.LaunchState> by lazy {
+    /*protected val _uiState : MutableStateFlow<LaunchUiState.LaunchState> by lazy {
         MutableStateFlow(initNewUIState())
     }
 
@@ -25,7 +25,7 @@ abstract class BaseViewModel: ViewModel() {
         _uiState.value = uiState
     }
 
-    abstract fun initNewUIState(): LaunchUiState.LaunchState
+    abstract fun initNewUIState(): LaunchUiState.LaunchState*/
 
     // val loading: StateFlow<Boolean> = eventExecutor.loading
 

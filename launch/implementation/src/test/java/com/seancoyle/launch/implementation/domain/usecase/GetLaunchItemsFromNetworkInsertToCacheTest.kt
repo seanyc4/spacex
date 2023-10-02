@@ -78,13 +78,13 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
         var result: Result<LaunchState>? = null
 
-        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent).collect { value ->
+        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+            LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
 
@@ -96,7 +96,7 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
         coEvery { cacheDataSource.getAll() } returns LAUNCH_LIST
 
-        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent)
+        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent)
         val results = cacheDataSource.getAll()
 
         assertTrue(results?.isNotEmpty() == true)
@@ -109,13 +109,13 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
         var result: Result<LaunchState>? = null
 
-        underTest(event = LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent).collect { value ->
+        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
             result = value
         }
 
         assertEquals(
             result?.stateMessage?.response?.message,
-            LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent.eventName() + EVENT_NETWORK_ERROR
+            LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }
 

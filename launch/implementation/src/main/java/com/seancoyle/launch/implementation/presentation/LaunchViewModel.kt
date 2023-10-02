@@ -2,8 +2,6 @@ package com.seancoyle.launch.implementation.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.Constants.ORDER_DESC
-import com.seancoyle.core.Constants.PAGINATION_PAGE_SIZE
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.di.MainDispatcher
 import com.seancoyle.core.domain.Result
@@ -12,33 +10,23 @@ import com.seancoyle.core.domain.asResult
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
-import com.seancoyle.launch.api.domain.model.CompanyInfo
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
+import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoFromCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.FetchLaunchesAndCacheAndUpdateUiStateEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,41 +42,36 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
+    private val _uiState = MutableStateFlow<LaunchUiState>(LaunchUiState.Loading)
+    val uiState: StateFlow<LaunchUiState> = _uiState
+
+    private val _scrollPosition = MutableStateFlow(0)
+    val scrollPosition: StateFlow<Int> get() = _scrollPosition
+
+    private val _numLaunchesInCache = MutableStateFlow(0)
+    val numLaunchesInCache: StateFlow<Int> get() = _numLaunchesInCache
+
+    private val _isDialogFilterDisplayed = MutableStateFlow(false)
+    val isDialogFilterDisplayed: StateFlow<Boolean> get() = _isDialogFilterDisplayed
+
+    private val _launchFilter = MutableStateFlow<Int?>(null)
+    val launchFilter: StateFlow<Int?> get() = _launchFilter
+
+    private val _order = MutableStateFlow<String?>(null)
+    val order: StateFlow<String?> get() = _order
+
+    private val _year = MutableStateFlow("")
+    val year: StateFlow<String> get() = _year
+
+    private val _page = MutableStateFlow(1)
+    val page: StateFlow<Int> get() = _page
+
     init {
+        setEvent(LaunchEvents.MergeDataEvent)
         restoreFilterAndOrderState()
         restoreStateOnProcessDeath()
         loadDataOnAppLaunchOrRestore()
-        setupListeners()
     }
-
-    private fun setupListeners() {
-        viewModelScope.launch {
-            _uiState.map { it.company }
-                .distinctUntilChanged()
-                .filterNotNull()
-                .collect {
-                    checkAndMergeData()
-                }
-        }
-
-        viewModelScope.launch {
-            _uiState.map { it.launches }
-                .distinctUntilChanged()
-                .filter { it!!.isNotEmpty() }
-                .collect {
-                    checkAndMergeData()
-                }
-        }
-    }
-
-    private fun checkAndMergeData() {
-        val currentCompany = _uiState.value.company
-        val currentLaunches = _uiState.value.launches
-        if (currentCompany != null && currentLaunches!!.isNotEmpty()) {
-            setEvent(LaunchEvents.MergeDataEvent)
-        }
-    }
-
 
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
@@ -97,14 +80,14 @@ class LaunchViewModel @Inject constructor(
             setEvent(FilterLaunchItemsInCacheEvent)
         } else {
             //Fresh app launch - get data from network
-            setEvent(GetCompanyInfoFromNetworkAndInsertToCacheEvent)
-            setEvent(FetchLaunchesAndCacheAndUpdateUiStateEvent)
+            setEvent(GetCompanyInfoApiAndCacheEvent)
+            setEvent(GetLaunchesApiAndCacheEvent)
         }
     }
 
     private fun restoreStateOnProcessDeath() {
         savedStateHandle.get<LaunchUiState.LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
-            setState(uiState)
+            //  setState(uiState)
         }
     }
 
@@ -119,101 +102,77 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    override fun setEvent(event: Event) {
+    fun setEvent(event: Event) {
         viewModelScope.launch {
             when (event) {
 
                 is LaunchEvents.MergeDataEvent -> {
                     createMergedLaunchesUseCase(
-                        companyInfo = getCompanyInfoState(),
-                        launches = getLaunchesState()
-                    ).collect { newState ->
-                        _uiState.value = uiState.value.copy(mergedLaunches = newState)
-                    }
-                }
-
-                is GetCompanyInfoFromCacheEvent -> {
-                    companyInfoUseCases.getCompanyInfoFromCacheUseCase().asResult()
-                        .map { result ->
+                        year = getSearchYearState(),
+                        order = getOrderState(),
+                        launchFilter = getFilterState(),
+                        page = getPageState()
+                    ).asResult()
+                        .collect { result ->
+                            printLogDebug("USECASE", result.toString())
                             when (result) {
-                                is Result.Success -> {
-                                    LaunchUiState.LaunchState(company = result.data)
-                                }
+                                is Result.Success -> _uiState.emit(
+                                    LaunchUiState.LaunchState(
+                                        mergedLaunches = result.data
+                                    )
+                                )
 
-                                is Result.Loading -> LaunchUiState.LaunchState(loading = true)
-                                is Result.Error -> TODO()
+                                is Result.Loading -> {
+                                    _uiState.emit(LaunchUiState.Loading)
+                                }
+                                is Result.Error -> {
+                                    _uiState.emit(LaunchUiState.ErrorState(result.exception?.message.toString()))
+                                }
                             }
-                        }.stateIn(
-                            scope = viewModelScope,
-                            started = SharingStarted.WhileSubscribed(5_000),
-                            initialValue = LaunchUiState.LaunchState(loading = true)
-                        ).collect { newState ->
-                            _uiState.value = _uiState.value.copy(company = newState.company)
                         }
                 }
 
-                is FilterLaunchItemsInCacheEvent -> {
+               /* is FilterLaunchItemsInCacheEvent -> {
                     launchUseCases.filterLaunchItemsInCacheUseCase(
-                        year = getSearchQueryState(),
+                        year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
                         page = getPageState()
                     ).asResult()
                         .map { result ->
                             when (result) {
-                                is Result.Success -> {
-                                    LaunchUiState.LaunchState(launches = result.data)
+                                is Result.Success -> { *//*LaunchUiState.LaunchState(launches = result.data)*//*
                                 }
 
-                                is Result.Loading -> LaunchUiState.LaunchState(loading = true)
+                                is Result.Loading -> LaunchUiState.Loading
                                 is Result.Error -> TODO()
                             }
-                        }.stateIn(
-                            scope = viewModelScope,
-                            started = SharingStarted.WhileSubscribed(5_000),
-                            initialValue = LaunchUiState.LaunchState(loading = true)
-                        ).collect { newState ->
-                            _uiState.value = _uiState.value.copy(launches = newState.launches)
                         }
+                }*/
+
+                is GetLaunchesApiAndCacheEvent -> {
+                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().collect()
                 }
 
-                is FetchLaunchesAndCacheAndUpdateUiStateEvent -> {
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().onCompletion {
-                        setEvent(FilterLaunchItemsInCacheEvent)
-                    }.collect()
-                }
-
-                is GetCompanyInfoFromNetworkAndInsertToCacheEvent -> {
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
-                        .onCompletion {
-                            setEvent(GetCompanyInfoFromCacheEvent)
-                        }.collect()
+                is GetCompanyInfoApiAndCacheEvent -> {
+                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().collect()
                 }
             }
         }
     }
 
-    override fun initNewUIState(): LaunchUiState.LaunchState {
-        return LaunchUiState.LaunchState()
-    }
-
-    fun getLaunchesState() = getCurrentState().launches ?: emptyList()
-
-    private fun getCompanyInfoState() = getCurrentState().company
 
     fun clearListState() {
-        setState(
-            getCurrentState().copy(
-                launches = emptyList(),
-                mergedLaunches = emptyList()
-            )
-        )
+        if (_uiState.value is LaunchUiState.LaunchState) {
+            _uiState.value = LaunchUiState.LaunchState(mergedLaunches = emptyList())
+        }
     }
+
 
     fun newSearchEvent() {
         resetPageState()
         refreshSearchQueryEvent()
-        printLogDebug("LaunchViewModel", "loadFirstPage: ${getCurrentState().yearQuery}")
+        printLogDebug("LaunchViewModel", "loadFirstPage: ${year}")
     }
 
     fun nextPage() {
@@ -226,79 +185,67 @@ class LaunchViewModel @Inject constructor(
         printLogDebug("LaunchViewModel", "nextPage: triggered: ${getPageState()}")
     }
 
-    private fun getScrollPositionState() = getCurrentState().scrollPosition ?: 0
-    private fun getSearchQueryState() = getCurrentState().yearQuery.orEmpty()
-    fun getPageState() = getCurrentState().page ?: 1
-    fun getOrderState() = getCurrentState().order ?: ORDER_DESC
-    fun getIsDialogFilterDisplayedState() = getCurrentState().isDialogFilterDisplayed ?: false
+    private fun getScrollPositionState() = scrollPosition.value
+    private fun getSearchYearState() = year.value
+    fun getPageState() = page.value
+    fun getOrderState() = order.value
+    fun getIsDialogFilterDisplayedState() = isDialogFilterDisplayed.value
 
     fun getFilterState(): Int? {
-        return if (getCurrentState().launchFilter == LAUNCH_ALL) {
+        return if (launchFilter.value == LAUNCH_ALL) {
             setLaunchFilterState(null)
-            getCurrentState().launchFilter
+            launchFilter.value
         } else {
-            getCurrentState().launchFilter
+            launchFilter.value
         }
     }
 
     fun clearQueryParameters() {
         clearListState()
-        setQueryState(null)
+        setYearState(null)
         setLaunchFilterState(null)
         resetPageState()
     }
 
-    private fun setMergedListState(list: List<ViewType>) {
-        setState(getCurrentState().copy(mergedLaunches = list))
-        printLogDebug("CurrentState", " after merge: ${getCurrentState()}")
-    }
-
-    fun setQueryState(query: String?) {
-        setState(getCurrentState().copy(yearQuery = query))
+    fun setYearState(query: String?) {
+        _year.value = query ?: ""
     }
 
     fun setLaunchOrderState(order: String?) {
-        setState(getCurrentState().copy(order = order))
-        saveOrderToDatastore(order ?: ORDER_DESC)
+        val nonNullOrder = order?:  ORDER_ASC
+        _order.value = nonNullOrder
+        saveOrderToDatastore(nonNullOrder)
     }
 
     fun setLaunchFilterState(filter: Int?) {
-        setState(getCurrentState().copy(launchFilter = filter))
+        _launchFilter.value = filter
         saveFilterToDataStore(filter ?: LAUNCH_ALL)
     }
 
-    fun setIsDialogFilterDisplayedState(isDisplayed: Boolean?) {
-        setState(getCurrentState().copy(isDialogFilterDisplayed = isDisplayed))
+    fun setIsDialogFilterDisplayedState(isDisplayed: Boolean) {
+        _isDialogFilterDisplayed.value = isDisplayed
     }
 
     private fun resetPageState() {
-        setState(getCurrentState().copy(page = 1))
+        _page.value = 1
     }
 
-    private fun setCompanyInfoState(companyInfo: CompanyInfo) {
-        setState(getCurrentState().copy(company = companyInfo))
-    }
-
-    private fun setLaunchesState(launches: List<Launch>) {
-        setState(getCurrentState().copy(launches = launches))
-    }
-
-    private fun setPageState(currentState: LaunchUiState.LaunchState, pageNum: Int) {
-        setState(currentState.copy(page = pageNum))
+    private fun setPageState(pageNum: Int) {
+        _page.value = pageNum
     }
 
     fun setScrollPositionState(position: Int) {
-        setState(getCurrentState().copy(scrollPosition = position))
+        _scrollPosition.value = position
     }
 
     private fun incrementPage() {
-        val currentState = getCurrentState()
-        val newPageState = (currentState.page ?: 1) + 1
-        setPageState(currentState, newPageState)
+        val incrementedPage = _page.value + 1
+        _page.value = incrementedPage
+        setPageState(incrementedPage)
     }
 
     fun saveState() {
-        savedStateHandle[LAUNCH_UI_STATE_KEY] = getCurrentState()
+        //       savedStateHandle[LAUNCH_UI_STATE_KEY] = getCurrentState()
     }
 
     private fun saveOrderToDatastore(order: String) {
@@ -314,7 +261,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun refreshSearchQueryEvent() {
-        setEvent(FilterLaunchItemsInCacheEvent)
+        setEvent(LaunchEvents.MergeDataEvent)
     }
 
     companion object {

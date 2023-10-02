@@ -13,6 +13,24 @@ class LaunchCacheDataSourceImpl @Inject constructor(
     private val entityMapper: LaunchEntityMapper
 ) : LaunchCacheDataSource {
 
+    override fun filterLaunchList(
+        year: String?,
+        order: String,
+        launchFilter: Int?,
+        page: Int?
+    ): Flow<List<Launch>?> {
+        return dao.returnOrderedQuery(
+            year = year,
+            launchFilter = launchFilter,
+            page = page,
+            order = order
+        ).map {
+            it?.let {
+                entityMapper.mapEntityListToDomainList(it)
+            }
+        }
+    }
+
     override suspend fun insert(launch: Launch): Long {
         return dao.insert(
             entityMapper.mapToEntity(
@@ -52,29 +70,15 @@ class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): Flow<List<Launch>> {
+    override fun getAll(): Flow<List<Launch>?> {
         return dao.getAll().map {
-            entityMapper.mapEntityListToDomainList(it)
+            it?.let {
+                entityMapper.mapEntityListToDomainList(it)
+            }
         }
     }
 
     override suspend fun getTotalEntries(): Int {
         return dao.getTotalEntries()
-    }
-
-    override suspend fun filterLaunchList(
-        year: String?,
-        order: String,
-        launchFilter: Int?,
-        page: Int
-    ): Flow<List<Launch>> {
-        return dao.returnOrderedQuery(
-            year = year,
-            launchFilter = launchFilter,
-            page = page,
-            order = order
-        ).map {
-            entityMapper.mapEntityListToDomainList(it)
-        }
     }
 }

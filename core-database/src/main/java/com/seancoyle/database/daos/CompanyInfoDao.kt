@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface CompanyInfoDao {
 
     @Query("SELECT * FROM company_info")
-    fun getCompanyInfo(): Flow<CompanyInfoEntity>
+    fun getCompanyInfo(): Flow<CompanyInfoEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(companyInfo: CompanyInfoEntity): Long

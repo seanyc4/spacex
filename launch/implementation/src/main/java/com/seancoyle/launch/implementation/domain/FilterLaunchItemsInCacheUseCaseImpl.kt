@@ -11,12 +11,12 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource,
 ) : FilterLaunchItemsInCacheUseCase {
 
-    override suspend operator fun invoke(
-        year: String,
+    override fun invoke(
+        year: String?,
         order: String,
         launchFilter: Int?,
-        page: Int
-    ): Flow<List<Launch>> {
+        page: Int?
+    ): Flow<List<Launch>?> {
         return cacheDataSource.filterLaunchList(
             year = year,
             order = order,
@@ -24,7 +24,4 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             page = page
         )
     }
-
 }
-
-
