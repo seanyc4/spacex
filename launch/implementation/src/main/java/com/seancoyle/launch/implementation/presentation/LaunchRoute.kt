@@ -23,7 +23,7 @@ internal fun LaunchRoute(
     onCardClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    printLogDebug("RECOMPOSING", "RECOMPOSING $uiState")
+    printLogDebug("SPACEXAPP: RECOMPOSING", "RECOMPOSING $uiState")
     LaunchScreen(
         uiState = uiState,
         modifier = modifier,
@@ -49,10 +49,12 @@ fun LaunchScreen(
 
     when (uiState) {
         is LaunchUiState.Loading -> {
+            printLogDebug("SPACEXAPP:", "LaunchUiState.Loading")
             LoadingLaunchCardList(itemCount = 10)
         }
 
         is LaunchUiState.LaunchState -> {
+            printLogDebug("SPACEXAPP:", "LaunchUiState.LaunchState")
             LaunchesContent(
                 launches = uiState.mergedLaunches,
                 onChangeScrollPosition = onChangeScrollPosition,

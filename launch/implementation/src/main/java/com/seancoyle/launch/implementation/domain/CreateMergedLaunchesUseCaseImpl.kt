@@ -1,7 +1,6 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.domain.StringResource
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.CompanySummary
@@ -17,13 +16,9 @@ import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch.implementation.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateMergedLaunchesUseCaseImpl @Inject constructor(

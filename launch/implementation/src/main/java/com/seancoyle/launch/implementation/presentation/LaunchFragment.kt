@@ -21,9 +21,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -43,13 +40,13 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val LINKS_KEY = "links"
@@ -112,7 +109,13 @@ class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeObservers()
+
+        // Get result from bottom action sheet fragment
+        setFragmentResultListener(LINKS_KEY) { key, bundle ->
+            if (key == LINKS_KEY) {
+                launchIntent(bundle.getString(LINKS_KEY))
+            }
+        }
     }
 
     override fun onPause() {
@@ -126,69 +129,18 @@ class LaunchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        /*if (!launchViewModel.uiState.value..isNullOrEmpty()) {
-            launchViewModel.refreshSearchQueryEvent()
+        if (launchViewModel.uiState.value.mergedLaunchesNotEmpty()) {
+            launchViewModel.newSearchEvent()
         }
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
-        }*/
-    }
-
-    private fun subscribeObservers() {
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                /*launchViewModel.stateMessage.collect { stateMessage ->
-                    stateMessage?.response?.let { response ->
-
-                        when (response.message) {
-                            LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS -> {
-                                launchViewModel.clearStateMessage()
-                                filterLaunchItemsInCacheEvent()
-                            }
-
-                            else -> {
-                                uiInteractionHandler.onResponseReceived(
-                                    response = stateMessage.response,
-                                    stateMessageCallback = object : StateMessageCallback {
-                                        override fun removeMessageFromStack() {
-                                            launchViewModel.clearStateMessage()
-                                        }
-                                    }
-                                )
-
-                                when (response.message) {
-                                    // Check cache for data if net connection fails
-                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
-                                        filterLaunchItemsInCacheEvent()
-                                    }
-
-                                    LaunchEvents.GetLaunchesFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
-                                        filterLaunchItemsInCacheEvent()
-                                    }
-
-                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + EVENT_CACHE_INSERT_FAILED -> {
-                                        getCompanyInfoFromCacheEvent()
-                                    }
-
-                                    LaunchEvents.GetCompanyInfoFromNetworkAndInsertToCacheEvent.eventName() + ERROR_UNKNOWN -> {
-                                        getCompanyInfoFromCacheEvent()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
-            }
-        }
-
-        // Get result from bottom action sheet fragment
-        setFragmentResultListener(LINKS_KEY) { key, bundle ->
-            if (key == LINKS_KEY) {
-                launchIntent(bundle.getString(LINKS_KEY))
-            }
         }
     }
+
+    private fun LaunchUiState?.mergedLaunchesNotEmpty(): Boolean {
+        return this is LaunchUiState.LaunchState && this.mergedLaunches.isNotEmpty()
+    }
+
 
     // Load url link in external browser
     private fun launchIntent(url: String?) {
@@ -306,19 +258,7 @@ class LaunchFragment : Fragment() {
     private fun startNewSearch() {
         printLogDebug("EventExecutor", "start new search")
         launchViewModel.clearListState()
-        launchViewModel.newSearchEvent()
-    }
-
-    private fun filterLaunchItemsInCacheEvent() {
-        launchViewModel.setEvent(
-            LaunchEvents.FilterLaunchItemsInCacheEvent
-        )
-    }
-
-    private fun getCompanyInfoFromCacheEvent() {
-        launchViewModel.setEvent(
-            LaunchEvents.GetCompanyInfoFromCacheEvent
-        )
+        launchViewModel.newSearch()
     }
 
     private fun displayErrorDialogNoLinks() {
