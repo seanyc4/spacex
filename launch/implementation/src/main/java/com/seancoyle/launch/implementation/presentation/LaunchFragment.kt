@@ -72,8 +72,9 @@ class LaunchFragment : Fragment() {
                 val refreshing = rememberPullRefreshState(
                     refreshing = false,
                     onRefresh = {
-                        launchViewModel::clearQueryParameters
-                        launchViewModel.setEvent(LaunchEvents.GetLaunchesApiAndCacheEvent)
+                        launchViewModel.clearQueryParameters()
+                        launchViewModel.clearListState()
+                        launchViewModel.setEvent(LaunchEvents.GetCompanyInfoApiAndCacheEvent)
                     }
                 )
 

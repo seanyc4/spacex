@@ -8,8 +8,6 @@ import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
-import kotlinx.coroutines.flow.Flow
-
 
 @Dao
 interface LaunchDao {
@@ -46,7 +44,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    fun getAll(): Flow<List<LaunchEntity>?>
+    fun getAll(): List<LaunchEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
@@ -60,11 +58,11 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun launchItemsWithSuccessOrderByYearDESC(
+    suspend fun launchItemsWithSuccessOrderByYearDESC(
         launchFilter: Int?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -75,11 +73,11 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun launchItemsWithSuccessOrderByYearASC(
+    suspend fun launchItemsWithSuccessOrderByYearASC(
         launchFilter: Int?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
 
     @Query(
@@ -92,12 +90,12 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun searchLaunchItemsWithSuccessOrderByYearDESC(
+    suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
         year: String?,
         launchFilter: Int?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -109,12 +107,12 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun searchLaunchItemsWithSuccessOrderByYearASC(
+    suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
         year: String?,
         launchFilter: Int?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -125,11 +123,11 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun searchLaunchItemsOrderByYearDESC(
+    suspend fun searchLaunchItemsOrderByYearDESC(
         year: String?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -140,11 +138,11 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun searchLaunchItemsOrderByYearASC(
+    suspend fun searchLaunchItemsOrderByYearASC(
         year: String?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -154,10 +152,10 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun launchItemsOrderByYearDESC(
+    suspend fun launchItemsOrderByYearDESC(
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
     @Query(
         """
@@ -167,19 +165,19 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    fun launchItemsOrderByYearASC(
+    suspend fun launchItemsOrderByYearASC(
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
-    ): Flow<List<LaunchEntity>>
+    ): List<LaunchEntity>
 
 }
 
-fun LaunchDao.returnOrderedQuery(
+suspend fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
     launchFilter: Int?,
     page: Int? = 1
-): Flow<List<LaunchEntity>?> {
+): List<LaunchEntity>? {
     val hasYear = !year.isNullOrEmpty()
     val hasLaunchFilter = launchFilter != null
     val isOrderDesc = order.contains(ORDER_DESC)

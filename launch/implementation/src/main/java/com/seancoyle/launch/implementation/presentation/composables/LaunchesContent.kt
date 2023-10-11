@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.Launch
@@ -34,6 +33,7 @@ private const val GRID_COLUMN_SIZE = 2
 @Composable
 fun LaunchesContent(
     launches: List<ViewType>,
+    isLoading: Boolean,
     onChangeScrollPosition: (Int) -> Unit,
     page: Int,
     loadNextPage: () -> Unit,
@@ -56,12 +56,8 @@ fun LaunchesContent(
                     GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                 }
             ) { index, launchItem ->
-                printLogDebug("SPACEXAPP: LazyVerticalGrid", ": index = $index")
                 onChangeScrollPosition(index)
                 if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
-                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "index + 1 = ${index + 1}")
-                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "page * PAGINATION_PAGE_SIZE = ${page * PAGINATION_PAGE_SIZE}")
-                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "loadNextPage()")
                     loadNextPage()
                 }
                 when (launchItem.type) {
@@ -78,8 +74,6 @@ fun LaunchesContent(
                             launchItem = launchItem as Launch,
                             onClick = { onCardClicked(launchItem.links) }
                         )
-                       // printLogDebug("SPACEXAPP: LazyVerticalGrid", launchItem.missionName)
-
                     }
 
                     ViewType.TYPE_GRID -> {
@@ -95,7 +89,6 @@ fun LaunchesContent(
                                 LaunchCarouselCard(
                                     launchItem = carouselItem,
                                     onClick = { onCardClicked(carouselItem.links) })
-                             //   printLogDebug("SPACEXAPP: Recyclerview - ROW ", ": index${index}")
                             }
                         }
                     }
@@ -105,7 +98,7 @@ fun LaunchesContent(
             }
         }
         PullRefreshIndicator(
-            refreshing = false,
+            refreshing = isLoading,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter)
         )

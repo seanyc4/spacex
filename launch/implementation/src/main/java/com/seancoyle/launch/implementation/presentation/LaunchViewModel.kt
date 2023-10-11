@@ -55,7 +55,6 @@ class LaunchViewModel @Inject constructor(
         } else {
             //Fresh app launch - get data from network
             setEvent(GetCompanyInfoApiAndCacheEvent)
-            setEvent(GetLaunchesApiAndCacheEvent)
         }
     }
 
@@ -133,14 +132,16 @@ class LaunchViewModel @Inject constructor(
                         }
                 }
 
+                is GetCompanyInfoApiAndCacheEvent -> {
+                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().onCompletion {
+                        setEvent(GetLaunchesApiAndCacheEvent)
+                    }.collect()
+                }
+
                 is GetLaunchesApiAndCacheEvent -> {
                     launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().onCompletion {
                         setEvent(MergeDataEvent)
                     }.collect()
-                }
-
-                is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().collect()
                 }
 
                 else -> {}
@@ -149,7 +150,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun clearListState() {
-        _uiState.value = uiState.value.copy(mergedLaunches = emptyList())
+        updateUiState { copy(mergedLaunches = emptyList()) }
     }
 
     fun newSearch() {

@@ -26,7 +26,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     private val getLaunchesFromCacheUseCase: FilterLaunchItemsInCacheUseCase
 ) : CreateMergedLaunchesUseCase {
 
-    override operator fun invoke(
+    override suspend operator fun invoke(
         year: String?,
         order: String,
         launchFilter: Int?,
@@ -100,7 +100,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         return getCompanyInfoFromCacheUseCase()
     }
 
-    private fun getLaunches(
+    private suspend fun getLaunches(
         year: String?,
         order: String,
         launchFilter: Int?,
@@ -112,6 +112,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             launchFilter = launchFilter,
             page = page
         )
+
     }
 
     companion object {

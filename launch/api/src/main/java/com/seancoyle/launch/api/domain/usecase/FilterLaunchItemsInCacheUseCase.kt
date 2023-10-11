@@ -4,7 +4,7 @@ import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
 interface FilterLaunchItemsInCacheUseCase {
-    operator fun invoke(
+    suspend operator fun invoke(
         year: String? = "",
         order: String,
         launchFilter: Int? = null,

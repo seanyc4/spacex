@@ -27,7 +27,6 @@ internal fun LaunchRoute(
         modifier = modifier,
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,
-        page = viewModel.getPageState(),
         pullRefreshState = refreshState,
         onCardClicked = onCardClicked
     )
@@ -35,10 +34,9 @@ internal fun LaunchRoute(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LaunchScreen(
+internal fun LaunchScreen(
     uiState: LaunchState,
     onChangeScrollPosition: (Int) -> Unit,
-    page: Int,
     loadNextPage: () -> Unit,
     pullRefreshState: PullRefreshState,
     modifier: Modifier = Modifier,
@@ -46,8 +44,9 @@ fun LaunchScreen(
 ) {
     LaunchesContent(
         launches = uiState.mergedLaunches,
+        isLoading = uiState.isLoading,
         onChangeScrollPosition = onChangeScrollPosition,
-        page = page,
+        page = uiState.page,
         loadNextPage = loadNextPage,
         pullRefreshState = pullRefreshState,
         modifier = modifier,
