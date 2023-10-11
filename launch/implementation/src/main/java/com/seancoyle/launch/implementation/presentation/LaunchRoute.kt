@@ -8,9 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
-import com.seancoyle.launch.implementation.presentation.composables.LoadingLaunchCardList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -38,7 +36,7 @@ internal fun LaunchRoute(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LaunchScreen(
-    uiState: LaunchUiState,
+    uiState: LaunchState,
     onChangeScrollPosition: (Int) -> Unit,
     page: Int,
     loadNextPage: () -> Unit,
@@ -46,17 +44,17 @@ fun LaunchScreen(
     modifier: Modifier = Modifier,
     onCardClicked: (links: Links) -> Unit
 ) {
-
-    when (uiState) {
-        is LaunchUiState.Loading -> {
-            printLogDebug("SPACEXAPP:", "LaunchUiState.Loading")
-            LoadingLaunchCardList(itemCount = 10)
+    printLogDebug("SPACEXAPP:", "LaunchScreenPage = $page")
+    when {
+        uiState.isLoading -> {
+            printLogDebug("SPACEXAPP:", "Launch.Loading")
+           // LoadingLaunchCardList(itemCount = 10)
         }
 
-        is LaunchUiState.LaunchState -> {
-            printLogDebug("SPACEXAPP:", "LaunchUiState.LaunchState")
+        else ->{
+            printLogDebug("SPACEXAPP:", "Launch.LaunchState")
             LaunchesContent(
-                launches = uiState.mergedLaunches,
+                launches = uiState.mergedLaunches!!,
                 onChangeScrollPosition = onChangeScrollPosition,
                 page = page,
                 loadNextPage = loadNextPage,
@@ -64,13 +62,6 @@ fun LaunchScreen(
                 modifier = modifier,
                 onCardClicked = onCardClicked
             )
-        }
-
-        is LaunchUiState.Empty -> {
-
-    }
-        is LaunchUiState.ErrorState -> {
-
         }
     }
 }

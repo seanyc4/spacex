@@ -1,7 +1,6 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.domain.StringResource
-import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.Launch
@@ -29,7 +28,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         year: String?,
-        order: String?,
+        order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<List<ViewType>> {
@@ -53,7 +52,7 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
 
     private fun createMergedList(
         companyInfo: CompanyInfo,
-        launches: List<Launch>,
+        launches: List<ViewType>,
     ): List<ViewType> {
         val mergedLaunches = mutableListOf<ViewType>().apply {
             add(SectionTitle(title = "HEADER", type = ViewType.TYPE_SECTION_TITLE))
@@ -73,7 +72,8 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         return mergedLaunches
     }
 
-    private fun buildGrid(launches: List<Launch>): List<ViewGrid> {
+    private fun buildGrid(launches: List<ViewType>): List<ViewGrid> {
+        launches as List<Launch>
         return launches.shuffled().take(MAX_GRID_SIZE).map { launchModel ->
             ViewGrid(
                 links = createLinks(launchModel.links),
@@ -83,7 +83,8 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun buildCarousel(launches: List<Launch>): ViewCarousel {
+    private fun buildCarousel(launches: List<ViewType>): ViewCarousel {
+        launches as List<Launch>
         return ViewCarousel(
             launches.shuffled().take(MAX_CAROUSEL_SIZE).map { launchModel ->
                 RocketWithMission(
@@ -101,13 +102,13 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
 
     private fun getLaunches(
         year: String?,
-        order: String?,
+        order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<Launch>?> {
+    ): Flow<List<ViewType>?> {
         return getLaunchesFromCacheUseCase(
             year = year,
-            order = order ?: ORDER_ASC,
+            order = order,
             launchFilter = launchFilter,
             page = page
         )

@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class LaunchEntityMapper @Inject constructor() {
 
-    fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<Launch> {
+    fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<ViewType> {
         return entities.map { entity -> mapFromEntity(entity) }
     }
 

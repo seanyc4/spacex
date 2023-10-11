@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.domain
 
 
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<Launch>?> {
+    ): Flow<List<ViewType>?> {
         return cacheDataSource.filterLaunchList(
             year = year,
             order = order,

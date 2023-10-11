@@ -1,6 +1,6 @@
 package com.seancoyle.launch.api.domain.usecase
 
-import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
 interface FilterLaunchItemsInCacheUseCase {
@@ -9,5 +9,5 @@ interface FilterLaunchItemsInCacheUseCase {
         order: String,
         launchFilter: Int? = null,
         page: Int? = 1
-    ): Flow<List<Launch>?>
+    ): Flow<List<ViewType>?>
 }

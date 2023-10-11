@@ -40,7 +40,6 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
@@ -129,18 +128,13 @@ class LaunchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (launchViewModel.uiState.value.mergedLaunchesNotEmpty()) {
+       /* if (launchViewModel.uiState.value.mergedLaunches.isNullOrEmpty()) {
             launchViewModel.newSearchEvent()
-        }
+        }*/
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
         }
     }
-
-    private fun LaunchUiState?.mergedLaunchesNotEmpty(): Boolean {
-        return this is LaunchUiState.LaunchState && this.mergedLaunches.isNotEmpty()
-    }
-
 
     // Load url link in external browser
     private fun launchIntent(url: String?) {
@@ -156,7 +150,6 @@ class LaunchFragment : Fragment() {
         }
     }
 
-
     private fun onCardClicked(links: Links) {
         if (isLinksNullOrEmpty(links)) {
             displayErrorDialogNoLinks()
@@ -169,7 +162,6 @@ class LaunchFragment : Fragment() {
         links.articleLink.isNullOrEmpty() &&
                 links.webcastLink.isNullOrEmpty() &&
                 links.wikiLink.isNullOrEmpty()
-
 
     private fun displayBottomActionSheet(links: Links) {
         if (findNavController().currentDestination?.id == R.id.launchFragment) {

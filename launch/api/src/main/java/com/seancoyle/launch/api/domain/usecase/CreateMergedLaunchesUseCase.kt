@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface CreateMergedLaunchesUseCase {
    operator fun invoke(
       year: String?,
-      order: String?,
+      order: String,
       launchFilter: Int?,
       page: Int?
    ): Flow<List<ViewType>>

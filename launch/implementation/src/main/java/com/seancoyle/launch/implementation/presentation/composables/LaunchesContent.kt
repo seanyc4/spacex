@@ -56,9 +56,12 @@ fun LaunchesContent(
                     GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                 }
             ) { index, launchItem ->
-                printLogDebug("LazyVerticalGrid", ": index$index")
+                printLogDebug("SPACEXAPP: LazyVerticalGrid", ": index = $index")
                 onChangeScrollPosition(index)
                 if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
+                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "index + 1 = ${index + 1}")
+                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "page * PAGINATION_PAGE_SIZE = ${page * PAGINATION_PAGE_SIZE}")
+                    printLogDebug("SPACEXAPP: LazyVerticalGrid", "loadNextPage()")
                     loadNextPage()
                 }
                 when (launchItem.type) {
@@ -75,6 +78,8 @@ fun LaunchesContent(
                             launchItem = launchItem as Launch,
                             onClick = { onCardClicked(launchItem.links) }
                         )
+                       // printLogDebug("SPACEXAPP: LazyVerticalGrid", launchItem.missionName)
+
                     }
 
                     ViewType.TYPE_GRID -> {
@@ -90,7 +95,7 @@ fun LaunchesContent(
                                 LaunchCarouselCard(
                                     launchItem = carouselItem,
                                     onClick = { onCardClicked(carouselItem.links) })
-                                printLogDebug("Recyclerview - ROW ", ": index${index}")
+                             //   printLogDebug("SPACEXAPP: Recyclerview - ROW ", ": index${index}")
                             }
                         }
                     }

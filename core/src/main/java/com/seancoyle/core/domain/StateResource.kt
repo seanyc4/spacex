@@ -9,16 +9,16 @@ data class Response(
 )
 
 sealed class MessageDisplayType {
-    object Toast : MessageDisplayType()
-    object Dialog : MessageDisplayType()
-    object None: MessageDisplayType()
+    data object Toast : MessageDisplayType()
+    data object Dialog : MessageDisplayType()
+    data object None: MessageDisplayType()
 }
 
 sealed class MessageType{
-    object Success: MessageType()
-    object Error: MessageType()
-    object Info: MessageType()
-    object None: MessageType()
+    data object Success: MessageType()
+    data object Error: MessageType()
+    data object Info: MessageType()
+    data object None: MessageType()
 }
 
 interface StateMessageCallback{

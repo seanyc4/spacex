@@ -11,9 +11,9 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.api.presentation.LaunchUiState
 import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
 import com.seancoyle.launch.implementation.domain.LaunchUseCases
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.MergeDataEvent
@@ -21,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,8 +55,8 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchUiState.LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
-            //  setState(uiState)
+        savedStateHandle.get<LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
+           //   setState(uiState)
         }
     }
 
@@ -75,8 +76,41 @@ class LaunchViewModel @Inject constructor(
             when (event) {
 
                 is MergeDataEvent -> {
-                    printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL: LAUNCH EVENT", MergeDataEvent.toString())
+                    printLogDebug(
+                        "SPACEXAPP: LAUNCHVIEWMODEL: LAUNCH EVENT",
+                        MergeDataEvent.toString()
+                    )
                     createMergedLaunchesUseCase(
+                        year = getSearchYearState(),
+                        order = getOrderState(),
+                        launchFilter = getFilterState(),
+                        page = getPageState()
+                    ).asResult()
+                        .distinctUntilChanged()
+                        .collect { result ->
+                            when (result) {
+                                is Result.Success -> {
+                                    _uiState.emit(
+                                        _uiState.value.copy(
+                                            mergedLaunches = result.data,
+                                  //          isLoading = false
+                                        )
+                                    )
+                                }
+
+                                is Result.Loading -> {
+                         //           _uiState.emit(_uiState.value.copy(isLoading = true))
+                                }
+
+                                is Result.Error -> {
+
+                                }
+                            }
+                        }
+                }
+
+                is FilterLaunchItemsInCacheEvent -> {
+                    launchUseCases.filterLaunchItemsInCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -84,14 +118,29 @@ class LaunchViewModel @Inject constructor(
                     ).asResult()
                         .collect { result ->
                             when (result) {
-                                is Result.Success -> _uiState.emit(
-                                    LaunchUiState.LaunchState(mergedLaunches = result.data)
-                                )
-                                is Result.Loading -> {
-                                    _uiState.emit(LaunchUiState.Loading)
+                                is Result.Success -> {
+                                    // Pagination - We append the next 30 rows to the current state as a new list
+                                    // This triggers a recompose and keeps immutability
+                                    val currentLaunches = uiState.value.mergedLaunches ?: emptyList()
+
+                                    val allLaunches = result.data?.let { newLaunches ->
+                                        currentLaunches + newLaunches
+                                    } ?: currentLaunches
+
+                                    _uiState.emit(
+                                        _uiState.value.copy(
+                                            mergedLaunches = allLaunches,
+                                            isLoading = false
+                                        )
+                                    )
                                 }
+
+                                is Result.Loading -> {
+                       //             _uiState.emit(_uiState.value.copy(isLoading = true))
+                                }
+
                                 is Result.Error -> {
-                                    _uiState.emit(LaunchUiState.ErrorState(result.exception?.message.toString()))
+
                                 }
                             }
                         }
@@ -99,12 +148,12 @@ class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL: LAUNCH EVENT", GetLaunchesApiAndCacheEvent.toString())
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().collect()
+                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().distinctUntilChanged().collect()
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
                     printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL :LAUNCH EVENT", GetCompanyInfoApiAndCacheEvent.toString())
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().collect()
+                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().distinctUntilChanged().collect()
                 }
 
                 else -> {
@@ -115,32 +164,25 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun clearListState() {
-        if (_uiState.value is LaunchUiState.LaunchState) {
-            _uiState.value = LaunchUiState.LaunchState(mergedLaunches = emptyList())
-        }
-        printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL", "clearListState(): ${_uiState.value}")
+        _uiState.value = uiState.value.copy(mergedLaunches = emptyList())
     }
 
     fun newSearch() {
         resetPageState()
         newSearchEvent()
-        printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL", "loadFirstPage: ${year}")
     }
 
     fun nextPage() {
         if ((getScrollPositionState() + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
             incrementPage()
-            if (getPageState() > 1) {
-                setEvent(MergeDataEvent)
-            }
+            setEvent(FilterLaunchItemsInCacheEvent)
         }
-        printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL", "nextPage: triggered: ${getPageState()}")
     }
 
     private fun getScrollPositionState() = scrollPosition.value
     private fun getSearchYearState() = year.value
     fun getPageState() = page.value
-    fun getOrderState() = order.value
+    fun getOrderState() = order.value ?: ORDER_ASC
     fun getIsDialogFilterDisplayedState() = isDialogFilterDisplayed.value
 
     fun getFilterState(): Int? {
@@ -164,7 +206,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     fun setLaunchOrderState(order: String?) {
-        val nonNullOrder = order?:  ORDER_ASC
+        val nonNullOrder = order ?: ORDER_ASC
         _order.value = nonNullOrder
         saveOrderToDatastore(nonNullOrder)
     }
