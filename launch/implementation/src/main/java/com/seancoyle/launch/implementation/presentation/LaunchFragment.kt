@@ -85,7 +85,7 @@ class LaunchFragment : Fragment() {
                         topBar = {
                             HomeAppBar(
                                 onClick = {
-                                    launchViewModel.setIsDialogFilterDisplayedState(true)
+                                    launchViewModel.setDialogFilterDisplayedState(true)
                                     displayFilterDialog()
                                 }
                             )
@@ -177,7 +177,7 @@ class LaunchFragment : Fragment() {
         activity?.let {
             val dialog = MaterialDialog(it)
                 .noAutoDismiss()
-                .onDismiss { launchViewModel.setIsDialogFilterDisplayedState(false) }
+                .onDismiss { launchViewModel.setDialogFilterDisplayedState(false) }
                 .customView(R.layout.dialog_filter)
                 .cornerRadius(res = R.dimen.default_corner_radius)
 

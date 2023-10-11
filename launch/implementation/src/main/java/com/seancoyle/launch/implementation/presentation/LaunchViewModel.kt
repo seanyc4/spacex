@@ -1,11 +1,11 @@
 package com.seancoyle.launch.implementation.presentation
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Result
 import com.seancoyle.core.domain.asResult
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
@@ -20,8 +20,11 @@ import com.seancoyle.launch.implementation.presentation.LaunchEvents.MergeDataEv
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +37,12 @@ class LaunchViewModel @Inject constructor(
     private val appDataStoreManager: AppDataStore,
     private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
     private val savedStateHandle: SavedStateHandle
-) : BaseViewModel() {
+): ViewModel() {
+
+    protected val _uiState = MutableStateFlow(LaunchState())
+    val uiState: StateFlow<LaunchState> = _uiState
 
     init {
-        setEvent(MergeDataEvent)
         restoreFilterAndOrderState()
         restoreStateOnProcessDeath()
         loadDataOnAppLaunchOrRestore()
@@ -56,18 +61,14 @@ class LaunchViewModel @Inject constructor(
 
     private fun restoreStateOnProcessDeath() {
         savedStateHandle.get<LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
-           //   setState(uiState)
+              _uiState.value = uiState
         }
     }
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
-            setLaunchOrderState(
-                appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY)
-            )
-            setLaunchFilterState(
-                appDataStoreManager.readIntValue(LAUNCH_FILTER_KEY)
-            )
+            setLaunchOrderState(appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: ORDER_ASC)
+            setLaunchFilterState(appDataStoreManager.readIntValue(LAUNCH_FILTER_KEY))
         }
     }
 
@@ -76,10 +77,6 @@ class LaunchViewModel @Inject constructor(
             when (event) {
 
                 is MergeDataEvent -> {
-                    printLogDebug(
-                        "SPACEXAPP: LAUNCHVIEWMODEL: LAUNCH EVENT",
-                        MergeDataEvent.toString()
-                    )
                     createMergedLaunchesUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
@@ -98,13 +95,8 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> {
-                                   _uiState.emit(_uiState.value.copy(isLoading = true))
-                                }
-
-                                is Result.Error -> {
-
-                                }
+                                is Result.Loading -> { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                                is Result.Error -> {}
                             }
                         }
                 }
@@ -135,30 +127,23 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> {
-                                    _uiState.emit(_uiState.value.copy(isLoading = true))
-                                }
-
-                                is Result.Error -> {
-
-                                }
+                                is Result.Loading -> { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                                is Result.Error -> {}
                             }
                         }
                 }
 
                 is GetLaunchesApiAndCacheEvent -> {
-                    printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL: LAUNCH EVENT", GetLaunchesApiAndCacheEvent.toString())
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().distinctUntilChanged().collect()
+                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().onCompletion {
+                        setEvent(MergeDataEvent)
+                    }.collect()
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    printLogDebug("SPACEXAPP: LAUNCHVIEWMODEL :LAUNCH EVENT", GetCompanyInfoApiAndCacheEvent.toString())
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().distinctUntilChanged().collect()
+                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().collect()
                 }
 
-                else -> {
-
-                }
+                else -> {}
             }
         }
     }
@@ -179,18 +164,18 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun getScrollPositionState() = scrollPosition.value
-    private fun getSearchYearState() = year.value
-    fun getPageState() = page.value
-    fun getOrderState() = order.value ?: ORDER_ASC
-    fun getIsDialogFilterDisplayedState() = isDialogFilterDisplayed.value
+    private fun getScrollPositionState() = uiState.value.scrollPosition
+    private fun getSearchYearState() = uiState.value.year
+    fun getPageState() = uiState.value.page
+    fun getOrderState() = uiState.value.order
+    fun getIsDialogFilterDisplayedState() = uiState.value.isDialogFilterDisplayed
 
     fun getFilterState(): Int? {
-        return if (launchFilter.value == LAUNCH_ALL) {
+        return if (uiState.value.launchFilter == LAUNCH_ALL) {
             setLaunchFilterState(null)
-            launchFilter.value
+            uiState.value.launchFilter
         } else {
-            launchFilter.value
+            uiState.value.launchFilter
         }
     }
 
@@ -201,45 +186,48 @@ class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
-    fun setYearState(query: String?) {
-        _year.value = query ?: ""
+    private fun updateUiState(update: LaunchState.() -> LaunchState) {
+        _uiState.value = _uiState.value.update()
     }
 
-    fun setLaunchOrderState(order: String?) {
-        val nonNullOrder = order ?: ORDER_ASC
-        _order.value = nonNullOrder
-        saveOrderToDatastore(nonNullOrder)
+    fun setYearState(year: String?) {
+        updateUiState { copy(year = year.orEmpty()) }
+    }
+
+    fun setLaunchOrderState(order: String) {
+        updateUiState { copy(order = order) }
+        saveOrderToDatastore(order)
     }
 
     fun setLaunchFilterState(filter: Int?) {
-        _launchFilter.value = filter
+        updateUiState { copy(launchFilter = filter) }
         saveFilterToDataStore(filter ?: LAUNCH_ALL)
     }
 
-    fun setIsDialogFilterDisplayedState(isDisplayed: Boolean) {
-        _isDialogFilterDisplayed.value = isDisplayed
+    fun setDialogFilterDisplayedState(isDisplayed: Boolean) {
+        updateUiState { copy(isDialogFilterDisplayed = isDisplayed) }
     }
 
     private fun resetPageState() {
-        _page.value = 1
+        updateUiState { copy(page = 1) }
     }
 
     private fun setPageState(pageNum: Int) {
-        _page.value = pageNum
+        updateUiState { copy(page = pageNum) }
     }
 
     fun setScrollPositionState(position: Int) {
-        _scrollPosition.value = position
+        updateUiState { copy(scrollPosition = position) }
     }
 
     private fun incrementPage() {
-        val incrementedPage = _page.value + 1
-        _page.value = incrementedPage
+        val incrementedPage = uiState.value.page + 1
+        updateUiState { copy(page = incrementedPage) }
         setPageState(incrementedPage)
     }
 
     fun saveState() {
-        //       savedStateHandle[LAUNCH_UI_STATE_KEY] = getCurrentState()
+        savedStateHandle[LAUNCH_UI_STATE_KEY] = _uiState.value
     }
 
     private fun saveOrderToDatastore(order: String) {
