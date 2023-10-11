@@ -93,13 +93,13 @@ class LaunchViewModel @Inject constructor(
                                     _uiState.emit(
                                         _uiState.value.copy(
                                             mergedLaunches = result.data,
-                                  //          isLoading = false
+                                            isLoading = false
                                         )
                                     )
                                 }
 
                                 is Result.Loading -> {
-                         //           _uiState.emit(_uiState.value.copy(isLoading = true))
+                                   _uiState.emit(_uiState.value.copy(isLoading = true))
                                 }
 
                                 is Result.Error -> {
@@ -121,7 +121,7 @@ class LaunchViewModel @Inject constructor(
                                 is Result.Success -> {
                                     // Pagination - We append the next 30 rows to the current state as a new list
                                     // This triggers a recompose and keeps immutability
-                                    val currentLaunches = uiState.value.mergedLaunches ?: emptyList()
+                                    val currentLaunches = uiState.value.mergedLaunches
 
                                     val allLaunches = result.data?.let { newLaunches ->
                                         currentLaunches + newLaunches
@@ -136,7 +136,7 @@ class LaunchViewModel @Inject constructor(
                                 }
 
                                 is Result.Loading -> {
-                       //             _uiState.emit(_uiState.value.copy(isLoading = true))
+                                    _uiState.emit(_uiState.value.copy(isLoading = true))
                                 }
 
                                 is Result.Error -> {

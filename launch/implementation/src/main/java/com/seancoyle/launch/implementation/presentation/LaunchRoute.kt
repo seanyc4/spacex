@@ -44,24 +44,17 @@ fun LaunchScreen(
     modifier: Modifier = Modifier,
     onCardClicked: (links: Links) -> Unit
 ) {
-    printLogDebug("SPACEXAPP:", "LaunchScreenPage = $page")
-    when {
-        uiState.isLoading -> {
-            printLogDebug("SPACEXAPP:", "Launch.Loading")
-           // LoadingLaunchCardList(itemCount = 10)
-        }
-
-        else ->{
-            printLogDebug("SPACEXAPP:", "Launch.LaunchState")
-            LaunchesContent(
-                launches = uiState.mergedLaunches!!,
-                onChangeScrollPosition = onChangeScrollPosition,
-                page = page,
-                loadNextPage = loadNextPage,
-                pullRefreshState = pullRefreshState,
-                modifier = modifier,
-                onCardClicked = onCardClicked
-            )
-        }
+    LaunchesContent(
+        launches = uiState.mergedLaunches,
+        onChangeScrollPosition = onChangeScrollPosition,
+        page = page,
+        loadNextPage = loadNextPage,
+        pullRefreshState = pullRefreshState,
+        modifier = modifier,
+        onCardClicked = onCardClicked
+    )
+    if (uiState.isLoading) {
+        printLogDebug("SPACEXAPP:", "Launch.Loading")
+        //LoadingLaunchCardList(itemCount = 10)
     }
 }
