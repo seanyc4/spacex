@@ -22,7 +22,7 @@ interface LaunchDao {
     suspend fun deleteById(id: Int): Int
 
     @Query("DELETE FROM launch WHERE id IN (:ids)")
-    suspend fun deleteList(ids: List<Int>): Int
+    suspend fun deleteList(ids: List<String>): Int
 
     @Query("DELETE FROM launch")
     suspend fun deleteAll()

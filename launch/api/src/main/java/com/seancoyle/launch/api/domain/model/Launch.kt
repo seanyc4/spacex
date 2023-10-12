@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @Keep
 @Parcelize
 data class Launch(
-    val id: Int,
+    val id: String,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
     val launchYear: String,

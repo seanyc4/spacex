@@ -34,6 +34,8 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

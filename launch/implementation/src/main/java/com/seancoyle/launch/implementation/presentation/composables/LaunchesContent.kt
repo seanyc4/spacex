@@ -67,6 +67,16 @@ fun LaunchesContent(
         ) {
             itemsIndexed(
                 items = launches,
+                key = { index, launchItem : ViewType->
+                   when (launchItem) {
+                        is SectionTitle -> launchItem.id
+                        is CompanySummary -> launchItem.id
+                        is ViewCarousel -> launchItem.id
+                        is ViewGrid -> launchItem.id
+                        is Launch -> launchItem.id
+                        else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                    }
+                },
                 span = { _, item ->
                     GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                 }

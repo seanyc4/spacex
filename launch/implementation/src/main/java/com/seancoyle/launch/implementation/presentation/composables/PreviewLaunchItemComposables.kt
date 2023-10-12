@@ -11,14 +11,14 @@ import com.seancoyle.launch.implementation.R
 @Preview
 @Composable
 fun PreviewLaunchHeading() {
-    val launchHeading = SectionTitle("Test title", ViewType.TYPE_SECTION_TITLE)
+    val launchHeading = SectionTitle("12345","Test title", ViewType.TYPE_SECTION_TITLE)
     LaunchHeading(launchHeading)
 }
 
 @Preview
 @Composable
 fun PreviewCompanySummaryCard() {
-    val companySummary = CompanySummary("Test Summary", ViewType.TYPE_HEADER)
+    val companySummary = CompanySummary("45678","Test Summary", ViewType.TYPE_HEADER)
     CompanySummaryCard(companySummary)
 }
 

@@ -18,6 +18,7 @@ import com.seancoyle.launch.implementation.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import java.util.UUID
 import javax.inject.Inject
 
 class CreateMergedLaunchesUseCaseImpl @Inject constructor(
@@ -55,27 +56,50 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         launches: List<ViewType>,
     ): List<ViewType> {
         val mergedLaunches = mutableListOf<ViewType>().apply {
-            add(SectionTitle(title = "HEADER", type = ViewType.TYPE_SECTION_TITLE))
+            launches as List<Launch>
+            add(
+                SectionTitle(
+                    id = UUID.randomUUID().toString(),
+                    title = "HEADER",
+                    type = ViewType.TYPE_SECTION_TITLE
+                )
+            )
             add(
                 CompanySummary(
+                    id = UUID.randomUUID().toString(),
                     summary = buildCompanySummary(companyInfo),
                     type = ViewType.TYPE_HEADER
                 )
             )
-            add(SectionTitle(title = "CAROUSEL", type = ViewType.TYPE_SECTION_TITLE))
+            add(
+                SectionTitle(
+                    id = UUID.randomUUID().toString(),
+                    title = "CAROUSEL", type = ViewType.TYPE_SECTION_TITLE
+                )
+            )
             add(buildCarousel(launches))
-            add(SectionTitle(title = "GRID", type = ViewType.TYPE_SECTION_TITLE))
+            add(
+                SectionTitle(
+                    id = UUID.randomUUID().toString(),
+                    title = "GRID", type = ViewType.TYPE_SECTION_TITLE
+                )
+            )
             addAll(buildGrid(launches))
-            add(SectionTitle(title = "LIST", type = ViewType.TYPE_SECTION_TITLE))
+            add(
+                SectionTitle(
+                    id = UUID.randomUUID().toString(),
+                    title = "LIST", type = ViewType.TYPE_SECTION_TITLE
+                )
+            )
             addAll(launches)
         }
         return mergedLaunches
     }
 
-    private fun buildGrid(launches: List<ViewType>): List<ViewGrid> {
-        launches as List<Launch>
+    private fun buildGrid(launches: List<Launch>): List<ViewGrid> {
         return launches.shuffled().take(MAX_GRID_SIZE).map { launchModel ->
             ViewGrid(
+                id = UUID.randomUUID().toString(),
                 links = createLinks(launchModel.links),
                 rocket = createRocket(launchModel.rocket),
                 type = ViewType.TYPE_GRID
@@ -83,9 +107,9 @@ class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun buildCarousel(launches: List<ViewType>): ViewCarousel {
-        launches as List<Launch>
+    private fun buildCarousel(launches: List<Launch>): ViewCarousel {
         return ViewCarousel(
+            id = UUID.randomUUID().toString(),
             launches.shuffled().take(MAX_CAROUSEL_SIZE).map { launchModel ->
                 RocketWithMission(
                     createLinks(links = launchModel.links),

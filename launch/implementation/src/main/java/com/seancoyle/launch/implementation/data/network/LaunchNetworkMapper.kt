@@ -27,7 +27,7 @@ class LaunchNetworkMapper @Inject constructor(
                 val launchSuccess = isLaunchSuccess
 
                 Launch(
-                    id = flightNumber ?: 0,
+                    id = flightNumber.toString()+localDateTime,
                     launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                     launchDateLocalDateTime = localDateTime,
                     isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),

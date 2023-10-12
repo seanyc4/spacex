@@ -3,7 +3,10 @@ package com.seancoyle.database.entities
 import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
 import androidx.annotation.StringRes
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.TypeConverters
 import com.seancoyle.database.typeconverters.LocalDateTimeTypeConverter
 import java.time.LocalDateTime
 
@@ -12,7 +15,7 @@ import java.time.LocalDateTime
 data class LaunchEntity(
 
     @ColumnInfo(name="id")
-    val id: Int,
+    val id: String,
 
     @ColumnInfo(name="launchDate")
     val launchDate: String,
