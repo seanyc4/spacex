@@ -29,7 +29,7 @@ internal fun LaunchRoute(
     LaunchScreen(
         launches = uiState.mergedLaunches,
         isLoading = uiState.isLoading,
-        page = uiState.page,
+        page = viewModel.getPageState(),
         modifier = modifier,
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,

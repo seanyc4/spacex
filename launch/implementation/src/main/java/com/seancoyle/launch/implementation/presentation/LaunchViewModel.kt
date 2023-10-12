@@ -44,6 +44,12 @@ class LaunchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LaunchState())
     val uiState: StateFlow<LaunchState> = _uiState
 
+    private val _filterState = MutableStateFlow(FilterState())
+    val filterState: StateFlow<FilterState> = _filterState
+
+    private val _listState = MutableStateFlow(ListState())
+    val listState: StateFlow<ListState> = _listState
+
     init {
         restoreFilterAndOrderState()
         restoreStateOnProcessDeath()
@@ -96,7 +102,9 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                                is Result.Loading -> {
+                                    _uiState.emit(_uiState.value.copy(isLoading = true))
+                                }
 
                                 is Result.Error -> {}
                             }
@@ -130,7 +138,10 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                                is Result.Loading -> {
+                                    _uiState.emit(_uiState.value.copy(isLoading = true))
+                                }
+
                                 is Result.Error -> {}
                             }
                         }
@@ -145,7 +156,8 @@ class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase()
-                        .onStart { _uiState.emit(_uiState.value.copy(isLoading = true)) }.onCompletion {
+                        .onStart { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                        .onCompletion {
                             setEvent(MergeDataEvent)
                         }.collect()
                 }
@@ -171,19 +183,19 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun getScrollPositionState() = uiState.value.scrollPosition
-    private fun getSearchYearState() = uiState.value.year
-    fun getPageState() = uiState.value.page
-    fun getOrderState() = uiState.value.order
-    fun getIsDialogFilterDisplayedState() = uiState.value.isDialogFilterDisplayed
-    fun isLoading() = uiState.value.isLoading
+    private fun getScrollPositionState() = listState.value.scrollPosition
+    fun getPageState() = listState.value.page
+    private fun getSearchYearState() = filterState.value.year
+    fun getOrderState() = filterState.value.order
+    fun getIsDialogFilterDisplayedState() = filterState.value.isDialogFilterDisplayed
+    fun isLoading() = _uiState.value.isLoading
 
     fun getFilterState(): Int? {
-        return if (uiState.value.launchFilter == LAUNCH_ALL) {
+        return if (filterState.value.launchFilter == LAUNCH_ALL) {
             setLaunchFilterState(null)
-            uiState.value.launchFilter
+            filterState.value.launchFilter
         } else {
-            uiState.value.launchFilter
+            filterState.value.launchFilter
         }
     }
 
@@ -198,39 +210,47 @@ class LaunchViewModel @Inject constructor(
         _uiState.value = _uiState.value.update()
     }
 
+    private fun updateFilterState(update: FilterState.() -> FilterState) {
+        _filterState.value = _filterState.value.update()
+    }
+
+    private fun updateListState(update: ListState.() -> ListState) {
+        _listState.value = _listState.value.update()
+    }
+
     fun setYearState(year: String?) {
-        updateUiState { copy(year = year.orEmpty()) }
+        updateFilterState { copy(year = year.orEmpty()) }
     }
 
     fun setLaunchOrderState(order: String) {
-        updateUiState { copy(order = order) }
+        updateFilterState { copy(order = order) }
         saveOrderToDatastore(order)
     }
 
     fun setLaunchFilterState(filter: Int?) {
-        updateUiState { copy(launchFilter = filter) }
+        updateFilterState { copy(launchFilter = filter) }
         saveFilterToDataStore(filter ?: LAUNCH_ALL)
     }
 
     fun setDialogFilterDisplayedState(isDisplayed: Boolean) {
-        updateUiState { copy(isDialogFilterDisplayed = isDisplayed) }
+        updateFilterState { copy(isDialogFilterDisplayed = isDisplayed) }
     }
 
     private fun resetPageState() {
-        updateUiState { copy(page = 1) }
+        updateListState { copy(page = 1) }
     }
 
     private fun setPageState(pageNum: Int) {
-        updateUiState { copy(page = pageNum) }
+        updateListState { copy(page = pageNum) }
     }
 
     fun setScrollPositionState(position: Int) {
-        updateUiState { copy(scrollPosition = position) }
+        updateListState { copy(scrollPosition = position) }
     }
 
     private fun incrementPage() {
-        val incrementedPage = uiState.value.page + 1
-        updateUiState { copy(page = incrementedPage) }
+        val incrementedPage = listState.value.page + 1
+        updateListState { copy(page = incrementedPage) }
         setPageState(incrementedPage)
     }
 
