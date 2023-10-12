@@ -16,12 +16,13 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import com.seancoyle.core.Constants.TAG
+import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.Launch
@@ -30,9 +31,13 @@ import com.seancoyle.launch.api.domain.model.SectionTitle
 import com.seancoyle.launch.api.domain.model.ViewCarousel
 import com.seancoyle.launch.api.domain.model.ViewGrid
 import com.seancoyle.launch.api.domain.model.ViewType
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 
 private const val GRID_COLUMN_SIZE = 2
 
+@FlowPreview
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LaunchesContent(
@@ -45,14 +50,17 @@ fun LaunchesContent(
     modifier: Modifier = Modifier,
     onCardClicked: (links: Links) -> Unit
 ) {
-
-    // Create a LazyListState to track the scroll position
+    printLogDebug(TAG, "RECOMPOSING LAUNCH CONTENT")
     val listState = rememberLazyGridState()
 
-    // Observe the firstVisibleItemIndex of the listState
-    // and update the ViewModel accordingly
-    LaunchedEffect(key1 = remember { derivedStateOf { listState.firstVisibleItemIndex } }) {
-        onChangeScrollPosition(listState.firstVisibleItemIndex)
+    // Observe and save scroll position to view model
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            listState.firstVisibleItemIndex
+        }.debounce(500L)
+            .collectLatest { position ->
+            onChangeScrollPosition(position)
+        }
     }
 
     Box(
@@ -67,14 +75,14 @@ fun LaunchesContent(
         ) {
             itemsIndexed(
                 items = launches,
-                key = { index, launchItem : ViewType->
+                key = { _, launchItem : ViewType->
                    when (launchItem) {
                         is SectionTitle -> launchItem.id
                         is CompanySummary -> launchItem.id
                         is ViewCarousel -> launchItem.id
                         is ViewGrid -> launchItem.id
                         is Launch -> launchItem.id
-                        else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                        else -> throw ClassCastException("Unknown view Type ${launchItem.type}")
                     }
                 },
                 span = { _, item ->
@@ -109,7 +117,7 @@ fun LaunchesContent(
                     ViewType.TYPE_CAROUSEL -> {
                         val carouselItems = (launchItem as ViewCarousel).items
                         LazyRow {
-                            itemsIndexed(carouselItems) { index, carouselItem ->
+                            itemsIndexed(carouselItems) { _, carouselItem ->
                                 LaunchCarouselCard(
                                     launchItem = carouselItem,
                                     onClick = { onCardClicked(carouselItem.links) })

@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class LaunchViewModel @Inject constructor(
     private val appDataStoreManager: AppDataStore,
     private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
     private val savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LaunchState())
     val uiState: StateFlow<LaunchState> = _uiState
@@ -61,7 +62,7 @@ class LaunchViewModel @Inject constructor(
 
     private fun restoreStateOnProcessDeath() {
         savedStateHandle.get<LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
-              _uiState.value = uiState
+            _uiState.value = uiState
         }
     }
 
@@ -96,6 +97,7 @@ class LaunchViewModel @Inject constructor(
                                 }
 
                                 is Result.Loading -> { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+
                                 is Result.Error -> {}
                             }
                         }
@@ -135,15 +137,17 @@ class LaunchViewModel @Inject constructor(
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase().onCompletion {
-                        setEvent(GetLaunchesApiAndCacheEvent)
-                    }.collect()
+                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
+                        .onCompletion {
+                            setEvent(GetLaunchesApiAndCacheEvent)
+                        }.collect()
                 }
 
                 is GetLaunchesApiAndCacheEvent -> {
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase().onCompletion {
-                        setEvent(MergeDataEvent)
-                    }.collect()
+                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase()
+                        .onStart { _uiState.emit(_uiState.value.copy(isLoading = true)) }.onCompletion {
+                            setEvent(MergeDataEvent)
+                        }.collect()
                 }
 
                 else -> {}
