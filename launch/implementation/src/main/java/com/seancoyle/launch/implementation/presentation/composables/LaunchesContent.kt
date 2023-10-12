@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -14,6 +15,9 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
@@ -34,13 +38,23 @@ private const val GRID_COLUMN_SIZE = 2
 fun LaunchesContent(
     launches: List<ViewType>,
     isLoading: Boolean,
-    onChangeScrollPosition: (Int) -> Unit,
     page: Int,
-    loadNextPage: () -> Unit,
+    onChangeScrollPosition: (Int) -> Unit,
+    loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
     modifier: Modifier = Modifier,
     onCardClicked: (links: Links) -> Unit
 ) {
+
+    // Create a LazyListState to track the scroll position
+    val listState = rememberLazyGridState()
+
+    // Observe the firstVisibleItemIndex of the listState
+    // and update the ViewModel accordingly
+    LaunchedEffect(key1 = remember { derivedStateOf { listState.firstVisibleItemIndex } }) {
+        onChangeScrollPosition(listState.firstVisibleItemIndex)
+    }
+
     Box(
         modifier = modifier
             .background(MaterialTheme.colors.background)
@@ -48,6 +62,7 @@ fun LaunchesContent(
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(GRID_COLUMN_SIZE),
+            state = listState,
             modifier = modifier.semantics { testTag = "Launch Grid" }
         ) {
             itemsIndexed(
@@ -56,9 +71,8 @@ fun LaunchesContent(
                     GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                 }
             ) { index, launchItem ->
-                onChangeScrollPosition(index)
                 if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
-                    loadNextPage()
+                    loadNextPage(index)
                 }
                 when (launchItem.type) {
                     ViewType.TYPE_SECTION_TITLE -> {

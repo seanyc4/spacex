@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Result
 import com.seancoyle.core.domain.asResult
+import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
@@ -39,7 +40,7 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    protected val _uiState = MutableStateFlow(LaunchState())
+    private val _uiState = MutableStateFlow(LaunchState())
     val uiState: StateFlow<LaunchState> = _uiState
 
     init {
@@ -101,6 +102,7 @@ class LaunchViewModel @Inject constructor(
                 }
 
                 is FilterLaunchItemsInCacheEvent -> {
+                    printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
                     launchUseCases.filterLaunchItemsInCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
@@ -158,8 +160,8 @@ class LaunchViewModel @Inject constructor(
         newSearchEvent()
     }
 
-    fun nextPage() {
-        if ((getScrollPositionState() + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
+    fun nextPage(position: Int) {
+        if ((position + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
             incrementPage()
             setEvent(FilterLaunchItemsInCacheEvent)
         }
@@ -170,6 +172,7 @@ class LaunchViewModel @Inject constructor(
     fun getPageState() = uiState.value.page
     fun getOrderState() = uiState.value.order
     fun getIsDialogFilterDisplayedState() = uiState.value.isDialogFilterDisplayed
+    fun isLoading() = uiState.value.isLoading
 
     fun getFilterState(): Int? {
         return if (uiState.value.launchFilter == LAUNCH_ALL) {
