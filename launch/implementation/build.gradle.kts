@@ -9,6 +9,7 @@ plugins {
     id(Plugins.junit5)
     id(Plugins.android_library)
     id(Plugins.ksp)
+    id(Plugins.kotlin)
 }
 
 android {
@@ -32,6 +33,7 @@ dependencies {
     ksp(Glide.glide_compiler)
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)
+    implementation(Kotlin.kotlin_immutable)
     implementation(Room.room_ktx)
     implementation(Room.room_runtime)
     ksp(Room.room_compiler)

@@ -8,8 +8,7 @@ android {
     }
 
     defaultConfig {
-        testInstrumentationRunner =
-                AndroidTestDependencies.instrumentation_runner
+        testInstrumentationRunner = AndroidTestDependencies.instrumentation_runner
     }
 }
 

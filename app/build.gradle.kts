@@ -42,6 +42,10 @@ android {
         }
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     compileOptions {
         sourceCompatibility = Java.java_compile_version
         targetCompatibility = Java.java_compile_version
