@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
+internal class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyInfoCacheDataSource
 ) : GetCompanyInfoFromCacheUseCase {
 

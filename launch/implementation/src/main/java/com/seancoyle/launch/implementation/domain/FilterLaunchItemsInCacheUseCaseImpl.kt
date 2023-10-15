@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
+internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource,
 ) : FilterLaunchItemsInCacheUseCase {
 

@@ -7,7 +7,7 @@ import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
 import javax.inject.Inject
 
-class LaunchCacheDataSourceImpl @Inject constructor(
+internal class LaunchCacheDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val entityMapper: LaunchEntityMapper
 ) : LaunchCacheDataSource {

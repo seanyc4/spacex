@@ -4,17 +4,16 @@ import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.domain.CreateMergedLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.GetNumLaunchItemsFromCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.LaunchUseCases
+import com.seancoyle.launch.implementation.domain.LaunchesComponentImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -41,17 +40,9 @@ internal abstract class LaunchUseCaseModule {
         impl: CreateMergedLaunchesUseCaseImpl
     ): CreateMergedLaunchesUseCase
 
-    companion object {
-        @ViewModelScoped
-        @Provides
-        fun provideLaunchUseCases(
-            getLaunchesFromNetworkAndInsertToCacheUseCase: GetLaunchesFromNetworkAndInsertToCacheUseCase,
-            filterLaunchItemsInCacheUseCase: FilterLaunchItemsInCacheUseCase
-        ): LaunchUseCases {
-            return LaunchUseCases(
-                getLaunchesFromNetworkAndInsertToCacheUseCase = getLaunchesFromNetworkAndInsertToCacheUseCase,
-                filterLaunchItemsInCacheUseCase = filterLaunchItemsInCacheUseCase
-            )
-        }
-    }
+    @Binds
+    abstract fun bindsLaunchesComponent(
+        impl: LaunchesComponentImpl
+    ): LaunchesComponent
+
 }

@@ -5,7 +5,7 @@ import com.seancoyle.launch.api.domain.model.CompanyInfo
 import com.seancoyle.launch.implementation.data.model.CompanyInfoDto
 import javax.inject.Inject
 
-class CompanyInfoNetworkMapper @Inject constructor(
+internal class CompanyInfoNetworkMapper @Inject constructor(
     private val numberFormatter: NumberFormatter
 ) {
 

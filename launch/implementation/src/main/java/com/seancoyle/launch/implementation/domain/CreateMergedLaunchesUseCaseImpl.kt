@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import java.util.UUID
 import javax.inject.Inject
 
-class CreateMergedLaunchesUseCaseImpl @Inject constructor(
+internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     private val stringResource: StringResource,
     private val getCompanyInfoFromCacheUseCase: GetCompanyInfoFromCacheUseCase,
     private val getLaunchesFromCacheUseCase: FilterLaunchItemsInCacheUseCase

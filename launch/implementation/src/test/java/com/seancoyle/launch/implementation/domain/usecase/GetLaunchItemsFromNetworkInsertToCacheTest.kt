@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.domain.Result
+import com.seancoyle.core.data.network.ApiResult
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core.testing.MainCoroutineRule
@@ -8,7 +8,6 @@ import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.launch.api.presentation.LaunchState
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -76,14 +75,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
 
-        var result: Result<LaunchState>? = null
+        var apiResult: ApiResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            result = value
+            apiResult = value
         }
 
         assertEquals(
-            result?.stateMessage?.response?.message,
+            apiResult?.stateMessage?.response?.message,
             LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
@@ -107,14 +106,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var result: Result<LaunchState>? = null
+        var apiResult: ApiResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            result = value
+            apiResult = value
         }
 
         assertEquals(
-            result?.stateMessage?.response?.message,
+            apiResult?.stateMessage?.response?.message,
             LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }

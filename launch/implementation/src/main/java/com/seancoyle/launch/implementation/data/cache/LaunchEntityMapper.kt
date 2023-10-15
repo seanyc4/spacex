@@ -9,7 +9,7 @@ import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
 import javax.inject.Inject
 
-class LaunchEntityMapper @Inject constructor() {
+internal class LaunchEntityMapper @Inject constructor() {
 
     fun mapEntityListToDomainList(entities: List<LaunchEntity>): List<ViewType> {
         return entities.map { entity -> mapFromEntity(entity) }

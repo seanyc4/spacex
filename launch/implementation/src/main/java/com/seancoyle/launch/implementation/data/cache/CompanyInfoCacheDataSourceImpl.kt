@@ -5,7 +5,7 @@ import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
-class CompanyInfoCacheDataSourceImpl @Inject constructor(
+internal class CompanyInfoCacheDataSourceImpl @Inject constructor(
     private val dao: CompanyInfoDao,
     private val entityMapper: CompanyInfoEntityMapper
 ) : CompanyInfoCacheDataSource {

@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.presentation
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import com.seancoyle.core.domain.Response
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.parcelize.Parcelize
@@ -9,7 +10,8 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 data class LaunchState(
     val mergedLaunches: List<ViewType> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val errorResponse: Response? = null
 )
 
 @Parcelize
@@ -19,11 +21,16 @@ data class FilterState(
     val launchFilter: Int? = null,
     val order: String = ORDER_ASC,
     val year: String = "",
-): Parcelable
+) : Parcelable
 
 @Parcelize
 @Immutable
 data class ListState(
     val page: Int = 1,
     val scrollPosition: Int = 0
-): Parcelable
+) : Parcelable
+
+@Immutable
+data class ErrorState(
+    val isErrorDisplayed: Boolean = false
+)

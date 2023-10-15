@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class LaunchDto(
+internal data class LaunchDto(
 
     @Expose
     @SerializedName("docs")
@@ -13,7 +13,7 @@ data class LaunchDto(
 )
 
 @Keep
-data class DocsDto(
+internal data class DocsDto(
 
     @Expose
     @SerializedName("flight_number")
@@ -41,7 +41,7 @@ data class DocsDto(
 )
 
 @Keep
-data class LinksDto(
+internal data class LinksDto(
     @Expose
     @SerializedName("patch")
     val patch: PatchDto?,
@@ -60,7 +60,7 @@ data class LinksDto(
 )
 
 @Keep
-data class RocketDto(
+internal data class RocketDto(
     @Expose
     @SerializedName("name")
     val name: String?,
@@ -71,7 +71,7 @@ data class RocketDto(
 )
 
 @Keep
-data class PatchDto(
+internal data class PatchDto(
     @Expose
     @SerializedName("small")
     val missionImage: String?

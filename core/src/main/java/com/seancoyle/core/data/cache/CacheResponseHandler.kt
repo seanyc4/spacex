@@ -2,14 +2,12 @@ package com.seancoyle.core.data.cache
 
 import com.seancoyle.core.data.cache.CacheErrors.CACHE_DATA_NULL
 import com.seancoyle.core.data.cache.CacheErrors.CACHE_ERROR_UNKNOWN
-import com.seancoyle.core.domain.Result
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.seancoyle.core.data.network.ApiResult
 
 abstract class CacheResponseHandler<Data>(
     private val response: CacheResult<Data?>
 ) {
-    suspend fun getResult(): Result<Data>? {
+    suspend fun getResult(): ApiResult<Data>? {
 
         return when (response) {
 
@@ -28,7 +26,7 @@ abstract class CacheResponseHandler<Data>(
         }
     }
 
-    abstract suspend fun emitError(errorMessage: String): Result<Data>?
+    abstract suspend fun emitError(errorMessage: String): ApiResult<Data>?
 
-    abstract suspend fun emitSuccess(data: Data): Result<Data>?
+    abstract suspend fun emitSuccess(data: Data): ApiResult<Data>?
 }

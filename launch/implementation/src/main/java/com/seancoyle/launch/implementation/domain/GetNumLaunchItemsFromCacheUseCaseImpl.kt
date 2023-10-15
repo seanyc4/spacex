@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
+internal class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource
 ) : GetNumLaunchItemsFromCacheUseCase {
 

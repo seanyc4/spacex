@@ -15,7 +15,7 @@ import com.seancoyle.launch.implementation.data.model.LaunchDto
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class LaunchNetworkMapper @Inject constructor(
+internal class LaunchNetworkMapper @Inject constructor(
     private val dateFormatter: DateFormatter,
     private val dateTransformer: DateTransformer
 ) {

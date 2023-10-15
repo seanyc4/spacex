@@ -3,17 +3,20 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seancoyle.core.data.network.ApiResult
+import com.seancoyle.core.data.network.asResult
 import com.seancoyle.core.di.IODispatcher
-import com.seancoyle.core.domain.Result
-import com.seancoyle.core.domain.asResult
+import com.seancoyle.core.domain.MessageDisplayType
+import com.seancoyle.core.domain.MessageType
+import com.seancoyle.core.domain.Response
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
 import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.implementation.domain.CompanyInfoUseCases
-import com.seancoyle.launch.implementation.domain.LaunchUseCases
+import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -34,8 +37,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LaunchViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val launchUseCases: LaunchUseCases,
-    private val companyInfoUseCases: CompanyInfoUseCases,
+    private val launchesComponent: LaunchesComponent,
+    private val companyInfoComponent: CompanyInfoComponent,
     private val appDataStoreManager: AppDataStore,
     private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
     private val savedStateHandle: SavedStateHandle
@@ -49,6 +52,9 @@ class LaunchViewModel @Inject constructor(
 
     private val _listState = MutableStateFlow(ListState())
     val listState: StateFlow<ListState> = _listState
+
+    private val _errorState = MutableStateFlow(ErrorState())
+    val errorState: StateFlow<ErrorState> = _errorState
 
     init {
         restoreFilterAndOrderState()
@@ -93,7 +99,7 @@ class LaunchViewModel @Inject constructor(
                         .distinctUntilChanged()
                         .collect { result ->
                             when (result) {
-                                is Result.Success -> {
+                                is ApiResult.Success -> {
                                     _uiState.emit(
                                         _uiState.value.copy(
                                             mergedLaunches = result.data,
@@ -102,26 +108,32 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> {
+                                is ApiResult.Loading -> {
                                     _uiState.emit(_uiState.value.copy(isLoading = true))
                                 }
 
-                                is Result.Error -> {}
+                                is ApiResult.Error -> {
+                                    _uiState.emit(_uiState.value.copy(
+                                         errorResponse = Response(
+                                            message = result.exception?.message,
+                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageType = MessageType.Error
+                                        )
+                                    ))
+                                }
                             }
                         }
                 }
 
                 is FilterLaunchItemsInCacheEvent -> {
                     printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
-                    launchUseCases.filterLaunchItemsInCacheUseCase(
-                        year = getSearchYearState(),
+                    launchesComponent.filterLaunchItemsInCacheUseCase().invoke( year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
-                        page = getPageState()
-                    ).asResult()
+                        page = getPageState()).asResult()
                         .collect { result ->
                             when (result) {
-                                is Result.Success -> {
+                                is ApiResult.Success -> {
                                     // Pagination - We append the next 30 rows to the current state as a new list
                                     // This triggers a recompose and keeps immutability
                                     val currentLaunches = uiState.value.mergedLaunches
@@ -138,24 +150,41 @@ class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is Result.Loading -> {
+                                is ApiResult.Loading -> {
                                     _uiState.emit(_uiState.value.copy(isLoading = true))
                                 }
 
-                                is Result.Error -> {}
+                                is ApiResult.Error -> {}
                             }
                         }
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoUseCases.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
+                    companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase().invoke()
                         .onCompletion {
                             setEvent(GetLaunchesApiAndCacheEvent)
-                        }.collect()
+                        }
+                        .collect { result ->
+                            when (result) {
+                                is ApiResult.Error -> {
+                                    _uiState.emit(
+                                        _uiState.value.copy(
+                                            errorResponse = Response(
+                                                messageType = MessageType.Error,
+                                                messageDisplayType = MessageDisplayType.Dialog,
+                                                message = result.toString()
+                                            )
+                                        )
+                                    )
+                                }
+
+                                else -> {}
+                            }
+                        }
                 }
 
                 is GetLaunchesApiAndCacheEvent -> {
-                    launchUseCases.getLaunchesFromNetworkAndInsertToCacheUseCase()
+                    launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase().invoke()
                         .onStart { _uiState.emit(_uiState.value.copy(isLoading = true)) }
                         .onCompletion {
                             setEvent(MergeDataEvent)
@@ -216,6 +245,10 @@ class LaunchViewModel @Inject constructor(
 
     private fun updateListState(update: ListState.() -> ListState) {
         _listState.value = _listState.value.update()
+    }
+
+    fun setErrorState(isDisplayed: Boolean){
+        _errorState.value = _errorState.value.copy(isErrorDisplayed = isDisplayed)
     }
 
     fun setYearState(year: String?) {

@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.presentation
 
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.runtime.Composable
@@ -7,9 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.Constants.TAG
+import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_ui.composables.Dialog
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -27,14 +29,14 @@ internal fun LaunchRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchScreen(
-        launches = uiState.mergedLaunches,
-        isLoading = uiState.isLoading,
+        uiState = uiState,
         page = viewModel.getPageState(),
         modifier = modifier,
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,
         pullRefreshState = refreshState,
-        onCardClicked = onCardClicked
+        onCardClicked = onCardClicked,
+        displayAlert = viewModel::setErrorState
     )
 }
 
@@ -42,9 +44,9 @@ internal fun LaunchRoute(
 @FlowPreview
 @Composable
 internal fun LaunchScreen(
-    launches: List<ViewType>,
-    isLoading: Boolean,
+    uiState: LaunchState,
     page: Int,
+    displayAlert: (Boolean) -> Unit,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
@@ -53,8 +55,8 @@ internal fun LaunchScreen(
 ) {
     printLogDebug(TAG, "RECOMPOSING LAUNCH SCREEN")
     LaunchesContent(
-        launches = launches,
-        isLoading = isLoading,
+        launches = uiState.mergedLaunches,
+        isLoading = uiState.isLoading,
         page = page,
         onChangeScrollPosition = onChangeScrollPosition,
         loadNextPage = loadNextPage,
@@ -62,8 +64,15 @@ internal fun LaunchScreen(
         modifier = modifier,
         onCardClicked = onCardClicked
     )
-    if (isLoading) {
+    if (uiState.isLoading) {
         printLogDebug(TAG, "Launch.Loading")
-        //LoadingLaunchCardList(itemCount = 10)
+        CircularProgressIndicator()
+    }
+    uiState.errorResponse?.let { error ->
+        when  {
+            error.messageDisplayType == MessageDisplayType.Dialog -> {
+                Dialog(displayAlertChanged = displayAlert )
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.seancoyle.database.entities.CompanyInfoEntity
 import com.seancoyle.launch.api.domain.model.CompanyInfo
 import javax.inject.Inject
 
-class CompanyInfoEntityMapper @Inject constructor() {
+internal class CompanyInfoEntityMapper @Inject constructor() {
 
     fun mapFromEntity(entity: CompanyInfoEntity): CompanyInfo {
         return with(entity) {

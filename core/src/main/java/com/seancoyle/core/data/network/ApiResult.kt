@@ -1,13 +1,21 @@
 package com.seancoyle.core.data.network
 
-sealed class ApiResult<out T> {
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
-    data class Success<out T>(val value: T): ApiResult<T>()
+sealed interface ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>
+    data class Error(val exception: Throwable? = null) : ApiResult<Nothing>
+    data object Loading : ApiResult<Nothing>
+}
 
-    data class Error(
-        val code: Int? = null,
-        val errorMessage: String? = null
-    ): ApiResult<Nothing>()
-
-    object NetworkError: ApiResult<Nothing>()
+fun <T> Flow<T>.asResult(): Flow<ApiResult<T>> {
+    return this
+        .map<T, ApiResult<T>> {
+            ApiResult.Success(it)
+        }
+        .onStart { emit(ApiResult.Loading) }
+        .catch { emit(ApiResult.Error(it)) }
 }

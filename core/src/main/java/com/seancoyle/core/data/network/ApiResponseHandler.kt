@@ -2,22 +2,21 @@ package com.seancoyle.core.data.network
 
 import com.seancoyle.core.data.network.NetworkErrors.NETWORK_DATA_NULL
 import com.seancoyle.core.data.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
-import com.seancoyle.core.domain.Result
 
 abstract class ApiResponseHandler<Data>(
-    private val response: ApiResult<Data?>
+    private val response: ApiResult_bkup<Data?>
 ) {
 
-    suspend fun getResult(): Result<Data>? {
+    suspend fun getResult(): ApiResult<Data>? {
 
         return when (response) {
 
-            is ApiResult.Error -> {
+            is ApiResult_bkup.Error -> {
                 val message = response.errorMessage ?: NETWORK_ERROR_UNKNOWN
                 emitError(message)
             }
 
-            is ApiResult.Success -> {
+            is ApiResult_bkup.Success -> {
                 if (response.value == null) {
                     emitError(NETWORK_DATA_NULL)
                 } else {
@@ -25,11 +24,11 @@ abstract class ApiResponseHandler<Data>(
                 }
             }
 
-            ApiResult.NetworkError -> TODO()
+            ApiResult_bkup.NetworkError -> TODO()
         }
     }
 
-    abstract suspend fun emitError(errorMessage: String): Result<Data>?
+    abstract suspend fun emitError(errorMessage: String): ApiResult<Data>?
 
-    abstract suspend fun emitSuccess(data: Data): Result<Data>?
+    abstract suspend fun emitSuccess(data: Data): ApiResult<Data>?
 }
