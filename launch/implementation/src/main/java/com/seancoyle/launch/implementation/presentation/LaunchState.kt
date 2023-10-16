@@ -11,7 +11,8 @@ import kotlinx.parcelize.Parcelize
 data class LaunchState(
     val mergedLaunches: List<ViewType> = emptyList(),
     val isLoading: Boolean = false,
-    val errorResponse: Response? = null
+    val errorResponse: Response? = null,
+    val displayError: Boolean = false
 )
 
 @Parcelize
@@ -29,8 +30,3 @@ data class ListState(
     val page: Int = 1,
     val scrollPosition: Int = 0
 ) : Parcelable
-
-@Immutable
-data class ErrorState(
-    val isErrorDisplayed: Boolean = false
-)

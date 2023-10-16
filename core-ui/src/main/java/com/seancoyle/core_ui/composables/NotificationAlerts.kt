@@ -17,59 +17,82 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleCoroutineScope
+import com.seancoyle.core.domain.MessageDisplayType
+import com.seancoyle.core.domain.Response
+import com.seancoyle.core_ui.R
 import kotlinx.coroutines.launch
 
 @Composable
+fun DisplayErrorAlert(
+    error: Response,
+    displayError: Boolean,
+    dismissAlert: (Boolean) -> Unit
+) {
+    when (error.messageDisplayType) {
+
+        MessageDisplayType.Dialog -> {
+            Dialog(
+                message = error.message,
+                openDialog = displayError,
+                displayAlertChanged = dismissAlert
+            )
+        }
+
+        MessageDisplayType.Snackbar -> {
+            //SnackBar()
+        }
+
+        else -> {
+            MessageDisplayType.None
+        }
+    }
+}
+
+
+@Composable
 fun Dialog(
+    message: String,
+    openDialog: Boolean,
     displayAlertChanged: (Boolean) -> Unit
 ) {
-    AlertDialog(
-        modifier = Modifier,
-        onDismissRequest = { displayAlertChanged(false) },
-        icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
-        title = {
-            Text(text = "Title")
-        },
-        text = {
-            Text(
-                "This area typically contains the supportive text " +
-                        "which presents the details regarding the Dialog's purpose."
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    displayAlertChanged(false)
+    if (openDialog) {
+        AlertDialog(
+            modifier = Modifier,
+            onDismissRequest = { displayAlertChanged(false) },
+            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
+            title = {
+                Text(text = stringResource(id = R.string.text_error))
+            },
+            text = {
+                Text(message)
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        displayAlertChanged(false)
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.text_ok))
                 }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    displayAlertChanged(false)
-                }
-            ) {
-                Text("Dismiss")
-            }
-        },
-        shape = RoundedCornerShape(12.dp),
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        iconContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        textContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        tonalElevation = 1.dp
-    )
+            },
+            shape = RoundedCornerShape(12.dp),
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            textContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            tonalElevation = 1.dp
+        )
+    }
 }
 
 @Composable
 fun SnackBar(
     hostState: SnackbarHostState,
     coroutineScope: LifecycleCoroutineScope
-){
+) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = hostState) },
         floatingActionButton = {

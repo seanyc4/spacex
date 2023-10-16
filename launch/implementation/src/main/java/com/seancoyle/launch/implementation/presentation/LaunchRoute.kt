@@ -8,9 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.Constants.TAG
-import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.core_ui.composables.Dialog
+import com.seancoyle.core_ui.composables.DisplayErrorAlert
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +35,7 @@ internal fun LaunchRoute(
         loadNextPage = viewModel::nextPage,
         pullRefreshState = refreshState,
         onCardClicked = onCardClicked,
-        displayAlert = viewModel::setErrorState
+        dismissAlert = viewModel::setErrorState
     )
 }
 
@@ -46,14 +45,14 @@ internal fun LaunchRoute(
 internal fun LaunchScreen(
     uiState: LaunchState,
     page: Int,
-    displayAlert: (Boolean) -> Unit,
+    dismissAlert: (Boolean) -> Unit,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
     modifier: Modifier = Modifier,
     onCardClicked: (links: Links) -> Unit
 ) {
-    printLogDebug(TAG, "RECOMPOSING LAUNCH SCREEN")
+    printLogDebug(TAG, "RECOMPOSING LAUNCH SCREEN - $uiState")
     LaunchesContent(
         launches = uiState.mergedLaunches,
         isLoading = uiState.isLoading,
@@ -69,10 +68,10 @@ internal fun LaunchScreen(
         CircularProgressIndicator()
     }
     uiState.errorResponse?.let { error ->
-        when  {
-            error.messageDisplayType == MessageDisplayType.Dialog -> {
-                Dialog(displayAlertChanged = displayAlert )
-            }
-        }
+        DisplayErrorAlert(
+            error = error,
+            displayError = uiState.displayError,
+            dismissAlert = dismissAlert
+        )
     }
 }

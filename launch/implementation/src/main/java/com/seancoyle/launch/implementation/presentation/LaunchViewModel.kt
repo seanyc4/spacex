@@ -44,7 +44,7 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LaunchState())
+    private val _uiState = MutableStateFlow(LaunchState(isLoading = true))
     val uiState: StateFlow<LaunchState> = _uiState
 
     private val _filterState = MutableStateFlow(FilterState())
@@ -52,9 +52,6 @@ class LaunchViewModel @Inject constructor(
 
     private val _listState = MutableStateFlow(ListState())
     val listState: StateFlow<ListState> = _listState
-
-    private val _errorState = MutableStateFlow(ErrorState())
-    val errorState: StateFlow<ErrorState> = _errorState
 
     init {
         restoreFilterAndOrderState()
@@ -113,13 +110,17 @@ class LaunchViewModel @Inject constructor(
                                 }
 
                                 is ApiResult.Error -> {
-                                    _uiState.emit(_uiState.value.copy(
-                                         errorResponse = Response(
-                                            message = result.exception?.message,
-                                            messageDisplayType = MessageDisplayType.Dialog,
-                                            messageType = MessageType.Error
+                                    _uiState.emit(
+                                        _uiState.value.copy(
+                                            displayError = true,
+                                            errorResponse = Response(
+                                                message = result.exception?.message.orEmpty(),
+                                                messageDisplayType = MessageDisplayType.Dialog,
+                                                messageType = MessageType.Error
+                                            )
                                         )
-                                    ))
+                                    )
+
                                 }
                             }
                         }
@@ -127,10 +128,12 @@ class LaunchViewModel @Inject constructor(
 
                 is FilterLaunchItemsInCacheEvent -> {
                     printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
-                    launchesComponent.filterLaunchItemsInCacheUseCase().invoke( year = getSearchYearState(),
+                    launchesComponent.filterLaunchItemsInCacheUseCase().invoke(
+                        year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
-                        page = getPageState()).asResult()
+                        page = getPageState()
+                    ).asResult()
                         .collect { result ->
                             when (result) {
                                 is ApiResult.Success -> {
@@ -169,6 +172,7 @@ class LaunchViewModel @Inject constructor(
                                 is ApiResult.Error -> {
                                     _uiState.emit(
                                         _uiState.value.copy(
+                                            displayError = true,
                                             errorResponse = Response(
                                                 messageType = MessageType.Error,
                                                 messageDisplayType = MessageDisplayType.Dialog,
@@ -247,8 +251,8 @@ class LaunchViewModel @Inject constructor(
         _listState.value = _listState.value.update()
     }
 
-    fun setErrorState(isDisplayed: Boolean){
-        _errorState.value = _errorState.value.copy(isErrorDisplayed = isDisplayed)
+    fun setErrorState(isDisplayed: Boolean) {
+        updateUiState { copy(displayError = isDisplayed) }
     }
 
     fun setYearState(year: String?) {

@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.seancoyle.core.domain.MessageDisplayType.Dialog
 import com.seancoyle.core.domain.MessageDisplayType.None
-import com.seancoyle.core.domain.MessageDisplayType.Toast
+import com.seancoyle.core.domain.MessageDisplayType.Snackbar
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessageCallback
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(),
     ) {
         when (response.messageDisplayType) {
 
-            is Toast -> {
+            is Snackbar -> {
                 response.message?.let {
                     displayToast(
                         message = it,
