@@ -9,7 +9,6 @@ import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.LaunchFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,12 +46,8 @@ open class LaunchBase {
     lateinit var launchOptions: LaunchOptions
 
     @Inject
-    lateinit var launchFactory: com.seancoyle.launch.implementation.LaunchFactory
-
-    @Inject
     lateinit var dataStore: AppDataStore
 
-    protected lateinit var validLaunchYears: List<String>
     protected val launchGridTag = "Launch Grid"
 
     @Before
@@ -61,7 +56,6 @@ open class LaunchBase {
         hiltRule.inject()
         Intents.init()
         getTestDataAndInsertToFakeDatabase()
-        validLaunchYears = launchFactory.provideValidFilterYearDates()
     }
 
     @After

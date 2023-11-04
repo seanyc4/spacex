@@ -1,6 +1,5 @@
 package com.seancoyle.spacex.di
 
-
 import android.content.Context
 import androidx.room.Room
 import com.seancoyle.core_database.implementation.Database
@@ -18,7 +17,6 @@ import javax.inject.Singleton
     replaces = [DatabaseModule::class]
 )
 object TestDatabaseModule {
-
     @Singleton
     @Provides
     fun provideSpaceXDb(@ApplicationContext app: Context): Database {
@@ -27,17 +25,4 @@ object TestDatabaseModule {
             .fallbackToDestructiveMigration()
             .build()
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
