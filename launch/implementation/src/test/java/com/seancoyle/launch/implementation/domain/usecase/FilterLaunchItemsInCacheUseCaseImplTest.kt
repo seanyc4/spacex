@@ -1,7 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.Constants.ORDER_ASC
-import com.seancoyle.core.Constants.ORDER_DESC
 import com.seancoyle.core.data.cache.CacheErrors
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
@@ -10,6 +8,8 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
+import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
+import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
@@ -17,7 +17,6 @@ import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.data.cache.FORCE_SEARCH_LAUNCH_EXCEPTION
 import com.seancoyle.launch.implementation.domain.FilterLaunchItemsInCacheUseCaseImpl
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations
@@ -58,9 +57,9 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
 
         var expectedResult = emptyList<Launch>()
         val givenLaunches = listOf(
-            createLaunch(id = 1, launchDate = "2023-01-01", isLaunchSuccess = LAUNCH_SUCCESS),
-            createLaunch(id = 2, launchDate = "2023-01-02", isLaunchSuccess = LAUNCH_SUCCESS),
-            createLaunch(id = 3, launchDate = "2023-01-03", isLaunchSuccess = LAUNCH_SUCCESS)
+            createLaunch(id = "1", launchDate = "2023-01-01", isLaunchSuccess = LAUNCH_SUCCESS),
+            createLaunch(id = "2", launchDate = "2023-01-02", isLaunchSuccess = LAUNCH_SUCCESS),
+            createLaunch(id = "3", launchDate = "2023-01-03", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
@@ -73,8 +72,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             year = "",
             order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
-            page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            page = 1
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -95,9 +93,9 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
 
         var expectedResult = emptyList<Launch>()
         val givenLaunches = listOf(
-            createLaunch(id = 1, launchDate = "2023-01-03", isLaunchSuccess = LAUNCH_SUCCESS),
-            createLaunch(id = 2, launchDate = "2023-01-02", isLaunchSuccess = LAUNCH_SUCCESS),
-            createLaunch(id = 3, launchDate = "2023-01-01", isLaunchSuccess = LAUNCH_SUCCESS)
+            createLaunch(id = "1", launchDate = "2023-01-03", isLaunchSuccess = LAUNCH_SUCCESS),
+            createLaunch(id = "2", launchDate = "2023-01-02", isLaunchSuccess = LAUNCH_SUCCESS),
+            createLaunch(id = "3", launchDate = "2023-01-01", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
             year = "",
@@ -148,8 +146,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             year = launchYear,
             order = ORDER_ASC,
             launchFilter = null,
-            page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            page = 1
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -186,8 +183,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             year = givenYear,
             order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
-            page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            page = 1
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
@@ -419,14 +415,14 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
 
         var expectedResult = emptyList<Launch>()
         coEvery { cacheDataSource.filterLaunchList(
-            year = FORCE_SEARCH_LAUNCH_EXCEPTION,
+            year = com.seancoyle.launch.implementation.cache.FORCE_SEARCH_LAUNCH_EXCEPTION,
             order = ORDER_DESC,
             launchFilter = null,
             page = 1
         ) } throws RuntimeException("Cache error")
 
         underTest(
-            year = FORCE_SEARCH_LAUNCH_EXCEPTION,
+            year = com.seancoyle.launch.implementation.cache.FORCE_SEARCH_LAUNCH_EXCEPTION,
             order = ORDER_DESC,
             launchFilter = null,
             page = 1,
@@ -466,7 +462,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     }
 
     private fun createLaunch(
-        id: Int,
+        id: String,
         launchDate: String,
         isLaunchSuccess: Int
     ): Launch {

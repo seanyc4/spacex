@@ -31,7 +31,6 @@ import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.domain.StateMessage
-import com.seancoyle.core.domain.UIInteractionHandler
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
@@ -46,7 +45,6 @@ import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import javax.inject.Inject
 
 const val LINKS_KEY = "links"
 
@@ -55,8 +53,6 @@ const val LINKS_KEY = "links"
 @AndroidEntryPoint
 class LaunchFragment : Fragment() {
 
-    @Inject
-    lateinit var uiInteractionHandler: UIInteractionHandler
     private val launchViewModel by viewModels<LaunchViewModel>()
 
     @OptIn(ExperimentalMaterialApi::class)

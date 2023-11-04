@@ -15,7 +15,6 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
-        <option name="testRunner" value="GRADLE" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
@@ -25,12 +24,15 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core-database" />
+            <option value="$PROJECT_DIR$/core-database/api" />
+            <option value="$PROJECT_DIR$/core-database/implementation" />
             <option value="$PROJECT_DIR$/core-datastore" />
             <option value="$PROJECT_DIR$/core-datastore-test" />
             <option value="$PROJECT_DIR$/core-ui" />
             <option value="$PROJECT_DIR$/launch" />
             <option value="$PROJECT_DIR$/launch/api" />
             <option value="$PROJECT_DIR$/launch/implementation" />
+            <option value="$PROJECT_DIR$/launch/launch-test" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

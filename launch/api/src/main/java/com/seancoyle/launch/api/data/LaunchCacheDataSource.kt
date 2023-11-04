@@ -14,13 +14,13 @@ interface LaunchCacheDataSource {
 
     suspend fun insert(launch: Launch): Long
 
-    suspend fun deleteById(id: Int): Int
+    suspend fun deleteById(id: String): Int
 
     suspend fun deleteList(launches: List<Launch>): Int
 
     suspend fun deleteAll()
 
-    suspend fun getById(id: Int): Launch?
+    suspend fun getById(id: String): Launch?
 
     suspend fun getAll(): List<ViewType>?
 

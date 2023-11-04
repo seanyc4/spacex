@@ -2,7 +2,7 @@ package com.seancoyle.spacex.di.data.companyinfo
 
 import com.seancoyle.core.testing.JsonFileReader
 import com.seancoyle.launch.implementation.di.CompanyInfoApiModule
-import com.seancoyle.spacex.data.network.company.FakeCompanyInfoApi
+import com.seancoyle.launch.implementation.network.company.FakeCompanyInfoApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -20,8 +20,8 @@ object TestCompanyInfoApiModule {
     @Provides
     fun provideFakeCompanyInfoApi(
         jsonFileReader: JsonFileReader
-    ): FakeCompanyInfoApi {
-        return FakeCompanyInfoApi(
+    ): com.seancoyle.launch.implementation.network.company.FakeCompanyInfoApi {
+        return com.seancoyle.launch.implementation.network.company.FakeCompanyInfoApi(
             jsonFileReader = jsonFileReader
         )
     }

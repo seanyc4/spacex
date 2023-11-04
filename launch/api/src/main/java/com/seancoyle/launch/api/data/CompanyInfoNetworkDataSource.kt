@@ -1,8 +1,8 @@
 package com.seancoyle.launch.api.data
 
-import com.seancoyle.launch.api.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.Company
 
 interface CompanyInfoNetworkDataSource {
-    suspend fun getCompanyInfo(): CompanyInfo
+    suspend fun getCompanyInfo(): Company
 
 }

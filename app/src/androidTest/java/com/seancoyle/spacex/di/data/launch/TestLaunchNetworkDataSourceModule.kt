@@ -3,8 +3,8 @@ package com.seancoyle.spacex.di.data.launch
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 import com.seancoyle.launch.implementation.di.LaunchNetworkDataSourceModule
-import com.seancoyle.spacex.data.network.launch.FakeLaunchApi
-import com.seancoyle.spacex.data.network.launch.FakeLaunchNetworkDataSourceImpl
+import com.seancoyle.launch.implementation.network.launch.FakeLaunchApi
+import com.seancoyle.launch.implementation.network.launch.FakeLaunchNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -22,10 +22,10 @@ object TestLaunchNetworkDataSourceModule {
     @Singleton
     @Provides
     fun provideLaunchNetworkDataSource(
-        fakeApi: FakeLaunchApi,
+        fakeApi: com.seancoyle.launch.implementation.network.launch.FakeLaunchApi,
         networkMapper: LaunchNetworkMapper
     ): LaunchNetworkDataSource {
-        return FakeLaunchNetworkDataSourceImpl(
+        return com.seancoyle.launch.implementation.network.launch.FakeLaunchNetworkDataSourceImpl(
             fakeApi = fakeApi,
             networkMapper = networkMapper
         )

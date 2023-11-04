@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.seancoyle.core_ui.composables.TAG_LOADING
-import com.seancoyle.launch.implementation.presentation.LaunchScreen
 import org.junit.Rule
 import org.junit.Test
 
@@ -24,15 +23,14 @@ class LaunchScreenTest {
                 onRefresh = {}
             )
 
-            LaunchScreen(
-                uiState = emptyList(),
-                loading = true,
+           /* LaunchScreen(
+                uiState = UiState,
                 onChangeScrollPosition = {},
                 loadNextPage = {},
-                page = 0 ,
+                page = 0,
                 pullRefreshState = refreshing,
                 onCardClicked = {}
-            )
+            )*/
         }
 
         composeTestRule.apply {

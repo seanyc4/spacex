@@ -3,8 +3,8 @@ package com.seancoyle.spacex.di.data.companyinfo
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
 import com.seancoyle.launch.implementation.di.CompanyInfoNetworkDataSourceModule
-import com.seancoyle.spacex.data.network.company.FakeCompanyInfoApi
-import com.seancoyle.spacex.data.network.company.FakeCompanyInfoNetworkDataSourceImpl
+import com.seancoyle.launch.implementation.network.company.FakeCompanyInfoApi
+import com.seancoyle.launch.implementation.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -21,10 +21,10 @@ object TestCompanyInfoNetworkDataSourceModule {
     @Singleton
     @Provides
     fun provideCompanyInfoNetworkDataSource(
-        fakeApi: FakeCompanyInfoApi,
+        fakeApi: com.seancoyle.launch.implementation.network.company.FakeCompanyInfoApi,
         networkMapper: CompanyInfoNetworkMapper
     ): CompanyInfoNetworkDataSource {
-        return FakeCompanyInfoNetworkDataSourceImpl(
+        return com.seancoyle.launch.implementation.network.company.FakeCompanyInfoNetworkDataSourceImpl(
             fakeApi = fakeApi,
             networkMapper = networkMapper
         )

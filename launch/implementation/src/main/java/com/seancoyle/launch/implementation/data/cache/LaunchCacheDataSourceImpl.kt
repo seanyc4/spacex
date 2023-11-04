@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.database.daos.LaunchDao
-import com.seancoyle.database.daos.returnOrderedQuery
+import com.seancoyle.core_database.api.LaunchDao
+import com.seancoyle.core_database.api.returnOrderedQuery
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 internal class LaunchCacheDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
-    private val entityMapper: LaunchEntityMapper
+    private val entityMapper: LaunchEntityMapperImpl
 ) : LaunchCacheDataSource {
 
     override suspend fun filterLaunchList(
@@ -49,11 +49,11 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         return dao.deleteAll()
     }
 
-    override suspend fun deleteById(id: Int): Int {
+    override suspend fun deleteById(id: String): Int {
         return dao.deleteById(id = id)
     }
 
-    override suspend fun getById(id: Int): Launch? {
+    override suspend fun getById(id: String): Launch? {
         return dao.getById(id = id)?.let {
             entityMapper.mapFromEntity(it)
         }

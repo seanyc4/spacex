@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain
 
 import com.seancoyle.core.domain.StringResource
-import com.seancoyle.launch.api.domain.model.CompanyInfo
+import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.CompanySummary
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
@@ -52,7 +52,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     }
 
     private fun createMergedList(
-        companyInfo: CompanyInfo,
+        company: Company,
         launches: List<ViewType>,
     ): List<ViewType> {
         val mergedLaunches = mutableListOf<ViewType>().apply {
@@ -67,7 +67,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             add(
                 CompanySummary(
                     id = UUID.randomUUID().toString(),
-                    summary = buildCompanySummary(companyInfo),
+                    summary = buildCompanySummary(company),
                     type = ViewType.TYPE_HEADER
                 )
             )
@@ -120,7 +120,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         )
     }
 
-    private fun getCompanyInfo(): Flow<CompanyInfo?> {
+    private fun getCompanyInfo(): Flow<Company?> {
         return getCompanyInfoFromCacheUseCase()
     }
 
@@ -144,14 +144,14 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         private const val MAX_CAROUSEL_SIZE = 20
     }
 
-    private fun buildCompanySummary(companyInfo: CompanyInfo?) = with(stringResource) {
+    private fun buildCompanySummary(company: Company?) = with(stringResource) {
         getString(R.string.company_info).format(
-            companyInfo?.name,
-            companyInfo?.founder,
-            companyInfo?.founded,
-            companyInfo?.employees,
-            companyInfo?.launchSites,
-            companyInfo?.valuation
+            company?.name,
+            company?.founder,
+            company?.founded,
+            company?.employees,
+            company?.launchSites,
+            company?.valuation
         )
     }
 

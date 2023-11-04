@@ -2,7 +2,7 @@ package com.seancoyle.spacex.di.data.launch
 
 import com.seancoyle.core.testing.JsonFileReader
 import com.seancoyle.launch.implementation.di.LaunchApiModule
-import com.seancoyle.spacex.data.network.launch.FakeLaunchApi
+import com.seancoyle.launch.implementation.network.launch.FakeLaunchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -21,8 +21,8 @@ object TestLaunchApiModule {
     @Provides
     fun provideLaunchApiService(
         jsonFileReader: JsonFileReader
-    ): FakeLaunchApi {
-        return FakeLaunchApi(
+    ): com.seancoyle.launch.implementation.network.launch.FakeLaunchApi {
+        return com.seancoyle.launch.implementation.network.launch.FakeLaunchApi(
             jsonFileReader = jsonFileReader
         )
     }

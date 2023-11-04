@@ -4,12 +4,12 @@ import androidx.annotation.CallSuper
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
+import com.seancoyle.launch.api.data.CompanyCacheDataSource
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.api.data.LaunchCacheDataSource
 import com.seancoyle.launch.api.data.LaunchNetworkDataSource
 import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.spacex.LaunchFactory
+import com.seancoyle.launch.implementation.LaunchFactory
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +38,7 @@ open class LaunchBase {
     lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @Inject
-    lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
+    lateinit var companyCacheDataSource: CompanyCacheDataSource
 
     @Inject
     lateinit var companyInfoNetworkDataSource: CompanyInfoNetworkDataSource
@@ -47,7 +47,7 @@ open class LaunchBase {
     lateinit var launchOptions: LaunchOptions
 
     @Inject
-    lateinit var launchFactory: LaunchFactory
+    lateinit var launchFactory: com.seancoyle.launch.implementation.LaunchFactory
 
     @Inject
     lateinit var dataStore: AppDataStore
@@ -80,8 +80,8 @@ open class LaunchBase {
         val testLaunchList = launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         val testCompanyInfoList = companyInfoNetworkDataSource.getCompanyInfo()
         launchCacheDataSource.deleteAll()
-        companyInfoCacheDataSource.deleteAll()
+        companyCacheDataSource.deleteAll()
         launchCacheDataSource.insertList(testLaunchList)
-        companyInfoCacheDataSource.insert(testCompanyInfoList)
+        companyCacheDataSource.insert(testCompanyInfoList)
     }
 }
