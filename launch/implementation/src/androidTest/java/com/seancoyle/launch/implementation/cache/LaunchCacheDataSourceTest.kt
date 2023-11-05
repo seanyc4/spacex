@@ -30,6 +30,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val PAGE = 1
@@ -64,53 +65,33 @@ class LaunchCacheDataSourceTest {
         underTest.deleteAll()
     }
 
-    private suspend fun insertTestData(num: Int = DATA): List<Launch>  {
+    private suspend fun insertTestData(num: Int = DATA): List<Launch> {
         val givenList = createLaunchListTest(num)
         underTest.insertList(givenList)
         return givenList
     }
 
     @Test
-    fun insertLaunchItem_getLaunchItemById_success() = runTest {
-        val givenLaunches = createLaunchItem(
-            id = "1",
-            launchDate = UUID.randomUUID().toString(),
-            launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-            isLaunchSuccess = 2,
-            launchSuccessIcon = R.drawable.ic_launch_success,
-            launchYear = UUID.randomUUID().toString(),
-            links = Links(
-                missionImage = DEFAULT_LAUNCH_IMAGE,
-                articleLink = "https://www.google.com",
-                webcastLink = "https://www.youtube.com",
-                wikiLink = "https://www.wikipedia.com"
-            ),
-            missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
-                rocketNameAndType = UUID.randomUUID().toString()
-            ),
-            daysToFromTitle = UUID.randomUUID().hashCode(),
-            launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LIST,
-        )
+    fun insertLaunch_getLaunchById_success() = runTest {
+        val givenLaunch = createRandomLaunchItem(id = "1")
 
-        underTest.insert(givenLaunches)
+        underTest.insert(givenLaunch)
 
         val result = underTest.getById("1")
-        assertEquals(result, givenLaunches)
+        assertEquals(result, givenLaunch)
     }
 
     @Test
-    fun insertLaunchList_getLaunchItem_success() = runTest {
+    fun insertLaunches_getLaunches_success() = runTest {
         val givenLaunches = insertTestData()
         val resultViewTypeList = underTest.getAll()
         val result = resultViewTypeList as? List<Launch>
 
-        assertTrue { givenLaunches.containsAll(result!!)}
+        assertTrue { givenLaunches.containsAll(result!!) }
     }
 
     @Test
-    fun insertDATALaunchItems_confirmNumLaunchItemsInDb() = runTest {
+    fun insertLaunches_confirmNumLaunchesInDb() = runTest {
         val givenLaunches = insertTestData()
         val result = underTest.getTotalEntries()
         assertEquals(result, givenLaunches.size)
@@ -118,38 +99,16 @@ class LaunchCacheDataSourceTest {
 
     @Test
     fun insertLaunch_deleteLaunch_confirmDeleted() = runTest {
-        val givenLaunch = createLaunchItem(
-            id = "2",
-            launchDate = UUID.randomUUID().toString(),
-            launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-            isLaunchSuccess = 1,
-            launchSuccessIcon = R.drawable.ic_launch_success,
-            launchYear = UUID.randomUUID().toString(),
-            links = Links(
-                missionImage = DEFAULT_LAUNCH_IMAGE,
-                articleLink = "https://www.google.com",
-                webcastLink = "https://www.youtube.com",
-                wikiLink = "https://www.wikipedia.com"
-            ),
-            missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
-                rocketNameAndType = UUID.randomUUID().toString()
-            ),
-            daysToFromTitle = UUID.randomUUID().hashCode(),
-            launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LIST,
-        )
+        val givenLaunch = createRandomLaunchItem(id = "2")
         underTest.insert(givenLaunch)
 
-        var result = underTest.getById(givenLaunch.id)
-
-        assert(result == givenLaunch)
+        val preDeleteResult = underTest.getById(givenLaunch.id)
+        assertEquals(givenLaunch, preDeleteResult)
 
         underTest.deleteById(givenLaunch.id)
 
-        result = underTest.getById(givenLaunch.id)
-
-        assert(result != givenLaunch)
+        val postDeleteResult = underTest.getById(givenLaunch.id)
+        assertNull(postDeleteResult, "Launch item should be null after deletion.")
     }
 
     @Test
@@ -277,8 +236,8 @@ class LaunchCacheDataSourceTest {
         val result = viewTypeList!!.filterIsInstance<Launch>()
 
         assertTrue(result.isNotEmpty())
-        checkDateOrderDescending(result)
         assertTrue { viewTypeList.containsAll(allLaunchItems!!) }
+        checkDateOrderDescending(result)
     }
 
     @Test
@@ -360,9 +319,10 @@ class LaunchCacheDataSourceTest {
         for (item in 0 until num) {
             // Generate a random launch state
             val randomLaunchState = when (Random.nextInt(3)) {
-                0 -> LAUNCH_SUCCESS
-                1 -> LAUNCH_FAILED
-                else -> LAUNCH_UNKNOWN
+                STATE_SUCCESS -> LAUNCH_SUCCESS
+                STATE_FAILED -> LAUNCH_FAILED
+                STATE_UNKNOWN -> LAUNCH_UNKNOWN
+                else -> throw IllegalStateException("Invalid launch state")
             }
 
             val launchYear = validLaunchYears.random()
@@ -373,7 +333,7 @@ class LaunchCacheDataSourceTest {
                     launchDate = UUID.randomUUID().toString(),
                     launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
                     isLaunchSuccess = randomLaunchState,
-                    launchSuccessIcon = R.drawable.ic_launch_success, // You might want to change icon based on state
+                    launchSuccessIcon = getIconBasedOnState(randomLaunchState),
                     launchYear = launchYear,
                     links = Links(
                         missionImage = DEFAULT_LAUNCH_IMAGE,
@@ -392,6 +352,40 @@ class LaunchCacheDataSourceTest {
             )
         }
         return list
+    }
+
+    private fun createRandomLaunchItem(id: String? = null): Launch {
+        val randomLaunchState = Random.nextInt(0, 3)
+        return createLaunchItem(
+            id = id ?: UUID.randomUUID().toString(),
+            launchDate = UUID.randomUUID().toString(),
+            launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+            isLaunchSuccess = randomLaunchState,
+            launchSuccessIcon = getIconBasedOnState(randomLaunchState),
+            launchYear = validLaunchYears.random(),
+            links = Links(
+                missionImage = DEFAULT_LAUNCH_IMAGE,
+                articleLink = "https://www.google.com",
+                webcastLink = "https://www.youtube.com",
+                wikiLink = "https://www.wikipedia.com"
+            ),
+            missionName = UUID.randomUUID().toString(),
+            rocket = Rocket(
+                rocketNameAndType = UUID.randomUUID().toString()
+            ),
+            daysToFromTitle = UUID.randomUUID().hashCode(),
+            launchDaysDifference = UUID.randomUUID().toString(),
+            type = TYPE_LIST,
+        )
+    }
+
+    private fun getIconBasedOnState(state: Int): Int {
+        return when (state) {
+            LAUNCH_SUCCESS -> R.drawable.ic_launch_success
+            LAUNCH_FAILED -> R.drawable.ic_launch_fail
+            LAUNCH_UNKNOWN -> R.drawable.ic_launch_unknown
+            else -> throw IllegalArgumentException("Invalid launch state")
+        }
     }
 
     private fun createLaunchItem(
@@ -422,4 +416,9 @@ class LaunchCacheDataSourceTest {
         type = type,
     )
 
+    companion object {
+        const val STATE_SUCCESS = 0
+        const val STATE_FAILED = 1
+        const val STATE_UNKNOWN = 2
+    }
 }
