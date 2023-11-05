@@ -234,7 +234,6 @@ suspend fun LaunchDao.returnOrderedQuery(
             )
         }
 
-
         isOrderDesc -> {
             printLogDebug("DAO", "launchItemsOrderByYearDESC")
             launchItemsOrderByYearDESC(
