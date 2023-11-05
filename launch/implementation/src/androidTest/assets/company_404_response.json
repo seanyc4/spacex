@@ -1,0 +1,5 @@
+{
+  "error": "Not Found",
+  "message": "The requested company information could not be found.",
+  "statusCode": 404
+}
