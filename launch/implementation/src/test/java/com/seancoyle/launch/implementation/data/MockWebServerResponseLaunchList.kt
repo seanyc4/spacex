@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.network
+package com.seancoyle.launch.implementation.data
 
 object MockWebServerResponseLaunchList {
 

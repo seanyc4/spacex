@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Keep
-internal data class CompanyInfoDto(
+internal data class CompanyDto(
 
     @Expose
     @SerializedName("employees")

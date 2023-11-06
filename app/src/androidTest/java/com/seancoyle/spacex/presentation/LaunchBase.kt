@@ -72,7 +72,7 @@ open class LaunchBase {
 
     private fun getTestDataAndInsertToFakeDatabase() = runTest {
         val testLaunchList = launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
-        val testCompanyInfoList = companyInfoNetworkDataSource.getCompanyInfo()
+        val testCompanyInfoList = companyInfoNetworkDataSource.getCompany()
         launchCacheDataSource.deleteAll()
         companyCacheDataSource.deleteAll()
         launchCacheDataSource.insertList(testLaunchList)

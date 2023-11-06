@@ -20,7 +20,7 @@ internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject cons
 
     override operator fun invoke(): Flow<ApiResult<Company>> = flow {
        val result = safeApiCall(ioDispatcher){
-           networkDataSource.getCompanyInfo()
+           networkDataSource.getCompany()
        }
 
         when (result) {

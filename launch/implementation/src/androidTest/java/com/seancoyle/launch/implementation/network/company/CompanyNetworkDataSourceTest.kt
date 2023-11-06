@@ -3,6 +3,7 @@ package com.seancoyle.launch.implementation.network.company
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.CompanyFactory
+import com.seancoyle.launch.implementation.TestConstants.ERROR_404_RESPONSE
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +43,7 @@ internal class CompanyNetworkDataSourceTest {
     }
 
     @Test
-    fun getCompanyShouldReturnExpectedCompany() = runTest {
+    fun whenAPISuccessful_getCompanyReturnsCompanyData() = runTest {
         val expectedCompany = dataFactory.createCompany(
             id = "",
             employees = "7،000",
@@ -53,17 +54,17 @@ internal class CompanyNetworkDataSourceTest {
             valuation = "27،500،000،000"
         )
 
-        val result = underTest.getCompanyInfo()
+        val result = underTest.getCompany()
 
         assertEquals(expected = expectedCompany, actual = result)
     }
 
     @Test
-    fun getCompanyWhenApiReturns404_shouldThrowHttpException() = runTest {
-        api.jsonFileName = COMPANY_404_RESPONSE
+    fun whenAPIReturns404_getCompanyShouldThrowHttpException() = runTest {
+        api.jsonFileName = ERROR_404_RESPONSE
 
         val exception = assertFailsWith<HttpException> {
-            api.getCompanyInfo()
+            api.getCompany()
         }
 
         assertEquals(

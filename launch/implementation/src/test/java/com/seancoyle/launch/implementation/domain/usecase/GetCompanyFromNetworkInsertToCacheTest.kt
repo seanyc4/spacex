@@ -64,7 +64,7 @@ class GetCompanyFromNetworkInsertToCacheTest {
     fun whenGetCompanyInfoFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
-        coEvery { networkDataSource.getCompanyInfo() } returns COMPANY_INFO
+        coEvery { networkDataSource.getCompany() } returns COMPANY_INFO
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
         var apiResult: ApiResult<LaunchState>? = null
 

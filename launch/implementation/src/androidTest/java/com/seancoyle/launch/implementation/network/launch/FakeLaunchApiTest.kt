@@ -1,11 +1,12 @@
-package com.seancoyle.launch.implementation.network.company
+package com.seancoyle.launch.implementation.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.implementation.TestConstants.COMPANY_200_RESPONSE
-import com.seancoyle.launch.implementation.data.network.dto.CompanyDto
+import com.seancoyle.launch.api.domain.model.LaunchOptions
+import com.seancoyle.launch.implementation.TestConstants.LAUNCHES_200_RESPONSE
+import com.seancoyle.launch.implementation.data.network.dto.LaunchDto
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,7 @@ import kotlin.test.assertEquals
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4ClassRunner::class)
 @HiltAndroidTest
-internal class FakeCompanyApiTest {
+internal class FakeLaunchApiTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -29,7 +30,10 @@ internal class FakeCompanyApiTest {
     lateinit var jsonFileReader: JsonFileReader
 
     @Inject
-    lateinit var underTest: FakeCompanyApi
+    lateinit var launchOptions: LaunchOptions
+
+    @Inject
+    lateinit var underTest: FakeLaunchApi
 
     @Before
     fun setUp() {
@@ -37,14 +41,14 @@ internal class FakeCompanyApiTest {
     }
 
     @Test
-    fun getCompanyReadsCorrectDataFromJSON() = runTest {
-        val jsonContent = jsonFileReader.readJSONFromAsset(COMPANY_200_RESPONSE)
-        val expectedDto: CompanyDto = Gson().fromJson(
+    fun getLaunchesReadsCorrectDataFromJSON() = runTest {
+        val jsonContent = jsonFileReader.readJSONFromAsset(LAUNCHES_200_RESPONSE)
+        val expectedDto: LaunchDto = Gson().fromJson(
             jsonContent,
-            object : TypeToken<CompanyDto>() {}.type
+            object : TypeToken<LaunchDto>() {}.type
         )
 
-        val actualDto = underTest.getCompany()
+        val actualDto = underTest.getLaunchList(launchOptions)
 
         assertEquals(expected = expectedDto, actual = actualDto)
     }

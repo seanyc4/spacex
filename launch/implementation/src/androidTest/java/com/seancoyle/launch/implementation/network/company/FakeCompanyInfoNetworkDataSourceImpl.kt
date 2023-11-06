@@ -10,9 +10,9 @@ internal class FakeCompanyInfoNetworkDataSourceImpl @Inject constructor(
     private val networkMapper: CompanyInfoNetworkMapper
 ) : CompanyInfoNetworkDataSource {
 
-    override suspend fun getCompanyInfo(): Company {
+    override suspend fun getCompany(): Company {
         return networkMapper.mapFromEntity(
-            fakeApi.getCompanyInfo()
+            fakeApi.getCompany()
         )
     }
 }

@@ -5,9 +5,7 @@ import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class FakeLaunchNetworkDataSourceImpl @Inject constructor(
     private val fakeApi: FakeLaunchApi,
     private val networkMapper: LaunchNetworkMapper
