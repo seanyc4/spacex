@@ -1,7 +1,7 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
 
-abstract class ViewType {
+internal abstract class ViewType {
     abstract val type: Int
 
     companion object {

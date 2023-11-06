@@ -14,9 +14,9 @@ import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
-import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponent
+import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
+import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class LaunchViewModel @Inject constructor(
+internal class LaunchViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val launchesComponent: LaunchesComponent,
     private val companyInfoComponent: CompanyInfoComponent,

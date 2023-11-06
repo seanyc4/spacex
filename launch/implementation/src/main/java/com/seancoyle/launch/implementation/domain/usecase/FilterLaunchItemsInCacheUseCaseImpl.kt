@@ -1,9 +1,8 @@
-package com.seancoyle.launch.implementation.domain
+package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.di.IODispatcher
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
+import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.model.ViewType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

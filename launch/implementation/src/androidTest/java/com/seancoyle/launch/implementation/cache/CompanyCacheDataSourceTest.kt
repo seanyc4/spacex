@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.launch.api.data.CompanyCacheDataSource
-import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.CompanyFactory
+import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
+import com.seancoyle.launch.implementation.domain.model.Company
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +23,7 @@ import kotlin.test.assertNull
 @FlowPreview
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-class CompanyCacheDataSourceTest {
+internal class CompanyCacheDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

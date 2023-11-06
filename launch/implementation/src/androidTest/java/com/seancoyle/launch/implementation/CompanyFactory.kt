@@ -1,13 +1,9 @@
 package com.seancoyle.launch.implementation
 
-import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.launch.implementation.domain.model.Company
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class CompanyFactory
-@Inject constructor(){
-
+internal class CompanyFactory @Inject constructor() {
     fun createCompany(
         id: String?,
         employees: String,
@@ -27,5 +23,4 @@ class CompanyFactory
             valuation = valuation,
         )
     }
-
 }

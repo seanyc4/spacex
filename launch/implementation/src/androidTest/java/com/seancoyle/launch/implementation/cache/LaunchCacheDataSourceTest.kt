@@ -7,13 +7,13 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
-import com.seancoyle.launch.api.domain.model.ViewType.Companion.TYPE_LIST
 import com.seancoyle.launch.implementation.LaunchFactory
 import com.seancoyle.launch.implementation.R
+import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Rocket
+import com.seancoyle.launch.implementation.domain.model.ViewType.Companion.TYPE_LIST
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,7 +41,7 @@ private const val DATA = 100
 @HiltAndroidTest
 @Suppress("UNCHECKED_CAST")
 @RunWith(AndroidJUnit4ClassRunner::class)
-class LaunchCacheDataSourceTest {
+internal class LaunchCacheDataSourceTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)

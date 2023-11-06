@@ -38,8 +38,8 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
-import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
+import com.seancoyle.launch.implementation.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
 import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +51,7 @@ const val LINKS_KEY = "links"
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class LaunchFragment : Fragment() {
+internal class LaunchFragment : Fragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
 

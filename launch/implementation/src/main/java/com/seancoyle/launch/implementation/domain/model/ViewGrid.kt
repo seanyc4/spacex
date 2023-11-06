@@ -1,6 +1,6 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
-data class ViewGrid(
+internal data class ViewGrid(
     val id: String,
     val links: Links,
     val rocket: Rocket,

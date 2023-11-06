@@ -1,33 +1,33 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
 import androidx.annotation.Keep
 
 @Keep
-data class LaunchOptions(
+internal data class LaunchOptions(
     val options: Options
 )
 
 @Keep
-data class Options(
+internal data class Options(
     val limit: Int,
     val populate: List<Populate>,
     val sort: Sort
 )
 
 @Keep
-data class Populate(
+internal data class Populate(
     val path: String,
     val select: Select
 )
 
 @Keep
-data class Select(
+internal data class Select(
     val name: Int,
     val type: Int
 )
 
 @Keep
-data class Sort(
+internal data class Sort(
     val flight_number: String
 )
 

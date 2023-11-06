@@ -4,9 +4,9 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.seancoyle.core.testing.JsonFileReader
-import com.seancoyle.launch.api.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.TestConstants.LAUNCHES_200_RESPONSE
 import com.seancoyle.launch.implementation.data.network.dto.LaunchDto
+import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -15,7 +15,6 @@ const val BASE_URL = "https://api.spacexdata.com/"
 @Module
 @InstallIn(SingletonComponent::class)
 internal object RetrofitModule {
-
     @Singleton
     @Provides
     fun provideLaunchRetrofitBuilder(): Retrofit {
@@ -25,5 +24,4 @@ internal object RetrofitModule {
             .client(OkHttpClient())
             .build()
     }
-
 }

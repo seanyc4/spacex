@@ -1,9 +1,9 @@
-package com.seancoyle.launch.api.domain.usecase
+package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
-interface FilterLaunchItemsInCacheUseCase {
+internal interface FilterLaunchItemsInCacheUseCase {
     suspend operator fun invoke(
         year: String? = "",
         order: String,

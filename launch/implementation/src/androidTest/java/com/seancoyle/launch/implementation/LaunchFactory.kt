@@ -1,12 +1,12 @@
 package com.seancoyle.launch.implementation
 
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Rocket
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class LaunchFactory @Inject constructor() {
+internal class LaunchFactory @Inject constructor() {
 
     fun provideValidFilterYearDates() = listOf(
         "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",

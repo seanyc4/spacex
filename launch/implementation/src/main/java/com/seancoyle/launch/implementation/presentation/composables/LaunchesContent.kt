@@ -24,13 +24,13 @@ import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core.Constants.TAG
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.SectionTitle
-import com.seancoyle.launch.api.domain.model.ViewCarousel
-import com.seancoyle.launch.api.domain.model.ViewGrid
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.domain.model.CompanySummary
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.SectionTitle
+import com.seancoyle.launch.implementation.domain.model.ViewCarousel
+import com.seancoyle.launch.implementation.domain.model.ViewGrid
+import com.seancoyle.launch.implementation.domain.model.ViewType
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -40,7 +40,7 @@ private const val GRID_COLUMN_SIZE = 2
 @FlowPreview
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LaunchesContent(
+internal fun LaunchesContent(
     launches: List<ViewType>,
     isLoading: Boolean,
     page: Int,
@@ -75,7 +75,7 @@ fun LaunchesContent(
         ) {
             itemsIndexed(
                 items = launches,
-                key = { _, launchItem : ViewType->
+                key = { _, launchItem : ViewType ->
                    when (launchItem) {
                         is SectionTitle -> launchItem.id
                         is CompanySummary -> launchItem.id

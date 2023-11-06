@@ -1,13 +1,13 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
 
-data class ViewCarousel(
+internal data class ViewCarousel(
     val id: String,
     val items: List<RocketWithMission>,
     override val type: Int
 ) : ViewType()
 
-data class RocketWithMission(
+internal data class RocketWithMission(
     val links: Links,
     val rocket: Rocket
 )

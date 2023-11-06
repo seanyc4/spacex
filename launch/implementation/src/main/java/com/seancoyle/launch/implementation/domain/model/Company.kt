@@ -1,4 +1,4 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class Company(
+internal data class Company(
     val id: String,
     val employees: String,
     val founded: Int,

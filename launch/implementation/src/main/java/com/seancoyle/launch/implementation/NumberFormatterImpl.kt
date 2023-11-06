@@ -12,5 +12,4 @@ internal class NumberFormatterImpl @Inject constructor() : NumberFormatter {
             .format(number)
             .replace(",", "،")
     }
-
 }

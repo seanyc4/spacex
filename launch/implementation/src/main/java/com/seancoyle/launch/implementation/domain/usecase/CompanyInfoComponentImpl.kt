@@ -1,8 +1,5 @@
-package com.seancoyle.launch.implementation.domain
+package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
-import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
-import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import javax.inject.Inject
 
 internal class CompanyInfoComponentImpl @Inject constructor(

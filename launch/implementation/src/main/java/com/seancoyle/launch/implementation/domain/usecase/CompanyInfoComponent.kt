@@ -1,6 +1,6 @@
-package com.seancoyle.launch.api.domain.usecase
+package com.seancoyle.launch.implementation.domain.usecase
 
-interface CompanyInfoComponent {
+internal interface CompanyInfoComponent {
     fun getCompanyInfoFromCacheUseCase(): GetCompanyInfoFromCacheUseCase
     fun getCompanyInfoFromNetworkAndInsertToCacheUseCase(): GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 }

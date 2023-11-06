@@ -2,9 +2,8 @@ package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.core_database.api.LaunchDao
 import com.seancoyle.core_database.api.returnOrderedQuery
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.ViewType
 import javax.inject.Inject
 
 internal class LaunchCacheDataSourceImpl @Inject constructor(

@@ -1,9 +1,5 @@
-package com.seancoyle.launch.implementation.domain
+package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.launch.api.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.api.domain.usecase.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.launch.api.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import javax.inject.Inject
 
 internal class LaunchesComponentImpl @Inject constructor(

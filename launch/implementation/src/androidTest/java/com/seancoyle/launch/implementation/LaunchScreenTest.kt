@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalMaterialApi
-class LaunchScreenTest {
+internal class LaunchScreenTest {
 
     @get:Rule
     val composeTestRule: ComposeContentTestRule = createComposeRule()

@@ -10,7 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.Constants.TAG
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
-import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

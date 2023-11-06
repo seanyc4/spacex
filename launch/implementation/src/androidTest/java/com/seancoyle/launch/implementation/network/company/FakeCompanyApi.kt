@@ -13,7 +13,6 @@ import retrofit2.HttpException
 import retrofit2.Response
 import javax.inject.Inject
 
-
 internal class FakeCompanyApi @Inject constructor(
     private val jsonFileReader: JsonFileReader
 ) : CompanyApi {

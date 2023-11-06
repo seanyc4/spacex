@@ -1,9 +1,9 @@
-package com.seancoyle.launch.api.data
+package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.ViewType
 
-interface LaunchCacheDataSource {
+internal interface LaunchCacheDataSource {
 
     suspend fun filterLaunchList(
         year: String?,

@@ -1,6 +1,6 @@
-package com.seancoyle.launch.api.domain.usecase
+package com.seancoyle.launch.implementation.domain.usecase
 
-interface LaunchesComponent {
+internal interface LaunchesComponent {
     fun getLaunchesFromNetworkAndInsertToCacheUseCase(): GetLaunchesFromNetworkAndInsertToCacheUseCase
     fun filterLaunchItemsInCacheUseCase(): FilterLaunchItemsInCacheUseCase
     fun createMergeLaunchesUseCase(): CreateMergedLaunchesUseCase

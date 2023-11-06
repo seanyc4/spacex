@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.core_database.api.CompanyEntity
-import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.launch.implementation.domain.model.Company
 
-interface CompanyEntityMapper {
+internal interface CompanyEntityMapper {
     fun mapFromEntity(entity: CompanyEntity): Company
     fun mapToEntity(domainModel: Company): CompanyEntity
 }

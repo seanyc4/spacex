@@ -1,4 +1,4 @@
-package com.seancoyle.launch.api.domain.model
+package com.seancoyle.launch.implementation.domain.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 @Keep
 @Parcelize
-data class Launch(
+internal data class Launch(
     val id: String,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
@@ -27,7 +27,7 @@ data class Launch(
 
 @Keep
 @Parcelize
-data class Links(
+internal data class Links(
     val missionImage: String,
     val articleLink: String?,
     val webcastLink: String?,
@@ -36,7 +36,7 @@ data class Links(
 
 @Keep
 @Parcelize
-data class LinkType(
+internal data class LinkType(
     @StringRes val nameResId: Int,
     val link: String?,
     val onClick: () -> Unit
@@ -44,6 +44,6 @@ data class LinkType(
 
 @Keep
 @Parcelize
-data class Rocket(
+internal data class Rocket(
     val rocketNameAndType: String,
 ) : Parcelable

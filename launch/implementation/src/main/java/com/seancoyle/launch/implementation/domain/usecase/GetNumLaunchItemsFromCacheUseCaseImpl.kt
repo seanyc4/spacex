@@ -1,7 +1,6 @@
-package com.seancoyle.launch.implementation.domain
+package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.domain.usecase.GetNumLaunchItemsFromCacheUseCase
+import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
