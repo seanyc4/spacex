@@ -52,9 +52,7 @@ dependencies {
     testImplementation(AndroidTestDependencies.jupiter_params)
     testImplementation(AndroidTestDependencies.junit4)
     testImplementation(KotlinTest.coroutines_test)
-    testImplementation(projects.launch.launchTest)
 
-    androidTestImplementation(projects.launch.launchTest)
     androidTestImplementation(AndroidTestDependencies.test_runner)
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)
     androidTestImplementation(KotlinTest.kotlin_test)

@@ -32,7 +32,6 @@
             <option value="$PROJECT_DIR$/launch" />
             <option value="$PROJECT_DIR$/launch/api" />
             <option value="$PROJECT_DIR$/launch/implementation" />
-            <option value="$PROJECT_DIR$/launch/launch-test" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
