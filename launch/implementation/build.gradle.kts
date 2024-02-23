@@ -19,6 +19,7 @@ android {
 dependencies {
 
     implementation(projects.core)
+    implementation(projects.coreTesting)
     implementation(projects.coreUi)
     implementation(projects.coreDatastore)
     implementation(projects.coreDatabase.api)

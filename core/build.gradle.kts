@@ -12,12 +12,5 @@ android {
 }
 
 dependencies {
-    implementation(Kotlin.coroutines_android)
-    implementation(KotlinTest.coroutines_test)
     implementation(Square.retrofit)
-    implementation(AndroidTestDependencies.test_arch_core)
-    implementation(AndroidTestDependencies.jupiter_api)
-    implementation(ComposeTest.compuse_ui_test_junit4)
-    implementation(AndroidTestDependencies.test_runner)
-    implementation(HiltTest.hilt_android_testing)
 }

@@ -2,8 +2,8 @@ import Kotlin.coroutines_core_version
 import Kotlin.kotlin_version
 
 object Kotlin {
-    const val kotlin_version = "1.9.10"
-    const val kotlin_ksp_version = "1.9.10-1.0.13" //https://github.com/google/ksp/releases - to be updated inline with kotlin version
+    const val kotlin_version = "1.9.22"
+    const val kotlin_ksp_version = "1.9.22-1.0.17" //https://github.com/google/ksp/releases - to be updated inline with kotlin version
     private const val kotlin_immutable_version = "0.3.6"
     const val kotlin_immutable ="org.jetbrains.kotlinx:kotlinx-collections-immutable:${kotlin_immutable_version}"
 

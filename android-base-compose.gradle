@@ -13,6 +13,10 @@ android {
 }
 
 dependencies {
+
+    implementation platform(Compose.compose_bom)
+    androidTestImplementation platform(Compose.compose_bom)
+
     implementation(Compose.compose_material3)
     implementation(Compose.compose_runtime)
     implementation(Compose.compose_preview)

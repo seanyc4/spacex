@@ -1,16 +1,17 @@
-import Compose.compose_version
-
 object Compose {
 
-    const val compose_compiler_version = "1.5.3"
-    const val compose_version = "1.6.0-alpha07"
+    const val compose_compiler_version = "1.5.10"
+    const val compose_bom_version = "2024.02.01"
 
-    const val compose_runtime = "androidx.compose.runtime:runtime:$compose_version"
-    const val compose_ui = "androidx.compose.ui:ui:$compose_version"
-    const val compose_preview = "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    const val compose_tooling = "androidx.compose.ui:ui-tooling:$compose_version"
-    const val compose_activity = "androidx.activity:activity-compose:$compose_version"
-    const val compose_viewbinding = "androidx.compose.ui:ui-viewbinding:$compose_version"
+
+    const val compose_bom = "androidx.compose:compose-bom:$compose_bom_version"
+
+    const val compose_runtime = "androidx.compose.runtime:runtime"
+    const val compose_ui = "androidx.compose.ui:ui"
+    const val compose_preview = "androidx.compose.ui:ui-tooling-preview"
+    const val compose_tooling = "androidx.compose.ui:ui-tooling"
+    const val compose_activity = "androidx.activity:activity-compose"
+    const val compose_viewbinding = "androidx.compose.ui:ui-viewbinding"
 
     private const val compose_lifecycle_version ="2.7.0-alpha02"
     const val compose_lifecycle ="androidx.lifecycle:lifecycle-runtime-compose:$compose_lifecycle_version"
@@ -19,7 +20,7 @@ object Compose {
     private const val compose_navigation_version = "2.7.4"
     const val compose_navigation = "androidx.navigation:navigation-compose:$compose_navigation_version"
 
-    private const val compose_material_version = "1.6.0-alpha07"
+    private const val compose_material_version = "1.6.2"
     const val compose_foundation = "androidx.compose.foundation:foundation:$compose_material_version"
     const val compose_layout = "androidx.compose.foundation:foundation-layout:$compose_material_version"
     const val compose_material = "androidx.compose.material:material:$compose_material_version"
@@ -38,7 +39,7 @@ object Compose {
 }
 
 object ComposeTest {
-    const val compuse_ui_test ="androidx.compose.ui:ui-test:$compose_version"
-    const val compuse_ui_test_junit4 ="androidx.compose.ui:ui-test-junit4:$compose_version"
-    const val compuse_ui_test_manifest ="androidx.compose.ui:ui-test-manifest:$compose_version"
+    const val compuse_ui_test ="androidx.compose.ui:ui-test"
+    const val compuse_ui_test_junit4 ="androidx.compose.ui:ui-test-junit4"
+    const val compuse_ui_test_manifest ="androidx.compose.ui:ui-test-manifest"
 }
