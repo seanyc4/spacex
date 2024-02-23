@@ -16,9 +16,6 @@ object AndroidX {
     const val fragment_version = "1.5.7"
     const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
 
-    private const val fragment_compose_version = "1.7.0-alpha10"
-    const val fragment_compose = "androidx.fragment:fragment-compose:$fragment_compose_version"
-
     const val navigation_version = "2.5.3"
     const val navigation_dynamic = "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
     const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$navigation_version"

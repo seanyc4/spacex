@@ -28,6 +28,7 @@ dependencies {
     implementation(Compose.compose_lifecycle)
     implementation(Compose.compose_viewmodel_lifecycle)
     implementation(Compose.compose_tooling)
+    implementation(Compose.compose_fragment)
     implementation(Hilt.hilt_navigation_compose)
 
     androidTestImplementation(ComposeTest.compuse_ui_test)
