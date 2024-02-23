@@ -15,11 +15,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.fragment.compose.content
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -60,44 +60,40 @@ internal class LaunchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
+    ) = content {
 
-                val scaffoldState = rememberScaffoldState()
-                val refreshing = rememberPullRefreshState(
-                    refreshing = false,
-                    onRefresh = {
-                        launchViewModel.clearQueryParameters()
-                        launchViewModel.clearListState()
-                        launchViewModel.setEvent(LaunchEvents.GetCompanyInfoApiAndCacheEvent)
+        val scaffoldState = rememberScaffoldState()
+        val refreshing = rememberPullRefreshState(
+            refreshing = false,
+            onRefresh = {
+                launchViewModel.clearQueryParameters()
+                launchViewModel.clearListState()
+                launchViewModel.setEvent(LaunchEvents.GetCompanyInfoApiAndCacheEvent)
+            }
+        )
+
+        AppTheme(
+            darkTheme = false,
+            displayProgressBar = false,
+        ) {
+            Scaffold(
+                topBar = {
+                    HomeAppBar(
+                        onClick = {
+                            launchViewModel.setDialogFilterDisplayedState(true)
+                            displayFilterDialog()
+                        }
+                    )
+                },
+                scaffoldState = scaffoldState
+            ) { padding ->
+                LaunchRoute(
+                    viewModel = launchViewModel,
+                    refreshState = refreshing,
+                    onItemClicked = { link ->
+                        onCardClicked(link)
                     }
                 )
-
-                AppTheme(
-                    darkTheme = false,
-                    displayProgressBar = false,
-                ) {
-                    Scaffold(
-                        topBar = {
-                            HomeAppBar(
-                                onClick = {
-                                    launchViewModel.setDialogFilterDisplayedState(true)
-                                    displayFilterDialog()
-                                }
-                            )
-                        },
-                        scaffoldState = scaffoldState
-                    ) { padding ->
-                        LaunchRoute(
-                            viewModel = launchViewModel,
-                            refreshState = refreshing,
-                            onItemClicked = { link ->
-                                onCardClicked(link)
-                            }
-                        )
-                    }
-                }
             }
         }
     }
@@ -124,9 +120,9 @@ internal class LaunchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-       /* if (launchViewModel.uiState.value.mergedLaunches.isNullOrEmpty()) {
-            launchViewModel.newSearchEvent()
-        }*/
+        /* if (launchViewModel.uiState.value.mergedLaunches.isNullOrEmpty()) {
+             launchViewModel.newSearchEvent()
+         }*/
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
         }
