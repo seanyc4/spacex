@@ -1,6 +1,5 @@
-package com.seancoyle.launch.implementation
+package com.seancoyle.core.domain
 
-import com.seancoyle.core.domain.NumberFormatter
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject

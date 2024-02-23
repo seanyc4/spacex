@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation
+package com.seancoyle.core.presentation
 
 import android.content.Context
 import com.seancoyle.core.domain.StringResource

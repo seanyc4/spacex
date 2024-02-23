@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.di
 
 import android.content.Context
 import com.seancoyle.core.domain.StringResource
-import com.seancoyle.launch.implementation.StringResourceImpl
+import com.seancoyle.core.presentation.StringResourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,5 @@
-package com.seancoyle.launch.implementation
+package com.seancoyle.core.domain
 
-import com.seancoyle.core.domain.DateFormatter
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter

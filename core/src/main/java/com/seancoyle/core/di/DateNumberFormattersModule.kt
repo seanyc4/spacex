@@ -1,12 +1,12 @@
-package com.seancoyle.launch.implementation.di
+package com.seancoyle.core.di
 
 import com.seancoyle.core.domain.DateFormatConstants
 import com.seancoyle.core.domain.DateFormatter
+import com.seancoyle.core.domain.DateFormatterImpl
 import com.seancoyle.core.domain.DateTransformer
+import com.seancoyle.core.domain.DateTransformerImpl
 import com.seancoyle.core.domain.NumberFormatter
-import com.seancoyle.launch.implementation.DateFormatterImpl
-import com.seancoyle.launch.implementation.DateTransformerImpl
-import com.seancoyle.launch.implementation.NumberFormatterImpl
+import com.seancoyle.core.domain.NumberFormatterImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
