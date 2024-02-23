@@ -15,7 +15,6 @@ import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponent
-import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
@@ -36,12 +35,11 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val launchesComponent: LaunchesComponent,
     private val companyInfoComponent: CompanyInfoComponent,
     private val appDataStoreManager: AppDataStore,
-    private val createMergedLaunchesUseCase: CreateMergedLaunchesUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<LaunchUiState> = MutableStateFlow(LaunchUiState.Loading)
@@ -87,7 +85,7 @@ internal class LaunchViewModel @Inject constructor(
             when (event) {
 
                 is MergeDataEvent -> {
-                    createMergedLaunchesUseCase(
+                    launchesComponent.createMergeLaunchesUseCase().invoke(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
