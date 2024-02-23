@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshState
@@ -20,8 +19,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import com.seancoyle.core.Constants.TAG
-import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.implementation.domain.model.CompanySummary
 import com.seancoyle.launch.implementation.domain.model.Launch
@@ -50,7 +48,6 @@ internal fun LaunchesContent(
     onItemClicked: (links: Links) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    printLogDebug(TAG, "RECOMPOSING LAUNCH CONTENT")
     val listState = rememberLazyGridState()
 
     // Observe and save scroll position to view model
@@ -125,7 +122,7 @@ internal fun LaunchesContent(
 
                 when (paginationState) {
                     is PaginationState.Loading -> {
-                        CircularProgressIndicator()
+                        CircularProgressBar()
                     }
                     is PaginationState.Error -> {}
                     is PaginationState.None -> {}

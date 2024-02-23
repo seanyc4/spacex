@@ -164,6 +164,7 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetCompanyInfoApiAndCacheEvent -> {
                     companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase().invoke()
+                        .onStart {  _uiState.value = LaunchUiState.Loading }
                         .onCompletion {
                             setEvent(GetLaunchesApiAndCacheEvent)
                         }

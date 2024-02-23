@@ -1,21 +1,15 @@
 package com.seancoyle.launch.implementation.presentation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seancoyle.core.Constants.TAG
-import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
 import com.seancoyle.launch.implementation.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
+import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -51,11 +45,8 @@ internal fun LaunchScreen(
     pullRefreshState: PullRefreshState,
     onItemClicked: (links: Links) -> Unit
 ) {
-    printLogDebug(TAG, "RECOMPOSING LAUNCH SCREEN - $uiState")
-
     when (uiState) {
         is LaunchUiState.Success -> {
-            printLogDebug(TAG, "Launch.Success")
             LaunchesContent(
                 launches = uiState.launches,
                 paginationState = uiState.paginationState,
@@ -68,26 +59,14 @@ internal fun LaunchScreen(
         }
 
         is LaunchUiState.Loading -> {
-            printLogDebug(TAG, "Launch.Loading")
-            CircularProgressIndicator()
+            CircularProgressBar()
         }
 
         is LaunchUiState.Error -> {
-            printLogDebug(TAG, "Launch.Error")
             DisplayErrorAlert(
                 error = uiState.errorResponse
             )
         }
     }
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        PullRefreshIndicator(
-            refreshing = uiState is LaunchUiState.Error,
-            state = pullRefreshState
-        )
-    }
-
+    SwipeToRefreshComposable(uiState, pullRefreshState)
 }

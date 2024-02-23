@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 const val TAG_LOADING = "loading"
 @Composable
 fun CircularProgressBar(
-    isDisplayed: Boolean,
-    verticalBias: Float
+    isDisplayed: Boolean = true,
+    verticalBias: Float = 0f
 ) {
     if (isDisplayed) {
         Box(
@@ -37,7 +37,7 @@ fun CircularProgressBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.secondary
+                    color = MaterialTheme.colors.primaryVariant
                 )
             }
         }
