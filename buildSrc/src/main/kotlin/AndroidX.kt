@@ -10,11 +10,12 @@ object AndroidX {
     private const val core_ktx_version = "1.10.0"
     const val core_ktx = "androidx.core:core-ktx:$core_ktx_version"
 
-    private const val data_store_version = "1.1.0-alpha04"
+    private const val data_store_version = "1.1.0-beta01"
     const val data_store = "androidx.datastore:datastore-preferences:$data_store_version"
 
-    const val fragment_version = "1.5.7"
+    const val fragment_version = "1.7.0-alpha10"
     const val fragment_ktx = "androidx.fragment:fragment-ktx:$fragment_version"
+    const val compose_fragment = "androidx.fragment:fragment-compose:$fragment_version"
 
     const val navigation_version = "2.5.3"
     const val navigation_dynamic = "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"

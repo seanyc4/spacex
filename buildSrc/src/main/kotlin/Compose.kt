@@ -13,9 +13,6 @@ object Compose {
     const val compose_activity = "androidx.activity:activity-compose"
     const val compose_viewbinding = "androidx.compose.ui:ui-viewbinding"
 
-    private const val fragment_compose_version = "1.7.0-alpha10"
-    const val compose_fragment = "androidx.fragment:fragment-compose:$fragment_compose_version"
-
     private const val compose_lifecycle_version ="2.7.0-alpha02"
     const val compose_lifecycle ="androidx.lifecycle:lifecycle-runtime-compose:$compose_lifecycle_version"
     const val compose_viewmodel_lifecycle ="androidx.lifecycle:lifecycle-viewmodel-compose:$compose_lifecycle_version"

@@ -28,11 +28,10 @@ dependencies {
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)
-    implementation(Glide.glide)
     implementation(Glide.glide_compose) {
         exclude(group = "androidx.test", module = "core-ktx")
     }
-    ksp(Glide.glide_compiler)
+    //ksp(Glide.glide_compiler)
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)
     implementation(Kotlin.kotlin_immutable)
