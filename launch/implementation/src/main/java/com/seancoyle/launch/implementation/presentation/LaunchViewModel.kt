@@ -25,9 +25,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -107,7 +105,6 @@ internal class LaunchViewModel @Inject constructor(
 
                                 is ApiResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
-                                        displayError = true,
                                         errorResponse = Response(
                                             message = result.exception?.message.orEmpty(),
                                             messageDisplayType = MessageDisplayType.Dialog,
@@ -165,14 +162,13 @@ internal class LaunchViewModel @Inject constructor(
                 is GetCompanyInfoApiAndCacheEvent -> {
                     companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase().invoke()
                         .onStart {  _uiState.value = LaunchUiState.Loading }
-                        .onCompletion {
-                            setEvent(GetLaunchesApiAndCacheEvent)
-                        }
                         .collect { result ->
                             when (result) {
+                                is ApiResult.Success -> {
+                                    setEvent(GetLaunchesApiAndCacheEvent)
+                                }
                                 is ApiResult.Error -> {
-                                    LaunchUiState.Error(
-                                        displayError = true,
+                                    _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
                                             message = result.exception?.message.orEmpty(),
                                             messageDisplayType = MessageDisplayType.Dialog,
@@ -188,10 +184,25 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase().invoke()
-                        .onStart { LaunchUiState.Loading }
-                        .onCompletion {
-                            setEvent(MergeDataEvent)
-                        }.collect()
+                        .onStart { _uiState.value = LaunchUiState.Loading  }
+                        .collect { result ->
+                            when (result) {
+                                is ApiResult.Success -> {
+                                    setEvent(MergeDataEvent)
+                                }
+                                is ApiResult.Error -> {
+                                    _uiState.value = LaunchUiState.Error(
+                                        errorResponse = Response(
+                                            message = result.exception?.message.orEmpty(),
+                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageType = MessageType.Error
+                                        )
+                                    )
+                                }
+
+                                else -> {}
+                            }
+                        }
                 }
 
                 else -> {}

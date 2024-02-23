@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun DisplayErrorAlert(
     error: Response,
-  //  displayError: Boolean,
   //  dismissAlert: (Boolean) -> Unit
 ) {
     when (error.messageDisplayType) {
