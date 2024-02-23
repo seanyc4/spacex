@@ -84,8 +84,10 @@ android {
     }
 
     packaging {
-        resources.excludes.add("META-INF/*")
-    }
+                resources.pickFirsts.add("META-INF/LICENSE.md")
+                resources.pickFirsts.add("META-INF/LICENSE-notice.md")
+
+        }
 
     lint {
         checkDependencies = true

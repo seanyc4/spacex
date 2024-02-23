@@ -9,15 +9,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -31,6 +30,7 @@ import com.seancoyle.launch.api.domain.model.SectionTitle
 import com.seancoyle.launch.api.domain.model.ViewCarousel
 import com.seancoyle.launch.api.domain.model.ViewGrid
 import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.presentation.PaginationState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -42,13 +42,13 @@ private const val GRID_COLUMN_SIZE = 2
 @Composable
 fun LaunchesContent(
     launches: List<ViewType>,
-    isLoading: Boolean,
+    paginationState: PaginationState,
     page: Int,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
+    onItemClicked: (links: Links) -> Unit,
     modifier: Modifier = Modifier,
-    onCardClicked: (links: Links) -> Unit
 ) {
     printLogDebug(TAG, "RECOMPOSING LAUNCH CONTENT")
     val listState = rememberLazyGridState()
@@ -75,22 +75,17 @@ fun LaunchesContent(
         ) {
             itemsIndexed(
                 items = launches,
-                key = { _, launchItem : ViewType->
-                   when (launchItem) {
-                        is SectionTitle -> launchItem.id
-                        is CompanySummary -> launchItem.id
-                        is ViewCarousel -> launchItem.id
-                        is ViewGrid -> launchItem.id
-                        is Launch -> launchItem.id
-                        else -> throw ClassCastException("Unknown view Type ${launchItem.type}")
-                    }
-                },
                 span = { _, item ->
                     GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
                 }
             ) { index, launchItem ->
                 if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
-                    loadNextPage(index)
+                    LazyVerticalGridPagination(
+                        listState = listState,
+                        buffer = GRID_COLUMN_SIZE,
+                        index = index,
+                        loadNextPage = loadNextPage
+                    )
                 }
                 when (launchItem.type) {
                     ViewType.TYPE_SECTION_TITLE -> {
@@ -102,16 +97,17 @@ fun LaunchesContent(
                     }
 
                     ViewType.TYPE_LIST -> {
+                        printLogDebug(TAG, "TYPE_LIST")
                         LaunchCard(
                             launchItem = launchItem as Launch,
-                            onClick = { onCardClicked(launchItem.links) }
+                            onClick = { onItemClicked(launchItem.links) }
                         )
                     }
 
                     ViewType.TYPE_GRID -> {
                         LaunchGridCard(
                             launchItem = launchItem as ViewGrid,
-                            onClick = { onCardClicked(launchItem.links) })
+                            onClick = { onItemClicked(launchItem.links) })
                     }
 
                     ViewType.TYPE_CAROUSEL -> {
@@ -120,19 +116,22 @@ fun LaunchesContent(
                             itemsIndexed(carouselItems) { _, carouselItem ->
                                 LaunchCarouselCard(
                                     launchItem = carouselItem,
-                                    onClick = { onCardClicked(carouselItem.links) })
+                                    onClick = { onItemClicked(carouselItem.links) })
                             }
                         }
                     }
 
                     else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
                 }
+
+                when (paginationState) {
+                    is PaginationState.Loading -> {
+                        CircularProgressIndicator()
+                    }
+                    is PaginationState.Error -> {}
+                    is PaginationState.None -> {}
+                }
             }
         }
-        PullRefreshIndicator(
-            refreshing = isLoading,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
     }
 }

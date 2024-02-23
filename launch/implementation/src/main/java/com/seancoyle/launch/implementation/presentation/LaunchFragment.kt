@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.presentation
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -10,12 +11,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -60,6 +59,7 @@ class LaunchFragment : Fragment() {
     private val launchViewModel by viewModels<LaunchViewModel>()
 
     @OptIn(ExperimentalMaterialApi::class)
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -94,10 +94,9 @@ class LaunchFragment : Fragment() {
                         scaffoldState = scaffoldState
                     ) { padding ->
                         LaunchRoute(
-                            Modifier.padding(padding),
                             viewModel = launchViewModel,
                             refreshState = refreshing,
-                            onCardClicked = { link ->
+                            onItemClicked = { link ->
                                 onCardClicked(link)
                             }
                         )

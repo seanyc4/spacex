@@ -44,8 +44,8 @@ class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LaunchState(isLoading = true))
-    val uiState: StateFlow<LaunchState> = _uiState
+    private val _uiState: MutableStateFlow<LaunchUiState> = MutableStateFlow(LaunchUiState.Loading)
+    val uiState: StateFlow<LaunchUiState> = _uiState
 
     private val _filterState = MutableStateFlow(FilterState())
     val filterState: StateFlow<FilterState> = _filterState
@@ -70,7 +70,7 @@ class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
+        savedStateHandle.get<LaunchUiState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
             _uiState.value = uiState
         }
     }
@@ -97,30 +97,25 @@ class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is ApiResult.Success -> {
-                                    _uiState.emit(
-                                        _uiState.value.copy(
-                                            mergedLaunches = result.data,
-                                            isLoading = false
-                                        )
+                                    _uiState.value = LaunchUiState.Success(
+                                        launches = result.data,
+                                        paginationState = PaginationState.None
                                     )
                                 }
 
                                 is ApiResult.Loading -> {
-                                    _uiState.emit(_uiState.value.copy(isLoading = true))
+                                    _uiState.value = LaunchUiState.Loading
                                 }
 
                                 is ApiResult.Error -> {
-                                    _uiState.emit(
-                                        _uiState.value.copy(
-                                            displayError = true,
-                                            errorResponse = Response(
-                                                message = result.exception?.message.orEmpty(),
-                                                messageDisplayType = MessageDisplayType.Dialog,
-                                                messageType = MessageType.Error
-                                            )
+                                    _uiState.value = LaunchUiState.Error(
+                                        displayError = true,
+                                        errorResponse = Response(
+                                            message = result.exception?.message.orEmpty(),
+                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageType = MessageType.Error
                                         )
                                     )
-
                                 }
                             }
                         }
@@ -139,25 +134,32 @@ class LaunchViewModel @Inject constructor(
                                 is ApiResult.Success -> {
                                     // Pagination - We append the next 30 rows to the current state as a new list
                                     // This triggers a recompose and keeps immutability
-                                    val currentLaunches = uiState.value.mergedLaunches
+                                    _uiState.update {
+                                        val currentLaunches = it.launches
 
-                                    val allLaunches = result.data?.let { newLaunches ->
-                                        currentLaunches + newLaunches
-                                    } ?: currentLaunches
+                                        val allLaunches = result.data?.let { newLaunches ->
+                                            currentLaunches + newLaunches
+                                        } ?: currentLaunches
 
-                                    _uiState.emit(
-                                        _uiState.value.copy(
-                                            mergedLaunches = allLaunches,
-                                            isLoading = false
+                                        it.copy(
+                                            launches = allLaunches,
+                                            paginationState = PaginationState.None
                                         )
-                                    )
+
+                                    }
                                 }
 
                                 is ApiResult.Loading -> {
-                                    _uiState.emit(_uiState.value.copy(isLoading = true))
+                                    _uiState.update {
+                                        it.copy(paginationState = PaginationState.Loading)
+                                    }
                                 }
 
-                                is ApiResult.Error -> {}
+                                is ApiResult.Error -> {
+                                    _uiState.update {
+                                        it.copy(paginationState = PaginationState.Error)
+                                    }
+                                }
                             }
                         }
                 }
@@ -170,14 +172,12 @@ class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is ApiResult.Error -> {
-                                    _uiState.emit(
-                                        _uiState.value.copy(
-                                            displayError = true,
-                                            errorResponse = Response(
-                                                messageType = MessageType.Error,
-                                                messageDisplayType = MessageDisplayType.Dialog,
-                                                message = result.toString()
-                                            )
+                                    LaunchUiState.Error(
+                                        displayError = true,
+                                        errorResponse = Response(
+                                            message = result.exception?.message.orEmpty(),
+                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageType = MessageType.Error
                                         )
                                     )
                                 }
@@ -189,7 +189,7 @@ class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase().invoke()
-                        .onStart { _uiState.emit(_uiState.value.copy(isLoading = true)) }
+                        .onStart { LaunchUiState.Loading }
                         .onCompletion {
                             setEvent(MergeDataEvent)
                         }.collect()
@@ -200,8 +200,15 @@ class LaunchViewModel @Inject constructor(
         }
     }
 
+    private fun MutableStateFlow<LaunchUiState>.update(updateState: (LaunchUiState.Success) -> LaunchUiState.Success) {
+        val state = this.value
+        if (state is LaunchUiState.Success) {
+            this.value = updateState(state)
+        }
+    }
+
     fun clearListState() {
-        updateUiState { copy(mergedLaunches = emptyList()) }
+      _uiState.update { it.copy(launches = emptyList()) }
     }
 
     fun newSearch() {
@@ -221,7 +228,7 @@ class LaunchViewModel @Inject constructor(
     private fun getSearchYearState() = filterState.value.year
     fun getOrderState() = filterState.value.order
     fun getIsDialogFilterDisplayedState() = filterState.value.isDialogFilterDisplayed
-    fun isLoading() = _uiState.value.isLoading
+    // fun isLoading() = _uiState.value.isLoading
 
     fun getFilterState(): Int? {
         return if (filterState.value.launchFilter == LAUNCH_ALL) {
@@ -239,20 +246,12 @@ class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
-    private fun updateUiState(update: LaunchState.() -> LaunchState) {
-        _uiState.value = _uiState.value.update()
-    }
-
     private fun updateFilterState(update: FilterState.() -> FilterState) {
         _filterState.value = _filterState.value.update()
     }
 
     private fun updateListState(update: ListState.() -> ListState) {
         _listState.value = _listState.value.update()
-    }
-
-    fun setErrorState(isDisplayed: Boolean) {
-        updateUiState { copy(displayError = isDisplayed) }
     }
 
     fun setYearState(year: String?) {

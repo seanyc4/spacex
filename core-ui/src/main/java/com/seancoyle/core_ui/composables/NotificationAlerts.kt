@@ -28,16 +28,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun DisplayErrorAlert(
     error: Response,
-    displayError: Boolean,
-    dismissAlert: (Boolean) -> Unit
+  //  displayError: Boolean,
+  //  dismissAlert: (Boolean) -> Unit
 ) {
     when (error.messageDisplayType) {
 
         MessageDisplayType.Dialog -> {
             Dialog(
                 message = error.message,
-                openDialog = displayError,
-                displayAlertChanged = dismissAlert
+              //  openDialog = displayError,
+             //   displayAlertChanged = dismissAlert
             )
         }
 
@@ -55,13 +55,15 @@ fun DisplayErrorAlert(
 @Composable
 fun Dialog(
     message: String,
-    openDialog: Boolean,
-    displayAlertChanged: (Boolean) -> Unit
+  //  openDialog: Boolean,
+  //  displayAlertChanged: (Boolean) -> Unit
 ) {
-    if (openDialog) {
+    //if (openDialog) {
         AlertDialog(
             modifier = Modifier,
-            onDismissRequest = { displayAlertChanged(false) },
+            onDismissRequest = {
+               // displayAlertChanged(false)
+                               },
             icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
             title = {
                 Text(text = stringResource(id = R.string.text_error))
@@ -72,7 +74,7 @@ fun Dialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        displayAlertChanged(false)
+                    //    displayAlertChanged(false)
                     }
                 ) {
                     Text(text = stringResource(id = R.string.text_ok))
@@ -85,7 +87,7 @@ fun Dialog(
             textContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             tonalElevation = 1.dp
         )
-    }
+  //  }
 }
 
 @Composable

@@ -31,7 +31,7 @@ class LaunchScreenTest {
                 loadNextPage = {},
                 page = 0 ,
                 pullRefreshState = refreshing,
-                onCardClicked = {}
+                onItemClicked = {}
             )
         }
 

@@ -1,7 +1,11 @@
 package com.seancoyle.launch.implementation.presentation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,22 +24,19 @@ import kotlinx.coroutines.FlowPreview
 @FlowPreview
 @Composable
 internal fun LaunchRoute(
-    modifier: Modifier = Modifier,
     viewModel: LaunchViewModel,
     refreshState: PullRefreshState,
-    onCardClicked: (links: Links) -> Unit
+    onItemClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchScreen(
         uiState = uiState,
         page = viewModel.getPageState(),
-        modifier = modifier,
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,
         pullRefreshState = refreshState,
-        onCardClicked = onCardClicked,
-        dismissAlert = viewModel::setErrorState
+        onItemClicked = onItemClicked
     )
 }
 
@@ -43,35 +44,50 @@ internal fun LaunchRoute(
 @FlowPreview
 @Composable
 internal fun LaunchScreen(
-    uiState: LaunchState,
+    uiState: LaunchUiState,
     page: Int,
-    dismissAlert: (Boolean) -> Unit,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
-    modifier: Modifier = Modifier,
-    onCardClicked: (links: Links) -> Unit
+    onItemClicked: (links: Links) -> Unit
 ) {
     printLogDebug(TAG, "RECOMPOSING LAUNCH SCREEN - $uiState")
-    LaunchesContent(
-        launches = uiState.mergedLaunches,
-        isLoading = uiState.isLoading,
-        page = page,
-        onChangeScrollPosition = onChangeScrollPosition,
-        loadNextPage = loadNextPage,
-        pullRefreshState = pullRefreshState,
-        modifier = modifier,
-        onCardClicked = onCardClicked
-    )
-    if (uiState.isLoading) {
-        printLogDebug(TAG, "Launch.Loading")
-        CircularProgressIndicator()
+
+    when (uiState) {
+        is LaunchUiState.Success -> {
+            printLogDebug(TAG, "Launch.Success")
+            LaunchesContent(
+                launches = uiState.launches,
+                paginationState = uiState.paginationState,
+                page = page,
+                onChangeScrollPosition = onChangeScrollPosition,
+                loadNextPage = loadNextPage,
+                pullRefreshState = pullRefreshState,
+                onItemClicked = onItemClicked
+            )
+        }
+
+        is LaunchUiState.Loading -> {
+            printLogDebug(TAG, "Launch.Loading")
+            CircularProgressIndicator()
+        }
+
+        is LaunchUiState.Error -> {
+            printLogDebug(TAG, "Launch.Error")
+            DisplayErrorAlert(
+                error = uiState.errorResponse
+            )
+        }
     }
-    uiState.errorResponse?.let { error ->
-        DisplayErrorAlert(
-            error = error,
-            displayError = uiState.displayError,
-            dismissAlert = dismissAlert
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        PullRefreshIndicator(
+            refreshing = uiState is LaunchUiState.Error,
+            state = pullRefreshState
         )
     }
+
 }
