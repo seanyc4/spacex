@@ -1,4 +1,4 @@
-package com.seancoyle.core.testing
+package com.seancoyle.core_testing
 
 import android.app.Application
 import android.content.Context

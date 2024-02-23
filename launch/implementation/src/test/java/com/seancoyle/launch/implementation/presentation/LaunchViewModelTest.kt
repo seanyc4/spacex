@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.presentation
 
-import com.seancoyle.core.testing.InstantExecutorExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.junit.jupiter.api.extension.ExtendWith
@@ -8,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@ExtendWith(InstantExecutorExtension::class)
+@ExtendWith(com.seancoyle.core_testing.InstantExecutorExtension::class)
 class LaunchViewModelTest {
 
    /* @get:Rule

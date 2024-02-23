@@ -1,4 +1,4 @@
-package com.seancoyle.core.testing
+package com.seancoyle.core_testing
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule

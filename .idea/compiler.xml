@@ -5,7 +5,6 @@
       <module name="spacex.buildSrc" target="11" />
       <module name="spacex.buildSrc.main" target="11" />
       <module name="spacex.buildSrc.test" target="11" />
-      <module name="SpaceX.core-testing" target="11" />
       <module name="SpaceX.data" target="11" />
       <module name="SpaceX.data.main" target="11" />
       <module name="SpaceX.data.test" target="11" />

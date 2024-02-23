@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.data.cache.CacheErrors
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_NO_MATCHING_RESULTS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
-import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.core_testing.MainCoroutineRule
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_FAILED
 import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_SUCCESS

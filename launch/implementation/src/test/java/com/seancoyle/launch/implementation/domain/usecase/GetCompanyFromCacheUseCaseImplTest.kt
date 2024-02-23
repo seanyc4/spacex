@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_SUCCESS
-import com.seancoyle.core.testing.MainCoroutineRule
+import com.seancoyle.core_testing.MainCoroutineRule
 import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
 import com.seancoyle.launch.implementation.domain.model.Company
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
@@ -31,7 +31,6 @@ class GetCompanyFromCacheUseCaseImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = GetCompanyInfoFromCacheUseCaseImpl(
-            ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )
     }

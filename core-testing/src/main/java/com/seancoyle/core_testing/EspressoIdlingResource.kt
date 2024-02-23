@@ -1,4 +1,4 @@
-package com.seancoyle.core.testing
+package com.seancoyle.core_testing
 
 object EspressoIdlingResource {
     fun increment() {}
