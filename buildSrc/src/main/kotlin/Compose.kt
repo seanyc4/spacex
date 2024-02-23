@@ -13,7 +13,7 @@ object Compose {
     const val compose_activity = "androidx.activity:activity-compose"
     const val compose_viewbinding = "androidx.compose.ui:ui-viewbinding"
 
-    private const val compose_lifecycle_version ="2.7.0-alpha02"
+    private const val compose_lifecycle_version ="2.7.0"
     const val compose_lifecycle ="androidx.lifecycle:lifecycle-runtime-compose:$compose_lifecycle_version"
     const val compose_viewmodel_lifecycle ="androidx.lifecycle:lifecycle-viewmodel-compose:$compose_lifecycle_version"
 
@@ -28,7 +28,7 @@ object Compose {
     const val compose_icons_extended = "androidx.compose.material.material-icons-extended:$compose_material_version"
     const val compose_ripple = "androidx.compose.material.material-ripple:$compose_material_version"
 
-    private const val compose_material3_version = "1.1.2"
+    private const val compose_material3_version = "1.2.0"
     const val compose_material3 = "androidx.compose.material3:material3:$compose_material3_version"
 
     private const val compose_theme_adapter_version = "1.2.1"
