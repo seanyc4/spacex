@@ -4,12 +4,11 @@ import androidx.annotation.CallSuper
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.data.CompanyInfoCacheDataSource
-import com.seancoyle.launch.api.data.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.api.data.LaunchCacheDataSource
-import com.seancoyle.launch.api.data.LaunchNetworkDataSource
-import com.seancoyle.launch.api.domain.model.LaunchOptions
-import com.seancoyle.spacex.LaunchFactory
+import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
+import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +37,7 @@ open class LaunchBase {
     lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @Inject
-    lateinit var companyInfoCacheDataSource: CompanyInfoCacheDataSource
+    lateinit var companyCacheDataSource: CompanyCacheDataSource
 
     @Inject
     lateinit var companyInfoNetworkDataSource: CompanyInfoNetworkDataSource
@@ -47,12 +46,8 @@ open class LaunchBase {
     lateinit var launchOptions: LaunchOptions
 
     @Inject
-    lateinit var launchFactory: LaunchFactory
-
-    @Inject
     lateinit var dataStore: AppDataStore
 
-    protected lateinit var validLaunchYears: List<String>
     protected val launchGridTag = "Launch Grid"
 
     @Before
@@ -61,7 +56,6 @@ open class LaunchBase {
         hiltRule.inject()
         Intents.init()
         getTestDataAndInsertToFakeDatabase()
-        validLaunchYears = launchFactory.provideValidFilterYearDates()
     }
 
     @After
@@ -78,10 +72,10 @@ open class LaunchBase {
 
     private fun getTestDataAndInsertToFakeDatabase() = runTest {
         val testLaunchList = launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
-        val testCompanyInfoList = companyInfoNetworkDataSource.getCompanyInfo()
+        val testCompanyInfoList = companyInfoNetworkDataSource.getCompany()
         launchCacheDataSource.deleteAll()
-        companyInfoCacheDataSource.deleteAll()
+        companyCacheDataSource.deleteAll()
         launchCacheDataSource.insertList(testLaunchList)
-        companyInfoCacheDataSource.insert(testCompanyInfoList)
+        companyCacheDataSource.insert(testCompanyInfoList)
     }
 }

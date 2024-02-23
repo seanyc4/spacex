@@ -21,7 +21,8 @@ dependencies {
     implementation(projects.core)
     implementation(projects.coreUi)
     implementation(projects.coreDatastore)
-    implementation(projects.coreDatabase)
+    implementation(projects.coreDatabase.api)
+    implementation(projects.coreDatabase.implementation)
     implementation(projects.launch.api)
 
     implementation(AndroidX.app_compat)
@@ -51,5 +52,9 @@ dependencies {
     testImplementation(AndroidTestDependencies.jupiter_params)
     testImplementation(AndroidTestDependencies.junit4)
     testImplementation(KotlinTest.coroutines_test)
+
+    androidTestImplementation(AndroidTestDependencies.test_runner)
+    androidTestImplementation(AndroidTestDependencies.test_core_ktx)
+    androidTestImplementation(KotlinTest.kotlin_test)
 
 }

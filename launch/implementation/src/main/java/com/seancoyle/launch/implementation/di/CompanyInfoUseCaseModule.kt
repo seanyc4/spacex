@@ -1,11 +1,11 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
-import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromCacheUseCase
-import com.seancoyle.launch.api.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch.implementation.domain.CompanyInfoComponentImpl
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponent
+import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponentImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -5,10 +5,10 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.Response
 import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.implementation.domain.model.ViewType
 import kotlinx.parcelize.Parcelize
 
-sealed interface LaunchUiState {
+internal sealed interface LaunchUiState {
     @Stable
     data class Success(
         val launches: List<ViewType>,
@@ -23,7 +23,7 @@ sealed interface LaunchUiState {
     ) : LaunchUiState
 }
 
-sealed interface PaginationState {
+internal sealed interface PaginationState {
     data object None : PaginationState
     data object Loading : PaginationState
     data object Error : PaginationState
@@ -40,7 +40,7 @@ sealed interface PaginationState {
 
 @Parcelize
 @Immutable
-data class FilterState(
+internal data class FilterState(
     val isDialogFilterDisplayed: Boolean = false,
     val launchFilter: Int? = null,
     val order: String = ORDER_ASC,
@@ -57,7 +57,7 @@ data class LaunchState(
 
 @Parcelize
 @Immutable
-data class ListState(
+internal data class ListState(
     val page: Int = 1,
     val scrollPosition: Int = 0
 ) : Parcelable

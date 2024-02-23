@@ -1,0 +1,95 @@
+package com.seancoyle.launch.implementation.network.launch
+
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.domain.DateFormatter
+import com.seancoyle.launch.implementation.TestConstants
+import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Rocket
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import retrofit2.HttpException
+import java.net.HttpURLConnection
+import javax.inject.Inject
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+
+@ExperimentalCoroutinesApi
+@FlowPreview
+@HiltAndroidTest
+@RunWith(AndroidJUnit4ClassRunner::class)
+internal class LaunchNetworkDataSourceTest {
+
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var launchOptions: LaunchOptions
+
+    @Inject
+    lateinit var api: FakeLaunchApi
+
+    @Inject
+    lateinit var dateTimeFormatter: DateFormatter
+
+    @Inject
+    lateinit var underTest: LaunchNetworkDataSource
+
+    @Before
+    fun init() {
+        hiltRule.inject()
+    }
+
+    @Test
+    fun whenAPISuccessful_getLaunchesReturnsNonEmptyList() = runTest {
+        val expectedLaunch = Launch(
+            id ="1902022-12-01T00:00",
+            launchDate = "01-12-2022 at 00:00",
+            launchDateLocalDateTime = dateTimeFormatter.formatDate("2022-12-01T00:00:00.000Z"),
+            launchYear = "2022",
+            isLaunchSuccess = 0,
+            launchSuccessIcon = 2131230833,
+            links = Links(
+                missionImage = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png",
+                articleLink = null,
+                webcastLink =null ,
+                wikiLink = null
+                ),
+            missionName = "USSF-44" ,
+            rocket = Rocket(
+                rocketNameAndType = "Falcon 9/rocket"
+            ),
+            daysToFromTitle = 2131820637,
+            launchDaysDifference = "+/- 340d",
+            type = 2
+
+        )
+
+        val result = underTest.getLaunchList(launchOptions)
+
+        assertEquals(expected = expectedLaunch, actual = result.first())
+    }
+
+    @Test
+    fun  whenAPIReturns404_getLaunchesShouldThrowHttpException() = runTest {
+        api.jsonFileName = TestConstants.ERROR_404_RESPONSE
+
+        val exception = assertFailsWith<HttpException> {
+            api.getLaunchList(launchOptions)
+        }
+
+        assertEquals(
+            expected = HttpURLConnection.HTTP_NOT_FOUND,
+            actual = exception.response()?.code()
+        )
+    }
+}

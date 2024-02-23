@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.implementation.data.network.CompanyInfoApi
+import com.seancoyle.launch.implementation.data.network.CompanyApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,8 +16,8 @@ internal object CompanyInfoApiModule {
     @Provides
     fun provideCompanyInfoApi(
         retrofit: Retrofit
-    ): CompanyInfoApi {
-        return retrofit.create(CompanyInfoApi::class.java)
+    ): CompanyApi {
+        return retrofit.create(CompanyApi::class.java)
     }
 
 }

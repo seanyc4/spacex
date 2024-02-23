@@ -1,0 +1,17 @@
+package com.seancoyle.launch.implementation.domain.model
+
+import android.os.Parcelable
+import androidx.annotation.Keep
+import kotlinx.parcelize.Parcelize
+
+@Keep
+@Parcelize
+internal data class Company(
+    val id: String,
+    val employees: String,
+    val founded: Int,
+    val founder: String,
+    val launchSites: Int,
+    val name: String,
+    val valuation: String
+) : Parcelable

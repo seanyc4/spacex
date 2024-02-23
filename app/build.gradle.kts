@@ -98,7 +98,8 @@ dependencies {
 
     implementation(projects.core)
     implementation(projects.coreDatastore)
-    implementation(projects.coreDatabase)
+    implementation(projects.coreDatabase.api)
+    implementation(projects.coreDatabase.implementation)
     implementation(projects.coreUi)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
@@ -135,8 +136,6 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.test_core_ktx)
     androidTestImplementation(AndroidTestDependencies.test_arch_core)
     androidTestImplementation(AndroidXTest.navigation_testing)
-    androidTestImplementation(HiltTest.hilt_android_testing)
-    kspAndroidTest(Hilt.compiler)
     androidTestImplementation(KotlinTest.coroutines_test)
     androidTestImplementation(KotlinTest.kotlin_test)
 

@@ -34,15 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.seancoyle.launch.api.domain.model.CompanySummary
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.RocketWithMission
-import com.seancoyle.launch.api.domain.model.SectionTitle
-import com.seancoyle.launch.api.domain.model.ViewGrid
 import com.seancoyle.launch.implementation.R
+import com.seancoyle.launch.implementation.domain.model.CompanySummary
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.RocketWithMission
+import com.seancoyle.launch.implementation.domain.model.SectionTitle
+import com.seancoyle.launch.implementation.domain.model.ViewGrid
 
 @Composable
-fun LaunchHeading(
+internal fun LaunchHeading(
     launchHeading: SectionTitle,
     modifier: Modifier = Modifier,
 ) {
@@ -66,7 +66,7 @@ fun LaunchHeading(
 }
 
 @Composable
-fun CompanySummaryCard(
+internal fun CompanySummaryCard(
     summary: CompanySummary,
     modifier: Modifier = Modifier,
 ) {
@@ -95,7 +95,7 @@ fun CompanySummaryCard(
 }
 
 @Composable
-fun LaunchCard(
+internal fun LaunchCard(
     launchItem: Launch,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -161,7 +161,7 @@ fun LaunchCard(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun LaunchCardImage(
+internal fun LaunchCardImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
     size: Dp
@@ -177,7 +177,7 @@ fun LaunchCardImage(
 }
 
 @Composable
-fun LaunchCardDefaultText(
+internal fun LaunchCardDefaultText(
     @StringRes title: Int
 ) {
     Text(
@@ -193,7 +193,7 @@ fun LaunchCardDefaultText(
 }
 
 @Composable
-fun LaunchCardDynamicText(
+internal fun LaunchCardDynamicText(
     title: String,
     modifier: Modifier = Modifier
 ) {
@@ -213,7 +213,7 @@ fun LaunchCardDynamicText(
 }
 
 @Composable
-fun LaunchCarouselCard(
+internal fun LaunchCarouselCard(
     launchItem: RocketWithMission,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -244,7 +244,7 @@ fun LaunchCarouselCard(
 }
 
 @Composable
-fun LaunchGridCard(
+internal fun LaunchGridCard(
     launchItem: ViewGrid,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
