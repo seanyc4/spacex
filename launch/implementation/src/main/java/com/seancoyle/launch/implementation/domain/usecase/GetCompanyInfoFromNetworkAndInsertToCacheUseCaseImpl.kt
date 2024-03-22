@@ -1,6 +1,8 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
@@ -35,7 +37,7 @@ internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject cons
                             }
 
                             else -> {
-                                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+                                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
                             }
                         }
                     }
@@ -47,7 +49,7 @@ internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject cons
             }
 
             else -> {
-                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+                emit(DataResult.Error(UNKNOWN_NETWORK_ERROR))
             }
         }
     }

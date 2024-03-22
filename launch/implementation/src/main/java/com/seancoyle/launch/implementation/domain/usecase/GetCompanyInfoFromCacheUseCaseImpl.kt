@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
@@ -31,7 +32,7 @@ internal class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
             }
 
             else -> {
-                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
             }
         }
     }

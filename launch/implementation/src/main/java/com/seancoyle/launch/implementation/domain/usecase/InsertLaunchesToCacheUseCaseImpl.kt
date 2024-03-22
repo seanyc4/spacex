@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
-import com.seancoyle.core.data.DataResult.Companion.UNKNOWN_ERROR
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Launch
@@ -30,7 +30,7 @@ internal class InsertLaunchesToCacheUseCaseImpl @Inject constructor(
             }
 
             else -> {
-                emit(DataResult.Error(UNKNOWN_ERROR))
+                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
             }
         }
     }
