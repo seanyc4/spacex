@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.cache.CacheResult
 import com.seancoyle.core.data.network.ApiResult
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -22,7 +23,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<ViewType>?> {
+    ): Flow<CacheResult<List<ViewType>?>> {
         return filterLaunchItemsInCacheUseCase.invoke(
             year = year,
             order = order,
@@ -36,7 +37,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<ViewType>> {
+    ): Flow<CacheResult<List<ViewType>>> {
         return mergedLaunchesUseCase.invoke(
             year = year,
             order = order,

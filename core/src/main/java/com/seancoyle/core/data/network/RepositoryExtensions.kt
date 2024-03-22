@@ -41,12 +41,11 @@ suspend fun <T> safeCacheCall(
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
             when (throwable) {
-
                 is TimeoutCancellationException -> {
                     CacheResult.Error(CACHE_ERROR_TIMEOUT)
                 }
                 else -> {
-                    CacheResult.Error(CACHE_ERROR_UNKNOWN)
+                    CacheResult.Error(throwable.message ?: CACHE_ERROR_UNKNOWN)
                 }
             }
         }

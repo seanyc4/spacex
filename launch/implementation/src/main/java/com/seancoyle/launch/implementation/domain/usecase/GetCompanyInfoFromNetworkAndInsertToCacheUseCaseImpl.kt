@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.network.ApiResult
 import com.seancoyle.core.data.network.safeApiCall
+import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
@@ -18,17 +19,20 @@ internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject cons
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
     override operator fun invoke(): Flow<ApiResult<Company>> = flow {
-       val result = safeApiCall(ioDispatcher){
-           networkDataSource.getCompany()
-       }
+        val result = safeApiCall(ioDispatcher) {
+            networkDataSource.getCompany()
+        }
 
         when (result) {
             is ApiResult.Success -> {
                 result.data?.let { companyInfo ->
-                    cacheDataSource.insert(companyInfo)
+                    safeCacheCall(ioDispatcher) {
+                        cacheDataSource.insert(companyInfo)
+                    }
                     emit(ApiResult.Success(companyInfo))
                 }
             }
+
             is ApiResult.Error -> {
                 emit(result)
             }

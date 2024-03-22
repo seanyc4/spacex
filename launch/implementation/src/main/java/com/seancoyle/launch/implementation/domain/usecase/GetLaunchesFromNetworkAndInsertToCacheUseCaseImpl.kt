@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.network.ApiResult
 import com.seancoyle.core.data.network.safeApiCall
+import com.seancoyle.core.data.network.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
@@ -27,10 +28,13 @@ internal class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constru
         when (result) {
             is ApiResult.Success -> {
                 result.data?.let { launches ->
-                    cacheDataSource.insertList(launches)
+                    safeCacheCall(ioDispatcher) {
+                        cacheDataSource.insertList(launches)
+                    }
                     emit(ApiResult.Success(launches))
                 }
             }
+
             is ApiResult.Error -> {
                 emit(result)
             }

@@ -1,5 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.cache.CacheErrors.CACHE_ERROR_UNKNOWN
+import com.seancoyle.core.data.cache.CacheResult
 import com.seancoyle.core.domain.StringResource
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
@@ -15,6 +17,7 @@ import com.seancoyle.launch.implementation.domain.model.ViewGrid
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,8 +32,8 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<ViewType>> {
-        val result: Flow<List<ViewType>> = combine(
+    ): Flow<CacheResult<List<ViewType>>> = flow {
+        combine(
             getCompanyInfo().distinctUntilChanged(),
             getLaunches(
                 year = year,
@@ -38,14 +41,28 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
                 launchFilter = launchFilter,
                 page = page
             ).distinctUntilChanged()
-        ) { companyInfoFlow, launchesFlow ->
-            if (companyInfoFlow != null && !launchesFlow.isNullOrEmpty()) {
-                createMergedList(companyInfoFlow, launchesFlow)
-            } else {
-                emptyList()
+        ) { companyInfoResult, launchesResult ->
+
+            // As Company and List<ViewType> are in the api module they cannot be smart casted
+            val companyInfoData: Company? = (companyInfoResult as? CacheResult.Success)?.data
+            val launchesData: List<ViewType>? = (launchesResult as? CacheResult.Success)?.data
+
+            when {
+                companyInfoData != null && !launchesData.isNullOrEmpty() ->
+                    CacheResult.Success(createMergedList(companyInfoData, launchesData))
+
+                companyInfoResult is CacheResult.Error ->
+                    CacheResult.Error(companyInfoResult.exception)
+
+                launchesResult is CacheResult.Error ->
+                    CacheResult.Error(launchesResult.exception)
+
+                else -> CacheResult.Error(CACHE_ERROR_UNKNOWN)
             }
-        }
-        return result
+
+        }.collect { combinedResult ->
+                emit(combinedResult)
+            }
     }
 
     private fun createMergedList(
@@ -117,7 +134,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         )
     }
 
-    private fun getCompanyInfo(): Flow<Company?> {
+    private fun getCompanyInfo(): Flow<CacheResult<Company?>> {
         return getCompanyInfoFromCacheUseCase()
     }
 
@@ -126,7 +143,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<List<ViewType>?> {
+    ): Flow<CacheResult<List<ViewType>?>> {
         return getLaunchesFromCacheUseCase(
             year = year,
             order = order,

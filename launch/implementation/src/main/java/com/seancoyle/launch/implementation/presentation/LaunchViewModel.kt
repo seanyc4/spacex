@@ -3,8 +3,8 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seancoyle.core.data.cache.CacheResult
 import com.seancoyle.core.data.network.ApiResult
-import com.seancoyle.core.data.network.asResult
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
@@ -88,25 +88,24 @@ internal class LaunchViewModel @Inject constructor(
                         order = getOrderState(),
                         launchFilter = getFilterState(),
                         page = getPageState()
-                    ).asResult()
-                        .distinctUntilChanged()
+                    ).distinctUntilChanged()
                         .collect { result ->
                             when (result) {
-                                is ApiResult.Success -> {
+                                is CacheResult.Success -> {
                                     _uiState.value = LaunchUiState.Success(
                                         launches = result.data,
                                         paginationState = PaginationState.None
                                     )
                                 }
 
-                                is ApiResult.Loading -> {
+                                is CacheResult.Loading -> {
                                     _uiState.value = LaunchUiState.Loading
                                 }
 
-                                is ApiResult.Error -> {
+                                is CacheResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = result.exception?.message.orEmpty(),
+                                            message = result.exception,
                                             messageDisplayType = MessageDisplayType.Dialog,
                                             messageType = MessageType.Error
                                         )
@@ -123,10 +122,9 @@ internal class LaunchViewModel @Inject constructor(
                         order = getOrderState(),
                         launchFilter = getFilterState(),
                         page = getPageState()
-                    ).asResult()
-                        .collect { result ->
+                    ).collect { result ->
                             when (result) {
-                                is ApiResult.Success -> {
+                                is CacheResult.Success -> {
                                     // Pagination - We append the next 30 rows to the current state as a new list
                                     // This triggers a recompose and keeps immutability
                                     _uiState.update {
@@ -144,13 +142,13 @@ internal class LaunchViewModel @Inject constructor(
                                     }
                                 }
 
-                                is ApiResult.Loading -> {
+                                is CacheResult.Loading -> {
                                     _uiState.update {
                                         it.copy(paginationState = PaginationState.Loading)
                                     }
                                 }
 
-                                is ApiResult.Error -> {
+                                is CacheResult.Error -> {
                                     _uiState.update {
                                         it.copy(paginationState = PaginationState.Error)
                                     }

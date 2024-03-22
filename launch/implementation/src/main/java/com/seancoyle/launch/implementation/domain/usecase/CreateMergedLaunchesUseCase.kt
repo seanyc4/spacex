@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.cache.CacheResult
 import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
@@ -9,5 +10,5 @@ internal interface CreateMergedLaunchesUseCase {
       order: String,
       launchFilter: Int?,
       page: Int?
-   ): Flow<List<ViewType>>
+   ): Flow<CacheResult<List<ViewType>>>
 }

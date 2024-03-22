@@ -11,7 +11,7 @@ sealed interface ApiResult<out T> {
     data object Loading : ApiResult<Nothing>
 }
 
-fun <T> Flow<T>.asResult(): Flow<ApiResult<T>> {
+fun <T> Flow<T>.apiResult(): Flow<ApiResult<T>> {
     return this
         .map<T, ApiResult<T>> {
             ApiResult.Success(it)
