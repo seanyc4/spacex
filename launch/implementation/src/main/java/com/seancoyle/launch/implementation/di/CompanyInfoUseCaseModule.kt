@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponent
+import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
 import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponentImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCacheUseCaseImpl

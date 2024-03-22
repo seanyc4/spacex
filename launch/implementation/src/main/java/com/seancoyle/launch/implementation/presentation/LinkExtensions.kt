@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.presentation
 
 import androidx.annotation.StringRes
-import com.seancoyle.launch.implementation.domain.model.LinkType
+import com.seancoyle.launch.api.domain.model.LinkType
 
 internal fun createLinkType(
         @StringRes titleRes: Int,

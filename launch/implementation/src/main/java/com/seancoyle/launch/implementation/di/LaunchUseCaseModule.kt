@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
+import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCase
@@ -8,7 +9,6 @@ import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetwork
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponentImpl
 import dagger.Binds
 import dagger.Module

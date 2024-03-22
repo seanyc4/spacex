@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_OPTIONS_ROCKET
-import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_OPTIONS_SORT
+import com.seancoyle.launch.api.LaunchConstants.LAUNCH_OPTIONS_ROCKET
+import com.seancoyle.launch.api.LaunchConstants.LAUNCH_OPTIONS_SORT
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.domain.model.Options
 import com.seancoyle.launch.implementation.domain.model.Populate

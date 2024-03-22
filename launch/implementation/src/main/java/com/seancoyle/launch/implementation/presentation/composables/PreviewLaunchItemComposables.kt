@@ -3,10 +3,10 @@ package com.seancoyle.launch.implementation.presentation.composables
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.domain.model.CompanySummary
 import com.seancoyle.launch.implementation.domain.model.SectionTitle
-import com.seancoyle.launch.implementation.domain.model.ViewType
 
 @Preview
 @Composable

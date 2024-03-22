@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_DESC
-import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
+import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 
 @Dao
 interface LaunchDao {

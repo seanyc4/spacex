@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.CompanyFactory
 import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
-import com.seancoyle.launch.implementation.domain.model.Company
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

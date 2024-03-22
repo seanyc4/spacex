@@ -4,13 +4,13 @@ import com.seancoyle.core.data.network.ApiResult
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core_testing.MainCoroutineRule
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
-import com.seancoyle.launch.implementation.domain.model.Launch
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.model.Links
-import com.seancoyle.launch.implementation.domain.model.Rocket
-import com.seancoyle.launch.implementation.domain.model.ViewType
 import com.seancoyle.launch.implementation.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations

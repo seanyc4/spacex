@@ -3,8 +3,8 @@ package com.seancoyle.launch.implementation.presentation
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.Response
-import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
-import com.seancoyle.launch.implementation.domain.model.ViewType
+import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
+import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.parcelize.Parcelize
 
 internal sealed interface LaunchUiState {

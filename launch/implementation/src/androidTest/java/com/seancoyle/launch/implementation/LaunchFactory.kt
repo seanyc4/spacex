@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation
 
-import com.seancoyle.launch.implementation.domain.model.Launch
-import com.seancoyle.launch.implementation.domain.model.Links
-import com.seancoyle.launch.implementation.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
 import java.time.LocalDateTime
 import javax.inject.Inject
 

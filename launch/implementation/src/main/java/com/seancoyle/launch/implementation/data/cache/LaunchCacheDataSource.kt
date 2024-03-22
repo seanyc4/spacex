@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.implementation.domain.model.Launch
-import com.seancoyle.launch.implementation.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.ViewType
 
 internal interface LaunchCacheDataSource {
 

@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
-import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
 import kotlinx.coroutines.ExperimentalCoroutinesApi

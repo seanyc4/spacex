@@ -1,17 +1,17 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.StringResource
+import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.model.Company
 import com.seancoyle.launch.implementation.domain.model.CompanySummary
-import com.seancoyle.launch.implementation.domain.model.Launch
-import com.seancoyle.launch.implementation.domain.model.Links
-import com.seancoyle.launch.implementation.domain.model.Rocket
 import com.seancoyle.launch.implementation.domain.model.RocketWithMission
 import com.seancoyle.launch.implementation.domain.model.SectionTitle
 import com.seancoyle.launch.implementation.domain.model.ViewCarousel
 import com.seancoyle.launch.implementation.domain.model.ViewGrid
-import com.seancoyle.launch.implementation.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

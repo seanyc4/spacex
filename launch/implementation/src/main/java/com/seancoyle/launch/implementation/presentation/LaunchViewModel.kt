@@ -11,11 +11,11 @@ import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.LaunchNetworkConstants.LAUNCH_ALL
-import com.seancoyle.launch.api.LaunchNetworkConstants.ORDER_ASC
-import com.seancoyle.launch.api.LaunchNetworkConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.implementation.domain.usecase.CompanyInfoComponent
-import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
+import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
+import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
+import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -83,7 +83,7 @@ internal class LaunchViewModel @Inject constructor(
             when (event) {
 
                 is MergeDataEvent -> {
-                    launchesComponent.createMergeLaunchesUseCase().invoke(
+                    launchesComponent.createMergeLaunchesUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -118,7 +118,7 @@ internal class LaunchViewModel @Inject constructor(
 
                 is FilterLaunchItemsInCacheEvent -> {
                     printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
-                    launchesComponent.filterLaunchItemsInCacheUseCase().invoke(
+                    launchesComponent.filterLaunchItemsInCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -160,7 +160,7 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase().invoke()
+                    companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
                         .onStart {  _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
@@ -183,7 +183,7 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is GetLaunchesApiAndCacheEvent -> {
-                    launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase().invoke()
+                    launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase()
                         .onStart { _uiState.value = LaunchUiState.Loading  }
                         .collect { result ->
                             when (result) {

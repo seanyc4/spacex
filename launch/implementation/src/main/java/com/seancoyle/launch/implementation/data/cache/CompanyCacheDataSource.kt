@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.launch.implementation.domain.model.Company
+import com.seancoyle.launch.api.domain.model.Company
 
 internal interface CompanyCacheDataSource {
     suspend fun insert(company: Company): Long

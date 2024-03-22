@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.data.cache
 
 import com.seancoyle.core_database.api.CompanyDao
-import com.seancoyle.launch.implementation.domain.model.Company
+import com.seancoyle.launch.api.domain.model.Company
 import javax.inject.Inject
 
 internal class CompanyCacheDataSourceImpl @Inject constructor(
