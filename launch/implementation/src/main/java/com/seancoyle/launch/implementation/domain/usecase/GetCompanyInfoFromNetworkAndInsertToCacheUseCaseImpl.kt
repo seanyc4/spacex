@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.network.ApiResult
-import com.seancoyle.core.data.network.safeApiCall
-import com.seancoyle.core.data.network.safeCacheCall
+import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.safeApiCall
+import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
@@ -18,22 +18,22 @@ internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject cons
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
 
-    override operator fun invoke(): Flow<ApiResult<Company>> = flow {
+    override operator fun invoke(): Flow<DataResult<Company>> = flow {
         val result = safeApiCall(ioDispatcher) {
             networkDataSource.getCompany()
         }
 
         when (result) {
-            is ApiResult.Success -> {
+            is DataResult.Success -> {
                 result.data?.let { companyInfo ->
                     safeCacheCall(ioDispatcher) {
                         cacheDataSource.insert(companyInfo)
                     }
-                    emit(ApiResult.Success(companyInfo))
+                    emit(DataResult.Success(companyInfo))
                 }
             }
 
-            is ApiResult.Error -> {
+            is DataResult.Error -> {
                 emit(result)
             }
 

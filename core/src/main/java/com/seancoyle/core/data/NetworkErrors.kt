@@ -1,4 +1,4 @@
-package com.seancoyle.core.data.network
+package com.seancoyle.core.data
 
 object NetworkErrors {
 

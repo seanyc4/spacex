@@ -1,7 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.cache.CacheResult
-import com.seancoyle.core.data.network.ApiResult
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
 import kotlinx.coroutines.flow.Flow
@@ -11,11 +10,11 @@ internal class CompanyInfoComponentImpl @Inject constructor(
     private val getCompanyInfoFromCacheUseCase: GetCompanyInfoFromCacheUseCase,
     private val getCompanyInfoFromNetworkAndInsertToCacheUseCase: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 ): CompanyInfoComponent {
-    override fun getCompanyInfoFromCacheUseCase(): Flow<CacheResult<Company?>> {
+    override fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>> {
         return getCompanyInfoFromCacheUseCase.invoke()
     }
 
-    override fun getCompanyInfoFromNetworkAndInsertToCacheUseCase(): Flow<ApiResult<Company>> {
+    override fun getCompanyInfoFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<Company>> {
         return getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke()
     }
 }

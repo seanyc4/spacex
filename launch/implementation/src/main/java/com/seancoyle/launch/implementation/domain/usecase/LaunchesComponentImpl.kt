@@ -1,7 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.cache.CacheResult
-import com.seancoyle.core.data.network.ApiResult
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
@@ -14,7 +13,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val mergedLaunchesUseCase: CreateMergedLaunchesUseCase
 ) : LaunchesComponent {
 
-    override suspend fun getLaunchesFromNetworkAndInsertToCacheUseCase(): Flow<ApiResult<List<Launch>>> {
+    override suspend fun getLaunchesFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<List<Launch>>> {
         return getLaunchesFromNetworkAndInsertToCacheUseCase.invoke()
     }
 
@@ -23,7 +22,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<CacheResult<List<ViewType>?>> {
+    ): Flow<DataResult<List<ViewType>?>> {
         return filterLaunchItemsInCacheUseCase.invoke(
             year = year,
             order = order,
@@ -37,7 +36,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<CacheResult<List<ViewType>>> {
+    ): Flow<DataResult<List<ViewType>>> {
         return mergedLaunchesUseCase.invoke(
             year = year,
             order = order,

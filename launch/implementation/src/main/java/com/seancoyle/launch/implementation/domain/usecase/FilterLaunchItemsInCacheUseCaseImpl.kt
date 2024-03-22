@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.cache.CacheResult
-import com.seancoyle.core.data.network.safeCacheCall
+import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
@@ -20,7 +20,7 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: Int?,
         page: Int?
-    ): Flow<CacheResult<List<ViewType>?>> = flow {
+    ): Flow<DataResult<List<ViewType>?>> = flow {
         val result = safeCacheCall(ioDispatcher){
             cacheDataSource.filterLaunchList(
                 year = year,
@@ -31,12 +31,12 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         }
 
         when(result){
-            is CacheResult.Success -> {
+            is DataResult.Success -> {
                 result.data?.let { launchList ->
-                    emit(CacheResult.Success(launchList))
+                    emit(DataResult.Success(launchList))
                 }
             }
-            is CacheResult.Error -> {
+            is DataResult.Error -> {
                 emit(result)
             }
             else -> {}

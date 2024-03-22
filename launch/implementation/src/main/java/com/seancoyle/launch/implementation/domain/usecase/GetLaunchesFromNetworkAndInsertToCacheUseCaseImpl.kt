@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.network.ApiResult
-import com.seancoyle.core.data.network.safeApiCall
-import com.seancoyle.core.data.network.safeCacheCall
+import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.safeApiCall
+import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
@@ -20,22 +20,22 @@ internal class GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl @Inject constru
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : GetLaunchesFromNetworkAndInsertToCacheUseCase {
 
-    override operator fun invoke(): Flow<ApiResult<List<Launch>>> = flow {
+    override operator fun invoke(): Flow<DataResult<List<Launch>>> = flow {
         val result = safeApiCall(ioDispatcher) {
             launchNetworkDataSource.getLaunchList(launchOptions = launchOptions)
         }
 
         when (result) {
-            is ApiResult.Success -> {
+            is DataResult.Success -> {
                 result.data?.let { launches ->
                     safeCacheCall(ioDispatcher) {
                         cacheDataSource.insertList(launches)
                     }
-                    emit(ApiResult.Success(launches))
+                    emit(DataResult.Success(launches))
                 }
             }
 
-            is ApiResult.Error -> {
+            is DataResult.Error -> {
                 emit(result)
             }
 

@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.cache.CacheResult
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
@@ -10,5 +10,5 @@ internal interface FilterLaunchItemsInCacheUseCase {
         order: String,
         launchFilter: Int? = null,
         page: Int? = 1
-    ): Flow<CacheResult<List<ViewType>?>>
+    ): Flow<DataResult<List<ViewType>?>>
 }

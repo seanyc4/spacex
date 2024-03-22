@@ -1,4 +1,4 @@
-package com.seancoyle.core.data.cache
+package com.seancoyle.core.data
 
 object CacheErrors {
     const val CACHE_ERROR_UNKNOWN = "Unknown cache error"

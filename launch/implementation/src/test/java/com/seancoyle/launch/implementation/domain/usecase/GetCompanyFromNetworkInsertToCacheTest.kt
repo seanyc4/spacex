@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.network.ApiResult
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core_testing.MainCoroutineRule
@@ -64,14 +64,14 @@ class GetCompanyFromNetworkInsertToCacheTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
         coEvery { networkDataSource.getCompany() } returns COMPANY_INFO
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
-        var apiResult: ApiResult<LaunchState>? = null
+        var dataResult: DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyInfoApiAndCacheEvent).collect { value ->
-            apiResult = value
+            dataResult = value
         }
 
         assertEquals(
-            apiResult?.stateMessage?.response?.message,
+            dataResult?.stateMessage?.response?.message,
             LaunchEvents.GetCompanyInfoApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
@@ -96,14 +96,14 @@ class GetCompanyFromNetworkInsertToCacheTest {
     fun whenGetCompanyInfoFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var apiResult: ApiResult<LaunchState>? = null
+        var dataResult: DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyInfoApiAndCacheEvent).collect { value ->
-            apiResult = value
+            dataResult = value
         }
 
         assertEquals(
-            apiResult?.stateMessage?.response?.message,
+            dataResult?.stateMessage?.response?.message,
             LaunchEvents.GetCompanyInfoApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }

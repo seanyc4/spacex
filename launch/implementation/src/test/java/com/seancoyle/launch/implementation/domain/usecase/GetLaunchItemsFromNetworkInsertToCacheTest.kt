@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.network.ApiResult
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_CACHE_INSERT_SUCCESS
 import com.seancoyle.core.domain.UsecaseResponses.EVENT_NETWORK_ERROR
 import com.seancoyle.core_testing.MainCoroutineRule
@@ -73,14 +73,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
         coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
 
-        var apiResult: ApiResult<LaunchState>? = null
+        var dataResult: DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            apiResult = value
+            dataResult = value
         }
 
         assertEquals(
-            apiResult?.stateMessage?.response?.message,
+            dataResult?.stateMessage?.response?.message,
             LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
@@ -104,14 +104,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
     fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var apiResult: ApiResult<LaunchState>? = null
+        var dataResult: DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            apiResult = value
+            dataResult = value
         }
 
         assertEquals(
-            apiResult?.stateMessage?.response?.message,
+            dataResult?.stateMessage?.response?.message,
             LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }
