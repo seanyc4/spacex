@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.CACHE_ERROR_UNKNOWN
+import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.domain.StringResource
 import com.seancoyle.launch.api.domain.model.Company
@@ -57,7 +57,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
                 launchesResult is DataResult.Error ->
                     DataResult.Error(launchesResult.exception)
 
-                else -> DataResult.Error(CACHE_ERROR_UNKNOWN)
+                else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
             }
 
         }.collect { combinedResult ->
