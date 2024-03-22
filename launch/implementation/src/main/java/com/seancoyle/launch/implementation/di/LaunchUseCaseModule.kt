@@ -9,6 +9,8 @@ import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetwork
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponentImpl
 import dagger.Binds
 import dagger.Module
@@ -44,4 +46,8 @@ internal abstract class LaunchUseCaseModule {
         impl: LaunchesComponentImpl
     ): LaunchesComponent
 
+    @Binds
+    abstract fun bindsInsertLaunchesToCacheUseCase(
+        impl: InsertLaunchesToCacheUseCaseImpl
+    ): InsertLaunchesToCacheUseCase
 }

@@ -1,6 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.DataResult.Companion.UNKNOWN_ERROR
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
@@ -10,30 +11,28 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
+internal class InsertCompanyInfoToCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyCacheDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : GetCompanyInfoFromCacheUseCase {
+) : InsertCompanyInfoToCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<Company?>> = flow {
+    override suspend fun invoke(companyInfo: Company): Flow<DataResult<Unit>> = flow {
         val result = safeCacheCall(ioDispatcher) {
-            cacheDataSource.getCompany()
+            cacheDataSource.insert(companyInfo)
         }
 
-        when(result) {
+        when (result) {
             is DataResult.Success -> {
-               result.data?.let { companyInfo ->
-                   emit(DataResult.Success(companyInfo))
-               }
+                emit(DataResult.Success(Unit))
             }
+
             is DataResult.Error -> {
-                emit(result)
+                emit(DataResult.Error(result.exception))
             }
 
             else -> {
-                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+                emit(DataResult.Error(UNKNOWN_ERROR))
             }
         }
     }
-
 }

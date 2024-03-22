@@ -39,7 +39,9 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             is DataResult.Error -> {
                 emit(result)
             }
-            else -> {}
+            else -> {
+                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCach
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,6 +26,11 @@ internal abstract class CompanyInfoUseCaseModule {
     abstract fun bindsGetCompanyInfoFromCacheUseCase(
         impl: GetCompanyInfoFromCacheUseCaseImpl
     ): GetCompanyInfoFromCacheUseCase
+
+    @Binds
+    abstract fun bindsInsertCompanyInfoToCacheUseCase(
+        impl: InsertCompanyInfoToCacheUseCaseImpl
+    ): InsertCompanyInfoToCacheUseCase
 
     @Binds
     abstract fun bindsGetCompanyInfoComponent(

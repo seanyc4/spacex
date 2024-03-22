@@ -1,39 +1,37 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.DataResult.Companion.UNKNOWN_ERROR
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
+internal class InsertLaunchesToCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : GetNumLaunchItemsFromCacheUseCase {
-
-    override operator fun invoke(): Flow<DataResult<Int>> = flow {
+) : InsertLaunchesToCacheUseCase {
+    override suspend fun invoke(launches: List<Launch>): Flow<DataResult<Unit>> = flow {
         val result = safeCacheCall(ioDispatcher) {
-            cacheDataSource.getTotalEntries()
+            cacheDataSource.insertList(launches)
         }
 
         when (result) {
             is DataResult.Success -> {
-                result.data?.let { numLaunchItems ->
-                    emit(DataResult.Success(numLaunchItems))
-                }
+                emit(DataResult.Success(Unit))
             }
 
             is DataResult.Error -> {
-                emit(result)
+                emit(DataResult.Error(result.exception))
             }
 
             else -> {
-                emit(DataResult.Error(DataResult.UNKNOWN_ERROR))
+                emit(DataResult.Error(UNKNOWN_ERROR))
             }
         }
     }
-
 }
