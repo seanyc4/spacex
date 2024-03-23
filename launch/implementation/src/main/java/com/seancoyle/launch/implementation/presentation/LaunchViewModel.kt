@@ -3,6 +3,7 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seancoyle.core.data.CacheErrors.CACHE_ERROR_NO_RESULTS
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.MessageDisplayType
@@ -91,10 +92,21 @@ internal class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    _uiState.value = LaunchUiState.Success(
-                                        launches = result.data,
-                                        paginationState = PaginationState.None
-                                    )
+                                    if (result.data.isEmpty()) {
+                                        _uiState.value = LaunchUiState.Error(
+                                            errorResponse = Response(
+                                                message = CACHE_ERROR_NO_RESULTS,
+                                                messageDisplayType = MessageDisplayType.Dialog,
+                                                messageType = MessageType.Error
+                                            ),
+                                            showError = true
+                                        )
+                                    } else {
+                                        _uiState.value = LaunchUiState.Success(
+                                            launches = result.data,
+                                            paginationState = PaginationState.None
+                                        )
+                                    }
                                 }
 
                                 is DataResult.Loading -> {
@@ -105,9 +117,10 @@ internal class LaunchViewModel @Inject constructor(
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
                                             message = result.exception,
-                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
-                                        )
+                                        ),
+                                        showError = true
                                     )
                                 }
                             }
@@ -122,55 +135,57 @@ internal class LaunchViewModel @Inject constructor(
                         launchFilter = getFilterState(),
                         page = getPageState()
                     ).collect { result ->
-                            when (result) {
-                                is DataResult.Success -> {
-                                    // Pagination - We append the next 30 rows to the current state as a new list
-                                    // This triggers a recompose and keeps immutability
-                                    _uiState.update {
-                                        val currentLaunches = it.launches
+                        when (result) {
+                            is DataResult.Success -> {
+                                // Pagination - We append the next 30 rows to the current state as a new list
+                                // This triggers a recompose and keeps immutability
+                                _uiState.update {
+                                    val currentLaunches = it.launches
 
-                                        val allLaunches = result.data?.let { newLaunches ->
-                                            currentLaunches + newLaunches
-                                        } ?: currentLaunches
+                                    val allLaunches = result.data?.let { newLaunches ->
+                                        currentLaunches + newLaunches
+                                    } ?: currentLaunches
 
-                                        it.copy(
-                                            launches = allLaunches,
-                                            paginationState = PaginationState.None
-                                        )
+                                    it.copy(
+                                        launches = allLaunches,
+                                        paginationState = PaginationState.None
+                                    )
 
-                                    }
                                 }
+                            }
 
-                                is DataResult.Loading -> {
-                                    _uiState.update {
-                                        it.copy(paginationState = PaginationState.Loading)
-                                    }
+                            is DataResult.Loading -> {
+                                _uiState.update {
+                                    it.copy(paginationState = PaginationState.Loading)
                                 }
+                            }
 
-                                is DataResult.Error -> {
-                                    _uiState.update {
-                                        it.copy(paginationState = PaginationState.Error)
-                                    }
+                            is DataResult.Error -> {
+                                _uiState.update {
+                                    it.copy(paginationState = PaginationState.Error)
                                 }
                             }
                         }
+                    }
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
                     companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
-                        .onStart {  _uiState.value = LaunchUiState.Loading }
+                        .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
                                     setEvent(GetLaunchesApiAndCacheEvent)
                                 }
+
                                 is DataResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
                                             message = result.exception,
-                                            messageDisplayType = MessageDisplayType.Dialog,
+                                            messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
-                                        )
+                                        ),
+                                        showError = true
                                     )
                                 }
 
@@ -181,12 +196,13 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase()
-                        .onStart { _uiState.value = LaunchUiState.Loading  }
+                        .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
                                     setEvent(MergeDataEvent)
                                 }
+
                                 is DataResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
@@ -214,8 +230,24 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
+    private fun MutableStateFlow<LaunchUiState>.updateError(updateState: (LaunchUiState.Error) -> LaunchUiState.Error) {
+        val state = this.value
+        if (state is LaunchUiState.Error) {
+            this.value = updateState(state)
+        }
+    }
+
+    fun dismissError() {
+        _uiState.updateError {
+            it.copy(
+                errorResponse = null,
+                showError = false
+            )
+        }
+    }
+
     fun clearListState() {
-      _uiState.update { it.copy(launches = emptyList()) }
+        _uiState.update { it.copy(launches = emptyList()) }
     }
 
     fun newSearch() {

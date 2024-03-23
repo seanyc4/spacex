@@ -15,6 +15,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -62,6 +65,7 @@ internal class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = content {
 
+        val snackbarHostState = remember { SnackbarHostState() }
         val scaffoldState = rememberScaffoldState()
         val refreshing = rememberPullRefreshState(
             refreshing = false,
@@ -85,11 +89,13 @@ internal class LaunchFragment : Fragment() {
                         }
                     )
                 },
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
             ) { padding ->
                 LaunchRoute(
                     viewModel = launchViewModel,
                     refreshState = refreshing,
+                    snackbarHostState = snackbarHostState,
                     onItemClicked = { link ->
                         onCardClicked(link)
                     }

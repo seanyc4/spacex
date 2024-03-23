@@ -22,7 +22,7 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> = flow {
-        val result = safeCacheCall(ioDispatcher){
+        val result = safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
                 year = year,
                 order = order,
@@ -31,15 +31,17 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
             )
         }
 
-        when(result){
+        when (result) {
             is DataResult.Success -> {
                 result.data?.let { launchList ->
                     emit(DataResult.Success(launchList))
                 }
             }
+
             is DataResult.Error -> {
-                emit(result)
+                emit(DataResult.Error(result.exception))
             }
+
             else -> {
                 emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
             }

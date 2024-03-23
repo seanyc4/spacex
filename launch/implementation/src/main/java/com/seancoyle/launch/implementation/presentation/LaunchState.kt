@@ -17,7 +17,8 @@ internal sealed interface LaunchUiState {
     data object Loading : LaunchUiState
 
     data class Error(
-        val errorResponse: Response
+        val errorResponse: Response? = null,
+        val showError: Boolean = true
     ) : LaunchUiState
 }
 

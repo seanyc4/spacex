@@ -1,5 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
+import com.seancoyle.core.data.CacheErrors.CACHE_ERROR_NO_RESULTS
 import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.domain.StringResource
@@ -56,6 +57,9 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
 
                 launchesResult is DataResult.Error ->
                     DataResult.Error(launchesResult.exception)
+
+                launchesData.isNullOrEmpty() ->
+                    DataResult.Error(CACHE_ERROR_NO_RESULTS)
 
                 else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
             }

@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -20,6 +21,7 @@ import kotlinx.coroutines.FlowPreview
 internal fun LaunchRoute(
     viewModel: LaunchViewModel,
     refreshState: PullRefreshState,
+    snackbarHostState: SnackbarHostState,
     onItemClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,7 +32,9 @@ internal fun LaunchRoute(
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,
         pullRefreshState = refreshState,
-        onItemClicked = onItemClicked
+        snackbarHostState = snackbarHostState,
+        onItemClicked = onItemClicked,
+        onDismissError = viewModel::dismissError
     )
 }
 
@@ -43,7 +47,9 @@ internal fun LaunchScreen(
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
-    onItemClicked: (links: Links) -> Unit
+    snackbarHostState: SnackbarHostState,
+    onItemClicked: (links: Links) -> Unit,
+    onDismissError: () -> Unit
 ) {
     when (uiState) {
         is LaunchUiState.Success -> {
@@ -64,7 +70,9 @@ internal fun LaunchScreen(
 
         is LaunchUiState.Error -> {
             DisplayErrorAlert(
-                error = uiState.errorResponse
+                error = uiState.errorResponse,
+                onDismiss = onDismissError,
+                snackbarHostState = snackbarHostState
             )
         }
     }
