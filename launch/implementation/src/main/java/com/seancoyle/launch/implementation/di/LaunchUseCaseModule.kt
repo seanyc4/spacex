@@ -1,12 +1,12 @@
 package com.seancoyle.launch.implementation.di
 
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.implementation.domain.usecase.CreateMergedAndFilteredLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCaseImpl
-import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCase
-import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
@@ -23,8 +23,8 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsGetLaunchListFromNetworkAndInsertToCacheUseCase(
-        impl: GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl
-    ): GetLaunchesFromNetworkAndInsertToCacheUseCase
+        impl: GetLaunchesApiAndCacheUseCaseImpl
+    ): GetLaunchesApiAndCacheUseCase
 
     @Binds
     abstract fun bindsGetNumLaunchItemsFromCacheUseCase(
@@ -38,7 +38,7 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsCreateMergedListUseCase(
-        impl: CreateMergedLaunchesUseCaseImpl
+        impl: CreateMergedAndFilteredLaunchesUseCaseImpl
     ): CreateMergedLaunchesUseCase
 
     @Binds

@@ -10,11 +10,11 @@ internal sealed class LaunchEvents {
 
     data object GetCompanyInfoFromCacheEvent : LaunchEvents()
 
-    data object FilterLaunchItemsInCacheEvent : LaunchEvents()
+    data object PaginateLaunchesCacheEvent : LaunchEvents()
 
     data object GetNumLaunchItemsInCacheEvent : LaunchEvents()
 
-    data object MergeDataEvent : LaunchEvents()
+    data object CreateMergedAndFilteredLaunchesEvent : LaunchEvents()
 
     class CreateMessageEvent(
         val stateMessage: StateMessage

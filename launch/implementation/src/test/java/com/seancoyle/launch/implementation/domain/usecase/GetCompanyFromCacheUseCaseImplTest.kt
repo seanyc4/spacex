@@ -25,12 +25,12 @@ class GetCompanyFromCacheUseCaseImplTest {
     @MockK
     private lateinit var cacheDataSource: CompanyCacheDataSource
 
-    private lateinit var underTest: GetCompanyInfoFromCacheUseCase
+    private lateinit var underTest: GetCompanyFromCacheUseCaseImpl
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetCompanyInfoFromCacheUseCaseImpl(
+        underTest = GetCompanyFromCacheUseCaseImpl(
             cacheDataSource = cacheDataSource
         )
     }

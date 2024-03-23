@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class CompanyInfoComponentImpl @Inject constructor(
-    private val getCompanyInfoFromCacheUseCase: GetCompanyInfoFromCacheUseCase,
-    private val getCompanyInfoFromNetworkAndInsertToCacheUseCase: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+    private val getCompanyFromCacheUseCase: GetCompanyFromCacheUseCase,
+    private val getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase
 ): CompanyInfoComponent {
     override fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>> {
-        return getCompanyInfoFromCacheUseCase.invoke()
+        return getCompanyFromCacheUseCase.invoke()
     }
 
-    override fun getCompanyInfoFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<Company>> {
-        return getCompanyInfoFromNetworkAndInsertToCacheUseCase.invoke()
+    override fun getCompanyInfoApiAndCacheUseCase(): Flow<DataResult<Company>> {
+        return getCompanyApiAndCacheUseCase.invoke()
     }
 }

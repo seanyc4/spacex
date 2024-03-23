@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class LaunchesComponentImpl @Inject constructor(
-    private val getLaunchesFromNetworkAndInsertToCacheUseCase: GetLaunchesFromNetworkAndInsertToCacheUseCase,
+    private val getLaunchesApiAndCacheUseCase: GetLaunchesApiAndCacheUseCase,
     private val filterLaunchItemsInCacheUseCase: FilterLaunchItemsInCacheUseCase,
-    private val mergedLaunchesUseCase: CreateMergedLaunchesUseCase
+    private val createMergedAndFilteredLaunchesUseCase: CreateMergedLaunchesUseCase
 ) : LaunchesComponent {
 
-    override suspend fun getLaunchesFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<List<Launch>>> {
-        return getLaunchesFromNetworkAndInsertToCacheUseCase.invoke()
+    override suspend fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>> {
+        return getLaunchesApiAndCacheUseCase.invoke()
     }
 
     override suspend fun filterLaunchItemsInCacheUseCase(
@@ -31,13 +31,13 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override suspend fun createMergeLaunchesUseCase(
+    override suspend fun createMergeAndFilteredLaunchesUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>>> {
-        return mergedLaunchesUseCase.invoke(
+        return createMergedAndFilteredLaunchesUseCase.invoke(
             year = year,
             order = order,
             launchFilter = launchFilter,

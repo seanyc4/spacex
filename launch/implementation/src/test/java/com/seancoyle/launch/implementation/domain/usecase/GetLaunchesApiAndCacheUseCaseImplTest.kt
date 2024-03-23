@@ -30,7 +30,7 @@ import java.net.HttpURLConnection
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetLaunchItemsFromNetworkInsertToCacheTest {
+class GetLaunchesApiAndCacheUseCaseImplTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -46,14 +46,14 @@ class GetLaunchItemsFromNetworkInsertToCacheTest {
 
     private lateinit var mockWebServer: MockWebServer
 
-    private lateinit var underTest: GetLaunchesFromNetworkAndInsertToCacheUseCase
+    private lateinit var underTest: GetLaunchesApiAndCacheUseCaseImpl
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
         mockWebServer = MockWebServer()
         underTest =
-            GetLaunchesFromNetworkAndInsertToCacheUseCaseImpl(
+            GetLaunchesApiAndCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
                 cacheDataSource = cacheDataSource,
                 launchNetworkDataSource = networkDataSource,

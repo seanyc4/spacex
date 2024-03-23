@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CompanyInfoComponent {
     fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>>
-    fun getCompanyInfoFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<Company>>
+    fun getCompanyInfoApiAndCacheUseCase(): Flow<DataResult<Company>>
 }

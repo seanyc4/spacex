@@ -22,11 +22,16 @@ import kotlinx.coroutines.flow.flow
 import java.util.UUID
 import javax.inject.Inject
 
-internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
+internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
     private val stringResource: StringResource,
-    private val getCompanyInfoFromCacheUseCase: GetCompanyInfoFromCacheUseCase,
+    private val getCompanyFromCacheUseCase: GetCompanyFromCacheUseCase,
     private val getLaunchesFromCacheUseCase: FilterLaunchItemsInCacheUseCase
 ) : CreateMergedLaunchesUseCase {
+
+    companion object {
+        private const val MAX_GRID_SIZE = 6
+        private const val MAX_CAROUSEL_SIZE = 20
+    }
 
     override suspend operator fun invoke(
         year: String?,
@@ -49,24 +54,30 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             val launchesData: List<ViewType>? = (launchesResult as? DataResult.Success)?.data
 
             when {
-                companyInfoData != null && !launchesData.isNullOrEmpty() ->
+                companyInfoData != null && !launchesData.isNullOrEmpty() -> {
                     DataResult.Success(createMergedList(companyInfoData, launchesData))
+                }
 
-                companyInfoResult is DataResult.Error ->
+                companyInfoResult is DataResult.Error -> {
                     DataResult.Error(companyInfoResult.exception)
+                }
 
-                launchesResult is DataResult.Error ->
+                launchesResult is DataResult.Error -> {
                     DataResult.Error(launchesResult.exception)
+                }
 
-                launchesData.isNullOrEmpty() ->
+                launchesData.isNullOrEmpty() -> {
                     DataResult.Error(CACHE_ERROR_NO_RESULTS)
+                }
 
-                else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
+                else -> {
+                    DataResult.Error(UNKNOWN_DATABASE_ERROR)
+                }
             }
 
         }.collect { combinedResult ->
-                emit(combinedResult)
-            }
+            emit(combinedResult)
+        }
     }
 
     private fun createMergedList(
@@ -139,7 +150,7 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
     }
 
     private fun getCompanyInfo(): Flow<DataResult<Company?>> {
-        return getCompanyInfoFromCacheUseCase()
+        return getCompanyFromCacheUseCase()
     }
 
     private suspend fun getLaunches(
@@ -155,11 +166,6 @@ internal class CreateMergedLaunchesUseCaseImpl @Inject constructor(
             page = page
         )
 
-    }
-
-    companion object {
-        private const val MAX_GRID_SIZE = 6
-        private const val MAX_CAROUSEL_SIZE = 20
     }
 
     private fun buildCompanySummary(company: Company?) = with(stringResource) {

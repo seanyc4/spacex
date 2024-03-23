@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetCompanyFromNetworkInsertToCacheTest {
+class GetCompanyApiAndCacheUseCaseImplTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -39,14 +39,14 @@ class GetCompanyFromNetworkInsertToCacheTest {
 
     private lateinit var mockWebServer: MockWebServer
 
-    private lateinit var underTest: GetCompanyInfoFromNetworkAndInsertToCacheUseCase
+    private lateinit var underTest: GetCompanyApiAndCacheUseCase
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
         mockWebServer = MockWebServer()
         underTest =
-            GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl(
+            GetCompanyApiAndCacheUseCaseImpl(
                 ioDispatcher = mainCoroutineRule.testDispatcher,
                 cacheDataSource = cacheDataSource,
                 networkDataSource = networkDataSource

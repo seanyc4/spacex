@@ -4,6 +4,6 @@ import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import kotlinx.coroutines.flow.Flow
 
-internal interface GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
-    operator fun invoke(): Flow<DataResult<Company>>
+internal interface GetCompanyFromCacheUseCase {
+    operator fun invoke(): Flow<DataResult<Company?>>
 }

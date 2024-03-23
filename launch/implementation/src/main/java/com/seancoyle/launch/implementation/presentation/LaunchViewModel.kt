@@ -16,10 +16,10 @@ import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.FilterLaunchItemsInCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMergedAndFilteredLaunchesEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.MergeDataEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.PaginateLaunchesCacheEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,7 +58,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
             //Restoring state from cache data
-            setEvent(MergeDataEvent)
+            setEvent(CreateMergedAndFilteredLaunchesEvent)
         } else {
             //Fresh app launch - get data from network
             setEvent(GetCompanyInfoApiAndCacheEvent)
@@ -82,8 +82,8 @@ internal class LaunchViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
 
-                is MergeDataEvent -> {
-                    launchesComponent.createMergeLaunchesUseCase(
+                is CreateMergedAndFilteredLaunchesEvent -> {
+                    launchesComponent.createMergeAndFilteredLaunchesUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -127,7 +127,7 @@ internal class LaunchViewModel @Inject constructor(
                         }
                 }
 
-                is FilterLaunchItemsInCacheEvent -> {
+                is PaginateLaunchesCacheEvent -> {
                     printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
                     launchesComponent.filterLaunchItemsInCacheUseCase(
                         year = getSearchYearState(),
@@ -170,7 +170,7 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoComponent.getCompanyInfoFromNetworkAndInsertToCacheUseCase()
+                    companyInfoComponent.getCompanyInfoApiAndCacheUseCase()
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
@@ -195,12 +195,12 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is GetLaunchesApiAndCacheEvent -> {
-                    launchesComponent.getLaunchesFromNetworkAndInsertToCacheUseCase()
+                    launchesComponent.getLaunchesApiAndCacheUseCase()
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    setEvent(MergeDataEvent)
+                                    setEvent(CreateMergedAndFilteredLaunchesEvent)
                                 }
 
                                 is DataResult.Error -> {
@@ -258,7 +258,7 @@ internal class LaunchViewModel @Inject constructor(
     fun nextPage(position: Int) {
         if ((position + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
             incrementPage()
-            setEvent(FilterLaunchItemsInCacheEvent)
+            setEvent(PaginateLaunchesCacheEvent)
         }
     }
 
@@ -346,7 +346,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     fun newSearchEvent() {
-        setEvent(MergeDataEvent)
+        setEvent(CreateMergedAndFilteredLaunchesEvent)
     }
 
     companion object {

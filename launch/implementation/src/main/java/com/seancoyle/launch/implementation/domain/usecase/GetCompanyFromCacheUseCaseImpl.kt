@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetCompanyInfoFromCacheUseCaseImpl @Inject constructor(
+internal class GetCompanyFromCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyCacheDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : GetCompanyInfoFromCacheUseCase {
+) : GetCompanyFromCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Company?>> = flow {
         val result = safeCacheCall(ioDispatcher) {

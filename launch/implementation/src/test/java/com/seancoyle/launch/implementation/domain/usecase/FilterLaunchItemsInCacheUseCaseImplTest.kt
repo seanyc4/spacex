@@ -74,7 +74,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -107,11 +107,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_DESC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -148,7 +148,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -185,7 +185,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let { actualResult ->
@@ -215,11 +215,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
             assertTrue(value?.data?.launches?.isEmpty() == true)
@@ -247,11 +247,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -285,11 +285,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_FAILED,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -323,11 +323,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_ALL,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -360,11 +360,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_UNKNOWN,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_SUCCESS
             )
 
             value?.data?.launches?.let {
@@ -393,11 +393,11 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_ASC,
             launchFilter = LAUNCH_SUCCESS,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assertEquals(
                 value?.stateMessage?.response?.message,
-                LaunchEvents.FilterLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
+                LaunchEvents.PaginateLaunchesCacheEvent.eventName() + EVENT_CACHE_NO_MATCHING_RESULTS
             )
 
             value?.data?.launches?.let {
@@ -424,7 +424,7 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
             order = ORDER_DESC,
             launchFilter = null,
             page = 1,
-            event = LaunchEvents.FilterLaunchItemsInCacheEvent
+            event = LaunchEvents.PaginateLaunchesCacheEvent
         ).collect { value ->
             assert(
                 value?.stateMessage?.response?.message

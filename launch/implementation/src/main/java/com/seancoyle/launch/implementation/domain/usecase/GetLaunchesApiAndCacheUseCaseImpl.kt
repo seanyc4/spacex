@@ -5,31 +5,33 @@ import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.core.di.IODispatcher
-import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetCompanyInfoFromNetworkAndInsertToCacheUseCaseImpl @Inject constructor(
-    private val insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase,
-    private val networkDataSource: CompanyInfoNetworkDataSource,
+internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
+    private val insertLaunchesToCacheUseCase: InsertLaunchesToCacheUseCase,
+    private val launchNetworkDataSource: LaunchNetworkDataSource,
+    private val launchOptions: LaunchOptions,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : GetCompanyInfoFromNetworkAndInsertToCacheUseCase {
+) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<Company>> = flow {
+    override operator fun invoke(): Flow<DataResult<List<Launch>>> = flow {
         val result = safeApiCall(ioDispatcher) {
-            networkDataSource.getCompany()
+            launchNetworkDataSource.getLaunchList(launchOptions)
         }
 
         when (result) {
             is DataResult.Success -> {
-                result.data?.let { companyInfo ->
-                    insertCompanyInfoToCacheUseCase(companyInfo).collect { insertResult ->
+                result.data?.let { launches ->
+                    insertLaunchesToCacheUseCase(launches).collect { insertResult ->
                         when (insertResult) {
                             is DataResult.Success -> {
-                                emit(DataResult.Success(companyInfo))
+                                emit(DataResult.Success(launches))
                             }
 
                             is DataResult.Error -> {

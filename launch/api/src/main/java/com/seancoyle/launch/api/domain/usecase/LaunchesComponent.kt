@@ -14,13 +14,13 @@ interface LaunchesComponent {
         page: Int?
     ): Flow<DataResult<List<ViewType>?>>
 
-    suspend fun createMergeLaunchesUseCase(
+    suspend fun createMergeAndFilteredLaunchesUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>>>
 
-    suspend fun getLaunchesFromNetworkAndInsertToCacheUseCase(): Flow<DataResult<List<Launch>>>
+    suspend fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>>
 
 }
