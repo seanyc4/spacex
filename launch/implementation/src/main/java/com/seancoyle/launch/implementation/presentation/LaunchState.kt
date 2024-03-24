@@ -30,7 +30,7 @@ internal sealed interface PaginationState {
 
 @Parcelize
 @Stable
-data class FilterState(
+data class LaunchFilterState(
     val isDialogFilterDisplayed: Boolean = false,
     val launchFilter: Int? = null,
     val order: String = ORDER_ASC,
@@ -39,7 +39,7 @@ data class FilterState(
 
 @Parcelize
 @Stable
-internal data class ListState(
+internal data class LaunchesListState(
     val page: Int = 1,
     val scrollPosition: Int = 0
 ) : Parcelable

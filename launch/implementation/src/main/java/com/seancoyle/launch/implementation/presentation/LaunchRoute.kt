@@ -4,8 +4,10 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
 import com.seancoyle.launch.api.domain.model.Links
@@ -25,6 +27,10 @@ internal fun LaunchRoute(
     onItemClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SideEffect {
+        printLogDebug("LaunchRoute", ": uiState: $uiState")
+    }
 
     LaunchScreen(
         uiState = uiState,

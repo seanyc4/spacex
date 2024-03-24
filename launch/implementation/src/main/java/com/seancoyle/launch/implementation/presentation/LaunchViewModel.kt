@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,11 +42,11 @@ internal class LaunchViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<LaunchUiState> = MutableStateFlow(LaunchUiState.Loading)
     val uiState: StateFlow<LaunchUiState> = _uiState
 
-    private val _filterState = MutableStateFlow(FilterState())
-    val filterState: StateFlow<FilterState> = _filterState
+    private val _launchFilterState = MutableStateFlow(LaunchFilterState())
+    val launchFilterState: StateFlow<LaunchFilterState> = _launchFilterState
 
-    private val _listState = MutableStateFlow(ListState())
-    val listState: StateFlow<ListState> = _listState
+    private val _launchListState = MutableStateFlow(LaunchesListState())
+    val launchesListState: StateFlow<LaunchesListState> = _launchListState
 
     init {
         restoreFilterAndOrderState()
@@ -64,8 +65,8 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchUiState>(LAUNCH_UI_STATE_KEY)?.let { uiState ->
-            _uiState.value = uiState
+        savedStateHandle.get<LaunchesListState>(LAUNCH_LIST_STATE_KEY)?.let { listState ->
+            _launchListState.value = listState
         }
     }
 
@@ -86,7 +87,8 @@ internal class LaunchViewModel @Inject constructor(
                         order = getOrderState(),
                         launchFilter = getFilterState(),
                         page = getPageState()
-                    ).collect { result ->
+                    ).distinctUntilChanged()
+                        .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
                                     _uiState.value = LaunchUiState.Success(
@@ -248,19 +250,18 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun getScrollPositionState() = listState.value.scrollPosition
-    fun getPageState() = listState.value.page
-    private fun getSearchYearState() = filterState.value.year
-    fun getOrderState() = filterState.value.order
-    fun getIsDialogFilterDisplayedState() = filterState.value.isDialogFilterDisplayed
-    // fun isLoading() = _uiState.value.isLoading
+    private fun getScrollPositionState() = launchesListState.value.scrollPosition
+    fun getPageState() = launchesListState.value.page
+    private fun getSearchYearState() = launchFilterState.value.year
+    fun getOrderState() = launchFilterState.value.order
+    fun getIsDialogFilterDisplayedState() = launchFilterState.value.isDialogFilterDisplayed
 
     fun getFilterState(): Int? {
-        return if (filterState.value.launchFilter == LAUNCH_ALL) {
+        return if (launchFilterState.value.launchFilter == LAUNCH_ALL) {
             setLaunchFilterState(null)
-            filterState.value.launchFilter
+            launchFilterState.value.launchFilter
         } else {
-            filterState.value.launchFilter
+            launchFilterState.value.launchFilter
         }
     }
 
@@ -271,12 +272,12 @@ internal class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
-    private fun updateFilterState(update: FilterState.() -> FilterState) {
-        _filterState.value = _filterState.value.update()
+    private fun updateFilterState(update: LaunchFilterState.() -> LaunchFilterState) {
+        _launchFilterState.value = _launchFilterState.value.update()
     }
 
-    private fun updateListState(update: ListState.() -> ListState) {
-        _listState.value = _listState.value.update()
+    private fun updateListState(update: LaunchesListState.() -> LaunchesListState) {
+        _launchListState.value = _launchListState.value.update()
     }
 
     fun setYearState(year: String?) {
@@ -310,13 +311,13 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun incrementPage() {
-        val incrementedPage = listState.value.page + 1
+        val incrementedPage = launchesListState.value.page + 1
         updateListState { copy(page = incrementedPage) }
         setPageState(incrementedPage)
     }
 
     fun saveState() {
-        savedStateHandle[LAUNCH_UI_STATE_KEY] = _uiState.value
+        savedStateHandle[LAUNCH_LIST_STATE_KEY] = _launchListState.value
     }
 
     private fun saveOrderToDatastore(order: String) {
@@ -340,10 +341,9 @@ internal class LaunchViewModel @Inject constructor(
         private const val LAUNCH_DATASTORE_KEY: String = "com.seancoyle.spacex.launch"
 
         // Datastore Keys
-        const val LAUNCH_ORDER_KEY: String = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
-        const val LAUNCH_FILTER_KEY: String = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"
-
-        const val LAUNCH_UI_STATE_KEY = "launch.state.key"
+        const val LAUNCH_ORDER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
+        const val LAUNCH_FILTER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"
+        const val LAUNCH_LIST_STATE_KEY = "$LAUNCH_DATASTORE_KEY.state.list.key"
     }
 
 }
