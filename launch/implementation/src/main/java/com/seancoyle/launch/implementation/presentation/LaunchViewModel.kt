@@ -3,7 +3,6 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.data.CacheErrors.CACHE_ERROR_NO_RESULTS
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.MessageDisplayType
@@ -25,7 +24,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -88,25 +86,13 @@ internal class LaunchViewModel @Inject constructor(
                         order = getOrderState(),
                         launchFilter = getFilterState(),
                         page = getPageState()
-                    ).distinctUntilChanged()
-                        .collect { result ->
+                    ).collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    if (result.data.isEmpty()) {
-                                        _uiState.value = LaunchUiState.Error(
-                                            errorResponse = Response(
-                                                message = CACHE_ERROR_NO_RESULTS,
-                                                messageDisplayType = MessageDisplayType.Dialog,
-                                                messageType = MessageType.Error
-                                            ),
-                                            showError = true
-                                        )
-                                    } else {
-                                        _uiState.value = LaunchUiState.Success(
-                                            launches = result.data,
-                                            paginationState = PaginationState.None
-                                        )
-                                    }
+                                    _uiState.value = LaunchUiState.Success(
+                                        launches = result.data,
+                                        paginationState = PaginationState.None
+                                    )
                                 }
 
                                 is DataResult.Loading -> {

@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
@@ -22,29 +21,14 @@ internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> = flow {
-        val result = safeCacheCall(ioDispatcher) {
+        emit(safeCacheCall(ioDispatcher) {
             cacheDataSource.filterLaunchList(
                 year = year,
                 order = order,
                 launchFilter = launchFilter,
                 page = page
             )
-        }
+        })
 
-        when (result) {
-            is DataResult.Success -> {
-                result.data?.let { launchList ->
-                    emit(DataResult.Success(launchList))
-                }
-            }
-
-            is DataResult.Error -> {
-                emit(DataResult.Error(result.exception))
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-            }
-        }
     }
 }

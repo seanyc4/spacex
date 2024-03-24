@@ -5,5 +5,5 @@ import com.seancoyle.launch.api.domain.model.Launch
 import kotlinx.coroutines.flow.Flow
 
 internal interface InsertLaunchesToCacheUseCase {
-    suspend operator fun invoke(launches: List<Launch>): Flow<DataResult<Unit>>
+    suspend operator fun invoke(launches: List<Launch>): Flow<DataResult<LongArray?>>
 }

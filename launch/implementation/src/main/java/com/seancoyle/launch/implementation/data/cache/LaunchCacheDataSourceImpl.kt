@@ -5,7 +5,9 @@ import com.seancoyle.core_database.api.returnOrderedQuery
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class LaunchCacheDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val entityMapper: LaunchEntityMapperImpl
@@ -28,20 +30,18 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insert(launch: Launch): Long {
-        return dao.insert(
-            entityMapper.mapToEntity(entity = launch)
-        )
+        return dao.insert(entityMapper.mapToEntity(launch))
     }
 
     override suspend fun insertList(launches: List<Launch>): LongArray {
         return dao.insertList(
-            entityMapper.mapDomainListToEntityList(launches = launches)
+            entityMapper.mapDomainListToEntityList(launches)
         )
     }
 
     override suspend fun deleteList(launches: List<Launch>): Int {
         val ids = launches.mapIndexed { _, item -> item.id }
-        return dao.deleteList(ids = ids)
+        return dao.deleteList(ids)
     }
 
     override suspend fun deleteAll() {
@@ -49,11 +49,11 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     }
 
     override suspend fun deleteById(id: String): Int {
-        return dao.deleteById(id = id)
+        return dao.deleteById(id)
     }
 
     override suspend fun getById(id: String): Launch? {
-        return dao.getById(id = id)?.let {
+        return dao.getById(id)?.let {
             entityMapper.mapFromEntity(it)
         }
     }
@@ -65,6 +65,6 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getTotalEntries(): Int {
-        return dao.getTotalEntries()
+        return dao.getTotalEntries() ?: 0
     }
 }

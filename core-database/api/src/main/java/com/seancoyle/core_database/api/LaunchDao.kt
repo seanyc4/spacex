@@ -46,7 +46,7 @@ interface LaunchDao {
     fun getAll(): List<LaunchEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
-    suspend fun getTotalEntries(): Int
+    suspend fun getTotalEntries(): Int?
 
     @Query(
         """

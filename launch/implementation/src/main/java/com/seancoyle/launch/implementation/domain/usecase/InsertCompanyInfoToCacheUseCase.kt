@@ -5,5 +5,5 @@ import com.seancoyle.launch.api.domain.model.Company
 import kotlinx.coroutines.flow.Flow
 
 internal interface InsertCompanyInfoToCacheUseCase {
-    suspend operator fun invoke(companyInfo: Company): Flow<DataResult<Unit>>
+    suspend operator fun invoke(companyInfo: Company): Flow<DataResult<Long?>>
 }

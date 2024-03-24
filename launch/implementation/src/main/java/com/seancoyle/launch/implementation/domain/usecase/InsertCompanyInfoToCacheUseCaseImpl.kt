@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
@@ -16,23 +15,10 @@ internal class InsertCompanyInfoToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : InsertCompanyInfoToCacheUseCase {
 
-    override suspend fun invoke(companyInfo: Company): Flow<DataResult<Unit>> = flow {
-        val result = safeCacheCall(ioDispatcher) {
+    override suspend fun invoke(companyInfo: Company): Flow<DataResult<Long?>> = flow {
+        emit(safeCacheCall(ioDispatcher) {
             cacheDataSource.insert(companyInfo)
-        }
+        })
 
-        when (result) {
-            is DataResult.Success -> {
-                emit(DataResult.Success(Unit))
-            }
-
-            is DataResult.Error -> {
-                emit(DataResult.Error(result.exception))
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-            }
-        }
     }
 }

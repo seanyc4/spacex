@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
@@ -17,24 +16,9 @@ internal class GetCompanyFromCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyFromCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Company?>> = flow {
-        val result = safeCacheCall(ioDispatcher) {
+        emit(safeCacheCall(ioDispatcher) {
             cacheDataSource.getCompany()
-        }
+        })
 
-        when(result) {
-            is DataResult.Success -> {
-               result.data?.let { companyInfo ->
-                   emit(DataResult.Success(companyInfo))
-               }
-            }
-            is DataResult.Error -> {
-                emit(result)
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-            }
-        }
     }
-
 }

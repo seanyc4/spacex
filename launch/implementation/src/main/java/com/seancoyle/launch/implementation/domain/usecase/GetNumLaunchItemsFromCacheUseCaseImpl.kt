@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
@@ -15,26 +14,10 @@ internal class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : GetNumLaunchItemsFromCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<Int>> = flow {
-        val result = safeCacheCall(ioDispatcher) {
+    override operator fun invoke(): Flow<DataResult<Int?>> = flow {
+        emit(safeCacheCall(ioDispatcher) {
             cacheDataSource.getTotalEntries()
-        }
+        })
 
-        when (result) {
-            is DataResult.Success -> {
-                result.data?.let { numLaunchItems ->
-                    emit(DataResult.Success(numLaunchItems))
-                }
-            }
-
-            is DataResult.Error -> {
-                emit(result)
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-            }
-        }
     }
-
 }

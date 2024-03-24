@@ -9,6 +9,7 @@ import com.seancoyle.core.data.CacheErrors.CONSTRAINT_VIOLATION
 import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT
 import com.seancoyle.core.data.NetworkErrors.NETWORK_CONNECTION_FAILED
+import com.seancoyle.core.data.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.seancoyle.core.data.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.seancoyle.core.data.NetworkErrors.NETWORK_FORBIDDEN
 import com.seancoyle.core.data.NetworkErrors.NETWORK_INTERNAL_SERVER_ERROR
@@ -35,7 +36,7 @@ suspend fun <T> safeApiCall(
             throwable.printStackTrace()
             when (throwable) {
                 is TimeoutCancellationException -> {
-                    DataResult.Error(NetworkErrors.NETWORK_ERROR_TIMEOUT)
+                    DataResult.Error(NETWORK_ERROR_TIMEOUT)
                 }
                 is IOException -> {
                     DataResult.Error(NETWORK_CONNECTION_FAILED)
