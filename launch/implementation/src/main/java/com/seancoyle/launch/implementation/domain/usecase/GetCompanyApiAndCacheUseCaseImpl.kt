@@ -15,9 +15,7 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyApiAndCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Company>> = flow {
-        val result = networkDataSource.getCompany()
-
-        when (result) {
+        when (val result = networkDataSource.getCompany()) {
             is DataResult.Success -> {
                 result.data.let { companyInfo ->
                     when (val insertResult = insertCompanyInfoToCacheUseCase(companyInfo)) {

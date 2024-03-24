@@ -22,9 +22,7 @@ internal class CompanyInfoNetworkDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            networkMapper.mapFromEntity(
-                api.getCompany()
-            )
+            networkMapper.mapFromEntity(api.getCompany())
         }
     }
 
