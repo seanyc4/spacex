@@ -13,7 +13,6 @@ import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.api.domain.usecase.CompanyInfoComponent
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMergedAndFilteredLaunchesEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
@@ -33,7 +32,6 @@ import javax.inject.Inject
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
-    private val companyInfoComponent: CompanyInfoComponent,
     private val appDataStoreManager: AppDataStore,
     private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
@@ -158,7 +156,7 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is GetCompanyInfoApiAndCacheEvent -> {
-                    companyInfoComponent.getCompanyInfoApiAndCacheUseCase()
+                    launchesComponent.getCompanyInfoApiAndCacheUseCase()
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
@@ -339,11 +337,10 @@ internal class LaunchViewModel @Inject constructor(
     companion object {
         // Datastore Files:
         private const val LAUNCH_DATASTORE_KEY: String = "com.seancoyle.spacex.launch"
-
         // Datastore Keys
-        const val LAUNCH_ORDER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
-        const val LAUNCH_FILTER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"
-        const val LAUNCH_LIST_STATE_KEY = "$LAUNCH_DATASTORE_KEY.state.list.key"
+        private const val LAUNCH_ORDER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
+        private const val LAUNCH_FILTER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"
+        private const val LAUNCH_LIST_STATE_KEY = "$LAUNCH_DATASTORE_KEY.state.list.key"
     }
 
 }

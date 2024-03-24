@@ -5,10 +5,16 @@ import com.seancoyle.launch.implementation.domain.usecase.CreateMergedAndFiltere
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyFromCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.GetCompanyFromCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsFromCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponentImpl
@@ -50,4 +56,19 @@ internal abstract class LaunchUseCaseModule {
     abstract fun bindsInsertLaunchesToCacheUseCase(
         impl: InsertLaunchesToCacheUseCaseImpl
     ): InsertLaunchesToCacheUseCase
+
+    @Binds
+    abstract fun bindsGetCompanyInfoFromNetworkAndInsertToCacheUseCase(
+        impl: GetCompanyApiAndCacheUseCaseImpl
+    ): GetCompanyApiAndCacheUseCase
+
+    @Binds
+    abstract fun bindsGetCompanyInfoFromCacheUseCase(
+        impl: GetCompanyFromCacheUseCaseImpl
+    ): GetCompanyFromCacheUseCase
+
+    @Binds
+    abstract fun bindsInsertCompanyInfoToCacheUseCase(
+        impl: InsertCompanyInfoToCacheUseCaseImpl
+    ): InsertCompanyInfoToCacheUseCase
 }
