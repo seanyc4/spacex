@@ -15,32 +15,22 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyApiAndCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Company>> = flow {
-        when (val result = networkDataSource.getCompany()) {
-            is DataResult.Success -> {
-                result.data.let { companyInfo ->
-                    when (val insertResult = insertCompanyInfoToCacheUseCase(companyInfo)) {
-                        is DataResult.Success -> {
-                            emit(DataResult.Success(companyInfo))
-                        }
+        emit(getCompanyFromNetwork())
+    }
 
-                        is DataResult.Error -> {
-                            emit(DataResult.Error(insertResult.exception))
-                        }
+    private suspend fun getCompanyFromNetwork(): DataResult<Company> {
+        return when (val networkResult = networkDataSource.getCompany()) {
+            is DataResult.Success -> cacheData(networkResult.data)
+            is DataResult.Error -> DataResult.Error(networkResult.exception)
+            else -> DataResult.Error(UNKNOWN_NETWORK_ERROR)
+        }
+    }
 
-                        else -> {
-                            emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-                        }
-                    }
-                }
-            }
-
-            is DataResult.Error -> {
-                emit(DataResult.Error(result.exception))
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_NETWORK_ERROR))
-            }
+    private suspend fun cacheData(company: Company): DataResult<Company> {
+        return when (val cacheResult = insertCompanyInfoToCacheUseCase(company)) {
+            is DataResult.Success -> DataResult.Success(company)
+            is DataResult.Error -> DataResult.Error(cacheResult.exception)
+            else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
         }
     }
 }

@@ -16,7 +16,6 @@ internal class CompanyInfoNetworkDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyInfoNetworkDataSource {
-
     override suspend fun getCompany(): DataResult<Company> {
         return safeApiCall(
             dispatcher = ioDispatcher,
@@ -25,5 +24,4 @@ internal class CompanyInfoNetworkDataSourceImpl @Inject constructor(
             networkMapper.mapFromEntity(api.getCompany())
         }
     }
-
 }

@@ -12,6 +12,5 @@ internal class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(): Flow<DataResult<Int?>> = flow {
         emit(cacheDataSource.getTotalEntries())
-
     }
 }

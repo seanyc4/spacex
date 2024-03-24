@@ -17,32 +17,22 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
 ) : GetLaunchesApiAndCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<List<Launch>>> = flow {
-        when (val result = launchNetworkDataSource.getLaunches(launchOptions)) {
-            is DataResult.Success -> {
-                result.data.let { launches ->
-                    when (val insertResult = insertLaunchesToCacheUseCase(launches)) {
-                        is DataResult.Success -> {
-                            emit(DataResult.Success(launches))
-                        }
+        emit(getLaunchesFromNetwork())
+    }
 
-                        is DataResult.Error -> {
-                            emit(DataResult.Error(insertResult.exception))
-                        }
+    private suspend fun getLaunchesFromNetwork(): DataResult<List<Launch>> {
+        return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
+            is DataResult.Success -> cacheData(networkResult.data)
+            is DataResult.Error -> DataResult.Error(networkResult.exception)
+            else -> DataResult.Error(UNKNOWN_NETWORK_ERROR)
+        }
+    }
 
-                        else -> {
-                            emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-                        }
-                    }
-                }
-            }
-
-            is DataResult.Error -> {
-                emit(DataResult.Error(result.exception))
-            }
-
-            else -> {
-                emit(DataResult.Error(UNKNOWN_NETWORK_ERROR))
-            }
+    private suspend fun cacheData(launches: List<Launch>): DataResult<List<Launch>> {
+        return when (val cacheResult = insertLaunchesToCacheUseCase(launches)) {
+            is DataResult.Success -> DataResult.Success(launches)
+            is DataResult.Error -> DataResult.Error(cacheResult.exception)
+            else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
         }
     }
 }
