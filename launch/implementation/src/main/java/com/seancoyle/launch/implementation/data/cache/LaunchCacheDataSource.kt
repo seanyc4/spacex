@@ -19,7 +19,7 @@ internal interface LaunchCacheDataSource {
 
     suspend fun deleteList(launches: List<Launch>): DataResult<Int>
 
-    suspend fun deleteAll()
+    suspend fun deleteAll(): DataResult<Unit>
 
     suspend fun getById(id: String): DataResult<Launch?>
 

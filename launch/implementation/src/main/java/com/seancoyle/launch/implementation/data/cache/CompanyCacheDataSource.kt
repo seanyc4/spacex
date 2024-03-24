@@ -6,5 +6,5 @@ import com.seancoyle.launch.api.domain.model.Company
 internal interface CompanyCacheDataSource {
     suspend fun insert(company: Company): DataResult<Long>
     suspend fun getCompany(): DataResult<Company?>
-    suspend fun deleteAll()
+    suspend fun deleteAll(): DataResult<Unit>
 }

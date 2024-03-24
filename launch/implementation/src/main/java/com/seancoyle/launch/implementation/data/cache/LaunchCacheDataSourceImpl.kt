@@ -28,8 +28,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     ): DataResult<List<ViewType>?> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.returnOrderedQuery(
                 year = year,
                 launchFilter = launchFilter,
@@ -44,8 +44,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun insert(launch: Launch): DataResult<Long> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.insert(entityMapper.mapToEntity(launch))
         }
     }
@@ -53,8 +53,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun insertList(launches: List<Launch>): DataResult<LongArray> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.insertList(
                 entityMapper.mapDomainListToEntityList(launches)
             )
@@ -65,21 +65,26 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         val ids = launches.mapIndexed { _, item -> item.id }
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.deleteList(ids)
         }
     }
 
-    override suspend fun deleteAll() {
-        return dao.deleteAll()
+    override suspend fun deleteAll(): DataResult<Unit> {
+        return safeCacheCall(
+            dispatcher = ioDispatcher,
+            crashlytics = crashlytics
+        ) {
+            dao.deleteAll()
+        }
     }
 
     override suspend fun deleteById(id: String): DataResult<Int> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.deleteById(id)
         }
     }
@@ -87,8 +92,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun getById(id: String): DataResult<Launch?> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.getById(id)?.let {
                 entityMapper.mapFromEntity(it)
             }
@@ -98,8 +103,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun getAll(): DataResult<List<ViewType>?> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.getAll()?.let {
                 entityMapper.mapEntityListToDomainList(it)
             }
@@ -109,8 +114,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun getTotalEntries(): DataResult<Int> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
-            crashlytics = crashlytics)
-        {
+            crashlytics = crashlytics
+        ) {
             dao.getTotalEntries() ?: 0
         }
     }
