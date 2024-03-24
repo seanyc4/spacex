@@ -11,9 +11,9 @@ internal class FakeLaunchNetworkDataSourceImpl @Inject constructor(
     private val networkMapper: LaunchNetworkMapper
 ) : LaunchNetworkDataSource {
 
-    override suspend fun getLaunchList(launchOptions: LaunchOptions): List<Launch> {
+    override suspend fun getLaunches(launchOptions: LaunchOptions): List<Launch> {
         return networkMapper.mapEntityToList(
-            fakeApi.getLaunchList(options = launchOptions)
+            fakeApi.getLaunches(options = launchOptions)
         )
     }
 }

@@ -74,7 +74,7 @@ internal class LaunchNetworkDataSourceTest {
 
         )
 
-        val result = underTest.getLaunchList(launchOptions)
+        val result = underTest.getLaunches(launchOptions)
 
         assertEquals(expected = expectedLaunch, actual = result.first())
     }
@@ -84,7 +84,7 @@ internal class LaunchNetworkDataSourceTest {
         api.jsonFileName = TestConstants.ERROR_404_RESPONSE
 
         val exception = assertFailsWith<HttpException> {
-            api.getLaunchList(launchOptions)
+            api.getLaunches(launchOptions)
         }
 
         assertEquals(

@@ -6,8 +6,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 internal interface LaunchApi {
-    @POST("/v4/launches/query")
-    suspend fun getLaunchList(
+    companion object {
+        private const val URL = "/v4/launches/query"
+    }
+
+    @POST(URL)
+    suspend fun getLaunches(
         @Body options: LaunchOptions
     ): LaunchDto
 }

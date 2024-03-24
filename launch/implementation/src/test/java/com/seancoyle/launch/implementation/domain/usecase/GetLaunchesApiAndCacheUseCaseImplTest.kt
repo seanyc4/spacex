@@ -70,7 +70,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     fun whenGetLaunchItemsFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
-        coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
+        coEvery { networkDataSource.getLaunches(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
 
         var dataResult: DataResult<LaunchState>? = null
@@ -89,7 +89,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     fun whenGetLaunchItemsFromNetwork_thenItemsCanBeRetrievedFromCache(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
-        coEvery { networkDataSource.getLaunchList(any()) } returns LAUNCH_LIST
+        coEvery { networkDataSource.getLaunches(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
         coEvery { cacheDataSource.getAll() } returns LAUNCH_LIST
 

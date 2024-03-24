@@ -23,7 +23,7 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(): Flow<DataResult<List<Launch>>> = flow {
         val result = safeApiCall(ioDispatcher) {
-            launchNetworkDataSource.getLaunchList(launchOptions)
+            launchNetworkDataSource.getLaunches(launchOptions)
         }
 
         when (result) {

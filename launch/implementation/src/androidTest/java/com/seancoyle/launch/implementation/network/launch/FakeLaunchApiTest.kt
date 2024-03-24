@@ -48,7 +48,7 @@ internal class FakeLaunchApiTest {
             object : TypeToken<LaunchDto>() {}.type
         )
 
-        val actualDto = underTest.getLaunchList(launchOptions)
+        val actualDto = underTest.getLaunches(launchOptions)
 
         assertEquals(expected = expectedDto, actual = actualDto)
     }

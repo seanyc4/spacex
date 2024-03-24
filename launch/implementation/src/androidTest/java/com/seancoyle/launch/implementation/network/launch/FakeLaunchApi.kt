@@ -19,7 +19,7 @@ internal class FakeLaunchApi @Inject constructor(
 
     var jsonFileName: String = TestConstants.LAUNCHES_200_RESPONSE
 
-    override suspend fun getLaunchList(options: LaunchOptions): LaunchDto {
+    override suspend fun getLaunches(options: LaunchOptions): LaunchDto {
         if (jsonFileName == TestConstants.ERROR_404_RESPONSE) {
             val errorContent = jsonFileReader.readJSONFromAsset(jsonFileName)
             val responseBody =
