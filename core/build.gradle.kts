@@ -13,4 +13,5 @@ android {
 
 dependencies {
     implementation(Square.retrofit)
+    implementation(Firebase.firebase)
 }
