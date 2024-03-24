@@ -1,19 +1,31 @@
 package com.seancoyle.launch.implementation.data.network
 
+import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.safeApiCall
+import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.util.Crashlytics
 import com.seancoyle.launch.api.domain.model.Company
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class CompanyInfoNetworkDataSourceImpl @Inject constructor(
     private val api: CompanyApi,
-    private val networkMapper: CompanyInfoNetworkMapper
+    private val networkMapper: CompanyInfoNetworkMapper,
+    private val crashlytics: Crashlytics,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyInfoNetworkDataSource {
 
-    override suspend fun getCompany(): Company {
-        return networkMapper.mapFromEntity(
-            api.getCompany()
-        )
+    override suspend fun getCompany(): DataResult<Company> {
+        return safeApiCall(
+            dispatcher = ioDispatcher,
+            crashlytics = crashlytics
+        ) {
+            networkMapper.mapFromEntity(
+                api.getCompany()
+            )
+        }
     }
 
 }

@@ -27,8 +27,8 @@ import java.io.IOException
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
     crashlytics: Crashlytics? = null,
-    apiCall: suspend () -> T?
-): DataResult<T?> {
+    apiCall: suspend () -> T
+): DataResult<T> {
     return withContext(dispatcher) {
         try {
             withTimeout(NETWORK_TIMEOUT) {
@@ -63,8 +63,8 @@ suspend fun <T> safeApiCall(
 suspend fun <T> safeCacheCall(
     dispatcher: CoroutineDispatcher,
     crashlytics: Crashlytics? = null,
-    cacheCall: suspend () -> T?
-): DataResult<T?> {
+    cacheCall: suspend () -> T
+): DataResult<T> {
     return withContext(dispatcher) {
         try {
             // throws TimeoutCancellationException

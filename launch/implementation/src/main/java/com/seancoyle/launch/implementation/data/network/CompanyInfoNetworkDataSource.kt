@@ -1,7 +1,8 @@
 package com.seancoyle.launch.implementation.data.network
 
+import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 
 internal interface CompanyInfoNetworkDataSource {
-    suspend fun getCompany(): Company
+    suspend fun getCompany(): DataResult<Company>
 }
