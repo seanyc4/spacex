@@ -16,6 +16,7 @@ import com.seancoyle.core.data.NetworkErrors.NETWORK_INTERNAL_SERVER_ERROR
 import com.seancoyle.core.data.NetworkErrors.NETWORK_NOT_FOUND
 import com.seancoyle.core.data.NetworkErrors.NETWORK_UNAUTHORIZED
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
+import com.seancoyle.core.util.Crashlytics
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
@@ -25,6 +26,7 @@ import java.io.IOException
 
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
+    crashlytics: Crashlytics? = null,
     apiCall: suspend () -> T?
 ): DataResult<T?> {
     return withContext(dispatcher) {
@@ -33,6 +35,7 @@ suspend fun <T> safeApiCall(
                 DataResult.Success(apiCall.invoke())
             }
         } catch (throwable: Throwable) {
+            crashlytics?.logException(throwable)
             throwable.printStackTrace()
             when (throwable) {
                 is TimeoutCancellationException -> {
@@ -59,6 +62,7 @@ suspend fun <T> safeApiCall(
 
 suspend fun <T> safeCacheCall(
     dispatcher: CoroutineDispatcher,
+    crashlytics: Crashlytics? = null,
     cacheCall: suspend () -> T?
 ): DataResult<T?> {
     return withContext(dispatcher) {
@@ -68,6 +72,7 @@ suspend fun <T> safeCacheCall(
                 DataResult.Success(cacheCall.invoke())
             }
         } catch (throwable: Throwable) {
+            crashlytics?.logException(throwable)
             throwable.printStackTrace()
             when (throwable) {
                 is TimeoutCancellationException -> {
