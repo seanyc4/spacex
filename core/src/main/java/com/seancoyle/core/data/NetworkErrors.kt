@@ -10,5 +10,6 @@ object NetworkErrors {
     const val NETWORK_INTERNAL_SERVER_ERROR = "Internal server error." // 500
     const val UNKNOWN_NETWORK_ERROR = "Unknown network error occurred."
     const val NETWORK_ERROR_UNKNOWN = "Network error: " // Use this prefix when you want to append error codes or additional details.
+    const val NETWORK_DATA_NULL = "Network data is null."
 
 }

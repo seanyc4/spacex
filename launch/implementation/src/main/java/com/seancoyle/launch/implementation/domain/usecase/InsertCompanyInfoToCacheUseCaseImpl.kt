@@ -6,8 +6,6 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 internal class InsertCompanyInfoToCacheUseCaseImpl @Inject constructor(
@@ -15,10 +13,8 @@ internal class InsertCompanyInfoToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : InsertCompanyInfoToCacheUseCase {
 
-    override suspend fun invoke(companyInfo: Company): Flow<DataResult<Long?>> = flow {
-        emit(safeCacheCall(ioDispatcher) {
+    override suspend operator fun invoke(companyInfo: Company): DataResult<Long?> =
+        safeCacheCall(ioDispatcher) {
             cacheDataSource.insert(companyInfo)
-        })
-
-    }
+        }
 }

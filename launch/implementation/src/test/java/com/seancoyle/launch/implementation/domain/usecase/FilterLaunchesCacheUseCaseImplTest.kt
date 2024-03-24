@@ -31,7 +31,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class FilterLaunchItemsInCacheUseCaseImplTest {
+class FilterLaunchesCacheUseCaseImplTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -39,12 +39,12 @@ class FilterLaunchItemsInCacheUseCaseImplTest {
     @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
-    private lateinit var underTest: FilterLaunchItemsInCacheUseCase
+    private lateinit var underTest: FilterLaunchesCacheUseCase
 
     @BeforeEach
     fun init() {
         MockKAnnotations.init(this)
-        underTest = FilterLaunchItemsInCacheUseCaseImpl(
+        underTest = FilterLaunchesCacheUseCaseImpl(
             ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )

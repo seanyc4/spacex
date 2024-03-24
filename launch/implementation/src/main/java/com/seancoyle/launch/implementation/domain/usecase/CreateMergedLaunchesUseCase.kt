@@ -5,7 +5,7 @@ import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
 internal interface CreateMergedLaunchesUseCase {
-   suspend operator fun invoke(
+   operator fun invoke(
       year: String?,
       order: String,
       launchFilter: Int?,

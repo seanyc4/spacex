@@ -10,23 +10,23 @@ import javax.inject.Inject
 
 internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiAndCacheUseCase: GetLaunchesApiAndCacheUseCase,
-    private val filterLaunchItemsInCacheUseCase: FilterLaunchItemsInCacheUseCase,
+    private val filterLaunchesCacheUseCase: FilterLaunchesCacheUseCase,
     private val createMergedAndFilteredLaunchesUseCase: CreateMergedLaunchesUseCase,
     private val getCompanyFromCacheUseCase: GetCompanyFromCacheUseCase,
     private val getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase
 ) : LaunchesComponent {
 
-    override suspend fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>> {
         return getLaunchesApiAndCacheUseCase.invoke()
     }
 
-    override suspend fun filterLaunchItemsInCacheUseCase(
+    override fun filterLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> {
-        return filterLaunchItemsInCacheUseCase.invoke(
+        return filterLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
             launchFilter = launchFilter,
@@ -34,7 +34,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override suspend fun createMergeAndFilteredLaunchesUseCase(
+    override fun createMergeAndFilteredLaunchesUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,

@@ -8,23 +8,24 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
-    suspend fun filterLaunchItemsInCacheUseCase(
+    fun filterLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>>
 
-    suspend fun createMergeAndFilteredLaunchesUseCase(
+    fun createMergeAndFilteredLaunchesUseCase(
         year: String?,
         order: String,
         launchFilter: Int?,
         page: Int?
     ): Flow<DataResult<List<ViewType>>>
 
-    suspend fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>>
+    fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>>
 
     fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>>
+
     fun getCompanyInfoApiAndCacheUseCase(): Flow<DataResult<Company>>
 
 }

@@ -25,7 +25,7 @@ import javax.inject.Inject
 internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
     private val stringResource: StringResource,
     private val getCompanyFromCacheUseCase: GetCompanyFromCacheUseCase,
-    private val getLaunchesFromCacheUseCase: FilterLaunchItemsInCacheUseCase
+    private val getLaunchesFromCacheUseCase: FilterLaunchesCacheUseCase
 ) : CreateMergedLaunchesUseCase {
 
     companion object {
@@ -33,7 +33,7 @@ internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
         private const val MAX_CAROUSEL_SIZE = 20
     }
 
-    override suspend operator fun invoke(
+    override operator fun invoke(
         year: String?,
         order: String,
         launchFilter: Int?,
@@ -153,7 +153,7 @@ internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
         return getCompanyFromCacheUseCase()
     }
 
-    private suspend fun getLaunches(
+    private fun getLaunches(
         year: String?,
         order: String,
         launchFilter: Int?,

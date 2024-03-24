@@ -6,8 +6,6 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 internal class InsertLaunchesToCacheUseCaseImpl @Inject constructor(
@@ -15,10 +13,9 @@ internal class InsertLaunchesToCacheUseCaseImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : InsertLaunchesToCacheUseCase {
 
-    override suspend fun invoke(launches: List<Launch>): Flow<DataResult<LongArray?>> = flow {
-        emit(safeCacheCall(ioDispatcher) {
+    override suspend operator fun invoke(launches: List<Launch>): DataResult<LongArray?> =
+        safeCacheCall(ioDispatcher) {
             cacheDataSource.insertList(launches)
-        })
+        }
 
-    }
 }

@@ -115,7 +115,7 @@ internal class LaunchViewModel @Inject constructor(
 
                 is PaginateLaunchesCacheEvent -> {
                     printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
-                    launchesComponent.filterLaunchItemsInCacheUseCase(
+                    launchesComponent.filterLaunchesCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),

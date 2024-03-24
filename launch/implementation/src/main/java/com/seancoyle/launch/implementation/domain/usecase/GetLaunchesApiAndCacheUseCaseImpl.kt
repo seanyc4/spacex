@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.data.NetworkErrors.NETWORK_DATA_NULL
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.core.di.IODispatcher
@@ -28,22 +29,20 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         when (result) {
             is DataResult.Success -> {
                 result.data?.let { launches ->
-                    insertLaunchesToCacheUseCase(launches).collect { insertResult ->
-                        when (insertResult) {
-                            is DataResult.Success -> {
-                                emit(DataResult.Success(launches))
-                            }
+                    when (val insertResult = insertLaunchesToCacheUseCase(launches)) {
+                        is DataResult.Success -> {
+                            emit(DataResult.Success(launches))
+                        }
 
-                            is DataResult.Error -> {
-                                emit(DataResult.Error(insertResult.exception))
-                            }
+                        is DataResult.Error -> {
+                            emit(DataResult.Error(insertResult.exception))
+                        }
 
-                            else -> {
-                                emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
-                            }
+                        else -> {
+                            emit(DataResult.Error(UNKNOWN_DATABASE_ERROR))
                         }
                     }
-                }
+                } ?: emit(DataResult.Error(NETWORK_DATA_NULL))
             }
 
             is DataResult.Error -> {

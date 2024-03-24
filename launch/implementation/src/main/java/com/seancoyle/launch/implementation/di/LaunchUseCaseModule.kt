@@ -3,8 +3,8 @@ package com.seancoyle.launch.implementation.di
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedAndFilteredLaunchesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.CreateMergedLaunchesUseCase
-import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCase
-import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchItemsInCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchesCacheUseCase
+import com.seancoyle.launch.implementation.domain.usecase.FilterLaunchesCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyFromCacheUseCase
@@ -38,9 +38,9 @@ internal abstract class LaunchUseCaseModule {
     ): GetNumLaunchItemsFromCacheUseCase
 
     @Binds
-    abstract fun bindsFilterLaunchItemsInCacheUseCase(
-        impl: FilterLaunchItemsInCacheUseCaseImpl
-    ): FilterLaunchItemsInCacheUseCase
+    abstract fun bindsFilterLaunchesCacheUseCase(
+        impl: FilterLaunchesCacheUseCaseImpl
+    ): FilterLaunchesCacheUseCase
 
     @Binds
     abstract fun bindsCreateMergedListUseCase(

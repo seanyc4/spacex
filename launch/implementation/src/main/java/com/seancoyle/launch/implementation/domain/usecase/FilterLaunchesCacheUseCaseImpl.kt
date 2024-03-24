@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class FilterLaunchItemsInCacheUseCaseImpl @Inject constructor(
+internal class FilterLaunchesCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : FilterLaunchItemsInCacheUseCase {
+) : FilterLaunchesCacheUseCase {
 
-    override suspend operator fun invoke(
+    override operator fun invoke(
         year: String?,
         order: String,
         launchFilter: Int?,
