@@ -17,6 +17,7 @@ import com.seancoyle.core.data.NetworkErrors.NETWORK_NOT_FOUND
 import com.seancoyle.core.data.NetworkErrors.NETWORK_UNAUTHORIZED
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
 import com.seancoyle.core.util.Crashlytics
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
@@ -52,7 +53,10 @@ suspend fun <T> safeApiCall(
                         500 -> DataResult.Error(NETWORK_INTERNAL_SERVER_ERROR)
                         else -> DataResult.Error("${NETWORK_ERROR_UNKNOWN}${throwable.code()}")                    }
                 }
-
+                is CancellationException -> {
+                    // Don't catch cancellation exceptions
+                    throw throwable
+                }
                 else ->
                     DataResult.Error(throwable.message ?: UNKNOWN_NETWORK_ERROR)
             }
@@ -83,6 +87,10 @@ suspend fun <T> safeCacheCall(
                 }
                 is SQLiteException -> {
                     DataResult.Error("${CACHE_ERROR}: ${throwable.message}")
+                }
+                is CancellationException -> {
+                    // Don't catch cancellation exceptions
+                    throw throwable
                 }
                 else -> {
                     DataResult.Error(throwable.message ?: UNKNOWN_DATABASE_ERROR)
