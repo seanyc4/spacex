@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 
 private const val APP_DATASTORE = "app"
 
-class AppDataStoreManager(
+internal class AppDataStoreManager(
     val context: Application
 ) : AppDataStore {
 

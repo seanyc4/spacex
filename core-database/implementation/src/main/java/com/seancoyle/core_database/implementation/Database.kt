@@ -21,7 +21,7 @@ import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
 @TypeConverters(
     LocalDateTimeTypeConverter::class
 )
-abstract class Database : RoomDatabase() {
+internal abstract class Database : RoomDatabase() {
 
     abstract fun launchDao(): LaunchDao
     abstract fun companyInfoDao(): CompanyDao
