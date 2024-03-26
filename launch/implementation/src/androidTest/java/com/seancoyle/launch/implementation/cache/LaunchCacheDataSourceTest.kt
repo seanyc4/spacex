@@ -13,7 +13,7 @@ import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType.Companion.TYPE_LIST
 import com.seancoyle.launch.implementation.LaunchFactory
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

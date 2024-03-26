@@ -6,9 +6,9 @@ import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
-import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.network.MockWebServerResponseLaunchList.launchList
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations

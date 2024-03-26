@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSourceImpl
 import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapper
 import com.seancoyle.launch.implementation.data.cache.LaunchEntityMapperImpl
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

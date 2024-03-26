@@ -5,6 +5,7 @@ import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Crashlytics
 import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton

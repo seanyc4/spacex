@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.data.cache
+package com.seancoyle.launch.implementation.domain.cache
 
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Launch

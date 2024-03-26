@@ -13,7 +13,7 @@ import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

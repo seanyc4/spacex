@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import javax.inject.Inject
 
 internal class InsertLaunchesToCacheUseCaseImpl @Inject constructor(

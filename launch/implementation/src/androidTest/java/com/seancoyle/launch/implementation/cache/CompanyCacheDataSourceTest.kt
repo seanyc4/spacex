@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.cache
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.CompanyFactory
-import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
+import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

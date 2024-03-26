@@ -6,8 +6,8 @@ import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.implementation.TestConstants
-import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

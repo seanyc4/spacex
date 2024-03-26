@@ -4,7 +4,7 @@ import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
 import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core_testing.MainCoroutineRule
-import com.seancoyle.launch.implementation.data.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

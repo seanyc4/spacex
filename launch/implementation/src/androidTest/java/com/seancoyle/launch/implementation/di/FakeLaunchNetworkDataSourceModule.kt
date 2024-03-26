@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.network.launch.FakeLaunchNetworkDataSourceImpl
 import dagger.Binds
 import dagger.Module

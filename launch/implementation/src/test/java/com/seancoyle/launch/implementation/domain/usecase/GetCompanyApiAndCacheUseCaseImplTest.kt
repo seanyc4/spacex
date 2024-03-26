@@ -4,8 +4,8 @@ import com.seancoyle.core.data.DataResult
 import com.seancoyle.core_testing.MainCoroutineRule
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.presentation.LaunchState
-import com.seancoyle.launch.implementation.data.cache.CompanyCacheDataSource
-import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkDataSource
+import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
+import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.network.MockWebServerResponseCompanyInfo.companyInfo
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations

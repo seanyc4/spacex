@@ -6,6 +6,7 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Crashlytics
 import com.seancoyle.core_database.api.CompanyDao
 import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
