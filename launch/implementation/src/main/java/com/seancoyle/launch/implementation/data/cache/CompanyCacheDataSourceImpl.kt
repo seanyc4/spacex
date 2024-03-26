@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
-import com.seancoyle.core.util.Crashlytics
+import com.seancoyle.core.domain.Crashlytics
 import com.seancoyle.core_database.api.CompanyDao
 import com.seancoyle.launch.api.domain.model.Company
 import kotlinx.coroutines.CoroutineDispatcher

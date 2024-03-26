@@ -1,7 +1,7 @@
 package com.seancoyle.core.di
 
-import com.seancoyle.core.util.Crashlytics
-import com.seancoyle.core.util.CrashlyticsImpl
+import com.seancoyle.core.data.CrashlyticsImpl
+import com.seancoyle.core.domain.Crashlytics
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

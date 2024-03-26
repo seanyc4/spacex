@@ -16,7 +16,7 @@ import com.seancoyle.core.data.NetworkErrors.NETWORK_INTERNAL_SERVER_ERROR
 import com.seancoyle.core.data.NetworkErrors.NETWORK_NOT_FOUND
 import com.seancoyle.core.data.NetworkErrors.NETWORK_UNAUTHORIZED
 import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
-import com.seancoyle.core.util.Crashlytics
+import com.seancoyle.core.domain.Crashlytics
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
