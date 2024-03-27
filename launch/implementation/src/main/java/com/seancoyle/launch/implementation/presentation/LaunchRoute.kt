@@ -10,6 +10,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
@@ -40,7 +42,9 @@ internal fun LaunchRoute(
         pullRefreshState = refreshState,
         snackbarHostState = snackbarHostState,
         onItemClicked = onItemClicked,
-        onDismissError = viewModel::dismissError
+        onDismissError = viewModel::dismissError,
+        getLaunchStatusIcon = viewModel::getLaunchStatusIcon,
+        getLaunchDate = viewModel::getLaunchDateText
     )
 }
 
@@ -55,6 +59,8 @@ internal fun LaunchScreen(
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
     onItemClicked: (links: Links) -> Unit,
+    getLaunchStatusIcon: (LaunchSuccessStatus) -> Int,
+    getLaunchDate: (LaunchDateStatus) -> Int,
     onDismissError: () -> Unit
 ) {
     when (uiState) {
@@ -66,7 +72,9 @@ internal fun LaunchScreen(
                 onChangeScrollPosition = onChangeScrollPosition,
                 loadNextPage = loadNextPage,
                 pullRefreshState = pullRefreshState,
-                onItemClicked = onItemClicked
+                onItemClicked = onItemClicked,
+                getLaunchStatusIcon = getLaunchStatusIcon,
+                getLaunchDate = getLaunchDate
             )
         }
 

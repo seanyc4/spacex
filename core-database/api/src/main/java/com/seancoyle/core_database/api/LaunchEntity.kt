@@ -1,13 +1,13 @@
 package com.seancoyle.core_database.api
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
-import androidx.annotation.StringRes
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
 import java.time.LocalDateTime
 
 @Keep
@@ -26,9 +26,8 @@ data class LaunchEntity(
     @ColumnInfo(name="isLaunchSuccess")
     val isLaunchSuccess: Int?,
 
-    @ColumnInfo(name="launchSuccessIcon")
-    @DrawableRes
-    val launchSuccessIcon: Int,
+    @ColumnInfo(name="launchSuccessStatus")
+    val launchSuccessStatus: LaunchSuccessStatus,
 
     @ColumnInfo(name="launchYear")
     val launchYear: String,
@@ -42,9 +41,8 @@ data class LaunchEntity(
     @Embedded
     val rocket: RocketEntity,
 
-    @ColumnInfo(name="daysToFromTitle")
-    @StringRes
-    val daysToFromTitle: Int,
+    @ColumnInfo(name="launchDateStatus")
+    val launchDateStatus: LaunchDateStatus,
 
     @ColumnInfo(name="launchDaysDifference")
     val launchDaysDifference: String

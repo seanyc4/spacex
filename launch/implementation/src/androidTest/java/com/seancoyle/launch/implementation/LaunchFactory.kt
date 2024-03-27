@@ -32,13 +32,13 @@ internal class LaunchFactory @Inject constructor() {
             launchDate = launchDate,
             launchDateLocalDateTime = launchDateLocalDateTime,
             isLaunchSuccess = isLaunchSuccess,
-            launchSuccessIcon = launchSuccessIcon,
+            launchSuccessStatus = launchSuccessIcon,
             launchYear = launchYear,
             links = links,
             missionName = missionName,
             rocket = rocket,
-            daysToFromTitle = daysToFromTitle,
-            launchDaysDifference = launchDaysDifference,
+            launchDateStatus = daysToFromTitle,
+            launchDays = launchDaysDifference,
             type = type
         )
     }

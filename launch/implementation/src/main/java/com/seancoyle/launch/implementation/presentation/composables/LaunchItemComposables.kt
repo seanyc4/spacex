@@ -98,6 +98,8 @@ internal fun CompanySummaryCard(
 internal fun LaunchCard(
     launchItem: Launch,
     onClick: () -> Unit,
+    getLaunchStatusIcon: Int,
+    getLaunchDate: Int,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -133,7 +135,7 @@ internal fun LaunchCard(
                 LaunchCardDefaultText(title = R.string.mission)
                 LaunchCardDefaultText(title = R.string.date_time)
                 LaunchCardDefaultText(title = R.string.rocket)
-                LaunchCardDefaultText(title = launchItem.daysToFromTitle)
+                LaunchCardDefaultText(title = getLaunchDate)
             }
 
             Column(
@@ -143,7 +145,7 @@ internal fun LaunchCard(
                 LaunchCardDynamicText(title = launchItem.missionName)
                 LaunchCardDynamicText(title = launchItem.launchDate)
                 LaunchCardDynamicText(title = launchItem.rocket.rocketNameAndType)
-                LaunchCardDynamicText(title = launchItem.launchDaysDifference)
+                LaunchCardDynamicText(title = launchItem.launchDays)
             }
 
             Column(
@@ -151,7 +153,7 @@ internal fun LaunchCard(
                     .fillMaxWidth(1f)
             ) {
                 Image(
-                    painter = painterResource(id = launchItem.launchSuccessIcon),
+                    painter = painterResource(id = getLaunchStatusIcon),
                     contentDescription = "Success or failure icon"
                 )
             }

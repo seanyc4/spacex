@@ -13,7 +13,10 @@ import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMergedAndFilteredLaunchesEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -206,6 +209,19 @@ internal class LaunchViewModel @Inject constructor(
 
                 else -> {}
             }
+        }
+    }
+
+    fun getLaunchStatusIcon(status: LaunchSuccessStatus): Int = when (status) {
+        LaunchSuccessStatus.SUCCESS -> R.drawable.ic_launch_success
+        LaunchSuccessStatus.FAILED -> R.drawable.ic_launch_fail
+        LaunchSuccessStatus.UNKNOWN -> R.drawable.ic_launch_unknown
+    }
+
+    fun getLaunchDateText(status: LaunchDateStatus): Int {
+        return when (status) {
+            LaunchDateStatus.PAST -> R.string.days_since_now
+            LaunchDateStatus.FUTURE -> R.string.days_from_now
         }
     }
 

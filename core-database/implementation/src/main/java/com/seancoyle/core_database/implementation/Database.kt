@@ -15,7 +15,7 @@ import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
         LaunchEntity::class,
         CompanyEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(

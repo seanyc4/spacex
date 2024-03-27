@@ -1,9 +1,7 @@
 package com.seancoyle.launch.api.domain.model
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
-import androidx.annotation.StringRes
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
@@ -15,12 +13,12 @@ data class Launch(
     val launchDateLocalDateTime: LocalDateTime,
     val launchYear: String,
     val isLaunchSuccess: Int?,
-    @DrawableRes val launchSuccessIcon: Int,
+    val launchSuccessStatus: LaunchSuccessStatus,
     val links: Links,
     val missionName: String,
     val rocket: Rocket,
-    @StringRes val daysToFromTitle: Int,
-    val launchDaysDifference: String,
+    val launchDateStatus: LaunchDateStatus,
+    val launchDays: String,
     override val type: Int
 ) : Parcelable,
     ViewType()
@@ -37,7 +35,7 @@ data class Links(
 @Keep
 @Parcelize
 data class LinkType(
-    @StringRes val nameResId: Int,
+    val nameResId: Int,
     val link: String?,
     val onClick: () -> Unit
 ) : Parcelable

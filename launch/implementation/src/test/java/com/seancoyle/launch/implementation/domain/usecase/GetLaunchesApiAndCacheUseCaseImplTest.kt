@@ -118,12 +118,12 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         private val LAUNCH_LIST = listOf(
             Launch(
                 type = ViewType.TYPE_LIST,
-                daysToFromTitle = 0,
+                launchDateStatus = 0,
                 isLaunchSuccess = 1,
                 launchDate = "01/01/2023",
                 id = 1,
-                launchDaysDifference = "5 days",
-                launchSuccessIcon = 0,
+                launchDays = "5 days",
+                launchSuccessStatus = 0,
                 launchYear = "2023",
                 launchDateLocalDateTime = LocalDateTime.now(),
                 links = Links(

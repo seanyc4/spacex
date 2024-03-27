@@ -471,12 +471,12 @@ class FilterLaunchesCacheUseCaseImplTest {
             launchDateLocalDateTime = localDateTime,
             launchYear = launchYear,
             isLaunchSuccess = isLaunchSuccess,
-            launchSuccessIcon = R.drawable.ic_launch_success,
+            launchSuccessStatus = R.drawable.ic_launch_success,
             links = Links("missionImage$id", "articleLink$id", "webcastLink$id", "wikiLink$id"),
             missionName = "Mission $id",
             rocket = Rocket("Falcon 9"),
-            daysToFromTitle = R.string.days_from_now,
-            launchDaysDifference = "1 day",
+            launchDateStatus = R.string.days_from_now,
+            launchDays = "1 day",
             type = ViewType.TYPE_LIST
         )
     }

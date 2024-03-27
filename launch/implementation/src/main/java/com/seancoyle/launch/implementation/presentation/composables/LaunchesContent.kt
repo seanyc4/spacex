@@ -22,6 +22,8 @@ import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.domain.model.CompanySummary
@@ -46,6 +48,8 @@ internal fun LaunchesContent(
     loadNextPage: (Int) -> Unit,
     pullRefreshState: PullRefreshState,
     onItemClicked: (links: Links) -> Unit,
+    getLaunchStatusIcon: (LaunchSuccessStatus) -> Int,
+    getLaunchDate: (LaunchDateStatus) -> Int,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyGridState()
@@ -96,7 +100,9 @@ internal fun LaunchesContent(
                     ViewType.TYPE_LIST -> {
                         LaunchCard(
                             launchItem = launchItem as Launch,
-                            onClick = { onItemClicked(launchItem.links) }
+                            onClick = { onItemClicked(launchItem.links) },
+                            getLaunchStatusIcon = getLaunchStatusIcon(launchItem.launchSuccessStatus),
+                            getLaunchDate = getLaunchDate(launchItem.launchDateStatus)
                         )
                     }
 

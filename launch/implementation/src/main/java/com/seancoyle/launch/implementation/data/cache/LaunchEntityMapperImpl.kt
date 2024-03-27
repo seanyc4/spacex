@@ -26,7 +26,7 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
                 isLaunchSuccess = isLaunchSuccess,
-                launchSuccessIcon = launchSuccessIcon,
+                launchSuccessStatus = launchSuccessStatus,
                 launchYear = launchYear,
                 links = Links(
                     missionImage = links.missionImage,
@@ -38,8 +38,8 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 rocket = Rocket(
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
-                daysToFromTitle = daysToFromTitle,
-                launchDaysDifference = launchDaysDifference,
+                launchDateStatus = launchDateStatus,
+                launchDays = launchDaysDifference,
                 type = ViewType.TYPE_LIST
             )
         }
@@ -52,7 +52,7 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
                 isLaunchSuccess = isLaunchSuccess,
-                launchSuccessIcon = launchSuccessIcon,
+                launchSuccessStatus = launchSuccessStatus,
                 launchYear = launchYear,
                 links = LinksEntity(
                     missionImage = links.missionImage,
@@ -64,8 +64,8 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 rocket = RocketEntity(
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
-                daysToFromTitle = daysToFromTitle,
-                launchDaysDifference = launchDaysDifference,
+                launchDateStatus = launchDateStatus,
+                launchDaysDifference = launchDays,
             )
         }
     }

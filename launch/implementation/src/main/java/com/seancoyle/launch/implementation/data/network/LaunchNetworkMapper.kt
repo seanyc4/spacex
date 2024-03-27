@@ -7,10 +7,11 @@ import com.seancoyle.launch.api.LaunchConstants.LAUNCH_FAILED
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.data.network.dto.LaunchDto
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -31,7 +32,7 @@ internal class LaunchNetworkMapper @Inject constructor(
                     launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                     launchDateLocalDateTime = localDateTime,
                     isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),
-                    launchSuccessIcon = mapIsLaunchSuccessToIcon(launchSuccess),
+                    launchSuccessStatus = mapIsLaunchSuccessToStatus(launchSuccess),
                     launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                     links = Links(
                         missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
@@ -43,8 +44,8 @@ internal class LaunchNetworkMapper @Inject constructor(
                     rocket = Rocket(
                         rocketNameAndType = "${rocket?.name}/${rocket?.type}",
                     ),
-                    daysToFromTitle = mapCorrectLaunchText(localDateTime),
-                    launchDaysDifference = dateTransformer.getLaunchDaysDifference(localDateTime),
+                    launchDateStatus = mapLaunchDateToStatus(localDateTime),
+                    launchDays = dateTransformer.getLaunchDaysDifference(localDateTime),
                     type = ViewType.TYPE_LIST
                 )
             }
@@ -58,17 +59,17 @@ internal class LaunchNetworkMapper @Inject constructor(
             else -> { LAUNCH_UNKNOWN }
         }
 
-    private fun mapIsLaunchSuccessToIcon(isLaunchSuccess: Boolean?) =
+    private fun mapIsLaunchSuccessToStatus(isLaunchSuccess: Boolean?) =
         when (isLaunchSuccess) {
-            true -> { R.drawable.ic_launch_success }
-            false -> { R.drawable.ic_launch_fail }
-            else -> { R.drawable.ic_launch_unknown }
+            true -> { LaunchSuccessStatus.SUCCESS }
+            false -> { LaunchSuccessStatus.FAILED }
+            else -> { LaunchSuccessStatus.UNKNOWN }
         }
 
-    private fun mapCorrectLaunchText(localDateTime: LocalDateTime) =
-        if (dateTransformer.isPastLaunch(launchDate = localDateTime)) {
-            R.string.days_since_now
+    private fun mapLaunchDateToStatus(localDateTime: LocalDateTime) =
+        if (dateTransformer.isPastLaunch(localDateTime)) {
+            LaunchDateStatus.PAST
         } else {
-            R.string.days_from_now
+            LaunchDateStatus.FUTURE
         }
 }

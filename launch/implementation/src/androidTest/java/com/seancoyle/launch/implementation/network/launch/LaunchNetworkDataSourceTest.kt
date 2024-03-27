@@ -57,7 +57,7 @@ internal class LaunchNetworkDataSourceTest {
             launchDateLocalDateTime = dateTimeFormatter.formatDate("2022-12-01T00:00:00.000Z"),
             launchYear = "2022",
             isLaunchSuccess = 0,
-            launchSuccessIcon = 2131230833,
+            launchSuccessStatus = 2131230833,
             links = Links(
                 missionImage = "https://images2.imgbox.com/3c/0e/T8iJcSN3_o.png",
                 articleLink = null,
@@ -68,8 +68,8 @@ internal class LaunchNetworkDataSourceTest {
             rocket = Rocket(
                 rocketNameAndType = "Falcon 9/rocket"
             ),
-            daysToFromTitle = 2131820637,
-            launchDaysDifference = "+/- 340d",
+            launchDateStatus = 2131820637,
+            launchDays = "+/- 340d",
             type = 2
 
         )
