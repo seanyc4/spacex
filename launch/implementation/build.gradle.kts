@@ -19,7 +19,7 @@ android {
 dependencies {
 
     implementation(projects.core)
-    implementation(projects.coreTesting)
+    implementation(projects.coreTest)
     implementation(projects.coreUi)
     implementation(projects.coreDatastore)
     implementation(projects.coreDatabase.api)
@@ -31,7 +31,6 @@ dependencies {
     implementation(Glide.glide_compose) {
         exclude(group = "androidx.test", module = "core-ktx")
     }
-    //ksp(Glide.glide_compiler)
     implementation(Kotlin.coroutines_core)
     implementation(Kotlin.coroutines_android)
     implementation(Kotlin.kotlin_immutable)

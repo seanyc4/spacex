@@ -103,7 +103,7 @@ dependencies {
     implementation(projects.coreUi)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
-    androidTestImplementation(projects.coreTesting)
+    androidTestImplementation(projects.coreTest)
 
     implementation(AndroidX.app_compat)
     implementation(AndroidX.core_ktx)

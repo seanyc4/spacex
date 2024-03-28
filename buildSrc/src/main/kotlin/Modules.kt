@@ -8,5 +8,5 @@ object Modules {
     const val core_ui_namespace = "com.seancoyle.core_ui"
     const val launch_api_namespace = "com.seancoyle.launch.api"
     const val launch_impl_namespace = "com.seancoyle.launch.implementation"
-    const val core_testing_namespace = "com.seancoyle.core_testing"
+    const val core_test_namespace = "com.seancoyle.core_test"
 }

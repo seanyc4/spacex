@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_testing_namespace
+    namespace = Modules.core_test_namespace
 }
 
 dependencies {
