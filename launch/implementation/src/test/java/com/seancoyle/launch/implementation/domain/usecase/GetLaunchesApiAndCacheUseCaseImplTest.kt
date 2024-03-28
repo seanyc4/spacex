@@ -123,7 +123,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
                 launchDate = "01/01/2023",
                 id = 1,
                 launchDays = "5 days",
-                launchSuccessStatus = 0,
+                launchStatus = 0,
                 launchYear = "2023",
                 launchDateLocalDateTime = LocalDateTime.now(),
                 links = Links(

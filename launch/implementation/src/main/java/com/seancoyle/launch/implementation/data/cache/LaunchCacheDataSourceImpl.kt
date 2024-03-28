@@ -7,6 +7,7 @@ import com.seancoyle.core.domain.Crashlytics
 import com.seancoyle.core_database.api.LaunchDao
 import com.seancoyle.core_database.api.returnOrderedQuery
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     override suspend fun filterLaunchList(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): DataResult<List<ViewType>?> {
         return safeCacheCall(

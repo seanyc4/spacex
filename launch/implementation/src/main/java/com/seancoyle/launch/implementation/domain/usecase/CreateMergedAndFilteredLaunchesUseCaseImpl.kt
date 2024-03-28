@@ -6,6 +6,7 @@ import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.domain.StringResource
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -36,7 +37,7 @@ internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
     override operator fun invoke(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>>> = flow {
         combine(
@@ -156,7 +157,7 @@ internal class CreateMergedAndFilteredLaunchesUseCaseImpl @Inject constructor(
     private fun getLaunches(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> {
         return getLaunchesFromCacheUseCase(

@@ -10,11 +10,10 @@ import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMergedAndFilteredLaunchesEvent
@@ -73,8 +72,9 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
+            val filterString = appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
             setLaunchOrderState(appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: ORDER_ASC)
-            setLaunchFilterState(appDataStoreManager.readIntValue(LAUNCH_FILTER_KEY))
+            setLaunchFilterState(LaunchStatus.valueOf(filterString))
         }
     }
 
@@ -212,10 +212,11 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun getLaunchStatusIcon(status: LaunchSuccessStatus): Int = when (status) {
-        LaunchSuccessStatus.SUCCESS -> R.drawable.ic_launch_success
-        LaunchSuccessStatus.FAILED -> R.drawable.ic_launch_fail
-        LaunchSuccessStatus.UNKNOWN -> R.drawable.ic_launch_unknown
+    fun getLaunchStatusIcon(status: LaunchStatus): Int = when (status) {
+        LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
+        LaunchStatus.FAILED -> R.drawable.ic_launch_fail
+        LaunchStatus.UNKNOWN -> R.drawable.ic_launch_unknown
+        LaunchStatus.ALL -> TODO()
     }
 
     fun getLaunchDateText(status: LaunchDateStatus): Int {
@@ -269,20 +270,12 @@ internal class LaunchViewModel @Inject constructor(
     private fun getSearchYearState() = launchFilterState.value.year
     fun getOrderState() = launchFilterState.value.order
     fun getIsDialogFilterDisplayedState() = launchFilterState.value.isDialogFilterDisplayed
-
-    fun getFilterState(): Int? {
-        return if (launchFilterState.value.launchFilter == LAUNCH_ALL) {
-            setLaunchFilterState(null)
-            launchFilterState.value.launchFilter
-        } else {
-            launchFilterState.value.launchFilter
-        }
-    }
+    fun getFilterState(): LaunchStatus = launchFilterState.value.launchFilter
 
     fun clearQueryParameters() {
         clearListState()
         setYearState(null)
-        setLaunchFilterState(null)
+        setLaunchFilterState(LaunchStatus.ALL)
         resetPageState()
     }
 
@@ -303,9 +296,9 @@ internal class LaunchViewModel @Inject constructor(
         saveOrderToDatastore(order)
     }
 
-    fun setLaunchFilterState(filter: Int?) {
+    fun setLaunchFilterState(filter: LaunchStatus) {
         updateFilterState { copy(launchFilter = filter) }
-        saveFilterToDataStore(filter ?: LAUNCH_ALL)
+        saveFilterToDataStore(filter)
     }
 
     fun setDialogFilterDisplayedState(isDisplayed: Boolean) {
@@ -340,9 +333,9 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun saveFilterToDataStore(filter: Int) {
+    private fun saveFilterToDataStore(filter: LaunchStatus) {
         viewModelScope.launch(ioDispatcher) {
-            appDataStoreManager.setIntValue(LAUNCH_FILTER_KEY, filter)
+            appDataStoreManager.setStringValue(LAUNCH_FILTER_KEY, filter.name)
         }
     }
 

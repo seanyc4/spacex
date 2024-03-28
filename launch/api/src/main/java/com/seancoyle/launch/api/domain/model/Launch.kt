@@ -5,23 +5,19 @@ import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
-@Keep
-@Parcelize
 data class Launch(
     val id: String,
     val launchDate: String,
     val launchDateLocalDateTime: LocalDateTime,
     val launchYear: String,
-    val isLaunchSuccess: Int?,
-    val launchSuccessStatus: LaunchSuccessStatus,
+    val launchStatus: LaunchStatus,
     val links: Links,
     val missionName: String,
     val rocket: Rocket,
     val launchDateStatus: LaunchDateStatus,
     val launchDays: String,
     override val type: Int
-) : Parcelable,
-    ViewType()
+) : ViewType()
 
 @Keep
 @Parcelize
@@ -40,8 +36,6 @@ data class LinkType(
     val onClick: () -> Unit
 ) : Parcelable
 
-@Keep
-@Parcelize
 data class Rocket(
     val rocketNameAndType: String,
-) : Parcelable
+)

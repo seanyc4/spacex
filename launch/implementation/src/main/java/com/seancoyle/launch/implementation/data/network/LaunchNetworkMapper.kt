@@ -3,12 +3,9 @@ package com.seancoyle.launch.implementation.data.network
 import com.seancoyle.core.domain.DateFormatter
 import com.seancoyle.core.domain.DateTransformer
 import com.seancoyle.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_FAILED
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_SUCCESS
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -28,11 +25,10 @@ internal class LaunchNetworkMapper @Inject constructor(
                 val launchSuccess = isLaunchSuccess
 
                 Launch(
-                    id = flightNumber.toString()+localDateTime,
+                    id = flightNumber.toString() + localDateTime,
                     launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                     launchDateLocalDateTime = localDateTime,
-                    isLaunchSuccess = mapIsLaunchSuccessToInt(item.isLaunchSuccess),
-                    launchSuccessStatus = mapIsLaunchSuccessToStatus(launchSuccess),
+                    launchStatus = mapIsLaunchSuccessToStatus(launchSuccess),
                     launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                     links = Links(
                         missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
@@ -52,18 +48,11 @@ internal class LaunchNetworkMapper @Inject constructor(
         }
     }
 
-    private fun mapIsLaunchSuccessToInt(isLaunchSuccess: Boolean?) =
-        when (isLaunchSuccess) {
-            true -> { LAUNCH_SUCCESS }
-            false -> { LAUNCH_FAILED }
-            else -> { LAUNCH_UNKNOWN }
-        }
-
     private fun mapIsLaunchSuccessToStatus(isLaunchSuccess: Boolean?) =
         when (isLaunchSuccess) {
-            true -> { LaunchSuccessStatus.SUCCESS }
-            false -> { LaunchSuccessStatus.FAILED }
-            else -> { LaunchSuccessStatus.UNKNOWN }
+            true -> { LaunchStatus.SUCCESS }
+            false -> { LaunchStatus.FAILED }
+            else -> { LaunchStatus.UNKNOWN }
         }
 
     private fun mapLaunchDateToStatus(localDateTime: LocalDateTime) =

@@ -3,6 +3,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     override fun filterLaunchesCacheUseCase(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> {
         return filterLaunchesCacheUseCase.invoke(
@@ -37,7 +38,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     override fun createMergeAndFilteredLaunchesUseCase(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>>> {
         return createMergedAndFilteredLaunchesUseCase.invoke(

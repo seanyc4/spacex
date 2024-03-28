@@ -33,12 +33,9 @@ import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_FAILED
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_SUCCESS
-import com.seancoyle.launch.api.LaunchConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
@@ -185,10 +182,10 @@ internal class LaunchFragment : Fragment() {
 
             view.findViewById<RadioGroup>(R.id.filter_group).apply {
                 when (filter) {
-                    null -> check(R.id.filter_all)
-                    LAUNCH_SUCCESS -> check(R.id.filter_success)
-                    LAUNCH_FAILED -> check(R.id.filter_failure)
-                    LAUNCH_UNKNOWN -> check(R.id.filter_unknown)
+                    LaunchStatus.ALL -> check(R.id.filter_all)
+                    LaunchStatus.SUCCESS -> check(R.id.filter_success)
+                    LaunchStatus.FAILED -> check(R.id.filter_failure)
+                    LaunchStatus.UNKNOWN -> check(R.id.filter_unknown)
                 }
             }
 
@@ -212,10 +209,10 @@ internal class LaunchFragment : Fragment() {
 
                 val newFilter =
                     when (view.findViewById<RadioGroup>(R.id.filter_group).checkedRadioButtonId) {
-                        R.id.filter_success -> LAUNCH_SUCCESS
-                        R.id.filter_failure -> LAUNCH_FAILED
-                        R.id.filter_unknown -> LAUNCH_UNKNOWN
-                        R.id.filter_all -> LAUNCH_ALL
+                        R.id.filter_success -> LaunchStatus.SUCCESS
+                        R.id.filter_failure -> LaunchStatus.FAILED
+                        R.id.filter_unknown -> LaunchStatus.UNKNOWN
+                        R.id.filter_all -> LaunchStatus.ALL
                         else -> null
                     }
 

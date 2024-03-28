@@ -11,7 +11,7 @@ import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayErrorAlert
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
@@ -59,7 +59,7 @@ internal fun LaunchScreen(
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
     onItemClicked: (links: Links) -> Unit,
-    getLaunchStatusIcon: (LaunchSuccessStatus) -> Int,
+    getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
     onDismissError: () -> Unit
 ) {

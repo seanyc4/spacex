@@ -25,8 +25,7 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
-                isLaunchSuccess = isLaunchSuccess,
-                launchSuccessStatus = launchSuccessStatus,
+                launchStatus = launchStatus,
                 launchYear = launchYear,
                 links = Links(
                     missionImage = links.missionImage,
@@ -51,8 +50,7 @@ internal class LaunchEntityMapperImpl @Inject constructor(): LaunchEntityMapper 
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
-                isLaunchSuccess = isLaunchSuccess,
-                launchSuccessStatus = launchSuccessStatus,
+                launchStatus = launchStatus,
                 launchYear = launchYear,
                 links = LinksEntity(
                     missionImage = links.missionImage,

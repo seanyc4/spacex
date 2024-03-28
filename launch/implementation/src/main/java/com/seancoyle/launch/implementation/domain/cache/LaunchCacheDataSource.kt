@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.domain.cache
 
 import com.seancoyle.core.data.DataResult
 import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType
 
 internal interface LaunchCacheDataSource {
@@ -9,7 +10,7 @@ internal interface LaunchCacheDataSource {
     suspend fun filterLaunchList(
         year: String?,
         order: String,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int?
     ): DataResult<List<ViewType>?>
 

@@ -7,7 +7,7 @@ import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchSuccessStatus
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 import java.time.LocalDateTime
 
 @Keep
@@ -23,11 +23,8 @@ data class LaunchEntity(
     @TypeConverters(LocalDateTimeTypeConverter::class)
     val launchDateLocalDateTime: LocalDateTime,
 
-    @ColumnInfo(name="isLaunchSuccess")
-    val isLaunchSuccess: Int?,
-
-    @ColumnInfo(name="launchSuccessStatus")
-    val launchSuccessStatus: LaunchSuccessStatus,
+    @ColumnInfo(name="launchStatus")
+    val launchStatus: LaunchStatus,
 
     @ColumnInfo(name="launchYear")
     val launchYear: String,

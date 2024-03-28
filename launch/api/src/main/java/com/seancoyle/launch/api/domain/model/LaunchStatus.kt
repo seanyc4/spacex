@@ -1,7 +1,7 @@
 package com.seancoyle.launch.api.domain.model
 
-enum class LaunchSuccessStatus {
-    SUCCESS, FAILED, UNKNOWN
+enum class LaunchStatus {
+    SUCCESS, FAILED, UNKNOWN, ALL
 }
 
 enum class LaunchDateStatus {

@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.domain.model.LaunchStatus
 
 @Dao
 interface LaunchDao {
@@ -34,7 +35,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    suspend fun getById(id: String):LaunchEntity?
+    suspend fun getById(id: String): LaunchEntity?
 
     @Query(
         """
@@ -51,14 +52,14 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE isLaunchSuccess = :launchFilter
+        WHERE launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
         OFFSET :page
         """
     )
-    suspend fun launchItemsWithSuccessOrderByYearDESC(
-        launchFilter: Int?,
+    suspend fun filterByLaunchStatusDESC(
+        launchFilter: LaunchStatus,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -66,14 +67,14 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE isLaunchSuccess = :launchFilter
+        WHERE launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
         OFFSET :page
         """
     )
-    suspend fun launchItemsWithSuccessOrderByYearASC(
-        launchFilter: Int?,
+    suspend fun filterByLaunchStatusASC(
+        launchFilter: LaunchStatus,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -83,15 +84,15 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launchYear = :year
-        AND isLaunchSuccess = :launchFilter
+        AND launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
         OFFSET :page
         """
     )
-    suspend fun searchLaunchItemsWithSuccessOrderByYearDESC(
+    suspend fun filterByLaunchStatusAndYearDESC(
         year: String?,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -100,15 +101,15 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launchYear = :year
-        AND isLaunchSuccess = :launchFilter
+        AND launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
         OFFSET :page
         """
     )
-    suspend fun searchLaunchItemsWithSuccessOrderByYearASC(
+    suspend fun filterByLaunchStatusAndYearASC(
         year: String?,
-        launchFilter: Int?,
+        launchFilter: LaunchStatus,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -122,7 +123,7 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    suspend fun searchLaunchItemsOrderByYearDESC(
+    suspend fun filterByYearDESC(
         year: String?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
@@ -137,7 +138,7 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    suspend fun searchLaunchItemsOrderByYearASC(
+    suspend fun filterByYearASC(
         year: String?,
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
@@ -151,7 +152,7 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    suspend fun launchItemsOrderByYearDESC(
+    suspend fun getAllDESC(
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -164,7 +165,7 @@ interface LaunchDao {
         OFFSET :page
         """
     )
-    suspend fun launchItemsOrderByYearASC(
+    suspend fun getAllASC(
         page: Int? = 1,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -174,76 +175,76 @@ interface LaunchDao {
 suspend fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
-    launchFilter: Int?,
+    launchFilter: LaunchStatus,
     page: Int? = 1
 ): List<LaunchEntity>? {
     val hasYear = !year.isNullOrEmpty()
-    val hasLaunchFilter = launchFilter != null
     val isOrderDesc = order.contains(ORDER_DESC)
     val offset = (page?.minus(1))?.times(PAGINATION_PAGE_SIZE)
+    val noFilter = launchFilter == LaunchStatus.ALL
 
     return when {
 
-        hasLaunchFilter && isOrderDesc && !hasYear -> {
-            printLogDebug("DAO", "launchItemsWithSuccessOrderByYearDESC")
-            launchItemsWithSuccessOrderByYearDESC(
-                launchFilter = launchFilter,
-                page = offset
-            )
-        }
-
-        hasLaunchFilter && !isOrderDesc && !hasYear -> {
-            printLogDebug("DAO", "launchItemsWithSuccessOrderByYearASC")
-            launchItemsWithSuccessOrderByYearASC(
-                launchFilter = launchFilter,
-                page = offset
-            )
-        }
-
-        hasYear && isOrderDesc && !hasLaunchFilter -> {
-            printLogDebug("DAO", "searchLaunchItemsOrderByYearDESC")
-            searchLaunchItemsOrderByYearDESC(
+        hasYear && isOrderDesc && noFilter -> {
+            printLogDebug("DAO", "filterByYearDESC")
+            filterByYearDESC(
                 year = year,
                 page = offset
             )
         }
 
-        hasYear && !isOrderDesc && !hasLaunchFilter -> {
-            printLogDebug("DAO", "searchLaunchItemsOrderByYearASC")
-            searchLaunchItemsOrderByYearASC(
+        hasYear && !isOrderDesc && noFilter -> {
+            printLogDebug("DAO", "filterByYearASC")
+            filterByYearASC(
                 year = year,
                 page = offset
             )
         }
 
-        hasYear && hasLaunchFilter && !isOrderDesc -> {
-            printLogDebug("DAO", "searchLaunchItemsWithSuccessOrderByYearASC")
-            searchLaunchItemsWithSuccessOrderByYearASC(
+        isOrderDesc && noFilter -> {
+            printLogDebug("DAO", "getAllDESC")
+            getAllDESC(
+                page = offset
+            )
+        }
+
+        !isOrderDesc && noFilter -> {
+            printLogDebug("DAO", "getAllASC")
+            getAllASC(
+                page = offset
+            )
+        }
+
+        isOrderDesc && !hasYear -> {
+            printLogDebug("DAO", "filterByLaunchStatusDESC")
+            filterByLaunchStatusDESC(
+                launchFilter = launchFilter,
+                page = offset
+            )
+        }
+
+        !isOrderDesc && !hasYear -> {
+            printLogDebug("DAO", "filterByLaunchStatusASC")
+            filterByLaunchStatusASC(
+                launchFilter = launchFilter,
+                page = offset
+            )
+        }
+
+        hasYear && !isOrderDesc -> {
+            printLogDebug("DAO", "filterByLaunchStatusAndYearASC")
+            filterByLaunchStatusAndYearASC(
                 year = year,
                 launchFilter = launchFilter,
                 page = offset
             )
         }
 
-        hasYear && hasLaunchFilter && isOrderDesc -> {
-            printLogDebug("DAO", "searchLaunchItemsWithSuccessOrderByYearDESC")
-            searchLaunchItemsWithSuccessOrderByYearDESC(
+        hasYear && isOrderDesc -> {
+            printLogDebug("DAO", "filterByLaunchStatusAndYearDESC")
+            filterByLaunchStatusAndYearDESC(
                 year = year,
                 launchFilter = launchFilter,
-                page = offset
-            )
-        }
-
-        isOrderDesc -> {
-            printLogDebug("DAO", "launchItemsOrderByYearDESC")
-            launchItemsOrderByYearDESC(
-                page = offset
-            )
-        }
-
-        !isOrderDesc -> {
-            printLogDebug("DAO", "launchItemsOrderByYearASC")
-            launchItemsOrderByYearASC(
                 page = offset
             )
         }
