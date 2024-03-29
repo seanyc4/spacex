@@ -152,19 +152,19 @@ scalingpixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingP
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashVersion" }
 
 # TestDependecies
-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExtVersion" }
-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCoreVersion" }
-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCoreVersion" }
-junit4 = { module = "junit:junit", version.ref = "junit4Version" }
-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Version" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockkVersion" }
-testArchCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCoreVersion" }
-testCoreKtx = { module = "androidx.test:core-ktx", version.ref = "testCoreVersion" }
-testCoreMonitor = { module = "androidx.test:monitor", version.ref = "testMonitorVersion" }
-testRules = { module = "androidx.test:rules", version.ref = "testRulesVersion" }
-testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
+test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExtVersion" }
+test-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCoreVersion" }
+test-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCoreVersion" }
+test-junit4 = { module = "junit:junit", version.ref = "junit4Version" }
+test-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Version" }
+test-mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockkVersion" }
+test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCoreVersion" }
+test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCoreVersion" }
+test-coreMonitor = { module = "androidx.test:monitor", version.ref = "testMonitorVersion" }
+test-testRules = { module = "androidx.test:rules", version.ref = "testRulesVersion" }
+test-testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
 
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
@@ -184,19 +184,24 @@ kotlinSerializationPlugin = { id = "plugin.serialization" }
 
 
 [bundles]
-androidTestLibraries = [
-    "androidxTestExt",
+androidTestBundle = [
     "compose-uiTestJunit4",
-    "espressoCore",
-    "espressoIntents",
+    "compose-uiTest",
+    "test-androidxTestExt",
+    "test-espressoCore",
+    "test-espressoIntents",
     "hilt-androidtesting",
-    "idlingResource",
-    "junit4",
-    "junit5",
-    "mockk",
-    "testArchCore",
-    "testCoreKtx",
-    "testCoreMonitor",
-    "testRules",
-    "testRunner"
+    "test-idlingResource",
+    "test-mockkAndroid",
+    "test-archCore",
+    "test-coreKtx",
+    "test-testRules",
+    "test-testRunner"
+]
+
+unitTestBundle = [
+    "compose-uiTestJunit4",
+    "test-junit4",
+    "test-junit5",
+    "test-mockk",
 ]

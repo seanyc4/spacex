@@ -12,5 +12,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.androidTestLibraries)
+    implementation(libs.bundles.androidTestBundle)
 }

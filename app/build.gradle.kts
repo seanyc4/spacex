@@ -122,25 +122,9 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.googleGson)
     implementation(libs.timber)
-    // androidTestImplementation(libs.idlingResource)
 
     // Android Test Dependencies
-    androidTestImplementation(libs.androidxTestExt)
-    androidTestImplementation(libs.espressoCore)
-    androidTestImplementation(libs.espressoIntents)
-    androidTestImplementation(libs.idlingResource)
-    androidTestImplementation(libs.mockkAndroid)
-    androidTestImplementation(libs.testRules)
-    androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.testCoreKtx)
-    androidTestImplementation(libs.testArchCore)
-    androidTestImplementation(libs.kotlin.coroutinestest)
-    androidTestImplementation(libs.kotlin.junit)
-    debugImplementation(libs.testCoreMonitor)
-
-    // Compose Test Libraries
-    androidTestImplementation(libs.compose.uiTest)
-    androidTestImplementation(libs.compose.uiTestJunit4)
+    androidTestImplementation(libs.bundles.androidTestBundle)
     debugImplementation(libs.compose.uiTestManifest)
 
 }
