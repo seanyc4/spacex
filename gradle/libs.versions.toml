@@ -185,7 +185,8 @@ junitJupiterLibraries = ["jupiterApi", "jupiterEngine", "jupiterParams"]
 [plugins]
 androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
-kotlinAndroid = { id = "android" }
+android = { id = "android" }
+kotlinAndroid = { id = "kotlin-android" }
 kotlinParcelize = { id = "kotlin-parcelize" }
 kotlinSerializationPlugin = { id = "plugin.serialization" }
 kotlinKsp = { id = "com.google.devtools.ksp" }

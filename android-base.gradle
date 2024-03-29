@@ -1,6 +1,6 @@
-apply plugin: Plugins.android_library
-apply plugin: Plugins.kotlin
-apply plugin: Plugins.kotlin_parcelize
+apply plugin: libs.plugins.androidLibrary.get().pluginId
+apply plugin: libs.plugins.kotlinAndroid.get().pluginId
+apply plugin: libs.plugins.kotlinParcelize.get().pluginId
 
 android {
     compileSdk Android.compileSdk
@@ -25,12 +25,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility Java.java_compile_version
-        targetCompatibility Java.java_compile_version
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = Java.java_version
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     kotlin {

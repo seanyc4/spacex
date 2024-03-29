@@ -1,4 +1,4 @@
-apply plugin: Plugins.ksp
+apply plugin: libs.plugins.kotlinKsp.get().pluginId
 
 android {
     buildFeatures {

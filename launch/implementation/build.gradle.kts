@@ -9,7 +9,7 @@ plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     id(libs.plugins.kotlinKsp.get().pluginId)
     id(libs.plugins.junit5.get().pluginId)
-    kotlin(libs.plugins.kotlinAndroid.get().pluginId)
+    kotlin(libs.plugins.android.get().pluginId)
 }
 
 android {

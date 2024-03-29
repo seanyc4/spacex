@@ -9,7 +9,7 @@ plugins {
     id(libs.plugins.kotlinKsp.get().pluginId)
     id(libs.plugins.kotlinParcelize.get().pluginId)
     id(libs.plugins.hilt.get().pluginId)
-    kotlin(libs.plugins.kotlinAndroid.get().pluginId)
+    kotlin(libs.plugins.android.get().pluginId)
     kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlin
 }
 
@@ -49,8 +49,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Java.java_compile_version
-        targetCompatibility = Java.java_compile_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
@@ -58,7 +58,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = Java.java_version
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
