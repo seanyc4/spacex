@@ -64,8 +64,4 @@ android {
 
 dependencies {
     implementation(libs.timber)
-    testImplementation(libs.jupiterEngine)
-    testImplementation(libs.jupiterApi)
-    testImplementation(libs.jupiterParams)
-    testImplementation(libs.junit4)
 }
