@@ -2,12 +2,10 @@ package com.seancoyle.launch.implementation.presentation
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import org.junit.jupiter.api.extension.ExtendWith
 
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@ExtendWith(com.seancoyle.core_testing.InstantExecutorExtension::class)
 class LaunchViewModelTest {
 
    /* @get:Rule

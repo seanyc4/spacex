@@ -43,14 +43,7 @@ dependencies {
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.gson)
     implementation(libs.square.mockwebserver)
-
-    testImplementation(libs.testArchCore)
-    testImplementation(libs.mockk)
-    testImplementation(libs.jupiterEngine)
-    testImplementation(libs.jupiterApi)
-    testImplementation(libs.jupiterParams)
-    testImplementation(libs.junit4)
-    testImplementation(libs.kotlin.coroutinestest)
+    implementation(libs.bundles.androidTestLibraries)
 
     androidTestImplementation(libs.testRunner)
     androidTestImplementation(libs.testCoreKtx)

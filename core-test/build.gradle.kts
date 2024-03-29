@@ -12,10 +12,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlin.coroutinestest)
-    implementation(libs.testArchCore)
-    implementation(libs.jupiterApi)
-    implementation(libs.compose.uiTestJunit4)
-    implementation(libs.testRunner)
-    implementation(libs.hilt.androidtesting)
+    implementation(libs.bundles.androidTestLibraries)
 }

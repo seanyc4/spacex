@@ -40,7 +40,6 @@ testCore = "1.5.0"
 testMonitor = "1.6.1"
 testArchCore = "2.2.0"
 junit4 = "4.13.2"
-junitJupiter = "5.8.2"
 scalingPixels = "1.0.6"
 materialDialogs = "3.3.0"
 
@@ -171,15 +170,7 @@ testCoreKtx = { module = "androidx.test:core-ktx", version.ref = "testCore" }
 testCoreMonitor = { module = "androidx.test:monitor", version.ref = "testMonitor" }
 testArchCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCore" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
-jupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiter" }
-jupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiter" }
 junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Plugin" }
-
-
-[bundles]
-androidTestLibraries = ["androidxTestExt", "espressoCore", "espressoIntents", "idlingResource", "mockkAndroid", "mockk", "testRules", "testRunner", "testCoreKtx", "testCoreMonitor", "testArchCore"]
-junitJupiterLibraries = ["jupiterApi", "jupiterEngine", "jupiterParams"]
 
 
 [plugins]
@@ -193,3 +184,21 @@ kotlinKsp = { id = "com.google.devtools.ksp" }
 hilt = { id = "dagger.hilt.android.plugin" }
 hiltTestRunner = { id = "com.seancoyle.core.testing.HiltTestRunner" }
 junit5 = { id = "de.mannodermaus.android-junit5" }
+
+
+[bundles]
+androidTestLibraries = [
+    "hilt-androidtesting",
+    "compose-uiTestJunit4",
+    "androidxTestExt",
+    "espressoCore",
+    "espressoIntents",
+    "idlingResource",
+    "mockkAndroid",
+    "mockk",
+    "testRules",
+    "testRunner",
+    "testCoreKtx",
+    "testCoreMonitor",
+    "testArchCore"
+]
