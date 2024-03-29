@@ -12,6 +12,8 @@ android {
 }
 
 dependencies {
-    implementation(Square.retrofit)
-    implementation(Firebase.firebase)
+    implementation(platform(libs.firebase.bom))
+
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.square.retrofit)
 }

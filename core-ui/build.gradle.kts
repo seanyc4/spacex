@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(projects.core)
-    implementation(AndroidX.lifecycle_vm_ktx)
-    implementation(Kotlin.coroutines_android)
-    implementation(ScalingPixels.scaling_pixels)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.scalingpixels)
 }

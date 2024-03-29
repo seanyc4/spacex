@@ -13,5 +13,5 @@ android {
 
 dependencies {
     implementation(projects.coreDatastore)
-    implementation(AndroidX.data_store)
+    implementation(libs.dataStore)
 }

@@ -12,10 +12,10 @@ android {
 }
 
 dependencies {
-    implementation(KotlinTest.coroutines_test)
-    implementation(AndroidTestDependencies.test_arch_core)
-    implementation(AndroidTestDependencies.jupiter_api)
-    implementation(ComposeTest.compuse_ui_test_junit4)
-    implementation(AndroidTestDependencies.test_runner)
-    implementation(HiltTest.hilt_android_testing)
+    implementation(libs.kotlin.coroutinestest)
+    implementation(libs.testArchCore)
+    implementation(libs.jupiterApi)
+    implementation(libs.compose.uiTestJunit4)
+    implementation(libs.testRunner)
+    implementation(libs.hilt.androidtesting)
 }

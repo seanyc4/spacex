@@ -84,10 +84,10 @@ android {
     }
 
     packaging {
-                resources.pickFirsts.add("META-INF/LICENSE.md")
-                resources.pickFirsts.add("META-INF/LICENSE-notice.md")
+        resources.pickFirsts.add("META-INF/LICENSE.md")
+        resources.pickFirsts.add("META-INF/LICENSE-notice.md")
 
-        }
+    }
 
     lint {
         checkDependencies = true
@@ -105,47 +105,43 @@ dependencies {
     implementation(projects.launch.implementation)
     androidTestImplementation(projects.coreTest)
 
-    implementation(AndroidX.app_compat)
-    implementation(AndroidX.core_ktx)
-    implementation(AndroidX.fragment_ktx)
-    implementation(AndroidX.lifecycle_live_data_ktx)
-    implementation(AndroidX.lifecycle_vm_ktx)
-    implementation(AndroidX.lifecycle_saved_state)
-    implementation(AndroidX.lifecycle_compose_viewmodel)
-    implementation(AndroidX.navigation_dynamic)
-    implementation(AndroidX.navigation_fragment)
-    implementation(AndroidX.navigation_ui)
-    ksp(AndroidX.lifecycle_compiler)
-    implementation(AndroidX.splash_screen)
-    implementation(Compose.compose_runtime)
-    implementation(Kotlin.serialization)
-    implementation(MaterialDialogs.material_dialogs)
-    //debugImplementation(Square.leak_canary)
-    implementation(Room.room_runtime)
-    implementation(Square.retrofit_gson)
-    implementation(ScalingPixels.scaling_pixels)
-    implementation(Timber.timber)
-    implementation(AndroidTestDependencies.idling_resource)
+    implementation(libs.appcompat)
+    implementation(libs.coreKtx)
+    implementation(libs.fragmentKtx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.livedataktx)
+    implementation(libs.lifecycle.savedstate)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.navigation.dynamic)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    ksp(libs.lifecycle.compiler)
+    implementation(libs.splashScreen)
+    implementation(libs.compose.runtime)
+    implementation(libs.kotlin.serialization)
+    // debugImplementation(libs.squareLeakcanary)
+    implementation(libs.room.runtime)
+    implementation(libs.googleGson)
+    implementation(libs.timber)
+    // androidTestImplementation(libs.idlingResource)
 
-    androidTestImplementation(AndroidTestDependencies.androidx_test_ext)
-    androidTestImplementation(AndroidTestDependencies.espresso_core)
-    androidTestImplementation(AndroidTestDependencies.espresso_intents)
-    androidTestImplementation(AndroidTestDependencies.idling_resource)
-    androidTestImplementation(AndroidTestDependencies.mockk_android)
-    androidTestImplementation(AndroidTestDependencies.test_rules)
-    androidTestImplementation(AndroidTestDependencies.test_runner)
-    androidTestImplementation(AndroidTestDependencies.test_core_ktx)
-    androidTestImplementation(AndroidTestDependencies.test_arch_core)
-    androidTestImplementation(AndroidXTest.navigation_testing)
-    androidTestImplementation(KotlinTest.coroutines_test)
-    androidTestImplementation(KotlinTest.kotlin_test)
+    // Android Test Dependencies
+    androidTestImplementation(libs.androidxTestExt)
+    androidTestImplementation(libs.espressoCore)
+    androidTestImplementation(libs.espressoIntents)
+    androidTestImplementation(libs.idlingResource)
+    androidTestImplementation(libs.mockkAndroid)
+    androidTestImplementation(libs.testRules)
+    androidTestImplementation(libs.testRunner)
+    androidTestImplementation(libs.testCoreKtx)
+    androidTestImplementation(libs.testArchCore)
+    androidTestImplementation(libs.kotlin.coroutinestest)
+    androidTestImplementation(libs.kotlin.junit)
+    debugImplementation(libs.testCoreMonitor)
 
-    debugImplementation(AndroidXTest.fragment_testing)
-    debugImplementation(AndroidTestDependencies.test_core_monitor)
+    // Compose Test Libraries
+    androidTestImplementation(libs.compose.uiTest)
+    androidTestImplementation(libs.compose.uiTestJunit4)
+    debugImplementation(libs.compose.uiTestManifest)
 
-    androidTestImplementation(ComposeTest.compuse_ui_test)
-    androidTestImplementation(ComposeTest.compuse_ui_test_junit4)
-    debugImplementation(ComposeTest.compuse_ui_test_manifest)
-
-    androidTestImplementation(projects.coreDatastoreTest)
 }

@@ -13,27 +13,29 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
 
-    implementation platform(Compose.compose_bom)
-    androidTestImplementation platform(Compose.compose_bom)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.preview)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.layout)
+    implementation(libs.compose.material)
+    implementation(libs.compose.constraintLayout)
+    implementation(libs.compose.lifecycle)
+    implementation(libs.compose.viewmodelLifecycle)
+    implementation(libs.compose.tooling)
+    implementation(libs.compose.fragment)
+    implementation(libs.compose.navigation)
+    implementation(libs.hilt.navigationcompose)
 
-    implementation(Compose.compose_material3)
-    implementation(Compose.compose_runtime)
-    implementation(Compose.compose_preview)
-    implementation(Compose.compose_ui)
-    implementation(Compose.compose_foundation)
-    implementation(Compose.compose_layout)
-    implementation(Compose.compose_material)
-    implementation(Compose.compose_constraint_layout)
-    implementation(Compose.compose_lifecycle)
-    implementation(Compose.compose_viewmodel_lifecycle)
-    implementation(Compose.compose_tooling)
-    implementation(AndroidX.compose_fragment)
-    implementation(Hilt.hilt_navigation_compose)
+    // Compose Test dependencies
+    androidTestImplementation(libs.compose.uiTest)
+    androidTestImplementation(libs.compose.uiTestJunit4)
 
-    androidTestImplementation(ComposeTest.compuse_ui_test)
-    androidTestImplementation(ComposeTest.compuse_ui_test_junit4)
-
-    debugImplementation(ComposeTest.compuse_ui_test_manifest)
-    debugImplementation(Compose.compose_tooling)
+    // Debug implementations
+    debugImplementation(libs.compose.uiTestManifest)
+    debugImplementation(libs.compose.tooling)
 }

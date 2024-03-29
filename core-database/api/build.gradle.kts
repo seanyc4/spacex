@@ -14,5 +14,5 @@ android {
 dependencies {
     implementation(projects.core)
     implementation(projects.launch.api)
-    implementation(Room.room_ktx)
+    implementation(libs.room.ktx)
 }

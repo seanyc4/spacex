@@ -2,8 +2,9 @@ apply plugin: Plugins.hilt
 apply plugin: Plugins.ksp
 
 dependencies {
-    implementation(Hilt.android)
-    androidTestImplementation(HiltTest.hilt_android_testing)
-    kspAndroidTest(Hilt.compiler)
-    ksp(Hilt.compiler)
+    implementation(libs.hilt.android)
+    androidTestImplementation(libs.hilt.androidtesting)
+    ksp(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 }
+

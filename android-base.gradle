@@ -63,9 +63,9 @@ android {
 }
 
 dependencies {
-    implementation(Timber.timber)
-    testImplementation(AndroidTestDependencies.jupiter_engine)
-    testImplementation(AndroidTestDependencies.jupiter_api)
-    testImplementation(AndroidTestDependencies.jupiter_params)
-    testImplementation(AndroidTestDependencies.junit4)
+    implementation(libs.timber)
+    testImplementation(libs.jupiterEngine)
+    testImplementation(libs.jupiterApi)
+    testImplementation(libs.jupiterParams)
+    testImplementation(libs.junit4)
 }

@@ -22,7 +22,7 @@ dependencies {
     implementation(projects.core)
     implementation(projects.coreDatabase.api)
     implementation(projects.launch.api)
-    implementation(Room.room_ktx)
-    implementation(Room.room_runtime)
-    ksp(Room.room_compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
 }
