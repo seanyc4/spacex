@@ -10,7 +10,7 @@ android {
         targetSdk Android.targetSdk
         versionCode Android.versionCode
         versionName Android.versionName
-        testInstrumentationRunner AndroidTestDependencies.instrumentation_runner
+        testInstrumentationRunner libs.plugins.hiltTestRunner.get().pluginId
         vectorDrawables.useSupportLibrary true
     }
 

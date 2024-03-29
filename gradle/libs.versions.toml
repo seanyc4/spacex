@@ -174,7 +174,7 @@ junit4 = { module = "junit:junit", version.ref = "junit4" }
 jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
 jupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiter" }
 jupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiter" }
-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Plugin"}
+junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Plugin" }
 
 
 [bundles]
@@ -187,7 +187,8 @@ androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
 kotlinAndroid = { id = "android" }
 kotlinParcelize = { id = "kotlin-parcelize" }
-kotlinSerializationPlugin = { id = "plugin.serialization"}
+kotlinSerializationPlugin = { id = "plugin.serialization" }
 kotlinKsp = { id = "com.google.devtools.ksp" }
 hilt = { id = "dagger.hilt.android.plugin" }
+hiltTestRunner = { id = "com.seancoyle.core.testing.HiltTestRunner" }
 junit5 = { id = "de.mannodermaus.android-junit5" }

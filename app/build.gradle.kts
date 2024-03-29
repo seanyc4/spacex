@@ -23,7 +23,7 @@ android {
         targetSdk = Android.targetSdk
         versionCode = Android.versionCode
         versionName = Android.versionName
-        testInstrumentationRunner = AndroidTestDependencies.instrumentation_runner
+        testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -54,7 +54,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.compose_compiler_version
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     kotlinOptions {
