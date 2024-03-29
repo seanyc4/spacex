@@ -10,7 +10,7 @@ plugins {
     id(libs.plugins.kotlinParcelize.get().pluginId)
     id(libs.plugins.hilt.get().pluginId)
     kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlin
+    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlinVersion
 }
 
 android {
@@ -54,7 +54,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompilerVersion.get()
     }
 
     kotlinOptions {
