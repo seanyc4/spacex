@@ -4,8 +4,7 @@ apply {
 }
 
 plugins {
-    id(Plugins.android_library)
-    kotlin(Plugins.android)
+    id(libs.plugins.androidLibrary.get().pluginId)
 }
 
 android {

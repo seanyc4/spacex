@@ -5,12 +5,12 @@ apply {
 }
 
 plugins {
-    id(Plugins.android_application)
-    id(Plugins.ksp)
-    id(Plugins.kotlin_parcelize)
-    id(Plugins.hilt)
-    kotlin(Plugins.android)
-    kotlin(Plugins.serialization) version Kotlin.kotlin_version
+    id(libs.plugins.androidApplication.get().pluginId)
+    id(libs.plugins.kotlinKsp.get().pluginId)
+    id(libs.plugins.kotlinParcelize.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
+    kotlin(libs.plugins.kotlinAndroid.get().pluginId)
+    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlin
 }
 
 android {
@@ -118,7 +118,6 @@ dependencies {
     ksp(libs.lifecycle.compiler)
     implementation(libs.splashScreen)
     implementation(libs.compose.runtime)
-    implementation(libs.kotlin.serialization)
     // debugImplementation(libs.squareLeakcanary)
     implementation(libs.room.runtime)
     implementation(libs.googleGson)

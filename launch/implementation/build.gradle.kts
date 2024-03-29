@@ -6,10 +6,10 @@ apply {
 }
 
 plugins {
-    id(Plugins.junit5)
-    id(Plugins.android_library)
-    id(Plugins.ksp)
-    id(Plugins.kotlin)
+    id(libs.plugins.androidLibrary.get().pluginId)
+    id(libs.plugins.kotlinKsp.get().pluginId)
+    id(libs.plugins.junit5.get().pluginId)
+    kotlin(libs.plugins.kotlinAndroid.get().pluginId)
 }
 
 android {

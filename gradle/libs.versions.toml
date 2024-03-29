@@ -20,7 +20,7 @@ kotlinKSP = "1.9.22-1.0.17"
 kotlinImmutable = "0.3.6"
 kotlinxDateTime = "0.4.0"
 coroutines = "1.7.3"
-serialization = "1.5.0"
+kotlinSerialization = "1.6.0"
 retrofit2 = "2.9.0"
 leakCanary = "2.9.1"
 okHttp = "4.9.3"
@@ -47,6 +47,8 @@ materialDialogs = "3.3.0"
 [libraries]
 # AppCompat
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+
+gradle-buildtools = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 # Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -116,6 +118,7 @@ glideCompose = { module = "com.github.bumptech.glide:compose", version.ref = "gl
 
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "androidHilt" }
 hilt-navigationcompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -129,12 +132,13 @@ googleGson = { module = "com.google.code.gson:gson", version.ref = "gsonVersion"
 # Kotlin
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "kotlinKSP" }
+kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKSP" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # Kotlin Testing
 kotlin-coroutinestest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -170,6 +174,7 @@ junit4 = { module = "junit:junit", version.ref = "junit4" }
 jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
 jupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiter" }
 jupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiter" }
+junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Plugin"}
 
 
 [bundles]
@@ -178,12 +183,11 @@ junitJupiterLibraries = ["jupiterApi", "jupiterEngine", "jupiterParams"]
 
 
 [plugins]
-android = { id = "android" }
-android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKSP" }
-hilt-android = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }
-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5Plugin" }
+androidApplication = { id = "com.android.application" }
+androidLibrary = { id = "com.android.library" }
+kotlinAndroid = { id = "android" }
+kotlinParcelize = { id = "kotlin-parcelize" }
+kotlinSerializationPlugin = { id = "plugin.serialization"}
+kotlinKsp = { id = "com.google.devtools.ksp" }
+hilt = { id = "dagger.hilt.android.plugin" }
+junit5 = { id = "de.mannodermaus.android-junit5" }

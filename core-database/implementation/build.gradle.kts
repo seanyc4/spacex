@@ -4,8 +4,8 @@ apply {
 }
 
 plugins {
-    id(Plugins.android_library)
-    id(Plugins.ksp)
+    id(libs.plugins.androidLibrary.get().pluginId)
+    id(libs.plugins.kotlinKsp.get().pluginId)
 }
 
 android {

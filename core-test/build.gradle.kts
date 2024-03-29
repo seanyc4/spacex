@@ -4,7 +4,7 @@ apply {
 }
 
 plugins {
-    id(Plugins.android_library)
+    id(libs.plugins.androidLibrary.get().pluginId)
 }
 
 android {
