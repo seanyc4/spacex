@@ -10,24 +10,24 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class LaunchesComponentImpl @Inject constructor(
-    private val getLaunchesApiAndCacheUseCase: GetLaunchesApiAndCacheUseCase,
-    private val filterLaunchesCacheUseCase: FilterLaunchesCacheUseCase,
-    private val createMergedAndFilteredLaunchesUseCase: CreateMergedLaunchesUseCase,
-    private val getCompanyFromCacheUseCase: GetCompanyFromCacheUseCase,
-    private val getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase
+    private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
+    private val sortAndFilterLaunchesCacheUseCase: SortAndFilterLaunchesCacheUseCase,
+    private val createMergedLaunchesCacheUseCase: CreateMergedLaunchesCacheUseCase,
+    private val getCompanyCacheUseCase: GetCompanyCacheUseCase,
+    private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase
 ) : LaunchesComponent {
 
     override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>> {
-        return getLaunchesApiAndCacheUseCase.invoke()
+        return getLaunchesApiCacheUseCase.invoke()
     }
 
-    override fun filterLaunchesCacheUseCase(
+    override fun sortAndFilterLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>> {
-        return filterLaunchesCacheUseCase.invoke(
+        return sortAndFilterLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
             launchFilter = launchFilter,
@@ -35,13 +35,13 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override fun createMergeAndFilteredLaunchesUseCase(
+    override fun createMergedLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>>> {
-        return createMergedAndFilteredLaunchesUseCase.invoke(
+        return createMergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
             launchFilter = launchFilter,
@@ -49,11 +49,11 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>> {
-        return getCompanyFromCacheUseCase.invoke()
+    override fun getCompanyCacheUseCase(): Flow<DataResult<Company?>> {
+        return getCompanyCacheUseCase.invoke()
     }
 
-    override fun getCompanyInfoApiAndCacheUseCase(): Flow<DataResult<Company>> {
-        return getCompanyApiAndCacheUseCase.invoke()
+    override fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company>> {
+        return getCompanyApiCacheUseCase.invoke()
     }
 }

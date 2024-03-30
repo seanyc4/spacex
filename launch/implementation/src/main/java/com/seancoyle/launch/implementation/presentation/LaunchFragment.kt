@@ -68,7 +68,7 @@ internal class LaunchFragment : Fragment() {
             onRefresh = {
                 launchViewModel.clearQueryParameters()
                 launchViewModel.clearListState()
-                launchViewModel.setEvent(LaunchEvents.GetCompanyInfoApiAndCacheEvent)
+                launchViewModel.setEvent(LaunchEvents.GetCompanyApiAndCacheEvent)
             }
         )
 

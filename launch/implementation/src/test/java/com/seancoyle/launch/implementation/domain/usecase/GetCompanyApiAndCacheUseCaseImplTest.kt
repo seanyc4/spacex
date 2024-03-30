@@ -64,13 +64,13 @@ class GetCompanyApiAndCacheUseCaseImplTest {
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
         var dataResult: DataResult<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetCompanyInfoApiAndCacheEvent).collect { value ->
+        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
             dataResult = value
         }
 
         assertEquals(
             dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyInfoApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+            LaunchEvents.GetCompanyApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
         )
     }
 
@@ -82,7 +82,7 @@ class GetCompanyApiAndCacheUseCaseImplTest {
         coEvery { cacheDataSource.getCompany() } returns COMPANY_INFO
 
 
-        underTest(event = LaunchEvents.GetCompanyInfoApiAndCacheEvent)
+        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent)
 
         val resultFromCache = cacheDataSource.getCompany()
 
@@ -96,13 +96,13 @@ class GetCompanyApiAndCacheUseCaseImplTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
         var dataResult: DataResult<LaunchState>? = null
 
-        underTest(event = LaunchEvents.GetCompanyInfoApiAndCacheEvent).collect { value ->
+        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
             dataResult = value
         }
 
         assertEquals(
             dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyInfoApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
+            LaunchEvents.GetCompanyApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
         )
     }
 

@@ -4,7 +4,6 @@ import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
 
-
 internal data class ViewCarousel(
     val id: String,
     val items: List<RocketWithMission>,

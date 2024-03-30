@@ -8,7 +8,6 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
@@ -16,10 +15,10 @@ import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.CreateMergedAndFilteredLaunchesEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyInfoApiAndCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.PaginateLaunchesCacheEvent
+import com.seancoyle.launch.implementation.presentation.LaunchEvents.SortAndFilterLaunchesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,11 +55,11 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
-            //Restoring state from cache data
-            setEvent(CreateMergedAndFilteredLaunchesEvent)
+            // Restoring state from cache data
+            setEvent(SortAndFilterLaunchesEvent)
         } else {
-            //Fresh app launch - get data from network
-            setEvent(GetCompanyInfoApiAndCacheEvent)
+            // Fresh app launch - get data from network
+            setEvent(GetCompanyApiAndCacheEvent)
         }
     }
 
@@ -82,8 +81,8 @@ internal class LaunchViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
 
-                is CreateMergedAndFilteredLaunchesEvent -> {
-                    launchesComponent.createMergeAndFilteredLaunchesUseCase(
+                is SortAndFilterLaunchesEvent -> {
+                    launchesComponent.createMergedLaunchesCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -117,8 +116,7 @@ internal class LaunchViewModel @Inject constructor(
                 }
 
                 is PaginateLaunchesCacheEvent -> {
-                    printLogDebug("SPACEXAPP: ", "FilterLaunchItemsInCacheEvent")
-                    launchesComponent.filterLaunchesCacheUseCase(
+                    launchesComponent.sortAndFilterLaunchesCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
                         launchFilter = getFilterState(),
@@ -158,8 +156,8 @@ internal class LaunchViewModel @Inject constructor(
                     }
                 }
 
-                is GetCompanyInfoApiAndCacheEvent -> {
-                    launchesComponent.getCompanyInfoApiAndCacheUseCase()
+                is GetCompanyApiAndCacheEvent -> {
+                    launchesComponent.getCompanyApiAndCacheUseCase()
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
@@ -189,7 +187,7 @@ internal class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    setEvent(CreateMergedAndFilteredLaunchesEvent)
+                                    setEvent(SortAndFilterLaunchesEvent)
                                 }
 
                                 is DataResult.Error -> {
@@ -216,7 +214,7 @@ internal class LaunchViewModel @Inject constructor(
         LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
         LaunchStatus.FAILED -> R.drawable.ic_launch_fail
         LaunchStatus.UNKNOWN -> R.drawable.ic_launch_unknown
-        LaunchStatus.ALL -> TODO()
+        LaunchStatus.ALL -> throw IllegalArgumentException("LaunchStatus.ALL is not supported here")
     }
 
     fun getLaunchDateText(status: LaunchDateStatus): Int {
@@ -340,7 +338,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     fun newSearchEvent() {
-        setEvent(CreateMergedAndFilteredLaunchesEvent)
+        setEvent(SortAndFilterLaunchesEvent)
     }
 
     companion object {

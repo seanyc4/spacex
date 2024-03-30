@@ -24,12 +24,12 @@ class GetCompanyFromCacheUseCaseImplTest {
     @MockK
     private lateinit var cacheDataSource: CompanyCacheDataSource
 
-    private lateinit var underTest: GetCompanyFromCacheUseCaseImpl
+    private lateinit var underTest: GetCompanyCacheUseCaseImpl
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetCompanyFromCacheUseCaseImpl(
+        underTest = GetCompanyCacheUseCaseImpl(
             cacheDataSource = cacheDataSource
         )
     }
@@ -42,13 +42,13 @@ class GetCompanyFromCacheUseCaseImplTest {
         coEvery { cacheDataSource.getCompany() } returns COMPANY_INFO
 
         underTest(
-            event = LaunchEvents.GetCompanyInfoFromCacheEvent
+            event = LaunchEvents.GetCompanyFromCacheEvent
         ).collect { value ->
             result = value?.data?.company
             stateMessage = value?.stateMessage?.response?.message
         }
 
-        val expectedMessage = LaunchEvents.GetCompanyInfoFromCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+        val expectedMessage = LaunchEvents.GetCompanyFromCacheEvent.eventName() + EVENT_CACHE_SUCCESS
         assertEquals(expectedMessage, stateMessage)
         assertNotNull(result)
     }

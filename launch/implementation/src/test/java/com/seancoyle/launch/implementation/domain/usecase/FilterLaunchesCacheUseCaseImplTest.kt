@@ -37,12 +37,12 @@ class FilterLaunchesCacheUseCaseImplTest {
     @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
-    private lateinit var underTest: FilterLaunchesCacheUseCase
+    private lateinit var underTest: SortAndFilterLaunchesCacheUseCase
 
     @BeforeEach
     fun init() {
         MockKAnnotations.init(this)
-        underTest = FilterLaunchesCacheUseCaseImpl(
+        underTest = SortAndFilterLaunchesCacheUseCaseImpl(
             ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )

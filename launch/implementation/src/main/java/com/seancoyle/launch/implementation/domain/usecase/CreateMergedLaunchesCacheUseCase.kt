@@ -5,11 +5,11 @@ import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType
 import kotlinx.coroutines.flow.Flow
 
-internal interface FilterLaunchesCacheUseCase {
-    operator fun invoke(
-        year: String? = "",
-        order: String,
-        launchFilter: LaunchStatus,
-        page: Int? = 1
-    ): Flow<DataResult<List<ViewType>?>>
+internal interface CreateMergedLaunchesCacheUseCase {
+   operator fun invoke(
+       year: String?,
+       order: String,
+       launchFilter: LaunchStatus,
+       page: Int?
+   ): Flow<DataResult<List<ViewType>>>
 }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class FilterLaunchesCacheUseCaseImpl @Inject constructor(
+internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource
-) : FilterLaunchesCacheUseCase {
+) : SortAndFilterLaunchesCacheUseCase {
 
     override operator fun invoke(
         year: String?,

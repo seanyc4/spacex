@@ -28,6 +28,6 @@ internal data class Select(
 
 @Keep
 internal data class Sort(
-    val flight_number: String
+    val flightNumber: String
 )
 

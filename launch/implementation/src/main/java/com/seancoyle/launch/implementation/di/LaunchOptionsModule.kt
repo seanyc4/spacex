@@ -11,13 +11,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object LaunchOptionsModule {
 
-    @Singleton
     @Provides
     fun provideLaunchOptions(): LaunchOptions {
         return LaunchOptions(
@@ -32,7 +30,7 @@ internal object LaunchOptionsModule {
                     )
                 ),
                 sort = Sort(
-                    flight_number = LAUNCH_OPTIONS_SORT,
+                    flightNumber = LAUNCH_OPTIONS_SORT,
                 ),
                 limit = 500
             )

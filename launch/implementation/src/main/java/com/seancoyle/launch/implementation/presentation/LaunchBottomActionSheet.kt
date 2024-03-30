@@ -36,13 +36,8 @@ internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
             setContent {
                 Column() {
-                    LaunchBottomSheetCard(
-                        linkTypes = linkTypes
-                    )
-
-                    LaunchBottomSheetExitButton {
-                        dismiss()
-                    }
+                    LaunchBottomSheetCard(linkTypes = linkTypes)
+                    LaunchBottomSheetExitButton { dismiss() }
                 }
             }
         }

@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
-    fun filterLaunchesCacheUseCase(
+    fun sortAndFilterLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
     ): Flow<DataResult<List<ViewType>?>>
 
-    fun createMergeAndFilteredLaunchesUseCase(
+    fun createMergedLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
@@ -25,8 +25,8 @@ interface LaunchesComponent {
 
     fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>>
 
-    fun getCompanyInfoFromCacheUseCase(): Flow<DataResult<Company?>>
+    fun getCompanyCacheUseCase(): Flow<DataResult<Company?>>
 
-    fun getCompanyInfoApiAndCacheUseCase(): Flow<DataResult<Company>>
+    fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company>>
 
 }

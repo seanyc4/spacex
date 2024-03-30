@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetCompanyFromCacheUseCaseImpl @Inject constructor(
+internal class GetCompanyCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyCacheDataSource
-) : GetCompanyFromCacheUseCase {
+) : GetCompanyCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Company?>> = flow {
         emit(cacheDataSource.getCompany())

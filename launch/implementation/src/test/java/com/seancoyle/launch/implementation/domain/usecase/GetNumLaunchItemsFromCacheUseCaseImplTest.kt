@@ -41,13 +41,13 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
         coEvery { cacheDataSource.getTotalEntries() } returns TOTAL_ENTRIES
 
         underTest(
-            event = LaunchEvents.GetNumLaunchItemsInCacheEvent
+            event = LaunchEvents.GetNumLaunchesInCacheEvent
         ).collect { value ->
             numItems = value?.data?.numLaunchesInCache ?: 0
             stateMessage = value?.stateMessage?.response?.message
         }
 
-        val expectedMessage = LaunchEvents.GetNumLaunchItemsInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
+        val expectedMessage = LaunchEvents.GetNumLaunchesInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
         assertEquals(expectedMessage, stateMessage)
         assertEquals(TOTAL_ENTRIES, numItems)
     }
