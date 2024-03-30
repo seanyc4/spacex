@@ -1,11 +1,11 @@
-package com.seancoyle.core_database.api.typeconverters
+package com.seancoyle.database.util
 
 import androidx.room.TypeConverter
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class LocalDateTimeTypeConverter {
+class LocalDateTimeConverter {
 
     @TypeConverter
     fun fromTimestamp(value: Long?): LocalDateTime? {

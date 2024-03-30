@@ -1,10 +1,11 @@
-package com.seancoyle.core_database.api
+package com.seancoyle.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.LaunchStatus

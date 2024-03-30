@@ -1,7 +1,7 @@
-package com.seancoyle.core_database.implementation.di
+package com.seancoyle.database.di
 
-import com.seancoyle.core_database.api.CompanyDao
-import com.seancoyle.core_database.implementation.Database
+import com.seancoyle.database.Database
+import com.seancoyle.database.dao.CompanyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

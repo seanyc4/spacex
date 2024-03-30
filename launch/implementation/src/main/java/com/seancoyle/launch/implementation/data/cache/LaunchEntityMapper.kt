@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.data.cache
 
-import com.seancoyle.core_database.api.LaunchEntity
+import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.ViewType
 

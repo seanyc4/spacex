@@ -1,13 +1,12 @@
-package com.seancoyle.core_database.implementation
+package com.seancoyle.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.seancoyle.core_database.api.CompanyDao
-import com.seancoyle.core_database.api.CompanyEntity
-import com.seancoyle.core_database.api.LaunchDao
-import com.seancoyle.core_database.api.LaunchEntity
-import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
+import com.seancoyle.database.dao.CompanyDao
+import com.seancoyle.database.dao.LaunchDao
+import com.seancoyle.database.entities.CompanyEntity
+import com.seancoyle.database.entities.LaunchEntity
 
 @Database(
     entities =
@@ -19,7 +18,7 @@ import com.seancoyle.core_database.api.typeconverters.LocalDateTimeTypeConverter
     exportSchema = true
 )
 @TypeConverters(
-    LocalDateTimeTypeConverter::class
+    com.seancoyle.database.util.LocalDateTimeConverter::class
 )
 internal abstract class Database : RoomDatabase() {
 

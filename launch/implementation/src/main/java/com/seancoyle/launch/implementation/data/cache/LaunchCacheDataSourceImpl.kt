@@ -4,8 +4,8 @@ import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Crashlytics
-import com.seancoyle.core_database.api.LaunchDao
-import com.seancoyle.core_database.api.returnOrderedQuery
+import com.seancoyle.database.dao.LaunchDao
+import com.seancoyle.database.dao.returnOrderedQuery
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType

@@ -1,9 +1,10 @@
-package com.seancoyle.core_database.api
+package com.seancoyle.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.seancoyle.database.entities.CompanyEntity
 
 @Dao
 interface CompanyDao {

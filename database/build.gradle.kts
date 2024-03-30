@@ -1,5 +1,6 @@
 apply {
     from("$rootDir/android-base.gradle")
+    from("$rootDir/hilt.gradle")
 }
 
 plugins {
@@ -8,11 +9,19 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_database_api_namespace
+    namespace = "com.seancoyle.core_database"
+
+    defaultConfig {
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
 }
 
 dependencies {
     implementation(projects.core)
     implementation(projects.launch.api)
     implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
 }

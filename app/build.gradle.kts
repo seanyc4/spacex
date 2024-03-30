@@ -97,8 +97,7 @@ dependencies {
 
     implementation(projects.core)
     implementation(projects.coreDatastore)
-    implementation(projects.coreDatabase.api)
-    implementation(projects.coreDatabase.implementation)
+    implementation(projects.database)
     implementation(projects.coreUi)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)

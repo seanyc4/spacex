@@ -1,8 +1,9 @@
-package com.seancoyle.core_database.implementation
+package com.seancoyle.database.di
 
 
 import android.content.Context
 import androidx.room.Room
+import com.seancoyle.database.Database
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

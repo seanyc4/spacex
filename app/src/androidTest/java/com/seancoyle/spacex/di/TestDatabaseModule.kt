@@ -2,8 +2,7 @@ package com.seancoyle.spacex.di
 
 import android.content.Context
 import androidx.room.Room
-import com.seancoyle.core_database.implementation.Database
-import com.seancoyle.core_database.implementation.DatabaseModule
+import com.seancoyle.database.di.DatabaseModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,9 +19,9 @@ object TestDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideSpaceXDb(@ApplicationContext app: Context): Database {
+    fun provideSpaceXDb(@ApplicationContext app: Context): com.seancoyle.database.Database {
         return Room
-            .inMemoryDatabaseBuilder(app, Database::class.java)
+            .inMemoryDatabaseBuilder(app, com.seancoyle.database.Database::class.java)
             .fallbackToDestructiveMigration()
             .build()
     }

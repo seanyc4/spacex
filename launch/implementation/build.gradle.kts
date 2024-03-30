@@ -22,15 +22,12 @@ dependencies {
     implementation(projects.coreTest)
     implementation(projects.coreUi)
     implementation(projects.coreDatastore)
-    implementation(projects.coreDatabase.api)
-    implementation(projects.coreDatabase.implementation)
+    implementation(projects.database)
     implementation(projects.launch.api)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)
-    implementation(libs.glideCompose) {
-        exclude(group = "androidx.test", module = "core-ktx")
-    }
+    implementation(libs.glideCompose)
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable)

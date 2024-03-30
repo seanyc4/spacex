@@ -1,4 +1,4 @@
-package com.seancoyle.core_database.api
+package com.seancoyle.database.entities
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
