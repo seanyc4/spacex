@@ -9,12 +9,10 @@ import androidx.compose.ui.test.onNodeWithText
 import com.seancoyle.core_testing.stringResource
 import com.seancoyle.spacex.R
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.junit.Test
 
 @ExperimentalTestApi
-@ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
 class SpaceXTest: LaunchBase() {

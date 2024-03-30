@@ -8,12 +8,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],

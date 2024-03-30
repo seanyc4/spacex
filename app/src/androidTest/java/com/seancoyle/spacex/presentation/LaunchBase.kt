@@ -11,16 +11,12 @@ import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkData
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @HiltAndroidTest
 open class LaunchBase {
 

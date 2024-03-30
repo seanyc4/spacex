@@ -20,13 +20,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.seancoyle.core_testing.stringResource
 import com.seancoyle.spacex.R
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.Matchers
 import org.junit.Test
 
 @ExperimentalTestApi
-@ExperimentalCoroutinesApi
 @FlowPreview
 @HiltAndroidTest
 class LaunchBottomSheetTest: LaunchBase() {
