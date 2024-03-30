@@ -8,10 +8,10 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_datastore_namespace
+    namespace = "com.seancoyle.datastore"
 }
 
 dependencies {
-    testImplementation(projects.coreDatastoreTest)
+    testImplementation(projects.datastoreTest)
     implementation(libs.dataStore)
 }

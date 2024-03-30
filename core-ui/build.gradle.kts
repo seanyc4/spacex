@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_ui_namespace
+    namespace = "com.seancoyle.core_ui"
 }
 
 dependencies {

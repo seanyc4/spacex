@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_namespace
+    namespace = "com.seancoye.core"
 }
 
 dependencies {

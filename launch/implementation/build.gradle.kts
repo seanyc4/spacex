@@ -13,15 +13,14 @@ plugins {
 }
 
 android {
-    namespace = Modules.launch_impl_namespace
+    namespace = "com.seancoyle.launch.implementation"
 }
 
 dependencies {
-
     implementation(projects.core)
     implementation(projects.coreTest)
     implementation(projects.coreUi)
-    implementation(projects.coreDatastore)
+    implementation(projects.datastore)
     implementation(projects.database)
     implementation(projects.launch.api)
 

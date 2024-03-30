@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Modules.core_test_namespace
+    namespace = "com.seancoyle.core_test"
 }
 
 dependencies {

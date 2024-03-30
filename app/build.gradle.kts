@@ -14,7 +14,7 @@ plugins {
 }
 
 android {
-    namespace = Modules.app_namespace
+    namespace = "com.seancoyle.spacex"
     compileSdk = Android.compileSdk
 
     defaultConfig {
@@ -94,9 +94,8 @@ android {
 }
 
 dependencies {
-
     implementation(projects.core)
-    implementation(projects.coreDatastore)
+    implementation(projects.datastore)
     implementation(projects.database)
     implementation(projects.coreUi)
     implementation(projects.launch.api)
