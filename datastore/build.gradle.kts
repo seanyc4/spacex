@@ -13,5 +13,6 @@ android {
 
 dependencies {
     testImplementation(projects.datastoreTest)
+    testImplementation(libs.kotlin.junit)
     implementation(libs.dataStore)
 }
