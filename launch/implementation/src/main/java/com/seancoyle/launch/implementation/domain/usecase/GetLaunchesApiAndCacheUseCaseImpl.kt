@@ -1,8 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
-import com.seancoyle.core.data.DataResult
-import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
+import com.seancoyle.core.domain.DataError
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
@@ -16,23 +15,23 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val launchOptions: LaunchOptions
 ) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<List<Launch>>> = flow {
+    override operator fun invoke(): Flow<DataResult<List<Launch>, DataError>> = flow {
         emit(getLaunchesFromNetwork())
     }
 
-    private suspend fun getLaunchesFromNetwork(): DataResult<List<Launch>> {
+    private suspend fun getLaunchesFromNetwork(): DataResult<List<Launch>, DataError> {
         return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
             is DataResult.Success -> cacheData(networkResult.data)
-            is DataResult.Error -> DataResult.Error(networkResult.exception)
-            else -> DataResult.Error(UNKNOWN_NETWORK_ERROR)
+            is DataResult.Error -> DataResult.Error(networkResult.error)
+            is DataResult.Loading -> DataResult.Loading
         }
     }
 
-    private suspend fun cacheData(launches: List<Launch>): DataResult<List<Launch>> {
+    private suspend fun cacheData(launches: List<Launch>): DataResult<List<Launch>, DataError> {
         return when (val cacheResult = insertLaunchesToCacheUseCase(launches)) {
             is DataResult.Success -> DataResult.Success(launches)
-            is DataResult.Error -> DataResult.Error(cacheResult.exception)
-            else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
+            is DataResult.Error -> DataResult.Error(cacheResult.error)
+            is DataResult.Loading -> DataResult.Loading
         }
     }
 }

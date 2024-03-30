@@ -1,8 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.CACHE_ERROR_NO_RESULTS
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
-import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.domain.DataError
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core.domain.StringResource
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
@@ -39,7 +38,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>>> = flow {
+    ): Flow<DataResult<List<ViewType>, DataError>> = flow {
         combine(
             getCompanyInfo().distinctUntilChanged(),
             getLaunches(
@@ -60,19 +59,19 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
                 }
 
                 companyInfoResult is DataResult.Error -> {
-                    DataResult.Error(companyInfoResult.exception)
+                    DataResult.Error(companyInfoResult.error)
                 }
 
                 launchesResult is DataResult.Error -> {
-                    DataResult.Error(launchesResult.exception)
+                    DataResult.Error(launchesResult.error)
                 }
 
                 launchesData.isNullOrEmpty() -> {
-                    DataResult.Error(CACHE_ERROR_NO_RESULTS)
+                    DataResult.Error(DataError.CACHE_ERROR_NO_RESULTS)
                 }
 
                 else -> {
-                    DataResult.Error(UNKNOWN_DATABASE_ERROR)
+                    DataResult.Error(DataError.UNKNOWN_DATABASE_ERROR)
                 }
             }
 
@@ -150,7 +149,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
         )
     }
 
-    private fun getCompanyInfo(): Flow<DataResult<Company?>> {
+    private fun getCompanyInfo(): Flow<DataResult<Company?, DataError>> {
         return getCompanyFromCacheUseCase()
     }
 
@@ -159,7 +158,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>?>> {
+    ): Flow<DataResult<List<ViewType>?, DataError>> {
         return getLaunchesFromCacheUseCase(
             year = year,
             order = order,

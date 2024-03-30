@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core_testing.MainCoroutineRule
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.presentation.LaunchState

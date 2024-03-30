@@ -1,6 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.domain.DataError
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -17,7 +18,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>, DataError>> {
         return getLaunchesApiCacheUseCase.invoke()
     }
 
@@ -26,7 +27,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>?>> {
+    ): Flow<DataResult<List<ViewType>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
@@ -40,7 +41,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>>> {
+    ): Flow<DataResult<List<ViewType>, DataError>> {
         return createMergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
@@ -49,11 +50,11 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override fun getCompanyCacheUseCase(): Flow<DataResult<Company?>> {
+    override fun getCompanyCacheUseCase(): Flow<DataResult<Company?, DataError>> {
         return getCompanyCacheUseCase.invoke()
     }
 
-    override fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company>> {
+    override fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company, DataError>> {
         return getCompanyApiCacheUseCase.invoke()
     }
 }

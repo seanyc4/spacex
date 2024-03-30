@@ -1,6 +1,7 @@
 package com.seancoyle.launch.api.domain.usecase
 
-import com.seancoyle.core.data.DataResult
+import com.seancoyle.core.domain.DataError
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -14,19 +15,19 @@ interface LaunchesComponent {
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>?>>
+    ): Flow<DataResult<List<ViewType>?, DataError>>
 
     fun createMergedLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>>>
+    ): Flow<DataResult<List<ViewType>, DataError>>
 
-    fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>>>
+    fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>, DataError>>
 
-    fun getCompanyCacheUseCase(): Flow<DataResult<Company?>>
+    fun getCompanyCacheUseCase(): Flow<DataResult<Company?, DataError>>
 
-    fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company>>
+    fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company, DataError>>
 
 }

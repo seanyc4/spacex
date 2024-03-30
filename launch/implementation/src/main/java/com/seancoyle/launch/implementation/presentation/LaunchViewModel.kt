@@ -3,11 +3,13 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.data.DataResult
 import com.seancoyle.core.di.IODispatcher
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
+import com.seancoyle.core.domain.StringResource
+import com.seancoyle.core.presentation.getErrorMessage
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
@@ -35,6 +37,7 @@ internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val appDataStoreManager: AppDataStore,
     private val savedStateHandle: SavedStateHandle,
+    private val stringResource: StringResource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -71,7 +74,8 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
-            val filterString = appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
+            val filterString =
+                appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
             setLaunchOrderState(appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: ORDER_ASC)
             setLaunchFilterState(LaunchStatus.valueOf(filterString))
         }
@@ -90,6 +94,7 @@ internal class LaunchViewModel @Inject constructor(
                     ).distinctUntilChanged()
                         .collect { result ->
                             when (result) {
+                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
                                 is DataResult.Success -> {
                                     _uiState.value = LaunchUiState.Success(
                                         launches = result.data,
@@ -97,14 +102,11 @@ internal class LaunchViewModel @Inject constructor(
                                     )
                                 }
 
-                                is DataResult.Loading -> {
-                                    _uiState.value = LaunchUiState.Loading
-                                }
-
                                 is DataResult.Error -> {
+                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = result.exception,
+                                            message = errorMessage,
                                             messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
                                         ),
@@ -123,6 +125,10 @@ internal class LaunchViewModel @Inject constructor(
                         page = getPageState()
                     ).collect { result ->
                         when (result) {
+                            is DataResult.Loading -> {
+                                _uiState.update { it.copy(paginationState = PaginationState.Loading) }
+                            }
+
                             is DataResult.Success -> {
                                 // Pagination - We append the next 30 rows to the current state as a new list
                                 // This triggers a recompose and keeps immutability
@@ -137,20 +143,11 @@ internal class LaunchViewModel @Inject constructor(
                                         launches = allLaunches,
                                         paginationState = PaginationState.None
                                     )
-
-                                }
-                            }
-
-                            is DataResult.Loading -> {
-                                _uiState.update {
-                                    it.copy(paginationState = PaginationState.Loading)
                                 }
                             }
 
                             is DataResult.Error -> {
-                                _uiState.update {
-                                    it.copy(paginationState = PaginationState.Error)
-                                }
+                                _uiState.update { it.copy(paginationState = PaginationState.Error) }
                             }
                         }
                     }
@@ -161,22 +158,19 @@ internal class LaunchViewModel @Inject constructor(
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
-                                is DataResult.Success -> {
-                                    setEvent(GetLaunchesApiAndCacheEvent)
-                                }
-
+                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
+                                is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
+                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = result.exception,
+                                            message = errorMessage,
                                             messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
                                         ),
                                         showError = true
                                     )
                                 }
-
-                                else -> {}
                             }
                         }
                 }
@@ -186,21 +180,18 @@ internal class LaunchViewModel @Inject constructor(
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
-                                is DataResult.Success -> {
-                                    setEvent(SortAndFilterLaunchesEvent)
-                                }
-
+                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
+                                is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
+                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = result.exception,
+                                            message = errorMessage,
                                             messageDisplayType = MessageDisplayType.Dialog,
                                             messageType = MessageType.Error
                                         )
                                     )
                                 }
-
-                                else -> {}
                             }
                         }
                 }
@@ -344,6 +335,7 @@ internal class LaunchViewModel @Inject constructor(
     companion object {
         // Datastore Files:
         private const val LAUNCH_DATASTORE_KEY: String = "com.seancoyle.spacex.launch"
+
         // Datastore Keys
         private const val LAUNCH_ORDER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
         private const val LAUNCH_FILTER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"

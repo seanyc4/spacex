@@ -1,8 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.data.CacheErrors.UNKNOWN_DATABASE_ERROR
-import com.seancoyle.core.data.DataResult
-import com.seancoyle.core.data.NetworkErrors.UNKNOWN_NETWORK_ERROR
+import com.seancoyle.core.domain.DataError
+import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import kotlinx.coroutines.flow.Flow
@@ -14,23 +13,23 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     private val networkDataSource: CompanyInfoNetworkDataSource
 ) : GetCompanyApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<Company>> = flow {
+    override operator fun invoke(): Flow<DataResult<Company, DataError>> = flow {
         emit(getCompanyFromNetwork())
     }
 
-    private suspend fun getCompanyFromNetwork(): DataResult<Company> {
+    private suspend fun getCompanyFromNetwork(): DataResult<Company, DataError> {
         return when (val networkResult = networkDataSource.getCompany()) {
             is DataResult.Success -> cacheData(networkResult.data)
-            is DataResult.Error -> DataResult.Error(networkResult.exception)
-            else -> DataResult.Error(UNKNOWN_NETWORK_ERROR)
+            is DataResult.Error -> DataResult.Error(networkResult.error)
+            is DataResult.Loading -> DataResult.Loading
         }
     }
 
-    private suspend fun cacheData(company: Company): DataResult<Company> {
+    private suspend fun cacheData(company: Company): DataResult<Company, DataError> {
         return when (val cacheResult = insertCompanyInfoToCacheUseCase(company)) {
             is DataResult.Success -> DataResult.Success(company)
-            is DataResult.Error -> DataResult.Error(cacheResult.exception)
-            else -> DataResult.Error(UNKNOWN_DATABASE_ERROR)
+            is DataResult.Error -> DataResult.Error(cacheResult.error)
+            is DataResult.Loading -> DataResult.Loading
         }
     }
 }

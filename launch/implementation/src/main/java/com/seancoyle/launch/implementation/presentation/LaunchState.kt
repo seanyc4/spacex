@@ -19,7 +19,7 @@ internal sealed interface LaunchUiState {
 
     data class Error(
         val errorResponse: Response? = null,
-        val showError: Boolean = true
+        val showError: Boolean? = false
     ) : LaunchUiState
 }
 
