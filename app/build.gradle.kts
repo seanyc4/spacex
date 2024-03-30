@@ -10,7 +10,7 @@ plugins {
     id(libs.plugins.kotlinParcelize.get().pluginId)
     id(libs.plugins.hilt.get().pluginId)
     kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlinVersion
+    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlin
 }
 
 android {
@@ -54,7 +54,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompilerVersion.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     kotlinOptions {
@@ -86,7 +86,6 @@ android {
     packaging {
         resources.pickFirsts.add("META-INF/LICENSE.md")
         resources.pickFirsts.add("META-INF/LICENSE-notice.md")
-
     }
 
     lint {

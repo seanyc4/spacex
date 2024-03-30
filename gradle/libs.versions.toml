@@ -1,72 +1,71 @@
 [versions]
-agpVersion = "8.2.2"
-androidHiltVersion = "1.2.0"
-androidxTestExtVersion = "1.1.5"
-appCompatVersion = "1.6.1"
+agp = "8.2.2"
+androidHilt = "1.2.0"
+androidxTestExt = "1.1.5"
+appCompat = "1.6.1"
 composeBom = "2024.03.00"
-composeCompilerVersion = "1.5.10"
-composeConstraintLayoutVersion = "1.1.0-alpha13"
-composeLifecycleVersion = "2.7.0"
-composeNavigationVersion = "2.7.7"
-composeThemeAdapterVersion = "1.2.1"
-coreKtxVersion = "1.12.0"
-datastoreVersion = "1.1.0-beta02"
-espressoCoreVersion = "3.5.0"
+composeCompiler = "1.5.10"
+composeConstraintLayout = "1.1.0-alpha13"
+composeLifecycle = "2.7.0"
+composeNavigation = "2.7.7"
+coreKtx = "1.12.0"
+datastore = "1.1.0-beta02"
+espressoCore = "3.5.0"
 firebaseBoM = "32.8.0"
-fragmentVersion = "1.7.0-beta01"
-glideComposeVersion = "1.0.0-beta01"
-gsonVersion = "2.10.1"
-hiltNavigationComposeVersion = "1.2.0"
-hiltVersion = "2.50"
-junit4Version = "4.13.2"
-junit5Version = "1.8.2.0"
-kotlinCoroutinesVersion = "1.7.3"
-kotlinImmutableVersion = "0.3.6"
-kotlinKSPVersion = "1.9.22-1.0.17"
-kotlinSerializationVersion = "1.6.0"
-kotlinVersion = "1.9.22"
-kotlinxDateTimeVersion = "0.4.0"
-leakCanaryVersion = "2.9.1"
-lifecycleVersion = "2.7.0"
-materialDialogsVersion = "3.3.0"
-mockkVersion = "1.13.5"
-navigationVersion = "2.7.7"
-okHttpVersion = "4.9.3"
-retrofit2Version = "2.9.0"
-roomVersion = "2.6.1"
-scalingPixelsVersion = "1.0.6"
-splashVersion = "1.0.1"
-testArchCoreVersion = "2.2.0"
-testCoreVersion = "1.5.0"
-testMonitorVersion = "1.6.1"
-testRulesVersion = "1.5.0"
-testRunnerVersion = "1.5.2"
-timberVersion = "5.0.1"
+fragment = "1.7.0-beta01"
+glideCompose = "1.0.0-beta01"
+gson = "2.10.1"
+hiltNavigationCompose = "1.2.0"
+hilt = "2.51"
+junit4 = "4.13.2"
+junit5 = "1.8.2.0"
+kotlinCoroutines = "1.8.0"
+kotlinImmutable = "0.3.6"
+kotlinKSP = "1.9.22-1.0.17"
+kotlinSerialization = "1.6.3"
+kotlin = "1.9.22"
+kotlinxDateTime = "0.5.0"
+leakCanary = "2.9.1"
+lifecycle = "2.7.0"
+materialDialogs = "3.3.0"
+mockk = "1.13.5"
+navigation = "2.7.7"
+okHttp = "4.12.0"
+retrofit2 = "2.9.0"
+room = "2.6.1"
+scalingPixels = "1.0.6"
+splash = "1.0.1"
+testArchCore = "2.2.0"
+testCore = "1.5.0"
+testMonitor = "1.6.1"
+testRules = "1.5.0"
+testRunner = "1.5.2"
+timber = "5.0.1"
 
 
 [libraries]
 # AppCompat
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompatVersion" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 
 # Compose
 compose-activity = { module = "androidx.activity:activity-compose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
-compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "composeConstraintLayoutVersion" }
+compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "composeConstraintLayout" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-fragment = { module = "androidx.fragment:fragment-compose", version.ref = "fragmentVersion" }
+compose-fragment = { module = "androidx.fragment:fragment-compose", version.ref = "fragment" }
 compose-iconsCore = { module = "androidx.compose.material:material-icons-core" }
 compose-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
 compose-layout = { module = "androidx.compose.foundation:foundation-layout" }
-compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycleVersion" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycle" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigationVersion" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ripple = { module = "androidx.compose.material:material-ripple" }
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui = { module = "androidx.compose.ui:ui" }
-compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycleVersion" }
+compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
 
 # Compose Test Libraries
 compose-uiTest = { module = "androidx.compose.ui:ui-test" }
@@ -74,10 +73,10 @@ compose-uiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-uiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 # Core KTX
-coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 
 # DataStore
-dataStore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastoreVersion" }
+dataStore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # Firebase
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -85,89 +84,89 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
 # Fragment
-fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentVersion" }
+fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 
 # Glide Compose
-glideCompose = { module = "com.github.bumptech.glide:compose", version.ref = "glideComposeVersion" }
+glideCompose = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
 
 # GradleAGP
-gradle-buildtools = { module = "com.android.tools.build:gradle", version.ref = "agpVersion" }
+gradle-buildtools = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 # Hilt
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
-hilt-androidtesting = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltVersion" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
-hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltVersion" }
-hilt-navigationcompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
-hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "androidHiltVersion" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-androidtesting = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+hilt-navigationcompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "androidHilt" }
 
 # Gson
-googleGson = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
+googleGson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Kotlin
-kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutinesVersion" }
-kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesVersion" }
-kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTimeVersion" }
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
-kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutableVersion" }
-kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKSPVersion" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerializationVersion" }
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
+kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKSP" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
 # Kotlin Testing
-kotlin-coroutinestest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutinesVersion" }
-kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
+kotlin-coroutinestest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
+kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 # Lifecycle
-lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycleVersion" }
-lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
-lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleVersion" }
-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
+lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
+lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 # MaterialDialogs
-materialDialogsCore = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogsVersion" }
+materialDialogsCore = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogs" }
 
 # Navigation
-navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationVersion" }
-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationVersion" }
-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationVersion" }
+navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigation" }
+navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 
 # Retrofit
-square-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanaryVersion" }
-square-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttpVersion" }
-square-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okHttpVersion" }
-square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttpVersion" }
-square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2Version" }
-square-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit2Version" }
+square-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
+square-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
+square-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okHttp" }
+square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
+square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
+square-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit2" }
 
 # Room
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 
 # ScalingPixels
-scalingpixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixelsVersion" }
+scalingpixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }
 
 # Splash Screen
-splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashVersion" }
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
 
 # TestDependecies
-test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExtVersion" }
-test-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
-test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCoreVersion" }
-test-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCoreVersion" }
-test-junit4 = { module = "junit:junit", version.ref = "junit4Version" }
-test-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5Version" }
-test-mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
-test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockkVersion" }
-test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCoreVersion" }
-test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCoreVersion" }
-test-coreMonitor = { module = "androidx.test:monitor", version.ref = "testMonitorVersion" }
-test-testRules = { module = "androidx.test:rules", version.ref = "testRulesVersion" }
-test-testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
+test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExt" }
+test-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
+test-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCore" }
+test-junit4 = { module = "junit:junit", version.ref = "junit4" }
+test-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5" }
+test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCore" }
+test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCore" }
+test-coreMonitor = { module = "androidx.test:monitor", version.ref = "testMonitor" }
+test-testRules = { module = "androidx.test:rules", version.ref = "testRules" }
+test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
 
 # Timber
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 
 [plugins]
