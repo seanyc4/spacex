@@ -21,7 +21,7 @@ internal data class CompanyDto(
 
     @Expose
     @SerializedName("launch_sites")
-    val launch_sites: Int?,
+    val launchSites: Int?,
 
     @Expose
     @SerializedName("name")
@@ -31,4 +31,4 @@ internal data class CompanyDto(
     @SerializedName("valuation")
     val valuation: Long?,
 
-)
+    )

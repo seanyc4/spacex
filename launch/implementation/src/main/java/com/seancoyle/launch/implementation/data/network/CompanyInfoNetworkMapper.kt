@@ -16,7 +16,7 @@ internal class CompanyInfoNetworkMapper @Inject constructor(
                 employees = numberFormatter.formatNumber(employees?.toLong()),
                 founded = founded ?: 0,
                 founder = founder.orEmpty(),
-                launchSites = launch_sites ?: 0,
+                launchSites = launchSites ?: 0,
                 name = name.orEmpty(),
                 valuation = numberFormatter.formatNumber(valuation)
             )
