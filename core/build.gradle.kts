@@ -15,5 +15,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
 
     implementation(libs.firebase.crashlytics)
-    implementation(libs.square.retrofit)
+    implementation(libs.square.retrofit.core)
 }

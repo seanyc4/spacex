@@ -26,7 +26,7 @@ dependencies {
     implementation(projects.coreDatabase.implementation)
     implementation(projects.launch.api)
 
-    implementation(libs.appcompat)
+    implementation(libs.appCompat)
     implementation(libs.coreKtx)
     implementation(libs.glideCompose) {
         exclude(group = "androidx.test", module = "core-ktx")
@@ -38,11 +38,12 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
-    implementation(libs.square.logginginterceptor)
+    implementation(libs.square.loggingInterceptor)
     implementation(libs.square.okhttp)
-    implementation(libs.square.retrofit)
+    implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.gson)
     implementation(libs.square.mockwebserver)
-    implementation(libs.bundles.androidTestBundle)
 
+    androidTestImplementation(libs.bundles.androidTestBundle)
+    testImplementation(libs.bundles.unitTestBundle)
 }

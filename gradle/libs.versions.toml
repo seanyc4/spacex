@@ -44,7 +44,7 @@ timber = "5.0.1"
 
 [libraries]
 # AppCompat
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 
 # Compose
 compose-activity = { module = "androidx.activity:activity-compose" }
@@ -93,10 +93,10 @@ gradle-buildtools = { module = "com.android.tools.build:gradle", version.ref = "
 
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-hilt-androidtesting = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-androidTesting = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
-hilt-navigationcompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-navigationCompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "androidHilt" }
 
 # Gson
@@ -112,15 +112,15 @@ kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
 # Kotlin Testing
-kotlin-coroutinestest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
+kotlin-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 # Lifecycle
 lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
 lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 # MaterialDialogs
 materialDialogsCore = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogs" }
@@ -132,10 +132,10 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 
 # Retrofit
 square-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
-square-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
+square-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
 square-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okHttp" }
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
-square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
+square-retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 square-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit2" }
 
 # Room
@@ -144,7 +144,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 
 # ScalingPixels
-scalingpixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }
+scalingPixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }
 
 # Splash Screen
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
@@ -187,7 +187,7 @@ androidTestBundle = [
     "test-androidxTestExt",
     "test-espressoCore",
     "test-espressoIntents",
-    "hilt-androidtesting",
+    "hilt-androidTesting",
     "test-idlingResource",
     "test-mockkAndroid",
     "test-archCore",
@@ -201,7 +201,7 @@ unitTestBundle = [
     "test-junit4",
     "test-junit5",
     "test-mockk",
-    "kotlin-coroutinestest",
+    "kotlin-coroutinesTest",
     "kotlin-junit"
 ]
 
@@ -222,5 +222,5 @@ composeBundle = [
     "compose-runtime",
     "compose-ui",
     "compose-viewmodelLifecycle",
-    "hilt-navigationcompose"
+    "hilt-navigationCompose"
 ]

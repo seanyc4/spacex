@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation(libs.fragmentKtx)
     implementation(libs.lifecycle.livedataktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.savedstate)
     implementation(libs.navigation.dynamic)
     implementation(libs.navigation.fragment)
