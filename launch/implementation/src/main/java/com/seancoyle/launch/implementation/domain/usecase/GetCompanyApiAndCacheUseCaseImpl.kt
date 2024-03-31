@@ -21,7 +21,6 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
         return when (val networkResult = networkDataSource.getCompany()) {
             is DataResult.Success -> cacheData(networkResult.data)
             is DataResult.Error -> DataResult.Error(networkResult.error)
-            is DataResult.Loading -> DataResult.Loading
         }
     }
 
@@ -29,7 +28,6 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
         return when (val cacheResult = insertCompanyInfoToCacheUseCase(company)) {
             is DataResult.Success -> DataResult.Success(company)
             is DataResult.Error -> DataResult.Error(cacheResult.error)
-            is DataResult.Loading -> DataResult.Loading
         }
     }
 }

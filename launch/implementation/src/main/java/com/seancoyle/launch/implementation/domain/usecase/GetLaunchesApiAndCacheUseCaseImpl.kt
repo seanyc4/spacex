@@ -23,7 +23,6 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
             is DataResult.Success -> cacheData(networkResult.data)
             is DataResult.Error -> DataResult.Error(networkResult.error)
-            is DataResult.Loading -> DataResult.Loading
         }
     }
 
@@ -31,7 +30,6 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         return when (val cacheResult = insertLaunchesToCacheUseCase(launches)) {
             is DataResult.Success -> DataResult.Success(launches)
             is DataResult.Error -> DataResult.Error(cacheResult.error)
-            is DataResult.Loading -> DataResult.Loading
         }
     }
 }

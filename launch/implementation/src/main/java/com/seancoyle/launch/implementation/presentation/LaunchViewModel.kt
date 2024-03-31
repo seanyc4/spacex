@@ -94,7 +94,6 @@ internal class LaunchViewModel @Inject constructor(
                     ).distinctUntilChanged()
                         .collect { result ->
                             when (result) {
-                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
                                 is DataResult.Success -> {
                                     _uiState.value = LaunchUiState.Success(
                                         launches = result.data,
@@ -125,10 +124,6 @@ internal class LaunchViewModel @Inject constructor(
                         page = getPageState()
                     ).collect { result ->
                         when (result) {
-                            is DataResult.Loading -> {
-                                _uiState.update { it.copy(paginationState = PaginationState.Loading) }
-                            }
-
                             is DataResult.Success -> {
                                 // Pagination - We append the next 30 rows to the current state as a new list
                                 // This triggers a recompose and keeps immutability
@@ -158,7 +153,6 @@ internal class LaunchViewModel @Inject constructor(
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
-                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
                                 is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
                                     val errorMessage = result.getErrorMessage(stringResource)
@@ -180,7 +174,6 @@ internal class LaunchViewModel @Inject constructor(
                         .onStart { _uiState.value = LaunchUiState.Loading }
                         .collect { result ->
                             when (result) {
-                                is DataResult.Loading -> _uiState.value = LaunchUiState.Loading
                                 is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
                                     val errorMessage = result.getErrorMessage(stringResource)
