@@ -1,5 +1,6 @@
 apply {
     from("$rootDir/android-base.gradle")
+    from("$rootDir/android-base-compose.gradle")
     from("$rootDir/hilt.gradle")
 }
 
@@ -8,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoye.core"
+    namespace = "com.seancoyle.core"
 }
 
 dependencies {

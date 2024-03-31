@@ -1,7 +1,9 @@
 package com.seancoyle.core.domain
 
+import com.seancoyle.core.presentation.StringResource
+
 data class Response(
-    val message: String,
+    val message: StringResource,
     val messageDisplayType: MessageDisplayType,
     val messageType: MessageType
 )

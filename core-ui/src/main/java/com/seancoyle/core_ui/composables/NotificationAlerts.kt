@@ -27,7 +27,7 @@ fun DisplayErrorAlert(
         when (it.messageDisplayType) {
             MessageDisplayType.Dialog -> {
                 ErrorDialog(
-                    message = it.message,
+                    message = it.message.asString(),
                     onDismiss = onDismiss
                 )
             }
@@ -35,7 +35,7 @@ fun DisplayErrorAlert(
             MessageDisplayType.Snackbar -> {
                 SnackBar(
                     hostState = snackbarHostState,
-                    message = error.message
+                    message = error.message.asString()
                 )
             }
 

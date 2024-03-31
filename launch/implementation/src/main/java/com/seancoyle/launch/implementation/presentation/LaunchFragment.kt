@@ -32,6 +32,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
@@ -252,7 +253,7 @@ internal class LaunchFragment : Fragment() {
             event = LaunchEvents.CreateMessageEvent(
                 response = Response(
                     messageType = MessageType.Info,
-                    message = getString(R.string.no_links),
+                    message = R.string.no_links.asStringResource(),
                     messageDisplayType = MessageDisplayType.Dialog
                 )
             )
@@ -264,7 +265,7 @@ internal class LaunchFragment : Fragment() {
             event = LaunchEvents.CreateMessageEvent(
                 response = Response(
                     messageType = MessageType.Error,
-                    message = getString(R.string.error_links),
+                    message = R.string.error_links.asStringResource(),
                     messageDisplayType = MessageDisplayType.Dialog
                 )
             )

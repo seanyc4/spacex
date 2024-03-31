@@ -8,8 +8,7 @@ import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core.domain.MessageDisplayType
 import com.seancoyle.core.domain.MessageType
 import com.seancoyle.core.domain.Response
-import com.seancoyle.core.domain.StringResource
-import com.seancoyle.core.presentation.getErrorMessage
+import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
@@ -37,7 +36,6 @@ internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val appDataStoreManager: AppDataStore,
     private val savedStateHandle: SavedStateHandle,
-    private val stringResource: StringResource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -102,10 +100,9 @@ internal class LaunchViewModel @Inject constructor(
                                 }
 
                                 is DataResult.Error -> {
-                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = errorMessage,
+                                            message = result.error.asStringResource(),
                                             messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
                                         ),
@@ -155,10 +152,9 @@ internal class LaunchViewModel @Inject constructor(
                             when (result) {
                                 is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
-                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = errorMessage,
+                                            message = result.error.asStringResource(),
                                             messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
                                         ),
@@ -176,10 +172,9 @@ internal class LaunchViewModel @Inject constructor(
                             when (result) {
                                 is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
-                                    val errorMessage = result.getErrorMessage(stringResource)
                                     _uiState.value = LaunchUiState.Error(
                                         errorResponse = Response(
-                                            message = errorMessage,
+                                            message = result.error.asStringResource(),
                                             messageDisplayType = MessageDisplayType.Dialog,
                                             messageType = MessageType.Error
                                         )
@@ -187,6 +182,12 @@ internal class LaunchViewModel @Inject constructor(
                                 }
                             }
                         }
+                }
+
+                is LaunchEvents.CreateMessageEvent -> {
+                    _uiState.value = LaunchUiState.Error(
+                        errorResponse = event.response
+                    )
                 }
 
                 else -> {}
