@@ -8,13 +8,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.util.printLogDebug
-import com.seancoyle.core_ui.composables.CircularProgressBar
-import com.seancoyle.core_ui.composables.DisplayNotification
-import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
-import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,61 +34,8 @@ internal fun LaunchRoute(
         pullRefreshState = refreshState,
         snackbarHostState = snackbarHostState,
         onItemClicked = onItemClicked,
-        onDismissError = viewModel::dismissError,
+        onDismissNotification = viewModel::dismissError,
         getLaunchStatusIcon = viewModel::getLaunchStatusIcon,
         getLaunchDate = viewModel::getLaunchDateText
     )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@FlowPreview
-@Composable
-internal fun LaunchScreen(
-    uiState: LaunchUiState,
-    page: Int,
-    onChangeScrollPosition: (Int) -> Unit,
-    loadNextPage: (Int) -> Unit,
-    pullRefreshState: PullRefreshState,
-    snackbarHostState: SnackbarHostState,
-    onItemClicked: (links: Links) -> Unit,
-    getLaunchStatusIcon: (LaunchStatus) -> Int,
-    getLaunchDate: (LaunchDateStatus) -> Int,
-    onDismissError: () -> Unit
-) {
-    when (uiState) {
-        is LaunchUiState.Success -> {
-            LaunchesContent(
-                launches = uiState.launches,
-                paginationState = uiState.paginationState,
-                page = page,
-                onChangeScrollPosition = onChangeScrollPosition,
-                loadNextPage = loadNextPage,
-                pullRefreshState = pullRefreshState,
-                onItemClicked = onItemClicked,
-                getLaunchStatusIcon = getLaunchStatusIcon,
-                getLaunchDate = getLaunchDate
-            )
-
-            uiState.notificationState?.let { notification ->
-                DisplayNotification(
-                    error = notification,
-                    onDismiss = onDismissError,
-                    snackbarHostState = snackbarHostState
-                )
-            }
-        }
-
-        is LaunchUiState.Loading -> {
-            CircularProgressBar()
-        }
-
-        is LaunchUiState.Error -> {
-            DisplayNotification(
-                error = uiState.errorNotificationState,
-                onDismiss = onDismissError,
-                snackbarHostState = snackbarHostState
-            )
-        }
-    }
-    SwipeToRefreshComposable(uiState, pullRefreshState)
 }

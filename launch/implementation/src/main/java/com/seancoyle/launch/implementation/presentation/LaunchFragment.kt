@@ -137,13 +137,13 @@ internal class LaunchFragment : Fragment() {
                 )
             )
         } catch (e: ActivityNotFoundException) {
-            displayErrorDialogUnableToLoadLink()
+            displayUnableToLoadLinkError()
         }
     }
 
     private fun onCardClicked(links: Links) {
         if (isLinksNullOrEmpty(links)) {
-            displayErrorDialogNoLinks()
+            displayNoLinksError()
         } else {
             displayBottomActionSheet(links)
         }
@@ -243,7 +243,7 @@ internal class LaunchFragment : Fragment() {
         launchViewModel.newSearch()
     }
 
-    private fun displayErrorDialogNoLinks() {
+    private fun displayNoLinksError() {
         launchViewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
@@ -255,13 +255,13 @@ internal class LaunchFragment : Fragment() {
         )
     }
 
-    private fun displayErrorDialogUnableToLoadLink() {
+    private fun displayUnableToLoadLinkError() {
         launchViewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
                     messageType = MessageType.Error,
                     message = R.string.error_links.asStringResource(),
-                    messageDisplayType = MessageDisplayType.Dialog
+                    messageDisplayType = MessageDisplayType.Snackbar
                 )
             )
         )
