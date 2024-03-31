@@ -37,8 +37,8 @@ import kotlinx.coroutines.flow.debounce
 
 private const val GRID_COLUMN_SIZE = 2
 
-@FlowPreview
 @OptIn(ExperimentalMaterialApi::class)
+@FlowPreview
 @Composable
 internal fun LaunchesContent(
     launches: List<ViewType>,

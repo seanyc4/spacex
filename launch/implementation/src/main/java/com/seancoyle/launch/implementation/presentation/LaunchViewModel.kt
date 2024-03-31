@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataResult
-import com.seancoyle.core.domain.MessageDisplayType
-import com.seancoyle.core.domain.MessageType
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.MessageDisplayType
+import com.seancoyle.core.presentation.MessageType
+import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
@@ -22,7 +22,6 @@ import com.seancoyle.launch.implementation.presentation.LaunchEvents.PaginateLau
 import com.seancoyle.launch.implementation.presentation.LaunchEvents.SortAndFilterLaunchesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -30,7 +29,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
@@ -101,12 +99,11 @@ internal class LaunchViewModel @Inject constructor(
 
                                 is DataResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
-                                        errorResponse = Response(
+                                        errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
                                             messageDisplayType = MessageDisplayType.Snackbar,
                                             messageType = MessageType.Error
-                                        ),
-                                        showError = true
+                                        )
                                     )
                                 }
                             }
@@ -153,12 +150,11 @@ internal class LaunchViewModel @Inject constructor(
                                 is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
-                                        errorResponse = Response(
+                                        errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
-                                            messageDisplayType = MessageDisplayType.Snackbar,
+                                            messageDisplayType = MessageDisplayType.Dialog,
                                             messageType = MessageType.Error
-                                        ),
-                                        showError = true
+                                        )
                                     )
                                 }
                             }
@@ -173,7 +169,7 @@ internal class LaunchViewModel @Inject constructor(
                                 is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
                                     _uiState.value = LaunchUiState.Error(
-                                        errorResponse = Response(
+                                        errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
                                             messageDisplayType = MessageDisplayType.Dialog,
                                             messageType = MessageType.Error
@@ -184,10 +180,8 @@ internal class LaunchViewModel @Inject constructor(
                         }
                 }
 
-                is LaunchEvents.CreateMessageEvent -> {
-                    _uiState.value = LaunchUiState.Error(
-                        errorResponse = event.response
-                    )
+                is LaunchEvents.NotificationEvent -> {
+                    _uiState.update { it.copy(notificationState = event.notificationState) }
                 }
 
                 else -> {}
@@ -216,19 +210,9 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun MutableStateFlow<LaunchUiState>.updateError(updateState: (LaunchUiState.Error) -> LaunchUiState.Error) {
-        val state = this.value
-        if (state is LaunchUiState.Error) {
-            this.value = updateState(state)
-        }
-    }
-
     fun dismissError() {
-        _uiState.updateError {
-            it.copy(
-                errorResponse = null,
-                showError = false
-            )
+        _uiState.update {
+            it.copy(notificationState = null)
         }
     }
 

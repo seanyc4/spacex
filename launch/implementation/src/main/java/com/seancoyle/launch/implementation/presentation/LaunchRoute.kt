@@ -9,17 +9,15 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.core_ui.composables.CircularProgressBar
-import com.seancoyle.core_ui.composables.DisplayErrorAlert
+import com.seancoyle.core_ui.composables.DisplayNotification
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.composables.LaunchesContent
 import com.seancoyle.launch.implementation.presentation.composables.SwipeToRefreshComposable
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(ExperimentalMaterialApi::class)
-@ExperimentalCoroutinesApi
 @FlowPreview
 @Composable
 internal fun LaunchRoute(
@@ -76,6 +74,14 @@ internal fun LaunchScreen(
                 getLaunchStatusIcon = getLaunchStatusIcon,
                 getLaunchDate = getLaunchDate
             )
+
+            uiState.notificationState?.let { notification ->
+                DisplayNotification(
+                    error = notification,
+                    onDismiss = onDismissError,
+                    snackbarHostState = snackbarHostState
+                )
+            }
         }
 
         is LaunchUiState.Loading -> {
@@ -83,8 +89,8 @@ internal fun LaunchScreen(
         }
 
         is LaunchUiState.Error -> {
-            DisplayErrorAlert(
-                error = uiState.errorResponse,
+            DisplayNotification(
+                error = uiState.errorNotificationState,
                 onDismiss = onDismissError,
                 snackbarHostState = snackbarHostState
             )

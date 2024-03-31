@@ -1,9 +1,9 @@
 package com.seancoyle.core.di
 
-import com.seancoyle.core.domain.DateFormatConstants
 import com.seancoyle.core.domain.DateFormatter
 import com.seancoyle.core.domain.DateTransformer
 import com.seancoyle.core.domain.NumberFormatter
+import com.seancoyle.core.presentation.DateFormatConstants
 import com.seancoyle.core.presentation.DateFormatterImpl
 import com.seancoyle.core.presentation.DateTransformerImpl
 import com.seancoyle.core.presentation.NumberFormatterImpl

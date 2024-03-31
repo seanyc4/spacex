@@ -13,13 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.domain.MessageDisplayType
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.MessageDisplayType
+import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core_ui.R
 
 @Composable
-fun DisplayErrorAlert(
-    error: Response?,
+fun DisplayNotification(
+    error: NotificationState?,
     onDismiss: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {

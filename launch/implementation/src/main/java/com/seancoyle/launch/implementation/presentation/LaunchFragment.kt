@@ -29,11 +29,10 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.seancoyle.core.domain.MessageDisplayType
-import com.seancoyle.core.domain.MessageType
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.MessageDisplayType
+import com.seancoyle.core.presentation.MessageType
+import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.asStringResource
-import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -123,9 +122,6 @@ internal class LaunchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        /* if (launchViewModel.uiState.value.mergedLaunches.isNullOrEmpty()) {
-             launchViewModel.newSearchEvent()
-         }*/
         if (launchViewModel.getIsDialogFilterDisplayedState()) {
             displayFilterDialog()
         }
@@ -243,27 +239,26 @@ internal class LaunchFragment : Fragment() {
     }
 
     private fun startNewSearch() {
-        printLogDebug("EventExecutor", "start new search")
         launchViewModel.clearListState()
         launchViewModel.newSearch()
     }
 
     private fun displayErrorDialogNoLinks() {
         launchViewModel.setEvent(
-            event = LaunchEvents.CreateMessageEvent(
-                response = Response(
+            event = LaunchEvents.NotificationEvent(
+                notificationState = NotificationState(
                     messageType = MessageType.Info,
                     message = R.string.no_links.asStringResource(),
                     messageDisplayType = MessageDisplayType.Dialog
-                )
+                ),
             )
         )
     }
 
     private fun displayErrorDialogUnableToLoadLink() {
         launchViewModel.setEvent(
-            event = LaunchEvents.CreateMessageEvent(
-                response = Response(
+            event = LaunchEvents.NotificationEvent(
+                notificationState = NotificationState(
                     messageType = MessageType.Error,
                     message = R.string.error_links.asStringResource(),
                     messageDisplayType = MessageDisplayType.Dialog

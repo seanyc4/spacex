@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.presentation
 
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.NotificationState
 
 internal sealed class LaunchEvents {
     data object GetLaunchesApiAndCacheEvent : LaunchEvents()
@@ -15,8 +15,8 @@ internal sealed class LaunchEvents {
 
     data object SortAndFilterLaunchesEvent : LaunchEvents()
 
-    class CreateMessageEvent(
-        val response: Response
+    class NotificationEvent(
+        val notificationState: NotificationState
     ) : LaunchEvents()
 
 }

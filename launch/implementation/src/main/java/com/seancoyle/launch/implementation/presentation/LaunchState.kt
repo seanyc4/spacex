@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.presentation
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
-import com.seancoyle.core.domain.Response
+import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.ViewType
@@ -12,14 +12,14 @@ internal sealed interface LaunchUiState {
     @Stable
     data class Success(
         val launches: List<ViewType>,
-        val paginationState: PaginationState = PaginationState.None
+        val paginationState: PaginationState = PaginationState.None,
+        val notificationState: NotificationState? = null
     ) : LaunchUiState
 
     data object Loading : LaunchUiState
 
     data class Error(
-        val errorResponse: Response? = null,
-        val showError: Boolean? = false
+        val errorNotificationState: NotificationState? = null
     ) : LaunchUiState
 }
 

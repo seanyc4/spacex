@@ -15,6 +15,9 @@ import kotlinx.coroutines.withTimeout
 import retrofit2.HttpException
 import java.io.IOException
 
+/**
+ *  Adapted from: https://medium.com/@douglas.iacovelli/how-to-handle-errors-with-retrofit-and-coroutines-33e7492a912
+ */
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
     crashlytics: Crashlytics? = null,

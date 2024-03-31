@@ -1,8 +1,6 @@
-package com.seancoyle.core.domain
+package com.seancoyle.core.presentation
 
-import com.seancoyle.core.presentation.StringResource
-
-data class Response(
+data class NotificationState(
     val message: StringResource,
     val messageDisplayType: MessageDisplayType,
     val messageType: MessageType
