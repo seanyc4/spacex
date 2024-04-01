@@ -6,6 +6,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.core_ui.composables.DisplayNotification
+import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
@@ -25,6 +26,7 @@ internal fun LaunchScreen(
     onItemClicked: (links: Links) -> Unit,
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
+    getCompanySummary: (Company) -> String,
     onDismissNotification: () -> Unit
 ) {
     when (uiState) {
@@ -38,6 +40,7 @@ internal fun LaunchScreen(
                 pullRefreshState = pullRefreshState,
                 onItemClicked = onItemClicked,
                 getLaunchStatusIcon = getLaunchStatusIcon,
+                getCompanySummary = getCompanySummary,
                 getLaunchDate = getLaunchDate
             )
 

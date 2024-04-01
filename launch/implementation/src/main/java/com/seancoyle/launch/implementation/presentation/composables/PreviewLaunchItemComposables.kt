@@ -5,7 +5,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.model.CompanySummary
 import com.seancoyle.launch.implementation.domain.model.SectionTitle
 
 @Preview
@@ -15,12 +14,12 @@ fun PreviewLaunchHeading() {
     LaunchHeading(launchHeading)
 }
 
-@Preview
+/*@Preview
 @Composable
 fun PreviewCompanySummaryCard() {
     val companySummary = CompanySummary("45678","Test Summary", ViewType.TYPE_HEADER)
     CompanySummaryCard(companySummary)
-}
+}*/
 
 @Preview
 @Composable

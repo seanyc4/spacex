@@ -36,6 +36,7 @@ internal fun LaunchRoute(
         onItemClicked = onItemClicked,
         onDismissNotification = viewModel::dismissError,
         getLaunchStatusIcon = viewModel::getLaunchStatusIcon,
+        getCompanySummary = viewModel::buildCompanySummary,
         getLaunchDate = viewModel::getLaunchDateText
     )
 }

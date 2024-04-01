@@ -9,7 +9,6 @@ import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.domain.model.CompanySummary
 import com.seancoyle.launch.implementation.domain.model.RocketWithMission
 import com.seancoyle.launch.implementation.domain.model.SectionTitle
@@ -96,7 +95,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
             add(
                 CompanySummary(
                     id = UUID.randomUUID().toString(),
-                    summary = buildCompanySummary(company),
+                    company = company,
                     type = ViewType.TYPE_HEADER
                 )
             )
@@ -166,17 +165,6 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
             page = page
         )
 
-    }
-
-    private fun buildCompanySummary(company: Company?) = with(stringResource) {
-        getString(R.string.company_info).format(
-            company?.name,
-            company?.founder,
-            company?.founded,
-            company?.employees,
-            company?.launchSites,
-            company?.valuation
-        )
     }
 
     private fun createLinks(links: Links) = Links(

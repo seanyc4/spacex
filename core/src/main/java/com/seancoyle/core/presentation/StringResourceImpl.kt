@@ -8,4 +8,8 @@ class StringResourceImpl @Inject constructor(private val context: Context) : Str
     override fun getString(resId: Int): String {
         return context.getString(resId)
     }
+
+    override fun getString(id: Int, args: Array<Any>): String {
+        return context.getString(id, *args)
+    }
 }

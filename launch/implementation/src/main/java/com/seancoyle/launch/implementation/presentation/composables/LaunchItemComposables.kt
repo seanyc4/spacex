@@ -12,9 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +37,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.model.CompanySummary
 import com.seancoyle.launch.implementation.domain.model.RocketWithMission
 import com.seancoyle.launch.implementation.domain.model.SectionTitle
 import com.seancoyle.launch.implementation.domain.model.ViewGrid
@@ -48,13 +48,13 @@ internal fun LaunchHeading(
 ) {
     Text(
         text = launchHeading.title,
-        color = MaterialTheme.colors.primary,
+        color = MaterialTheme.colorScheme.primary,
         style = TextStyle(
             fontFamily = FontFamily(
                 Font(R.font.orbitron)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_subHeading).value.sp,
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start
         ),
@@ -67,24 +67,23 @@ internal fun LaunchHeading(
 
 @Composable
 internal fun CompanySummaryCard(
-    summary: CompanySummary,
+    companySummary: String,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = 4.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primaryVariant),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
         modifier = modifier.padding(8.dp)
     ) {
         Text(
-            text = summary.summary,
+            text = companySummary,
             style = TextStyle(
                 fontFamily = FontFamily(
                     Font(R.font.space_grotesk)
                 ),
                 fontSize = dimensionResource(id = R.dimen.text_size_medium).value.sp,
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Start
             ),
             modifier = modifier
@@ -107,7 +106,6 @@ internal fun LaunchCard(
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Row(
@@ -189,7 +187,7 @@ internal fun LaunchCardDefaultText(
                 Font(R.font.space_grotesk)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = MaterialTheme.colors.primary
+            color = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -206,7 +204,7 @@ internal fun LaunchCardDynamicText(
                 Font(R.font.space_grotesk)
             ),
             fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = MaterialTheme.colors.primaryVariant
+            color = MaterialTheme.colorScheme.primary
         ),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
@@ -225,10 +223,9 @@ internal fun LaunchCarouselCard(
             .size(120.dp)
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        backgroundColor = MaterialTheme.colors.surface,
         shape = CircleShape,
-        elevation = 4.dp,
-        border = BorderStroke(1.dp, MaterialTheme.colors.primaryVariant)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
     ) {
         Column(
             modifier = modifier
@@ -255,12 +252,12 @@ internal fun LaunchGridCard(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
     ) {
         Column(
             modifier = modifier
-                .padding(dimensionResource(id = R.dimen.default_view_margin)),
+                .padding(dimensionResource(id = R.dimen.default_view_margin))
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LaunchCardImage(

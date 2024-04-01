@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -55,6 +56,7 @@ internal fun LaunchesContent(
     onItemClicked: (links: Links) -> Unit,
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
+    getCompanySummary: (Company) -> String,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyGridState()
@@ -65,8 +67,8 @@ internal fun LaunchesContent(
             listState.firstVisibleItemIndex
         }.debounce(500L)
             .collectLatest { position ->
-            onChangeScrollPosition(position)
-        }
+                onChangeScrollPosition(position)
+            }
     }
 
     Box(
@@ -99,7 +101,10 @@ internal fun LaunchesContent(
                     }
 
                     ViewType.TYPE_HEADER -> {
-                        CompanySummaryCard(launchItem as CompanySummary)
+                        launchItem as CompanySummary
+                        CompanySummaryCard(
+                            companySummary = getCompanySummary(launchItem.company)
+                        )
                     }
 
                     ViewType.TYPE_LIST -> {
