@@ -9,7 +9,7 @@ import com.seancoyle.launch.implementation.domain.model.Links
 import com.seancoyle.launch.implementation.domain.model.Rocket
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.network.MockWebServerResponseLaunchList.launchList
-import com.seancoyle.launch.implementation.presentation.LaunchEvents
+import com.seancoyle.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

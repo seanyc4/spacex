@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation
+package com.seancoyle.launch.implementation.presentation.state
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable

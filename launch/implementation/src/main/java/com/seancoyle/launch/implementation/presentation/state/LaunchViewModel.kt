@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation
+package com.seancoyle.launch.implementation.presentation.state
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -18,10 +18,10 @@ import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetCompanyApiAndCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.GetLaunchesApiAndCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.PaginateLaunchesCacheEvent
-import com.seancoyle.launch.implementation.presentation.LaunchEvents.SortAndFilterLaunchesEvent
+import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
+import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
+import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
+import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.SortAndFilterLaunchesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

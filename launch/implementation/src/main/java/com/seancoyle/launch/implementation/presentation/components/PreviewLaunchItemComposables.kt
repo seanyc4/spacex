@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation.composables
+package com.seancoyle.launch.implementation.presentation.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation.composables
+package com.seancoyle.launch.implementation.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
