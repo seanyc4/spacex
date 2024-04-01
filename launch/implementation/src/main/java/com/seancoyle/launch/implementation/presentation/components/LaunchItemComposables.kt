@@ -86,7 +86,8 @@ internal fun LaunchCard(
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
             modifier = modifier
@@ -222,7 +223,8 @@ internal fun LaunchGridCard(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
             .clickable { onClick() },
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column(
             modifier = modifier
