@@ -3,9 +3,8 @@ package com.seancoyle.launch.implementation.data
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_ALL
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.model.Launch
 import javax.inject.Inject
 
 const val FORCE_DELETE_LAUNCH_EXCEPTION = "-2"

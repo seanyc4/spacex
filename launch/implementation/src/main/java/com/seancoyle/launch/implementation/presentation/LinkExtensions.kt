@@ -4,14 +4,14 @@ import androidx.annotation.StringRes
 import com.seancoyle.launch.api.domain.model.LinkType
 
 internal fun createLinkType(
-        @StringRes titleRes: Int,
-        link: String?,
-        onClick: (String?) -> Unit
-    ): LinkType? {
-        return link?.let {
-            LinkType(
-                titleRes, it,
-                onClick = { onClick(link) }
-            )
-        }
+    @StringRes titleRes: Int,
+    link: String?,
+    onClick: (String?) -> Unit
+): LinkType? {
+    return link?.let {
+        LinkType(
+            titleRes, it,
+            onClick = { onClick(link) }
+        )
     }
+}

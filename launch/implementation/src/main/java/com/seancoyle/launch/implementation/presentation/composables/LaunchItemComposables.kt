@@ -30,15 +30,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchTypes
+import com.seancoyle.launch.api.domain.model.RocketWithMission
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.model.RocketWithMission
-import com.seancoyle.launch.implementation.domain.model.SectionTitle
-import com.seancoyle.launch.implementation.domain.model.ViewGrid
 
 @Composable
 internal fun LaunchHeading(
-    launchHeading: SectionTitle,
+    launchHeading: LaunchTypes.SectionTitle,
     modifier: Modifier = Modifier,
 ) {
     Text(
@@ -77,7 +75,7 @@ internal fun CompanySummaryCard(
 
 @Composable
 internal fun LaunchCard(
-    launchItem: Launch,
+    launchItem: LaunchTypes.Launch,
     onClick: () -> Unit,
     getLaunchStatusIcon: Int,
     getLaunchDate: Int,
@@ -216,7 +214,7 @@ internal fun LaunchCarouselCard(
 
 @Composable
 internal fun LaunchGridCard(
-    launchItem: ViewGrid,
+    launchItem: LaunchTypes.Grid,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

@@ -22,15 +22,10 @@ import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.ViewType
-import com.seancoyle.launch.implementation.domain.model.CompanySummary
-import com.seancoyle.launch.implementation.domain.model.SectionTitle
-import com.seancoyle.launch.implementation.domain.model.ViewCarousel
-import com.seancoyle.launch.implementation.domain.model.ViewGrid
 import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchCarouselCard
@@ -47,7 +42,7 @@ private const val GRID_COLUMN_SIZE = 2
 @FlowPreview
 @Composable
 internal fun LaunchesContent(
-    launches: List<ViewType>,
+    launches: List<LaunchTypes>,
     paginationState: PaginationState,
     page: Int,
     onChangeScrollPosition: (Int) -> Unit,
@@ -84,7 +79,7 @@ internal fun LaunchesContent(
             itemsIndexed(
                 items = launches,
                 span = { _, item ->
-                    GridItemSpan(if (item.type == ViewType.TYPE_GRID) 1 else 2)
+                    GridItemSpan(if (item is LaunchTypes.Grid) 1 else 2)
                 }
             ) { index, launchItem ->
                 if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
@@ -95,37 +90,35 @@ internal fun LaunchesContent(
                         loadNextPage = loadNextPage
                     )
                 }
-                when (launchItem.type) {
-                    ViewType.TYPE_SECTION_TITLE -> {
-                        LaunchHeading(launchItem as SectionTitle)
+                when (launchItem) {
+                    is LaunchTypes.SectionTitle -> {
+                        LaunchHeading(launchItem)
                     }
 
-                    ViewType.TYPE_HEADER -> {
-                        launchItem as CompanySummary
+                    is LaunchTypes.CompanySummary -> {
                         CompanySummaryCard(
                             companySummary = getCompanySummary(launchItem.company)
                         )
                     }
 
-                    ViewType.TYPE_LIST -> {
+                    is LaunchTypes.Launch -> {
                         LaunchCard(
-                            launchItem = launchItem as Launch,
+                            launchItem = launchItem,
                             onClick = { onItemClicked(launchItem.links) },
                             getLaunchStatusIcon = getLaunchStatusIcon(launchItem.launchStatus),
                             getLaunchDate = getLaunchDate(launchItem.launchDateStatus)
                         )
                     }
 
-                    ViewType.TYPE_GRID -> {
+                    is LaunchTypes.Grid -> {
                         LaunchGridCard(
-                            launchItem = launchItem as ViewGrid,
+                            launchItem = launchItem,
                             onClick = { onItemClicked(launchItem.links) })
                     }
 
-                    ViewType.TYPE_CAROUSEL -> {
-                        val carouselItems = (launchItem as ViewCarousel).items
+                    is LaunchTypes.Carousel -> {
                         LazyRow {
-                            itemsIndexed(carouselItems) { _, carouselItem ->
+                            itemsIndexed(launchItem.items) { _, carouselItem ->
                                 LaunchCarouselCard(
                                     launchItem = carouselItem,
                                     onClick = { onItemClicked(carouselItem.links) })
@@ -133,13 +126,14 @@ internal fun LaunchesContent(
                         }
                     }
 
-                    else -> throw ClassCastException("Unknown viewType ${launchItem.type}")
+                    else -> throw ClassCastException("Unknown viewType $launchItem")
                 }
 
                 when (paginationState) {
                     is PaginationState.Loading -> {
                         CircularProgressBar()
                     }
+
                     is PaginationState.Error -> {}
                     is PaginationState.None -> {}
                 }

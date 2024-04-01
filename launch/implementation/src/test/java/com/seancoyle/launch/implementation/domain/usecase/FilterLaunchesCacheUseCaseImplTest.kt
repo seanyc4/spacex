@@ -8,12 +8,11 @@ import com.seancoyle.launch.api.LaunchConstants.LAUNCH_SUCCESS
 import com.seancoyle.launch.api.LaunchConstants.LAUNCH_UNKNOWN
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
-import com.seancoyle.launch.api.domain.model.ViewType
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
+import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Rocket
 import com.seancoyle.launch.implementation.presentation.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

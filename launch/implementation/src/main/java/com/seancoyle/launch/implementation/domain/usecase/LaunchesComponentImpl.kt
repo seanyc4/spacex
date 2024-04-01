@@ -3,9 +3,8 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.api.domain.model.Launch
 import com.seancoyle.launch.api.domain.model.LaunchStatus
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -18,7 +17,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<Launch>, DataError>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>> {
         return getLaunchesApiCacheUseCase.invoke()
     }
 
@@ -27,7 +26,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>?, DataError>> {
+    ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
@@ -41,7 +40,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>, DataError>> {
+    ): Flow<DataResult<List<LaunchTypes>, DataError>> {
         return createMergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,

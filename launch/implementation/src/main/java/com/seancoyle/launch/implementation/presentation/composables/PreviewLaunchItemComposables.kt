@@ -3,23 +3,15 @@ package com.seancoyle.launch.implementation.presentation.composables
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.domain.model.SectionTitle
 
 @Preview
 @Composable
 fun PreviewLaunchHeading() {
-    val launchHeading = SectionTitle("12345","Test title", ViewType.TYPE_SECTION_TITLE)
+    val launchHeading = LaunchTypes.SectionTitle("12345", "Test title")
     LaunchHeading(launchHeading)
 }
-
-/*@Preview
-@Composable
-fun PreviewCompanySummaryCard() {
-    val companySummary = CompanySummary("45678","Test Summary", ViewType.TYPE_HEADER)
-    CompanySummaryCard(companySummary)
-}*/
 
 @Preview
 @Composable

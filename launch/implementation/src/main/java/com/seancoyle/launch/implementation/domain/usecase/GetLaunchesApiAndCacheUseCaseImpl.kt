@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
-import com.seancoyle.launch.api.domain.model.Launch
+import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import kotlinx.coroutines.flow.Flow
@@ -15,18 +15,18 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val launchOptions: LaunchOptions
 ) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<List<Launch>, DataError>> = flow {
+    override operator fun invoke(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>> = flow {
         emit(getLaunchesFromNetwork())
     }
 
-    private suspend fun getLaunchesFromNetwork(): DataResult<List<Launch>, DataError> {
+    private suspend fun getLaunchesFromNetwork(): DataResult<List<LaunchTypes.Launch>, DataError> {
         return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
             is DataResult.Success -> cacheData(networkResult.data)
             is DataResult.Error -> DataResult.Error(networkResult.error)
         }
     }
 
-    private suspend fun cacheData(launches: List<Launch>): DataResult<List<Launch>, DataError> {
+    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): DataResult<List<LaunchTypes.Launch>, DataError> {
         return when (val cacheResult = insertLaunchesToCacheUseCase(launches)) {
             is DataResult.Success -> DataResult.Success(launches)
             is DataResult.Error -> DataResult.Error(cacheResult.error)

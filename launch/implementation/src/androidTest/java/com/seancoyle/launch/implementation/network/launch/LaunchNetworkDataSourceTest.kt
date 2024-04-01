@@ -2,11 +2,11 @@ package com.seancoyle.launch.implementation.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.domain.DateFormatter
-import com.seancoyle.launch.api.domain.model.Launch
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
 import com.seancoyle.launch.implementation.TestConstants
+import com.seancoyle.launch.implementation.domain.model.Launch
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.launch.implementation.domain.model.Links
+import com.seancoyle.launch.implementation.domain.model.Rocket
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
 import com.seancoyle.launch.api.domain.model.LaunchStatus
-import com.seancoyle.launch.api.domain.model.ViewType
+import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,7 +18,7 @@ internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
         order: String,
         launchFilter: LaunchStatus,
         page: Int?
-    ): Flow<DataResult<List<ViewType>?, DataError>> = flow {
+    ): Flow<DataResult<List<LaunchTypes>?, DataError>> = flow {
         emit(
             cacheDataSource.filterLaunchList(
                 year = year,
