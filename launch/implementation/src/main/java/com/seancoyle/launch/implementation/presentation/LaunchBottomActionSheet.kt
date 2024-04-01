@@ -15,8 +15,8 @@ import com.seancoyle.core_ui.theme.AppTheme
 import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
+import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetExitButton
 
 @ExperimentalMaterialApi
 internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {

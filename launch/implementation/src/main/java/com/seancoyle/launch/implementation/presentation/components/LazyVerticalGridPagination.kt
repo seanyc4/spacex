@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation.composables
+package com.seancoyle.launch.implementation.presentation.components
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable

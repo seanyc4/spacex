@@ -1,4 +1,4 @@
-package com.seancoyle.launch.implementation.presentation.composables
+package com.seancoyle.launch.implementation.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.seancoyle.launch.implementation.presentation.LaunchUiState
+import com.seancoyle.launch.implementation.presentation.state.LaunchUiState
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)

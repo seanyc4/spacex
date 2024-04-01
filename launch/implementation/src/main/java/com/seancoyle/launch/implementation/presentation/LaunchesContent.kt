@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -26,19 +27,20 @@ import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.implementation.presentation.composables.CompanySummaryCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchCarouselCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchGridCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchHeading
-import com.seancoyle.launch.implementation.presentation.composables.LazyVerticalGridPagination
+import com.seancoyle.launch.implementation.presentation.components.CompanySummaryCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchCarouselCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchGridCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchHeading
+import com.seancoyle.launch.implementation.presentation.components.LazyVerticalGridPagination
+import com.seancoyle.launch.implementation.presentation.state.PaginationState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
 private const val GRID_COLUMN_SIZE = 2
 
-@OptIn(ExperimentalMaterialApi::class)
+@ExperimentalMaterialApi
 @FlowPreview
 @Composable
 internal fun LaunchesContent(
@@ -55,16 +57,7 @@ internal fun LaunchesContent(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyGridState()
-
-    // Observe and save scroll position to view model
-    LaunchedEffect(listState) {
-        snapshotFlow {
-            listState.firstVisibleItemIndex
-        }.debounce(500L)
-            .collectLatest { position ->
-                onChangeScrollPosition(position)
-            }
-    }
+    ObserveScrollPosition(listState, onChangeScrollPosition)
 
     Box(
         modifier = modifier
@@ -82,62 +75,107 @@ internal fun LaunchesContent(
                     GridItemSpan(if (item is LaunchTypes.Grid) 1 else 2)
                 }
             ) { index, launchItem ->
-                if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
-                    LazyVerticalGridPagination(
-                        listState = listState,
-                        buffer = GRID_COLUMN_SIZE,
-                        index = index,
-                        loadNextPage = loadNextPage
-                    )
-                }
-                when (launchItem) {
-                    is LaunchTypes.SectionTitle -> {
-                        LaunchHeading(launchItem)
-                    }
 
-                    is LaunchTypes.CompanySummary -> {
-                        CompanySummaryCard(
-                            companySummary = getCompanySummary(launchItem.company)
-                        )
-                    }
+                RenderGridSections(
+                    launchItem = launchItem,
+                    getCompanySummary = getCompanySummary,
+                    onItemClicked = onItemClicked,
+                    getLaunchStatusIcon = getLaunchStatusIcon,
+                    getLaunchDate = getLaunchDate
+                )
 
-                    is LaunchTypes.Launch -> {
-                        LaunchCard(
-                            launchItem = launchItem,
-                            onClick = { onItemClicked(launchItem.links) },
-                            getLaunchStatusIcon = getLaunchStatusIcon(launchItem.launchStatus),
-                            getLaunchDate = getLaunchDate(launchItem.launchDateStatus)
-                        )
-                    }
+                HandlePagination(
+                    index = index,
+                    page = page,
+                    listState = listState,
+                    loadNextPage = loadNextPage
+                )
 
-                    is LaunchTypes.Grid -> {
-                        LaunchGridCard(
-                            launchItem = launchItem,
-                            onClick = { onItemClicked(launchItem.links) })
-                    }
+                PaginationState(paginationState)
+            }
+        }
+    }
+}
 
-                    is LaunchTypes.Carousel -> {
-                        LazyRow {
-                            itemsIndexed(launchItem.items) { _, carouselItem ->
-                                LaunchCarouselCard(
-                                    launchItem = carouselItem,
-                                    onClick = { onItemClicked(carouselItem.links) })
-                            }
-                        }
-                    }
+@Composable
+private fun RenderGridSections(
+    launchItem: LaunchTypes,
+    getCompanySummary: (Company) -> String,
+    onItemClicked: (links: Links) -> Unit,
+    getLaunchStatusIcon: (LaunchStatus) -> Int,
+    getLaunchDate: (LaunchDateStatus) -> Int
+) {
+    when (launchItem) {
+        is LaunchTypes.SectionTitle -> LaunchHeading(launchItem)
 
-                    else -> throw ClassCastException("Unknown viewType $launchItem")
-                }
+        is LaunchTypes.CompanySummary -> CompanySummaryCard(getCompanySummary(launchItem.company))
 
-                when (paginationState) {
-                    is PaginationState.Loading -> {
-                        CircularProgressBar()
-                    }
+        is LaunchTypes.Launch -> {
+            LaunchCard(
+                launchItem = launchItem,
+                onClick = { onItemClicked(launchItem.links) },
+                getLaunchStatusIcon = getLaunchStatusIcon(launchItem.launchStatus),
+                getLaunchDate = getLaunchDate(launchItem.launchDateStatus)
+            )
+        }
 
-                    is PaginationState.Error -> {}
-                    is PaginationState.None -> {}
+        is LaunchTypes.Grid -> {
+            LaunchGridCard(
+                launchItem = launchItem,
+                onClick = { onItemClicked(launchItem.links) })
+        }
+
+        is LaunchTypes.Carousel -> {
+            LazyRow {
+                itemsIndexed(launchItem.items) { _, carouselItem ->
+                    LaunchCarouselCard(
+                        launchItem = carouselItem,
+                        onClick = { onItemClicked(carouselItem.links) })
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandlePagination(
+    index: Int,
+    page: Int,
+    listState: LazyGridState,
+    loadNextPage: (Int) -> Unit
+) {
+    if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
+        LazyVerticalGridPagination(
+            listState = listState,
+            buffer = GRID_COLUMN_SIZE,
+            index = index,
+            loadNextPage = loadNextPage
+        )
+    }
+}
+
+@Composable
+private fun PaginationState(paginationState: PaginationState) {
+    when (paginationState) {
+        is PaginationState.Loading -> CircularProgressBar()
+        is PaginationState.Error -> {}
+        is PaginationState.None -> {}
+    }
+}
+
+@FlowPreview
+@Composable
+private fun ObserveScrollPosition(
+    listState: LazyGridState,
+    onChangeScrollPosition: (Int) -> Unit
+) {
+    // Observe and save scroll position to view model
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            listState.firstVisibleItemIndex
+        }.debounce(750L)
+            .collectLatest { position ->
+                onChangeScrollPosition(position)
+            }
     }
 }

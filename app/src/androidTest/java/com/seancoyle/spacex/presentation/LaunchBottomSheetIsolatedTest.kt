@@ -9,8 +9,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.core_testing.stringResource
 import com.seancoyle.launch.implementation.domain.model.LinkType
-import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
-import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
+import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetCard
+import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetExitButton
 import com.seancoyle.spacex.R
 import org.junit.Rule
 import org.junit.Test

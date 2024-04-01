@@ -5,7 +5,7 @@ This app is for demonstration purposes to show good coding practices in android 
 SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 
 - Data is retrieved from two end points: "Company Info" and "All Launches"
-- The data is displayed in a multi view type LazyVerticalGrid.
+- The data is displayed in a multi view type LazyVerticalGrid using a Kotlin Sealed Class.
 - Data in the grid can be filtered by ASC/DESC, Year or whether the launch success status.
 - The data is also paginated from Room, loading 30 items at a time.
 - A modal bottom sheet is used to present launch media links if available. These are external links to other websites.
@@ -21,6 +21,7 @@ SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 * Datastore
 * State Flow
 * Splash Screen API
+* Dark & Light Mode Support
 * Navigation Component
 * Hilt Dependency Injection
 * Retrofit2
