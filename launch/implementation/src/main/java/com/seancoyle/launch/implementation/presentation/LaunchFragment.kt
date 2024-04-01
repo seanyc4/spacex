@@ -11,13 +11,19 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -33,13 +39,13 @@ import com.seancoyle.core.presentation.MessageDisplayType
 import com.seancoyle.core.presentation.MessageType
 import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.asStringResource
+import com.seancoyle.core_ui.theme.AppTheme
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.HomeAppBar
-import com.seancoyle.launch.implementation.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -49,12 +55,13 @@ const val LINKS_KEY = "links"
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
+@ExperimentalMaterialApi
+@ExperimentalComposeUiApi
 internal class LaunchFragment : Fragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
 
-    @OptIn(ExperimentalMaterialApi::class)
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +69,7 @@ internal class LaunchFragment : Fragment() {
     ) = content {
 
         val snackbarHostState = remember { SnackbarHostState() }
-        val scaffoldState = rememberScaffoldState()
+
         val refreshing = rememberPullRefreshState(
             refreshing = false,
             onRefresh = {
@@ -72,10 +79,7 @@ internal class LaunchFragment : Fragment() {
             }
         )
 
-        AppTheme(
-            darkTheme = false,
-            displayProgressBar = false,
-        ) {
+        AppTheme {
             Scaffold(
                 topBar = {
                     HomeAppBar(
@@ -85,17 +89,25 @@ internal class LaunchFragment : Fragment() {
                         }
                     )
                 },
-                scaffoldState = scaffoldState,
-                snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                modifier = Modifier.semantics {
+                    testTagsAsResourceId = true
+                },
+                containerColor = MaterialTheme.colorScheme.background
             ) { padding ->
-                LaunchRoute(
-                    viewModel = launchViewModel,
-                    refreshState = refreshing,
-                    snackbarHostState = snackbarHostState,
-                    onItemClicked = { link ->
-                        onCardClicked(link)
-                    }
-                )
+                Box(
+                    Modifier
+                        .padding(padding)
+                ){
+                    LaunchRoute(
+                        viewModel = launchViewModel,
+                        refreshState = refreshing,
+                        snackbarHostState = snackbarHostState,
+                        onItemClicked = { link ->
+                            onCardClicked(link)
+                        }
+                    )
+                }
             }
         }
     }
@@ -109,10 +121,6 @@ internal class LaunchFragment : Fragment() {
                 launchIntent(bundle.getString(LINKS_KEY))
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

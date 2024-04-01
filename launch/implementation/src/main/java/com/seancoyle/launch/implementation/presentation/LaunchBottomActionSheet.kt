@@ -2,21 +2,23 @@ package com.seancoyle.launch.implementation.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.compose.content
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.seancoyle.core_ui.extensions.parcelable
+import com.seancoyle.core_ui.theme.AppTheme
 import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetCard
 import com.seancoyle.launch.implementation.presentation.composables.LaunchBottomSheetExitButton
 
+@ExperimentalMaterialApi
 internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
     private var linkTypes: List<LinkType>? = null
@@ -30,15 +32,12 @@ internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            getLinksFromBundle()
-
-            setContent {
-                Column() {
-                    LaunchBottomSheetCard(linkTypes = linkTypes)
-                    LaunchBottomSheetExitButton { dismiss() }
-                }
+    ) = content {
+        getLinksFromBundle()
+        AppTheme {
+            Column {
+                LaunchBottomSheetCard(linkTypes = linkTypes)
+                LaunchBottomSheetExitButton { dismiss() }
             }
         }
     }
@@ -47,9 +46,18 @@ internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         val links: Links? = arguments?.parcelable(LINKS_KEY)
         links?.let {
             linkTypes = listOfNotNull(
-                createLinkType(titleRes = R.string.article, link = it.articleLink) { link -> onLinkClicked(link) },
-                createLinkType(titleRes = R.string.webcast, link = it.webcastLink) { link -> onLinkClicked(link) },
-                createLinkType(titleRes = R.string.wikipedia, link = it.wikiLink) { link -> onLinkClicked(link) }
+                createLinkType(
+                    titleRes = R.string.article,
+                    link = it.articleLink
+                ) { link -> onLinkClicked(link) },
+                createLinkType(
+                    titleRes = R.string.webcast,
+                    link = it.webcastLink
+                ) { link -> onLinkClicked(link) },
+                createLinkType(
+                    titleRes = R.string.wikipedia,
+                    link = it.wikiLink
+                ) { link -> onLinkClicked(link) }
             )
         }
     }

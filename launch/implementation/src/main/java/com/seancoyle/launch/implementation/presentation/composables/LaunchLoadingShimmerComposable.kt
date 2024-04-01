@@ -12,8 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,12 +45,12 @@ fun LoadingLaunchCardList(
         }
         item { LoadingLaunchHeading() }
         items(itemCount) {
-           Row(
-               modifier = modifier.fillMaxWidth()
-           ){
-               LoadingLaunchGridCard(modifier = modifier.weight(1f))
-               LoadingLaunchGridCard(modifier = modifier.weight(1f))
-           }
+            Row(
+                modifier = modifier.fillMaxWidth()
+            ) {
+                LoadingLaunchGridCard(modifier = modifier.weight(1f))
+                LoadingLaunchGridCard(modifier = modifier.weight(1f))
+            }
         }
     }
 }
@@ -59,7 +59,7 @@ fun LoadingLaunchCardList(
 fun LoadingCompanySummaryCard(modifier: Modifier = Modifier) {
     ShimmerAnimation(getShimmerColors()) { brush ->
         Card(
-            elevation = 4.dp,
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
             modifier = modifier.padding(8.dp)
         ) {
@@ -90,9 +90,8 @@ fun LoadingLaunchCarouselCard(modifier: Modifier = Modifier) {
             modifier = modifier
                 .size(120.dp)
                 .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-            backgroundColor = MaterialTheme.colors.surface,
             shape = CircleShape,
-            elevation = 4.dp
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         ) {
             Box(
                 modifier = modifier
@@ -128,7 +127,6 @@ fun LoadingLaunchCard(modifier: Modifier = Modifier) {
             modifier = modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-            backgroundColor = MaterialTheme.colors.secondary,
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
         ) {
             Box(

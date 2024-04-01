@@ -10,9 +10,9 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -73,7 +73,7 @@ internal fun LaunchesContent(
 
     Box(
         modifier = modifier
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
             .pullRefresh(pullRefreshState)
     ) {
         LazyVerticalGrid(

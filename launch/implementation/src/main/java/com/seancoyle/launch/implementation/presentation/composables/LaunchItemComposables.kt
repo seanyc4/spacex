@@ -24,15 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.launch.api.domain.model.Launch
@@ -48,16 +43,8 @@ internal fun LaunchHeading(
 ) {
     Text(
         text = launchHeading.title,
-        color = MaterialTheme.colorScheme.primary,
-        style = TextStyle(
-            fontFamily = FontFamily(
-                Font(R.font.orbitron)
-            ),
-            fontSize = dimensionResource(id = R.dimen.text_size_subHeading).value.sp,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Start
-        ),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.secondary,
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen._8sdp))
@@ -78,14 +65,9 @@ internal fun CompanySummaryCard(
     ) {
         Text(
             text = companySummary,
-            style = TextStyle(
-                fontFamily = FontFamily(
-                    Font(R.font.space_grotesk)
-                ),
-                fontSize = dimensionResource(id = R.dimen.text_size_medium).value.sp,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Start
-            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Start,
             modifier = modifier
                 .padding(dimensionResource(R.dimen.default_view_margin))
                 .semantics { testTag = "HEADER" }
@@ -182,13 +164,8 @@ internal fun LaunchCardDefaultText(
 ) {
     Text(
         text = stringResource(id = title),
-        style = TextStyle(
-            fontFamily = FontFamily(
-                Font(R.font.space_grotesk)
-            ),
-            fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = MaterialTheme.colorScheme.primary
-        )
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.secondary
     )
 }
 
@@ -199,13 +176,8 @@ internal fun LaunchCardDynamicText(
 ) {
     Text(
         text = title,
-        style = TextStyle(
-            fontFamily = FontFamily(
-                Font(R.font.space_grotesk)
-            ),
-            fontSize = dimensionResource(id = R.dimen.text_size_small).value.sp,
-            color = MaterialTheme.colorScheme.primary
-        ),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.primary,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
         modifier = modifier
