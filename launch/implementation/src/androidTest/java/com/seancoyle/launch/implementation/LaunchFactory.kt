@@ -1,8 +1,8 @@
 package com.seancoyle.launch.implementation
 
-import com.seancoyle.launch.implementation.domain.model.Launch
-import com.seancoyle.launch.implementation.domain.model.Links
-import com.seancoyle.launch.implementation.domain.model.Rocket
+import com.seancoyle.launch.api.domain.model.LaunchTypes
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -25,8 +25,8 @@ internal class LaunchFactory @Inject constructor() {
         daysToFromTitle: Int,
         launchDaysDifference: String,
         type: Int
-    ): Launch {
-        return Launch(
+    ): LaunchTypes.Launch {
+        return LaunchTypes.Launch(
             id = id,
             launchDate = launchDate,
             launchDateLocalDateTime = launchDateLocalDateTime,
@@ -36,8 +36,7 @@ internal class LaunchFactory @Inject constructor() {
             missionName = missionName,
             rocket = rocket,
             launchDateStatus = daysToFromTitle,
-            launchDays = launchDaysDifference,
-            type = type
+            launchDays = launchDaysDifference
         )
     }
 }

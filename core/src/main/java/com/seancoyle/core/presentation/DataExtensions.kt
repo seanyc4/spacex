@@ -1,4 +1,4 @@
-package com.seancoyle.core_ui.extensions
+package com.seancoyle.core.presentation
 
 import android.content.Intent
 import android.os.Build
