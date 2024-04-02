@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core.domain.StringResource
-import com.seancoyle.core.presentation.MessageDisplayType
-import com.seancoyle.core.presentation.MessageType
 import com.seancoyle.core.presentation.NotificationState
+import com.seancoyle.core.presentation.NotificationType
+import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
@@ -104,8 +104,8 @@ internal class LaunchViewModel @Inject constructor(
                                     _uiState.value = LaunchUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
-                                            messageDisplayType = MessageDisplayType.Snackbar,
-                                            messageType = MessageType.Error
+                                            notificationUiType = NotificationUiType.Snackbar,
+                                            notificationType = NotificationType.Error
                                         )
                                     )
                                 }
@@ -155,8 +155,8 @@ internal class LaunchViewModel @Inject constructor(
                                     _uiState.value = LaunchUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
-                                            messageDisplayType = MessageDisplayType.Dialog,
-                                            messageType = MessageType.Error
+                                            notificationUiType = NotificationUiType.Dialog,
+                                            notificationType = NotificationType.Error
                                         )
                                     )
                                 }
@@ -174,8 +174,8 @@ internal class LaunchViewModel @Inject constructor(
                                     _uiState.value = LaunchUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
-                                            messageDisplayType = MessageDisplayType.Dialog,
-                                            messageType = MessageType.Error
+                                            notificationUiType = NotificationUiType.Dialog,
+                                            notificationType = NotificationType.Error
                                         )
                                     )
                                 }

@@ -35,9 +35,9 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.seancoyle.core.presentation.MessageDisplayType
-import com.seancoyle.core.presentation.MessageType
 import com.seancoyle.core.presentation.NotificationState
+import com.seancoyle.core.presentation.NotificationType
+import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_ui.theme.AppTheme
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
@@ -257,9 +257,9 @@ internal class LaunchFragment : Fragment() {
         launchViewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
-                    messageType = MessageType.Info,
+                    notificationType = NotificationType.Info,
                     message = R.string.no_links.asStringResource(),
-                    messageDisplayType = MessageDisplayType.Dialog
+                    notificationUiType = NotificationUiType.Dialog
                 ),
             )
         )
@@ -269,9 +269,9 @@ internal class LaunchFragment : Fragment() {
         launchViewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
-                    messageType = MessageType.Error,
+                    notificationType = NotificationType.Error,
                     message = R.string.error_links.asStringResource(),
-                    messageDisplayType = MessageDisplayType.Snackbar
+                    notificationUiType = NotificationUiType.Snackbar
                 )
             )
         )

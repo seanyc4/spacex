@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.presentation.MessageDisplayType
 import com.seancoyle.core.presentation.NotificationState
+import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core_ui.R
 
 @Composable
@@ -24,15 +24,15 @@ fun DisplayNotification(
     snackbarHostState: SnackbarHostState
 ) {
     error?.let {
-        when (it.messageDisplayType) {
-            MessageDisplayType.Dialog -> {
+        when (it.notificationUiType) {
+            NotificationUiType.Dialog -> {
                 ErrorDialog(
                     message = it.message.asString(),
                     onDismiss = onDismiss
                 )
             }
 
-            MessageDisplayType.Snackbar -> {
+            NotificationUiType.Snackbar -> {
                 SnackBar(
                     hostState = snackbarHostState,
                     message = error.message.asString()
