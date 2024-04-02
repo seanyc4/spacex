@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataResult
-import com.seancoyle.core.domain.StringResource
 import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
+import com.seancoyle.core.presentation.StringResource
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_datastore.AppDataStore
 import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
@@ -36,7 +36,6 @@ internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val appDataStoreManager: AppDataStore,
     private val savedStateHandle: SavedStateHandle,
-    private val stringResource: StringResource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -192,16 +191,19 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun buildCompanySummary(company: Company?) = with(stringResource) {
-        getString(R.string.company_info).format(
-            company?.name,
-            company?.founder,
-            company?.founded,
-            company?.employees,
-            company?.launchSites,
-            company?.valuation
+    fun buildCompanySummary(company: Company) =
+        StringResource.AndroidStringResource(
+            R.string.company_info,
+            arrayOf(
+                company.name,
+                company.founder,
+                company.founded,
+                company.employees,
+                company.launchSites,
+                company.valuation
+            )
         )
-    }
+
 
     fun getLaunchStatusIcon(status: LaunchStatus): Int = when (status) {
         LaunchStatus.SUCCESS -> R.drawable.ic_launch_success

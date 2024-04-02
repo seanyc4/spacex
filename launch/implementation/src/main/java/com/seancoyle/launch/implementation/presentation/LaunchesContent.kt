@@ -20,6 +20,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import com.seancoyle.core.presentation.StringResource
 import com.seancoyle.core_ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
@@ -53,7 +54,7 @@ internal fun LaunchesContent(
     onItemClicked: (links: Links) -> Unit,
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
-    getCompanySummary: (Company) -> String,
+    getCompanySummary: (Company) -> StringResource,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyGridState()
@@ -100,7 +101,7 @@ internal fun LaunchesContent(
 @Composable
 private fun RenderGridSections(
     launchItem: LaunchTypes,
-    getCompanySummary: (Company) -> String,
+    getCompanySummary: (Company) -> StringResource,
     onItemClicked: (links: Links) -> Unit,
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int
@@ -108,7 +109,7 @@ private fun RenderGridSections(
     when (launchItem) {
         is LaunchTypes.SectionTitle -> LaunchHeading(launchItem)
 
-        is LaunchTypes.CompanySummary -> CompanySummaryCard(getCompanySummary(launchItem.company))
+        is LaunchTypes.CompanySummary -> CompanySummaryCard(getCompanySummary(launchItem.company).asString())
 
         is LaunchTypes.Launch -> {
             LaunchCard(
