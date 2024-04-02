@@ -48,7 +48,7 @@ suspend fun <T> safeApiCall(
                         413 -> DataResult.Error(DataError.NETWORK_PAYLOAD_TOO_LARGE)
                         404 -> DataResult.Error(DataError.NETWORK_NOT_FOUND)
                         500 -> DataResult.Error(DataError.NETWORK_INTERNAL_SERVER_ERROR)
-                        else -> DataResult.Error(DataError.UNKNOWN_NETWORK_ERROR)
+                        else -> DataResult.Error(DataError.NETWORK_UNKNOWN_ERROR)
                     }
                 }
 
@@ -58,7 +58,7 @@ suspend fun <T> safeApiCall(
                 }
 
                 else ->
-                    DataResult.Error(DataError.UNKNOWN_NETWORK_ERROR)
+                    DataResult.Error(DataError.NETWORK_UNKNOWN_ERROR)
             }
         }
     }
@@ -84,7 +84,7 @@ suspend fun <T> safeCacheCall(
                 }
 
                 is SQLiteConstraintException -> {
-                    DataResult.Error(DataError.CONSTRAINT_VIOLATION)
+                    DataResult.Error(DataError.CACHE_CONSTRAINT_VIOLATION)
                 }
 
                 is SQLiteException -> {
@@ -97,7 +97,7 @@ suspend fun <T> safeCacheCall(
                 }
 
                 else -> {
-                    DataResult.Error(DataError.UNKNOWN_DATABASE_ERROR)
+                    DataResult.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
         }

@@ -65,7 +65,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
                 }
 
                 else -> {
-                    DataResult.Error(DataError.UNKNOWN_DATABASE_ERROR)
+                    DataResult.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
 
