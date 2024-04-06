@@ -1,21 +1,18 @@
 package com.seancoyle.core_datastore
 
-import android.app.Application
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object DataStoreModule {
+internal abstract class DataStoreModule {
 
     @Singleton
-    @Provides
-    fun provideDataStoreManager(
-        application: Application
-    ): AppDataStore {
-        return AppDataStoreManager(application)
-    }
+    @Binds
+    abstract fun bindsDataStoreManager(
+        impl: AppDataStoreImpl
+    ): AppDataStore
 }

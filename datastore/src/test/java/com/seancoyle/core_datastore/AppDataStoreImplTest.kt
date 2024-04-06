@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class AppDataStoreManagerTest {
+class AppDataStoreImplTest {
     private lateinit var underTest: AppDataStoreManagerFake
 
     @Before
