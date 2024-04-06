@@ -13,14 +13,14 @@ interface LaunchesComponent {
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>>
 
     fun createMergedLaunchesCacheUseCase(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>, DataError>>
 
     fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>>

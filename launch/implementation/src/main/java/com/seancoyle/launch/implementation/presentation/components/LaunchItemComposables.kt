@@ -133,7 +133,7 @@ internal fun LaunchCard(
             ) {
                 Image(
                     painter = painterResource(id = getLaunchStatusIcon),
-                    contentDescription = "Success or failure icon"
+                    contentDescription = "Launch Status icon"
                 )
             }
         }

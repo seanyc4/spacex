@@ -25,7 +25,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
             year = year,
@@ -39,7 +39,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>, DataError>> {
         return createMergedLaunchesCacheUseCase.invoke(
             year = year,

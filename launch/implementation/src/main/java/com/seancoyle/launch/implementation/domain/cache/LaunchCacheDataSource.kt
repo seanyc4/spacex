@@ -11,7 +11,7 @@ internal interface LaunchCacheDataSource {
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): DataResult<List<LaunchTypes>?, DataError>
 
     suspend fun insert(launch: LaunchTypes.Launch): DataResult<Long, DataError>

@@ -26,7 +26,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): DataResult<List<LaunchTypes>?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,

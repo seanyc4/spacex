@@ -17,7 +17,7 @@ internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> = flow {
         emit(
             cacheDataSource.filterLaunchList(
