@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.presentation
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -52,7 +51,6 @@ internal class LaunchFragment : Fragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
