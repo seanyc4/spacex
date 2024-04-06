@@ -1,11 +1,5 @@
 package com.seancoyle.launch.api.domain.model
 
-import android.os.Parcelable
-import androidx.annotation.Keep
-import kotlinx.parcelize.Parcelize
-
-@Keep
-@Parcelize
 data class Company(
     val id: String,
     val employees: String,
@@ -14,4 +8,4 @@ data class Company(
     val launchSites: Int,
     val name: String,
     val valuation: String
-) : Parcelable
+)

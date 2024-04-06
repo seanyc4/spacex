@@ -28,14 +28,7 @@ interface LaunchDao {
     @Query("DELETE FROM launch")
     suspend fun deleteAll()
 
-    @Query(
-        """
-        SELECT * 
-        FROM launch 
-        WHERE id = :id
-        ORDER BY launchDateLocalDateTime DESC
-    """
-    )
+    @Query("SELECT * FROM launch WHERE id = :id")
     suspend fun getById(id: String): LaunchEntity?
 
     @Query(
@@ -48,7 +41,7 @@ interface LaunchDao {
     fun getAll(): List<LaunchEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
-    suspend fun getTotalEntries(): Int?
+    suspend fun getTotalEntries(): Int
 
     @Query(
         """
@@ -56,12 +49,12 @@ interface LaunchDao {
         WHERE launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByLaunchStatusDESC(
         launchFilter: LaunchStatus,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -71,12 +64,12 @@ interface LaunchDao {
         WHERE launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByLaunchStatusASC(
         launchFilter: LaunchStatus,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -88,13 +81,13 @@ interface LaunchDao {
         AND launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByLaunchStatusAndYearDESC(
         year: String?,
         launchFilter: LaunchStatus,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -105,13 +98,13 @@ interface LaunchDao {
         AND launchStatus = :launchFilter
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByLaunchStatusAndYearASC(
         year: String?,
         launchFilter: LaunchStatus,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -121,12 +114,12 @@ interface LaunchDao {
         WHERE launchYear = :year
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByYearDESC(
         year: String?,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -136,12 +129,12 @@ interface LaunchDao {
         WHERE launchYear = :year
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun filterByYearASC(
         year: String?,
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -150,11 +143,11 @@ interface LaunchDao {
         SELECT * FROM launch
         ORDER BY launchDateLocalDateTime DESC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun getAllDESC(
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -163,11 +156,11 @@ interface LaunchDao {
         SELECT * FROM launch
         ORDER BY launchDateLocalDateTime ASC 
         LIMIT :pageSize
-        OFFSET :page
+        OFFSET :offset
         """
     )
     suspend fun getAllASC(
-        page: Int? = 1,
+        offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
 
@@ -177,11 +170,11 @@ suspend fun LaunchDao.returnOrderedQuery(
     year: String?,
     order: String,
     launchFilter: LaunchStatus,
-    page: Int? = 1
+    page: Int
 ): List<LaunchEntity>? {
     val hasYear = !year.isNullOrEmpty()
     val isOrderDesc = order.contains(ORDER_DESC)
-    val offset = (page?.minus(1))?.times(PAGINATION_PAGE_SIZE)
+    val offset = page.minus(1).times(PAGINATION_PAGE_SIZE)
     val noFilter = launchFilter == LaunchStatus.ALL
 
     return when {
@@ -190,7 +183,7 @@ suspend fun LaunchDao.returnOrderedQuery(
             printLogDebug("DAO", "filterByYearDESC")
             filterByYearDESC(
                 year = year,
-                page = offset
+                offset = offset
             )
         }
 
@@ -198,21 +191,21 @@ suspend fun LaunchDao.returnOrderedQuery(
             printLogDebug("DAO", "filterByYearASC")
             filterByYearASC(
                 year = year,
-                page = offset
+                offset = offset
             )
         }
 
         isOrderDesc && noFilter -> {
             printLogDebug("DAO", "getAllDESC")
             getAllDESC(
-                page = offset
+                offset = offset
             )
         }
 
         !isOrderDesc && noFilter -> {
             printLogDebug("DAO", "getAllASC")
             getAllASC(
-                page = offset
+                offset = offset
             )
         }
 
@@ -220,7 +213,7 @@ suspend fun LaunchDao.returnOrderedQuery(
             printLogDebug("DAO", "filterByLaunchStatusDESC")
             filterByLaunchStatusDESC(
                 launchFilter = launchFilter,
-                page = offset
+                offset = offset
             )
         }
 
@@ -228,7 +221,7 @@ suspend fun LaunchDao.returnOrderedQuery(
             printLogDebug("DAO", "filterByLaunchStatusASC")
             filterByLaunchStatusASC(
                 launchFilter = launchFilter,
-                page = offset
+                offset = offset
             )
         }
 
@@ -237,7 +230,7 @@ suspend fun LaunchDao.returnOrderedQuery(
             filterByLaunchStatusAndYearASC(
                 year = year,
                 launchFilter = launchFilter,
-                page = offset
+                offset = offset
             )
         }
 
@@ -246,7 +239,7 @@ suspend fun LaunchDao.returnOrderedQuery(
             filterByLaunchStatusAndYearDESC(
                 year = year,
                 launchFilter = launchFilter,
-                page = offset
+                offset = offset
             )
         }
 

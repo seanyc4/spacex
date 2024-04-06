@@ -22,12 +22,12 @@ class GetNumLaunchItemsFromCacheUseCaseImplTest {
     @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
-    private lateinit var underTest: GetNumLaunchItemsFromCacheUseCase
+    private lateinit var underTest: GetNumLaunchItemsCacheUseCase
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetNumLaunchItemsFromCacheUseCaseImpl(
+        underTest = GetNumLaunchItemsCacheUseCaseImpl(
             ioDispatcher = mainCoroutineRule.testDispatcher,
             cacheDataSource = cacheDataSource
         )

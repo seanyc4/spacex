@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 internal class CompanyCacheDataSourceImpl @Inject constructor(
     private val dao: CompanyDao,
-    private val entityMapper: CompanyEntityMapper,
+    private val mapper: CompanyEntityMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyCacheDataSource {
@@ -26,7 +26,7 @@ internal class CompanyCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.getCompanyInfo()?.let {
-                entityMapper.mapFromEntity(it)
+                mapper.mapFromEntity(it)
             }
         }
     }
@@ -36,7 +36,7 @@ internal class CompanyCacheDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.insert(entityMapper.mapToEntity(company))
+            dao.insert(mapper.mapToEntity(company))
         }
     }
 

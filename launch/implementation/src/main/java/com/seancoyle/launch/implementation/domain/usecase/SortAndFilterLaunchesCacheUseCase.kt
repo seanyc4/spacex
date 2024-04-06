@@ -11,6 +11,6 @@ internal interface SortAndFilterLaunchesCacheUseCase {
         year: String? = "",
         order: String,
         launchFilter: LaunchStatus,
-        page: Int? = 1
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>>
 }

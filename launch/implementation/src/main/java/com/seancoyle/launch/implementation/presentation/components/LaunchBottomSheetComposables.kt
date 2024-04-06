@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +32,7 @@ fun LaunchBottomSheetDivider(
         modifier = modifier
             .fillMaxWidth()
             .height(1.dp)
-            .background(colorResource(id = R.color.colorAccent))
+            .background(MaterialTheme.colorScheme.primary)
     )
 }
 

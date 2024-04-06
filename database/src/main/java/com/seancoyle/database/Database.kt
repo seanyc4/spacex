@@ -7,6 +7,7 @@ import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.util.LocalDateTimeConverter
 
 @Database(
     entities =
@@ -18,7 +19,7 @@ import com.seancoyle.database.entities.LaunchEntity
     exportSchema = true
 )
 @TypeConverters(
-    com.seancoyle.database.util.LocalDateTimeConverter::class
+    LocalDateTimeConverter::class
 )
 internal abstract class Database : RoomDatabase() {
 

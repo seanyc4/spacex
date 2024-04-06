@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.flow
 import java.util.UUID
 import javax.inject.Inject
 
-internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject constructor(
+internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     private val getCompanyFromCacheUseCase: GetCompanyCacheUseCase,
     private val getLaunchesFromCacheUseCase: SortAndFilterLaunchesCacheUseCase
-) : CreateMergedLaunchesCacheUseCase {
+) : MergedLaunchesCacheUseCase {
 
     companion object {
         private const val MAX_GRID_SIZE = 6
@@ -31,7 +31,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>, DataError>> = flow {
         combine(
             getCompanyInfo().distinctUntilChanged(),
@@ -65,7 +65,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
                 }
 
                 else -> {
-                    DataResult.Error(DataError.UNKNOWN_DATABASE_ERROR)
+                    DataResult.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
 
@@ -82,7 +82,7 @@ internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject construct
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return getLaunchesFromCacheUseCase(
             year = year,

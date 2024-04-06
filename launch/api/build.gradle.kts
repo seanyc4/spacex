@@ -13,4 +13,5 @@ android {
 
 dependencies {
     implementation(projects.core)
+    implementation(libs.googleGson)
 }

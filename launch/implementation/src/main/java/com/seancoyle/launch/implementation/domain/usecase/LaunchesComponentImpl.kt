@@ -12,7 +12,7 @@ import javax.inject.Inject
 internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
     private val sortAndFilterLaunchesCacheUseCase: SortAndFilterLaunchesCacheUseCase,
-    private val createMergedLaunchesCacheUseCase: CreateMergedLaunchesCacheUseCase,
+    private val mergedLaunchesCacheUseCase: MergedLaunchesCacheUseCase,
     private val getCompanyCacheUseCase: GetCompanyCacheUseCase,
     private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase
 ) : LaunchesComponent {
@@ -25,7 +25,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
             year = year,
@@ -39,9 +39,9 @@ internal class LaunchesComponentImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): Flow<DataResult<List<LaunchTypes>, DataError>> {
-        return createMergedLaunchesCacheUseCase.invoke(
+        return mergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
             launchFilter = launchFilter,

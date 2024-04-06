@@ -1,7 +1,7 @@
 package com.seancoyle.launch.api.domain.model
 
 import android.os.Parcelable
-import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
@@ -41,19 +41,23 @@ sealed class LaunchTypes {
     ) : LaunchTypes()
 }
 
-@Keep
 @Parcelize
 data class Links(
+    @SerializedName("missionImage")
     val missionImage: String,
+    @SerializedName("articleLink")
     val articleLink: String?,
+    @SerializedName("webcastLink")
     val webcastLink: String?,
+    @SerializedName("wikiLink")
     val wikiLink: String?,
 ) : Parcelable
 
-@Keep
 @Parcelize
 data class LinkType(
+    @SerializedName("nameResId")
     val nameResId: Int,
+    @SerializedName("link")
     val link: String?,
     val onClick: () -> Unit
 ) : Parcelable

@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 internal class LaunchCacheDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
-    private val entityMapper: LaunchEntityMapper,
+    private val mapper: LaunchEntityMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LaunchCacheDataSource {
@@ -26,7 +26,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         year: String?,
         order: String,
         launchFilter: LaunchStatus,
-        page: Int?
+        page: Int
     ): DataResult<List<LaunchTypes>?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
@@ -38,7 +38,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
                 page = page,
                 order = order
             )?.let {
-                entityMapper.mapEntityListToDomainList(it)
+                mapper.mapEntityListToDomainList(it)
             }
         }
     }
@@ -48,7 +48,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.insert(entityMapper.mapToEntity(launch))
+            dao.insert(mapper.mapToEntity(launch))
         }
     }
 
@@ -58,7 +58,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.insertList(
-                entityMapper.mapDomainListToEntityList(launches)
+                mapper.mapDomainListToEntityList(launches)
             )
         }
     }
@@ -97,7 +97,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.getById(id)?.let {
-                entityMapper.mapFromEntity(it)
+                mapper.mapFromEntity(it)
             }
         }
     }
@@ -108,7 +108,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.getAll()?.let {
-                entityMapper.mapEntityListToDomainList(it)
+                mapper.mapEntityListToDomainList(it)
             }
         }
     }
@@ -118,7 +118,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.getTotalEntries() ?: 0
+            dao.getTotalEntries()
         }
     }
 }

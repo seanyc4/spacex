@@ -14,11 +14,11 @@
     <!-- Network Error Messages -->
     <string name="network_error_timeout">Request timed out. Please try again.</string>
     <string name="network_connection_failed">Failed to connect. Please check your internet connection.</string>
-    <string name="network_unauthorized">Unauthorized access.</string>
+    <string name="network_unauthorized">Unauthorized, please login.</string>
     <string name="network_forbidden">Forbidden access.</string>
     <string name="network_not_found">The requested resource was not found.</string>
     <string name="network_internal_server_error">Internal server error.</string>
-    <string name="unknown_network_error">Unknown network error occurred.</string>
-    <string name="network_error_unknown">Network error</string>
+    <string name="network_unknown_error">Unknown network error occurred.</string>
     <string name="network_data_null">Network data is null.</string>
+    <string name="network_payload_too_large">.</string>
 </resources>
