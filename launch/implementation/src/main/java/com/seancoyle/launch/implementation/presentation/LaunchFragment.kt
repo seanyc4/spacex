@@ -35,13 +35,12 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.seancoyle.core.domain.Order
 import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_ui.theme.AppTheme
-import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
-import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
@@ -100,7 +99,7 @@ internal class LaunchFragment : Fragment() {
                 Box(
                     Modifier
                         .padding(padding)
-                ){
+                ) {
                     LaunchRoute(
                         viewModel = launchViewModel,
                         refreshState = refreshing,
@@ -185,7 +184,7 @@ internal class LaunchFragment : Fragment() {
             val view = dialog.getCustomView()
             val order = launchViewModel.getOrderState()
             val filter = launchViewModel.getFilterState()
-            var newOrder: String? = null
+            var newOrder: Order = order
 
             view.findViewById<RadioGroup>(R.id.filter_group).apply {
                 when (filter) {
@@ -198,17 +197,17 @@ internal class LaunchFragment : Fragment() {
 
             // set switch to on/off based on state
             val orderSwitch = view.findViewById<SwitchMaterial>(R.id.order_switch).apply {
-                when (order) {
-                    ORDER_ASC -> isChecked = false
-                    ORDER_DESC -> isChecked = true
+                isChecked = when (order) {
+                    Order.ASC -> false
+                    Order.DESC -> true
                 }
             }
 
             orderSwitch.setOnCheckedChangeListener { _, isChecked ->
                 newOrder = if (isChecked) {
-                    ORDER_DESC
+                    Order.DESC
                 } else {
-                    ORDER_ASC
+                    Order.ASC
                 }
             }
 
@@ -220,19 +219,17 @@ internal class LaunchFragment : Fragment() {
                         R.id.filter_failure -> LaunchStatus.FAILED
                         R.id.filter_unknown -> LaunchStatus.UNKNOWN
                         R.id.filter_all -> LaunchStatus.ALL
-                        else -> null
+                        else -> {
+                            LaunchStatus.ALL
+                        }
                     }
 
                 val yearQuery = view.findViewById<EditText>(R.id.year_query).text.toString()
 
                 // Save data to view model
                 launchViewModel.apply {
-                    newOrder?.let { order ->
-                        setLaunchOrderState(order)
-                    }
-                    newFilter?.let { filter ->
-                        setLaunchFilterState(filter)
-                    }
+                    setLaunchOrderState(newOrder)
+                    setLaunchFilterState(newFilter)
                     setYearState(yearQuery)
                 }
 

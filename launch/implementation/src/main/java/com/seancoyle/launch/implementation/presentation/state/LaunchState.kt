@@ -2,8 +2,8 @@ package com.seancoyle.launch.implementation.presentation.state
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
+import com.seancoyle.core.domain.Order
 import com.seancoyle.core.presentation.NotificationState
-import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import kotlinx.parcelize.Parcelize
@@ -33,8 +33,8 @@ internal sealed interface PaginationState {
 @Stable
 data class LaunchFilterState(
     val isDialogFilterDisplayed: Boolean = false,
-    val launchFilter: LaunchStatus = LaunchStatus.ALL,
-    val order: String = ORDER_ASC,
+    val launchStatus: LaunchStatus = LaunchStatus.ALL,
+    val order: Order = Order.DESC,
     val year: String = "",
 ) : Parcelable
 

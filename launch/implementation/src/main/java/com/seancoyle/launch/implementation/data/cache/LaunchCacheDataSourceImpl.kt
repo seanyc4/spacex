@@ -5,6 +5,7 @@ import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.Crashlytics
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.returnOrderedQuery
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -23,8 +24,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
 ) : LaunchCacheDataSource {
 
     override suspend fun filterLaunchList(
-        year: String?,
-        order: String,
+        year: String,
+        order: Order,
         launchFilter: LaunchStatus,
         page: Int
     ): DataResult<List<LaunchTypes>?, DataError> {

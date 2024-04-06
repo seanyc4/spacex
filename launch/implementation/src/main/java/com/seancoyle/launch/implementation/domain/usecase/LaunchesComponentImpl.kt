@@ -2,6 +2,7 @@ package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
@@ -22,8 +23,8 @@ internal class LaunchesComponentImpl @Inject constructor(
     }
 
     override fun sortAndFilterLaunchesCacheUseCase(
-        year: String?,
-        order: String,
+        year: String,
+        order: Order,
         launchFilter: LaunchStatus,
         page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
@@ -36,8 +37,8 @@ internal class LaunchesComponentImpl @Inject constructor(
     }
 
     override fun createMergedLaunchesCacheUseCase(
-        year: String?,
-        order: String,
+        year: String,
+        order: Order,
         launchFilter: LaunchStatus,
         page: Int
     ): Flow<DataResult<List<LaunchTypes>, DataError>> {

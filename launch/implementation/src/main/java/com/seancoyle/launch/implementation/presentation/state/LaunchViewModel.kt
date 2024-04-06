@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.di.IODispatcher
 import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.domain.Order
 import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.StringResource
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.api.LaunchConstants.ORDER_ASC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
@@ -72,9 +72,9 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
-            val filterString =
-                appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
-            setLaunchOrderState(appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: ORDER_ASC)
+            val filterString = appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
+            val orderString = appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: Order.DESC.name
+            setLaunchOrderState(Order.valueOf(orderString))
             setLaunchFilterState(LaunchStatus.valueOf(filterString))
         }
     }
@@ -253,11 +253,11 @@ internal class LaunchViewModel @Inject constructor(
     private fun getSearchYearState() = launchFilterState.value.year
     fun getOrderState() = launchFilterState.value.order
     fun getIsDialogFilterDisplayedState() = launchFilterState.value.isDialogFilterDisplayed
-    fun getFilterState(): LaunchStatus = launchFilterState.value.launchFilter
+    fun getFilterState(): LaunchStatus = launchFilterState.value.launchStatus
 
     fun clearQueryParameters() {
         clearListState()
-        setYearState(null)
+        setYearState("")
         setLaunchFilterState(LaunchStatus.ALL)
         resetPageState()
     }
@@ -270,17 +270,17 @@ internal class LaunchViewModel @Inject constructor(
         _launchListState.value = _launchListState.value.update()
     }
 
-    fun setYearState(year: String?) {
-        updateFilterState { copy(year = year.orEmpty()) }
+    fun setYearState(year: String) {
+        updateFilterState { copy(year = year) }
     }
 
-    fun setLaunchOrderState(order: String) {
+    fun setLaunchOrderState(order: Order) {
         updateFilterState { copy(order = order) }
         saveOrderToDatastore(order)
     }
 
     fun setLaunchFilterState(filter: LaunchStatus) {
-        updateFilterState { copy(launchFilter = filter) }
+        updateFilterState { copy(launchStatus = filter) }
         saveFilterToDataStore(filter)
     }
 
@@ -310,9 +310,9 @@ internal class LaunchViewModel @Inject constructor(
         savedStateHandle[LAUNCH_LIST_STATE_KEY] = _launchListState.value
     }
 
-    private fun saveOrderToDatastore(order: String) {
+    private fun saveOrderToDatastore(order: Order) {
         viewModelScope.launch(ioDispatcher) {
-            appDataStoreManager.setStringValue(LAUNCH_ORDER_KEY, order)
+            appDataStoreManager.setStringValue(LAUNCH_ORDER_KEY, order.name)
         }
     }
 

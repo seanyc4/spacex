@@ -4,9 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.seancoyle.core.domain.Order
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.launch.api.LaunchConstants.ORDER_DESC
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 
@@ -85,7 +85,7 @@ interface LaunchDao {
         """
     )
     suspend fun filterByLaunchStatusAndYearDESC(
-        year: String?,
+        year: String,
         launchFilter: LaunchStatus,
         offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
@@ -102,7 +102,7 @@ interface LaunchDao {
         """
     )
     suspend fun filterByLaunchStatusAndYearASC(
-        year: String?,
+        year: String,
         launchFilter: LaunchStatus,
         offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
@@ -118,7 +118,7 @@ interface LaunchDao {
         """
     )
     suspend fun filterByYearDESC(
-        year: String?,
+        year: String,
         offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -133,7 +133,7 @@ interface LaunchDao {
         """
     )
     suspend fun filterByYearASC(
-        year: String?,
+        year: String,
         offset: Int,
         pageSize: Int = PAGINATION_PAGE_SIZE
     ): List<LaunchEntity>
@@ -167,13 +167,13 @@ interface LaunchDao {
 }
 
 suspend fun LaunchDao.returnOrderedQuery(
-    year: String?,
-    order: String,
+    year: String,
+    order: Order,
     launchFilter: LaunchStatus,
     page: Int
 ): List<LaunchEntity>? {
-    val hasYear = !year.isNullOrEmpty()
-    val isOrderDesc = order.contains(ORDER_DESC)
+    val hasYear = year.isNotEmpty()
+    val isOrderDesc = order == Order.DESC
     val offset = page.minus(1).times(PAGINATION_PAGE_SIZE)
     val noFilter = launchFilter == LaunchStatus.ALL
 
