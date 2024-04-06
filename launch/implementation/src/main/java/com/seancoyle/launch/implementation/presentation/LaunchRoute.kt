@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.launch.implementation.presentation.state.LaunchViewModel
 import kotlinx.coroutines.FlowPreview
 
@@ -22,6 +23,7 @@ internal fun LaunchRoute(
     onItemClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val launchFilterState by viewModel.launchFilterState.collectAsStateWithLifecycle()
 
     SideEffect {
         printLogDebug("LaunchRoute", ": uiState: $uiState")
@@ -40,4 +42,15 @@ internal fun LaunchRoute(
         getCompanySummary = viewModel::buildCompanySummary,
         getLaunchDate = viewModel::getLaunchDateText
     )
+
+    if (launchFilterState.isDialogFilterDisplayed) {
+        FilterDialog(
+            filterState = launchFilterState,
+            year = viewModel::setYearState,
+            launchStatus = viewModel::setLaunchFilterState,
+            order = viewModel::setLaunchOrderState,
+            onDismiss = viewModel::setDialogFilterDisplayedState,
+            newSearch = viewModel::newSearch
+        )
+    }
 }

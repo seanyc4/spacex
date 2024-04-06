@@ -237,8 +237,10 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     fun newSearch() {
+        clearListState()
         resetPageState()
         newSearchEvent()
+        setDialogFilterDisplayedState(false)
     }
 
     fun nextPage(position: Int) {
@@ -251,9 +253,8 @@ internal class LaunchViewModel @Inject constructor(
     private fun getScrollPositionState() = launchesListState.value.scrollPosition
     fun getPageState() = launchesListState.value.page
     private fun getSearchYearState() = launchFilterState.value.year
-    fun getOrderState() = launchFilterState.value.order
-    fun getIsDialogFilterDisplayedState() = launchFilterState.value.isDialogFilterDisplayed
-    fun getFilterState(): LaunchStatus = launchFilterState.value.launchStatus
+    private fun getOrderState() = launchFilterState.value.order
+    private fun getFilterState(): LaunchStatus = launchFilterState.value.launchStatus
 
     fun clearQueryParameters() {
         clearListState()
@@ -322,7 +323,7 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun newSearchEvent() {
+    private fun newSearchEvent() {
         setEvent(SortAndFilterLaunchesEvent)
     }
 

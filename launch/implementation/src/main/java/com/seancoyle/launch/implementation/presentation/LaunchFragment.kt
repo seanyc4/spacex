@@ -8,9 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -30,18 +27,11 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.customview.getCustomView
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.seancoyle.core.domain.Order
 import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.asStringResource
 import com.seancoyle.core_ui.theme.AppTheme
-import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.components.HomeAppBar
@@ -86,7 +76,6 @@ internal class LaunchFragment : Fragment() {
                     HomeAppBar(
                         onClick = {
                             launchViewModel.setDialogFilterDisplayedState(true)
-                            displayFilterDialog()
                         }
                     )
                 },
@@ -129,13 +118,6 @@ internal class LaunchFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (launchViewModel.getIsDialogFilterDisplayedState()) {
-            displayFilterDialog()
-        }
-    }
-
     // Load url link in external browser
     private fun launchIntent(url: String?) {
         try {
@@ -170,84 +152,6 @@ internal class LaunchFragment : Fragment() {
                 bundleOf(LINKS_KEY to links)
             )
         }
-    }
-
-    private fun displayFilterDialog() {
-
-        activity?.let {
-            val dialog = MaterialDialog(it)
-                .noAutoDismiss()
-                .onDismiss { launchViewModel.setDialogFilterDisplayedState(false) }
-                .customView(R.layout.dialog_filter)
-                .cornerRadius(res = R.dimen.default_corner_radius)
-
-            val view = dialog.getCustomView()
-            val order = launchViewModel.getOrderState()
-            val filter = launchViewModel.getFilterState()
-            var newOrder: Order = order
-
-            view.findViewById<RadioGroup>(R.id.filter_group).apply {
-                when (filter) {
-                    LaunchStatus.ALL -> check(R.id.filter_all)
-                    LaunchStatus.SUCCESS -> check(R.id.filter_success)
-                    LaunchStatus.FAILED -> check(R.id.filter_failure)
-                    LaunchStatus.UNKNOWN -> check(R.id.filter_unknown)
-                }
-            }
-
-            // set switch to on/off based on state
-            val orderSwitch = view.findViewById<SwitchMaterial>(R.id.order_switch).apply {
-                isChecked = when (order) {
-                    Order.ASC -> false
-                    Order.DESC -> true
-                }
-            }
-
-            orderSwitch.setOnCheckedChangeListener { _, isChecked ->
-                newOrder = if (isChecked) {
-                    Order.DESC
-                } else {
-                    Order.ASC
-                }
-            }
-
-            view.findViewById<TextView>(R.id.apply_btn).setOnClickListener {
-
-                val newFilter =
-                    when (view.findViewById<RadioGroup>(R.id.filter_group).checkedRadioButtonId) {
-                        R.id.filter_success -> LaunchStatus.SUCCESS
-                        R.id.filter_failure -> LaunchStatus.FAILED
-                        R.id.filter_unknown -> LaunchStatus.UNKNOWN
-                        R.id.filter_all -> LaunchStatus.ALL
-                        else -> {
-                            LaunchStatus.ALL
-                        }
-                    }
-
-                val yearQuery = view.findViewById<EditText>(R.id.year_query).text.toString()
-
-                // Save data to view model
-                launchViewModel.apply {
-                    setLaunchOrderState(newOrder)
-                    setLaunchFilterState(newFilter)
-                    setYearState(yearQuery)
-                }
-
-                startNewSearch()
-                dialog.dismiss()
-            }
-
-            view.findViewById<TextView>(R.id.cancel_btn).setOnClickListener {
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        }
-    }
-
-    private fun startNewSearch() {
-        launchViewModel.clearListState()
-        launchViewModel.newSearch()
     }
 
     private fun displayNoLinksError() {
