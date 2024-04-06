@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class GetNumLaunchItemsFromCacheUseCaseImpl @Inject constructor(
+internal class GetNumLaunchItemsCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource
-) : GetNumLaunchItemsFromCacheUseCase {
+) : GetNumLaunchItemsCacheUseCase {
 
     override operator fun invoke(): Flow<DataResult<Int?, DataError>> = flow {
         emit(cacheDataSource.getTotalEntries())

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.flow
 import java.util.UUID
 import javax.inject.Inject
 
-internal class CreateMergedAndFilteredLaunchesCacheUseCaseImpl @Inject constructor(
+internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     private val getCompanyFromCacheUseCase: GetCompanyCacheUseCase,
     private val getLaunchesFromCacheUseCase: SortAndFilterLaunchesCacheUseCase
-) : CreateMergedLaunchesCacheUseCase {
+) : MergedLaunchesCacheUseCase {
 
     companion object {
         private const val MAX_GRID_SIZE = 6

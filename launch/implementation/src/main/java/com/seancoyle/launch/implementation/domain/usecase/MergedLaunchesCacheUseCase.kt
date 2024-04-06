@@ -6,7 +6,7 @@ import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import kotlinx.coroutines.flow.Flow
 
-internal interface CreateMergedLaunchesCacheUseCase {
+internal interface MergedLaunchesCacheUseCase {
    operator fun invoke(
        year: String?,
        order: String,
