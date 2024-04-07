@@ -95,9 +95,10 @@ android {
 
 dependencies {
     implementation(projects.core)
-    implementation(projects.datastore)
-    implementation(projects.database)
     implementation(projects.coreUi)
+    implementation(projects.database)
+    implementation(projects.datastore.api)
+    implementation(projects.datastore.implementation)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
     androidTestImplementation(projects.coreTest)

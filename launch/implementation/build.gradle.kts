@@ -20,7 +20,7 @@ dependencies {
     implementation(projects.core)
     implementation(projects.coreTest)
     implementation(projects.coreUi)
-    implementation(projects.datastore)
+    implementation(projects.datastore.api)
     implementation(projects.database)
     implementation(projects.launch.api)
 

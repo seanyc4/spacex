@@ -11,7 +11,7 @@ import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.StringResource
 import com.seancoyle.core.presentation.asStringResource
-import com.seancoyle.core_datastore.AppDataStore
+import com.seancoyle.datastore.api.AppDataStoreComponent
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
@@ -34,7 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
-    private val appDataStoreManager: AppDataStore,
+    private val dataStoreComponent: AppDataStoreComponent,
     private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -72,8 +72,8 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
-            val filterString = appDataStoreManager.readStringValue(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
-            val orderString = appDataStoreManager.readStringValue(LAUNCH_ORDER_KEY) ?: Order.DESC.name
+            val filterString = dataStoreComponent.readStringUseCase(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
+            val orderString = dataStoreComponent.readStringUseCase(LAUNCH_ORDER_KEY) ?: Order.DESC.name
             setLaunchOrderState(Order.valueOf(orderString))
             setLaunchFilterState(LaunchStatus.valueOf(filterString))
         }
@@ -256,7 +256,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun getOrderState() = launchesFilterState.value.order
     private fun getFilterState(): LaunchStatus = launchesFilterState.value.launchStatus
 
-    fun clearQueryParameters() {
+    private fun clearQueryParameters() {
         clearListState()
         setYearState("")
         setLaunchFilterState(LaunchStatus.ALL)
@@ -319,13 +319,13 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun saveOrderToDatastore(order: Order) {
         viewModelScope.launch(ioDispatcher) {
-            appDataStoreManager.setStringValue(LAUNCH_ORDER_KEY, order.name)
+            dataStoreComponent.saveStringUseCase(LAUNCH_ORDER_KEY, order.name)
         }
     }
 
     private fun saveFilterToDataStore(filter: LaunchStatus) {
         viewModelScope.launch(ioDispatcher) {
-            appDataStoreManager.setStringValue(LAUNCH_FILTER_KEY, filter.name)
+            dataStoreComponent.saveStringUseCase(LAUNCH_FILTER_KEY, filter.name)
         }
     }
 
