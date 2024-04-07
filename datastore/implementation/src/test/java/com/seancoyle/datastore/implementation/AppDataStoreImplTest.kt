@@ -41,7 +41,7 @@ class AppDataStoreImplTest {
         assertEquals(0, intResult)
     }
 
-    companion object{
+    companion object {
         private const val STRING_KEY = "stringKey"
         private const val STRING_VALUE = "testValue"
         private const val INT_KEY = "intKey"
