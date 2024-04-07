@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -19,6 +21,7 @@ import com.seancoyle.launch.implementation.presentation.components.LaunchBottomS
 import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetExitButton
 
 @ExperimentalMaterialApi
+@ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
 
     private var linkTypes: List<LinkType>? = null
@@ -34,10 +37,20 @@ internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ) = content {
         getLinksFromBundle()
+
+        val windowSize = calculateWindowSizeClass(requireActivity())
+
         AppTheme {
             Column {
-                LaunchBottomSheetCard(linkTypes = linkTypes)
-                LaunchBottomSheetExitButton { dismiss() }
+                LaunchBottomSheetCard(
+                    linkTypes = linkTypes,
+                    windowSize = windowSize
+                )
+
+                LaunchBottomSheetExitButton(
+                    windowSize = windowSize,
+                    onExitBtn = { dismiss() }
+                )
             }
         }
     }

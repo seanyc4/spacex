@@ -55,7 +55,7 @@ internal fun LaunchesContent(
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
     getCompanySummary: (Company) -> StringResource,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyGridState()
     ObserveScrollPosition(listState, onChangeScrollPosition)

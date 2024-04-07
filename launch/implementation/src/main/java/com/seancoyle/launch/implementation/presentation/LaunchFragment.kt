@@ -32,6 +32,7 @@ import com.seancoyle.core.presentation.NotificationState
 import com.seancoyle.core.presentation.NotificationType
 import com.seancoyle.core.presentation.NotificationUiType
 import com.seancoyle.core.presentation.asStringResource
+import com.seancoyle.core_ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core_ui.theme.AppTheme
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.R
@@ -89,6 +90,7 @@ internal class LaunchFragment : Fragment() {
             ) { padding ->
                 Box(
                     Modifier
+                        .adaptiveHorizontalPadding(windowSize)
                         .padding(padding)
                 ) {
                     LaunchRoute(
