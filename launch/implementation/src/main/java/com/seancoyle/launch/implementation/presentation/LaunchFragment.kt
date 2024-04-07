@@ -55,7 +55,7 @@ const val LINKS_KEY = "links"
 @ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchFragment : Fragment() {
 
-    private val launchViewModel by viewModels<LaunchViewModel>()
+    private val viewModel by viewModels<LaunchViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,11 +68,7 @@ internal class LaunchFragment : Fragment() {
 
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
-            onRefresh = {
-                launchViewModel.clearQueryParameters()
-                launchViewModel.clearListState()
-                launchViewModel.setEvent(LaunchEvents.GetCompanyApiAndCacheEvent)
-            }
+            onRefresh = { viewModel.swipeToRefresh() }
         )
 
         AppTheme {
@@ -80,11 +76,11 @@ internal class LaunchFragment : Fragment() {
                 topBar = {
                     HomeAppBar(
                         onClick = {
-                            launchViewModel.setDialogFilterDisplayedState(true)
+                            viewModel.setDialogFilterDisplayedState(true)
                         }
                     )
                 },
-                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                snackbarHost = { SnackbarHost(snackbarHostState) },
                 modifier = Modifier.semantics {
                     testTagsAsResourceId = true
                 },
@@ -98,7 +94,7 @@ internal class LaunchFragment : Fragment() {
                         .pullRefresh(pullRefreshState)
                 ) {
                     LaunchRoute(
-                        viewModel = launchViewModel,
+                        viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
                         onItemClicked = ::onCardClicked,
@@ -121,7 +117,7 @@ internal class LaunchFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        launchViewModel.saveState()
+        viewModel.saveState()
         super.onSaveInstanceState(outState)
     }
 
@@ -162,7 +158,7 @@ internal class LaunchFragment : Fragment() {
     }
 
     private fun displayNoLinksError() {
-        launchViewModel.setEvent(
+        viewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
                     notificationType = NotificationType.Info,
@@ -174,7 +170,7 @@ internal class LaunchFragment : Fragment() {
     }
 
     private fun displayUnableToLoadLinkError() {
-        launchViewModel.setEvent(
+        viewModel.setEvent(
             event = LaunchEvents.NotificationEvent(
                 notificationState = NotificationState(
                     notificationType = NotificationType.Error,

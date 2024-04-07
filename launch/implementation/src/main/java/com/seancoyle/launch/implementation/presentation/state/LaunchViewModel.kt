@@ -263,6 +263,12 @@ internal class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
+    fun swipeToRefresh(){
+        clearQueryParameters()
+        clearListState()
+        setEvent(GetCompanyApiAndCacheEvent)
+    }
+
     private fun updateFilterState(update: LaunchesFilterState.() -> LaunchesFilterState) {
         _launchesFilterState.value = _launchesFilterState.value.update()
     }
