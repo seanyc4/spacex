@@ -23,15 +23,16 @@
     <string name="wikipedia">Wikipedia</string>
 
     <!-- Filter Dialog -->
+    <string name="filter_options">Filter Options</string>
     <string name="filter_button">Filter button</string>
-    <string name="filter_by_year">FILTER BY YEAR</string>
-    <string name="year">YEAR</string>
-    <string name="asc_desc">ASC/DESC</string>
+    <string name="filter_by_year">Filter by Year</string>
+    <string name="year">Year</string>
+    <string name="asc_desc">Ascending/Descending</string>
     <string name="asc">ASC</string>
     <string name="desc">DESC</string>
     <string name="failure">FAILURE</string>
     <string name="success">SUCCESS</string>
-    <string name="launch_status">LAUNCH STATUS</string>
+    <string name="launch_status">Filter by Launch Status</string>
     <string name="unknown">UNKNOWN</string>
     <string name="all">ALL</string>
 

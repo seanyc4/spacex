@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core_ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.launch.implementation.R
 
@@ -38,12 +40,14 @@ fun LaunchBottomSheetDivider(
 
 @Composable
 internal fun LaunchBottomSheetCard(
-    modifier: Modifier = Modifier,
-    linkTypes: List<LinkType>?
+    linkTypes: List<LinkType>?,
+    windowSize: WindowSizeClass,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .adaptiveHorizontalPadding(windowSize = windowSize, horizontalPadding = 164.dp)
             .padding(
                 start = dimensionResource(id = R.dimen.small_view_margins_8dp),
                 end = dimensionResource(id = R.dimen.small_view_margins_8dp)
@@ -73,7 +77,7 @@ internal fun LaunchBottomSheetCard(
 
 @Composable
 fun LaunchBottomSheetHeader(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = stringResource(id = R.string.links),
@@ -87,9 +91,9 @@ fun LaunchBottomSheetHeader(
 
 @Composable
 fun LaunchBottomSheetTitle(
-    modifier: Modifier = Modifier,
     name: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = name,
@@ -106,14 +110,16 @@ fun LaunchBottomSheetTitle(
 
 @Composable
 fun LaunchBottomSheetExitButton(
-    modifier: Modifier = Modifier,
-    onExitBtn: () -> Unit
+    onExitBtn: () -> Unit,
+    windowSize: WindowSizeClass,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onExitBtn,
         modifier = modifier
             .fillMaxWidth()
             .height(height = 80.dp)
+            .adaptiveHorizontalPadding(windowSize = windowSize, horizontalPadding = 164.dp)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin)),
         shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.default_corner_radius)),
         colors = ButtonDefaults.buttonColors(

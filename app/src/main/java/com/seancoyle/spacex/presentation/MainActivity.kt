@@ -17,11 +17,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding :ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         // add google-services.json before init in prod app
         //crashlytics.init(true)
 
-        installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

@@ -22,7 +22,7 @@ sealed interface StringResource {
 
     fun asString(context: Context): String {
         return when (this) {
-            is DynamicString -> this.value
+            is DynamicString -> value
             is AndroidStringResource -> context.getString(id, *args)
         }
     }

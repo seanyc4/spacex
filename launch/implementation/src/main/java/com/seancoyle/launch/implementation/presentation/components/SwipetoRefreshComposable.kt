@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.seancoyle.launch.implementation.presentation.state.LaunchUiState
+import com.seancoyle.launch.implementation.presentation.state.LaunchesUiState
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 internal fun SwipeToRefreshComposable(
-    uiState: LaunchUiState,
+    uiState: LaunchesUiState,
     pullRefreshState: PullRefreshState
 ) {
     Box(
@@ -29,7 +29,7 @@ internal fun SwipeToRefreshComposable(
                 .align(Alignment.TopCenter)
         ) {
             PullRefreshIndicator(
-                refreshing = uiState is LaunchUiState.Loading,
+                refreshing = uiState is LaunchesUiState.Loading,
                 state = pullRefreshState
             )
         }

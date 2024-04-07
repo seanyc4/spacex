@@ -2,14 +2,15 @@ package com.seancoyle.launch.implementation.domain.cache
 
 import com.seancoyle.core.domain.DataError
 import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 
 internal interface LaunchCacheDataSource {
 
     suspend fun filterLaunchList(
-        year: String?,
-        order: String,
+        year: String,
+        order: Order,
         launchFilter: LaunchStatus,
         page: Int
     ): DataResult<List<LaunchTypes>?, DataError>

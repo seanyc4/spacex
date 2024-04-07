@@ -5,27 +5,27 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
-sealed class LaunchTypes {
+sealed interface LaunchTypes {
     data class CompanySummary(
         val id: String,
         val company: Company
-    ) : LaunchTypes()
+    ) : LaunchTypes
 
     data class SectionTitle(
         val id: String,
         val title: String
-    ) : LaunchTypes()
+    ) : LaunchTypes
 
     data class Grid(
         val id: String,
         val links: Links,
         val rocket: Rocket
-    ) : LaunchTypes()
+    ) : LaunchTypes
 
     data class Carousel(
         val id: String,
         val items: List<RocketWithMission>
-    ) : LaunchTypes()
+    ) : LaunchTypes
 
     data class Launch(
         val id: String,
@@ -38,7 +38,7 @@ sealed class LaunchTypes {
         val rocket: Rocket,
         val launchDateStatus: LaunchDateStatus,
         val launchDays: String
-    ) : LaunchTypes()
+    ) : LaunchTypes
 }
 
 @Parcelize
