@@ -32,7 +32,7 @@
     <string name="desc">DESC</string>
     <string name="failure">FAILURE</string>
     <string name="success">SUCCESS</string>
-    <string name="launch_status">Launch Status</string>
+    <string name="launch_status">Filter by Launch Status</string>
     <string name="unknown">UNKNOWN</string>
     <string name="all">ALL</string>
 

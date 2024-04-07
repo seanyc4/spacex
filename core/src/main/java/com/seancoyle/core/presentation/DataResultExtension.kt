@@ -2,7 +2,6 @@ package com.seancoyle.core.presentation
 
 import com.seancoyle.core.R
 import com.seancoyle.core.domain.DataError
-import com.seancoyle.core.domain.DataResult
 
 fun DataError.asStringResource(): StringResource {
     return when (this) {
@@ -28,11 +27,3 @@ fun DataError.asStringResource(): StringResource {
 
 fun Int.asStringResource(args: Array<Any> = emptyArray()): StringResource =
     StringResource.AndroidStringResource(id = this, args = args)
-
-fun String.asStringResource(): StringResource {
-    return this.asStringResource()
-}
-
-fun DataResult.Error<DataError>.asStringResource(): StringResource {
-    return error.asStringResource()
-}

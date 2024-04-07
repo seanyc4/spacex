@@ -12,14 +12,14 @@ import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.components.SwipeToRefreshComposable
-import com.seancoyle.launch.implementation.presentation.state.LaunchUiState
+import com.seancoyle.launch.implementation.presentation.state.LaunchesUiState
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(ExperimentalMaterialApi::class)
 @FlowPreview
 @Composable
 internal fun LaunchScreen(
-    uiState: LaunchUiState,
+    uiState: LaunchesUiState,
     page: Int,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
@@ -32,7 +32,7 @@ internal fun LaunchScreen(
     onDismissNotification: () -> Unit
 ) {
     when (uiState) {
-        is LaunchUiState.Success -> {
+        is LaunchesUiState.Success -> {
             LaunchesContent(
                 launches = uiState.launches,
                 paginationState = uiState.paginationState,
@@ -55,11 +55,11 @@ internal fun LaunchScreen(
             }
         }
 
-        is LaunchUiState.Loading -> {
+        is LaunchesUiState.Loading -> {
             CircularProgressBar()
         }
 
-        is LaunchUiState.Error -> {
+        is LaunchesUiState.Error -> {
             uiState.errorNotificationState?.let { error ->
                 LaunchErrorScreen(
                     errorMessage = error.message,

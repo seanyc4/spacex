@@ -3,16 +3,16 @@ agp = "8.2.2"
 androidHilt = "1.2.0"
 androidxTestExt = "1.1.5"
 appCompat = "1.6.1"
-composeBom = "2024.03.00"
+composeBom = "2024.04.00"
 composeCompiler = "1.5.10"
 composeConstraintLayout = "1.1.0-alpha13"
 composeLifecycle = "2.7.0"
 composeNavigation = "2.7.7"
 coreKtx = "1.12.0"
-datastore = "1.1.0-beta02"
+datastore = "1.1.0-rc01"
 espressoCore = "3.5.0"
 firebaseBoM = "32.8.0"
-fragment = "1.7.0-beta01"
+fragment = "1.7.0-rc01"
 glideCompose = "1.0.0-beta01"
 gson = "2.10.1"
 hiltNavigationCompose = "1.2.0"
@@ -27,7 +27,6 @@ kotlinSerialization = "1.6.3"
 kotlinxDateTime = "0.5.0"
 leakCanary = "2.9.1"
 lifecycle = "2.7.0"
-materialDialogs = "3.3.0"
 mockk = "1.13.5"
 navigation = "2.7.7"
 okHttp = "4.12.0"
@@ -121,9 +120,6 @@ lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", 
 lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
 lifecycle-viewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-
-# MaterialDialogs
-materialDialogsCore = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogs" }
 
 # Navigation
 navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigation" }

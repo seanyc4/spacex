@@ -39,14 +39,14 @@ internal class LaunchViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<LaunchUiState> = MutableStateFlow(LaunchUiState.Loading)
-    val uiState: StateFlow<LaunchUiState> = _uiState
+    private val _uiState: MutableStateFlow<LaunchesUiState> = MutableStateFlow(LaunchesUiState.Loading)
+    val uiState: StateFlow<LaunchesUiState> = _uiState
 
-    private val _launchFilterState = MutableStateFlow(LaunchFilterState())
-    val launchFilterState: StateFlow<LaunchFilterState> = _launchFilterState
+    private val _launchesFilterState = MutableStateFlow(LaunchesFilterState())
+    val launchesFilterState: StateFlow<LaunchesFilterState> = _launchesFilterState
 
-    private val _launchListState = MutableStateFlow(LaunchesListState())
-    val launchesListState: StateFlow<LaunchesListState> = _launchListState
+    private val _launchListState = MutableStateFlow(LaunchesScrollState())
+    val launchesScrollState: StateFlow<LaunchesScrollState> = _launchListState
 
     init {
         restoreFilterAndOrderState()
@@ -65,7 +65,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchesListState>(LAUNCH_LIST_STATE_KEY)?.let { listState ->
+        savedStateHandle.get<LaunchesScrollState>(LAUNCH_LIST_STATE_KEY)?.let { listState ->
             _launchListState.value = listState
         }
     }
@@ -93,14 +93,14 @@ internal class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    _uiState.value = LaunchUiState.Success(
+                                    _uiState.value = LaunchesUiState.Success(
                                         launches = result.data,
                                         paginationState = PaginationState.None
                                     )
                                 }
 
                                 is DataResult.Error -> {
-                                    _uiState.value = LaunchUiState.Error(
+                                    _uiState.value = LaunchesUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
                                             notificationUiType = NotificationUiType.Snackbar,
@@ -146,12 +146,12 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetCompanyApiAndCacheEvent -> {
                     launchesComponent.getCompanyApiAndCacheUseCase()
-                        .onStart { _uiState.value = LaunchUiState.Loading }
+                        .onStart { _uiState.value = LaunchesUiState.Loading }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
-                                    _uiState.value = LaunchUiState.Error(
+                                    _uiState.value = LaunchesUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
                                             notificationUiType = NotificationUiType.Dialog,
@@ -165,12 +165,12 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchesComponent.getLaunchesApiAndCacheUseCase()
-                        .onStart { _uiState.value = LaunchUiState.Loading }
+                        .onStart { _uiState.value = LaunchesUiState.Loading }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
-                                    _uiState.value = LaunchUiState.Error(
+                                    _uiState.value = LaunchesUiState.Error(
                                         errorNotificationState = NotificationState(
                                             message = result.error.asStringResource(),
                                             notificationUiType = NotificationUiType.Dialog,
@@ -219,9 +219,9 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun MutableStateFlow<LaunchUiState>.update(updateState: (LaunchUiState.Success) -> LaunchUiState.Success) {
+    private fun MutableStateFlow<LaunchesUiState>.update(updateState: (LaunchesUiState.Success) -> LaunchesUiState.Success) {
         val state = this.value
-        if (state is LaunchUiState.Success) {
+        if (state is LaunchesUiState.Success) {
             this.value = updateState(state)
         }
     }
@@ -250,11 +250,11 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun getScrollPositionState() = launchesListState.value.scrollPosition
-    fun getPageState() = launchesListState.value.page
-    private fun getSearchYearState() = launchFilterState.value.year
-    private fun getOrderState() = launchFilterState.value.order
-    private fun getFilterState(): LaunchStatus = launchFilterState.value.launchStatus
+    private fun getScrollPositionState() = launchesScrollState.value.scrollPosition
+    fun getPageState() = launchesScrollState.value.page
+    private fun getSearchYearState() = launchesFilterState.value.year
+    private fun getOrderState() = launchesFilterState.value.order
+    private fun getFilterState(): LaunchStatus = launchesFilterState.value.launchStatus
 
     fun clearQueryParameters() {
         clearListState()
@@ -263,11 +263,11 @@ internal class LaunchViewModel @Inject constructor(
         resetPageState()
     }
 
-    private fun updateFilterState(update: LaunchFilterState.() -> LaunchFilterState) {
-        _launchFilterState.value = _launchFilterState.value.update()
+    private fun updateFilterState(update: LaunchesFilterState.() -> LaunchesFilterState) {
+        _launchesFilterState.value = _launchesFilterState.value.update()
     }
 
-    private fun updateListState(update: LaunchesListState.() -> LaunchesListState) {
+    private fun updateListState(update: LaunchesScrollState.() -> LaunchesScrollState) {
         _launchListState.value = _launchListState.value.update()
     }
 
@@ -302,7 +302,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun incrementPage() {
-        val incrementedPage = launchesListState.value.page + 1
+        val incrementedPage = launchesScrollState.value.page + 1
         updateListState { copy(page = incrementedPage) }
         setPageState(incrementedPage)
     }

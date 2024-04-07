@@ -23,7 +23,7 @@ internal fun LaunchRoute(
     onItemClicked: (links: Links) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val launchFilterState by viewModel.launchFilterState.collectAsStateWithLifecycle()
+    val launchFilterState by viewModel.launchesFilterState.collectAsStateWithLifecycle()
 
     SideEffect {
         printLogDebug("LaunchRoute", ": uiState: $uiState")

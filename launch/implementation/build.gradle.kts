@@ -30,7 +30,6 @@ dependencies {
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable)
-    implementation(libs.materialDialogsCore)
     implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.gson)
 

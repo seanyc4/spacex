@@ -20,13 +20,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.implementation.R
-import com.seancoyle.launch.implementation.presentation.state.LaunchFilterState
+import com.seancoyle.launch.implementation.presentation.state.LaunchesFilterState
 
 private val maxChar = 4
 
 @Composable
 fun FilterDialog(
-    filterState: LaunchFilterState,
+    filterState: LaunchesFilterState,
     year: (String) -> Unit,
     launchStatus: (LaunchStatus) -> Unit,
     order: (Order) -> Unit,

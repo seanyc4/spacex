@@ -8,19 +8,19 @@ import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import kotlinx.parcelize.Parcelize
 
-internal sealed interface LaunchUiState {
+internal sealed interface LaunchesUiState {
     @Stable
     data class Success(
         val launches: List<LaunchTypes>,
         val paginationState: PaginationState = PaginationState.None,
         val notificationState: NotificationState? = null
-    ) : LaunchUiState
+    ) : LaunchesUiState
 
-    data object Loading : LaunchUiState
+    data object Loading : LaunchesUiState
 
     data class Error(
         val errorNotificationState: NotificationState? = null
-    ) : LaunchUiState
+    ) : LaunchesUiState
 }
 
 internal sealed interface PaginationState {
@@ -31,7 +31,7 @@ internal sealed interface PaginationState {
 
 @Parcelize
 @Stable
-data class LaunchFilterState(
+data class LaunchesFilterState(
     val isDialogFilterDisplayed: Boolean = false,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val order: Order = Order.DESC,
@@ -40,7 +40,7 @@ data class LaunchFilterState(
 
 @Parcelize
 @Stable
-internal data class LaunchesListState(
+internal data class LaunchesScrollState(
     val page: Int = 1,
     val scrollPosition: Int = 0
 ) : Parcelable
