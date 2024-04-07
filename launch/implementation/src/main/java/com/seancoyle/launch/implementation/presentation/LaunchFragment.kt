@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -64,7 +66,7 @@ internal class LaunchFragment : Fragment() {
         val windowSize = calculateWindowSizeClass(requireActivity())
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val refreshing = rememberPullRefreshState(
+        val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
             onRefresh = {
                 launchViewModel.clearQueryParameters()
@@ -92,10 +94,12 @@ internal class LaunchFragment : Fragment() {
                     Modifier
                         .adaptiveHorizontalPadding(windowSize)
                         .padding(padding)
+                        .fillMaxSize()
+                        .pullRefresh(pullRefreshState)
                 ) {
                     LaunchRoute(
                         viewModel = launchViewModel,
-                        refreshState = refreshing,
+                        pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
                         onItemClicked = ::onCardClicked,
                         windowSize = windowSize

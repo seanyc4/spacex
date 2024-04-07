@@ -11,8 +11,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,7 +48,6 @@ internal fun LaunchesContent(
     page: Int,
     onChangeScrollPosition: (Int) -> Unit,
     loadNextPage: (Int) -> Unit,
-    pullRefreshState: PullRefreshState,
     onItemClicked: (links: Links) -> Unit,
     getLaunchStatusIcon: (LaunchStatus) -> Int,
     getLaunchDate: (LaunchDateStatus) -> Int,
@@ -63,7 +60,6 @@ internal fun LaunchesContent(
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
-            .pullRefresh(pullRefreshState)
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(GRID_COLUMN_SIZE),

@@ -13,6 +13,7 @@ import com.seancoyle.core.util.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogLandscape
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogPortrait
+import com.seancoyle.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.launch.implementation.presentation.state.LaunchViewModel
 import kotlinx.coroutines.FlowPreview
 
@@ -21,7 +22,7 @@ import kotlinx.coroutines.FlowPreview
 @Composable
 internal fun LaunchRoute(
     viewModel: LaunchViewModel,
-    refreshState: PullRefreshState,
+    pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
     onItemClicked: (links: Links) -> Unit,
     windowSize: WindowSizeClass
@@ -38,7 +39,6 @@ internal fun LaunchRoute(
         page = viewModel.getPageState(),
         onChangeScrollPosition = viewModel::setScrollPositionState,
         loadNextPage = viewModel::nextPage,
-        pullRefreshState = refreshState,
         snackbarHostState = snackbarHostState,
         onItemClicked = onItemClicked,
         onDismissNotification = viewModel::dismissError,
@@ -68,4 +68,6 @@ internal fun LaunchRoute(
             )
         }
     }
+
+    SwipeToRefreshComposable(uiState, pullRefreshState)
 }
