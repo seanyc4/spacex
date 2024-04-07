@@ -195,7 +195,6 @@ androidTestBundle = [
 ]
 
 unitTestBundle = [
-    "compose-uiTestJunit4",
     "test-junit4",
     "test-junit5",
     "test-mockk",
@@ -219,6 +218,7 @@ composeBundle = [
     "compose-ripple",
     "compose-runtime",
     "compose-ui",
+    "compose-uiTestJunit4",
     "compose-viewmodelLifecycle",
     "compose-windowSize",
     "hilt-navigationCompose"

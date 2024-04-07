@@ -28,7 +28,7 @@ internal fun LaunchRoute(
     windowSize: WindowSizeClass
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val launchFilterState by viewModel.launchesFilterState.collectAsStateWithLifecycle()
+    val launchFilterState by viewModel.filterState.collectAsStateWithLifecycle()
 
     SideEffect {
         printLogDebug("LaunchRoute", ": uiState: $uiState")
