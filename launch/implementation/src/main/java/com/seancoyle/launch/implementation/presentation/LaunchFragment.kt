@@ -15,6 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,6 +49,7 @@ const val LINKS_KEY = "links"
 @AndroidEntryPoint
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
+@ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchFragment : Fragment() {
 
     private val launchViewModel by viewModels<LaunchViewModel>()
@@ -57,6 +60,7 @@ internal class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = content {
 
+        val windowSize = calculateWindowSizeClass(requireActivity())
         val snackbarHostState = remember { SnackbarHostState() }
 
         val refreshing = rememberPullRefreshState(
@@ -91,9 +95,8 @@ internal class LaunchFragment : Fragment() {
                         viewModel = launchViewModel,
                         refreshState = refreshing,
                         snackbarHostState = snackbarHostState,
-                        onItemClicked = { link ->
-                            onCardClicked(link)
-                        }
+                        onItemClicked = ::onCardClicked,
+                        windowSize = windowSize
                     )
                 }
             }
