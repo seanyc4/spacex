@@ -27,8 +27,6 @@ import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.state.LaunchesFilterState
 
-private val maxChar = 4
-
 @Composable
 fun FilterDialogPortrait(
     filterState: LaunchesFilterState,
@@ -46,13 +44,7 @@ fun FilterDialogPortrait(
             Column {
                 Text(stringResource(R.string.filter_by_year))
 
-                OutlinedTextField(
-                    value = filterState.year,
-                    onValueChange = { if (it.length <= maxChar) year(it) },
-                    label = { Text(stringResource(R.string.year)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                YearInputField(year = filterState.year, onYearChange = year)
 
                 Text(
                     text = stringResource(R.string.launch_status),
@@ -64,28 +56,18 @@ fun FilterDialogPortrait(
                     onLaunchStatusSelected = launchStatus
                 )
 
-                Text(
-                    text = stringResource(R.string.asc_desc),
-                    modifier = modifier.padding(top = dimensionResource(R.dimen.small_view_margins_8dp))
-                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Switch(
-                    checked = filterState.order == Order.ASC,
-                    onCheckedChange = { newValue -> order(if (newValue) Order.ASC else Order.DESC) }
-                )
+                OrderSwitch(order = filterState.order, onOrderChange = order)
             }
         },
 
         confirmButton = {
-            Button(onClick = { newSearch() }) {
-                Text(stringResource(R.string.text_search))
-            }
+            ConfirmButton(newSearch)
         },
 
         dismissButton = {
-            Button(onClick = { onDismiss(false) }) {
-                Text(stringResource(R.string.text_cancel))
-            }
+            DismissButton(onDismiss)
         }
     )
 }
@@ -106,33 +88,24 @@ fun FilterDialogLandscape(
         text = {
             Row(modifier = modifier.fillMaxWidth()) {
 
-                Column(modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
                 ) {
                     Text(stringResource(R.string.filter_by_year))
 
-                    OutlinedTextField(
-                        value = filterState.year,
-                        onValueChange = { if (it.length <= 4) year(it) },
-                        label = { Text(stringResource(R.string.year)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
+                    YearInputField(year = filterState.year, onYearChange = year)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(text = stringResource(R.string.asc_desc))
-
-                    Switch(
-                        checked = filterState.order == Order.ASC,
-                        onCheckedChange = { newValue -> order(if (newValue) Order.ASC else Order.DESC) }
-                    )
+                    OrderSwitch(order = filterState.order, onOrderChange = order)
                 }
 
-                Column(modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 6.dp)
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 6.dp)
                 ) {
                     Text(text = stringResource(R.string.launch_status))
                     RadioGroup(
@@ -144,16 +117,53 @@ fun FilterDialogLandscape(
         },
 
         confirmButton = {
-            Button(onClick = { newSearch() }) {
-                Text(stringResource(R.string.text_search))
-            }
+            ConfirmButton(newSearch)
         },
 
         dismissButton = {
-            Button(onClick = { onDismiss(false) }) {
-                Text(stringResource(R.string.text_cancel))
-            }
+            DismissButton(onDismiss)
         }
+    )
+}
+
+@Composable
+private fun DismissButton(onDismiss: (Boolean) -> Unit) {
+    Button(onClick = { onDismiss(false) }) {
+        Text(stringResource(R.string.text_cancel))
+    }
+}
+
+@Composable
+private fun ConfirmButton(newSearch: () -> Unit) {
+    Button(onClick = { newSearch() }) {
+        Text(stringResource(R.string.text_search))
+    }
+}
+
+@Composable
+fun YearInputField(
+    year: String,
+    onYearChange: (String) -> Unit,
+    maxChar: Int = 4
+) {
+    OutlinedTextField(
+        value = year,
+        onValueChange = { if (it.length <= maxChar) onYearChange(it) },
+        label = { Text(stringResource(R.string.year)) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
+}
+
+@Composable
+fun OrderSwitch(
+    order: Order,
+    onOrderChange: (Order) -> Unit
+) {
+    Text(text = stringResource(R.string.asc_desc))
+    Switch(
+        checked = order == Order.ASC,
+        onCheckedChange = { newValue -> onOrderChange(if (newValue) Order.ASC else Order.DESC) }
     )
 }
 
