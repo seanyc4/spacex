@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -94,20 +95,24 @@ internal class LaunchViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> {
-                                    uiState.value = LaunchesUiState.Success(
-                                        launches = result.data,
-                                        paginationState = PaginationState.None
-                                    )
+                                    uiState.update {
+                                        LaunchesUiState.Success(
+                                            launches = result.data,
+                                            paginationState = PaginationState.None
+                                        )
+                                    }
                                 }
 
                                 is DataResult.Error -> {
-                                    uiState.value = LaunchesUiState.Error(
-                                        errorNotificationState = NotificationState(
-                                            message = result.error.asStringResource(),
-                                            notificationUiType = NotificationUiType.Snackbar,
-                                            notificationType = NotificationType.Error
+                                    uiState.update {
+                                        LaunchesUiState.Error(
+                                            errorNotificationState = NotificationState(
+                                                message = result.error.asStringResource(),
+                                                notificationUiType = NotificationUiType.Snackbar,
+                                                notificationType = NotificationType.Error
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
                         }
@@ -124,22 +129,21 @@ internal class LaunchViewModel @Inject constructor(
                             is DataResult.Success -> {
                                 // Pagination - We append the next 30 rows to the current state as a new list
                                 // This triggers a recompose and keeps immutability
-                                uiState.update {
-                                    val currentLaunches = it.launches
-
-                                    val allLaunches = result.data?.let { newLaunches ->
-                                        currentLaunches + newLaunches
-                                    } ?: currentLaunches
-
-                                    it.copy(
-                                        launches = allLaunches,
-                                        paginationState = PaginationState.None
-                                    )
+                                uiState.update { currentState ->
+                                    currentState.isSuccess {
+                                        val updatedLaunches = it.launches + (result.data ?: emptyList())
+                                        it.copy(
+                                            launches = updatedLaunches,
+                                            paginationState = PaginationState.None
+                                        )
+                                    }
                                 }
                             }
 
                             is DataResult.Error -> {
-                                uiState.update { it.copy(paginationState = PaginationState.Error) }
+                                uiState.update { currentState ->
+                                    currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
+                                }
                             }
                         }
                     }
@@ -147,18 +151,20 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetCompanyApiAndCacheEvent -> {
                     launchesComponent.getCompanyApiAndCacheUseCase()
-                        .onStart { uiState.value = LaunchesUiState.Loading }
+                        .onStart { uiState.update { LaunchesUiState.Loading } }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> setEvent(GetLaunchesApiAndCacheEvent)
                                 is DataResult.Error -> {
-                                    uiState.value = LaunchesUiState.Error(
-                                        errorNotificationState = NotificationState(
-                                            message = result.error.asStringResource(),
-                                            notificationUiType = NotificationUiType.Dialog,
-                                            notificationType = NotificationType.Error
+                                    uiState.update {
+                                        LaunchesUiState.Error(
+                                            errorNotificationState = NotificationState(
+                                                message = result.error.asStringResource(),
+                                                notificationUiType = NotificationUiType.Dialog,
+                                                notificationType = NotificationType.Error
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
                         }
@@ -166,25 +172,29 @@ internal class LaunchViewModel @Inject constructor(
 
                 is GetLaunchesApiAndCacheEvent -> {
                     launchesComponent.getLaunchesApiAndCacheUseCase()
-                        .onStart { uiState.value = LaunchesUiState.Loading }
+                        .onStart { uiState.update { LaunchesUiState.Loading } }
                         .collect { result ->
                             when (result) {
                                 is DataResult.Success -> setEvent(SortAndFilterLaunchesEvent)
                                 is DataResult.Error -> {
-                                    uiState.value = LaunchesUiState.Error(
-                                        errorNotificationState = NotificationState(
-                                            message = result.error.asStringResource(),
-                                            notificationUiType = NotificationUiType.Dialog,
-                                            notificationType = NotificationType.Error
+                                    uiState.update {
+                                        LaunchesUiState.Error(
+                                            errorNotificationState = NotificationState(
+                                                message = result.error.asStringResource(),
+                                                notificationUiType = NotificationUiType.Dialog,
+                                                notificationType = NotificationType.Error
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
                         }
                 }
 
                 is LaunchEvents.NotificationEvent -> {
-                    uiState.update { it.copy(notificationState = event.notificationState) }
+                    uiState.update { currentState ->
+                        currentState.isSuccess { it.copy(notificationState = event.notificationState) }
+                    }
                 }
 
                 else -> {}
@@ -220,21 +230,26 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun MutableStateFlow<LaunchesUiState>.update(updateState: (LaunchesUiState.Success) -> LaunchesUiState.Success) {
-        val state = this.value
-        if (state is LaunchesUiState.Success) {
-            this.value = updateState(state)
+    private fun LaunchesUiState.isSuccess(updateState: (LaunchesUiState.Success) -> LaunchesUiState): LaunchesUiState {
+        return if (this is LaunchesUiState.Success) {
+            updateState(this)
+        } else {
+            this
         }
     }
 
     fun dismissError() {
-        uiState.update {
-            it.copy(notificationState = null)
+        uiState.update { currentState ->
+            currentState.isSuccess {
+                it.copy(notificationState = null)
+            }
         }
     }
 
-    fun clearListState() {
-        uiState.update { it.copy(launches = emptyList()) }
+    private fun clearListState() {
+        uiState.update { currentState ->
+            currentState.isSuccess { it.copy(launches = emptyList()) }
+        }
     }
 
     fun newSearch() {
