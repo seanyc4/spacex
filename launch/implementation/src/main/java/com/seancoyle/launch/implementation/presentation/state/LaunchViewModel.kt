@@ -48,10 +48,12 @@ internal class LaunchViewModel @Inject constructor(
     var scrollState = MutableStateFlow(LaunchesScrollState())
         private set
 
-    init {
-        restoreFilterAndOrderState()
-        restoreStateOnProcessDeath()
-        loadDataOnAppLaunchOrRestore()
+    fun loadData() {
+        if (uiState.value is LaunchesUiState.Loading) {
+            restoreFilterAndOrderState()
+            restoreStateOnProcessDeath()
+            loadDataOnAppLaunchOrRestore()
+        }
     }
 
     private fun loadDataOnAppLaunchOrRestore() {
