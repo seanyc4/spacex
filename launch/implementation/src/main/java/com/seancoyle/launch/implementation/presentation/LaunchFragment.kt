@@ -107,7 +107,7 @@ internal class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadData()
+        viewModel.init()
         // Get result from bottom action sheet fragment
         setFragmentResultListener(LINKS_KEY) { key, bundle ->
             if (key == LINKS_KEY) {

@@ -48,7 +48,7 @@ internal class LaunchViewModel @Inject constructor(
     var scrollState = MutableStateFlow(LaunchesScrollState())
         private set
 
-    fun loadData() {
+    fun init() {
         if (uiState.value is LaunchesUiState.Loading) {
             restoreFilterAndOrderState()
             restoreStateOnProcessDeath()
@@ -74,10 +74,8 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch(ioDispatcher) {
-            val filterString =
-                dataStoreComponent.readStringUseCase(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
-            val orderString =
-                dataStoreComponent.readStringUseCase(LAUNCH_ORDER_KEY) ?: Order.DESC.name
+            val filterString = dataStoreComponent.readStringUseCase(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
+            val orderString = dataStoreComponent.readStringUseCase(LAUNCH_ORDER_KEY) ?: Order.DESC.name
             setLaunchOrderState(Order.valueOf(orderString))
             setLaunchFilterState(LaunchStatus.valueOf(filterString))
         }
@@ -86,7 +84,6 @@ internal class LaunchViewModel @Inject constructor(
     fun setEvent(event: LaunchEvents) {
         viewModelScope.launch {
             when (event) {
-
                 is SortAndFilterLaunchesEvent -> {
                     launchesComponent.createMergedLaunchesCacheUseCase(
                         year = getSearchYearState(),

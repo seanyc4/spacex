@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.seancoyle.core.domain.Order
-import com.seancoyle.core.util.printLogDebug
+import com.seancoyle.core.domain.printLogDebug
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.LaunchStatus
