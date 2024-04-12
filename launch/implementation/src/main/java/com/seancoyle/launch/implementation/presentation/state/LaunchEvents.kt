@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.presentation.state
 
-import com.seancoyle.core.presentation.NotificationState
+import com.seancoyle.core.ui.NotificationState
 
 internal sealed class LaunchEvents {
     data object GetLaunchesApiAndCacheEvent : LaunchEvents()

@@ -3,9 +3,9 @@ package com.seancoyle.launch.implementation.presentation
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import com.seancoyle.core.presentation.StringResource
-import com.seancoyle.core_ui.composables.CircularProgressBar
-import com.seancoyle.core_ui.composables.DisplayNotification
+import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.composables.CircularProgressBar
+import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus

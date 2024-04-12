@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.presentation.state
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.Order
-import com.seancoyle.core.presentation.NotificationState
+import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import kotlinx.parcelize.Parcelize

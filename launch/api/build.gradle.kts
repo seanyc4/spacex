@@ -12,6 +12,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
+    implementation(projects.core.domain)
     implementation(libs.googleGson)
 }

@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
+    implementation(projects.core.domain)
     implementation(projects.launch.api)
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)

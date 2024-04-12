@@ -1,6 +1,5 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core.domain.DataResult
 import com.seancoyle.core_testing.MainCoroutineRule
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
 import com.seancoyle.launch.implementation.domain.model.Launch
@@ -70,7 +69,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         coEvery { networkDataSource.getLaunches(any()) } returns LAUNCH_LIST
         coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
 
-        var dataResult: DataResult<LaunchState>? = null
+        var dataResult: com.seancoyle.core.domain.DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
             dataResult = value
@@ -101,7 +100,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var dataResult: DataResult<LaunchState>? = null
+        var dataResult: com.seancoyle.core.domain.DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
             dataResult = value

@@ -1,7 +1,6 @@
 package com.seancoyle.launch.implementation.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.domain.DateFormatter
 import com.seancoyle.launch.implementation.TestConstants
 import com.seancoyle.launch.implementation.domain.model.Launch
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
@@ -39,7 +38,7 @@ internal class LaunchNetworkDataSourceTest {
     lateinit var api: FakeLaunchApi
 
     @Inject
-    lateinit var dateTimeFormatter: DateFormatter
+    lateinit var dateTimeFormatter: com.seancoyle.core.domain.DateFormatter
 
     @Inject
     lateinit var underTest: LaunchNetworkDataSource

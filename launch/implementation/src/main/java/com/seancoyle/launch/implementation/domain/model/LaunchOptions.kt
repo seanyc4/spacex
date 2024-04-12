@@ -23,4 +23,3 @@ internal data class Select(
 internal data class Sort(
     val flightNumber: String
 )
-

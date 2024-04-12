@@ -18,8 +18,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import com.seancoyle.core.presentation.StringResource
-import com.seancoyle.core_ui.composables.CircularProgressBar
+import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus

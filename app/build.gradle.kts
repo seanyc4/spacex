@@ -94,14 +94,15 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
-    implementation(projects.coreUi)
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.core.ui)
     implementation(projects.database)
     implementation(projects.datastore.api)
     implementation(projects.datastore.implementation)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
-    androidTestImplementation(projects.coreTest)
+    androidTestImplementation(projects.core.test)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)

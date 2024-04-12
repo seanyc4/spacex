@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core_ui.composables.ShimmerAnimation
+import com.seancoyle.core.ui.composables.ShimmerAnimation
 import com.seancoyle.launch.implementation.R
 
 @Composable

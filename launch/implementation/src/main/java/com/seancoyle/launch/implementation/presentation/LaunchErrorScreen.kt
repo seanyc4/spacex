@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.presentation.StringResource
+import com.seancoyle.core.ui.StringResource
 
 @ExperimentalMaterialApi
 @Composable
