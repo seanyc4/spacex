@@ -1,6 +1,6 @@
-package com.seancoyle.datastore.implementation.domain
+package com.seancoyle.datastore.api
 
-internal interface AppDataStore {
+interface AppDataStore {
 
     suspend fun saveStringValue(
         key: String,

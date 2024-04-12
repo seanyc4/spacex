@@ -1,7 +1,7 @@
 package com.seancoyle.datastore.implementation.di
 
+import com.seancoyle.datastore.api.AppDataStore
 import com.seancoyle.datastore.implementation.data.AppDataStoreImpl
-import com.seancoyle.datastore.implementation.domain.AppDataStore
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

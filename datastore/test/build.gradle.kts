@@ -6,15 +6,10 @@ apply {
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
 }
-
 android {
-    namespace = "com.seancoyle.datastore.implementation"
+    namespace = "com.seancoyle.datastore.test"
 }
 
 dependencies {
     implementation(projects.datastore.api)
-    implementation(libs.dataStore)
-
-    testImplementation(projects.datastore.test)
-    testImplementation(libs.bundles.unitTestBundle)
 }

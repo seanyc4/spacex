@@ -1,6 +1,6 @@
-package com.seancoyle.datastore.implementation
+package com.seancoyle.datastore.test
 
-import com.seancoyle.datastore.implementation.domain.AppDataStore
+import com.seancoyle.datastore.api.AppDataStore
 
 class AppDataStoreManagerFake : AppDataStore {
 
