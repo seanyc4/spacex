@@ -12,12 +12,12 @@ internal class SaveLaunchPreferencesUseCaseImpl @Inject constructor(
     override suspend fun invoke(
         order: Order,
         launchStatus: LaunchStatus,
-        year: String
+        launchYear: String
     ) {
         launchPreferencesDataSource.saveLaunchPreferences(
             order = order,
             launchStatus = launchStatus,
-            year = year
+            launchYear = launchYear
         )
     }
 }

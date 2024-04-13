@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seancoyle.core.domain.printLogDebug
+import com.seancoyle.core.common.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogLandscape
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogPortrait
@@ -51,18 +51,14 @@ internal fun LaunchRoute(
         if (windowSize.heightSizeClass == WindowHeightSizeClass.Compact) {
             FilterDialogLandscape(
                 filterState = launchFilterState,
-                year = viewModel::setYearState,
-                launchStatus = viewModel::setLaunchFilterState,
-                order = viewModel::setLaunchOrderState,
+                updateFilterState = viewModel::setLaunchFilterState,
                 onDismiss = viewModel::setDialogFilterDisplayedState,
                 newSearch = viewModel::newSearch
             )
         } else {
             FilterDialogPortrait(
                 filterState = launchFilterState,
-                year = viewModel::setYearState,
-                launchStatus = viewModel::setLaunchFilterState,
-                order = viewModel::setLaunchOrderState,
+                updateFilterState = viewModel::setLaunchFilterState,
                 onDismiss = viewModel::setDialogFilterDisplayedState,
                 newSearch = viewModel::newSearch,
             )

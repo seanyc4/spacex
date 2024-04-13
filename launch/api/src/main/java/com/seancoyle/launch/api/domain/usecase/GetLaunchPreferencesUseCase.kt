@@ -1,8 +1,7 @@
 package com.seancoyle.launch.api.domain.usecase
 
-import com.seancoyle.launch.api.domain.model.LaunchPreferencesTest
-import kotlinx.coroutines.flow.Flow
+import com.seancoyle.launch.api.domain.model.LaunchPrefs
 
 interface GetLaunchPreferencesUseCase {
-    suspend operator fun invoke(): Flow<LaunchPreferencesTest>
+    suspend operator fun invoke(): LaunchPrefs
 }

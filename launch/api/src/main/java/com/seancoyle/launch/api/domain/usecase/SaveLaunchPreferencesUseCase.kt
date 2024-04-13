@@ -7,6 +7,6 @@ interface SaveLaunchPreferencesUseCase {
     suspend operator fun invoke(
         order: Order,
         launchStatus: LaunchStatus,
-        year: String
+        launchYear: String
     )
 }

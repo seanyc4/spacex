@@ -9,4 +9,5 @@ option java_multiple_files = true;
 message LaunchPreferences {
     OrderProto order = 1;
     LaunchStatusProto launch_status = 2;
+    string launch_date = 3;
 }

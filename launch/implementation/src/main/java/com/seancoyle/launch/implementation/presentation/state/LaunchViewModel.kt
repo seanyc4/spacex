@@ -3,7 +3,6 @@ package com.seancoyle.launch.implementation.presentation.state
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
@@ -15,14 +14,15 @@ import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.launch.api.domain.usecase.GetLaunchPreferencesUseCase
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.api.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.launch.implementation.R
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.SortAndFilterLaunchesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
@@ -34,7 +34,8 @@ import javax.inject.Inject
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val launchesComponent: LaunchesComponent,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    private val saveLaunchPreferencesUseCase: SaveLaunchPreferencesUseCase,
+    private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
 ) : ViewModel() {
 
     var uiState: MutableStateFlow<LaunchesUiState> = MutableStateFlow(LaunchesUiState.Loading)
@@ -71,12 +72,14 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreFilterAndOrderState() {
-        /*viewModelScope.launch(ioDispatcher) {
-            val filterString = dataStoreComponent.readStringUseCase(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
-            val orderString = dataStoreComponent.readStringUseCase(LAUNCH_ORDER_KEY) ?: Order.DESC.name
-            setLaunchOrderState(Order.valueOf(orderString))
-            setLaunchFilterState(LaunchStatus.valueOf(filterString))
-        }*/
+        viewModelScope.launch {
+            val result = getLaunchPreferencesUseCase()
+            setLaunchFilterState(
+                order = result.order,
+                launchStatus = result.launchStatus,
+                year = result.launchYear
+            )
+        }
     }
 
     fun setEvent(event: LaunchEvents) {
@@ -86,7 +89,7 @@ internal class LaunchViewModel @Inject constructor(
                     launchesComponent.createMergedLaunchesCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
-                        launchFilter = getFilterState(),
+                        launchFilter = getLaunchStatusState(),
                         page = getPageState()
                     ).distinctUntilChanged()
                         .collect { result ->
@@ -119,7 +122,7 @@ internal class LaunchViewModel @Inject constructor(
                     launchesComponent.sortAndFilterLaunchesCacheUseCase(
                         year = getSearchYearState(),
                         order = getOrderState(),
-                        launchFilter = getFilterState(),
+                        launchFilter = getLaunchStatusState(),
                         page = getPageState()
                     ).collect { result ->
                         when (result) {
@@ -128,7 +131,8 @@ internal class LaunchViewModel @Inject constructor(
                                 // This triggers a recompose and keeps immutability
                                 uiState.update { currentState ->
                                     currentState.isSuccess {
-                                        val updatedLaunches = it.launches + (result.data ?: emptyList())
+                                        val updatedLaunches =
+                                            it.launches + (result.data ?: emptyList())
                                         it.copy(
                                             launches = updatedLaunches,
                                             paginationState = PaginationState.None
@@ -265,14 +269,17 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun getScrollPositionState() = scrollState.value.scrollPosition
     fun getPageState() = scrollState.value.page
-    private fun getSearchYearState() = filterState.value.year
+    private fun getSearchYearState() = filterState.value.launchYear
     private fun getOrderState() = filterState.value.order
-    private fun getFilterState(): LaunchStatus = filterState.value.launchStatus
+    private fun getLaunchStatusState(): LaunchStatus = filterState.value.launchStatus
 
     private fun clearQueryParameters() {
         clearListState()
-        setYearState("")
-        setLaunchFilterState(LaunchStatus.ALL)
+        setLaunchFilterState(
+            order = Order.DESC,
+            launchStatus = LaunchStatus.ALL,
+            year = ""
+        )
         resetPageState()
     }
 
@@ -290,18 +297,18 @@ internal class LaunchViewModel @Inject constructor(
         scrollState.value = scrollState.value.update()
     }
 
-    fun setYearState(year: String) {
-        updateFilterState { copy(year = year) }
-    }
-
-    fun setLaunchOrderState(order: Order) {
-        updateFilterState { copy(order = order) }
-        saveOrderToDatastore(order)
-    }
-
-    fun setLaunchFilterState(filter: LaunchStatus) {
-        updateFilterState { copy(launchStatus = filter) }
-        saveFilterToDataStore(filter)
+    fun setLaunchFilterState(
+        order: Order,
+        launchStatus: LaunchStatus,
+        year: String
+    ) {
+        updateFilterState {
+            copy(
+                order = order,
+                launchStatus = launchStatus,
+                launchYear = year
+            )
+        }
     }
 
     fun setDialogFilterDisplayedState(isDisplayed: Boolean) {
@@ -330,30 +337,31 @@ internal class LaunchViewModel @Inject constructor(
         savedStateHandle[LAUNCH_LIST_STATE_KEY] = scrollState.value
     }
 
-    private fun saveOrderToDatastore(order: Order) {
-    /*    viewModelScope.launch(ioDispatcher) {
-            dataStoreComponent.saveStringUseCase(LAUNCH_ORDER_KEY, order.name)
-        }*/
-    }
-
-    private fun saveFilterToDataStore(filter: LaunchStatus) {
-     /*   viewModelScope.launch(ioDispatcher) {
-            dataStoreComponent.saveStringUseCase(LAUNCH_FILTER_KEY, filter.name)
-        }*/
+    private fun saveLaunchPreferences(
+        order: Order,
+        launchStatus: LaunchStatus,
+        launchYear: String
+    ) {
+        viewModelScope.launch {
+            saveLaunchPreferencesUseCase(
+                order = order,
+                launchStatus = launchStatus,
+                launchYear = launchYear
+            )
+        }
     }
 
     private fun newSearchEvent() {
         setEvent(SortAndFilterLaunchesEvent)
+        saveLaunchPreferences(
+            order = getOrderState(),
+            launchStatus = getLaunchStatusState(),
+            launchYear = getSearchYearState()
+        )
     }
 
-    companion object {
-        // Datastore Files:
-        private const val LAUNCH_DATASTORE_KEY: String = "com.seancoyle.spacex.launch"
-
-        // Datastore Keys
-        private const val LAUNCH_ORDER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_ORDER"
-        private const val LAUNCH_FILTER_KEY = "$LAUNCH_DATASTORE_KEY.LAUNCH_FILTER"
-        private const val LAUNCH_LIST_STATE_KEY = "$LAUNCH_DATASTORE_KEY.state.list.key"
+    private companion object {
+        const val LAUNCH_LIST_STATE_KEY = "launches.list.position.key"
     }
 
 }

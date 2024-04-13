@@ -34,7 +34,7 @@ internal sealed interface PaginationState {
 data class LaunchesFilterState(
     val order: Order = Order.DESC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
-    val year: String = "",
+    val launchYear: String = "",
     val isDialogFilterDisplayed: Boolean = false,
 ) : Parcelable
 
