@@ -23,7 +23,7 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.data)
     implementation(projects.database)
-    implementation(projects.launch.api)
+    implementation(projects.feature.launch.api)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)

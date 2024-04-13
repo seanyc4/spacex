@@ -21,7 +21,7 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.domain)
-    implementation(projects.launch.api)
+    implementation(projects.feature.launch.api)
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)

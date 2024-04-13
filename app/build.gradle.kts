@@ -100,8 +100,8 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.database)
     implementation(projects.core.datastore)
-    implementation(projects.launch.api)
-    implementation(projects.launch.implementation)
+    implementation(projects.feature.launch.api)
+    implementation(projects.feature.launch.implementation)
     androidTestImplementation(projects.core.test)
 
     implementation(libs.appCompat)

@@ -16,7 +16,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.launch.api)
+    implementation(projects.feature.launch.api)
     implementation(projects.core.common)
     implementation(projects.core.domain)
 
