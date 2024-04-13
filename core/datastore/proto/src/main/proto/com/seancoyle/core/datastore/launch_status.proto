@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.seancoyle.core.datastore";
+option java_multiple_files = true;
+
+enum LaunchStatusProto {
+  SUCCESS = 0;
+  FAILED = 1;
+  UNKNOWN = 2;
+  ALL = 3;
+}
