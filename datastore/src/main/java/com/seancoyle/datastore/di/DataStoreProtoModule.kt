@@ -19,20 +19,23 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class DataStoreModule {
-
-    @Provides
+internal class DataStoreProtoModule {
     @Singleton
-    fun providesLaunchPreferencesDataStore(
+    @Provides
+    fun providesDataStoreProto(
         @ApplicationContext context: Context,
         @IODispatcher ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
-        preferencesSerializer: LaunchPreferencesSerializer,
+        preferencesSerializer: LaunchPreferencesSerializer
     ): DataStore<LaunchPreferences> =
         DataStoreFactory.create(
             serializer = preferencesSerializer,
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher)
         ) {
-            context.dataStoreFile("launch_preferences.pb")
+            context.dataStoreFile(LAUNCH_PREFERENCES)
         }
+
+    private companion object {
+        const val LAUNCH_PREFERENCES = "launch_preferences"
+    }
 }

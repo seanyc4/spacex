@@ -3,9 +3,9 @@ package com.seancoyle.datastore.domain
 import javax.inject.Inject
 
 internal class ReadStringUseCaseImpl @Inject constructor(
-    private val appDataStore: AppDataStore
+    private val appPreferencesDataSource: AppPreferencesDataSource
 ) : ReadStringUseCase {
     override suspend fun invoke(key: String): String? {
-        return appDataStore.readStringValue(key)
+        return appPreferencesDataSource.readStringValue(key)
     }
 }

@@ -22,4 +22,3 @@ class LaunchPreferencesSerializer @Inject constructor() : Serializer<LaunchPrefe
         t.writeTo(output)
     }
 }
-

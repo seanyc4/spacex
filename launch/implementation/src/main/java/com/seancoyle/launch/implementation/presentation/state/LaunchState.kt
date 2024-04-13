@@ -32,10 +32,10 @@ internal sealed interface PaginationState {
 @Parcelize
 @Stable
 data class LaunchesFilterState(
-    val isDialogFilterDisplayed: Boolean = false,
-    val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val order: Order = Order.DESC,
+    val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val year: String = "",
+    val isDialogFilterDisplayed: Boolean = false,
 ) : Parcelable
 
 @Parcelize

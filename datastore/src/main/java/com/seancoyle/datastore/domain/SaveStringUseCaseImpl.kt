@@ -3,9 +3,9 @@ package com.seancoyle.datastore.domain
 import javax.inject.Inject
 
 internal class SaveStringUseCaseImpl @Inject constructor(
-    private val appDataStore: AppDataStore
+    private val appPreferencesDataSource: AppPreferencesDataSource
 ) : SaveStringUseCase {
     override suspend fun invoke(key: String, value: String) {
-        appDataStore.saveStringValue(key, value)
+        appPreferencesDataSource.saveStringValue(key, value)
     }
 }

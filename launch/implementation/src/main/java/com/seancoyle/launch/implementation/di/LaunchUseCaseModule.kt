@@ -1,10 +1,13 @@
 package com.seancoyle.launch.implementation.di
 
+import com.seancoyle.launch.api.domain.usecase.GetLaunchPreferencesUseCase
 import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
+import com.seancoyle.launch.api.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetLaunchPreferencesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsCacheUseCase
@@ -16,6 +19,7 @@ import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheU
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponentImpl
 import com.seancoyle.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.MergedLaunchesCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCaseImpl
 import dagger.Binds
@@ -71,4 +75,14 @@ internal abstract class LaunchUseCaseModule {
     abstract fun bindsInsertCompanyInfoToCacheUseCase(
         impl: InsertCompanyInfoToCacheUseCaseImpl
     ): InsertCompanyInfoToCacheUseCase
+
+    @Binds
+    abstract fun bindsSaveLaunchPreferencesUseCase(
+        impl: SaveLaunchPreferencesUseCaseImpl
+    ): SaveLaunchPreferencesUseCase
+
+    @Binds
+    abstract fun bindsGetLaunchPreferencesUseCase(
+        impl: GetLaunchPreferencesUseCaseImpl
+    ): GetLaunchPreferencesUseCase
 }
