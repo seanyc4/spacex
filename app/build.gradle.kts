@@ -99,7 +99,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.ui)
     implementation(projects.database)
-    implementation(projects.datastore)
+    implementation(projects.core.datastore)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
     androidTestImplementation(projects.core.test)

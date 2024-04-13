@@ -30,9 +30,7 @@ import com.seancoyle.launch.implementation.presentation.state.LaunchesFilterStat
 @Composable
 fun FilterDialogPortrait(
     filterState: LaunchesFilterState,
-    year: (String) -> Unit,
-    launchStatus: (LaunchStatus) -> Unit,
-    order: (Order) -> Unit,
+    updateFilterState: (Order, LaunchStatus, String) -> Unit,
     onDismiss: (Boolean) -> Unit,
     newSearch: () -> Unit,
     modifier: Modifier = Modifier
@@ -44,7 +42,9 @@ fun FilterDialogPortrait(
             Column {
                 Text(stringResource(R.string.filter_by_year))
 
-                YearInputField(year = filterState.year, onYearChange = year)
+                YearInputField(year = filterState.launchYear, onYearChange = { year ->
+                    updateFilterState(filterState.order, filterState.launchStatus, year)
+                })
 
                 Text(
                     text = stringResource(R.string.launch_status),
@@ -53,12 +53,16 @@ fun FilterDialogPortrait(
 
                 RadioGroup(
                     selectedLaunchStatus = filterState.launchStatus,
-                    onLaunchStatusSelected = launchStatus
+                    onLaunchStatusSelected = { status ->
+                        updateFilterState(filterState.order, status, filterState.launchYear)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OrderSwitch(order = filterState.order, onOrderChange = order)
+                OrderSwitch(order = filterState.order, onOrderChange = { order ->
+                    updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+                })
             }
         },
 
@@ -75,9 +79,7 @@ fun FilterDialogPortrait(
 @Composable
 fun FilterDialogLandscape(
     filterState: LaunchesFilterState,
-    year: (String) -> Unit,
-    launchStatus: (LaunchStatus) -> Unit,
-    order: (Order) -> Unit,
+    updateFilterState: (Order, LaunchStatus, String) -> Unit,
     onDismiss: (Boolean) -> Unit,
     newSearch: () -> Unit,
     modifier: Modifier = Modifier
@@ -95,11 +97,15 @@ fun FilterDialogLandscape(
                 ) {
                     Text(stringResource(R.string.filter_by_year))
 
-                    YearInputField(year = filterState.year, onYearChange = year)
+                    YearInputField(year = filterState.launchYear, onYearChange = { year ->
+                        updateFilterState(filterState.order, filterState.launchStatus, year)
+                    })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    OrderSwitch(order = filterState.order, onOrderChange = order)
+                    OrderSwitch(order = filterState.order, onOrderChange = { order ->
+                        updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+                    })
                 }
 
                 Column(
@@ -110,7 +116,9 @@ fun FilterDialogLandscape(
                     Text(text = stringResource(R.string.launch_status))
                     RadioGroup(
                         selectedLaunchStatus = filterState.launchStatus,
-                        onLaunchStatusSelected = launchStatus
+                        onLaunchStatusSelected = { status ->
+                            updateFilterState(filterState.order, status, filterState.launchYear)
+                        }
                     )
                 }
             }

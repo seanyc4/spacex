@@ -20,7 +20,7 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.domain)
 
-    api(projects.core.datastore.proto)
+    api(projects.core.datastoreProto)
     api(libs.dataStore)
     api(libs.dataStore.preferences)
     api(libs.protobuf.kotlin.lite)
