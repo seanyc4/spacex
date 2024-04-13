@@ -1,4 +1,4 @@
-package com.seancoyle.core.domain
+package com.seancoyle.core.common.result
 
 sealed interface DataResult<out T, out E> {
     data class Success<out T>(val data: T) : DataResult<T, Nothing>

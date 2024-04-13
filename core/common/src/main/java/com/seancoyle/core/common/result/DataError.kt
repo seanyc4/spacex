@@ -1,4 +1,4 @@
-package com.seancoyle.core.domain
+package com.seancoyle.core.common.result
 
 enum class DataError : ErrorType {
     NETWORK_TIMEOUT,

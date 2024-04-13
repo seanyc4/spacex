@@ -8,11 +8,9 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.launch.api"
+    namespace = "com.seancoyle.core.common"
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.domain)
-    implementation(libs.googleGson)
+
 }

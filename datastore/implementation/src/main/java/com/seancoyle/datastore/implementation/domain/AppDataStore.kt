@@ -1,4 +1,4 @@
-package com.seancoyle.datastore.api
+package com.seancoyle.datastore.implementation.domain
 
 interface AppDataStore {
 

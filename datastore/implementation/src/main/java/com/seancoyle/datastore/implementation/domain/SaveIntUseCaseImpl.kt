@@ -1,6 +1,5 @@
 package com.seancoyle.datastore.implementation.domain
 
-import com.seancoyle.datastore.api.AppDataStore
 import javax.inject.Inject
 
 internal class SaveIntUseCaseImpl @Inject constructor(

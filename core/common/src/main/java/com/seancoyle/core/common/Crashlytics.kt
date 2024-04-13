@@ -1,4 +1,4 @@
-package com.seancoyle.core.domain
+package com.seancoyle.core.common
 
 interface Crashlytics {
     fun init(isEnabled: Boolean)

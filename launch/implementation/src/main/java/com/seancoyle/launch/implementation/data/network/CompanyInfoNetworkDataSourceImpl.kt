@@ -1,10 +1,10 @@
 package com.seancoyle.launch.implementation.data.network
 
+import com.seancoyle.core.common.Crashlytics
+import com.seancoyle.core.common.di.IODispatcher
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.data.safeApiCall
-import com.seancoyle.core.domain.Crashlytics
-import com.seancoyle.core.domain.DataError
-import com.seancoyle.core.domain.DataResult
-import com.seancoyle.core.domain.di.IODispatcher
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher

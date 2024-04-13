@@ -61,7 +61,7 @@ class GetCompanyApiAndCacheUseCaseImplTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
         coEvery { networkDataSource.getCompany() } returns COMPANY_INFO
         coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
-        var dataResult: com.seancoyle.core.domain.DataResult<LaunchState>? = null
+        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
             dataResult = value
@@ -93,7 +93,7 @@ class GetCompanyApiAndCacheUseCaseImplTest {
     fun whenGetCompanyInfoFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
 
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var dataResult: com.seancoyle.core.domain.DataResult<LaunchState>? = null
+        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
 
         underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
             dataResult = value

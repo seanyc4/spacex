@@ -1,7 +1,7 @@
 package com.seancoyle.launch.api.domain.usecase
 
-import com.seancoyle.core.domain.DataError
-import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchStatus

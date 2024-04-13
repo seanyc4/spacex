@@ -2,11 +2,11 @@ package com.seancoyle.core.data
 
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
+import com.seancoyle.core.common.Crashlytics
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.data.CacheConstants.CACHE_TIMEOUT
 import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT
-import com.seancoyle.core.domain.Crashlytics
-import com.seancoyle.core.domain.DataError
-import com.seancoyle.core.domain.DataResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException

@@ -17,6 +17,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(projects.core.domain)
     implementation(projects.core.test)
     implementation(projects.core.ui)
