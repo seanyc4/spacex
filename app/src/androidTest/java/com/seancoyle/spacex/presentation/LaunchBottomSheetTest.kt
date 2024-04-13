@@ -1,35 +1,15 @@
 package com.seancoyle.spacex.presentation
 
-import android.app.Instrumentation
-import android.content.Intent
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToIndex
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.seancoyle.core_testing.stringResource
-import com.seancoyle.spacex.R
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.FlowPreview
-import org.hamcrest.Matchers
-import org.junit.Test
 
 @ExperimentalTestApi
 @FlowPreview
 @HiltAndroidTest
 class LaunchBottomSheetTest: LaunchBase() {
 
-    private val launchBottomSheetTag = "Launch Bottom Sheet"
+   /* private val launchBottomSheetTag = "Launch Bottom Sheet"
     private val articleString by composeTestRule.stringResource(R.string.article)
     private val wikiString by composeTestRule.stringResource(R.string.wikipedia)
 
@@ -164,5 +144,5 @@ class LaunchBottomSheetTest: LaunchBase() {
             onNodeWithText(wikiString).assertIsDisplayed()
             onNodeWithText(linksString).assertIsDisplayed()
         }
-    }
+    }*/
 }

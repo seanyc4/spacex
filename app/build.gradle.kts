@@ -94,12 +94,12 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.core.ui)
     implementation(projects.database)
-    implementation(projects.datastore.api)
-    implementation(projects.datastore.implementation)
+    implementation(projects.datastore)
     implementation(projects.launch.api)
     implementation(projects.launch.implementation)
     androidTestImplementation(projects.core.test)

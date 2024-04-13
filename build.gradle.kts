@@ -13,6 +13,7 @@ buildscript {
         classpath(libs.kotlin.serialization)
         classpath(libs.kotlin.ksp)
         classpath(libs.test.junit5)
+        classpath(libs.protobuf.gradlePlugin)
     }
 }
 

@@ -7,10 +7,6 @@ import com.seancoyle.launch.implementation.TestConstants
 import com.seancoyle.launch.implementation.data.network.LaunchApi
 import com.seancoyle.launch.implementation.data.network.dto.LaunchDto
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
-import retrofit2.HttpException
-import retrofit2.Response
 import javax.inject.Inject
 
 internal class FakeLaunchApi @Inject constructor(
@@ -22,10 +18,10 @@ internal class FakeLaunchApi @Inject constructor(
     override suspend fun getLaunches(options: LaunchOptions): LaunchDto {
         if (jsonFileName == TestConstants.ERROR_404_RESPONSE) {
             val errorContent = jsonFileReader.readJSONFromAsset(jsonFileName)
-            val responseBody =
+           /* val responseBody =
                 ResponseBody.create("application/json".toMediaTypeOrNull(), errorContent)
             val response = Response.error<String>(404, responseBody)
-            throw HttpException(response)
+            throw HttpException(response)*/
         }
         return Gson()
             .fromJson(

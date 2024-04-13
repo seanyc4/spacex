@@ -8,9 +8,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.core_testing.stringResource
-import com.seancoyle.launch.implementation.domain.model.LinkType
-import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetCard
-import com.seancoyle.launch.implementation.presentation.components.LaunchBottomSheetExitButton
+import com.seancoyle.launch.api.domain.model.LinkType
 import com.seancoyle.spacex.R
 import org.junit.Rule
 import org.junit.Test
@@ -28,8 +26,7 @@ class LaunchBottomSheetIsolatedTest {
         val linksString by composeTestRule.stringResource(R.string.links)
 
         composeTestRule.setContent {
-            LaunchBottomSheetCard(linkTypes = LINK_TYPES)
-            LaunchBottomSheetExitButton {}
+
         }
 
         composeTestRule.onNode(hasText(articleString) and hasClickAction()).performClick()

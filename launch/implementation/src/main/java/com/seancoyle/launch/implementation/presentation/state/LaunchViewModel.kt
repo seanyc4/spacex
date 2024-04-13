@@ -3,15 +3,14 @@ package com.seancoyle.launch.implementation.presentation.state
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.domain.DataResult
+import com.seancoyle.core.common.di.IODispatcher
+import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.domain.Order
-import com.seancoyle.core.domain.di.IODispatcher
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.NotificationUiType
 import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.asStringResource
-import com.seancoyle.datastore.api.AppDataStoreComponent
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
@@ -33,9 +32,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
-    private val launchesComponent: LaunchesComponent,
-    private val dataStoreComponent: AppDataStoreComponent,
     private val savedStateHandle: SavedStateHandle,
+    private val launchesComponent: LaunchesComponent,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -73,12 +71,12 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreFilterAndOrderState() {
-        viewModelScope.launch(ioDispatcher) {
+        /*viewModelScope.launch(ioDispatcher) {
             val filterString = dataStoreComponent.readStringUseCase(LAUNCH_FILTER_KEY) ?: LaunchStatus.ALL.name
             val orderString = dataStoreComponent.readStringUseCase(LAUNCH_ORDER_KEY) ?: Order.DESC.name
             setLaunchOrderState(Order.valueOf(orderString))
             setLaunchFilterState(LaunchStatus.valueOf(filterString))
-        }
+        }*/
     }
 
     fun setEvent(event: LaunchEvents) {
@@ -333,15 +331,15 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun saveOrderToDatastore(order: Order) {
-        viewModelScope.launch(ioDispatcher) {
+    /*    viewModelScope.launch(ioDispatcher) {
             dataStoreComponent.saveStringUseCase(LAUNCH_ORDER_KEY, order.name)
-        }
+        }*/
     }
 
     private fun saveFilterToDataStore(filter: LaunchStatus) {
-        viewModelScope.launch(ioDispatcher) {
+     /*   viewModelScope.launch(ioDispatcher) {
             dataStoreComponent.saveStringUseCase(LAUNCH_FILTER_KEY, filter.name)
-        }
+        }*/
     }
 
     private fun newSearchEvent() {

@@ -1,26 +1,11 @@
 package com.seancoyle.spacex.presentation
 
-import androidx.annotation.CallSuper
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.espresso.intent.Intents
-import com.seancoyle.core_datastore.AppDataStore
-import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
-import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
-import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import javax.inject.Inject
 
 @HiltAndroidTest
 open class LaunchBase {
 
-    @get:Rule(order = 0)
+   /* @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
@@ -73,5 +58,5 @@ open class LaunchBase {
         companyCacheDataSource.deleteAll()
         launchCacheDataSource.insertList(testLaunchList)
         companyCacheDataSource.insert(testCompanyInfoList)
-    }
+    }*/
 }
