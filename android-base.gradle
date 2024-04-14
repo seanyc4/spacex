@@ -54,11 +54,6 @@ android {
 
         // To prevent textUtils error with espresso idling resource
         unitTests.returnDefaultValues = true
-
-        unitTests.all {
-            it.useJUnitPlatform()
-            jvmArgs += "--add-opens=java.base/java.time=ALL-UNNAMED"
-        }
     }
 }
 
