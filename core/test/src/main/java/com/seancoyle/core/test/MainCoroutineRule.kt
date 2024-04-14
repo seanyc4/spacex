@@ -1,4 +1,4 @@
-package com.seancoyle.core_testing
+package com.seancoyle.core.test
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

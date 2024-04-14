@@ -21,7 +21,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.core.data)
     implementation(projects.database)
@@ -38,5 +37,7 @@ dependencies {
 
     androidTestImplementation(projects.core.datastore)
     androidTestImplementation(libs.bundles.androidTestBundle)
+    androidTestImplementation(projects.core.test)
+    testImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)
 }

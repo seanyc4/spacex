@@ -121,5 +121,6 @@ dependencies {
     androidTestImplementation(libs.bundles.androidTestBundle)
     androidTestImplementation(projects.core.test)
     debugImplementation(libs.compose.uiTestManifest)
+    debugImplementation(projects.core.hiltUiTest)
 
 }

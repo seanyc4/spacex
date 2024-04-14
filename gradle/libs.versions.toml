@@ -39,7 +39,7 @@ splash = "1.0.1"
 testArchCore = "2.2.0"
 testCore = "1.5.0"
 testRules = "1.5.0"
-testRunner = "1.5.2"
+testRunner = "1.5.0"
 timber = "5.0.1"
 
 
@@ -176,7 +176,7 @@ android = { id = "android" }
 androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
 hilt = { id = "dagger.hilt.android.plugin" }
-hiltTestRunner = { id = "com.seancoyle.core.testing.HiltTestRunner" }
+hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
 kotlinAndroid = { id = "kotlin-android" }
 kotlinKsp = { id = "com.google.devtools.ksp" }
 kotlinParcelize = { id = "kotlin-parcelize" }

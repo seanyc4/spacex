@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.network.company
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.test.JsonFileReader
 import com.seancoyle.feature.launch.implementation.data.network.CompanyApi
 import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
 import com.seancoyle.launch.implementation.TestConstants.COMPANY_200_RESPONSE

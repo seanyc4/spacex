@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.network.launch
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.test.JsonFileReader
 import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchDto
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.launch.implementation.TestConstants.LAUNCHES_200_RESPONSE

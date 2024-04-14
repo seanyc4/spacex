@@ -2,7 +2,7 @@ package com.seancoyle.launch.implementation.network.launch
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.test.JsonFileReader
 import com.seancoyle.feature.launch.implementation.data.network.LaunchApi
 import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchDto
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions

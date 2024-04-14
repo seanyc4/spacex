@@ -1,7 +1,7 @@
 package com.seancoyle.spacex.di
 
 import android.content.Context
-import com.seancoyle.core_testing.JsonFileReader
+import com.seancoyle.core.test.JsonFileReader
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
