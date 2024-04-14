@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchPrefs
@@ -21,7 +21,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<Result<List<LaunchTypes.Launch>, DataError>> {
         return getLaunchesApiCacheUseCase.invoke()
     }
 
@@ -30,7 +30,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
+    ): Flow<Result<List<LaunchTypes>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
             launchYear = year,
             order = order,
@@ -44,7 +44,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<DataResult<List<LaunchTypes>, DataError>> {
+    ): Flow<Result<List<LaunchTypes>, DataError>> {
         return mergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
@@ -53,11 +53,11 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override fun getCompanyCacheUseCase(): Flow<DataResult<Company?, DataError>> {
+    override fun getCompanyCacheUseCase(): Flow<Result<Company?, DataError>> {
         return getCompanyCacheUseCase.invoke()
     }
 
-    override fun getCompanyApiAndCacheUseCase(): Flow<DataResult<Company, DataError>> {
+    override fun getCompanyApiAndCacheUseCase(): Flow<Result<Company, DataError>> {
         return getCompanyApiCacheUseCase.invoke()
     }
 

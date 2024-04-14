@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
@@ -16,21 +16,21 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val launchOptions: LaunchOptions
 ) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>> = flow {
+    override operator fun invoke(): Flow<Result<List<LaunchTypes.Launch>, DataError>> = flow {
         emit(getLaunchesFromNetwork())
     }
 
-    private suspend fun getLaunchesFromNetwork(): DataResult<List<LaunchTypes.Launch>, DataError> {
+    private suspend fun getLaunchesFromNetwork(): Result<List<LaunchTypes.Launch>, DataError> {
         return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
-            is DataResult.Success -> cacheData(networkResult.data)
-            is DataResult.Error -> DataResult.Error(networkResult.error)
+            is Result.Success -> cacheData(networkResult.data)
+            is Result.Error -> Result.Error(networkResult.error)
         }
     }
 
-    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): DataResult<List<LaunchTypes.Launch>, DataError> {
+    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): Result<List<LaunchTypes.Launch>, DataError> {
         return when (val cacheResult = insertLaunchesToCacheUseCase(launches)) {
-            is DataResult.Success -> DataResult.Success(launches)
-            is DataResult.Error -> DataResult.Error(cacheResult.error)
+            is Result.Success -> Result.Success(launches)
+            is Result.Error -> Result.Error(cacheResult.error)
         }
     }
 }

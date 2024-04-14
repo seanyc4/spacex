@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.test
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
 import com.seancoyle.launch.api.domain.model.LaunchTypes
@@ -15,15 +15,15 @@ import java.time.LocalDateTime
 class FakeGetLaunchesApiAndCacheUseCase : GetLaunchesApiAndCacheUseCase {
 
     val isSuccess = true
-    override fun invoke(): Flow<DataResult<List<LaunchTypes.Launch>, DataError>> = flow {
+    override fun invoke(): Flow<Result<List<LaunchTypes.Launch>, DataError>> = flow {
         emit(getFakeLaunchesFromNetwork())
     }
 
-    private fun getFakeLaunchesFromNetwork(): DataResult<List<LaunchTypes.Launch>, DataError> {
+    private fun getFakeLaunchesFromNetwork(): Result<List<LaunchTypes.Launch>, DataError> {
         // Simulating network data fetching behavior
         return if (shouldSimulateSuccess(isSuccess)) {
             // Simulate a successful data fetch
-            DataResult.Success(
+            Result.Success(
                 listOf(
                     LaunchTypes.Launch(
                         id = "5",
@@ -46,7 +46,7 @@ class FakeGetLaunchesApiAndCacheUseCase : GetLaunchesApiAndCacheUseCase {
             )
         } else {
             // Simulate a network error
-            DataResult.Error(DataError.NETWORK_CONNECTION_FAILED)
+            Result.Error(DataError.NETWORK_CONNECTION_FAILED)
         }
     }
 

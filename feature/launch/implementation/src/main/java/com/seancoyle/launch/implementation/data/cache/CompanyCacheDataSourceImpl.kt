@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.launch.api.domain.model.Company
@@ -20,7 +20,7 @@ internal class CompanyCacheDataSourceImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyCacheDataSource {
 
-    override suspend fun getCompany(): DataResult<Company?, DataError> {
+    override suspend fun getCompany(): Result<Company?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -31,7 +31,7 @@ internal class CompanyCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(company: Company): DataResult<Long, DataError> {
+    override suspend fun insert(company: Company): Result<Long, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -40,7 +40,7 @@ internal class CompanyCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAll(): DataResult<Unit, DataError> {
+    override suspend fun deleteAll(): Result<Unit, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics

@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import kotlinx.coroutines.flow.Flow
 
 internal interface GetNumLaunchItemsCacheUseCase {
-    operator fun invoke(): Flow<DataResult<Int?, DataError>>
+    operator fun invoke(): Flow<Result<Int?, DataError>>
 }

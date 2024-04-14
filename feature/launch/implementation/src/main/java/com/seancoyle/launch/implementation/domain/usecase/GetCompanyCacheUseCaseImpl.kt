@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +12,7 @@ internal class GetCompanyCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: CompanyCacheDataSource
 ) : GetCompanyCacheUseCase {
 
-    override operator fun invoke(): Flow<DataResult<Company?, DataError>> = flow {
+    override operator fun invoke(): Flow<Result<Company?, DataError>> = flow {
         emit(cacheDataSource.getCompany())
     }
 }

@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.cache
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
@@ -28,7 +28,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): DataResult<List<LaunchTypes>?, DataError> {
+    ): Result<List<LaunchTypes>?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -44,7 +44,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(launch: LaunchTypes.Launch): DataResult<Long, DataError> {
+    override suspend fun insert(launch: LaunchTypes.Launch): Result<Long, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -53,7 +53,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertList(launches: List<LaunchTypes.Launch>): DataResult<LongArray, DataError> {
+    override suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<LongArray, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -64,7 +64,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteList(launches: List<LaunchTypes.Launch>): DataResult<Int, DataError> {
+    override suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError> {
         val ids = launches.mapIndexed { _, item -> item.id }
         return safeCacheCall(
             dispatcher = ioDispatcher,
@@ -74,7 +74,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAll(): DataResult<Unit, DataError> {
+    override suspend fun deleteAll(): Result<Unit, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -83,7 +83,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteById(id: String): DataResult<Int, DataError> {
+    override suspend fun deleteById(id: String): Result<Int, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -92,7 +92,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getById(id: String): DataResult<LaunchTypes.Launch?, DataError> {
+    override suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -103,7 +103,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): DataResult<List<LaunchTypes>?, DataError> {
+    override suspend fun getAll(): Result<List<LaunchTypes>?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -114,7 +114,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTotalEntries(): DataResult<Int, DataError> {
+    override suspend fun getTotalEntries(): Result<Int, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics

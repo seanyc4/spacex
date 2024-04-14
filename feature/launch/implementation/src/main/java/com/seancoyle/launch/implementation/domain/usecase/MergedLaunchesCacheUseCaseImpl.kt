@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchStatus
@@ -33,7 +33,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<DataResult<List<LaunchTypes>, DataError>> = flow {
+    ): Flow<Result<List<LaunchTypes>, DataError>> = flow {
         combine(
             getCompanyInfo().distinctUntilChanged(),
             getLaunches(
@@ -45,28 +45,28 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         ) { companyInfoResult, launchesResult ->
 
             // As Company and List<ViewType> are in the api module they cannot be smart casted
-            val companyInfoData: Company? = (companyInfoResult as? DataResult.Success)?.data
-            val launchesData: List<LaunchTypes>? = (launchesResult as? DataResult.Success)?.data
+            val companyInfoData: Company? = (companyInfoResult as? Result.Success)?.data
+            val launchesData: List<LaunchTypes>? = (launchesResult as? Result.Success)?.data
 
             when {
                 companyInfoData != null && !launchesData.isNullOrEmpty() -> {
-                    DataResult.Success(createMergedList(companyInfoData, launchesData))
+                    Result.Success(createMergedList(companyInfoData, launchesData))
                 }
 
-                companyInfoResult is DataResult.Error -> {
-                    DataResult.Error(companyInfoResult.error)
+                companyInfoResult is Result.Error -> {
+                    Result.Error(companyInfoResult.error)
                 }
 
-                launchesResult is DataResult.Error -> {
-                    DataResult.Error(launchesResult.error)
+                launchesResult is Result.Error -> {
+                    Result.Error(launchesResult.error)
                 }
 
                 launchesData.isNullOrEmpty() -> {
-                    DataResult.Error(DataError.CACHE_ERROR_NO_RESULTS)
+                    Result.Error(DataError.CACHE_ERROR_NO_RESULTS)
                 }
 
                 else -> {
-                    DataResult.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
+                    Result.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
 
@@ -75,7 +75,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun getCompanyInfo(): Flow<DataResult<Company?, DataError>> {
+    private fun getCompanyInfo(): Flow<Result<Company?, DataError>> {
         return getCompanyFromCacheUseCase()
     }
 
@@ -84,7 +84,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
+    ): Flow<Result<List<LaunchTypes>?, DataError>> {
         return getLaunchesFromCacheUseCase(
             launchYear = launchYear,
             order = order,

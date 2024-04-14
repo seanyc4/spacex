@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.data.network
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.launch.api.domain.model.LaunchTypes
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
@@ -19,7 +19,7 @@ internal class LaunchNetworkDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LaunchNetworkDataSource {
-    override suspend fun getLaunches(launchOptions: LaunchOptions): DataResult<List<LaunchTypes.Launch>, DataError> {
+    override suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError> {
         return safeApiCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics

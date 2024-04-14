@@ -3,7 +3,7 @@ package com.seancoyle.launch.implementation.network.company
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataResult
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
@@ -18,7 +18,7 @@ internal class FakeCompanyInfoNetworkDataSourceImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyInfoNetworkDataSource {
 
-    override suspend fun getCompany(): DataResult<Company, DataError> {
+    override suspend fun getCompany(): Result<Company, DataError> {
         return safeApiCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
