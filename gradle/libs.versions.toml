@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.1"
+agp = "8.3.2"
 androidHilt = "1.2.0"
 androidxTestExt = "1.1.5"
 appCompat = "1.6.1"
@@ -12,7 +12,7 @@ composeWindowSize = "1.2.1"
 coreKtx = "1.12.0"
 datastore = "1.1.0-rc01"
 espressoCore = "3.5.0"
-firebaseBoM = "32.8.0"
+firebaseBoM = "32.8.1"
 fragment = "1.7.0-rc01"
 glideCompose = "1.0.0-beta01"
 gson = "2.10.1"
@@ -42,8 +42,6 @@ testCore = "1.5.0"
 testRules = "1.5.0"
 testRunner = "1.5.2"
 timber = "5.0.1"
-junit = "1.1.5"
-material = "1.11.0"
 
 
 [libraries]
@@ -173,8 +171,6 @@ test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" 
 
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [plugins]
