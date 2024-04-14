@@ -17,13 +17,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.domain)
     implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.core.data)
     implementation(projects.database)
-    implementation(projects.feature.launch.api)
+    api(projects.feature.launch.api)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)

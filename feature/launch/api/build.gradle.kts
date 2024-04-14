@@ -13,6 +13,6 @@ android {
 
 dependencies {
     api(projects.core.common)
-    implementation(projects.core.domain)
+    api(projects.core.domain)
     implementation(libs.googleGson)
 }
