@@ -19,7 +19,6 @@ gson = "2.10.1"
 hiltNavigationCompose = "1.2.0"
 hilt = "2.51"
 junit4 = "4.13.2"
-junit5 = "1.8.2.0"
 kotlin = "1.9.22"
 kotlinCoroutines = "1.8.0"
 kotlinImmutable = "0.3.6"
@@ -161,7 +160,6 @@ test-espressoCore = { module = "androidx.test.espresso:espresso-core", version.r
 test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 test-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCore" }
 test-junit4 = { module = "junit:junit", version.ref = "junit4" }
-test-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "junit5" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCore" }
@@ -179,7 +177,6 @@ androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
 hilt = { id = "dagger.hilt.android.plugin" }
 hiltTestRunner = { id = "com.seancoyle.core.testing.HiltTestRunner" }
-junit5 = { id = "de.mannodermaus.android-junit5" }
 kotlinAndroid = { id = "kotlin-android" }
 kotlinKsp = { id = "com.google.devtools.ksp" }
 kotlinParcelize = { id = "kotlin-parcelize" }
@@ -206,7 +203,6 @@ androidTestBundle = [
 
 unitTestBundle = [
     "test-junit4",
-    "test-junit5",
     "test-mockk",
     "kotlin-coroutinesTest",
     "kotlin-junit"

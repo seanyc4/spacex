@@ -67,20 +67,16 @@ android {
         buildConfig = true
     }
 
-    sourceSets {
-        getByName("test").resources.srcDir("src/test/res")
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+            all { it.useJUnitPlatform() }
+        }
     }
 
-    testOptions {
-        // Fix for mock issue on >= API 28
-        packagingOptions.jniLibs.useLegacyPackaging = true
-
-        // To prevent textUtils error with espresso idling resource
-        unitTests.isReturnDefaultValues = true
-
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
+    sourceSets {
+        getByName("test").resources.srcDir("src/test/res")
     }
 
     packaging {
