@@ -1,4 +1,4 @@
-package com.seancoyle.core.domain
+package com.seancoyle.core.common.dataformatter
 
 import java.time.LocalDateTime
 

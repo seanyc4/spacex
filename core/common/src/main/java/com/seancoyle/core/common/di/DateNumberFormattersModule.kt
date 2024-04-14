@@ -1,12 +1,10 @@
-package com.seancoyle.core.ui.di
+package com.seancoyle.core.common.di
 
-import com.seancoyle.core.domain.DateFormatter
-import com.seancoyle.core.domain.DateTransformer
-import com.seancoyle.core.domain.NumberFormatter
-import com.seancoyle.core.ui.DateFormatConstants
-import com.seancoyle.core.ui.DateFormatterImpl
-import com.seancoyle.core.ui.DateTransformerImpl
-import com.seancoyle.core.ui.NumberFormatterImpl
+import com.seancoyle.core.common.dataformatter.DateFormatConstants
+import com.seancoyle.core.common.dataformatter.DateFormatter
+import com.seancoyle.core.common.dataformatter.DateFormatterImpl
+import com.seancoyle.core.common.dataformatter.DateTransformer
+import com.seancoyle.core.common.dataformatter.DateTransformerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,11 +23,6 @@ internal abstract class DateNumberFormattersModule {
     abstract fun provideDateFormatter(
         impl: DateFormatterImpl
     ): DateFormatter
-
-    @Binds
-    abstract fun provideNumberFormatter(
-        impl: NumberFormatterImpl
-    ): NumberFormatter
 
     @Binds
     abstract fun provideDateTransformer(

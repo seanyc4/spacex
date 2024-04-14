@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.seancoyle.core.domain.AppPreferencesDataSource
+import com.seancoyle.core.data.AppPreferencesDataSource
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 

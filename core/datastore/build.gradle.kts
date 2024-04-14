@@ -18,6 +18,7 @@ android {
 dependencies {
     implementation(projects.feature.launch.api)
     implementation(projects.core.common)
+    implementation(projects.core.data)
     implementation(projects.core.domain)
 
     api(projects.core.datastoreProto)

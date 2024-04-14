@@ -1,6 +1,5 @@
-package com.seancoyle.core.ui
+package com.seancoyle.core.common.dataformatter
 
-import com.seancoyle.core.domain.DateTransformer
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject

@@ -62,10 +62,8 @@ internal class LaunchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = content {
-
         val windowSize = calculateWindowSizeClass(requireActivity())
         val snackbarHostState = remember { SnackbarHostState() }
-
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
             onRefresh = { viewModel.swipeToRefresh() }

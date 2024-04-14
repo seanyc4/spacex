@@ -1,6 +1,6 @@
 package com.seancoyle.datastore.di
 
-import com.seancoyle.core.domain.AppPreferencesDataSource
+import com.seancoyle.core.data.AppPreferencesDataSource
 import com.seancoyle.datastore.data.AppPreferencesDataSourceImpl
 import dagger.Binds
 import dagger.Module
