@@ -37,10 +37,10 @@ import com.seancoyle.core.ui.asStringResource
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
-import com.seancoyle.launch.implementation.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

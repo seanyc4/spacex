@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.R
 
 @Preview
 @Composable

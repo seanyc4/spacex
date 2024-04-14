@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.feature.launch.api.domain.model.LinkType
-import com.seancoyle.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.R
 
 @Composable
 fun LaunchBottomSheetDivider(

@@ -18,7 +18,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.seancoyle.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

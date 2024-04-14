@@ -32,7 +32,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.RocketWithMission
-import com.seancoyle.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.R
 
 @Composable
 internal fun LaunchHeading(

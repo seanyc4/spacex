@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.launch.api"
+    namespace = "com.seancoyle.feature.launch.api"
 }
 
 dependencies {

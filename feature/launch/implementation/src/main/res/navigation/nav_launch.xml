@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/launchFragment"
-        android:name="com.seancoyle.launch.implementation.presentation.LaunchFragment"
+        android:name="com.seancoyle.feature.launch.implementation.presentation.LaunchFragment"
         android:label="LaunchFragment">
 
         <action
@@ -17,7 +17,7 @@
 
     <dialog
         android:id="@+id/launchBottomActionSheet"
-        android:name="com.seancoyle.launch.implementation.presentation.LaunchBottomActionSheet"
+        android:name="com.seancoyle.feature.launch.implementation.presentation.LaunchBottomActionSheet"
         android:label="LaunchBottomActionSheet" />
 
 </navigation>

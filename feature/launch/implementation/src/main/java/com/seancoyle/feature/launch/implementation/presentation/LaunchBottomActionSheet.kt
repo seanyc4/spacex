@@ -16,9 +16,9 @@ import com.seancoyle.core.ui.parcelable
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetCard
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetExitButton
-import com.seancoyle.launch.implementation.R
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3WindowSizeClassApi

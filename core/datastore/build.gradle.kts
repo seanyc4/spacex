@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.datastore.implementation"
+    namespace = "com.seancoyle.core.datastore"
 
     defaultConfig {
         consumerProguardFiles("consumer-proguard-rules.pro")

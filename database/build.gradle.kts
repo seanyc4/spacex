@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.core_database"
+    namespace = "com.seancoyle.core.database"
 
     defaultConfig {
         ksp {

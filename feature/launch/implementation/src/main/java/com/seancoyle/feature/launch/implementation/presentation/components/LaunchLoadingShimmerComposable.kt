@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.composables.ShimmerAnimation
-import com.seancoyle.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.R
 
 @Composable
 fun getShimmerColors() = listOf(

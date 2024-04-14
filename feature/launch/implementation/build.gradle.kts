@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.launch.implementation"
+    namespace = "com.seancoyle.feature.launch.implementation"
 
     packaging {
         resources.pickFirsts.add("META-INF/LICENSE.md")
