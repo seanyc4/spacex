@@ -29,40 +29,21 @@ import com.seancoyle.launch.implementation.presentation.state.LaunchesFilterStat
 
 @Composable
 fun FilterDialogPortrait(
-    filterState: LaunchesFilterState,
+    currentFilterState: LaunchesFilterState,
     updateFilterState: (Order, LaunchStatus, String) -> Unit,
     onDismiss: (Boolean) -> Unit,
     newSearch: () -> Unit,
+    isLandScape: Boolean,
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss(false) },
         title = { Text(stringResource(R.string.filter_options)) },
         text = {
-            Column {
-                Text(stringResource(R.string.filter_by_year))
-
-                YearInputField(year = filterState.launchYear, onYearChange = { year ->
-                    updateFilterState(filterState.order, filterState.launchStatus, year)
-                })
-
-                Text(
-                    text = stringResource(R.string.launch_status),
-                    modifier = modifier.padding(top = dimensionResource(R.dimen.default_view_margin))
-                )
-
-                RadioGroup(
-                    selectedLaunchStatus = filterState.launchStatus,
-                    onLaunchStatusSelected = { status ->
-                        updateFilterState(filterState.order, status, filterState.launchYear)
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OrderSwitch(order = filterState.order, onOrderChange = { order ->
-                    updateFilterState(order, filterState.launchStatus, filterState.launchYear)
-                })
+            if (isLandScape){
+                LandscapeDialogContent(currentFilterState, updateFilterState, modifier)
+            } else {
+                PortraitDialogContent(currentFilterState, updateFilterState, modifier)
             }
         },
 
@@ -77,61 +58,78 @@ fun FilterDialogPortrait(
 }
 
 @Composable
-fun FilterDialogLandscape(
+private fun PortraitDialogContent(
     filterState: LaunchesFilterState,
     updateFilterState: (Order, LaunchStatus, String) -> Unit,
-    onDismiss: (Boolean) -> Unit,
-    newSearch: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
-    AlertDialog(
-        onDismissRequest = { onDismiss(false) },
-        title = { Text(stringResource(R.string.filter_options)) },
-        text = {
-            Row(modifier = modifier.fillMaxWidth()) {
+    Column {
+        Text(stringResource(R.string.filter_by_year))
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                ) {
-                    Text(stringResource(R.string.filter_by_year))
+        YearInputField(year = filterState.launchYear, onYearChange = { year ->
+            updateFilterState(filterState.order, filterState.launchStatus, year)
+        })
 
-                    YearInputField(year = filterState.launchYear, onYearChange = { year ->
-                        updateFilterState(filterState.order, filterState.launchStatus, year)
-                    })
+        Text(
+            text = stringResource(R.string.launch_status),
+            modifier = modifier.padding(top = dimensionResource(R.dimen.default_view_margin))
+        )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    OrderSwitch(order = filterState.order, onOrderChange = { order ->
-                        updateFilterState(order, filterState.launchStatus, filterState.launchYear)
-                    })
-                }
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 6.dp)
-                ) {
-                    Text(text = stringResource(R.string.launch_status))
-                    RadioGroup(
-                        selectedLaunchStatus = filterState.launchStatus,
-                        onLaunchStatusSelected = { status ->
-                            updateFilterState(filterState.order, status, filterState.launchYear)
-                        }
-                    )
-                }
+        RadioGroup(
+            selectedLaunchStatus = filterState.launchStatus,
+            onLaunchStatusSelected = { status ->
+                updateFilterState(filterState.order, status, filterState.launchYear)
             }
-        },
+        )
 
-        confirmButton = {
-            ConfirmButton(newSearch)
-        },
+        Spacer(modifier = Modifier.height(16.dp))
 
-        dismissButton = {
-            DismissButton(onDismiss)
+        OrderSwitch(order = filterState.order, onOrderChange = { order ->
+            updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+        })
+    }
+}
+
+@Composable
+private fun LandscapeDialogContent(
+    filterState: LaunchesFilterState,
+    updateFilterState: (Order, LaunchStatus, String) -> Unit,
+    modifier: Modifier
+) {
+    Row(modifier = modifier.fillMaxWidth()) {
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        ) {
+            Text(stringResource(R.string.filter_by_year))
+
+            YearInputField(year = filterState.launchYear, onYearChange = { year ->
+                updateFilterState(filterState.order, filterState.launchStatus, year)
+            })
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OrderSwitch(order = filterState.order, onOrderChange = { order ->
+                updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+            })
         }
-    )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 6.dp)
+        ) {
+            Text(text = stringResource(R.string.launch_status))
+            RadioGroup(
+                selectedLaunchStatus = filterState.launchStatus,
+                onLaunchStatusSelected = { status ->
+                    updateFilterState(filterState.order, status, filterState.launchYear)
+                }
+            )
+        }
+    }
 }
 
 @Composable

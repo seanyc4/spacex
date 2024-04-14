@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.implementation.presentation.components.FilterDialogLandscape
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogPortrait
 import com.seancoyle.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.launch.implementation.presentation.state.LaunchViewModel
@@ -48,21 +47,13 @@ internal fun LaunchRoute(
     )
 
     if (launchFilterState.isDialogFilterDisplayed) {
-        if (windowSize.heightSizeClass == WindowHeightSizeClass.Compact) {
-            FilterDialogLandscape(
-                filterState = launchFilterState,
-                updateFilterState = viewModel::setLaunchFilterState,
-                onDismiss = viewModel::setDialogFilterDisplayedState,
-                newSearch = viewModel::newSearch
-            )
-        } else {
-            FilterDialogPortrait(
-                filterState = launchFilterState,
-                updateFilterState = viewModel::setLaunchFilterState,
-                onDismiss = viewModel::setDialogFilterDisplayedState,
-                newSearch = viewModel::newSearch,
-            )
-        }
+        FilterDialogPortrait(
+            currentFilterState = launchFilterState,
+            updateFilterState = viewModel::setLaunchFilterState,
+            onDismiss = viewModel::setDialogFilterDisplayedState,
+            newSearch = viewModel::newSearch,
+            isLandScape = windowSize.heightSizeClass == WindowHeightSizeClass.Compact
+        )
     }
 
     SwipeToRefreshComposable(uiState, pullRefreshState)
