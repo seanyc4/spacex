@@ -1,6 +1,5 @@
-package com.seancoyle.core.data
+package com.seancoyle.core.common.crashlytics
 
-import com.seancoyle.core.common.Crashlytics
 import javax.inject.Inject
 import javax.inject.Singleton
 

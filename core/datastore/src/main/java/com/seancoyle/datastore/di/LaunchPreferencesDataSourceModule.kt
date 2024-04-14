@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class LaunchPreferencesDataSourceModule {
-
     @Singleton
     @Binds
     abstract fun bindsLaunchPreferencesDataSource(

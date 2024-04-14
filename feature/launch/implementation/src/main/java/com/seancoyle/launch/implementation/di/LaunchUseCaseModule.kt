@@ -1,14 +1,12 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.api.domain.usecase.GetLaunchPreferencesUseCase
-import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
-import com.seancoyle.launch.api.domain.usecase.SaveLaunchPreferencesUseCase
+import com.seancoyle.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetCompanyCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.GetLaunchPreferencesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchPreferencesUseCaseImpl
-import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.GetNumLaunchItemsCacheUseCaseImpl
@@ -16,9 +14,11 @@ import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCac
 import com.seancoyle.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponentImpl
 import com.seancoyle.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.MergedLaunchesCacheUseCaseImpl
+import com.seancoyle.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCaseImpl
 import com.seancoyle.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCase
 import com.seancoyle.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCaseImpl

@@ -5,10 +5,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.seancoyle.datastore.domain.AppPreferencesDataSource
+import com.seancoyle.core.domain.AppPreferencesDataSource
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-internal class AppPreferencesDataSourceImpl(
+internal class AppPreferencesDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : AppPreferencesDataSource {
 

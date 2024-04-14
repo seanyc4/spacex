@@ -2,8 +2,8 @@ package com.seancoyle.datastore.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
-import com.seancoyle.core.common.Crashlytics
-import com.seancoyle.core.common.printLogDebug
+import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.datastore.LaunchPreferences
 import com.seancoyle.core.datastore.LaunchStatusProto
 import com.seancoyle.core.datastore.OrderProto
@@ -40,11 +40,12 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
 
     override suspend fun getLaunchPreferences(): LaunchPrefs {
         val preferences = dataStore.data.first()
-        return LaunchPrefs(
-            order = Order.valueOf(preferences.order.name),
-            launchStatus = LaunchStatus.valueOf(preferences.launchStatus.name),
-            launchYear = preferences.launchDate
-        )
+        return preferences.toModel()
     }
 
+    private fun LaunchPreferences.toModel(): LaunchPrefs = LaunchPrefs(
+        order = Order.valueOf(this.order.name),
+        launchStatus = LaunchStatus.valueOf(this.launchStatus.name),
+        launchYear = this.launchDate
+    )
 }

@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation.network.company
 
-import com.seancoyle.core.common.Crashlytics
+import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataResult

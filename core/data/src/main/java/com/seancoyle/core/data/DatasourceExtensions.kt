@@ -2,7 +2,7 @@ package com.seancoyle.core.data
 
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
-import com.seancoyle.core.common.Crashlytics
+import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataResult
 import com.seancoyle.core.data.CacheConstants.CACHE_TIMEOUT

@@ -14,10 +14,8 @@ import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.launch.api.domain.model.LaunchStatus
-import com.seancoyle.launch.api.domain.usecase.GetLaunchPreferencesUseCase
-import com.seancoyle.launch.api.domain.usecase.LaunchesComponent
-import com.seancoyle.launch.api.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.launch.implementation.R
+import com.seancoyle.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
@@ -33,9 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val launchesComponent: LaunchesComponent,
-    private val saveLaunchPreferencesUseCase: SaveLaunchPreferencesUseCase,
-    private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
+    private val launchesComponent: LaunchesComponent
 ) : ViewModel() {
 
     var uiState: MutableStateFlow<LaunchesUiState> = MutableStateFlow(LaunchesUiState.Loading)
@@ -73,7 +69,7 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch {
-            val result = getLaunchPreferencesUseCase()
+            val result = launchesComponent.getLaunchPreferencesUseCase()
             setLaunchFilterState(
                 order = result.order,
                 launchStatus = result.launchStatus,
@@ -216,7 +212,6 @@ internal class LaunchViewModel @Inject constructor(
             )
         )
 
-
     fun getLaunchStatusIcon(status: LaunchStatus): Int = when (status) {
         LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
         LaunchStatus.FAILED -> R.drawable.ic_launch_fail
@@ -343,7 +338,7 @@ internal class LaunchViewModel @Inject constructor(
         launchYear: String
     ) {
         viewModelScope.launch {
-            saveLaunchPreferencesUseCase(
+            launchesComponent.saveLaunchPreferencesUseCase(
                 order = order,
                 launchStatus = launchStatus,
                 launchYear = launchYear

@@ -1,4 +1,4 @@
-package com.seancoyle.datastore.domain
+package com.seancoyle.core.domain
 
 interface AppPreferencesDataSource {
 
@@ -21,5 +21,4 @@ interface AppPreferencesDataSource {
     ): Int?
 
     suspend fun clearData()
-
 }

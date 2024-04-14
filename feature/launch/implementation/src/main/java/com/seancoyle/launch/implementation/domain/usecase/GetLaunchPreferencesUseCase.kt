@@ -1,4 +1,4 @@
-package com.seancoyle.launch.api.domain.usecase
+package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.launch.api.domain.model.LaunchPrefs
 

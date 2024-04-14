@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.seancoyle.core.common.printLogDebug
+import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE

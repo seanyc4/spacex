@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seancoyle.core.common.printLogDebug
+import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.launch.api.domain.model.Links
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogLandscape
 import com.seancoyle.launch.implementation.presentation.components.FilterDialogPortrait
