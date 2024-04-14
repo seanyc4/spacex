@@ -24,9 +24,9 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
 ) : LaunchCacheDataSource {
 
     override suspend fun filterLaunchList(
-        year: String,
+        launchYear: String,
         order: Order,
-        launchFilter: LaunchStatus,
+        launchStatus: LaunchStatus,
         page: Int
     ): DataResult<List<LaunchTypes>?, DataError> {
         return safeCacheCall(
@@ -34,8 +34,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.returnOrderedQuery(
-                year = year,
-                launchFilter = launchFilter,
+                launchYear = launchYear,
+                launchStatus = launchStatus,
                 page = page,
                 order = order
             )?.let {

@@ -15,16 +15,16 @@ internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
 ) : SortAndFilterLaunchesCacheUseCase {
 
     override operator fun invoke(
-        year: String,
+        launchYear: String,
         order: Order,
-        launchFilter: LaunchStatus,
+        launchStatus: LaunchStatus,
         page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> = flow {
         emit(
             cacheDataSource.filterLaunchList(
-                year = year,
+                launchYear = launchYear,
                 order = order,
-                launchFilter = launchFilter,
+                launchStatus = launchStatus,
                 page = page
             )
         )

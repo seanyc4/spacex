@@ -37,9 +37,9 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         combine(
             getCompanyInfo().distinctUntilChanged(),
             getLaunches(
-                year = year,
+                launchYear = year,
                 order = order,
-                launchFilter = launchFilter,
+                launchStatus = launchFilter,
                 page = page
             ).distinctUntilChanged()
         ) { companyInfoResult, launchesResult ->
@@ -80,15 +80,15 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     }
 
     private fun getLaunches(
-        year: String,
+        launchYear: String,
         order: Order,
-        launchFilter: LaunchStatus,
+        launchStatus: LaunchStatus,
         page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return getLaunchesFromCacheUseCase(
-            year = year,
+            launchYear = launchYear,
             order = order,
-            launchFilter = launchFilter,
+            launchStatus = launchStatus,
             page = page
         )
     }

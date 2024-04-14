@@ -57,9 +57,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = "3", launchDate = "2023-01-03", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_ALL,
+            launchStatus = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
@@ -93,9 +93,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = "3", launchDate = "2023-01-01", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_DESC,
-            launchFilter = LAUNCH_ALL,
+            launchStatus = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
@@ -131,9 +131,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2023-03-01", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = launchYear,
+            launchYear = launchYear,
             order = ORDER_ASC,
-            launchFilter = null,
+            launchStatus = null,
             page = 1
         ) } returns givenLaunches
 
@@ -168,9 +168,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2024-03-01", isLaunchSuccess = LAUNCH_SUCCESS),
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = givenYear,
+            launchYear = givenYear,
             order = ORDER_ASC,
-            launchFilter = LAUNCH_SUCCESS,
+            launchStatus = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
@@ -200,9 +200,9 @@ class FilterLaunchesCacheUseCaseImplTest {
 
         coEvery {
             cacheDataSource.filterLaunchList(
-                year = givenYear,
+                launchYear = givenYear,
                 order = ORDER_ASC,
-                launchFilter = LAUNCH_SUCCESS,
+                launchStatus = LAUNCH_SUCCESS,
                 page = 1
             )
         } returns emptyList()
@@ -233,9 +233,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2023-03-01", isLaunchSuccess = LAUNCH_SUCCESS)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_SUCCESS,
+            launchStatus = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
@@ -271,9 +271,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2023-03-01", isLaunchSuccess = LAUNCH_FAILED)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_FAILED,
+            launchStatus = LAUNCH_FAILED,
             page = 1
         ) } returns givenLaunches
 
@@ -309,9 +309,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2023-03-01", isLaunchSuccess = LAUNCH_UNKNOWN)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_ALL,
+            launchStatus = LAUNCH_ALL,
             page = 1
         ) } returns givenLaunches
 
@@ -346,9 +346,9 @@ class FilterLaunchesCacheUseCaseImplTest {
             createLaunch(id = 3, launchDate = "2023-03-01", isLaunchSuccess = LAUNCH_UNKNOWN)
         )
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_UNKNOWN,
+            launchStatus = LAUNCH_UNKNOWN,
             page = 1
         ) } returns givenLaunches
 
@@ -379,9 +379,9 @@ class FilterLaunchesCacheUseCaseImplTest {
         var expectedResult = emptyList<Launch>()
         val givenLaunches = emptyList<Launch>()
         coEvery { cacheDataSource.filterLaunchList(
-            year = "",
+            launchYear = "",
             order = ORDER_ASC,
-            launchFilter = LAUNCH_SUCCESS,
+            launchStatus = LAUNCH_SUCCESS,
             page = 1
         ) } returns givenLaunches
 
@@ -410,9 +410,9 @@ class FilterLaunchesCacheUseCaseImplTest {
 
         var expectedResult = emptyList<Launch>()
         coEvery { cacheDataSource.filterLaunchList(
-            year = com.seancoyle.launch.implementation.cache.FORCE_SEARCH_LAUNCH_EXCEPTION,
+            launchYear = com.seancoyle.launch.implementation.cache.FORCE_SEARCH_LAUNCH_EXCEPTION,
             order = ORDER_DESC,
-            launchFilter = null,
+            launchStatus = null,
             page = 1
         ) } throws RuntimeException("Cache error")
 

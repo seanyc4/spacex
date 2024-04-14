@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface SortAndFilterLaunchesCacheUseCase {
     operator fun invoke(
-        year: String,
+        launchYear: String,
         order: Order,
-        launchFilter: LaunchStatus,
+        launchStatus: LaunchStatus,
         page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>>
 }

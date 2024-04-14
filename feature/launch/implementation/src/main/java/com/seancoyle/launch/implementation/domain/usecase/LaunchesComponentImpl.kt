@@ -32,9 +32,9 @@ internal class LaunchesComponentImpl @Inject constructor(
         page: Int
     ): Flow<DataResult<List<LaunchTypes>?, DataError>> {
         return sortAndFilterLaunchesCacheUseCase.invoke(
-            year = year,
+            launchYear = year,
             order = order,
-            launchFilter = launchFilter,
+            launchStatus = launchFilter,
             page = page
         )
     }

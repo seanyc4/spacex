@@ -9,9 +9,9 @@ import com.seancoyle.launch.api.domain.model.LaunchTypes
 internal interface LaunchCacheDataSource {
 
     suspend fun filterLaunchList(
-        year: String,
+        launchYear: String,
         order: Order,
-        launchFilter: LaunchStatus,
+        launchStatus: LaunchStatus,
         page: Int
     ): DataResult<List<LaunchTypes>?, DataError>
 

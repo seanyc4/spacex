@@ -167,22 +167,22 @@ interface LaunchDao {
 }
 
 suspend fun LaunchDao.returnOrderedQuery(
-    year: String,
+    launchYear: String,
     order: Order,
-    launchFilter: LaunchStatus,
+    launchStatus: LaunchStatus,
     page: Int
 ): List<LaunchEntity>? {
-    val hasYear = year.isNotEmpty()
+    val hasYear = launchYear.isNotEmpty()
     val isOrderDesc = order == Order.DESC
     val offset = page.minus(1).times(PAGINATION_PAGE_SIZE)
-    val noFilter = launchFilter == LaunchStatus.ALL
+    val noFilter = launchStatus == LaunchStatus.ALL
 
     return when {
 
         hasYear && isOrderDesc && noFilter -> {
             printLogDebug("DAO", "filterByYearDESC")
             filterByYearDESC(
-                year = year,
+                year = launchYear,
                 offset = offset
             )
         }
@@ -190,7 +190,7 @@ suspend fun LaunchDao.returnOrderedQuery(
         hasYear && !isOrderDesc && noFilter -> {
             printLogDebug("DAO", "filterByYearASC")
             filterByYearASC(
-                year = year,
+                year = launchYear,
                 offset = offset
             )
         }
@@ -212,7 +212,7 @@ suspend fun LaunchDao.returnOrderedQuery(
         isOrderDesc && !hasYear -> {
             printLogDebug("DAO", "filterByLaunchStatusDESC")
             filterByLaunchStatusDESC(
-                launchFilter = launchFilter,
+                launchFilter = launchStatus,
                 offset = offset
             )
         }
@@ -220,7 +220,7 @@ suspend fun LaunchDao.returnOrderedQuery(
         !isOrderDesc && !hasYear -> {
             printLogDebug("DAO", "filterByLaunchStatusASC")
             filterByLaunchStatusASC(
-                launchFilter = launchFilter,
+                launchFilter = launchStatus,
                 offset = offset
             )
         }
@@ -228,8 +228,8 @@ suspend fun LaunchDao.returnOrderedQuery(
         hasYear && !isOrderDesc -> {
             printLogDebug("DAO", "filterByLaunchStatusAndYearASC")
             filterByLaunchStatusAndYearASC(
-                year = year,
-                launchFilter = launchFilter,
+                year = launchYear,
+                launchFilter = launchStatus,
                 offset = offset
             )
         }
@@ -237,8 +237,8 @@ suspend fun LaunchDao.returnOrderedQuery(
         hasYear && isOrderDesc -> {
             printLogDebug("DAO", "filterByLaunchStatusAndYearDESC")
             filterByLaunchStatusAndYearDESC(
-                year = year,
-                launchFilter = launchFilter,
+                year = launchYear,
+                launchFilter = launchStatus,
                 offset = offset
             )
         }
