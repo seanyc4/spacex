@@ -1,6 +1,6 @@
 package com.seancoyle.launch.implementation
 
-import com.seancoyle.launch.api.domain.model.Company
+import com.seancoyle.feature.launch.api.domain.model.Company
 import javax.inject.Inject
 
 internal class CompanyFactory @Inject constructor() {

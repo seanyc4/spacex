@@ -6,8 +6,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.database.util.LocalDateTimeConverter
-import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import java.time.LocalDateTime
 
 @Keep

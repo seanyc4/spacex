@@ -1,7 +1,7 @@
 package com.seancoyle.datastore.di
 
 import com.seancoyle.datastore.data.LaunchPreferencesDataSourceImpl
-import com.seancoyle.launch.api.domain.cache.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.api.domain.cache.LaunchPreferencesDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

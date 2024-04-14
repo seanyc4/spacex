@@ -2,12 +2,12 @@ package com.seancoyle.feature.launch.test
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
-import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchStatus
-import com.seancoyle.launch.api.domain.model.LaunchTypes
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
-import com.seancoyle.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.api.domain.model.Rocket
+import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDateTime

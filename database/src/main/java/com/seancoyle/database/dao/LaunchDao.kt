@@ -7,8 +7,8 @@ import androidx.room.Query
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 
 @Dao
 interface LaunchDao {

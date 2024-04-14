@@ -2,14 +2,14 @@ package com.seancoyle.launch.implementation.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.dataformatter.DateFormatter
-import com.seancoyle.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.launch.api.domain.model.LaunchStatus
-import com.seancoyle.launch.api.domain.model.LaunchTypes
-import com.seancoyle.launch.api.domain.model.Links
-import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.api.domain.model.Rocket
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.feature.launch.implementation.domain.network.LaunchNetworkDataSource
 import com.seancoyle.launch.implementation.TestConstants
-import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

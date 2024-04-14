@@ -5,10 +5,10 @@ import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeApiCall
-import com.seancoyle.launch.api.domain.model.LaunchTypes
-import com.seancoyle.launch.implementation.data.network.LaunchNetworkMapper
-import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkMapper
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.feature.launch.implementation.domain.network.LaunchNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

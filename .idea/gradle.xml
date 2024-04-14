@@ -35,6 +35,7 @@
             <option value="$PROJECT_DIR$/feature/launch" />
             <option value="$PROJECT_DIR$/feature/launch/api" />
             <option value="$PROJECT_DIR$/feature/launch/implementation" />
+            <option value="$PROJECT_DIR$/feature/launch/test" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

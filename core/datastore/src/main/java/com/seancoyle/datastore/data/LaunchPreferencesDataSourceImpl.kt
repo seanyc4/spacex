@@ -9,12 +9,14 @@ import com.seancoyle.core.datastore.LaunchStatusProto
 import com.seancoyle.core.datastore.OrderProto
 import com.seancoyle.core.datastore.copy
 import com.seancoyle.core.domain.Order
-import com.seancoyle.launch.api.domain.cache.LaunchPreferencesDataSource
-import com.seancoyle.launch.api.domain.model.LaunchPrefs
-import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.cache.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class LaunchPreferencesDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<LaunchPreferences>,
     private val crashlytics: Crashlytics

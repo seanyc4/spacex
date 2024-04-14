@@ -13,6 +13,11 @@ plugins {
 
 android {
     namespace = "com.seancoyle.launch.implementation"
+
+    packaging {
+        resources.pickFirsts.add("META-INF/LICENSE.md")
+        resources.pickFirsts.add("META-INF/LICENSE-notice.md")
+    }
 }
 
 dependencies {
@@ -31,6 +36,7 @@ dependencies {
     implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.gson)
 
+    androidTestImplementation(projects.core.datastore)
     androidTestImplementation(libs.bundles.androidTestBundle)
     testImplementation(libs.bundles.unitTestBundle)
 }

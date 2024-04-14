@@ -5,9 +5,9 @@ import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeApiCall
-import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.implementation.data.network.CompanyInfoNetworkMapper
-import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
+import com.seancoyle.feature.launch.api.domain.model.Company
+import com.seancoyle.feature.launch.implementation.data.network.CompanyInfoNetworkMapper
+import com.seancoyle.feature.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

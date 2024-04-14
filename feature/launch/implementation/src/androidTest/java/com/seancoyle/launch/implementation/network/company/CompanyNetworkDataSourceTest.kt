@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.feature.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.CompanyFactory
 import com.seancoyle.launch.implementation.TestConstants.ERROR_404_RESPONSE
-import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,6 +1,7 @@
 package com.seancoyle.launch.implementation.di
 
-import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
+import com.seancoyle.feature.launch.implementation.di.CompanyInfoNetworkDataSourceModule
+import com.seancoyle.feature.launch.implementation.domain.network.CompanyInfoNetworkDataSource
 import com.seancoyle.launch.implementation.network.company.FakeCompanyInfoNetworkDataSourceImpl
 import dagger.Binds
 import dagger.Module
