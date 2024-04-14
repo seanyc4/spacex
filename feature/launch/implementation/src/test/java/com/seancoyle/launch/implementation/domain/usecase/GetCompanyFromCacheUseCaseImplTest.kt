@@ -1,60 +1,68 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core_testing.MainCoroutineRule
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.api.domain.model.Company
 import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
-import com.seancoyle.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class GetCompanyFromCacheUseCaseImplTest {
-
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
+class GetCompanyCacheUseCaseImplTest {
 
     @MockK
     private lateinit var cacheDataSource: CompanyCacheDataSource
 
-    private lateinit var underTest: GetCompanyCacheUseCaseImpl
+    private lateinit var underTest: GetCompanyCacheUseCase
 
-    @BeforeEach
+    @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetCompanyCacheUseCaseImpl(
-            cacheDataSource = cacheDataSource
-        )
+        underTest = GetCompanyCacheUseCaseImpl(cacheDataSource)
     }
 
     @Test
-    fun getCompanyInfoFromCache_success_confirmCorrect() = runBlocking {
+    fun `invoke should return company from cache on success`() = runTest {
+        coEvery { cacheDataSource.getCompany() } returns Result.Success(COMPANY_INFO)
 
-        var result: Company? = null
-        var stateMessage: String? = null
-        coEvery { cacheDataSource.getCompany() } returns COMPANY_INFO
+        val results = mutableListOf<Result<Company?, DataError>>()
+        underTest().collect { results.add(it) }
 
-        underTest(
-            event = LaunchEvents.GetCompanyFromCacheEvent
-        ).collect { value ->
-            result = value?.data?.company
-            stateMessage = value?.stateMessage?.response?.message
-        }
-
-        val expectedMessage = LaunchEvents.GetCompanyFromCacheEvent.eventName() + EVENT_CACHE_SUCCESS
-        assertEquals(expectedMessage, stateMessage)
-        assertNotNull(result)
+        assertTrue(results.first() is Result.Success)
+        assertEquals(COMPANY_INFO, (results.first() as Result.Success).data)
     }
 
-    companion object {
-        private val COMPANY_INFO = Company(
+    @Test
+    fun `invoke should return null when cache is empty`() = runTest {
+        coEvery { cacheDataSource.getCompany() } returns Result.Success(null)
+
+        val results = mutableListOf<Result<Company?, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Success)
+        assertNull((results.first() as Result.Success).data)
+    }
+
+    @Test
+    fun `invoke should return error when cache access fails`() = runTest {
+        val error = DataError.CACHE_ERROR
+        coEvery { cacheDataSource.getCompany() } returns Result.Error(error)
+
+        val results = mutableListOf<Result<Company?, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Error)
+        assertEquals(error, (results.first() as Result.Error).error)
+    }
+
+    private companion object {
+        val COMPANY_INFO = Company(
             id = "1",
             employees = "employees",
             founded = 2000,

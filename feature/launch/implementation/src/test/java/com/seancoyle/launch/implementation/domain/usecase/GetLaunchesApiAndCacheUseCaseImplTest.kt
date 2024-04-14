@@ -1,140 +1,106 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core_testing.MainCoroutineRule
-import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
-import com.seancoyle.launch.implementation.domain.model.Launch
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.Result
+import com.seancoyle.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.launch.api.domain.model.LaunchStatus
+import com.seancoyle.launch.api.domain.model.LaunchTypes
+import com.seancoyle.launch.api.domain.model.Links
+import com.seancoyle.launch.api.domain.model.Rocket
+import com.seancoyle.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.launch.implementation.domain.model.Links
-import com.seancoyle.launch.implementation.domain.model.Rocket
 import com.seancoyle.launch.implementation.domain.network.LaunchNetworkDataSource
-import com.seancoyle.launch.implementation.network.MockWebServerResponseLaunchList.launchList
-import com.seancoyle.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.Rule
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.net.HttpURLConnection
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
 import java.time.LocalDateTime
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class GetLaunchesApiAndCacheUseCaseImplTest {
 
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
+    @MockK
+    private lateinit var insertLaunchesToCacheUseCase: InsertLaunchesToCacheUseCase
 
     @MockK
-    private lateinit var cacheDataSource: LaunchCacheDataSource
-
-    @MockK
-    private lateinit var networkDataSource: LaunchNetworkDataSource
+    private lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @MockK
     private lateinit var launchOptions: LaunchOptions
 
-    private lateinit var mockWebServer: MockWebServer
+    private lateinit var underTest: GetLaunchesApiAndCacheUseCase
 
-    private lateinit var underTest: GetLaunchesApiAndCacheUseCaseImpl
-
-    @BeforeEach
+    @Before
     fun setup() {
         MockKAnnotations.init(this)
-        mockWebServer = MockWebServer()
-        underTest =
-            GetLaunchesApiAndCacheUseCaseImpl(
-                ioDispatcher = mainCoroutineRule.testDispatcher,
-                cacheDataSource = cacheDataSource,
-                launchNetworkDataSource = networkDataSource,
-                launchOptions = launchOptions
-            )
-    }
-
-    @AfterEach
-    fun cleanup() {
-        mockWebServer.shutdown()
-    }
-
-    @Test
-    fun whenGetLaunchItemsFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
-
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
-        coEvery { networkDataSource.getLaunches(any()) } returns LAUNCH_LIST
-        coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
-
-        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
-
-        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            dataResult = value
-        }
-
-        assertEquals(
-            dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+        underTest = GetLaunchesApiAndCacheUseCaseImpl(
+            insertLaunchesToCacheUseCase = insertLaunchesToCacheUseCase,
+            launchNetworkDataSource = launchNetworkDataSource,
+            launchOptions = launchOptions
         )
     }
 
     @Test
-    fun whenGetLaunchItemsFromNetwork_thenItemsCanBeRetrievedFromCache(): Unit = runBlocking {
+    fun `invoke should emit success result when network and cache operations are successful`() = runTest {
+        coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns Result.Success(LAUNCH_LIST)
+        coEvery { insertLaunchesToCacheUseCase(LAUNCH_LIST) } returns Result.Success(INSERT_SUCCESS)
 
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(launchList))
-        coEvery { networkDataSource.getLaunches(any()) } returns LAUNCH_LIST
-        coEvery { cacheDataSource.insertList(LAUNCH_LIST) } returns longArrayOf(1)
-        coEvery { cacheDataSource.getAll() } returns LAUNCH_LIST
+        val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
+        underTest().collect { results.add(it) }
 
-        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent)
-        val results = cacheDataSource.getAll()
-
-        assertTrue(results?.isNotEmpty() == true)
-        assertTrue(results?.get(index = 0) is Launch)
+        assertTrue(results.first() is Result.Success)
+        assertEquals(LAUNCH_LIST, (results.first() as Result.Success).data)
     }
 
     @Test
-    fun whenGetLaunchItemsFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
+    fun `invoke should emit error when network fetch fails`() = runTest {
+        val networkError = DataError.NETWORK_UNKNOWN_ERROR
+        coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns Result.Error(networkError)
 
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
+        val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
+        underTest().collect { results.add(it) }
 
-        underTest(event = LaunchEvents.GetLaunchesApiAndCacheEvent).collect { value ->
-            dataResult = value
-        }
-
-        assertEquals(
-            dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetLaunchesApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
-        )
+        assertTrue(results.first() is Result.Error)
+        assertEquals(networkError, (results.first() as Result.Error).error)
     }
 
-    companion object {
-        private val LAUNCH_LIST = listOf(
-            Launch(
-                type = ViewType.TYPE_LIST,
-                launchDateStatus = 0,
-                isLaunchSuccess = 1,
-                launchDate = "01/01/2023",
-                id = 1,
-                launchDays = "5 days",
-                launchStatus = 0,
-                launchYear = "2023",
+    @Test
+    fun `invoke should emit error when cache operation fails`() = runTest {
+        val cacheError = DataError.CACHE_ERROR
+        coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns Result.Success(LAUNCH_LIST)
+        coEvery { insertLaunchesToCacheUseCase(LAUNCH_LIST) } returns Result.Error(cacheError)
+
+        val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Error)
+        assertEquals(cacheError, (results.first() as Result.Error).error)
+    }
+
+
+    private companion object {
+        val LAUNCH_LIST = listOf(
+            LaunchTypes.Launch(
+                id = "5",
+                launchDate = "2024-01-01",
                 launchDateLocalDateTime = LocalDateTime.now(),
+                launchYear = "2024",
+                launchStatus = LaunchStatus.SUCCESS,
                 links = Links(
-                    articleLink = "articleLink",
-                    missionImage = "missionLink",
-                    webcastLink = "webCastLink",
-                    wikiLink = "wikiLink"
+                    missionImage = "https://example.com/mission3.jpg",
+                    articleLink = "https://example.com/article3",
+                    webcastLink = "https://example.com/webcast3",
+                    wikiLink = "https://example.com/wiki3"
                 ),
-                missionName = "missionName",
-                rocket = Rocket(
-                    rocketNameAndType = "rocketNameAndType"
-                )
+                missionName = "Starlink Mission",
+                rocket = Rocket("Falcon 9 Block 5"),
+                launchDateStatus = LaunchDateStatus.FUTURE,
+                launchDays = "5 days"
             )
         )
+        val INSERT_SUCCESS = longArrayOf(1L)
     }
 }

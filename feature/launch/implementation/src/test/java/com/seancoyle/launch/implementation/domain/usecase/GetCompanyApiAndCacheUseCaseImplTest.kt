@@ -1,112 +1,77 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core_testing.MainCoroutineRule
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.api.domain.model.Company
-import com.seancoyle.launch.api.presentation.LaunchState
-import com.seancoyle.launch.implementation.domain.cache.CompanyCacheDataSource
 import com.seancoyle.launch.implementation.domain.network.CompanyInfoNetworkDataSource
-import com.seancoyle.launch.implementation.network.MockWebServerResponseCompanyInfo.companyInfo
-import com.seancoyle.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.Rule
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.net.HttpURLConnection
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
+
 class GetCompanyApiAndCacheUseCaseImplTest {
 
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
-
     @MockK
-    private lateinit var cacheDataSource: CompanyCacheDataSource
+    private lateinit var insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase
 
     @MockK
     private lateinit var networkDataSource: CompanyInfoNetworkDataSource
 
-    private lateinit var mockWebServer: MockWebServer
-
     private lateinit var underTest: GetCompanyApiAndCacheUseCase
 
-    @BeforeEach
+    @Before
     fun setup() {
         MockKAnnotations.init(this)
-        mockWebServer = MockWebServer()
-        underTest =
-            GetCompanyApiAndCacheUseCaseImpl(
-                ioDispatcher = mainCoroutineRule.testDispatcher,
-                cacheDataSource = cacheDataSource,
-                networkDataSource = networkDataSource
-            )
-    }
-
-    @AfterEach
-    fun cleanup() {
-        mockWebServer.shutdown()
-    }
-
-    @Test
-    fun whenGetCompanyInfoFromNetwork_thenItemsAreInsertedIntoCache(): Unit = runBlocking {
-
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
-        coEvery { networkDataSource.getCompany() } returns COMPANY_INFO
-        coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
-        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
-
-        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
-            dataResult = value
-        }
-
-        assertEquals(
-            dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyApiAndCacheEvent.eventName() + EVENT_CACHE_INSERT_SUCCESS
+        underTest = GetCompanyApiAndCacheUseCaseImpl(
+            insertCompanyInfoToCacheUseCase = insertCompanyInfoToCacheUseCase,
+            networkDataSource = networkDataSource
         )
     }
 
     @Test
-    fun whenGetCompanyInfoFromNetwork_thenItemsCanBeRetrievedFromCache(): Unit = runBlocking {
+    fun `invoke should return company from cache on network success and cache success`() = runTest {
+        coEvery { networkDataSource.getCompany() } returns Result.Success(COMPANY_INFO)
+        coEvery { insertCompanyInfoToCacheUseCase(COMPANY_INFO) } returns Result.Success(COMPANY_INSERT_SUCCESS)
 
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_OK).setBody(companyInfo))
-        coEvery { cacheDataSource.insert(COMPANY_INFO) } returns 1
-        coEvery { cacheDataSource.getCompany() } returns COMPANY_INFO
+        val results = mutableListOf<Result<Company, DataError>>()
+        underTest().collect { results.add(it) }
 
-
-        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent)
-
-        val resultFromCache = cacheDataSource.getCompany()
-
-        assertTrue(resultFromCache != null)
-        assertTrue(resultFromCache is Company)
+        assertTrue(results.first() is Result.Success)
+        assertEquals(COMPANY_INFO, (results.first() as Result.Success).data)
     }
 
     @Test
-    fun whenGetCompanyInfoFromNetwork_andNetworkErrorOccurs_thenErrorEventIsEmitted(): Unit = runBlocking {
+    fun `invoke should return error when network fails`() = runTest {
+        val error = DataError.NETWORK_UNKNOWN_ERROR
+        coEvery { networkDataSource.getCompany() } returns Result.Error(error)
 
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST).setBody("{}"))
-        var dataResult: com.seancoyle.core.common.result.DataResult<LaunchState>? = null
+        val results = mutableListOf<Result<Company, DataError>>()
+        underTest().collect { results.add(it) }
 
-        underTest(event = LaunchEvents.GetCompanyApiAndCacheEvent).collect { value ->
-            dataResult = value
-        }
-
-        assertEquals(
-            dataResult?.stateMessage?.response?.message,
-            LaunchEvents.GetCompanyApiAndCacheEvent.eventName() + EVENT_NETWORK_ERROR
-        )
+        assertTrue(results.first() is Result.Error)
+        assertEquals(error, (results.first() as Result.Error).error)
     }
 
-    companion object {
-        private val COMPANY_INFO = Company(
+    @Test
+    fun `invoke should return cache error on network success and cache failure`() = runTest {
+        val cacheError = DataError.CACHE_ERROR
+        coEvery { networkDataSource.getCompany() } returns Result.Success(COMPANY_INFO)
+        coEvery { insertCompanyInfoToCacheUseCase(COMPANY_INFO) } returns Result.Error(cacheError)
+
+        val results = mutableListOf<Result<Company, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Error)
+        assertEquals(cacheError, (results.first() as Result.Error).error)
+    }
+
+    private companion object {
+        val COMPANY_INFO = Company(
             id = "1",
             employees = "employees",
             founded = 2000,
@@ -115,5 +80,7 @@ class GetCompanyApiAndCacheUseCaseImplTest {
             name = "name",
             valuation = "valuation"
         )
+
+        const val COMPANY_INSERT_SUCCESS = 1L
     }
 }

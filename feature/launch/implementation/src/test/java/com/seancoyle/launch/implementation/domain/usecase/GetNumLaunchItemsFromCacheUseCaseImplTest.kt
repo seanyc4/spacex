@@ -1,56 +1,64 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
-import com.seancoyle.core_testing.MainCoroutineRule
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.launch.implementation.domain.cache.LaunchCacheDataSource
-import com.seancoyle.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-@OptIn(ExperimentalCoroutinesApi::class)
-class GetNumLaunchItemsFromCacheUseCaseImplTest {
-
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+class GetNumLaunchItemsCacheUseCaseImplTest {
 
     @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
     private lateinit var underTest: GetNumLaunchItemsCacheUseCase
 
-    @BeforeEach
+    @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetNumLaunchItemsCacheUseCaseImpl(
-            ioDispatcher = mainCoroutineRule.testDispatcher,
-            cacheDataSource = cacheDataSource
-        )
+        underTest = GetNumLaunchItemsCacheUseCaseImpl(cacheDataSource)
     }
 
     @Test
-    fun getNumLaunchItems_success_confirmCorrect() = runBlocking {
+    fun `invoke should emit the correct number of entries when data is available`() = runTest {
+        val totalEntries = 42
+        coEvery { cacheDataSource.getTotalEntries() } returns Result.Success(totalEntries)
 
-        var numItems = 0
-        var stateMessage: String? = null
-        coEvery { cacheDataSource.getTotalEntries() } returns TOTAL_ENTRIES
+        val results = mutableListOf<Result<Int?, DataError>>()
+        underTest().collect { results.add(it) }
 
-        underTest(
-            event = LaunchEvents.GetNumLaunchesInCacheEvent
-        ).collect { value ->
-            numItems = value?.data?.numLaunchesInCache ?: 0
-            stateMessage = value?.stateMessage?.response?.message
-        }
-
-        val expectedMessage = LaunchEvents.GetNumLaunchesInCacheEvent.eventName() + EVENT_CACHE_SUCCESS
-        assertEquals(expectedMessage, stateMessage)
-        assertEquals(TOTAL_ENTRIES, numItems)
+        assertTrue(results.first() is Result.Success)
+        assertEquals(totalEntries, (results.first() as Result.Success).data)
     }
+
+   /* @Test
+    fun `invoke should emit null when no entries are found`() = runTest {
+        coEvery { cacheDataSource.getTotalEntries() } returns Result.Success(null)
+
+        val results = mutableListOf<Result<Int?, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Success)
+        assertNull((results.first() as Result.Success).data)
+    }*/
+
+    @Test
+    fun `invoke should emit an error when there is a problem accessing cache`() = runTest {
+        val error = DataError.CACHE_ERROR
+        coEvery { cacheDataSource.getTotalEntries() } returns Result.Error(error)
+
+        val results = mutableListOf<Result<Int?, DataError>>()
+        underTest().collect { results.add(it) }
+
+        assertTrue(results.first() is Result.Error)
+        assertEquals(error, (results.first() as Result.Error).error)
+    }
+
 
     companion object {
         private const val TOTAL_ENTRIES = 10
