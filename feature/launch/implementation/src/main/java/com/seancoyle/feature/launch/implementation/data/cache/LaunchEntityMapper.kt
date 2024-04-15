@@ -29,15 +29,15 @@ internal class LaunchEntityMapper @Inject constructor() {
                 links = Links(
                     missionImage = links.missionImage,
                     articleLink = links.articleLink,
-                    webcastLink = links.videoLink,
-                    wikiLink = links.wikipedia
+                    webcastLink = links.webcastLink,
+                    wikiLink = links.wikiLink
                 ),
                 missionName = missionName,
                 rocket = Rocket(
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
                 launchDateStatus = launchDateStatus,
-                launchDays = launchDaysDifference
+                launchDays = launchDays
             )
         }
     }
@@ -53,15 +53,15 @@ internal class LaunchEntityMapper @Inject constructor() {
                 links = LinksEntity(
                     missionImage = links.missionImage,
                     articleLink = links.articleLink,
-                    videoLink = links.webcastLink,
-                    wikipedia = links.wikiLink,
+                    webcastLink = links.webcastLink,
+                    wikiLink = links.wikiLink,
                 ),
                 missionName = missionName,
                 rocket = RocketEntity(
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
                 launchDateStatus = launchDateStatus,
-                launchDaysDifference = launchDays,
+                launchDays = launchDays,
             )
         }
     }

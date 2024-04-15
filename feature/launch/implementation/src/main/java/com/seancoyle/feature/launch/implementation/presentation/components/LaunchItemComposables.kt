@@ -233,11 +233,11 @@ internal fun LaunchGridCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LaunchCardImage(
-                imageUrl = launchItem.links.missionImage,
+                imageUrl = launchItem.items.links.missionImage,
                 size = 100.dp
             )
             LaunchCardDynamicText(
-                title = launchItem.rocket.rocketNameAndType,
+                title = launchItem.items.rocket.rocketNameAndType,
                 modifier = modifier
                     .padding(top = dimensionResource(id = R.dimen.small_view_margins_8dp))
             )

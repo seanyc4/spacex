@@ -23,7 +23,7 @@ data class CompanyEntity(
     val founder: String,
 
     @ColumnInfo(name="launch_sites")
-    val launch_sites: Int,
+    val launchSites: Int,
 
     @ColumnInfo(name="name")
     val name: String,

@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.network
 
-import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchDto
+import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchesDto
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -13,5 +13,5 @@ internal interface LaunchApi {
     @POST(URL)
     suspend fun getLaunches(
         @Body options: LaunchOptions
-    ): LaunchDto
+    ): LaunchesDto
 }

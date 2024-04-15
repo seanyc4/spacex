@@ -20,12 +20,12 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
 ) : MergedLaunchesCacheUseCase {
 
     companion object {
-        private const val MAX_GRID_SIZE = 6
-        private const val MAX_CAROUSEL_SIZE = 20
-        private const val HEADER = "HEADER"
-        private const val CAROUSEL = "CAROUSEL"
-        private const val GRID = "GRID"
-        private const val LIST = "LIST"
+        const val MAX_GRID_SIZE = 6
+        const val MAX_CAROUSEL_SIZE = 20
+        const val HEADER = "HEADER"
+        const val CAROUSEL = "CAROUSEL"
+        const val GRID = "GRID"
+        const val LIST = "LIST"
     }
 
     override operator fun invoke(
@@ -115,8 +115,10 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         return launches.shuffled().take(MAX_GRID_SIZE).map { launchModel ->
             LaunchTypes.Grid(
                 id = UUID.randomUUID().toString(),
-                links = launchModel.links,
-                rocket = launchModel.rocket
+                RocketWithMission(
+                    links = launchModel.links,
+                    rocket = launchModel.rocket
+                )
             )
         }
     }

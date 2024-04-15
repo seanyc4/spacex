@@ -18,8 +18,7 @@ sealed interface LaunchTypes {
 
     data class Grid(
         val id: String,
-        val links: Links,
-        val rocket: Rocket
+        val items: RocketWithMission
     ) : LaunchTypes
 
     data class Carousel(

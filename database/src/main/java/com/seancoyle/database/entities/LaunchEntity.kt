@@ -42,7 +42,7 @@ data class LaunchEntity(
     val launchDateStatus: LaunchDateStatus,
 
     @ColumnInfo(name="launchDaysDifference")
-    val launchDaysDifference: String
+    val launchDays: String
 )
 
 @Keep
@@ -54,10 +54,10 @@ data class LinksEntity(
     val articleLink: String?,
 
     @ColumnInfo(name="videoLink")
-    val videoLink: String?,
+    val webcastLink: String?,
 
     @ColumnInfo(name="wikipedia")
-    val wikipedia: String?,
+    val wikiLink: String?,
 )
 
 @Keep

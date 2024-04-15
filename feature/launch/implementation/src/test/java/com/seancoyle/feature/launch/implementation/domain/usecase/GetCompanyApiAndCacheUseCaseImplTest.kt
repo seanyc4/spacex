@@ -3,7 +3,9 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.domain.network.CompanyInfoNetworkDataSource
+import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.util.TestData.COMPANY_INSERT_SUCCESS
+import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -13,14 +15,13 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 class GetCompanyApiAndCacheUseCaseImplTest {
 
     @MockK
-    private lateinit var insertCompanyInfoToCacheUseCase: InsertCompanyInfoToCacheUseCase
+    private lateinit var insertCompanyToCacheUseCase: InsertCompanyToCacheUseCase
 
     @MockK
-    private lateinit var networkDataSource: CompanyInfoNetworkDataSource
+    private lateinit var networkDataSource: CompanyNetworkDataSource
 
     private lateinit var underTest: GetCompanyApiAndCacheUseCase
 
@@ -28,23 +29,21 @@ class GetCompanyApiAndCacheUseCaseImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = GetCompanyApiAndCacheUseCaseImpl(
-            insertCompanyInfoToCacheUseCase = insertCompanyInfoToCacheUseCase,
+            insertCompanyToCacheUseCase = insertCompanyToCacheUseCase,
             networkDataSource = networkDataSource
         )
     }
 
     @Test
     fun `invoke should return company from cache on network success and cache success`() = runTest {
-        coEvery { networkDataSource.getCompany() } returns Result.Success(COMPANY_INFO)
-        coEvery { insertCompanyInfoToCacheUseCase(COMPANY_INFO) } returns Result.Success(
-            COMPANY_INSERT_SUCCESS
-        )
+        coEvery { networkDataSource.getCompany() } returns Result.Success(companyModel)
+        coEvery { insertCompanyToCacheUseCase(companyModel) } returns Result.Success(COMPANY_INSERT_SUCCESS)
 
         val results = mutableListOf<Result<Company, DataError>>()
         underTest().collect { results.add(it) }
 
         assertTrue(results.first() is Result.Success)
-        assertEquals(COMPANY_INFO, (results.first() as Result.Success).data)
+        assertEquals(companyModel, (results.first() as Result.Success).data)
     }
 
     @Test
@@ -62,27 +61,13 @@ class GetCompanyApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should return cache error on network success and cache failure`() = runTest {
         val cacheError = DataError.CACHE_ERROR
-        coEvery { networkDataSource.getCompany() } returns Result.Success(COMPANY_INFO)
-        coEvery { insertCompanyInfoToCacheUseCase(COMPANY_INFO) } returns Result.Error(cacheError)
+        coEvery { networkDataSource.getCompany() } returns Result.Success(companyModel)
+        coEvery { insertCompanyToCacheUseCase(companyModel) } returns Result.Error(cacheError)
 
         val results = mutableListOf<Result<Company, DataError>>()
         underTest().collect { results.add(it) }
 
         assertTrue(results.first() is Result.Error)
         assertEquals(cacheError, (results.first() as Result.Error).error)
-    }
-
-    private companion object {
-        val COMPANY_INFO = Company(
-            id = "1",
-            employees = "employees",
-            founded = 2000,
-            founder = "founder",
-            launchSites = 4,
-            name = "name",
-            valuation = "valuation"
-        )
-
-        const val COMPANY_INSERT_SUCCESS = 1L
     }
 }

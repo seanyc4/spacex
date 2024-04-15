@@ -8,10 +8,10 @@ import com.seancoyle.feature.launch.implementation.domain.usecase.GetCompanyCach
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchItemsCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchItemsCacheUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyInfoToCacheUseCaseImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchesCacheUseCaseImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyToCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyToCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
@@ -38,8 +38,8 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsGetNumLaunchItemsCacheUseCase(
-        impl: GetNumLaunchItemsCacheUseCaseImpl
-    ): GetNumLaunchItemsCacheUseCase
+        impl: GetNumLaunchesCacheUseCaseImpl
+    ): GetNumLaunchesCacheUseCase
 
     @Binds
     abstract fun bindsSortAndFilterLaunchesCacheUseCase(
@@ -73,8 +73,8 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsInsertCompanyInfoToCacheUseCase(
-        impl: InsertCompanyInfoToCacheUseCaseImpl
-    ): InsertCompanyInfoToCacheUseCase
+        impl: InsertCompanyToCacheUseCaseImpl
+    ): InsertCompanyToCacheUseCase
 
     @Binds
     abstract fun bindsSaveLaunchPreferencesUseCase(

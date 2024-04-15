@@ -119,7 +119,7 @@ private fun RenderGridSections(
         is LaunchTypes.Grid -> {
             LaunchGridCard(
                 launchItem = launchItem,
-                onClick = { onItemClicked(launchItem.links) })
+                onClick = { onItemClicked(launchItem.items.links) })
         }
 
         is LaunchTypes.Carousel -> {

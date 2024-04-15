@@ -13,7 +13,7 @@ internal class CompanyEntityMapper @Inject constructor() {
                 employees = employees,
                 founded = founded,
                 founder = founder,
-                launchSites = launch_sites,
+                launchSites = launchSites,
                 name = name,
                 valuation = valuation,
             )
@@ -27,7 +27,7 @@ internal class CompanyEntityMapper @Inject constructor() {
                 employees = employees,
                 founded = founded,
                 founder = founder,
-                launch_sites = launchSites,
+                launchSites = launchSites,
                 name = name,
                 valuation = valuation
             )

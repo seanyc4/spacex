@@ -8,7 +8,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
-import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchDto
+import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchesDto
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ internal class LaunchNetworkMapper @Inject constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun mapEntityToList(entity: LaunchDto): List<LaunchTypes.Launch> {
+    fun mapEntityToList(entity: LaunchesDto): List<LaunchTypes.Launch> {
         return entity.docs.map { item ->
             with(item) {
                 val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
@@ -32,8 +32,8 @@ internal class LaunchNetworkMapper @Inject constructor(
                     links = Links(
                         missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
                         articleLink = links?.articleLink,
-                        webcastLink = links?.videoLink,
-                        wikiLink = links?.wikipedia,
+                        webcastLink = links?.webcastLink,
+                        wikiLink = links?.wikiLink,
                     ),
                     missionName = missionName.orEmpty(),
                     rocket = Rocket(
