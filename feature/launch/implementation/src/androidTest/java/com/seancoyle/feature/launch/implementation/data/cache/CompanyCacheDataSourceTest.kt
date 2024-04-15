@@ -1,14 +1,16 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.CompanyFactory
 import com.seancoyle.feature.launch.implementation.domain.cache.CompanyCacheDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,9 +30,6 @@ internal class CompanyCacheDataSourceTest {
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var companyFactory: CompanyFactory
-
-    @Inject
     lateinit var underTest: CompanyCacheDataSource
 
     private lateinit var givenCompany: Company
@@ -38,7 +37,7 @@ internal class CompanyCacheDataSourceTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        givenCompany = companyFactory.createCompany(
+        givenCompany = Company(
             id = "1",
             employees = UUID.randomUUID().toString(),
             founded = UUID.randomUUID().hashCode(),
@@ -47,6 +46,9 @@ internal class CompanyCacheDataSourceTest {
             name = UUID.randomUUID().toString(),
             valuation = UUID.randomUUID().toString(),
         )
+
+        // Clear cache
+        runTest { underTest.deleteAll() }
     }
 
     @After
@@ -56,20 +58,25 @@ internal class CompanyCacheDataSourceTest {
 
     @Test
     fun insertCompany_confirmInserted() = runTest {
-        underTest.insert(givenCompany)
+        val insertResult = underTest.insert(givenCompany)
 
-        val insertedCompany = underTest.getCompany()
+        assert(insertResult is Result.Success)
 
-     //   assertEquals(insertedCompany, givenCompany)
+        val result = underTest.getCompany()
+
+        assert(result is Result.Success)
+        result as Result.Success
+        assertThat(result.data, equalTo(givenCompany))
     }
 
     @Test
     fun getCompany_confirmRetrieved() = runTest {
         underTest.insert(givenCompany)
 
-        val retrievedCompany = underTest.getCompany()
-
-       // assertEquals(retrievedCompany, givenCompany)
+        val result = underTest.getCompany()
+        assert(result is Result.Success)
+        result as Result.Success
+        assertThat(result.data, equalTo(givenCompany))
     }
 
     @Test
@@ -78,7 +85,9 @@ internal class CompanyCacheDataSourceTest {
 
         underTest.deleteAll()
 
-        val resultAfterDeletion = underTest.getCompany()
-        assertNull(resultAfterDeletion, "The table should be empty after deletion.")
+        val result = underTest.getCompany()
+        assert(result is Result.Success)
+        result as Result.Success
+        assertNull(result.data)
     }
 }

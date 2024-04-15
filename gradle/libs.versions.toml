@@ -189,6 +189,7 @@ androidTestBundle = [
     "compose-uiTestJunit4",
     "compose-uiTest",
     "kotlin-junit",
+    "square-mockwebserver",
     "test-androidxTestExt",
     "test-espressoCore",
     "test-espressoIntents",
