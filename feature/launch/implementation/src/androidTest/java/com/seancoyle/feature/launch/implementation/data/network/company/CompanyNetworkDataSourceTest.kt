@@ -8,8 +8,6 @@ import com.seancoyle.feature.launch.implementation.data.network.MockWebServerRes
 import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -24,8 +22,7 @@ import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@ExperimentalCoroutinesApi
-@FlowPreview
+
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class CompanyNetworkDataSourceTest {
