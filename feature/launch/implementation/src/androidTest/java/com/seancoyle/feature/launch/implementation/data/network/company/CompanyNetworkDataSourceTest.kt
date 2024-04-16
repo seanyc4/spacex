@@ -1,38 +1,40 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.feature.launch.implementation.CompanyFactory
-import com.seancoyle.feature.launch.implementation.TestConstants.ERROR_404_RESPONSE
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.Result
+import com.seancoyle.feature.launch.api.domain.model.Company
+import com.seancoyle.feature.launch.implementation.data.network.MockWebServerResponseCompanyInfo.companyResponse
 import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import retrofit2.HttpException
 import java.net.HttpURLConnection
 import javax.inject.Inject
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@RunWith(AndroidJUnit4ClassRunner::class)
 @HiltAndroidTest
+@RunWith(AndroidJUnit4ClassRunner::class)
 internal class CompanyNetworkDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var dataFactory: CompanyFactory
-
-    @Inject
-    lateinit var api: FakeCompanyApi
+    lateinit var mockWebServer : MockWebServer
 
     @Inject
     lateinit var underTest: CompanyNetworkDataSource
@@ -42,9 +44,14 @@ internal class CompanyNetworkDataSourceTest {
         hiltRule.inject()
     }
 
+    @After
+    fun tearDown() {
+        mockWebServer.shutdown()
+    }
+
     @Test
     fun whenAPISuccessful_getCompanyReturnsCompanyData() = runTest {
-        val expectedCompany = dataFactory.createCompany(
+        val expectedCompany = Company(
             id = "",
             employees = "7،000",
             founded = 2002,
@@ -54,22 +61,132 @@ internal class CompanyNetworkDataSourceTest {
             valuation = "27،500،000،000"
         )
 
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+                .setBody(companyResponse)
+        )
+
         val result = underTest.getCompany()
 
-        //assertEquals(expected = expectedCompany, actual = result)
+        assertTrue(result is Result.Success)
+        assertEquals(result.data, expectedCompany)
     }
 
     @Test
-    fun whenAPIReturns404_getCompanyShouldThrowHttpException() = runTest {
-        api.jsonFileName = ERROR_404_RESPONSE
-
-        val exception = assertFailsWith<HttpException> {
-            api.getCompany()
-        }
-
-        assertEquals(
-            expected = HttpURLConnection.HTTP_NOT_FOUND,
-            actual = exception.response()?.code()
+    fun whenNetworkFails_getCompanyThrowsException() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
     }
+
+    @Test
+    fun whenNetworkTimesOut_getCompanyReturnsTimeoutError() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setSocketPolicy(SocketPolicy.NO_RESPONSE)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_TIMEOUT, result.error)
+    }
+
+    @Test
+    fun whenApiReturnsNotFound_getCompanyReturnsNotFoundError() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_NOT_FOUND, result.error)
+    }
+
+    @Test
+    fun whenApiReturnsUnauthorized_getCompanyHandlesUnauthorized() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_UNAUTHORIZED, result.error)
+    }
+
+    @Test
+    fun whenServerErrors_getCompanyHandlesServerError() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
+    }
+
+    @Test
+    fun whenNetworkFails_getCompanyReturnsNetworkError() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_CONNECTION_FAILED, result.error)
+    }
+
+    @Test
+    fun whenApiReturnsForbidden_getCompanyHandlesForbidden() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_FORBIDDEN, result.error)
+    }
+
+    @Test
+    fun whenApiReturnsRequestTimeout_getCompanyHandlesRequestTimeout() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_TIMEOUT, result.error)
+    }
+
+    @Test
+    fun whenApiReturnsPayloadTooLarge_getCompanyHandlesPayloadTooLarge() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
+        )
+
+        val result = underTest.getCompany()
+
+        assertTrue(result is Result.Error)
+        assertEquals(DataError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
+    }
+
 }

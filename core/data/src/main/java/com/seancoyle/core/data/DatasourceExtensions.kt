@@ -44,9 +44,9 @@ suspend fun <T> safeApiCall(
                     when (throwable.code()) {
                         401 -> Result.Error(DataError.NETWORK_UNAUTHORIZED)
                         403 -> Result.Error(DataError.NETWORK_FORBIDDEN)
+                        404 -> Result.Error(DataError.NETWORK_NOT_FOUND)
                         408 -> Result.Error(DataError.NETWORK_TIMEOUT)
                         413 -> Result.Error(DataError.NETWORK_PAYLOAD_TOO_LARGE)
-                        404 -> Result.Error(DataError.NETWORK_NOT_FOUND)
                         500 -> Result.Error(DataError.NETWORK_INTERNAL_SERVER_ERROR)
                         else -> Result.Error(DataError.NETWORK_UNKNOWN_ERROR)
                     }

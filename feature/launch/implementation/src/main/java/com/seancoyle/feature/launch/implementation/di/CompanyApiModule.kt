@@ -10,11 +10,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object CompanyInfoApiModule {
+internal object CompanyApiModule {
 
     @Singleton
     @Provides
-    fun provideCompanyInfoApi(
+    fun provideCompanyApi(
         retrofit: Retrofit
     ): CompanyApi {
         return retrofit.create(CompanyApi::class.java)

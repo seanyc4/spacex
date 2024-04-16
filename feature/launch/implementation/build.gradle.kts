@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.kotlin.immutable)
     implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.gson)
+    implementation(libs.square.loggingInterceptor)
 
     androidTestImplementation(projects.core.datastore)
     androidTestImplementation(libs.bundles.androidTestBundle)
