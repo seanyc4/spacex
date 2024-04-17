@@ -1,8 +1,7 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.database
 
 import android.content.Context
 import androidx.room.Room
-import com.seancoyle.database.Database
 import com.seancoyle.database.di.DatabaseModule
 import dagger.Module
 import dagger.Provides
