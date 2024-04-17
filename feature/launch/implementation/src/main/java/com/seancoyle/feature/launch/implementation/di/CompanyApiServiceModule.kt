@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di
 
-import com.seancoyle.feature.launch.implementation.data.network.CompanyApi
+import com.seancoyle.feature.launch.implementation.data.network.CompanyApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,14 +10,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object CompanyApiModule {
+internal object CompanyApiServiceModule {
 
     @Singleton
     @Provides
     fun provideCompanyApi(
         retrofit: Retrofit
-    ): CompanyApi {
-        return retrofit.create(CompanyApi::class.java)
+    ): CompanyApiService {
+        return retrofit.create(CompanyApiService::class.java)
     }
 
 }

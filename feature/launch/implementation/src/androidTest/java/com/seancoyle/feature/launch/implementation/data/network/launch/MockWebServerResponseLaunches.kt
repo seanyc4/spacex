@@ -1,6 +1,6 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.launch
 
-object MockWebServerResponseLaunchList {
+object MockWebServerResponseLaunches {
     val launchesResponse = """{
       "docs": [
         {

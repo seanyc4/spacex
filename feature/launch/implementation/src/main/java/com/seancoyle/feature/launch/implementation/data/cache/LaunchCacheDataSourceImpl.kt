@@ -28,19 +28,19 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Result<List<LaunchTypes>?, DataError> {
+    ): Result<List<LaunchTypes>, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.returnOrderedQuery(
-                launchYear = launchYear,
-                launchStatus = launchStatus,
-                page = page,
-                order = order
-            )?.let {
-                mapper.mapEntityListToDomainList(it)
-            }
+            mapper.mapEntityListToDomainList(
+                dao.returnOrderedQuery(
+                    launchYear = launchYear,
+                    launchStatus = launchStatus,
+                    page = page,
+                    order = order
+                )
+            )
         }
     }
 
@@ -103,14 +103,12 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): Result<List<LaunchTypes>?, DataError> {
+    override suspend fun getAll(): Result<List<LaunchTypes>, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.getAll()?.let {
-                mapper.mapEntityListToDomainList(it)
-            }
+            mapper.mapEntityListToDomainList(dao.getAll())
         }
     }
 

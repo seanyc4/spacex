@@ -15,7 +15,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class GetCompanyApiAndCacheUseCaseImplTest {
+class GetCompanyApiServiceAndCacheUseCaseImplTest {
 
     @MockK
     private lateinit var insertCompanyToCacheUseCase: InsertCompanyToCacheUseCase

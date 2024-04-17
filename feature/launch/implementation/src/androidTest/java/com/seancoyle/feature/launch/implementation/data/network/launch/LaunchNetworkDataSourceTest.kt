@@ -8,7 +8,6 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
-import com.seancoyle.feature.launch.implementation.data.network.MockWebServerResponseLaunchList
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.network.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -60,13 +59,25 @@ internal class LaunchNetworkDataSourceTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setBody(MockWebServerResponseLaunchList.launchesResponse)
+                .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
 
         val result = underTest.getLaunches(launchOptions)
 
         assertTrue(result is Result.Success)
-        assertEquals(result.data, expectedLaunches)
+
+        // We skip checking item.launchDays as its dynamic and changes based on the date
+        result.data.forEachIndexed { index, item ->
+            assertEquals(item.id, expectedLaunches[index].id)
+            assertEquals(item.launchDateLocalDateTime, expectedLaunches[index].launchDateLocalDateTime)
+            assertEquals(item.launchDate, expectedLaunches[index].launchDate)
+            assertEquals(item.launchDateStatus, expectedLaunches[index].launchDateStatus)
+            assertEquals(item.launchYear, expectedLaunches[index].launchYear)
+            assertEquals(item.launchStatus, expectedLaunches[index].launchStatus)
+            assertEquals(item.links, expectedLaunches[index].links)
+            assertEquals(item.missionName, expectedLaunches[index].missionName)
+            assertEquals(item.rocket, expectedLaunches[index].rocket)
+        }
     }
 
     @Test
@@ -189,7 +200,7 @@ internal class LaunchNetworkDataSourceTest {
         LaunchTypes.Launch(
             id = "1022022-09-15T12:14",
             launchDate = "15-09-2022 at 12:14",
-            launchDateLocalDateTime = LocalDateTime.of(2022,9,15,12,14),
+            launchDateLocalDateTime = LocalDateTime.of(2022, 9, 15, 12, 14),
             launchYear = "2022",
             launchStatus = LaunchStatus.SUCCESS,
             links = Links(
@@ -208,7 +219,7 @@ internal class LaunchNetworkDataSourceTest {
         LaunchTypes.Launch(
             id = "1032022-10-04T15:22",
             launchDate = "04-10-2022 at 15:22",
-            launchDateLocalDateTime = LocalDateTime.of(2022,10,4,15,22),
+            launchDateLocalDateTime = LocalDateTime.of(2022, 10, 4, 15, 22),
             launchStatus = LaunchStatus.FAILED,
             launchYear = "2022",
             links = Links(

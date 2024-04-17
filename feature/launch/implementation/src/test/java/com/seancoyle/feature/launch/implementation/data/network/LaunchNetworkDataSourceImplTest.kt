@@ -25,7 +25,7 @@ class LaunchNetworkDataSourceImplTest {
     val testDispatcher = TestCoroutineRule()
 
     @MockK
-    private lateinit var api: LaunchApi
+    private lateinit var api: LaunchApiService
 
     @MockK
     private lateinit var networkMapper: LaunchNetworkMapper

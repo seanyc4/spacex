@@ -38,7 +38,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    fun getAll(): List<LaunchEntity>?
+    fun getAll(): List<LaunchEntity>
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
@@ -171,7 +171,7 @@ suspend fun LaunchDao.returnOrderedQuery(
     order: Order,
     launchStatus: LaunchStatus,
     page: Int
-): List<LaunchEntity>? {
+): List<LaunchEntity> {
     val hasYear = launchYear.isNotEmpty()
     val isOrderDesc = order == Order.DESC
     val offset = page.minus(1).times(PAGINATION_PAGE_SIZE)

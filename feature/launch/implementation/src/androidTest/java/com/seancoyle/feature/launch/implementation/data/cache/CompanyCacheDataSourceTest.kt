@@ -9,8 +9,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -18,7 +16,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -60,13 +60,12 @@ internal class CompanyCacheDataSourceTest {
     fun insertCompany_confirmInserted() = runTest {
         val insertResult = underTest.insert(givenCompany)
 
-        assert(insertResult is Result.Success)
+        assertTrue(insertResult is Result.Success)
 
         val result = underTest.getCompany()
 
-        assert(result is Result.Success)
-        result as Result.Success
-        assertThat(result.data, equalTo(givenCompany))
+        assertTrue(result is Result.Success)
+        assertEquals(givenCompany, result.data)
     }
 
     @Test
@@ -74,9 +73,9 @@ internal class CompanyCacheDataSourceTest {
         underTest.insert(givenCompany)
 
         val result = underTest.getCompany()
-        assert(result is Result.Success)
-        result as Result.Success
-        assertThat(result.data, equalTo(givenCompany))
+
+        assertTrue(result is Result.Success)
+        assertEquals(givenCompany, result.data)
     }
 
     @Test
@@ -86,8 +85,8 @@ internal class CompanyCacheDataSourceTest {
         underTest.deleteAll()
 
         val result = underTest.getCompany()
-        assert(result is Result.Success)
-        result as Result.Success
+
+        assertTrue(result is Result.Success)
         assertNull(result.data)
     }
 }

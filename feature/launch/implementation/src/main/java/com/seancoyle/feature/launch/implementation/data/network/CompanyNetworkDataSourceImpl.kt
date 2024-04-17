@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class CompanyNetworkDataSourceImpl @Inject constructor(
-    private val api: CompanyApi,
+    private val api: CompanyApiService,
     private val networkMapper: CompanyNetworkMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher

@@ -13,7 +13,7 @@ internal interface LaunchCacheDataSource {
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Result<List<LaunchTypes>?, DataError>
+    ): Result<List<LaunchTypes>, DataError>
 
     suspend fun insert(launch: LaunchTypes.Launch): Result<Long, DataError>
 
@@ -25,7 +25,7 @@ internal interface LaunchCacheDataSource {
 
     suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError>
 
-    suspend fun getAll(): Result<List<LaunchTypes>?, DataError>
+    suspend fun getAll(): Result<List<LaunchTypes>, DataError>
 
     suspend fun getTotalEntries(): Result<Int, DataError>
 

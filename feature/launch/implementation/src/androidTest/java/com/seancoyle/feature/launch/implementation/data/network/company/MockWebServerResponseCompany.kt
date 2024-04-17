@@ -1,6 +1,6 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.company
 
-object MockWebServerResponseCompanyInfo {
+object MockWebServerResponseCompany {
 
     val companyResponse = """
 {

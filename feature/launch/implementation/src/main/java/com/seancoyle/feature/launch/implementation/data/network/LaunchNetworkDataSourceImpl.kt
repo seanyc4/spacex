@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class LaunchNetworkDataSourceImpl @Inject constructor(
-    private val api: LaunchApi,
+    private val api: LaunchApiService,
     private val networkMapper: LaunchNetworkMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher

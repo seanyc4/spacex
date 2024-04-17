@@ -1,26 +1,43 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.domain.Order
+import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.api.domain.model.Rocket
+import com.seancoyle.feature.launch.implementation.domain.cache.LaunchCacheDataSource
+import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
 import org.junit.runner.RunWith
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import java.util.UUID
+import javax.inject.Inject
+import kotlin.random.Random
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 private const val PAGE = 1
-private const val DATA = 100
+private const val DATA = 1000
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @HiltAndroidTest
 @Suppress("UNCHECKED_CAST")
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class LaunchCacheDataSourceTest {
 
-   /* @get:Rule(order = 0)
+    @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
-
-    @Inject
-    lateinit var factory: LaunchFactory
 
     private lateinit var validLaunchYears: List<String>
 
@@ -30,7 +47,7 @@ internal class LaunchCacheDataSourceTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        validLaunchYears = factory.provideValidFilterYearDates()
+        validLaunchYears = provideValidFilterYearDates()
     }
 
     @After
@@ -45,353 +62,299 @@ internal class LaunchCacheDataSourceTest {
     }
 
     @Test
-    fun insertLaunch_getLaunchById_success() = runTest {
-        val givenLaunch = createRandomLaunchItem(id = "1")
+    fun insertLaunchGetLaunchByIdSuccess() = runTest {
+        val expectedResult = createRandomLaunchItem(id = "1")
 
-        underTest.insert(givenLaunch)
+        underTest.insert(expectedResult)
 
-        val result = underTest.getById("1")
-        assertEquals(result, givenLaunch)
+        val result = underTest.getById(id = "1")
+
+        assertTrue(result is Result.Success)
+        assertEquals(expectedResult, result.data)
     }
 
     @Test
-    fun insertLaunches_getLaunches_success() = runTest {
-        val givenLaunches = insertTestData()
-        val resultViewTypeList = underTest.getAll()
-        val result = resultViewTypeList as? List<LaunchTypes.Launch>
+    fun insertLaunchesGetLaunchesSuccess() = runTest {
+        val expectedResult = insertTestData()
 
-        assertTrue { givenLaunches.containsAll(result!!) }
+        val result = underTest.getAll()
+
+        assertTrue(result is Result.Success)
+        assertNotNull(result.data)
+        result.data.filterIsInstance<List<LaunchTypes.Launch>>()
+        assertTrue { expectedResult.containsAll(result.data) }
     }
 
     @Test
-    fun insertLaunches_confirmNumLaunchesInDb() = runTest {
-        val givenLaunches = insertTestData()
+    fun insertLaunchesConfirmNumLaunchesInDb() = runTest {
+        val expectedResult = insertTestData()
+
         val result = underTest.getTotalEntries()
-        assertEquals(result, givenLaunches.size)
+
+        assertTrue(result is Result.Success)
+        assertEquals(expectedResult.size, result.data)
     }
 
     @Test
-    fun insertLaunch_deleteLaunch_confirmDeleted() = runTest {
-        val givenLaunch = createRandomLaunchItem(id = "2")
-        underTest.insert(givenLaunch)
+    fun insertLaunchDeleteLaunchConfirmDeleted() = runTest {
+        val expectedResult = createRandomLaunchItem(id = "2")
+        underTest.insert(expectedResult)
 
-        val preDeleteResult = underTest.getById(givenLaunch.id)
-        assertEquals(givenLaunch, preDeleteResult)
+        val preDeleteResult = underTest.getById(expectedResult.id)
 
-        underTest.deleteById(givenLaunch.id)
+        assertTrue(preDeleteResult is Result.Success)
+        assertEquals(expectedResult, preDeleteResult.data)
 
-        val postDeleteResult = underTest.getById(givenLaunch.id)
-        assertNull(postDeleteResult, "Launch item should be null after deletion.")
+        underTest.deleteById(expectedResult.id)
+
+        val postDeleteResult = underTest.getById(expectedResult.id)
+        assertTrue(postDeleteResult is Result.Success)
+        assertNull(postDeleteResult.data, "Launch item should be null after deletion.")
     }
 
     @Test
-    fun orderAllLaunchItemsByDateASC_confirm() = runTest {
+    fun orderAllLaunchesByDateASCConfirm() = runTest {
         insertTestData()
-        val viewTypeList = underTest.filterLaunchList(
-            year = "",
-            order = Order.ASC,
-            launchFilter = LaunchStatus.SUCCESS,
-            page = PAGE,
-        )
 
-        val result = viewTypeList.filterIsInstance<LaunchTypes.Launch>()
-
-        assertTrue(result.isNotEmpty())
-        checkDateOrderAscending(result)
-    }
-
-    @Test
-    fun orderAllLaunchItemsByDateDESC_confirm() = runTest {
-        insertTestData()
-        val viewTypeList = underTest.filterLaunchList(
-            year = null,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_SUCCESS,
-            page = PAGE,
-        )
-
-        val result = viewTypeList!!.filterIsInstance<Launch>()
-
-        assertTrue(viewTypeList.isNotEmpty())
-        checkDateOrderDescending(result)
-    }
-
-    @Test
-    fun filterLaunchItemsByYearAndDateOrderASC_success() = runTest {
-        insertTestData()
-        val launchYear = validLaunchYears.random()
-        val viewTypeList = underTest.filterLaunchList(
-            year = launchYear,
-            order = ORDER_ASC,
-            launchFilter = null,
-            page = PAGE,
-        )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
-
-        assertTrue(result.isNotEmpty())
-        assertTrue { result.all { it.launchYear == launchYear } }
-        checkDateOrderAscending(result)
-    }
-
-    @Test
-    fun filterLaunchItemsByYearAndDateOrderDESC_success() = runTest {
-        insertTestData()
-        val launchYear = validLaunchYears.random()
-        val viewTypeList = underTest.filterLaunchList(
-            year = launchYear,
-            order = ORDER_DESC,
-            launchFilter = null,
-            page = PAGE,
-        )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
-
-        assertTrue(result.isNotEmpty())
-        assertTrue { result.all { it.launchYear == launchYear } }
-        checkDateOrderDescending(result)
-    }
-
-    @Test
-    fun filterLaunchItemsByYear_noResultsFound() = runTest {
-        insertTestData()
-        val launchYear = "1000"
         val result = underTest.filterLaunchList(
-            year = launchYear,
-            order = ORDER_DESC,
-            launchFilter = null,
+            launchYear = "",
+            order = Order.ASC,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue(result?.isEmpty() == true)
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderAscending(result.data)
     }
 
     @Test
-    fun filterLaunchItemsByLaunchStatus_launchSuccess() = runTest {
+    fun orderAllLaunchesByDateDESCConfirm() = runTest {
         insertTestData()
-        val viewTypeList = underTest.filterLaunchList(
-            year = null,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_SUCCESS,
+
+        val result = underTest.filterLaunchList(
+            launchYear = "",
+            order = Order.DESC,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
 
-        assertTrue(result.isNotEmpty())
-        checkDateOrderDescending(result)
-        assertTrue { result.all { it.isLaunchSuccess == LAUNCH_SUCCESS } }
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
     }
 
     @Test
-    fun filterLaunchItemsByLaunchStatus_launchFailed() = runTest {
+    fun filterLaunchesByYearAndDateOrderASCSuccess() = runTest {
         insertTestData()
-        val viewTypeList = underTest.filterLaunchList(
-            year = null,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_FAILED,
+        val launchYear = validLaunchYears.random()
+
+        val result = underTest.filterLaunchList(
+            launchYear = launchYear,
+            order = Order.ASC,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
 
-        assertTrue(result.isNotEmpty())
-        checkDateOrderDescending(result)
-        assertTrue { result.all { it.isLaunchSuccess == LAUNCH_FAILED } }
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { result.data.all { it.launchYear == launchYear } }
+        checkDateOrderAscending(result.data)
     }
 
     @Test
-    fun filterLaunchItemsByLaunchStatus_launchAll() = runTest {
-        insertTestData(30)
-        val allLaunchItems = underTest.getAll()
-        val viewTypeList = underTest.filterLaunchList(
-            year = null,
-            order = ORDER_DESC,
-            launchFilter = null,
-            page = PAGE,
-        )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
-
-        assertTrue(result.isNotEmpty())
-        assertTrue { viewTypeList.containsAll(allLaunchItems!!) }
-        checkDateOrderDescending(result)
-    }
-
-    @Test
-    fun filterLaunchItemsByLaunchStatus_unknown() = runTest {
+    fun filterLaunchesByYearOrderDESCSuccess() = runTest {
         insertTestData()
-        val viewTypeList = underTest.filterLaunchList(
-            year = null,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_UNKNOWN,
+        val launchYear = validLaunchYears.random()
+
+        val result = underTest.filterLaunchList(
+            launchYear = launchYear,
+            order = Order.DESC,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
-        val result = viewTypeList!!.filterIsInstance<Launch>()
 
-        assertTrue(viewTypeList.isNotEmpty())
-        checkDateOrderDescending(result)
-        assertTrue { result.all { it.isLaunchSuccess == LAUNCH_UNKNOWN } }
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { result.data.all { it.launchYear == launchYear } }
+        checkDateOrderDescending(result.data)
     }
 
     @Test
-    fun filterLaunchItemsByLaunchStatus_noResultsFound() = runTest {
+    fun filterLaunchesByYearNoResultsFound() = runTest {
+        insertTestData()
+        val invalidYear = "1000"
+
+        val result = underTest.filterLaunchList(
+            launchYear = invalidYear,
+            order = Order.DESC,
+            launchStatus = LaunchStatus.ALL,
+            page = PAGE,
+        )
+
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isEmpty())
+    }
+
+    @Test
+    fun filterLaunchesByLaunchStatusSuccess() = runTest {
+        insertTestData()
+
+        val result = underTest.filterLaunchList(
+            launchYear = "",
+            order = Order.DESC,
+            launchStatus = LaunchStatus.SUCCESS,
+            page = PAGE,
+        )
+
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.SUCCESS } }
+    }
+
+    @Test
+    fun filterLaunchesByLaunchStatusFailed() = runTest {
+        insertTestData()
+
+        val result = underTest.filterLaunchList(
+            launchYear = "",
+            order = Order.DESC,
+            launchStatus = LaunchStatus.FAILED,
+            page = PAGE,
+        )
+
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.FAILED } }
+    }
+
+    @Test
+    fun filterLaunchesByLaunchStatusAll() = runTest {
+        val expectedResult = insertTestData()
+
+        val result = underTest.filterLaunchList(
+            launchYear = "",
+            order = Order.DESC,
+            launchStatus = LaunchStatus.ALL,
+            page = PAGE,
+        )
+
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { expectedResult.containsAll(result.data) }
+        checkDateOrderDescending(result.data)
+    }
+
+    @Test
+    fun filterLaunchesByLaunchStatusUnknown() = runTest {
+        insertTestData()
+
+        val result = underTest.filterLaunchList(
+            launchYear = "",
+            order = Order.DESC,
+            launchStatus = LaunchStatus.UNKNOWN,
+            page = PAGE,
+        )
+
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.UNKNOWN } }
+    }
+
+    @Test
+    fun filterLaunchesInvalidYearByLaunchStatusNoResultsFound() = runTest {
         insertTestData()
         val year = "0000"
         val result = underTest.filterLaunchList(
-            year = year,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_SUCCESS,
+            launchYear = year,
+            order = Order.DESC,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue { result?.isEmpty() == true }
+        assertTrue(result is Result.Success)
+        result as Result.Success<List<LaunchTypes.Launch>>
+
+        assertTrue { result.data.isEmpty() }
     }
 
-    @Test
-    fun filterLaunchItemsFail_noResultsFound() = runTest {
-        insertTestData()
-        val FORCE_SEARCH_LAUNCH_EXCEPTION = "FORCE_SEARCH_LAUNCH_EXCEPTION"
-        val launchList = underTest.filterLaunchList(
-            year = FORCE_SEARCH_LAUNCH_EXCEPTION,
-            order = ORDER_DESC,
-            launchFilter = LAUNCH_SUCCESS,
-            page = PAGE,
-        )
-
-        assertTrue { launchList?.isEmpty() == true }
-
-        // confirm there are launch items in the cache
-        val result = underTest.getAll()
-        if (result != null) {
-            assertTrue { result.isNotEmpty() }
-        }
-    }
-
-    private fun checkDateOrderAscending(launchList: List<Launch>) {
-        // Check the list and verify the date is less than the next index
-        for (item in 0..launchList.size.minus(2)) {
+    private fun checkDateOrderAscending(launchList: List<LaunchTypes.Launch>) {
+        launchList.zipWithNext().forEach { (current, next) ->
             assertTrue(
-                launchList[item].launchDateLocalDateTime <=
-                        launchList[item.plus(1)].launchDateLocalDateTime
+                current.launchDateLocalDateTime <= next.launchDateLocalDateTime,
+                "Dates are not in ascending order"
             )
         }
     }
 
-    private fun checkDateOrderDescending(launchList: List<Launch>) {
-        // Check the list and verify the date is greater than the next index
-        for (item in 0..launchList.size.minus(2)) {
+    private fun checkDateOrderDescending(launches: List<LaunchTypes.Launch>) {
+        launches.zipWithNext().forEach { (current, next) ->
             assertTrue(
-                launchList[item].launchDateLocalDateTime >=
-                        launchList[item.plus(1)].launchDateLocalDateTime
+                current.launchDateLocalDateTime >= next.launchDateLocalDateTime,
+                "Dates are not in descending order"
             )
         }
     }
 
     private fun createLaunchListTest(
         num: Int,
-        id: String? = null
-    ): List<Launch> {
-        val list: ArrayList<Launch> = ArrayList()
-
-        for (item in 0 until num) {
-            // Generate a random launch state
-            val randomLaunchState = when (Random.nextInt(3)) {
-                STATE_SUCCESS -> LAUNCH_SUCCESS
-                STATE_FAILED -> LAUNCH_FAILED
-                STATE_UNKNOWN -> LAUNCH_UNKNOWN
-                else -> throw IllegalStateException("Invalid launch state")
-            }
-
-            val launchYear = validLaunchYears.random()
-
-            list.add(
-                createLaunchItem(
-                    id = id ?: UUID.randomUUID().toString(),
-                    launchDate = UUID.randomUUID().toString(),
-                    launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-                    isLaunchSuccess = randomLaunchState,
-                    launchSuccessIcon = getIconBasedOnState(randomLaunchState),
-                    launchYear = launchYear,
-                    links = Links(
-                        missionImage = DEFAULT_LAUNCH_IMAGE,
-                        articleLink = "https://www.google.com",
-                        webcastLink = "https://www.youtube.com",
-                        wikiLink = "https://www.wikipedia.com"
-                    ),
-                    missionName = UUID.randomUUID().toString(),
-                    rocket = Rocket(
-                        rocketNameAndType = UUID.randomUUID().toString()
-                    ),
-                    daysToFromTitle = UUID.randomUUID().hashCode(),
-                    launchDaysDifference = UUID.randomUUID().toString(),
-                    type = TYPE_LIST
-                )
-            )
+        id: String = UUID.randomUUID().toString()
+    ): List<LaunchTypes.Launch> {
+        return List(num) {
+            createRandomLaunchItem(id = id)
         }
-        return list
     }
 
-    private fun createRandomLaunchItem(id: String? = null): Launch {
-        val randomLaunchState = Random.nextInt(0, 3)
-        return createLaunchItem(
-            id = id ?: UUID.randomUUID().toString(),
-            launchDate = UUID.randomUUID().toString(),
-            launchDateLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-            isLaunchSuccess = randomLaunchState,
-            launchSuccessIcon = getIconBasedOnState(randomLaunchState),
+    private fun createRandomLaunchItem(id: String): LaunchTypes.Launch {
+        val randomLaunchState = Random.nextInt(0, 4)
+        val now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
+        return LaunchTypes.Launch(
+            id = id,
+            launchDate = now.toLocalDate().toString(),
+            launchDateLocalDateTime = now,
             launchYear = validLaunchYears.random(),
+            launchStatus = when (randomLaunchState) {
+                0 -> LaunchStatus.SUCCESS
+                1 -> LaunchStatus.FAILED
+                2 -> LaunchStatus.UNKNOWN
+                else -> LaunchStatus.ALL
+            },
             links = Links(
                 missionImage = DEFAULT_LAUNCH_IMAGE,
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
-                wikiLink = "https://www.wikipedia.com"
+                wikiLink = "https://www.wikipedia.org"
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = Rocket(
-                rocketNameAndType = UUID.randomUUID().toString()
-            ),
-            daysToFromTitle = UUID.randomUUID().hashCode(),
-            launchDaysDifference = UUID.randomUUID().toString(),
-            type = TYPE_LIST,
+            rocket = Rocket(rocketNameAndType = "Falcon 9"),
+            launchDateStatus = if (Random.nextBoolean()) LaunchDateStatus.PAST else LaunchDateStatus.FUTURE,
+            launchDays = "${Random.nextInt(-1000, 1000)}d"
         )
     }
 
-    private fun getIconBasedOnState(state: Int): Int {
-        return when (state) {
-            LAUNCH_SUCCESS -> R.drawable.ic_launch_success
-            LAUNCH_FAILED -> R.drawable.ic_launch_fail
-            LAUNCH_UNKNOWN -> R.drawable.ic_launch_unknown
-            else -> throw IllegalArgumentException("Invalid launch state")
-        }
-    }
-
-    private fun createLaunchItem(
-        id: String,
-        launchDate: String,
-        isLaunchSuccess: Int,
-        launchSuccessIcon: Int,
-        launchDateLocalDateTime: LocalDateTime,
-        launchYear: String,
-        links: Links,
-        missionName: String,
-        rocket: Rocket,
-        daysToFromTitle: Int,
-        launchDaysDifference: String,
-        type: Int
-    ) = factory.createLaunchItem(
-        id = id,
-        launchDate = launchDate,
-        isLaunchSuccess = isLaunchSuccess,
-        launchSuccessIcon = launchSuccessIcon,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        links = links,
-        missionName = missionName,
-        rocket = rocket,
-        daysToFromTitle = daysToFromTitle,
-        launchDaysDifference = launchDaysDifference,
-        type = type,
-    )
-
-    companion object {
-        const val STATE_SUCCESS = 0
-        const val STATE_FAILED = 1
-        const val STATE_UNKNOWN = 2
-    }*/
+    private fun provideValidFilterYearDates() = listOf(
+        "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013",
+        "2012", "2010", "2009", "2008", "2007", "2006"
+    ).shuffled()
 }

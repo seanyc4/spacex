@@ -5,7 +5,7 @@ import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface LaunchApi {
+internal interface LaunchApiService {
     companion object {
         private const val URL = "/v4/launches/query"
     }

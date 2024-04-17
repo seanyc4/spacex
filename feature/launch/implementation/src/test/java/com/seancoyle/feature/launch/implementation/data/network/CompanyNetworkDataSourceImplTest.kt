@@ -24,7 +24,7 @@ class CompanyNetworkDataSourceImplTest {
     val testCoroutineRule = TestCoroutineRule()
 
     @MockK
-    private lateinit var api: CompanyApi
+    private lateinit var api: CompanyApiService
 
     @MockK
     private lateinit var networkMapper: CompanyNetworkMapper

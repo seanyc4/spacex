@@ -4,7 +4,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.network.MockWebServerResponseCompanyInfo.companyResponse
+import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
 import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -21,7 +21,6 @@ import java.net.HttpURLConnection
 import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
