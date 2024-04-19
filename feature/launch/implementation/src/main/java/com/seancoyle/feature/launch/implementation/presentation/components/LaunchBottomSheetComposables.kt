@@ -110,12 +110,12 @@ fun LaunchBottomSheetTitle(
 
 @Composable
 fun LaunchBottomSheetExitButton(
-    onExitBtn: () -> Unit,
+    actionExitClicked: () -> Unit,
     windowSize: WindowSizeClass,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onExitBtn,
+        onClick = actionExitClicked,
         modifier = modifier
             .fillMaxWidth()
             .height(height = 80.dp)

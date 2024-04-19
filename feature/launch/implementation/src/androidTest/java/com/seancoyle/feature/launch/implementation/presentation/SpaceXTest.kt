@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.presentation
+package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import dagger.hilt.android.testing.HiltAndroidTest

@@ -34,6 +34,7 @@ okhttpIdling = "1.0.0"
 protobuf = "3.25.2"
 protobufPlugin = "0.9.4"
 retrofit2 = "2.9.0"
+robolectricVersion = "4.11.1"
 room = "2.6.1"
 scalingPixels = "1.0.6"
 splash = "1.0.1"
@@ -166,6 +167,7 @@ test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCore" }
 test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCore" }
+test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
 test-testRules = { module = "androidx.test:rules", version.ref = "testRules" }
 test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
 
@@ -211,6 +213,7 @@ androidTestBundle = [
 unitTestBundle = [
     "test-junit4",
     "test-mockk",
+    "test-robolectric",
     "kotlin-coroutinesTest",
     "kotlin-junit"
 ]

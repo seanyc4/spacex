@@ -36,9 +36,9 @@ dependencies {
     implementation(libs.square.retrofit.gson)
     implementation(libs.square.loggingInterceptor)
 
+    androidTestImplementation(projects.core.test)
     androidTestImplementation(projects.core.datastore)
     androidTestImplementation(libs.bundles.androidTestBundle)
-    androidTestImplementation(projects.core.test)
     testImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)
 }

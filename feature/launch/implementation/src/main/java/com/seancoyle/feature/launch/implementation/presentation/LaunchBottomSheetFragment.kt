@@ -3,7 +3,6 @@ package com.seancoyle.feature.launch.implementation.presentation
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -17,12 +16,10 @@ import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetCard
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetExitButton
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3WindowSizeClassApi
-internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
+internal class LaunchBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var linkTypes: List<LinkType>? = null
 
@@ -41,17 +38,11 @@ internal class LaunchBottomActionSheet : BottomSheetDialogFragment() {
         val windowSize = calculateWindowSizeClass(requireActivity())
 
         AppTheme {
-            Column {
-                LaunchBottomSheetCard(
-                    linkTypes = linkTypes,
-                    windowSize = windowSize
-                )
-
-                LaunchBottomSheetExitButton(
-                    windowSize = windowSize,
-                    onExitBtn = { dismiss() }
-                )
-            }
+            LaunchBottomSheetScreen(
+                linkTypes = linkTypes,
+                dismiss = { dismiss() },
+                windowSize = windowSize
+            )
         }
     }
 

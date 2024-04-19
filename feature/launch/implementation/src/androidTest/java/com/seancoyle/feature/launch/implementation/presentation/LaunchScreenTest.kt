@@ -1,8 +1,7 @@
-package com.seancoyle.feature.launch.implementation
+package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.seancoyle.core.ui.composables.TAG_LOADING
@@ -13,7 +12,7 @@ import org.junit.Test
 class LaunchScreenTest {
 
     @get:Rule
-    val composeTestRule: ComposeContentTestRule = createComposeRule()
+    val composeTestRule = createComposeRule()
 
     @Test
     fun displayLoadingSpinner() {

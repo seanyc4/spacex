@@ -1,15 +1,31 @@
-package com.seancoyle.spacex.presentation
+package com.seancoyle.feature.launch.implementation.presentation
 
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import com.seancoyle.core.test.stringResource
+import com.seancoyle.feature.launch.implementation.R
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.FlowPreview
+import org.hamcrest.Matchers
+import org.junit.Test
 
 @ExperimentalTestApi
 @FlowPreview
 @HiltAndroidTest
-class LaunchBottomSheetTest: LaunchBase() {
+internal class LaunchBottomSheetFragmentTest: LaunchBase() {
 
-   /* private val launchBottomSheetTag = "Launch Bottom Sheet"
+    private val launchBottomSheetTag = "Launch Bottom Sheet"
     private val articleString by composeTestRule.stringResource(R.string.article)
     private val wikiString by composeTestRule.stringResource(R.string.wikipedia)
 
@@ -87,7 +103,7 @@ class LaunchBottomSheetTest: LaunchBase() {
         }
     }
 
-    @Test
+    /*@Test
     fun launchBottomSheetNoLinksDisplaysDialogue(){
         composeTestRule.apply {
             waitUntilAtLeastOneExists(hasTestTag(launchGridTag))
@@ -100,7 +116,7 @@ class LaunchBottomSheetTest: LaunchBase() {
         Espresso.onView(withId(R.id.md_text_title)).check(matches(withText(R.string.text_info)))
         Espresso.onView(withId(R.id.md_text_message)).check(matches(withText(R.string.no_links)))
     }
-
+*/
     private fun launchBottomSheetLinkOpensExternalBrowser(
         position: Int,
         linkString: String,
@@ -144,5 +160,5 @@ class LaunchBottomSheetTest: LaunchBase() {
             onNodeWithText(wikiString).assertIsDisplayed()
             onNodeWithText(linksString).assertIsDisplayed()
         }
-    }*/
+    }
 }
