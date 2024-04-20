@@ -16,17 +16,17 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SortAndFilterLaunchesCacheUseCaseImplTest {
+class PaginateLaunchesCacheUseCaseImplTest {
 
     @MockK
     private lateinit var cacheDataSource: LaunchCacheDataSource
 
-    private lateinit var underTest: SortAndFilterLaunchesCacheUseCase
+    private lateinit var underTest: PaginateLaunchesCacheUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = SortAndFilterLaunchesCacheUseCaseImpl(cacheDataSource)
+        underTest = PaginateLaunchesCacheUseCaseImpl(cacheDataSource)
     }
 
     @Test
@@ -37,7 +37,7 @@ class SortAndFilterLaunchesCacheUseCaseImplTest {
         val page = 1
 
         coEvery {
-            cacheDataSource.filterLaunchList(
+            cacheDataSource.paginateLaunches(
                 launchYear = year,
                 order = order,
                 launchStatus = status,
@@ -66,7 +66,7 @@ class SortAndFilterLaunchesCacheUseCaseImplTest {
         val error = DataError.CACHE_ERROR
 
         coEvery {
-            cacheDataSource.filterLaunchList(
+            cacheDataSource.paginateLaunches(
                 launchYear = year,
                 order = order,
                 launchStatus = status,

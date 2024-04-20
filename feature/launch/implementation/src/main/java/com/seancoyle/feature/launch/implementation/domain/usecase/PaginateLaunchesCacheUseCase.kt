@@ -7,7 +7,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import kotlinx.coroutines.flow.Flow
 
-internal interface SortAndFilterLaunchesCacheUseCase {
+internal interface PaginateLaunchesCacheUseCase {
     operator fun invoke(
         launchYear: String,
         order: Order,

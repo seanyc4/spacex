@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
-    private val sortAndFilterLaunchesCacheUseCase: SortAndFilterLaunchesCacheUseCase,
+    private val paginateLaunchesCacheUseCase: PaginateLaunchesCacheUseCase,
     private val mergedLaunchesCacheUseCase: MergedLaunchesCacheUseCase,
     private val getCompanyCacheUseCase: GetCompanyCacheUseCase,
     private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase,
@@ -25,13 +25,13 @@ internal class LaunchesComponentImpl @Inject constructor(
         return getLaunchesApiCacheUseCase.invoke()
     }
 
-    override fun sortAndFilterLaunchesCacheUseCase(
+    override fun paginateLaunchesCacheUseCase(
         year: String,
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
     ): Flow<Result<List<LaunchTypes>?, DataError>> {
-        return sortAndFilterLaunchesCacheUseCase.invoke(
+        return paginateLaunchesCacheUseCase.invoke(
             launchYear = year,
             order = order,
             launchStatus = launchFilter,

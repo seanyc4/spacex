@@ -39,7 +39,7 @@ class MergedLaunchesCacheUseCaseImplTest {
     private lateinit var getCompanyFromCacheUseCase: GetCompanyCacheUseCase
 
     @MockK
-    private lateinit var getLaunchesFromCacheUseCase: SortAndFilterLaunchesCacheUseCase
+    private lateinit var getLaunchesFromCacheUseCase: PaginateLaunchesCacheUseCase
 
     private lateinit var underTest: MergedLaunchesCacheUseCaseImpl
 

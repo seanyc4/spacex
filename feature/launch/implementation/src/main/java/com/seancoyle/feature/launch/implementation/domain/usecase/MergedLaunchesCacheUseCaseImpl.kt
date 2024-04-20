@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     private val getCompanyFromCacheUseCase: GetCompanyCacheUseCase,
-    private val getLaunchesFromCacheUseCase: SortAndFilterLaunchesCacheUseCase
+    private val getLaunchesFromCacheUseCase: PaginateLaunchesCacheUseCase
 ) : MergedLaunchesCacheUseCase {
 
     companion object {

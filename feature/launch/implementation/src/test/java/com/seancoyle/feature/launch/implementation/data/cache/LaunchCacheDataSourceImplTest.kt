@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
-import com.seancoyle.database.dao.returnOrderedQuery
+import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
@@ -57,10 +57,10 @@ class LaunchCacheDataSourceImplTest {
         val order = Order.ASC
         val launchStatus = LaunchStatus.ALL
         val page = 1
-        coEvery { dao.returnOrderedQuery(launchYear, order, launchStatus, page) } returns launchesEntity
-        coEvery { mapper.mapEntityListToDomainList(launchesEntity) } returns launchesModel
+        coEvery { dao.paginateLaunches(launchYear, order, launchStatus, page) } returns launchesEntity
+        coEvery { mapper.entityToDomainList(launchesEntity) } returns launchesModel
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = launchYear,
             order = order,
             launchStatus = launchStatus,
@@ -70,7 +70,7 @@ class LaunchCacheDataSourceImplTest {
         assertTrue(result is Result.Success)
         assertEquals(launchesModel, result.data)
         coVerify {
-            dao.returnOrderedQuery(
+            dao.paginateLaunches(
                 launchYear = launchYear,
                 order = order,
                 launchStatus = launchStatus,
@@ -95,7 +95,7 @@ class LaunchCacheDataSourceImplTest {
     @Test
     fun `getAll returns mapped launches when DAO provides data`() = runTest {
         coEvery { dao.getAll() } returns listOf(launchEntity)
-        coEvery { mapper.mapEntityListToDomainList(listOf(launchEntity)) } returns launchesModel
+        coEvery { mapper.entityToDomainList(listOf(launchEntity)) } returns launchesModel
 
         val result = underTest.getAll()
 

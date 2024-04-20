@@ -8,7 +8,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 
 internal interface LaunchCacheDataSource {
 
-    suspend fun filterLaunchList(
+    suspend fun paginateLaunches(
         launchYear: String,
         order: Order,
         launchStatus: LaunchStatus,

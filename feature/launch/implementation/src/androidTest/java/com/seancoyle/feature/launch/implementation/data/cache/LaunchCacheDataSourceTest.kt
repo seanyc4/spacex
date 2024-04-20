@@ -116,7 +116,7 @@ internal class LaunchCacheDataSourceTest {
     fun orderAllLaunchesByDateASCConfirm() = runTest {
         insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.ASC,
             launchStatus = LaunchStatus.SUCCESS,
@@ -134,7 +134,7 @@ internal class LaunchCacheDataSourceTest {
     fun orderAllLaunchesByDateDESCConfirm() = runTest {
         insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.DESC,
             launchStatus = LaunchStatus.SUCCESS,
@@ -153,7 +153,7 @@ internal class LaunchCacheDataSourceTest {
         insertTestData()
         val launchYear = validLaunchYears.random()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = launchYear,
             order = Order.ASC,
             launchStatus = LaunchStatus.ALL,
@@ -173,7 +173,7 @@ internal class LaunchCacheDataSourceTest {
         insertTestData()
         val launchYear = validLaunchYears.random()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = launchYear,
             order = Order.DESC,
             launchStatus = LaunchStatus.ALL,
@@ -193,7 +193,7 @@ internal class LaunchCacheDataSourceTest {
         insertTestData()
         val invalidYear = "1000"
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = invalidYear,
             order = Order.DESC,
             launchStatus = LaunchStatus.ALL,
@@ -210,7 +210,7 @@ internal class LaunchCacheDataSourceTest {
     fun filterLaunchesByLaunchStatusSuccess() = runTest {
         insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.DESC,
             launchStatus = LaunchStatus.SUCCESS,
@@ -229,7 +229,7 @@ internal class LaunchCacheDataSourceTest {
     fun filterLaunchesByLaunchStatusFailed() = runTest {
         insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.DESC,
             launchStatus = LaunchStatus.FAILED,
@@ -248,7 +248,7 @@ internal class LaunchCacheDataSourceTest {
     fun filterLaunchesByLaunchStatusAll() = runTest {
         val expectedResult = insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.DESC,
             launchStatus = LaunchStatus.ALL,
@@ -267,7 +267,7 @@ internal class LaunchCacheDataSourceTest {
     fun filterLaunchesByLaunchStatusUnknown() = runTest {
         insertTestData()
 
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = "",
             order = Order.DESC,
             launchStatus = LaunchStatus.UNKNOWN,
@@ -286,7 +286,7 @@ internal class LaunchCacheDataSourceTest {
     fun filterLaunchesInvalidYearByLaunchStatusNoResultsFound() = runTest {
         insertTestData()
         val year = "0000"
-        val result = underTest.filterLaunchList(
+        val result = underTest.paginateLaunches(
             launchYear = year,
             order = Order.DESC,
             launchStatus = LaunchStatus.SUCCESS,

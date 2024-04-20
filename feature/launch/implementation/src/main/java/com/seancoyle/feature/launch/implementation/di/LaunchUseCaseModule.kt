@@ -18,10 +18,10 @@ import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesCompon
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponentImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCaseImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.PaginateLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.PaginateLaunchesCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.SortAndFilterLaunchesCacheUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -43,8 +43,8 @@ internal abstract class LaunchUseCaseModule {
 
     @Binds
     abstract fun bindsSortAndFilterLaunchesCacheUseCase(
-        impl: SortAndFilterLaunchesCacheUseCaseImpl
-    ): SortAndFilterLaunchesCacheUseCase
+        impl: PaginateLaunchesCacheUseCaseImpl
+    ): PaginateLaunchesCacheUseCase
 
     @Binds
     abstract fun bindsMergedLaunchesCacheUseCase(

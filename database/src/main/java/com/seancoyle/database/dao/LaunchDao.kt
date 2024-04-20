@@ -166,7 +166,7 @@ interface LaunchDao {
 
 }
 
-suspend fun LaunchDao.returnOrderedQuery(
+suspend fun LaunchDao.paginateLaunches(
     launchYear: String,
     order: Order,
     launchStatus: LaunchStatus,

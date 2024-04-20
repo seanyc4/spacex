@@ -49,7 +49,7 @@ class LaunchEntityMapperTest {
 
     @Test
     fun `mapEntityListToDomainList correctly maps list of entities to list of domain models`() {
-        val models = mapper.mapEntityListToDomainList(launchesEntity)
+        val models = mapper.entityToDomainList(launchesEntity)
 
         assertEquals(launchesModel.size, models.size)
         models.forEachIndexed { index, model ->
@@ -59,7 +59,7 @@ class LaunchEntityMapperTest {
 
     @Test
     fun `mapDomainListToEntityList correctly maps list of domain models to list of entities`() {
-        val entities = mapper.mapDomainListToEntityList(launchesModel)
+        val entities = mapper.domaintoEntityList(launchesModel)
 
         assertEquals(launchesEntity.size, entities.size)
         entities.forEachIndexed { index, entity ->

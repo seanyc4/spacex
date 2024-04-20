@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
-    fun sortAndFilterLaunchesCacheUseCase(
+    fun paginateLaunchesCacheUseCase(
         year: String,
         order: Order,
         launchFilter: LaunchStatus,

@@ -7,7 +7,7 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
-import com.seancoyle.database.dao.returnOrderedQuery
+import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.cache.LaunchCacheDataSource
@@ -23,7 +23,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LaunchCacheDataSource {
 
-    override suspend fun filterLaunchList(
+    override suspend fun paginateLaunches(
         launchYear: String,
         order: Order,
         launchStatus: LaunchStatus,
@@ -33,8 +33,8 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            mapper.mapEntityListToDomainList(
-                dao.returnOrderedQuery(
+            mapper.entityToDomainList(
+                dao.paginateLaunches(
                     launchYear = launchYear,
                     launchStatus = launchStatus,
                     page = page,
@@ -59,7 +59,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.insertList(
-                mapper.mapDomainListToEntityList(launches)
+                mapper.domaintoEntityList(launches)
             )
         }
     }
@@ -108,7 +108,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            mapper.mapEntityListToDomainList(dao.getAll())
+            mapper.entityToDomainList(dao.getAll())
         }
     }
 

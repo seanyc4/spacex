@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
+internal class PaginateLaunchesCacheUseCaseImpl @Inject constructor(
     private val cacheDataSource: LaunchCacheDataSource
-) : SortAndFilterLaunchesCacheUseCase {
+) : PaginateLaunchesCacheUseCase {
 
     override operator fun invoke(
         launchYear: String,
@@ -21,7 +21,7 @@ internal class SortAndFilterLaunchesCacheUseCaseImpl @Inject constructor(
         page: Int
     ): Flow<Result<List<LaunchTypes>?, DataError>> = flow {
         emit(
-            cacheDataSource.filterLaunchList(
+            cacheDataSource.paginateLaunches(
                 launchYear = launchYear,
                 order = order,
                 launchStatus = launchStatus,

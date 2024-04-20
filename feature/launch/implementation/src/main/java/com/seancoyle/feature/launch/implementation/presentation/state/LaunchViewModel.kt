@@ -18,11 +18,11 @@ import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SortAndFilterLaunchesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -60,7 +60,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun loadDataOnAppLaunchOrRestore() {
         if (getScrollPositionState() != 0) {
             // Restoring state from cache data
-            setEvent(SortAndFilterLaunchesEvent)
+            setEvent(CreateMergedLaunchesEvent)
         } else {
             // Fresh app launch - get data from network
             setEvent(GetCompanyApiAndCacheEvent)
@@ -84,125 +84,131 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun setEvent(event: LaunchEvents) {
+    private fun setEvent(event: LaunchEvents) {
         viewModelScope.launch {
             when (event) {
-                is SortAndFilterLaunchesEvent -> {
-                    launchesComponent.createMergedLaunchesCacheUseCase(
-                        year = getSearchYearState(),
-                        order = getOrderState(),
-                        launchFilter = getLaunchStatusState(),
-                        page = getPageState()
-                    ).distinctUntilChanged()
-                        .collect { result ->
-                            when (result) {
-                                is Result.Success -> {
-                                    uiState.update {
-                                        LaunchesUiState.Success(
-                                            launches = result.data,
-                                            paginationState = PaginationState.None
-                                        )
-                                    }
-                                }
-
-                                is Result.Error -> {
-                                    uiState.update {
-                                        LaunchesUiState.Error(
-                                            errorNotificationState = NotificationState(
-                                                message = result.error.asStringResource(),
-                                                notificationUiType = NotificationUiType.Snackbar,
-                                                notificationType = NotificationType.Error
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                }
-
-                is PaginateLaunchesCacheEvent -> {
-                    launchesComponent.sortAndFilterLaunchesCacheUseCase(
-                        year = getSearchYearState(),
-                        order = getOrderState(),
-                        launchFilter = getLaunchStatusState(),
-                        page = getPageState()
-                    ).collect { result ->
-                        when (result) {
-                            is Result.Success -> {
-                                // Pagination - We append the next 30 rows to the current state as a new list
-                                // This triggers a recompose and keeps immutability
-                                uiState.update { currentState ->
-                                    currentState.isSuccess {
-                                        val updatedLaunches =
-                                            it.launches + (result.data ?: emptyList())
-                                        it.copy(
-                                            launches = updatedLaunches,
-                                            paginationState = PaginationState.None
-                                        )
-                                    }
-                                }
-                            }
-
-                            is Result.Error -> {
-                                uiState.update { currentState ->
-                                    currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                is GetCompanyApiAndCacheEvent -> {
-                    launchesComponent.getCompanyApiAndCacheUseCase()
-                        .onStart { uiState.update { LaunchesUiState.Loading } }
-                        .collect { result ->
-                            when (result) {
-                                is Result.Success -> setEvent(GetLaunchesApiAndCacheEvent)
-                                is Result.Error -> {
-                                    uiState.update {
-                                        LaunchesUiState.Error(
-                                            errorNotificationState = NotificationState(
-                                                message = result.error.asStringResource(),
-                                                notificationUiType = NotificationUiType.Dialog,
-                                                notificationType = NotificationType.Error
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                }
-
-                is GetLaunchesApiAndCacheEvent -> {
-                    launchesComponent.getLaunchesApiAndCacheUseCase()
-                        .onStart { uiState.update { LaunchesUiState.Loading } }
-                        .collect { result ->
-                            when (result) {
-                                is Result.Success -> setEvent(SortAndFilterLaunchesEvent)
-                                is Result.Error -> {
-                                    uiState.update {
-                                        LaunchesUiState.Error(
-                                            errorNotificationState = NotificationState(
-                                                message = result.error.asStringResource(),
-                                                notificationUiType = NotificationUiType.Dialog,
-                                                notificationType = NotificationType.Error
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                }
-
-                is NotificationEvent -> {
-                    uiState.update { currentState ->
-                        currentState.isSuccess { it.copy(notificationState = event.notificationState) }
-                    }
-                }
+                is CreateMergedLaunchesEvent -> mergedLaunchesCacheUseCase()
+                is PaginateLaunchesCacheEvent -> paginateLaunchesCacheUseCase()
+                is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
+                is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
+                is NotificationEvent -> updateNotificationState(event)
 
                 else -> {}
             }
         }
+    }
+
+    private fun updateNotificationState(event: NotificationEvent) {
+        uiState.update { currentState ->
+            currentState.isSuccess { it.copy(notificationState = event.notificationState) }
+        }
+    }
+
+    private suspend fun getLaunchesApiAndCacheUseCase() {
+        launchesComponent.getLaunchesApiAndCacheUseCase()
+            .onStart { uiState.update { LaunchesUiState.Loading } }
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> setEvent(CreateMergedLaunchesEvent)
+                    is Result.Error -> {
+                        uiState.update {
+                            LaunchesUiState.Error(
+                                errorNotificationState = NotificationState(
+                                    message = result.error.asStringResource(),
+                                    notificationUiType = NotificationUiType.Dialog,
+                                    notificationType = NotificationType.Error
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+    }
+
+    private suspend fun getCompanyApiAndCacheUseCase() {
+        launchesComponent.getCompanyApiAndCacheUseCase()
+            .onStart { uiState.update { LaunchesUiState.Loading } }
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> setEvent(GetLaunchesApiAndCacheEvent)
+                    is Result.Error -> {
+                        uiState.update {
+                            LaunchesUiState.Error(
+                                errorNotificationState = NotificationState(
+                                    message = result.error.asStringResource(),
+                                    notificationUiType = NotificationUiType.Dialog,
+                                    notificationType = NotificationType.Error
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+    }
+
+    private suspend fun paginateLaunchesCacheUseCase() {
+        launchesComponent.paginateLaunchesCacheUseCase(
+            year = getSearchYearState(),
+            order = getOrderState(),
+            launchFilter = getLaunchStatusState(),
+            page = getPageState()
+        ).collect { result ->
+            when (result) {
+                is Result.Success -> {
+                    // Pagination - We append the next 30 rows to the current state as a new list
+                    // This triggers a recompose and keeps immutability
+                    uiState.update { currentState ->
+                        currentState.isSuccess {
+                            val updatedLaunches =
+                                it.launches + (result.data ?: emptyList())
+                            it.copy(
+                                launches = updatedLaunches,
+                                paginationState = PaginationState.None
+                            )
+                        }
+                    }
+                }
+
+                is Result.Error -> {
+                    uiState.update { currentState ->
+                        currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun mergedLaunchesCacheUseCase() {
+        launchesComponent.createMergedLaunchesCacheUseCase(
+            year = getSearchYearState(),
+            order = getOrderState(),
+            launchFilter = getLaunchStatusState(),
+            page = getPageState()
+        ).distinctUntilChanged()
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        uiState.update {
+                            LaunchesUiState.Success(
+                                launches = result.data,
+                                paginationState = PaginationState.None
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        uiState.update {
+                            LaunchesUiState.Error(
+                                errorNotificationState = NotificationState(
+                                    message = result.error.asStringResource(),
+                                    notificationUiType = NotificationUiType.Snackbar,
+                                    notificationType = NotificationType.Error
+                                )
+                            )
+                        }
+                    }
+                }
+            }
     }
 
     fun buildCompanySummary(company: Company) =
@@ -353,7 +359,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun newSearchEvent() {
-        setEvent(SortAndFilterLaunchesEvent)
+        setEvent(CreateMergedLaunchesEvent)
         saveLaunchPreferences(
             order = getOrderState(),
             launchStatus = getLaunchStatusState(),
