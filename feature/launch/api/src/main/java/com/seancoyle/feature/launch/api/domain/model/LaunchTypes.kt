@@ -57,8 +57,7 @@ data class LinkType(
     @SerializedName("nameResId")
     val nameResId: Int,
     @SerializedName("link")
-    val link: String?,
-    val onClick: () -> Unit
+    val link: String?
 ) : Parcelable
 
 data class Rocket(

@@ -6,6 +6,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.api.domain.model.LinkType
 import kotlinx.parcelize.Parcelize
 
 internal sealed interface LaunchesUiState {
@@ -35,7 +36,7 @@ data class LaunchesFilterState(
     val order: Order = Order.DESC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchYear: String = "",
-    val isDialogFilterDisplayed: Boolean = false,
+    val isVisible: Boolean = false,
 ) : Parcelable
 
 @Parcelize
@@ -43,4 +44,11 @@ data class LaunchesFilterState(
 internal data class LaunchesScrollState(
     val page: Int = 1,
     val scrollPosition: Int = 0
+) : Parcelable
+
+@Parcelize
+@Stable
+data class BottomSheetUiState(
+    val isVisible: Boolean = false,
+    val linkTypes: List<LinkType> = emptyList()
 ) : Parcelable

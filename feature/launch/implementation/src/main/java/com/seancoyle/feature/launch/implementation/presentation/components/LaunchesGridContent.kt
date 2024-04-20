@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.presentation
+package com.seancoyle.feature.launch.implementation.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,12 +26,6 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
-import com.seancoyle.feature.launch.implementation.presentation.components.CompanySummaryCard
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchCard
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchCarouselCard
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchGridCard
-import com.seancoyle.feature.launch.implementation.presentation.components.LaunchHeading
-import com.seancoyle.feature.launch.implementation.presentation.components.LazyVerticalGridPagination
 import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -42,7 +36,7 @@ private const val GRID_COLUMN_SIZE = 2
 @ExperimentalMaterialApi
 @FlowPreview
 @Composable
-internal fun LaunchesContent(
+internal fun LaunchesGridContent(
     launches: List<LaunchTypes>,
     paginationState: PaginationState,
     page: Int,

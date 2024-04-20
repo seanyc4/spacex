@@ -15,9 +15,4 @@
 
     </fragment>
 
-    <dialog
-        android:id="@+id/launchBottomActionSheet"
-        android:name="com.seancoyle.feature.launch.implementation.presentation.LaunchBottomActionSheet"
-        android:label="LaunchBottomActionSheet" />
-
 </navigation>

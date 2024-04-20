@@ -17,7 +17,7 @@ fun PreviewLaunchHeading() {
 @Composable
 fun PreviewLaunchCardImage() {
     LaunchCardImage(
-        imageUrl = "https://via.placeholder.com/150", // replace with appropriate test data
+        imageUrl = "https://via.placeholder.com/150",
         size = 60.dp
     )
 }
@@ -25,7 +25,7 @@ fun PreviewLaunchCardImage() {
 @Preview
 @Composable
 fun PreviewLaunchCardDefaultText() {
-    LaunchCardDefaultText(title = R.string.app_name) // replace with appropriate test data
+    LaunchCardDefaultText(title = R.string.app_name)
 }
 
 @Preview

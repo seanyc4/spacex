@@ -14,6 +14,8 @@ import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LinkType
+import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
@@ -42,6 +44,9 @@ internal class LaunchViewModel @Inject constructor(
         private set
 
     var scrollState = MutableStateFlow(LaunchesScrollState())
+        private set
+
+    var bottomSheetState = MutableStateFlow(BottomSheetUiState())
         private set
 
     fun init() {
@@ -308,7 +313,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     fun setDialogFilterDisplayedState(isDisplayed: Boolean) {
-        updateFilterState { copy(isDialogFilterDisplayed = isDisplayed) }
+        updateFilterState { copy(isVisible = isDisplayed) }
     }
 
     private fun resetPageState() {
@@ -354,6 +359,64 @@ internal class LaunchViewModel @Inject constructor(
             launchStatus = getLaunchStatusState(),
             launchYear = getSearchYearState()
         )
+    }
+
+    fun handleLaunchClick(links: Links?) {
+        val linkTypes = createLinkTypeList(links)
+
+        if (validateLinks(linkTypes)) {
+            bottomSheetState.update { currentState ->
+                currentState.copy(isVisible = true, linkTypes = linkTypes)
+            }
+        } else {
+            bottomSheetState.update {
+                displayNoLinksError()
+                BottomSheetUiState()
+            }
+        }
+    }
+
+    private fun createLinkTypeList(links: Links?): List<LinkType> {
+        val linkTypes = listOfNotNull(
+            LinkType(R.string.article, links?.articleLink),
+            LinkType(R.string.webcast, links?.webcastLink),
+            LinkType(R.string.wikipedia, links?.wikiLink)
+        )
+        return linkTypes
+    }
+
+    private fun validateLinks(links: List<LinkType>): Boolean {
+        return links.all { it.link?.isNotEmpty() == true }
+    }
+
+    private fun displayNoLinksError() {
+        setEvent(
+            event = NotificationEvent(
+                notificationState = NotificationState(
+                    notificationType = NotificationType.Info,
+                    message = R.string.no_links.asStringResource(),
+                    notificationUiType = NotificationUiType.Dialog
+                ),
+            )
+        )
+    }
+
+    fun displayUnableToLoadLinkError() {
+        setEvent(
+            event = NotificationEvent(
+                notificationState = NotificationState(
+                    notificationType = NotificationType.Error,
+                    message = R.string.error_links.asStringResource(),
+                    notificationUiType = NotificationUiType.Snackbar
+                )
+            )
+        )
+    }
+
+    fun dismissBottomSheet() {
+        bottomSheetState.update { currentState ->
+            currentState.copy(isVisible = false)
+        }
     }
 
     private companion object {

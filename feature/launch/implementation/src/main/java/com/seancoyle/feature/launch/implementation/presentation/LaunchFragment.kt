@@ -13,44 +13,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
-import androidx.navigation.fragment.findNavController
-import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.NotificationUiType
-import com.seancoyle.core.ui.asStringResource
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.theme.AppTheme
-import com.seancoyle.feature.launch.api.domain.model.Links
-import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
-const val LINKS_KEY = "links"
-
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 @ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchFragment : Fragment() {
@@ -63,6 +54,7 @@ internal class LaunchFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = content {
         val windowSize = calculateWindowSizeClass(requireActivity())
+        val isLandscape = windowSize.heightSizeClass == WindowHeightSizeClass.Compact
         val snackbarHostState = remember { SnackbarHostState() }
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
@@ -86,7 +78,7 @@ internal class LaunchFragment : Fragment() {
             ) { padding ->
                 Box(
                     Modifier
-                        .adaptiveHorizontalPadding(windowSize)
+                        .adaptiveHorizontalPadding(isLandscape)
                         .padding(padding)
                         .fillMaxSize()
                         .pullRefresh(pullRefreshState)
@@ -95,8 +87,8 @@ internal class LaunchFragment : Fragment() {
                         viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
-                        onItemClicked = ::onCardClicked,
-                        windowSize = windowSize
+                        isLandscape = isLandscape,
+                        openLink = { launchIntent(it) },
                     )
                 }
             }
@@ -106,12 +98,6 @@ internal class LaunchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.init()
-        // Get result from bottom action sheet fragment
-        setFragmentResultListener(LINKS_KEY) { key, bundle ->
-            if (key == LINKS_KEY) {
-                launchIntent(bundle.getString(LINKS_KEY))
-            }
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -129,54 +115,7 @@ internal class LaunchFragment : Fragment() {
                 )
             )
         } catch (e: ActivityNotFoundException) {
-            displayUnableToLoadLinkError()
+            viewModel.displayUnableToLoadLinkError()
         }
     }
-
-    private fun onCardClicked(links: Links) {
-        if (isLinksNullOrEmpty(links)) {
-            displayNoLinksError()
-        } else {
-            displayBottomActionSheet(links)
-        }
-    }
-
-    private fun isLinksNullOrEmpty(links: Links) =
-        links.articleLink.isNullOrEmpty() &&
-                links.webcastLink.isNullOrEmpty() &&
-                links.wikiLink.isNullOrEmpty()
-
-    private fun displayBottomActionSheet(links: Links) {
-        if (findNavController().currentDestination?.id == R.id.launchFragment) {
-            findNavController().navigate(
-                R.id.action_launchFragment_to_launchBottomActionSheet,
-                bundleOf(LINKS_KEY to links)
-            )
-        }
-    }
-
-    private fun displayNoLinksError() {
-        viewModel.setEvent(
-            event = LaunchEvents.NotificationEvent(
-                notificationState = NotificationState(
-                    notificationType = NotificationType.Info,
-                    message = R.string.no_links.asStringResource(),
-                    notificationUiType = NotificationUiType.Dialog
-                ),
-            )
-        )
-    }
-
-    private fun displayUnableToLoadLinkError() {
-        viewModel.setEvent(
-            event = LaunchEvents.NotificationEvent(
-                notificationState = NotificationState(
-                    notificationType = NotificationType.Error,
-                    message = R.string.error_links.asStringResource(),
-                    notificationUiType = NotificationUiType.Snackbar
-                )
-            )
-        )
-    }
-
 }

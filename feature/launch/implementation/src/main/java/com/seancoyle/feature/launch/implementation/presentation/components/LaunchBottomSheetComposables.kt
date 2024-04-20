@@ -14,7 +14,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,13 +40,14 @@ fun LaunchBottomSheetDivider(
 @Composable
 internal fun LaunchBottomSheetCard(
     linkTypes: List<LinkType>?,
-    windowSize: WindowSizeClass,
+    isLandscape: Boolean,
+    actionLinkClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .adaptiveHorizontalPadding(windowSize = windowSize, horizontalPadding = 164.dp)
+            .adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 164.dp)
             .padding(
                 start = dimensionResource(id = R.dimen.small_view_margins_8dp),
                 end = dimensionResource(id = R.dimen.small_view_margins_8dp)
@@ -64,7 +64,7 @@ internal fun LaunchBottomSheetCard(
                 if (!linkType.link.isNullOrEmpty()) {
                     LaunchBottomSheetTitle(
                         name = stringResource(id = linkType.nameResId),
-                        onClick = linkType.onClick
+                        actionLinkClicked = { actionLinkClicked(linkType.link!!) }
                     )
                     if (index < linkTypes.lastIndex) {
                         LaunchBottomSheetDivider()
@@ -92,7 +92,7 @@ fun LaunchBottomSheetHeader(
 @Composable
 fun LaunchBottomSheetTitle(
     name: String,
-    onClick: () -> Unit,
+    actionLinkClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -103,7 +103,7 @@ fun LaunchBottomSheetTitle(
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin))
             .focusable(enabled = true)
             .clickable {
-                onClick()
+                actionLinkClicked()
             }
     )
 }
@@ -111,7 +111,7 @@ fun LaunchBottomSheetTitle(
 @Composable
 fun LaunchBottomSheetExitButton(
     actionExitClicked: () -> Unit,
-    windowSize: WindowSizeClass,
+    isLandscape: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
@@ -119,7 +119,7 @@ fun LaunchBottomSheetExitButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height = 80.dp)
-            .adaptiveHorizontalPadding(windowSize = windowSize, horizontalPadding = 164.dp)
+            .adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 164.dp)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin)),
         shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.default_corner_radius)),
         colors = ButtonDefaults.buttonColors(
@@ -139,7 +139,7 @@ fun LaunchBottomSheetExitButton(
 fun LaunchBottomSheetTitlePreview() {
     LaunchBottomSheetTitle(
         name = "Example Title",
-        onClick = {}
+        actionLinkClicked = {}
     )
 }
 

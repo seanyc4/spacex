@@ -39,7 +39,7 @@ class LaunchBottomSheetTest {
             LaunchBottomSheetScreen(
                 linkTypes = linkTypes,
                 dismiss = { actionExitClicked() },
-                windowSize = windowSize
+                isLandscape = windowSize
             )
         }
     }

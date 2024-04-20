@@ -2,59 +2,43 @@ package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.common.crashlytics.printLogDebug
-import com.seancoyle.feature.launch.api.domain.model.Links
-import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
-import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
 import kotlinx.coroutines.FlowPreview
 
-@OptIn(ExperimentalMaterialApi::class)
+@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @FlowPreview
 @Composable
 internal fun LaunchRoute(
     viewModel: LaunchViewModel,
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
-    onItemClicked: (links: Links) -> Unit,
-    windowSize: WindowSizeClass
+    isLandscape: Boolean,
+    openLink: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val launchFilterState by viewModel.filterState.collectAsStateWithLifecycle()
+    val filterState by viewModel.filterState.collectAsStateWithLifecycle()
+    val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
 
     SideEffect {
         printLogDebug("LaunchRoute", ": uiState: $uiState")
     }
 
-    LaunchScreen(
+    LaunchScreenWithBottomSheet(
         uiState = uiState,
-        page = viewModel.getPageState(),
-        onChangeScrollPosition = viewModel::setScrollPositionState,
-        loadNextPage = viewModel::nextPage,
+        viewModel = viewModel,
         snackbarHostState = snackbarHostState,
-        onItemClicked = onItemClicked,
-        onDismissNotification = viewModel::dismissError,
-        getLaunchStatusIcon = viewModel::getLaunchStatusIcon,
-        getCompanySummary = viewModel::buildCompanySummary,
-        getLaunchDate = viewModel::getLaunchDateText
+        filterState = filterState,
+        isLandscape = isLandscape,
+        bottomSheetState = bottomSheetState,
+        pullRefreshState = pullRefreshState,
+        openLink = openLink
     )
-
-    if (launchFilterState.isDialogFilterDisplayed) {
-        FilterDialog(
-            currentFilterState = launchFilterState,
-            updateFilterState = viewModel::setLaunchFilterState,
-            onDismiss = viewModel::setDialogFilterDisplayedState,
-            newSearch = viewModel::newSearch,
-            isLandScape = windowSize.heightSizeClass == WindowHeightSizeClass.Compact
-        )
-    }
-
-    SwipeToRefreshComposable(uiState, pullRefreshState)
 }
