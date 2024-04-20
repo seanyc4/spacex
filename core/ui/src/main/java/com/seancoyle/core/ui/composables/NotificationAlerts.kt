@@ -20,7 +20,7 @@ import com.seancoyle.core.ui.R
 @Composable
 fun DisplayNotification(
     error: NotificationState?,
-    onDismiss: () -> Unit,
+    onDismissNotification: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
     error?.let {
@@ -28,7 +28,7 @@ fun DisplayNotification(
             NotificationUiType.Dialog -> {
                 ErrorDialog(
                     message = it.message.asString(),
-                    onDismiss = onDismiss
+                    onDismissNotification = onDismissNotification
                 )
             }
 
@@ -47,15 +47,15 @@ fun DisplayNotification(
 @Composable
 fun ErrorDialog(
     message: String,
-    onDismiss: () -> Unit
+    onDismissNotification: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismissNotification,
         title = { Text(text = stringResource(id = R.string.text_error)) },
         text = { Text(message) },
         icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = onDismissNotification) {
                 Text(text = stringResource(id = R.string.text_ok))
             }
         },

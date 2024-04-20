@@ -36,7 +36,9 @@ sealed interface LaunchTypes {
         val missionName: String,
         val rocket: Rocket,
         val launchDateStatus: LaunchDateStatus,
-        val launchDays: String
+        val launchDays: String,
+        val launchDaysResId: Int,
+        val launchStatusIconResId: Int
     ) : LaunchTypes
 }
 

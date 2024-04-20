@@ -8,22 +8,18 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
-import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LinkType
-import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetCard
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetExitButton
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
 import kotlinx.coroutines.FlowPreview
 
@@ -33,33 +29,27 @@ import kotlinx.coroutines.FlowPreview
 @Composable
 internal fun LaunchScreenWithBottomSheet(
     uiState: LaunchesUiState,
-    viewModel: LaunchViewModel,
-    snackbarHostState: SnackbarHostState,
     filterState: LaunchesFilterState,
-    isLandscape: Boolean,
+    scrollState: LaunchesScrollState,
     bottomSheetState: BottomSheetUiState,
     pullRefreshState: PullRefreshState,
-    openLink: (String) -> Unit
+    snackbarHostState: SnackbarHostState,
+    onEvent: (LaunchEvents) -> Unit,
+    onDismissNotification: () -> Unit,
+    isLandscape: Boolean,
 ) {
     LaunchScreen(
         uiState = uiState,
-        page = viewModel.getPageState(),
-        onChangeScrollPosition = viewModel::setScrollPositionState,
-        loadNextPage = viewModel::nextPage,
+        onEvent = onEvent,
+        scrollState = scrollState,
         snackbarHostState = snackbarHostState,
-        onItemClicked = viewModel::handleLaunchClick,
-        onDismissNotification = viewModel::dismissError,
-        getLaunchStatusIcon = viewModel::getLaunchStatusIcon,
-        getCompanySummary = viewModel::buildCompanySummary,
-        getLaunchDate = viewModel::getLaunchDateText
+        onDismissNotification = onDismissNotification
     )
 
     if (filterState.isVisible) {
         FilterDialog(
             currentFilterState = filterState,
-            updateFilterState = viewModel::setLaunchFilterState,
-            onDismiss = viewModel::setDialogFilterDisplayedState,
-            newSearch = viewModel::newSearch,
+            onEvent = onEvent,
             isLandScape = isLandscape
         )
     }
@@ -67,8 +57,7 @@ internal fun LaunchScreenWithBottomSheet(
     if (bottomSheetState.isVisible) {
         LaunchBottomSheetScreen(
             bottomSheetUiState = bottomSheetState,
-            dismiss = viewModel::dismissBottomSheet,
-            openLink = openLink,
+            onEvent = onEvent,
             isLandscape = isLandscape
         )
     }
@@ -81,34 +70,24 @@ internal fun LaunchScreenWithBottomSheet(
 @Composable
 internal fun LaunchScreen(
     uiState: LaunchesUiState,
-    page: Int,
-    onChangeScrollPosition: (Int) -> Unit,
-    loadNextPage: (Int) -> Unit,
+    scrollState: LaunchesScrollState,
+    onEvent: (LaunchEvents) -> Unit,
+    onDismissNotification: () -> Unit,
     snackbarHostState: SnackbarHostState,
-    onItemClicked: (links: Links) -> Unit,
-    getLaunchStatusIcon: (LaunchStatus) -> Int,
-    getLaunchDate: (LaunchDateStatus) -> Int,
-    getCompanySummary: (Company) -> StringResource,
-    onDismissNotification: () -> Unit
 ) {
     when (uiState) {
         is LaunchesUiState.Success -> {
             LaunchesGridContent(
                 launches = uiState.launches,
                 paginationState = uiState.paginationState,
-                page = page,
-                onChangeScrollPosition = onChangeScrollPosition,
-                loadNextPage = loadNextPage,
-                onItemClicked = onItemClicked,
-                getLaunchStatusIcon = getLaunchStatusIcon,
-                getCompanySummary = getCompanySummary,
-                getLaunchDate = getLaunchDate
+                scrollState = scrollState,
+                onEvent = onEvent
             )
 
             uiState.notificationState?.let { notification ->
                 DisplayNotification(
                     error = notification,
-                    onDismiss = onDismissNotification,
+                    onDismissNotification = onDismissNotification,
                     snackbarHostState = snackbarHostState
                 )
             }
@@ -133,8 +112,7 @@ internal fun LaunchScreen(
 @Composable
 internal fun LaunchBottomSheetScreen(
     bottomSheetUiState: BottomSheetUiState,
-    dismiss: () -> Unit,
-    openLink: (String) -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     isLandscape: Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -145,13 +123,12 @@ internal fun LaunchBottomSheetScreen(
     if (bottomSheetUiState.isVisible) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = dismiss
+            onDismissRequest = { onEvent(LaunchEvents.DismissBottomSheetEvent) }
         ) {
             BottomSheetContent(
                 linkTypes = bottomSheetUiState.linkTypes,
                 isLandscape = isLandscape,
-                actionLinkClicked = { openLink(it) },
-                dismiss = dismiss
+                onEvent = onEvent
             )
         }
     }
@@ -161,19 +138,18 @@ internal fun LaunchBottomSheetScreen(
 private fun BottomSheetContent(
     linkTypes: List<LinkType>?,
     isLandscape: Boolean,
-    actionLinkClicked: (String) -> Unit,
-    dismiss: () -> Unit
+    onEvent: (LaunchEvents) -> Unit
 ) {
     Column {
         LaunchBottomSheetCard(
             linkTypes = linkTypes,
             isLandscape = isLandscape,
-            actionLinkClicked = actionLinkClicked
+            actionLinkClicked = { onEvent(LaunchEvents.OpenLinkEvent(it)) }
         )
         LaunchBottomSheetExitButton(
             isLandscape = isLandscape,
             actionExitClicked = {
-                dismiss()
+                onEvent(LaunchEvents.DismissBottomSheetEvent)
             }
         )
     }

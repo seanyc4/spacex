@@ -33,6 +33,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.RocketWithMission
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 
 @Composable
 internal fun LaunchHeading(
@@ -76,16 +77,14 @@ internal fun CompanySummaryCard(
 @Composable
 internal fun LaunchCard(
     launchItem: LaunchTypes.Launch,
-    onClick: () -> Unit,
-    getLaunchStatusIcon: Int,
-    getLaunchDate: Int,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onClick() },
+            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
@@ -114,7 +113,7 @@ internal fun LaunchCard(
                 LaunchCardDefaultText(title = R.string.mission)
                 LaunchCardDefaultText(title = R.string.date_time)
                 LaunchCardDefaultText(title = R.string.rocket)
-                LaunchCardDefaultText(title = getLaunchDate)
+                LaunchCardDefaultText(title = launchItem.launchDaysResId)
             }
 
             Column(
@@ -132,7 +131,7 @@ internal fun LaunchCard(
                     .fillMaxWidth(1f)
             ) {
                 Image(
-                    painter = painterResource(id = getLaunchStatusIcon),
+                    painter = painterResource(id = launchItem.launchStatusIconResId),
                     contentDescription = "Launch Status icon"
                 )
             }
@@ -186,14 +185,14 @@ internal fun LaunchCardDynamicText(
 @Composable
 internal fun LaunchCarouselCard(
     launchItem: RocketWithMission,
-    onClick: () -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .size(120.dp)
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onClick() },
+            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
         shape = CircleShape,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
@@ -216,13 +215,13 @@ internal fun LaunchCarouselCard(
 @Composable
 internal fun LaunchGridCard(
     launchItem: LaunchTypes.Grid,
-    onClick: () -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onClick() },
+            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.items.links)) },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
     ) {

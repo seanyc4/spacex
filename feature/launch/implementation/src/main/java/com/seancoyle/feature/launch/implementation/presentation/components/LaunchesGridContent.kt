@@ -18,14 +18,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -39,18 +38,12 @@ private const val GRID_COLUMN_SIZE = 2
 internal fun LaunchesGridContent(
     launches: List<LaunchTypes>,
     paginationState: PaginationState,
-    page: Int,
-    onChangeScrollPosition: (Int) -> Unit,
-    loadNextPage: (Int) -> Unit,
-    onItemClicked: (links: Links) -> Unit,
-    getLaunchStatusIcon: (LaunchStatus) -> Int,
-    getLaunchDate: (LaunchDateStatus) -> Int,
-    getCompanySummary: (Company) -> StringResource,
+    scrollState: LaunchesScrollState,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyGridState()
-    ObserveScrollPosition(listState, onChangeScrollPosition)
-
+    ObserveScrollPosition(listState, onEvent)
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
@@ -69,17 +62,14 @@ internal fun LaunchesGridContent(
 
                 RenderGridSections(
                     launchItem = launchItem,
-                    getCompanySummary = getCompanySummary,
-                    onItemClicked = onItemClicked,
-                    getLaunchStatusIcon = getLaunchStatusIcon,
-                    getLaunchDate = getLaunchDate
+                    onEvent = onEvent
                 )
 
                 HandlePagination(
                     index = index,
-                    page = page,
+                    page = scrollState.page,
                     listState = listState,
-                    loadNextPage = loadNextPage
+                    onEvent = onEvent
                 )
 
                 PaginationState(paginationState)
@@ -91,29 +81,25 @@ internal fun LaunchesGridContent(
 @Composable
 private fun RenderGridSections(
     launchItem: LaunchTypes,
-    getCompanySummary: (Company) -> StringResource,
-    onItemClicked: (links: Links) -> Unit,
-    getLaunchStatusIcon: (LaunchStatus) -> Int,
-    getLaunchDate: (LaunchDateStatus) -> Int
+    onEvent: (LaunchEvents) -> Unit
 ) {
     when (launchItem) {
         is LaunchTypes.SectionTitle -> LaunchHeading(launchItem)
 
-        is LaunchTypes.CompanySummary -> CompanySummaryCard(getCompanySummary(launchItem.company).asString())
+        is LaunchTypes.CompanySummary -> CompanySummaryCard(launchItem.company.summary)
 
         is LaunchTypes.Launch -> {
             LaunchCard(
                 launchItem = launchItem,
-                onClick = { onItemClicked(launchItem.links) },
-                getLaunchStatusIcon = getLaunchStatusIcon(launchItem.launchStatus),
-                getLaunchDate = getLaunchDate(launchItem.launchDateStatus)
+                onEvent = { onEvent(HandleLaunchClickEvent(launchItem.links)) }
             )
         }
 
         is LaunchTypes.Grid -> {
             LaunchGridCard(
                 launchItem = launchItem,
-                onClick = { onItemClicked(launchItem.items.links) })
+                onEvent = { onEvent(HandleLaunchClickEvent(launchItem.items.links)) },
+            )
         }
 
         is LaunchTypes.Carousel -> {
@@ -121,7 +107,8 @@ private fun RenderGridSections(
                 itemsIndexed(launchItem.items) { _, carouselItem ->
                     LaunchCarouselCard(
                         launchItem = carouselItem,
-                        onClick = { onItemClicked(carouselItem.links) })
+                        onEvent = { onEvent(HandleLaunchClickEvent(carouselItem.links)) },
+                    )
                 }
             }
         }
@@ -133,14 +120,14 @@ private fun HandlePagination(
     index: Int,
     page: Int,
     listState: LazyGridState,
-    loadNextPage: (Int) -> Unit
+    onEvent: (LaunchEvents) -> Unit
 ) {
     if ((index + 1) >= (page * PAGINATION_PAGE_SIZE)) {
         LazyVerticalGridPagination(
             listState = listState,
             buffer = GRID_COLUMN_SIZE,
             index = index,
-            loadNextPage = loadNextPage
+            onEvent = onEvent
         )
     }
 }
@@ -158,7 +145,7 @@ private fun PaginationState(paginationState: PaginationState) {
 @Composable
 private fun ObserveScrollPosition(
     listState: LazyGridState,
-    onChangeScrollPosition: (Int) -> Unit
+    onEvent: (LaunchEvents) -> Unit,
 ) {
     // Observe and save scroll position to view model
     LaunchedEffect(listState) {
@@ -166,7 +153,7 @@ private fun ObserveScrollPosition(
             listState.firstVisibleItemIndex
         }.debounce(750L)
             .collectLatest { position ->
-                onChangeScrollPosition(position)
+                onEvent(SaveScrollPositionEvent(position))
             }
     }
 }

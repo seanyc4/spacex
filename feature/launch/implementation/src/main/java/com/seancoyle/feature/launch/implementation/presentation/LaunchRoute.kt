@@ -20,12 +20,12 @@ internal fun LaunchRoute(
     viewModel: LaunchViewModel,
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
-    isLandscape: Boolean,
-    openLink: (String) -> Unit
+    isLandscape: Boolean
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val filterState by viewModel.filterState.collectAsStateWithLifecycle()
     val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
+    val scrollState by viewModel.scrollState.collectAsStateWithLifecycle()
 
     SideEffect {
         printLogDebug("LaunchRoute", ": uiState: $uiState")
@@ -33,12 +33,13 @@ internal fun LaunchRoute(
 
     LaunchScreenWithBottomSheet(
         uiState = uiState,
-        viewModel = viewModel,
+        scrollState = scrollState,
+        onEvent = viewModel::onEvent,
         snackbarHostState = snackbarHostState,
         filterState = filterState,
         isLandscape = isLandscape,
         bottomSheetState = bottomSheetState,
         pullRefreshState = pullRefreshState,
-        openLink = openLink
+        onDismissNotification = viewModel::dismissNotification
     )
 }

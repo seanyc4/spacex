@@ -29,13 +29,24 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.seancoyle.core.ui.NotificationState
+import com.seancoyle.core.ui.NotificationType
+import com.seancoyle.core.ui.NotificationUiType
+import com.seancoyle.core.ui.asStringResource
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.theme.AppTheme
+import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -58,7 +69,7 @@ internal class LaunchFragment : Fragment() {
         val snackbarHostState = remember { SnackbarHostState() }
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
-            onRefresh = { viewModel.swipeToRefresh() }
+            onRefresh = { viewModel.onEvent(SwipeToRefreshEvent) }
         )
 
         AppTheme {
@@ -66,7 +77,7 @@ internal class LaunchFragment : Fragment() {
                 topBar = {
                     HomeAppBar(
                         onClick = {
-                            viewModel.setDialogFilterDisplayedState(true)
+                            viewModel.displayFilterDialog(true)
                         }
                     )
                 },
@@ -87,8 +98,7 @@ internal class LaunchFragment : Fragment() {
                         viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
-                        isLandscape = isLandscape,
-                        openLink = { launchIntent(it) },
+                        isLandscape = isLandscape
                     )
                 }
             }
@@ -98,6 +108,14 @@ internal class LaunchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.init()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.linkEvent.collect { link ->
+                    launchWebBrowser(link)
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -105,8 +123,7 @@ internal class LaunchFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
-    // Load url link in external browser
-    private fun launchIntent(url: String?) {
+    private fun launchWebBrowser(url: String?) {
         try {
             startActivity(
                 Intent(
@@ -115,7 +132,15 @@ internal class LaunchFragment : Fragment() {
                 )
             )
         } catch (e: ActivityNotFoundException) {
-            viewModel.displayUnableToLoadLinkError()
+            viewModel.onEvent(
+                NotificationEvent(
+                    notificationState = NotificationState(
+                        notificationType = NotificationType.Error,
+                        message = R.string.error_links.asStringResource(),
+                        notificationUiType = NotificationUiType.Snackbar
+                    )
+                )
+            )
         }
     }
 }
