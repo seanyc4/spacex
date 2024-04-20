@@ -16,12 +16,13 @@ internal class CompanyEntityMapper @Inject constructor() {
                 launchSites = launchSites,
                 name = name,
                 valuation = valuation,
+                summary = summary
             )
         }
     }
 
-    fun mapToEntity(domainModel: Company): CompanyEntity {
-        return with(domainModel) {
+    fun mapToEntity(domain: Company): CompanyEntity {
+        return with(domain) {
             CompanyEntity(
                 id = "1",
                 employees = employees,
@@ -29,7 +30,8 @@ internal class CompanyEntityMapper @Inject constructor() {
                 founder = founder,
                 launchSites = launchSites,
                 name = name,
-                valuation = valuation
+                valuation = valuation,
+                summary = summary
             )
         }
     }

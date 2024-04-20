@@ -7,5 +7,6 @@ data class Company(
     val founder: String,
     val launchSites: Int,
     val name: String,
-    val valuation: String
+    val valuation: String,
+    val summary: String
 )

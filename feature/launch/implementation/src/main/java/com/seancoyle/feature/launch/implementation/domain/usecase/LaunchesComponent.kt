@@ -16,7 +16,7 @@ interface LaunchesComponent {
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>?, DataError>>
+    ): Flow<Result<List<LaunchTypes>, DataError>>
 
     fun createMergedLaunchesCacheUseCase(
         year: String,

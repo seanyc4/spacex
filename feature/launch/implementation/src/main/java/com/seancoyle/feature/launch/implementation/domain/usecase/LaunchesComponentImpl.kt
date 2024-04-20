@@ -30,7 +30,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>?, DataError>> {
+    ): Flow<Result<List<LaunchTypes>, DataError>> {
         return paginateLaunchesCacheUseCase.invoke(
             launchYear = year,
             order = order,

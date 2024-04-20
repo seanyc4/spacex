@@ -19,7 +19,7 @@ internal class PaginateLaunchesCacheUseCaseImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>?, DataError>> = flow {
+    ): Flow<Result<List<LaunchTypes>, DataError>> = flow {
         emit(
             cacheDataSource.paginateLaunches(
                 launchYear = launchYear,

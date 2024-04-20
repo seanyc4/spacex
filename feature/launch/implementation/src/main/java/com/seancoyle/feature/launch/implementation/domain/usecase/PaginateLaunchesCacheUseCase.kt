@@ -13,5 +13,5 @@ internal interface PaginateLaunchesCacheUseCase {
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>?, DataError>>
+    ): Flow<Result<List<LaunchTypes>, DataError>>
 }

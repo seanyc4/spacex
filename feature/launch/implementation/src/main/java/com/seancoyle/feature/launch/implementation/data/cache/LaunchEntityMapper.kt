@@ -14,7 +14,7 @@ internal class LaunchEntityMapper @Inject constructor() {
         return entities.map { entity -> mapFromEntity(entity) }
     }
 
-    fun domaintoEntityList(launches: List<LaunchTypes.Launch>): List<LaunchEntity> {
+    fun domainToEntityList(launches: List<LaunchTypes.Launch>): List<LaunchEntity> {
         return launches.map { item -> mapToEntity(item) }
     }
 
@@ -37,7 +37,9 @@ internal class LaunchEntityMapper @Inject constructor() {
                     rocketNameAndType = rocket.rocketNameAndType
                 ),
                 launchDateStatus = launchDateStatus,
-                launchDays = launchDays
+                launchDays = launchDays,
+                launchDaysResId = launchDaysResId,
+                launchStatusIconResId = launchStatusIconResId
             )
         }
     }
@@ -62,6 +64,8 @@ internal class LaunchEntityMapper @Inject constructor() {
                 ),
                 launchDateStatus = launchDateStatus,
                 launchDays = launchDays,
+                launchDaysResId = launchDaysResId,
+                launchStatusIconResId = launchStatusIconResId
             )
         }
     }

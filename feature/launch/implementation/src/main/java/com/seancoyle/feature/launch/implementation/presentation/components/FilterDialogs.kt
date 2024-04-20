@@ -25,34 +25,36 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NewSearchEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SetFilterStateEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 
 @Composable
-fun FilterDialog(
+internal fun FilterDialog(
     currentFilterState: LaunchesFilterState,
-    updateFilterState: (Order, LaunchStatus, String) -> Unit,
-    onDismiss: (Boolean) -> Unit,
-    newSearch: () -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     isLandScape: Boolean,
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        onDismissRequest = { onDismiss(false) },
+        onDismissRequest = { onEvent(DismissFilterDialogEvent) },
         title = { Text(stringResource(R.string.filter_options)) },
         text = {
-            if (isLandScape){
-                LandscapeDialogContent(currentFilterState, updateFilterState, modifier)
+            if (isLandScape) {
+                LandscapeDialogContent(currentFilterState, onEvent, modifier)
             } else {
-                PortraitDialogContent(currentFilterState, updateFilterState, modifier)
+                PortraitDialogContent(currentFilterState, onEvent, modifier)
             }
         },
 
         confirmButton = {
-            ConfirmButton(newSearch)
+            ConfirmButton(onEvent)
         },
 
         dismissButton = {
-            DismissButton(onDismiss)
+            DismissButton(onEvent)
         }
     )
 }
@@ -60,14 +62,14 @@ fun FilterDialog(
 @Composable
 private fun PortraitDialogContent(
     filterState: LaunchesFilterState,
-    updateFilterState: (Order, LaunchStatus, String) -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier
 ) {
     Column {
         Text(stringResource(R.string.filter_by_year))
 
         YearInputField(year = filterState.launchYear, onYearChange = { year ->
-            updateFilterState(filterState.order, filterState.launchStatus, year)
+            onEvent(SetFilterStateEvent(filterState.order, filterState.launchStatus, year))
         })
 
         Text(
@@ -78,14 +80,14 @@ private fun PortraitDialogContent(
         RadioGroup(
             selectedLaunchStatus = filterState.launchStatus,
             onLaunchStatusSelected = { status ->
-                updateFilterState(filterState.order, status, filterState.launchYear)
+                onEvent(SetFilterStateEvent(filterState.order, status, filterState.launchYear))
             }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OrderSwitch(order = filterState.order, onOrderChange = { order ->
-            updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+            onEvent(SetFilterStateEvent(order, filterState.launchStatus, filterState.launchYear))
         })
     }
 }
@@ -93,7 +95,7 @@ private fun PortraitDialogContent(
 @Composable
 private fun LandscapeDialogContent(
     filterState: LaunchesFilterState,
-    updateFilterState: (Order, LaunchStatus, String) -> Unit,
+    onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
@@ -106,13 +108,19 @@ private fun LandscapeDialogContent(
             Text(stringResource(R.string.filter_by_year))
 
             YearInputField(year = filterState.launchYear, onYearChange = { year ->
-                updateFilterState(filterState.order, filterState.launchStatus, year)
+                onEvent(SetFilterStateEvent(filterState.order, filterState.launchStatus, year))
             })
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OrderSwitch(order = filterState.order, onOrderChange = { order ->
-                updateFilterState(order, filterState.launchStatus, filterState.launchYear)
+                onEvent(
+                    SetFilterStateEvent(
+                        order,
+                        filterState.launchStatus,
+                        filterState.launchYear
+                    )
+                )
             })
         }
 
@@ -125,7 +133,7 @@ private fun LandscapeDialogContent(
             RadioGroup(
                 selectedLaunchStatus = filterState.launchStatus,
                 onLaunchStatusSelected = { status ->
-                    updateFilterState(filterState.order, status, filterState.launchYear)
+                    onEvent(SetFilterStateEvent(filterState.order, status, filterState.launchYear))
                 }
             )
         }
@@ -133,15 +141,15 @@ private fun LandscapeDialogContent(
 }
 
 @Composable
-private fun DismissButton(onDismiss: (Boolean) -> Unit) {
-    Button(onClick = { onDismiss(false) }) {
+private fun DismissButton(onEvent: (LaunchEvents) -> Unit) {
+    Button(onClick = { onEvent(DismissFilterDialogEvent) }) {
         Text(stringResource(R.string.text_cancel))
     }
 }
 
 @Composable
-private fun ConfirmButton(newSearch: () -> Unit) {
-    Button(onClick = { newSearch() }) {
+private fun ConfirmButton(onEvent: (LaunchEvents) -> Unit) {
+    Button(onClick = { onEvent(NewSearchEvent) }) {
         Text(stringResource(R.string.text_search))
     }
 }

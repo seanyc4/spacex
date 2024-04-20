@@ -40,7 +40,9 @@ internal class LaunchNetworkMapper @Inject constructor(
                         rocketNameAndType = "${rocket?.name}/${rocket?.type}",
                     ),
                     launchDateStatus = mapLaunchDateToStatus(localDateTime),
-                    launchDays = dateTransformer.getLaunchDaysDifference(localDateTime)
+                    launchDays = dateTransformer.getLaunchDaysDifference(localDateTime),
+                    launchDaysResId = 0,
+                    launchStatusIconResId = 0
                 )
             }
         }

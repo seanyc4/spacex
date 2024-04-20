@@ -18,7 +18,8 @@ internal class CompanyNetworkMapper @Inject constructor(
                 founder = founder.orEmpty(),
                 launchSites = launchSites ?: 0,
                 name = name.orEmpty(),
-                valuation = numberFormatter.formatNumber(valuation)
+                valuation = numberFormatter.formatNumber(valuation),
+                summary = ""
             )
         }
     }

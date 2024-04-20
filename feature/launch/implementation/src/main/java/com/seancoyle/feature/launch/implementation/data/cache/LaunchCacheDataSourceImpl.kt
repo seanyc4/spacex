@@ -59,7 +59,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
             crashlytics = crashlytics
         ) {
             dao.insertList(
-                mapper.domaintoEntityList(launches)
+                mapper.domainToEntityList(launches)
             )
         }
     }
