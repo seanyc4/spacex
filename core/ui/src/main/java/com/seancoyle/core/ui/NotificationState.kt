@@ -2,19 +2,18 @@ package com.seancoyle.core.ui
 
 data class NotificationState(
     val message: StringResource,
-    val notificationUiType: NotificationUiType,
+    val uiComponentType: UiComponentType,
     val notificationType: NotificationType
 )
 
-sealed class NotificationUiType {
-    data object Snackbar : NotificationUiType()
-    data object Dialog : NotificationUiType()
-    data object None: NotificationUiType()
+sealed interface UiComponentType {
+    data object Snackbar : UiComponentType
+    data object Dialog : UiComponentType
+    data object None : UiComponentType
 }
 
-sealed class NotificationType{
-    data object Success: NotificationType()
-    data object Error: NotificationType()
-    data object Info: NotificationType()
-    data object None: NotificationType()
+sealed interface NotificationType {
+    data object Success : NotificationType
+    data object Error : NotificationType
+    data object Info : NotificationType
 }

@@ -8,7 +8,7 @@ import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.NotificationUiType
+import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
@@ -146,7 +146,7 @@ internal class LaunchViewModel @Inject constructor(
                             LaunchesUiState.Error(
                                 errorNotificationState = NotificationState(
                                     message = result.error.asStringResource(),
-                                    notificationUiType = NotificationUiType.Dialog,
+                                    uiComponentType = UiComponentType.Dialog,
                                     notificationType = NotificationType.Error
                                 )
                             )
@@ -167,7 +167,7 @@ internal class LaunchViewModel @Inject constructor(
                             LaunchesUiState.Error(
                                 errorNotificationState = NotificationState(
                                     message = result.error.asStringResource(),
-                                    notificationUiType = NotificationUiType.Dialog,
+                                    uiComponentType = UiComponentType.Dialog,
                                     notificationType = NotificationType.Error
                                 )
                             )
@@ -233,7 +233,7 @@ internal class LaunchViewModel @Inject constructor(
                             LaunchesUiState.Error(
                                 errorNotificationState = NotificationState(
                                     message = result.error.asStringResource(),
-                                    notificationUiType = NotificationUiType.Snackbar,
+                                    uiComponentType = UiComponentType.Snackbar,
                                     notificationType = NotificationType.Error
                                 )
                             )
@@ -451,7 +451,7 @@ internal class LaunchViewModel @Inject constructor(
                 notificationState = NotificationState(
                     notificationType = NotificationType.Info,
                     message = R.string.no_links.asStringResource(),
-                    notificationUiType = NotificationUiType.Dialog
+                    uiComponentType = UiComponentType.Dialog
                 ),
             )
         )

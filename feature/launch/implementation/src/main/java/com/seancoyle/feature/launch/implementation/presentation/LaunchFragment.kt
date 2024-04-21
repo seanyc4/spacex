@@ -34,7 +34,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.NotificationUiType
+import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.core.ui.theme.AppTheme
@@ -138,7 +138,7 @@ internal class LaunchFragment : Fragment() {
                     notificationState = NotificationState(
                         notificationType = NotificationType.Error,
                         message = R.string.error_links.asStringResource(),
-                        notificationUiType = NotificationUiType.Snackbar
+                        uiComponentType = UiComponentType.Snackbar
                     )
                 )
             )

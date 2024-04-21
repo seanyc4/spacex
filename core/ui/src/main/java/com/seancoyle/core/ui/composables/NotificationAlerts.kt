@@ -14,8 +14,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.NotificationUiType
+import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.R
+import com.seancoyle.core.ui.UiComponentType
 
 @Composable
 fun DisplayNotification(
@@ -24,21 +25,55 @@ fun DisplayNotification(
     snackbarHostState: SnackbarHostState
 ) {
     error?.let {
-        when (it.notificationUiType) {
-            NotificationUiType.Dialog -> {
-                ErrorDialog(
-                    message = it.message.asString(),
-                    onDismissNotification = onDismissNotification
-                )
+        when (it.uiComponentType) {
+            UiComponentType.Dialog -> {
+
+                when (it.notificationType) {
+                    NotificationType.Success -> {
+                    //TODO("Create Success Dialog")
+                    }
+
+                    NotificationType.Error -> {
+                        ErrorDialog(
+                            message = it.message.asString(),
+                            onDismissNotification = onDismissNotification
+                        )
+                    }
+
+                    NotificationType.Info -> {
+                        InfoDialog(
+                            message = it.message.asString(),
+                            onDismissNotification = onDismissNotification
+                        )
+                    }
+                }
             }
 
-            NotificationUiType.Snackbar -> {
-                SnackBar(
-                    hostState = snackbarHostState,
-                    message = error.message.asString()
-                )
-            }
+            UiComponentType.Snackbar -> {
+                when (it.notificationType) {
+                    NotificationType.Success -> {
+                        SnackBar(
+                            hostState = snackbarHostState,
+                            message = error.message.asString()
+                        )
+                    }
 
+                    NotificationType.Error -> {
+                        SnackBar(
+                            hostState = snackbarHostState,
+                            message = error.message.asString()
+                        )
+                    }
+
+                    NotificationType.Info -> {
+                        SnackBar(
+                            hostState = snackbarHostState,
+                            message = error.message.asString()
+                        )
+                    }
+                }
+            }
+            //TODO( "Create different Snackbars for different types of notifications")
             else -> Unit // Do nothing for MessageDisplayType.None
         }
     }
@@ -52,6 +87,30 @@ fun ErrorDialog(
     AlertDialog(
         onDismissRequest = onDismissNotification,
         title = { Text(text = stringResource(id = R.string.text_error)) },
+        text = { Text(message) },
+        icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
+        confirmButton = {
+            TextButton(onClick = onDismissNotification) {
+                Text(text = stringResource(id = R.string.text_ok))
+            }
+        },
+        shape = RoundedCornerShape(12.dp),
+        containerColor = MaterialTheme.colorScheme.errorContainer,
+        iconContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        textContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        tonalElevation = 1.dp
+    )
+}
+
+@Composable
+fun InfoDialog(
+    message: String,
+    onDismissNotification: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissNotification,
+        title = { Text(text = stringResource(id = R.string.text_info)) },
         text = { Text(message) },
         icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
         confirmButton = {
