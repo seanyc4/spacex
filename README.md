@@ -15,7 +15,7 @@ SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 ## Tech stack
 
 * Clean Architecture
-* MVVM
+* MVI
 * KSP
 * Compose
 * Coroutines
