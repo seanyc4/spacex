@@ -10,6 +10,7 @@ internal sealed interface LaunchEvents {
     data object DismissBottomSheetEvent : LaunchEvents
     data object DismissFilterDialogEvent : LaunchEvents
     data object DisplayFilterDialogEvent : LaunchEvents
+    data object DismissNotificationEvent : LaunchEvents
     data object GetCompanyApiAndCacheEvent : LaunchEvents
     data object GetLaunchesApiAndCacheEvent : LaunchEvents
     data object NewSearchEvent : LaunchEvents

@@ -35,8 +35,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.NotificationUiType
-import com.seancoyle.core.ui.asStringResource
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
+import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar

@@ -26,6 +26,9 @@ import com.seancoyle.feature.launch.implementation.presentation.components.Launc
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissNotificationEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.OpenLinkEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
@@ -43,15 +46,13 @@ internal fun LaunchScreenWithBottomSheet(
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
     onEvent: (LaunchEvents) -> Unit,
-    onDismissNotification: () -> Unit,
     isLandscape: Boolean,
 ) {
     LaunchScreen(
         uiState = uiState,
         onEvent = onEvent,
         scrollState = scrollState,
-        snackbarHostState = snackbarHostState,
-        onDismissNotification = onDismissNotification
+        snackbarHostState = snackbarHostState
     )
 
     if (filterState.isVisible) {
@@ -80,7 +81,6 @@ internal fun LaunchScreen(
     uiState: LaunchesUiState,
     scrollState: LaunchesScrollState,
     onEvent: (LaunchEvents) -> Unit,
-    onDismissNotification: () -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     when (uiState) {
@@ -95,7 +95,7 @@ internal fun LaunchScreen(
             uiState.notificationState?.let { notification ->
                 DisplayNotification(
                     error = notification,
-                    onDismissNotification = onDismissNotification,
+                    onDismissNotification = { onEvent(DismissNotificationEvent) },
                     snackbarHostState = snackbarHostState
                 )
             }
@@ -131,7 +131,7 @@ internal fun LaunchBottomSheetScreen(
     if (bottomSheetUiState.isVisible) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = { onEvent(LaunchEvents.DismissBottomSheetEvent) },
+            onDismissRequest = { onEvent(DismissBottomSheetEvent) },
             modifier = Modifier.adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 190.dp)
         ) {
             BottomSheetContent(
@@ -158,7 +158,7 @@ private fun BottomSheetContent(
             if (!linkType.link.isNullOrEmpty()) {
                 LaunchBottomSheetTitle(
                     name = stringResource(id = linkType.nameResId),
-                    actionLinkClicked = { onEvent(LaunchEvents.OpenLinkEvent(linkType.link!!)) }
+                    actionLinkClicked = { onEvent(OpenLinkEvent(linkType.link!!)) }
                 )
                 if (index < bottomSheetLinks.lastIndex) {
                     LaunchBottomSheetDivider()
@@ -167,7 +167,7 @@ private fun BottomSheetContent(
         }
         LaunchBottomSheetExitButton(
             actionExitClicked = {
-                onEvent(LaunchEvents.DismissBottomSheetEvent)
+                onEvent(DismissBottomSheetEvent)
             }
         )
     }

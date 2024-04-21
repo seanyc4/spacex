@@ -39,7 +39,6 @@ internal fun LaunchRoute(
         filterState = filterState,
         isLandscape = isLandscape,
         bottomSheetState = bottomSheetState,
-        pullRefreshState = pullRefreshState,
-        onDismissNotification = viewModel::dismissNotification
+        pullRefreshState = pullRefreshState
     )
 }

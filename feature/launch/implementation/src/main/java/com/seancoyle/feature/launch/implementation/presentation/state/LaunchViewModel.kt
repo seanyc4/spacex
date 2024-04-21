@@ -9,7 +9,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.NotificationUiType
-import com.seancoyle.core.ui.asStringResource
+import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.api.domain.model.Company
@@ -22,6 +22,7 @@ import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesCompon
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissNotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -107,6 +108,7 @@ internal class LaunchViewModel @Inject constructor(
                 is DismissBottomSheetEvent -> dismissBottomSheet()
                 is DismissFilterDialogEvent -> displayFilterDialog(false)
                 is DisplayFilterDialogEvent -> displayFilterDialog(true)
+                is DismissNotificationEvent -> dismissNotification()
                 is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
                 is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
@@ -304,7 +306,7 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun dismissNotification() {
+    private fun dismissNotification() {
         uiState.update { currentState ->
             currentState.isSuccess {
                 it.copy(notificationState = null)
@@ -422,7 +424,10 @@ internal class LaunchViewModel @Inject constructor(
 
         if (bottomSheetLinks.isNotEmpty()) {
             bottomSheetState.update { currentState ->
-                currentState.copy(isVisible = true, bottomSheetLinks = bottomSheetLinks)
+                currentState.copy(
+                    isVisible = true,
+                    bottomSheetLinks = bottomSheetLinks)
+
             }
         } else {
             bottomSheetState.update {
