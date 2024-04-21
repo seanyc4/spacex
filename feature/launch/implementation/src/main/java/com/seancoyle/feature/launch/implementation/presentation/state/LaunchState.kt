@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
+import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.LinkType
 import kotlinx.parcelize.Parcelize
 
 internal sealed interface LaunchesUiState {
@@ -50,5 +50,5 @@ internal data class LaunchesScrollState(
 @Stable
 data class BottomSheetUiState(
     val isVisible: Boolean = false,
-    val linkTypes: List<LinkType> = emptyList()
+    val bottomSheetLinks: List<BottomSheetLinks> = emptyList()
 ) : Parcelable

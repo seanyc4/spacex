@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
-import com.seancoyle.feature.launch.api.domain.model.LinkType
+import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetDivider
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetExitButton
@@ -135,7 +135,7 @@ internal fun LaunchBottomSheetScreen(
             modifier = Modifier.adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 190.dp)
         ) {
             BottomSheetContent(
-                linkTypes = bottomSheetUiState.linkTypes,
+                bottomSheetLinks = bottomSheetUiState.bottomSheetLinks,
                 onEvent = onEvent
             )
         }
@@ -144,7 +144,7 @@ internal fun LaunchBottomSheetScreen(
 
 @Composable
 private fun BottomSheetContent(
-    linkTypes: List<LinkType>?,
+    bottomSheetLinks: List<BottomSheetLinks>?,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -154,13 +154,13 @@ private fun BottomSheetContent(
     ) {
         LaunchBottomSheetHeader()
         LaunchBottomSheetDivider()
-        linkTypes?.forEachIndexed { index, linkType ->
+        bottomSheetLinks?.forEachIndexed { index, linkType ->
             if (!linkType.link.isNullOrEmpty()) {
                 LaunchBottomSheetTitle(
                     name = stringResource(id = linkType.nameResId),
                     actionLinkClicked = { onEvent(LaunchEvents.OpenLinkEvent(linkType.link!!)) }
                 )
-                if (index < linkTypes.lastIndex) {
+                if (index < bottomSheetLinks.lastIndex) {
                     LaunchBottomSheetDivider()
                 }
             }

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.seancoyle.feature.launch.api.domain.model.LinkType
+import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.implementation.R
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -37,7 +37,7 @@ class LaunchBottomSheetTest {
 
         composeTestRule.setContent {
             LaunchBottomSheetScreen(
-                linkTypes = linkTypes,
+                linkTypes = bottomSheetLinks,
                 dismiss = { actionExitClicked() },
                 isLandscape = windowSize
             )
@@ -82,18 +82,18 @@ class LaunchBottomSheetTest {
         private const val DEFAULT_WEBCAST = "https://www.youtube.com"
         private const val DEFAULT_WIKI = "https://www.wikipedia.com"
 
-        private val linkTypes = listOf(
-            LinkType(
+        private val bottomSheetLinks = listOf(
+            BottomSheetLinks(
                 link = DEFAULT_ARTICLE,
                 nameResId = R.string.article,
                 onClick = {}
             ),
-            LinkType(
+            BottomSheetLinks(
                 link = DEFAULT_WEBCAST,
                 nameResId = R.string.webcast,
                 onClick = {}
             ),
-            LinkType(
+            BottomSheetLinks(
                 link = DEFAULT_WIKI,
                 nameResId = R.string.wikipedia,
                 onClick = {}

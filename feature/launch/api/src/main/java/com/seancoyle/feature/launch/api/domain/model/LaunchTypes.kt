@@ -55,7 +55,7 @@ data class Links(
 ) : Parcelable
 
 @Parcelize
-data class LinkType(
+data class BottomSheetLinks(
     @SerializedName("nameResId")
     val nameResId: Int,
     @SerializedName("link")

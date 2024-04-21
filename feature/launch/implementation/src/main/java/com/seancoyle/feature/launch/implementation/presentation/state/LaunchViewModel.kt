@@ -11,11 +11,11 @@ import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.NotificationUiType
 import com.seancoyle.core.ui.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
@@ -368,7 +368,7 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun displayFilterDialog(isDisplayed: Boolean) {
+    private fun displayFilterDialog(isDisplayed: Boolean) {
         filterState.update { currentState -> currentState.copy(isVisible = isDisplayed) }
     }
 
@@ -418,11 +418,11 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun handleLaunchClick(links: Links?) {
-        val linkTypes = createLinkTypeList(links)
+        val bottomSheetLinks = createBottomSheetLinks(links)
 
-        if (validateLinks(linkTypes)) {
+        if (bottomSheetLinks.isNotEmpty()) {
             bottomSheetState.update { currentState ->
-                currentState.copy(isVisible = true, linkTypes = linkTypes)
+                currentState.copy(isVisible = true, bottomSheetLinks = bottomSheetLinks)
             }
         } else {
             bottomSheetState.update {
@@ -432,17 +432,12 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun createLinkTypeList(links: Links?): List<LinkType> {
-        val linkTypes = listOfNotNull(
-            LinkType(R.string.article, links?.articleLink),
-            LinkType(R.string.webcast, links?.webcastLink),
-            LinkType(R.string.wikipedia, links?.wikiLink)
+    private fun createBottomSheetLinks(links: Links?): List<BottomSheetLinks> {
+        return listOfNotNull(
+            links?.articleLink?.let { BottomSheetLinks(R.string.article, it) },
+            links?.webcastLink?.let { BottomSheetLinks(R.string.webcast, it) },
+            links?.wikiLink?.let { BottomSheetLinks(R.string.wikipedia, it) }
         )
-        return linkTypes
-    }
-
-    private fun validateLinks(links: List<LinkType>): Boolean {
-        return links.all { it.link?.isNotEmpty() == true }
     }
 
     private fun displayNoLinksError() {
