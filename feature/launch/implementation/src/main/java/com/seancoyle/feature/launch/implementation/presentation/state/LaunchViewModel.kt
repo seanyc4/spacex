@@ -20,7 +20,9 @@ import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
@@ -31,6 +33,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEven
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SetFilterStateEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,8 +84,8 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchesScrollState>(LAUNCH_LIST_STATE_KEY)?.let { listState ->
-            scrollState.value = listState
+        savedStateHandle.get<LaunchesScrollState>(LAUNCH_LIST_STATE_KEY)?.let { scrollState ->
+            this.scrollState.value = scrollState
         }
     }
 
@@ -101,25 +104,26 @@ internal class LaunchViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is CreateMergedLaunchesEvent -> mergedLaunchesCacheUseCase()
-                is PaginateLaunchesCacheEvent -> paginateLaunchesCacheUseCase()
+                is DismissBottomSheetEvent -> dismissBottomSheet()
+                is DismissFilterDialogEvent -> displayFilterDialog(false)
+                is DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
                 is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
-                is LaunchEvents.DismissBottomSheetEvent -> dismissBottomSheet()
-                is NotificationEvent -> updateNotificationState(event)
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
                 is LoadNextPageEvent -> loadNextPage(event.page)
                 is NewSearchEvent -> newSearch()
+                is NotificationEvent -> updateNotificationState(event)
                 is OpenLinkEvent -> openLink(event.url)
+                is PaginateLaunchesCacheEvent -> paginateLaunchesCacheUseCase()
                 is SaveScrollPositionEvent -> setScrollPositionState(event.position)
-                is LaunchEvents.SwipeToRefreshEvent -> swipeToRefresh()
-                is DismissFilterDialogEvent -> displayFilterDialog(false)
-                is LaunchEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is SetFilterStateEvent -> setLaunchFilterState(
                     order = event.order,
                     launchStatus = event.launchStatus,
                     year = event.launchYear
                 )
+                is SwipeToRefreshEvent -> swipeToRefresh()
             }
+
         }
     }
 
