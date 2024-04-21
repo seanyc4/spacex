@@ -8,8 +8,11 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
+import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetCard
@@ -123,11 +126,11 @@ internal fun LaunchBottomSheetScreen(
     if (bottomSheetUiState.isVisible) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = { onEvent(LaunchEvents.DismissBottomSheetEvent) }
+            onDismissRequest = { onEvent(LaunchEvents.DismissBottomSheetEvent) },
+            modifier = Modifier.adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 164.dp)
         ) {
             BottomSheetContent(
                 linkTypes = bottomSheetUiState.linkTypes,
-                isLandscape = isLandscape,
                 onEvent = onEvent
             )
         }
@@ -137,17 +140,14 @@ internal fun LaunchBottomSheetScreen(
 @Composable
 private fun BottomSheetContent(
     linkTypes: List<LinkType>?,
-    isLandscape: Boolean,
     onEvent: (LaunchEvents) -> Unit
 ) {
     Column {
         LaunchBottomSheetCard(
             linkTypes = linkTypes,
-            isLandscape = isLandscape,
             actionLinkClicked = { onEvent(LaunchEvents.OpenLinkEvent(it)) }
         )
         LaunchBottomSheetExitButton(
-            isLandscape = isLandscape,
             actionExitClicked = {
                 onEvent(LaunchEvents.DismissBottomSheetEvent)
             }

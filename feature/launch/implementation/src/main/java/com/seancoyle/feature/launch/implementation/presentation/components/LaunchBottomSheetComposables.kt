@@ -21,7 +21,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.feature.launch.api.domain.model.LinkType
 import com.seancoyle.feature.launch.implementation.R
 
@@ -40,14 +39,12 @@ fun LaunchBottomSheetDivider(
 @Composable
 internal fun LaunchBottomSheetCard(
     linkTypes: List<LinkType>?,
-    isLandscape: Boolean,
     actionLinkClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 164.dp)
             .padding(
                 start = dimensionResource(id = R.dimen.small_view_margins_8dp),
                 end = dimensionResource(id = R.dimen.small_view_margins_8dp)
@@ -111,7 +108,6 @@ fun LaunchBottomSheetTitle(
 @Composable
 fun LaunchBottomSheetExitButton(
     actionExitClicked: () -> Unit,
-    isLandscape: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
@@ -119,7 +115,6 @@ fun LaunchBottomSheetExitButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height = 80.dp)
-            .adaptiveHorizontalPadding(isLandscape = isLandscape, horizontalPadding = 164.dp)
             .padding(dimensionResource(id = R.dimen.default_bottom_sheet_margin)),
         shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.default_corner_radius)),
         colors = ButtonDefaults.buttonColors(

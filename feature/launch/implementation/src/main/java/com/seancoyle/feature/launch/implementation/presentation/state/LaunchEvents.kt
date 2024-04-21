@@ -16,9 +16,10 @@ internal sealed interface LaunchEvents {
     data object NewSearchEvent : LaunchEvents
     data object DismissBottomSheetEvent : LaunchEvents
     data class OpenLinkEvent(val url: String) : LaunchEvents
-    data object DismissFilterDialogEvent : LaunchEvents
     data class NotificationEvent(val notificationState: NotificationState) : LaunchEvents
     data object SwipeToRefreshEvent : LaunchEvents
+    data object DismissFilterDialogEvent : LaunchEvents
+    data object DisplayFilterDialogEvent : LaunchEvents
     data class SetFilterStateEvent(
         val order: Order,
         val launchStatus: LaunchStatus,

@@ -40,6 +40,7 @@ import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
@@ -77,7 +78,7 @@ internal class LaunchFragment : Fragment() {
                 topBar = {
                     HomeAppBar(
                         onClick = {
-                            viewModel.displayFilterDialog(true)
+                            viewModel.onEvent(DisplayFilterDialogEvent)
                         }
                     )
                 },

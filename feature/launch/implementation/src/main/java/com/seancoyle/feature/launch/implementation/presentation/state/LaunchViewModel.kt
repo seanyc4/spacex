@@ -20,7 +20,6 @@ import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
@@ -61,7 +60,7 @@ internal class LaunchViewModel @Inject constructor(
         private set
 
     var linkEvent = MutableSharedFlow<String>(replay = 0)
-    private set
+        private set
 
     fun init() {
         if (uiState.value is LaunchesUiState.Loading) {
@@ -105,15 +104,16 @@ internal class LaunchViewModel @Inject constructor(
                 is PaginateLaunchesCacheEvent -> paginateLaunchesCacheUseCase()
                 is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
                 is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
+                is LaunchEvents.DismissBottomSheetEvent -> dismissBottomSheet()
                 is NotificationEvent -> updateNotificationState(event)
-                is DismissBottomSheetEvent -> dismissBottomSheet()
-                is DismissFilterDialogEvent -> displayFilterDialog(false)
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
                 is LoadNextPageEvent -> loadNextPage(event.page)
                 is NewSearchEvent -> newSearch()
                 is OpenLinkEvent -> openLink(event.url)
                 is SaveScrollPositionEvent -> setScrollPositionState(event.position)
                 is LaunchEvents.SwipeToRefreshEvent -> swipeToRefresh()
+                is DismissFilterDialogEvent -> displayFilterDialog(false)
+                is LaunchEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is SetFilterStateEvent -> setLaunchFilterState(
                     order = event.order,
                     launchStatus = event.launchStatus,
