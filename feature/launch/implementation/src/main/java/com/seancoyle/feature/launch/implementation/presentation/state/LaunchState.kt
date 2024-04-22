@@ -32,7 +32,7 @@ internal sealed interface PaginationState {
 
 @Parcelize
 @Stable
-data class LaunchesFilterState(
+internal data class LaunchesFilterState(
     val order: Order = Order.DESC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchYear: String = "",
@@ -48,7 +48,7 @@ internal data class LaunchesScrollState(
 
 @Parcelize
 @Stable
-data class BottomSheetUiState(
+internal data class BottomSheetUiState(
     val isVisible: Boolean = false,
     val bottomSheetLinks: List<BottomSheetLinks> = emptyList()
 ) : Parcelable
