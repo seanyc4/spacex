@@ -45,6 +45,7 @@ internal class CompanyCacheDataSourceTest {
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
             valuation = UUID.randomUUID().toString(),
+            summary = UUID.randomUUID().toString()
         )
 
         // Clear cache

@@ -38,7 +38,8 @@ internal object TestData {
         founder = "Elon Musk",
         launchSites = 4,
         name = "SpaceX",
-        valuation = "74,000,000,000L"
+        valuation = "74,000,000,000L",
+        summary = "Summary"
     )
 
     val companyDto = CompanyDto(
@@ -57,7 +58,8 @@ internal object TestData {
         founder = "founder",
         launchSites = 4,
         name = "name",
-        valuation = "74,000,000,000L"
+        valuation = "74,000,000,000L",
+        summary = "summary"
     )
 
     val launchModel = LaunchTypes.Launch(
@@ -75,7 +77,9 @@ internal object TestData {
         missionName = "Starlink Mission",
         rocket = Rocket("Falcon 9 Block 5"),
         launchDateStatus = LaunchDateStatus.FUTURE,
-        launchDays = "5 days"
+        launchDays = "5 days",
+        launchDaysResId = 0,
+        launchStatusIconResId = 0
     )
 
     val launchesModel = listOf(
@@ -98,7 +102,9 @@ internal object TestData {
         missionName = "Starlink Mission",
         rocket = RocketEntity("Falcon 9 Block 5"),
         launchDateStatus = LaunchDateStatus.FUTURE,
-        launchDays = "5 days"
+        launchDays = "5 days",
+        launchDaysResId = 0,
+        launchStatusIconResId = 0
     )
 
     val launchesEntity = listOf(

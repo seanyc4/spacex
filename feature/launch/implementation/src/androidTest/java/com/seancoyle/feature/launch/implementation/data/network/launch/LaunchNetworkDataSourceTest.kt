@@ -214,7 +214,9 @@ internal class LaunchNetworkDataSourceTest {
                 rocketNameAndType = "Falcon 9/FT"
             ),
             launchDateStatus = LaunchDateStatus.PAST,
-            launchDays = "+/- 579d"
+            launchDays = "+/- 579d",
+            launchDaysResId = 0,
+            launchStatusIconResId = 0
         ),
         LaunchTypes.Launch(
             id = "1032022-10-04T15:22",
@@ -233,7 +235,9 @@ internal class LaunchNetworkDataSourceTest {
                 rocketNameAndType = "Falcon Heavy/Block 5"
             ),
             launchDateStatus = LaunchDateStatus.PAST,
-            launchDays = "+/- 560d"
+            launchDays = "+/- 560d",
+            launchDaysResId = 0,
+            launchStatusIconResId = 0
         )
     )
 }

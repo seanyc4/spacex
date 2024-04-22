@@ -54,7 +54,8 @@ internal class CompanyNetworkDataSourceTest {
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "27،500،000،000"
+            valuation = "27،500،000،000",
+            summary = ""
         )
 
         mockWebServer.enqueue(

@@ -28,11 +28,11 @@ open class LaunchBase {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    @Inject
-    internal lateinit var getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase
+   /* @Inject
+    internal lateinit var getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase*/
 
-    @Inject
-    internal lateinit var getLaunchesApiAndCacheUseCase: GetCompanyApiAndCacheUseCase
+   /* @Inject
+    internal lateinit var getLaunchesApiAndCacheUseCase: GetCompanyApiAndCacheUseCase*/
    /* @Inject
     internal lateinit var launchCacheDataSource: LaunchCacheDataSource
 
@@ -83,7 +83,7 @@ open class LaunchBase {
                 .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
 
-        getCompanyApiAndCacheUseCase.invoke()
-        getLaunchesApiAndCacheUseCase.invoke()
+      /*  getCompanyApiAndCacheUseCase.invoke()
+        getLaunchesApiAndCacheUseCase.invoke()*/
     }
 }

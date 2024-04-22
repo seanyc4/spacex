@@ -40,7 +40,9 @@ class FakeGetLaunchesApiAndCacheUseCase : GetLaunchesApiAndCacheUseCase {
                         missionName = "Starlink Mission",
                         rocket = Rocket("Falcon 9 Block 5"),
                         launchDateStatus = LaunchDateStatus.FUTURE,
-                        launchDays = "5 days"
+                        launchDays = "5 days",
+                        launchDaysResId = 0,
+                        launchStatusIconResId = 0
                     )
                 )
             )

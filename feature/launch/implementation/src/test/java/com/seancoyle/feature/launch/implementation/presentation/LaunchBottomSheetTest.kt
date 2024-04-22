@@ -1,14 +1,16 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
@@ -17,7 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @ExperimentalMaterial3WindowSizeClassApi
 @RunWith(RobolectricTestRunner::class)
 class LaunchBottomSheetTest {
@@ -26,10 +28,12 @@ class LaunchBottomSheetTest {
     val composeTestRule = createComposeRule()
 
     @MockK(relaxed = true)
-    private lateinit var actionExitClicked: () -> Unit
+    private lateinit var onEvent: (LaunchEvents) -> Unit
 
     @MockK(relaxed = true)
-    private lateinit var windowSize: WindowSizeClass
+    private lateinit var bottomSheetUiState: BottomSheetUiState
+
+    private var isLandScape = false
 
     @Before
     fun setup() {
@@ -37,9 +41,9 @@ class LaunchBottomSheetTest {
 
         composeTestRule.setContent {
             LaunchBottomSheetScreen(
-                linkTypes = bottomSheetLinks,
-                dismiss = { actionExitClicked() },
-                isLandscape = windowSize
+                bottomSheetUiState = bottomSheetUiState,
+                onEvent = onEvent,
+                isLandscape = isLandScape
             )
         }
     }
@@ -85,18 +89,15 @@ class LaunchBottomSheetTest {
         private val bottomSheetLinks = listOf(
             BottomSheetLinks(
                 link = DEFAULT_ARTICLE,
-                nameResId = R.string.article,
-                onClick = {}
+                nameResId = R.string.article
             ),
             BottomSheetLinks(
                 link = DEFAULT_WEBCAST,
-                nameResId = R.string.webcast,
-                onClick = {}
+                nameResId = R.string.webcast
             ),
             BottomSheetLinks(
                 link = DEFAULT_WIKI,
-                nameResId = R.string.wikipedia,
-                onClick = {}
+                nameResId = R.string.wikipedia
             ),
         )
     }

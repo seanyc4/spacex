@@ -90,7 +90,7 @@ class MergedLaunchesCacheUseCaseImplTest {
         val error = DataError.CACHE_ERROR
         val launches = listOf<LaunchTypes>()
         val companyResult: Flow<Result<Company?, DataError>> = flowOf(Result.Error(error))
-        val launchesResult: Flow<Result<List<LaunchTypes>?, DataError>> = flowOf(Result.Success(launches))
+        val launchesResult: Flow<Result<List<LaunchTypes>, DataError>> = flowOf(Result.Success(launches))
 
         coEvery { getCompanyFromCacheUseCase() } returns companyResult
         coEvery { getLaunchesFromCacheUseCase(any(), any(), any(), any()) } returns launchesResult

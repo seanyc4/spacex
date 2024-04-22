@@ -18,7 +18,8 @@ class CompanyEntityMapperTest {
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "100000000000"
+            valuation = "100000000000",
+            summary = "Summary"
         )
 
         val model = mapper.mapFromEntity(entity)
@@ -43,7 +44,8 @@ class CompanyEntityMapperTest {
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "100000000000"
+            valuation = "100000000000",
+            summary = "Summary"
         )
 
         val entity = mapper.mapToEntity(model)
