@@ -34,7 +34,7 @@ fun LaunchErrorScreen(
     ) {
         item {
             Text(
-                text = errorMessage.asString(),
+                text = errorMessage.resolve(),
                 style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.error,

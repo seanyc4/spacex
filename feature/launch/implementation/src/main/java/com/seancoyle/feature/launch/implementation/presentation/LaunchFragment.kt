@@ -39,11 +39,11 @@ import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -117,6 +117,25 @@ internal class LaunchFragment : Fragment() {
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorEvent.collect { state ->
+                   if(state == UIErrors.NO_LINKS) displayNoLinksError()
+                }
+            }
+        }
+    }
+
+    private fun displayNoLinksError() {
+        viewModel.onEvent(
+            event = NotificationEvent(
+                notificationState = NotificationState(
+                    notificationType = NotificationType.Info,
+                    message = R.string.no_links.asStringResource(),
+                    uiComponentType = UiComponentType.Dialog
+                ),
+            )
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

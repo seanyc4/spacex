@@ -35,14 +35,14 @@ fun DisplayNotification(
 
                     NotificationType.Error -> {
                         ErrorDialog(
-                            message = it.message.asString(),
+                            message = it.message.resolve(),
                             onDismissNotification = onDismissNotification
                         )
                     }
 
                     NotificationType.Info -> {
                         InfoDialog(
-                            message = it.message.asString(),
+                            message = it.message.resolve(),
                             onDismissNotification = onDismissNotification
                         )
                     }
@@ -54,21 +54,21 @@ fun DisplayNotification(
                     NotificationType.Success -> {
                         SnackBar(
                             hostState = snackbarHostState,
-                            message = error.message.asString()
+                            message = error.message.resolve()
                         )
                     }
 
                     NotificationType.Error -> {
                         SnackBar(
                             hostState = snackbarHostState,
-                            message = error.message.asString()
+                            message = error.message.resolve()
                         )
                     }
 
                     NotificationType.Info -> {
                         SnackBar(
                             hostState = snackbarHostState,
-                            message = error.message.asString()
+                            message = error.message.resolve()
                         )
                     }
                 }

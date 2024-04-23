@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.presentation.state
+package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,14 +11,13 @@ import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
-import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
-import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
@@ -35,6 +34,10 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEven
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SetFilterStateEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
+import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,6 +67,9 @@ internal class LaunchViewModel @Inject constructor(
         private set
 
     var linkEvent = MutableSharedFlow<String>(replay = 0)
+        private set
+
+    var errorEvent = MutableSharedFlow<UIErrors>(replay = 0)
         private set
 
     fun init() {
@@ -247,13 +253,13 @@ internal class LaunchViewModel @Inject constructor(
         val updatedLaunches = result.data.map { launchType ->
             when (launchType) {
                 is LaunchTypes.CompanySummary -> {
-                    launchType.copy(company = buildCompanySummary(launchType.company))
+                    launchType.copy(company = launchType.company.getSummary(appStringResource))
                 }
 
                 is LaunchTypes.Launch -> {
                     launchType.copy(
-                        launchDaysResId = getLaunchDateStringRes(launchType.launchDateStatus),
-                        launchStatusIconResId = getLaunchStatusDrawableRes(launchType.launchStatus)
+                        launchDaysResId = launchType.launchDateStatus.getDateStringRes(),
+                        launchStatusIconResId = launchType.launchStatus.getDrawableRes()
                     )
                 }
 
@@ -266,35 +272,6 @@ internal class LaunchViewModel @Inject constructor(
     private fun openLink(link: String) {
         viewModelScope.launch {
             linkEvent.emit(link)
-        }
-    }
-
-    private fun buildCompanySummary(company: Company): Company {
-        val summary = appStringResource.getString(
-            R.string.company_info,
-            arrayOf(
-                company.name,
-                company.founder,
-                company.founded,
-                company.employees,
-                company.launchSites,
-                company.valuation
-            )
-        )
-        return company.copy(summary = summary)
-    }
-
-    private fun getLaunchStatusDrawableRes(status: LaunchStatus): Int = when (status) {
-        LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
-        LaunchStatus.FAILED -> R.drawable.ic_launch_fail
-        LaunchStatus.UNKNOWN -> R.drawable.ic_launch_unknown
-        LaunchStatus.ALL -> throw IllegalArgumentException("LaunchStatus.ALL is not supported here")
-    }
-
-    private fun getLaunchDateStringRes(status: LaunchDateStatus): Int {
-        return when (status) {
-            LaunchDateStatus.PAST -> R.string.days_since_now
-            LaunchDateStatus.FUTURE -> R.string.days_from_now
         }
     }
 
@@ -338,7 +315,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun getPageState() = scrollState.value.page
     private fun getSearchYearState() = filterState.value.launchYear
     private fun getOrderState() = filterState.value.order
-    private fun getLaunchStatusState(): LaunchStatus = filterState.value.launchStatus
+    private fun getLaunchStatusState() = filterState.value.launchStatus
 
     private fun clearQueryParameters() {
         clearListState()
@@ -419,42 +396,20 @@ internal class LaunchViewModel @Inject constructor(
         )
     }
 
-    private fun handleLaunchClick(links: Links?) {
-        val bottomSheetLinks = createBottomSheetLinks(links)
+    private suspend fun handleLaunchClick(links: Links?) {
+        val bottomSheetLinks = links.getLinks()
 
         if (bottomSheetLinks.isNotEmpty()) {
             bottomSheetState.update { currentState ->
                 currentState.copy(
                     isVisible = true,
-                    bottomSheetLinks = bottomSheetLinks)
+                    bottomSheetLinks = bottomSheetLinks
+                )
 
             }
         } else {
-            bottomSheetState.update {
-                displayNoLinksError()
-                BottomSheetUiState()
-            }
+            errorEvent.emit(UIErrors.NO_LINKS)
         }
-    }
-
-    private fun createBottomSheetLinks(links: Links?): List<BottomSheetLinks> {
-        return listOfNotNull(
-            links?.articleLink?.let { BottomSheetLinks(R.string.article, it) },
-            links?.webcastLink?.let { BottomSheetLinks(R.string.webcast, it) },
-            links?.wikiLink?.let { BottomSheetLinks(R.string.wikipedia, it) }
-        )
-    }
-
-    private fun displayNoLinksError() {
-        onEvent(
-            event = NotificationEvent(
-                notificationState = NotificationState(
-                    notificationType = NotificationType.Info,
-                    message = R.string.no_links.asStringResource(),
-                    uiComponentType = UiComponentType.Dialog
-                ),
-            )
-        )
     }
 
     private fun dismissBottomSheet() {

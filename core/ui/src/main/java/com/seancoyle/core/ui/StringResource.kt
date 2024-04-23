@@ -3,27 +3,40 @@ package com.seancoyle.core.ui
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.res.stringResource
 
+@Stable
 sealed interface StringResource {
-    data class DynamicString(val value: String) : StringResource
-    class AndroidStringResource(
-        @StringRes val id: Int,
-        val args: Array<Any> = arrayOf()
-    ) : StringResource
+    fun resolve(context: Context): String
 
-    @Composable
-    fun asString(): String {
-        return when (this) {
-            is DynamicString -> value
-            is AndroidStringResource -> LocalContext.current.getString(id, *args)
+    data class Text(val text: String) : StringResource {
+        override fun resolve(context: Context): String {
+            return text
         }
     }
 
-    fun asString(context: Context): String {
+    data class ResId(@StringRes val stringId: Int): StringResource {
+        override fun resolve(context: Context): String {
+            return context.getString(stringId)
+        }
+    }
+
+    data class ResIdWithParams(
+        @StringRes val stringId: Int,
+        val args: List<Any>
+    ) : StringResource {
+        override fun resolve(context: Context): String {
+            return context.getString(stringId, *args.toTypedArray())
+        }
+    }
+
+    @Composable
+    fun resolve(): String {
         return when (this) {
-            is DynamicString -> value
-            is AndroidStringResource -> context.getString(id, *args)
+            is ResId -> stringResource(id = stringId)
+            is ResIdWithParams -> stringResource(id = stringId, *args.toTypedArray())
+            is Text -> text
         }
     }
 }
