@@ -10,14 +10,15 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import dagger.Lazy
 
 internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
-    private val paginateLaunchesCacheUseCase: PaginateLaunchesCacheUseCase,
+    private val paginateLaunchesCacheUseCase: Lazy<PaginateLaunchesCacheUseCase>,
     private val mergedLaunchesCacheUseCase: MergedLaunchesCacheUseCase,
     private val getCompanyCacheUseCase: GetCompanyCacheUseCase,
     private val getCompanyApiCacheUseCase: GetCompanyApiAndCacheUseCase,
-    private val saveLaunchPreferencesUseCase: SaveLaunchPreferencesUseCase,
+    private val saveLaunchPreferencesUseCase: Lazy<SaveLaunchPreferencesUseCase>,
     private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
 ) : LaunchesComponent {
 
@@ -31,7 +32,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         launchFilter: LaunchStatus,
         page: Int
     ): Flow<Result<List<LaunchTypes>, DataError>> {
-        return paginateLaunchesCacheUseCase.invoke(
+        return paginateLaunchesCacheUseCase.get().invoke(
             launchYear = year,
             order = order,
             launchStatus = launchFilter,
@@ -70,7 +71,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         launchStatus: LaunchStatus,
         launchYear: String
     ) {
-        saveLaunchPreferencesUseCase.invoke(
+        saveLaunchPreferencesUseCase.get().invoke(
             order = order,
             launchStatus = launchStatus,
             launchYear = launchYear

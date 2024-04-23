@@ -46,12 +46,13 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import dagger.Lazy
 
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val launchesComponent: LaunchesComponent,
-    private val appStringResource: AppStringResource
+    private val appStringResource: Lazy<AppStringResource>
 ) : ViewModel() {
 
     var uiState: MutableStateFlow<LaunchesUiState> = MutableStateFlow(LaunchesUiState.Loading)
@@ -253,7 +254,7 @@ internal class LaunchViewModel @Inject constructor(
         val updatedLaunches = result.data.map { launchType ->
             when (launchType) {
                 is LaunchTypes.CompanySummary -> {
-                    launchType.copy(company = launchType.company.getSummary(appStringResource))
+                    launchType.copy(company = launchType.company.getSummary(appStringResource.get()))
                 }
 
                 is LaunchTypes.Launch -> {
