@@ -91,7 +91,8 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.data)
-    implementation(projects.core.datastore)
+    implementation(projects.core.datastore.api)
+    implementation(projects.core.datastore.implementation)
     implementation(projects.core.domain)
     implementation(projects.core.ui)
     implementation(projects.database)

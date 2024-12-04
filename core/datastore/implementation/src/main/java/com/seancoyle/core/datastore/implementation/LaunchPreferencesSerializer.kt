@@ -1,8 +1,9 @@
-package com.seancoyle.core.datastore
+package com.seancoyle.core.datastore.implementation
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
+import com.seancoyle.core.datastore.LaunchPreferences
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject

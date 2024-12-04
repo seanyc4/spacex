@@ -37,7 +37,7 @@ dependencies {
     implementation(libs.square.loggingInterceptor)
 
     androidTestImplementation(projects.core.test)
-    androidTestImplementation(projects.core.datastore)
+    androidTestImplementation(projects.core.datastore.api)
     androidTestImplementation(libs.bundles.androidTestBundle)
     testImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)

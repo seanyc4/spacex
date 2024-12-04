@@ -1,4 +1,4 @@
-package com.seancoyle.core.datastore.data
+package com.seancoyle.core.datastore.implementation.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException

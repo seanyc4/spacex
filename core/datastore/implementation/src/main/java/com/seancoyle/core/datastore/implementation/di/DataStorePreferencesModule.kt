@@ -1,4 +1,4 @@
-package com.seancoyle.core.datastore.di
+package com.seancoyle.core.datastore.implementation.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -21,6 +21,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal class DataStorePreferencesModule {
+
     @Singleton
     @Provides
     fun provideDataStorePreferences(

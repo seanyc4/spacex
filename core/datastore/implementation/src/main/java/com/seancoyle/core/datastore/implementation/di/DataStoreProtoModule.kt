@@ -1,4 +1,4 @@
-package com.seancoyle.core.datastore.di
+package com.seancoyle.core.datastore.implementation.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,7 +7,7 @@ import androidx.datastore.dataStoreFile
 import com.seancoyle.core.common.di.ApplicationScope
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.datastore.LaunchPreferences
-import com.seancoyle.core.datastore.LaunchPreferencesSerializer
+import com.seancoyle.core.datastore.implementation.LaunchPreferencesSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +20,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal class DataStoreProtoModule {
+
     @Singleton
     @Provides
     fun providesDataStoreProto(
