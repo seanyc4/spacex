@@ -16,16 +16,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.launch.api)
     implementation(projects.core.common)
-    implementation(projects.core.data)
-    implementation(projects.core.domain)
     implementation(projects.core.datastore.api)
-    implementation(projects.core.datastoreProto)
+    api(projects.core.datastoreProto)
 
     implementation(libs.dataStore)
     implementation(libs.dataStore.preferences)
-    implementation(libs.protobuf.kotlin.lite)
 
     testImplementation(libs.bundles.unitTestBundle)
 }

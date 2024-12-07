@@ -1,10 +1,10 @@
-package com.seancoyle.core.datastore.implementation.data
+package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.crashlytics.printLogDebug
-import com.seancoyle.core.datastore.LaunchPreferences
+import com.seancoyle.core.datastore.LaunchPreferencesProto
 import com.seancoyle.core.datastore.LaunchStatusProto
 import com.seancoyle.core.datastore.OrderProto
 import com.seancoyle.core.datastore.copy
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class LaunchPreferencesDataSourceImpl @Inject constructor(
-    private val dataStore: DataStore<LaunchPreferences>,
+    private val dataStore: DataStore<LaunchPreferencesProto>,
     private val crashlytics: Crashlytics
 ) : LaunchPreferencesDataSource {
     override suspend fun saveLaunchPreferences(
@@ -45,7 +45,7 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
         return preferences.toModel()
     }
 
-    private fun LaunchPreferences.toModel(): LaunchPrefs = LaunchPrefs(
+    private fun LaunchPreferencesProto.toModel(): LaunchPrefs = LaunchPrefs(
         order = Order.valueOf(this.order.name),
         launchStatus = LaunchStatus.valueOf(this.launchStatus.name),
         launchYear = this.launchDate

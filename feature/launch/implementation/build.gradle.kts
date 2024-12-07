@@ -24,10 +24,12 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.data)
     implementation(projects.database)
+    implementation(projects.core.datastoreProto)
     api(projects.feature.launch.api)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)
+    implementation(libs.dataStore)
     implementation(libs.glideCompose)
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
