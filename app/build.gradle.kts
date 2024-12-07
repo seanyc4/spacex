@@ -107,7 +107,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.livedataktx)
     implementation(libs.lifecycle.savedstate)
-    implementation(libs.lifecycle.viewmodelCompose)
     ksp(libs.lifecycle.compiler)
     implementation(libs.navigation.dynamic)
     implementation(libs.navigation.fragment)

@@ -17,7 +17,7 @@ fragment = "1.7.0-rc01"
 glideCompose = "1.0.0-beta01"
 gson = "2.10.1"
 hiltNavigationCompose = "1.2.0"
-hilt = "2.51"
+hilt = "2.51.1"
 junit4 = "4.13.2"
 kotlin = "1.9.22"
 kotlinCoroutines = "1.8.0"
@@ -124,7 +124,6 @@ kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref 
 lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
 lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
-lifecycle-viewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 # Navigation
