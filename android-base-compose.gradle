@@ -1,10 +1,8 @@
+apply plugin: libs.plugins.compose.compiler.get().pluginId
+
 android {
     buildFeatures {
         compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     defaultConfig {

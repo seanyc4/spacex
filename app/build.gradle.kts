@@ -1,3 +1,5 @@
+import com.android.utils.TraceUtils.simpleId
+
 apply {
     from("$rootDir/hilt.gradle")
     from("$rootDir/android-base-ui.gradle")
@@ -5,6 +7,7 @@ apply {
 }
 
 plugins {
+    alias(libs.plugins.compose.compiler)
     id(libs.plugins.androidApplication.get().pluginId)
     id(libs.plugins.kotlinKsp.get().pluginId)
     id(libs.plugins.kotlinParcelize.get().pluginId)
@@ -51,10 +54,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     kotlinOptions {

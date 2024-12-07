@@ -3,8 +3,7 @@ agp = "8.4.0-rc02"
 androidHilt = "1.2.0"
 androidxTestExt = "1.1.5"
 appCompat = "1.6.1"
-composeBom = "2024.04.00"
-composeCompiler = "1.5.10"
+composeBom = "2024.11.00"
 composeConstraintLayout = "1.1.0-alpha13"
 composeLifecycle = "2.7.0"
 composeNavigation = "2.7.7"
@@ -19,10 +18,10 @@ gson = "2.10.1"
 hiltNavigationCompose = "1.2.0"
 hilt = "2.51.1"
 junit4 = "4.13.2"
-kotlin = "1.9.22"
+kotlin = "2.0.21"
 kotlinCoroutines = "1.8.0"
 kotlinImmutable = "0.3.6"
-kotlinKSP = "1.9.22-1.0.18"
+kotlinKSP = "2.0.21-1.0.27"
 kotlinSerialization = "1.6.3"
 kotlinxDateTime = "0.5.0"
 leakCanary = "2.9.1"
@@ -177,6 +176,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 android = { id = "android" }
 androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "dagger.hilt.android.plugin" }
 hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
 kotlinAndroid = { id = "kotlin-android" }
