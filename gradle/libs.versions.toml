@@ -173,9 +173,6 @@ test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" 
 
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
 
 [plugins]
 android = { id = "android" }
