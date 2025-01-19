@@ -6,8 +6,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.database.util.LocalDateTimeConverter
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import java.time.LocalDateTime
 
 @Keep
@@ -24,7 +22,7 @@ data class LaunchEntity(
     val launchDateLocalDateTime: LocalDateTime,
 
     @ColumnInfo(name="launchStatus")
-    val launchStatus: LaunchStatus,
+    val launchStatus: LaunchStatusEntity,
 
     @ColumnInfo(name="launchYear")
     val launchYear: String,
@@ -39,7 +37,7 @@ data class LaunchEntity(
     val rocket: RocketEntity,
 
     @ColumnInfo(name="launchDateStatus")
-    val launchDateStatus: LaunchDateStatus,
+    val launchDateStatus: LaunchDateStatusEntity,
 
     @ColumnInfo(name="launchDaysDifference")
     val launchDays: String,
@@ -71,3 +69,13 @@ data class RocketEntity(
     @ColumnInfo(name="rocketNameAndType")
     val rocketNameAndType: String
 )
+
+@Keep
+enum class LaunchDateStatusEntity {
+    PAST, FUTURE
+}
+
+@Keep
+enum class LaunchStatusEntity {
+    SUCCESS, FAILED, UNKNOWN, ALL
+}

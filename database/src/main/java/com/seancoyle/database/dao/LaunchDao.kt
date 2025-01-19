@@ -7,8 +7,7 @@ import androidx.room.Query
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.database.entities.LaunchStatusEntity
 
 @Dao
 interface LaunchDao {
@@ -53,9 +52,9 @@ interface LaunchDao {
         """
     )
     suspend fun filterByLaunchStatusDESC(
-        launchFilter: LaunchStatus,
+        launchFilter: LaunchStatusEntity,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -68,9 +67,9 @@ interface LaunchDao {
         """
     )
     suspend fun filterByLaunchStatusASC(
-        launchFilter: LaunchStatus,
+        launchFilter: LaunchStatusEntity,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
 
@@ -86,9 +85,9 @@ interface LaunchDao {
     )
     suspend fun filterByLaunchStatusAndYearDESC(
         year: String,
-        launchFilter: LaunchStatus,
+        launchFilter: LaunchStatusEntity,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -103,9 +102,9 @@ interface LaunchDao {
     )
     suspend fun filterByLaunchStatusAndYearASC(
         year: String,
-        launchFilter: LaunchStatus,
+        launchFilter: LaunchStatusEntity,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -120,7 +119,7 @@ interface LaunchDao {
     suspend fun filterByYearDESC(
         year: String,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -135,7 +134,7 @@ interface LaunchDao {
     suspend fun filterByYearASC(
         year: String,
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -148,7 +147,7 @@ interface LaunchDao {
     )
     suspend fun getAllDESC(
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
     @Query(
@@ -161,7 +160,7 @@ interface LaunchDao {
     )
     suspend fun getAllASC(
         offset: Int,
-        pageSize: Int = PAGINATION_PAGE_SIZE
+        pageSize: Int
     ): List<LaunchEntity>
 
 }
@@ -169,13 +168,14 @@ interface LaunchDao {
 suspend fun LaunchDao.paginateLaunches(
     launchYear: String,
     order: Order,
-    launchStatus: LaunchStatus,
-    page: Int
+    launchStatus: LaunchStatusEntity,
+    page: Int,
+    pageSize: Int
 ): List<LaunchEntity> {
     val hasYear = launchYear.isNotEmpty()
     val isOrderDesc = order == Order.DESC
-    val offset = page.minus(1).times(PAGINATION_PAGE_SIZE)
-    val noFilter = launchStatus == LaunchStatus.ALL
+    val offset = page.minus(1).times(pageSize)
+    val noFilter = launchStatus == LaunchStatusEntity.ALL
 
     return when {
 
@@ -183,7 +183,8 @@ suspend fun LaunchDao.paginateLaunches(
             printLogDebug("DAO", "filterByYearDESC")
             filterByYearDESC(
                 year = launchYear,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
@@ -191,21 +192,24 @@ suspend fun LaunchDao.paginateLaunches(
             printLogDebug("DAO", "filterByYearASC")
             filterByYearASC(
                 year = launchYear,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
         isOrderDesc && noFilter -> {
             printLogDebug("DAO", "getAllDESC")
             getAllDESC(
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
         !isOrderDesc && noFilter -> {
             printLogDebug("DAO", "getAllASC")
             getAllASC(
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
@@ -213,7 +217,8 @@ suspend fun LaunchDao.paginateLaunches(
             printLogDebug("DAO", "filterByLaunchStatusDESC")
             filterByLaunchStatusDESC(
                 launchFilter = launchStatus,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
@@ -221,7 +226,8 @@ suspend fun LaunchDao.paginateLaunches(
             printLogDebug("DAO", "filterByLaunchStatusASC")
             filterByLaunchStatusASC(
                 launchFilter = launchStatus,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
@@ -230,7 +236,8 @@ suspend fun LaunchDao.paginateLaunches(
             filterByLaunchStatusAndYearASC(
                 year = launchYear,
                 launchFilter = launchStatus,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
@@ -239,7 +246,8 @@ suspend fun LaunchDao.paginateLaunches(
             filterByLaunchStatusAndYearDESC(
                 year = launchYear,
                 launchFilter = launchStatus,
-                offset = offset
+                offset = offset,
+                pageSize = pageSize
             )
         }
 
