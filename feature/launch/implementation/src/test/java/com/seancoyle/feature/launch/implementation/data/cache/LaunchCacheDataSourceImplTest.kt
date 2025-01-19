@@ -6,6 +6,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
+import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
@@ -14,6 +15,7 @@ import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -56,9 +58,21 @@ class LaunchCacheDataSourceImplTest {
         val launchYear = "2022"
         val order = Order.ASC
         val launchStatus = LaunchStatus.ALL
+        val launchStatusEntity = LaunchStatusEntity.ALL
         val page = 1
-        coEvery { dao.paginateLaunches(launchYear, order, launchStatus, page) } returns launchesEntity
-        coEvery { mapper.entityToDomainList(launchesEntity) } returns launchesModel
+        val pageSize = 30
+
+        coEvery {
+            dao.paginateLaunches(
+                launchYear = launchYear,
+                order = order,
+                launchStatus = launchStatusEntity,
+                page = page,
+                pageSize = pageSize
+            )
+        } returns launchesEntity
+        every { mapper.entityToDomainList(launchesEntity) } returns launchesModel
+        every { mapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
 
         val result = underTest.paginateLaunches(
             launchYear = launchYear,
@@ -73,8 +87,9 @@ class LaunchCacheDataSourceImplTest {
             dao.paginateLaunches(
                 launchYear = launchYear,
                 order = order,
-                launchStatus = launchStatus,
-                page = page
+                launchStatus = launchStatusEntity,
+                page = page,
+                pageSize = pageSize
             )
         }
     }
@@ -83,7 +98,7 @@ class LaunchCacheDataSourceImplTest {
     fun `getById returns a mapped launch when DAO provides an entity`() = runTest {
         val launchId = "1"
         coEvery { dao.getById(launchId) } returns launchEntity
-        coEvery { mapper.mapFromEntity(launchEntity) } returns launchModel
+        every { mapper.mapFromEntity(launchEntity) } returns launchModel
 
         val result = underTest.getById(launchId)
 
@@ -95,7 +110,7 @@ class LaunchCacheDataSourceImplTest {
     @Test
     fun `getAll returns mapped launches when DAO provides data`() = runTest {
         coEvery { dao.getAll() } returns listOf(launchEntity)
-        coEvery { mapper.entityToDomainList(listOf(launchEntity)) } returns launchesModel
+        every { mapper.entityToDomainList(listOf(launchEntity)) } returns launchesModel
 
         val result = underTest.getAll()
 

@@ -84,14 +84,14 @@ internal class LaunchEntityMapper @Inject constructor() {
         }
     }
 
-    private fun mapToLaunchDateStatusEntity(launchDateStatus: LaunchDateStatus): LaunchDateStatusEntity {
+    fun mapToLaunchDateStatusEntity(launchDateStatus: LaunchDateStatus): LaunchDateStatusEntity {
         return when (launchDateStatus) {
             LaunchDateStatus.PAST -> LaunchDateStatusEntity.PAST
             LaunchDateStatus.FUTURE -> LaunchDateStatusEntity.FUTURE
         }
     }
 
-    private fun mapToLaunchStatus(launchStatusEntity: LaunchStatusEntity): LaunchStatus {
+    fun mapToLaunchStatus(launchStatusEntity: LaunchStatusEntity): LaunchStatus {
         return when (launchStatusEntity) {
             LaunchStatusEntity.SUCCESS -> LaunchStatus.SUCCESS
             LaunchStatusEntity.FAILED -> LaunchStatus.FAILED
@@ -101,7 +101,7 @@ internal class LaunchEntityMapper @Inject constructor() {
     }
 
 
-    private fun mapToLaunchDateStatus(launchDateStatusEntity: LaunchDateStatusEntity): LaunchDateStatus {
+    fun mapToLaunchDateStatus(launchDateStatusEntity: LaunchDateStatusEntity): LaunchDateStatus {
         return when (launchDateStatusEntity) {
             LaunchDateStatusEntity.PAST -> LaunchDateStatus.PAST
             LaunchDateStatusEntity.FUTURE -> LaunchDateStatus.FUTURE

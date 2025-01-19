@@ -1,7 +1,9 @@
 package com.seancoyle.feature.launch.implementation.util
 
 import com.seancoyle.database.entities.CompanyEntity
+import com.seancoyle.database.entities.LaunchDateStatusEntity
 import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.LinksEntity
 import com.seancoyle.database.entities.RocketEntity
 import com.seancoyle.feature.launch.api.LaunchConstants.LAUNCH_OPTIONS_ROCKET
@@ -92,7 +94,7 @@ internal object TestData {
         launchDate = "2024-01-01",
         launchDateLocalDateTime = LocalDateTime.of(2024, 1, 1, 0, 0),
         launchYear = "2024",
-        launchStatus = LaunchStatus.SUCCESS,
+        launchStatus = LaunchStatusEntity.SUCCESS,
         links = LinksEntity(
             missionImage = "https://example.com/mission3.jpg",
             articleLink = "https://example.com/article3",
@@ -101,7 +103,7 @@ internal object TestData {
         ),
         missionName = "Starlink Mission",
         rocket = RocketEntity("Falcon 9 Block 5"),
-        launchDateStatus = LaunchDateStatus.FUTURE,
+        launchDateStatus = LaunchDateStatusEntity.FUTURE,
         launchDays = "5 days",
         launchDaysResId = 0,
         launchStatusIconResId = 0
