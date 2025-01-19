@@ -14,4 +14,5 @@ android {
 dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    testImplementation(libs.test.junit4)
 }

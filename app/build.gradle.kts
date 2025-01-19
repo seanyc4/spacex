@@ -1,5 +1,3 @@
-import com.android.utils.TraceUtils.simpleId
-
 apply {
     from("$rootDir/hilt.gradle")
     from("$rootDir/android-base-ui.gradle")
