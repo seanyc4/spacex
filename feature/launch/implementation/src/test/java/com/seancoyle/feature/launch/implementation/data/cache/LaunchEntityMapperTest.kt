@@ -1,5 +1,9 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
+import com.seancoyle.database.entities.LaunchDateStatusEntity
+import com.seancoyle.database.entities.LaunchStatusEntity
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
@@ -9,47 +13,47 @@ import kotlin.test.assertEquals
 
 class LaunchEntityMapperTest {
 
-    private val mapper = LaunchEntityMapper()
+    private val underTest = LaunchEntityMapper()
 
     @Test
     fun `mapFromEntity correctly maps from LaunchEntity to LaunchTypes Launch`() {
-        val model = mapper.mapFromEntity(launchEntity)
+        val model = underTest.mapFromEntity(launchEntity)
 
         with(model) {
             assertEquals(launchEntity.id, id)
             assertEquals(launchEntity.launchDate, launchDate)
             assertEquals(launchEntity.launchDateLocalDateTime, launchDateLocalDateTime)
-            assertEquals(launchEntity.launchStatus, launchStatus)
+            assertEquals(underTest.mapToLaunchStatus(launchEntity.launchStatus), launchStatus)
             assertEquals(launchEntity.launchYear, launchYear)
             assertEquals(launchEntity.links.missionImage, links.missionImage)
             assertEquals(launchEntity.missionName, missionName)
             assertEquals(launchEntity.rocket.rocketNameAndType, rocket.rocketNameAndType)
-            assertEquals(launchEntity.launchDateStatus, launchDateStatus)
+            assertEquals(underTest.mapToLaunchDateStatus(launchEntity.launchDateStatus), launchDateStatus)
             assertEquals(launchEntity.launchDays, launchDays)
         }
     }
 
     @Test
     fun `mapToEntity correctly maps from LaunchTypes Launch to LaunchEntity`() {
-        val entity = mapper.mapToEntity(launchModel)
+        val entity = underTest.mapToEntity(launchModel)
 
         with(entity) {
             assertEquals(launchModel.id, id)
             assertEquals(launchModel.launchDate, launchDate)
             assertEquals(launchModel.launchDateLocalDateTime, launchDateLocalDateTime)
-            assertEquals(launchModel.launchStatus, launchStatus)
+            assertEquals(underTest.mapToLaunchStatusEntity(launchModel.launchStatus), launchStatus)
             assertEquals(launchModel.launchYear, launchYear)
             assertEquals(launchModel.links.missionImage, links.missionImage)
             assertEquals(launchModel.missionName, missionName)
             assertEquals(launchModel.rocket.rocketNameAndType, rocket.rocketNameAndType)
-            assertEquals(launchModel.launchDateStatus, launchDateStatus)
+            assertEquals(underTest.mapToLaunchDateStatusEntity(launchModel.launchDateStatus), launchDateStatus)
             assertEquals(launchModel.launchDays, launchDays)
         }
     }
 
     @Test
     fun `mapEntityListToDomainList correctly maps list of entities to list of domain models`() {
-        val models = mapper.entityToDomainList(launchesEntity)
+        val models = underTest.entityToDomainList(launchesEntity)
 
         assertEquals(launchesModel.size, models.size)
         models.forEachIndexed { index, model ->
@@ -59,11 +63,43 @@ class LaunchEntityMapperTest {
 
     @Test
     fun `mapDomainListToEntityList correctly maps list of domain models to list of entities`() {
-        val entities = mapper.domainToEntityList(launchesModel)
+        val entities = underTest.domainToEntityList(launchesModel)
 
         assertEquals(launchesEntity.size, entities.size)
         entities.forEachIndexed { index, entity ->
             assertEquals(launchesEntity[index], entity)
         }
+    }
+
+    @Test
+    fun `mapToLaunchStatus correctly maps LaunchStatusEntity to LaunchStatus`() {
+        val entity = LaunchStatusEntity.SUCCESS
+        val domain = underTest.mapToLaunchStatus(entity)
+
+        assertEquals(LaunchStatus.SUCCESS, domain)
+    }
+
+    @Test
+    fun `mapToLaunchStatusEntity correctly maps LaunchStatus to LaunchStatusEntity`() {
+        val domain = LaunchStatus.SUCCESS
+        val entity = underTest.mapToLaunchStatusEntity(domain)
+
+        assertEquals(LaunchStatusEntity.SUCCESS, entity)
+    }
+
+    @Test
+    fun `mapToLaunchDateStatus correctly maps LaunchDateStatusEntity to LaunchDateStatus`() {
+        val entity = LaunchDateStatusEntity.PAST
+        val domain = underTest.mapToLaunchDateStatus(entity)
+
+        assertEquals(LaunchDateStatus.PAST, domain)
+    }
+
+    @Test
+    fun `mapToLaunchDateStatusEntity correctly maps LaunchDateStatus to LaunchDateStatusEntity`() {
+        val domain = LaunchDateStatus.PAST
+        val entity = underTest.mapToLaunchDateStatusEntity(domain)
+
+        assertEquals(LaunchDateStatusEntity.PAST, entity)
     }
 }

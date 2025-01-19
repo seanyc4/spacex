@@ -1,6 +1,5 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -18,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterial3WindowSizeClassApi

@@ -10,7 +10,7 @@ fun Modifier.adaptiveHorizontalPadding(
     horizontalPadding: Dp = 128.dp
 ): Modifier = this.then(
     if (isLandscape) {
-        padding(horizontal = horizontalPadding)
+        this.padding(horizontal = horizontalPadding)
     } else {
         this
     }
