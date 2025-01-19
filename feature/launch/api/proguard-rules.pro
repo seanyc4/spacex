@@ -20,4 +20,3 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.seancoyle.feature.launch.api.domain.model.** { *; }

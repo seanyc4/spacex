@@ -92,11 +92,15 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.datastore.api)
     implementation(projects.core.datastore.implementation)
+    implementation(projects.core.datastoreProto)
     implementation(projects.core.domain)
+    implementation(projects.core.hiltUiTest)
+    implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.database)
     implementation(projects.feature.launch.api)
     implementation(projects.feature.launch.implementation)
+    implementation(projects.feature.launch.test)
 
     implementation(libs.appCompat)
     implementation(libs.compose.runtime)
@@ -118,6 +122,7 @@ dependencies {
     // Android Test Dependencies
     androidTestImplementation(libs.bundles.androidTestBundle)
     androidTestImplementation(projects.core.test)
+    testImplementation(libs.bundles.unitTestBundle)
     debugImplementation(libs.compose.uiTestManifest)
     debugImplementation(projects.core.hiltUiTest)
 

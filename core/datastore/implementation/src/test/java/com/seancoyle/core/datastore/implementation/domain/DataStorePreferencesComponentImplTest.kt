@@ -12,7 +12,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class DataStoreComponentImplTest {
+class DataStorePreferencesComponentImplTest {
 
     @MockK(relaxed = true)
     private lateinit var dataStorePreferences: DataStorePreferences
