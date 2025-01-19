@@ -45,3 +45,57 @@
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+
+#Retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+#support Library
+-dontwarn androidx.appcompat.**
+-dontwarn androidx.appcompat.**
+-dontwarn androidx.design.**
+-keep class androidx.appcompat.** { *; }
+-keep interface androidx.appcompat.** { *; }
+-keep interface androidx.annotation.** { *; }
+
+# Test dependencies
+-dontwarn org.robolectric.**
+
+#
+# Keeps the classes and the interfaces annotated with @Keep
+#
+-keep @androidx.annotation.Keep class * {
+  <init>(...);
+  *;
+}
+-keep @androidx.annotation.Keep interface * {
+    *;
+}
+
+-keepclassmembers class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+
+-keep interface com.google.gson.annotations.SerializedName
+
+
+-keep class kotlinx.coroutines.internal.MainDispatcherFactory { *; }
+-keep class kotlinx.coroutines.android.AndroidExceptionPreHandler { *; }
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory { *; }
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keepnames class kotlinx.** { *; }
