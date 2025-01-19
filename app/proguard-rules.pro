@@ -75,6 +75,7 @@
 
 # Test dependencies
 -dontwarn org.robolectric.**
+-dontwarn org.junit.**
 
 #
 # Keeps the classes and the interfaces annotated with @Keep

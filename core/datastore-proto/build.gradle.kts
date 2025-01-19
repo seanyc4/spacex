@@ -10,6 +10,10 @@ plugins {
 
 android {
     namespace = "com.seancoyle.core.datastore.proto"
+
+    defaultConfig {
+        consumerProguardFiles("consumer-proguard-rules.pro")
+    }
 }
 
 protobuf {
