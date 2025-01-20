@@ -12,6 +12,7 @@ android {
         versionName Android.versionName
         testInstrumentationRunner libs.plugins.hiltTestRunner.get().pluginId
         vectorDrawables.useSupportLibrary true
+        consumerProguardFiles "consumer-proguard-rules.pro"
     }
 
     buildTypes {

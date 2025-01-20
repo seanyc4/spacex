@@ -35,12 +35,13 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
+                "consumer-proguard-rules.pro"
             )
         }
     }
@@ -122,6 +123,7 @@ dependencies {
     androidTestImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)
     debugImplementation(libs.compose.uiTestManifest)
+    implementation(libs.compose.uiTestManifest)
     debugImplementation(projects.core.hiltUiTest)
 
 }

@@ -20,6 +20,30 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Ensure we keep the source file and line numbers for Crashlytics
+-keepattributes SourceFile, LineNumberTable, Signature, Exceptions, *Annotation*, Annotation, *JavascriptInterface*
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+#-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*,!class/unboxing/enum,code/removal/simple,code/removal/advanced,!code/removal/exception
+-optimizations !field/*,!method/*,!class/*,!code/simplification/*,!code/merging,!code/removal/exception,code/removal/simple,code/removal/advanced
+-flattenpackagehierarchy
+
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep class * extends java.lang.Exception
+-keep class androidx.design.** { *; }
+-keep interface androidx.design.** { *; }
+-keep public class androidx.design.R$* { *; }
+
 #Remove LogCat logs
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);
@@ -75,6 +99,7 @@
 
 # Test dependencies
 -dontwarn org.robolectric.**
+-dontwarn android.app.RobolectricActivityManager
 -dontwarn org.junit.**
 
 #
