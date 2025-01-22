@@ -41,14 +41,11 @@ jobs:
 
       - name: Calculate UI test modules
         run: |
-          MODULES=$(./gradlew tasks --all | grep ":connectedCheck" | cut -d: -f1 | sort -u)
+          MODULES=$(./gradlew printAndroidTestModules | grep "Module with androidTest" | cut -d: -f2- | xargs)       
           test_modules=""
           for module in $MODULES
           do
-            module_path=$(echo "$module" | tr ':' '/')
-            if [[ -d "./$module_path/src/androidTest" ]]; then
-              test_modules+="$module:connectedAndroidTest "
-            fi
+            test_modules+="$module:connectedAndroidTest "
           done
           echo "UI_TEST_COMMANDS=${test_modules}" >> $GITHUB_ENV
 

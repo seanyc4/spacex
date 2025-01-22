@@ -25,7 +25,7 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
 }
 
-tasks.register("printModulesWithTests") {
+/*tasks.register("printAndroidTestModules") {
     doLast {
         val modulesWithTests = subprojects.filter { subproject ->
             val androidTestDir = file("${subproject.projectDir}/src/androidTest")
@@ -34,6 +34,20 @@ tasks.register("printModulesWithTests") {
             subproject.path
         }
         file("modules_with_tests.txt").writeText(modulesWithTests.joinToString(" "))
+    }
+}*/
+
+tasks.register("printAndroidTestModules") {
+    doLast {
+        val modulesWithTests = subprojects.filter { subproject ->
+            val androidTestDir = file("${subproject.projectDir}/src/androidTest")
+            androidTestDir.exists() && androidTestDir.walkTopDown().any { it.isFile && (it.extension == "kt" || it.extension == "java") }
+        }.map { subproject ->
+            subproject.path
+        }
+        modulesWithTests.forEach { module ->
+            println("Module with androidTest: $module")
+        }
     }
 }
 
