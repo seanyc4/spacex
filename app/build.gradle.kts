@@ -1,5 +1,3 @@
-import com.android.utils.TraceUtils.simpleId
-
 apply {
     from("$rootDir/hilt.gradle")
     from("$rootDir/android-base-ui.gradle")
@@ -38,11 +36,12 @@ android {
         }
         getByName("release") {
             isMinifyEnabled = true
-            isShrinkResources = false
+            isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
+                "consumer-proguard-rules.pro"
             )
         }
     }
@@ -124,6 +123,7 @@ dependencies {
     androidTestImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)
     debugImplementation(libs.compose.uiTestManifest)
+    implementation(libs.compose.uiTestManifest)
     debugImplementation(projects.core.hiltUiTest)
 
 }

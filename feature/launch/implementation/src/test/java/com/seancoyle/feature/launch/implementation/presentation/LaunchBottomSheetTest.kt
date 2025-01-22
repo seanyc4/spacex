@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -18,7 +19,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-
 @ExperimentalMaterial3Api
 @ExperimentalMaterial3WindowSizeClassApi
 @RunWith(RobolectricTestRunner::class)
@@ -30,7 +30,6 @@ class LaunchBottomSheetTest {
     @MockK(relaxed = true)
     private lateinit var onEvent: (LaunchEvents) -> Unit
 
-    @MockK(relaxed = true)
     private lateinit var bottomSheetUiState: BottomSheetUiState
 
     private var isLandScape = false
@@ -38,6 +37,11 @@ class LaunchBottomSheetTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+
+        bottomSheetUiState = BottomSheetUiState(
+            isVisible = true,
+            bottomSheetLinks = bottomSheetLinks
+        )
 
         composeTestRule.setContent {
             LaunchBottomSheetScreen(
@@ -60,25 +64,25 @@ class LaunchBottomSheetTest {
     @Test
     fun `when exit button is clicked, then actionExitClicked is called`() {
         composeTestRule.onNodeWithText("Cancel").performClick()
-      //  composeTestRule.onNodeWithText("Cancel").assertHasClickAction()
+        composeTestRule.onNodeWithText("Cancel").assertHasClickAction()
     }
 
     @Test
     fun `when article link is clicked, then actionExitClicked is called`() {
         composeTestRule.onNodeWithText("Article").performClick()
-      //  composeTestRule.onNodeWithText("Article").assertHasClickAction()
+        composeTestRule.onNodeWithText("Article").assertHasClickAction()
     }
 
     @Test
     fun `when webcast link is clicked, then actionExitClicked is called`() {
         composeTestRule.onNodeWithText("Webcast").performClick()
-     //   composeTestRule.onNodeWithText("Webcast").assertHasClickAction()
+        composeTestRule.onNodeWithText("Webcast").assertHasClickAction()
     }
 
     @Test
     fun `when wikipedia link is clicked, then actionExitClicked is called`() {
         composeTestRule.onNodeWithText("Wikipedia").performClick()
-      //  composeTestRule.onNodeWithText("Wikipedia").assertHasClickAction()
+        composeTestRule.onNodeWithText("Wikipedia").assertHasClickAction()
     }
 
     companion object {
