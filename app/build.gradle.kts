@@ -127,3 +127,4 @@ dependencies {
     debugImplementation(projects.core.hiltUiTest)
 
 }
+

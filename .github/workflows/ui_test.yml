@@ -1,0 +1,59 @@
+name: UI Tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  workflow_dispatch:
+
+jobs:
+  uiTest:
+    name: Run UI tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 29 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Add secrets
+        run: |
+          cat > local.properties << ENDOFFILE
+          API_KEY=${{ secrets.API_KEY }}
+          ENDOFFILE
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Calculate UI test modules
+        run: |
+          MODULES=$(./gradlew tasks --all | grep ":connectedCheck" | cut -d: -f1 | sort -u)
+          test_modules=""
+          for module in $MODULES
+          do
+            module_path=$(echo "$module" | tr ':' '/')
+            if [[ -d "./$module_path/src/androidTest" ]]; then
+              test_modules+="$module:connectedAndroidTest "
+            fi
+          done
+          echo "UI_TEST_COMMANDS=${test_modules}" >> $GITHUB_ENV
+
+      - name: Run UI tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew ${{ env.UI_TEST_COMMANDS }} --stacktrace

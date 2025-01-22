@@ -6,8 +6,6 @@ import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.domain.cache.CompanyCacheDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -20,8 +18,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class CompanyCacheDataSourceTest {
@@ -29,10 +25,10 @@ internal class CompanyCacheDataSourceTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
+    private lateinit var givenCompany: Company
+
     @Inject
     lateinit var underTest: CompanyCacheDataSource
-
-    private lateinit var givenCompany: Company
 
     @Before
     fun setup() {

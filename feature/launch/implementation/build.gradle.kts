@@ -14,6 +14,10 @@ plugins {
 android {
     namespace = "com.seancoyle.feature.launch.implementation"
 
+    defaultConfig {
+        testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
+    }
+
     packaging {
         resources.pickFirsts.add("META-INF/LICENSE.md")
         resources.pickFirsts.add("META-INF/LICENSE-notice.md")
