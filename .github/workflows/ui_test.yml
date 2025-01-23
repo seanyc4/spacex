@@ -61,4 +61,12 @@ jobs:
             echo "==== Detailed Test Results ===="
             grep -E "(PASSED|FAILED|SKIPPED)" ui-test-results.log || echo "No tests were found!"
 
+      - name: Publish UI Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: '**/build/outputs/androidTest-results/connected/**/*.xml'
+          title: UI Test Results
+
+
           
