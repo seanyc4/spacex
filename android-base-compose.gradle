@@ -4,10 +4,6 @@ android {
     buildFeatures {
         compose true
     }
-
-    defaultConfig {
-        testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
-    }
 }
 
 dependencies {
