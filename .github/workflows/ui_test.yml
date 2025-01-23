@@ -53,4 +53,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew ${{ env.UI_TEST_COMMANDS }} --stacktrace
+          script: |
+            # Run UI tests and capture the output
+            ./gradlew ${{ env.UI_TEST_COMMANDS }} --stacktrace --info > ui-test-results.log || true
+            
+            # Print detailed test results
+            echo "==== Detailed Test Results ===="
+            grep -E "(PASSED|FAILED|SKIPPED)" ui-test-results.log || echo "No tests were found!"
+
+          
