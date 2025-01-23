@@ -25,6 +25,7 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
 }
 
+// Gets a list of all modules that have androidTest sources for CI
 tasks.register("printAndroidTestModules") {
     doLast {
         val modulesWithTests = subprojects.filter { subproject ->
