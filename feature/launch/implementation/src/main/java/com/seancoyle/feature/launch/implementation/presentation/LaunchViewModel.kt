@@ -411,6 +411,7 @@ internal class LaunchViewModel @Inject constructor(
         } else {
             errorEvent.emit(UIErrors.NO_LINKS)
         }
+        TODO()
     }
 
     private fun dismissBottomSheet() {
