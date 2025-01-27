@@ -15,11 +15,6 @@ fail("Please provide a meaningful description for the PR.") if github.pr_body.ni
 # Ensure that unit tests are updated or added for the changes made
 test_files = git.modified_files.grep(%r{src/test/.*\.kt$})
 implementation_files = git.modified_files.grep(%r{src/main/.*\.kt$})
-warn("Consider adding or updating tests for your changes.") if implementation_files.any? && test_files.empty?
-
-# Ensure that unit tests are updated or added for the changes made
-test_files = git.modified_files.grep(%r{src/test/.*\.kt$})
-implementation_files = git.modified_files.grep(%r{src/main/.*\.kt$})
 
 if implementation_files.any? && test_files.empty?
   warn("The following implementation files were modified, but no corresponding test files were updated or added. Please consider adding or updating tests:\n\n" +
