@@ -7,7 +7,27 @@ warn("Large PR detected, consider splitting it into smaller ones!") if git.lines
 warn("This PR is marked as Work in Progress, do not merge!") if github.pr_title.include?("[WIP]")
 
 # Warn if there are merge conflicts that need to be resolved
-fail("This PR has unresolved merge conflicts. Please resolve them.") if git.modified_files.any? { |file| file.include?('<<<<<<') }
+merge_conflicts = []
+
+git.modified_files.each do |file|
+  next unless File.exist?(file) # Ensure the file exists before reading
+
+  File.readlines(file).each_with_index do |line, index|
+    if line.include?('<<<<<<')
+      # Attempt to extract the class name by looking for common class declarations (Kotlin/Java/other)
+      class_name = File.readlines(file).grep(/class\s+(\w+)/).first&.strip || "Unknown Class"
+      merge_conflicts << { file: file, line: index + 1, class: class_name, content: line.strip }
+    end
+  end
+end
+
+if merge_conflicts.any?
+  message = "This PR has unresolved merge conflicts. Please resolve them:\n\n" +
+            merge_conflicts.map do |conflict|
+              "- File: #{conflict[:file]}, Line: #{conflict[:line]}, Class: #{conflict[:class]} \n  Conflict Line: #{conflict[:content]}"
+            end.join("\n")
+  fail(message)
+end
 
 # Ensure a PR description exists
 fail("Please provide a meaningful description for the PR.") if github.pr_body.nil? || github.pr_body.strip.empty?
@@ -43,7 +63,6 @@ if todo_locations.any?
             todo_locations.map { |todo| "- #{todo[:file]}:#{todo[:line]} - #{todo[:content]}" }.join("\n")
   fail(message)
 end
-
 
 # Warn and list which build.gradle or build.gradle.kts files were modified
 modified_build_files = git.modified_files.select { |file| file.include?('build.gradle') || file.include?('build.gradle.kts') }
