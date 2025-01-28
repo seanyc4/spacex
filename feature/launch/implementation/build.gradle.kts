@@ -47,4 +47,5 @@ dependencies {
     androidTestImplementation(libs.bundles.androidTestBundle)
     testImplementation(projects.core.test)
     testImplementation(libs.bundles.unitTestBundle)
+    testImplementation(libs.bundles.unitTestBundle)
 }
