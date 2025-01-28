@@ -7,7 +7,6 @@ import androidx.test.espresso.intent.Intents
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany
 import com.seancoyle.feature.launch.implementation.data.network.launch.MockWebServerResponseLaunches
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest

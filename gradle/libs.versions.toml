@@ -1,33 +1,33 @@
 [versions]
-agp = "8.6.1"
+agp = "8.8.0"
 androidHilt = "1.2.0"
 androidxTestExt = "1.2.1"
 appCompat = "1.7.0"
-composeBom = "2024.11.00"
+composeBom = "2025.01.00"
 composeConstraintLayout = "1.1.0"
 composeLifecycle = "2.8.7"
-composeNavigation = "2.8.4"
+composeNavigation = "2.8.5"
 composeWindowSize = "1.3.1"
 coreKtx = "1.15.0"
-datastore = "1.1.1"
-espressoCore = "3.5.0"
-firebaseBoM = "33.7.0"
+datastore = "1.1.2"
+espressoCore = "3.6.1"
+firebaseBoM = "33.8.0"
 fragment = "1.8.5"
 glideCompose = "1.0.0-beta01"
 gson = "2.11.0"
 hiltNavigationCompose = "1.2.0"
-hilt = "2.51.1"
+hilt = "2.55"
 junit4 = "4.13.2"
-kotlin = "2.0.21"
+kotlin = "2.1.10"
 kotlinCoroutines = "1.8.1"
 kotlinImmutable = "0.3.6"
-kotlinKSP = "2.0.21-1.0.27"
+kotlinKSP = "2.1.0-1.0.29"
 kotlinSerialization = "1.6.3"
 kotlinxDateTime = "0.6.0"
 leakCanary = "2.13"
 lifecycle = "2.8.7"
 mockk = "1.13.12"
-navigation = "2.8.4"
+navigation = "2.8.5"
 okHttp = "4.12.0"
 okhttpIdling = "1.0.0"
 protobuf = "4.26.1"
@@ -40,7 +40,7 @@ splash = "1.0.1"
 testArchCore = "2.2.0"
 testCore = "1.6.1"
 testRules = "1.6.1"
-testRunner = "1.5.0"
+testRunner = "1.6.2"
 timber = "5.0.1"
 
 
@@ -156,9 +156,7 @@ splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "spla
 
 # TestDependecies
 test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExt" }
-test-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
-test-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCore" }
 test-okhttp-idlingResource = { module = "com.jakewharton.espresso:okhttp3-idling-resource", version.ref = "okhttpIdling" }
 test-junit4 = { module = "junit:junit", version.ref = "junit4" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -196,11 +194,9 @@ androidTestBundle = [
     "square-retrofit-core",
     "square-retrofit-gson",
     "test-androidxTestExt",
-    "test-espressoCore",
     "test-espressoIntents",
     "test-okhttp-idlingResource",
     "hilt-androidTesting",
-    "test-idlingResource",
     "test-mockkAndroid",
     "test-archCore",
     "test-coreKtx",
