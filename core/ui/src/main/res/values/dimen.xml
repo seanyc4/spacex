@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- view sizes -->
-    <dimen name="toolbar_height">@dimen/_48sdp</dimen>
-    <dimen name="toolbar_height_tablet">@dimen/_36sdp</dimen>
-    <dimen name="filter_btn_size">@dimen/_22sdp</dimen>
-
     <!-- view margins -->
     <dimen name="default_view_margin">@dimen/_16sdp</dimen>
-    <dimen name="default_view_margin_landscape">@dimen/_100sdp</dimen>
-    <dimen name="default_view_margin_tablet">@dimen/_40sdp</dimen>
-    <dimen name="default_view_margin_negative">@dimen/_minus16sdp</dimen>
     <dimen name="default_bottom_sheet_margin">@dimen/_10sdp</dimen>
-    <dimen name="default_bottom_sheet_margin_tablet">@dimen/_7sdp</dimen>
-    <dimen name="default_bottom_sheet_view_margin_tablet">@dimen/_70sdp</dimen>
-    <dimen name="default_bottom_sheet_view_margin_tablet_landscape">@dimen/_150sdp</dimen>
-    <dimen name="default_bottom_sheet_margin_landscape">@dimen/_120sdp</dimen>
     <dimen name="small_view_margins_8dp">@dimen/_8sdp</dimen>
-    <dimen name="scrollview_bottom_margin">80dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_xxs">@dimen/_6sdp</dimen>
