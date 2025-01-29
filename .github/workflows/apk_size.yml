@@ -6,6 +6,7 @@ on:
 jobs:
   apkSize:
     runs-on: ubuntu-latest
+    name: Compare APK sizes
     steps:
       - name: Checkout
         uses: actions/checkout@v4
