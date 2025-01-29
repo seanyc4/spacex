@@ -46,6 +46,9 @@ jobs:
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  unit-tests:
+    uses: ./.github/workflows/unit_test.yml
+
   generateBundles:
     runs-on: ubuntu-latest
     steps:

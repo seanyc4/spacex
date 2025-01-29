@@ -1,11 +1,7 @@
 name: Unit Tests
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   unitTest:
