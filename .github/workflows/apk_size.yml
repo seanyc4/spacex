@@ -44,10 +44,31 @@ jobs:
               file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
               echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
           fi
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v4
+
+      - name: Find Existing Comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ env.OUTPUT }}
-          identifier: apk-size-comment
-          edit-mode: replace
+          comment-author: "github-actions[bot]"
+          body-includes: "APK size"
+
+      - name: Create or Update Comment
+        if: steps.find-comment.outputs.comment-id == ''
+        uses: peter-evans/create-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **APK Size Report**
+                  
+            ${{ env.OUTPUT }}
+
+      - name: Update Existing Comment
+        if: steps.find-comment.outputs.comment-id != ''
+        uses: peter-evans/update-comment@v3
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          body: |
+            **APK Size Report**
+                  
+            ${{ env.OUTPUT }}
