@@ -1,8 +1,9 @@
 name: Pull Request
 
 permissions:
-    issues: write
-    pull-requests: write
+  contents: read
+  actions: read
+  pull-requests: write
 
 on:
   pull_request:
@@ -17,110 +18,17 @@ concurrency:
 jobs:
 
   danger:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Run Lint
-        run: bash ./gradlew lint
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-          bundler-cache: true
-      - uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - uses: MeilCli/danger-action@v6
-        with:
-          plugins_file: 'Gemfile'
-          install_path: 'vendor/bundle'
-          danger_file: 'Dangerfile'
-          danger_id: 'danger-pr'
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/danger.yml
+
+  unit-tests:
+    uses: ./.github/workflows/unit_test.yml
+
+  uiTests:
+    uses: ./.github/workflows/ui_test.yml
 
   generateBundles:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Assemble app debug APK
-        run: |
-          bash ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-branch.apk
-      - name: Upload branch APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-branch
-          path: app/build/outputs/apk/debug/app-debug-branch.apk
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: 'main'
-      - name: Assemble app debug APK
-        run: |
-          bash ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-main.apk
-      - name: Upload app APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-main
-          path: app/build/outputs/apk/debug/app-debug-main.apk
+    uses: ./.github/workflows/generate_bundles.yml
 
   apkSize:
-    runs-on: ubuntu-latest
     needs: generateBundles
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Download branch APK
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-branch
-      - name: Download main APK
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-main
-      - name: Compare APK sizes
-        run: |
-          file1="app-debug-main.apk"
-          file2="app-debug-branch.apk"
-          file_size_one_kb=`du -k "$file1" | cut -f1`
-          file_size_two_kb=`du -k "$file2" | cut -f1`
-
-          file_size_one_mb=$(echo $file_size_one_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
-          file_size_two_mb=$(echo $file_size_two_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
-
-          if [[ $file_size_one_kb == $file_size_two_kb ]]; then
-              echo "OUTPUT=✅  APK size has not changed." >> $GITHUB_ENV
-          elif [[ "$file_size_one_kb" -gt "$file_size_two_kb" ]]; then
-              change=$((file_size_one_kb-file_size_two_kb))
-              file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
-              echo "OUTPUT=📉  New APK is ${file_size} smaller." >> $GITHUB_ENV
-          elif [[ "$file_size_two_kb" -gt "$file_size_one_kb" ]]; then
-              change=$((file_size_two_kb-file_size_one_kb))
-              file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
-              echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
-          fi
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ env.OUTPUT }}
+    uses: ./.github/workflows/apk_size.yml
