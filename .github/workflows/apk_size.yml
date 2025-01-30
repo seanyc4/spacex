@@ -44,8 +44,10 @@ jobs:
               file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
               echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
           fi
-      - name: Create comment
+      - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ env.OUTPUT }}
+          identifier: apk-size-comment
+          edit-mode: replace
