@@ -14,8 +14,8 @@ import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyT
 import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyToCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
-import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponentImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponentImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.PaginateLaunchesCacheUseCase

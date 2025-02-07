@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.domain.usecase
+package com.seancoyle.feature.launch.implementation.domain.usecase.component
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
