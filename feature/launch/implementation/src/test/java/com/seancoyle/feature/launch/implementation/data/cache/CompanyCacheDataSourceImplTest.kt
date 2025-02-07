@@ -4,6 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations

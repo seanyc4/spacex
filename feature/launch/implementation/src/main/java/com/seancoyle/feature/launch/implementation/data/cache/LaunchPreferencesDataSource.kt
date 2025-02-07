@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.cache
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.mapper
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.feature.launch.api.domain.model.Company

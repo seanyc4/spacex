@@ -7,9 +7,9 @@ import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkMapper
-import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkMapper
-import com.seancoyle.feature.launch.implementation.data.network.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.cache.LaunchPreferencesDataSource
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkDataSource
 import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource

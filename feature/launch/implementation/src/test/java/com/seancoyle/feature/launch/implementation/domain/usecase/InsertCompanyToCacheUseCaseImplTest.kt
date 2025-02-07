@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
-import com.seancoyle.feature.launch.implementation.data.network.CompanyCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.cache.CompanyCacheDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

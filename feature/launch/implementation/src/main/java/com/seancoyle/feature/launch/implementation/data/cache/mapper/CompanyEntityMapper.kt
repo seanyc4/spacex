@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache
+package com.seancoyle.feature.launch.implementation.data.cache.mapper
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company

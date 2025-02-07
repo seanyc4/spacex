@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.network.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.cache.LaunchCacheDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

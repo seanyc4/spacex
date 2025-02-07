@@ -4,6 +4,7 @@ import com.seancoyle.database.entities.LaunchDateStatusEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity

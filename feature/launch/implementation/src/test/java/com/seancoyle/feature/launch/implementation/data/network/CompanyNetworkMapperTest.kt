@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.network
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
+import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyNetworkMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.every

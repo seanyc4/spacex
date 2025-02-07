@@ -7,7 +7,7 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.network.CompanyCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

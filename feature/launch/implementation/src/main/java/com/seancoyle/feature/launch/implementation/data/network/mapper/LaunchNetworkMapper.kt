@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.mapper
 
 import com.seancoyle.core.common.dataformatter.DateFormatter
 import com.seancoyle.core.common.dataformatter.DateTransformer

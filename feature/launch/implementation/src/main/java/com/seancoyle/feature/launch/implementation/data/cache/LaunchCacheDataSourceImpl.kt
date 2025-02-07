@@ -11,7 +11,7 @@ import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.network.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
