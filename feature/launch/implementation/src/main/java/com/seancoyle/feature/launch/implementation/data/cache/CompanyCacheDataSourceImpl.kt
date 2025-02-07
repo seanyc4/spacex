@@ -6,35 +6,31 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
-import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
+import com.seancoyle.database.entities.CompanyEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 internal class CompanyCacheDataSourceImpl @Inject constructor(
     private val dao: CompanyDao,
-    private val mapper: CompanyEntityMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyCacheDataSource {
 
-    override suspend fun getCompany(): Result<Company?, DataError> {
+    override suspend fun getCompany(): Result<CompanyEntity?, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.getCompanyInfo()?.let {
-                mapper.mapFromEntity(it)
-            }
+            dao.getCompanyInfo()
         }
     }
 
-    override suspend fun insert(company: Company): Result<Long, DataError> {
+    override suspend fun insert(company: CompanyEntity): Result<Long, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.insert(mapper.mapToEntity(company))
+            dao.insert(company)
         }
     }
 

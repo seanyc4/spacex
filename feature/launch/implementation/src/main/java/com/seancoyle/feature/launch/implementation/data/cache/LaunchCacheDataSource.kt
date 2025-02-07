@@ -3,32 +3,32 @@ package com.seancoyle.feature.launch.implementation.data.cache
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchStatusEntity
 
 internal interface LaunchCacheDataSource {
 
     suspend fun paginateLaunches(
         launchYear: String,
         order: Order,
-        launchStatus: LaunchStatus,
+        launchStatus: LaunchStatusEntity,
         page: Int
-    ): Result<List<LaunchTypes>, DataError>
+    ): Result<List<LaunchEntity>, DataError>
 
-    suspend fun insert(launch: LaunchTypes.Launch): Result<Long, DataError>
+    suspend fun insert(launch: LaunchEntity): Result<Long, DataError>
 
     suspend fun deleteById(id: String): Result<Int, DataError>
 
-    suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError>
+    suspend fun deleteList(launches: List<LaunchEntity>): Result<Int, DataError>
 
     suspend fun deleteAll(): Result<Unit, DataError>
 
-    suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError>
+    suspend fun getById(id: String): Result<LaunchEntity?, DataError>
 
-    suspend fun getAll(): Result<List<LaunchTypes>, DataError>
+    suspend fun getAll(): Result<List<LaunchEntity>, DataError>
 
     suspend fun getTotalEntries(): Result<Int, DataError>
 
-    suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<LongArray, DataError>
+    suspend fun insertList(launches: List<LaunchEntity>): Result<LongArray, DataError>
 
 }

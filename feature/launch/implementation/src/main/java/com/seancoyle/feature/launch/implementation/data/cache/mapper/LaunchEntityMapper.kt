@@ -100,7 +100,6 @@ internal class LaunchEntityMapper @Inject constructor() {
         }
     }
 
-
     fun mapToLaunchDateStatus(launchDateStatusEntity: LaunchDateStatusEntity): LaunchDateStatus {
         return when (launchDateStatusEntity) {
             LaunchDateStatusEntity.PAST -> LaunchDateStatus.PAST
