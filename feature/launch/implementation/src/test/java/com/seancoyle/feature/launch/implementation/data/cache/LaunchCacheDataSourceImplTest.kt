@@ -7,16 +7,11 @@ import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
-import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
-import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -35,20 +30,16 @@ class LaunchCacheDataSourceImplTest {
     @MockK
     private lateinit var dao: LaunchDao
 
-    @MockK
-    private lateinit var mapper: LaunchEntityMapper
-
     @MockK(relaxed = true)
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: LaunchCacheDataSourceImpl
+    private lateinit var underTest: LaunchCacheDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchCacheDataSourceImpl(
             dao = dao,
-            mapper = mapper,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
@@ -58,7 +49,6 @@ class LaunchCacheDataSourceImplTest {
     fun `filterLaunchList returns mapped launches when DAO provides data`() = runTest {
         val launchYear = "2022"
         val order = Order.ASC
-        val launchStatus = LaunchStatus.ALL
         val launchStatusEntity = LaunchStatusEntity.ALL
         val page = 1
         val pageSize = 30
@@ -72,18 +62,16 @@ class LaunchCacheDataSourceImplTest {
                 pageSize = pageSize
             )
         } returns launchesEntity
-        every { mapper.entityToDomainList(launchesEntity) } returns launchesModel
-        every { mapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
 
         val result = underTest.paginateLaunches(
             launchYear = launchYear,
             order = order,
-            launchStatus = launchStatus,
+            launchStatus = launchStatusEntity,
             page = page
         )
 
         assertTrue(result is Result.Success)
-        assertEquals(launchesModel, result.data)
+        assertEquals(launchesEntity, result.data)
         coVerify {
             dao.paginateLaunches(
                 launchYear = launchYear,
@@ -96,27 +84,25 @@ class LaunchCacheDataSourceImplTest {
     }
 
     @Test
-    fun `getById returns a mapped launch when DAO provides an entity`() = runTest {
+    fun `getById returns a launchEntity when DAO provides an entity`() = runTest {
         val launchId = "1"
         coEvery { dao.getById(launchId) } returns launchEntity
-        every { mapper.mapFromEntity(launchEntity) } returns launchModel
 
         val result = underTest.getById(launchId)
 
         assertTrue(result is Result.Success)
-        assertEquals(launchModel, result.data)
+        assertEquals(launchEntity, result.data)
         coVerify { dao.getById(launchId) }
     }
 
     @Test
-    fun `getAll returns mapped launches when DAO provides data`() = runTest {
-        coEvery { dao.getAll() } returns listOf(launchEntity)
-        every { mapper.entityToDomainList(listOf(launchEntity)) } returns launchesModel
+    fun `getAll returns launchesEntity when DAO provides data`() = runTest {
+        coEvery { dao.getAll() } returns launchesEntity
 
         val result = underTest.getAll()
 
         assertTrue(result is Result.Success)
-        assertEquals(launchesModel, result.data)
+        assertEquals(launchesEntity, result.data)
     }
 
     @Test

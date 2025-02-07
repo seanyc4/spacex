@@ -4,15 +4,11 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
-import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -33,20 +29,16 @@ class CompanyCacheDataSourceImplTest {
     @MockK
     private lateinit var dao: CompanyDao
 
-    @MockK
-    private lateinit var mapper: CompanyEntityMapper
-
     @MockK(relaxed = true)
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: CompanyCacheDataSourceImpl
+    private lateinit var underTest: CompanyCacheDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         underTest = CompanyCacheDataSourceImpl(
             dao = dao,
-            mapper = mapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher
         )
@@ -55,14 +47,12 @@ class CompanyCacheDataSourceImplTest {
     @Test
     fun `getCompany returns mapped company when DAO provides an entity`() = runTest {
         coEvery { dao.getCompanyInfo() } returns companyEntity
-        every { mapper.mapFromEntity(companyEntity) } returns companyModel
 
         val result = underTest.getCompany()
 
         assertTrue(result is Result.Success)
-        assertEquals(companyModel, result.data)
+        assertEquals(companyEntity, result.data)
         coVerify { dao.getCompanyInfo() }
-        verify { mapper.mapFromEntity(companyEntity) }
     }
 
     @Test
@@ -78,13 +68,11 @@ class CompanyCacheDataSourceImplTest {
     fun `insert company calls DAO and returns a success result`() = runTest {
         val entityId = 1L
         coEvery { dao.insert(companyEntity) } returns entityId
-        every { mapper.mapToEntity(companyModel) } returns companyEntity
 
-        val result = underTest.insert(companyModel)
+        val result = underTest.insert(companyEntity)
 
         assertTrue(result is Result.Success && result.data == entityId)
         coVerify { dao.insert(companyEntity) }
-        verify { mapper.mapToEntity(companyModel) }
     }
 
     @Test

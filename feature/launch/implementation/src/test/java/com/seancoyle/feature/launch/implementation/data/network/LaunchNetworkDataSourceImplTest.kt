@@ -4,10 +4,8 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchNetworkMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
-import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -28,34 +26,29 @@ class LaunchNetworkDataSourceImplTest {
     @MockK
     private lateinit var api: LaunchApiService
 
-    @MockK
-    private lateinit var networkMapper: LaunchNetworkMapper
-
     @MockK(relaxed = true)
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: LaunchNetworkDataSourceImpl
+    private lateinit var underTest: LaunchNetworkDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchNetworkDataSourceImpl(
             api = api,
-            networkMapper = networkMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher.testCoroutineDispatcher
         )
     }
 
     @Test
-    fun `getLaunches returns mapped launches when API call is successful`() = runTest {
+    fun `getLaunches returns launches DTO when API call is successful`() = runTest {
         coEvery { api.getLaunches(launchOptions) } returns launchesDto
-        coEvery { networkMapper.mapEntityToList(launchesDto) } returns launchesModel
 
         val result = underTest.getLaunches(launchOptions)
 
         assertTrue(result is Result.Success)
-        assertEquals(launchesModel, result.data)
+        assertEquals(launchesDto, result.data)
     }
 
     @Test

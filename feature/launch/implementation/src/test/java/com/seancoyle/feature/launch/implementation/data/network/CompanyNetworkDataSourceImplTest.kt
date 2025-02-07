@@ -4,9 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyNetworkMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
-import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -27,34 +25,29 @@ class CompanyNetworkDataSourceImplTest {
     @MockK
     private lateinit var api: CompanyApiService
 
-    @MockK
-    private lateinit var networkMapper: CompanyNetworkMapper
-
     @MockK(relaxed = true)
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: CompanyNetworkDataSourceImpl
+    private lateinit var underTest: CompanyNetworkDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         underTest = CompanyNetworkDataSourceImpl(
             api = api,
-            networkMapper = networkMapper,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
     }
 
     @Test
-    fun `getCompany returns mapped company when API call is successful`() = runTest {
+    fun `getCompany returns company DTO when API call is successful`() = runTest {
         coEvery { api.getCompany() } returns companyDto
-        coEvery { networkMapper.mapFromEntity(companyDto) } returns companyModel
 
         val result = underTest.getCompany()
 
         assertTrue(result is Result.Success)
-        assertEquals(companyModel, result.data)
+        assertEquals(companyDto, result.data)
     }
 
     @Test
