@@ -1,7 +1,7 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.implementation.domain.cache.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.implementation.data.network.LaunchPreferencesDataSource
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCaseImpl

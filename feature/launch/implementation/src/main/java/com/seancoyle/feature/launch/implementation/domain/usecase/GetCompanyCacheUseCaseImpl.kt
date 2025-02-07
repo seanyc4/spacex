@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.domain.cache.CompanyCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.network.CompanyCacheDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
