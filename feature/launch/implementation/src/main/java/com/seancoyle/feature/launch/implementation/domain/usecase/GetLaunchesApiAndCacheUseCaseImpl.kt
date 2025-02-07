@@ -5,14 +5,14 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.domain.network.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val insertLaunchesToCacheUseCase: InsertLaunchesToCacheUseCase,
-    private val launchNetworkDataSource: LaunchNetworkDataSource,
+    private val spaceXRepository: SpaceXRepository,
     private val launchOptions: LaunchOptions
 ) : GetLaunchesApiAndCacheUseCase {
 
@@ -21,7 +21,7 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     }
 
     private suspend fun getLaunchesFromNetwork(): Result<List<LaunchTypes.Launch>, DataError> {
-        return when (val networkResult = launchNetworkDataSource.getLaunches(launchOptions)) {
+        return when (val networkResult = spaceXRepository.getLaunches(launchOptions)) {
             is Result.Success -> cacheData(networkResult.data)
             is Result.Error -> Result.Error(networkResult.error)
         }

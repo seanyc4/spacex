@@ -1,9 +1,9 @@
 package com.seancoyle.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.implementation.domain.cache.LaunchPreferencesDataSource
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCaseImpl
 import io.mockk.MockKAnnotations
@@ -17,14 +17,14 @@ import kotlin.test.assertEquals
 class GetLaunchPreferencesUseCaseImplTest {
 
     @MockK
-    private lateinit var launchPreferencesDataSource: LaunchPreferencesDataSource
+    private lateinit var spaceXRepository: SpaceXRepository
 
     private lateinit var underTest: GetLaunchPreferencesUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = GetLaunchPreferencesUseCaseImpl(launchPreferencesDataSource)
+        underTest = GetLaunchPreferencesUseCaseImpl(spaceXRepository)
     }
 
     @Test
@@ -35,7 +35,7 @@ class GetLaunchPreferencesUseCaseImplTest {
             launchYear = "2024"
         )
 
-        coEvery { launchPreferencesDataSource.getLaunchPreferences() } returns launchPrefs
+        coEvery { spaceXRepository.getLaunchPreferences() } returns launchPrefs
 
         val result = underTest.invoke()
 
