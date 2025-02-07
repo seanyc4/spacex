@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeApiCall
 import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
-import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

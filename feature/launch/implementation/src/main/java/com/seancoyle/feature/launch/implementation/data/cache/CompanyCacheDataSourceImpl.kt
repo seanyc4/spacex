@@ -7,12 +7,10 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.domain.cache.CompanyCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.network.CompanyCacheDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class CompanyCacheDataSourceImpl @Inject constructor(
     private val dao: CompanyDao,
     private val mapper: CompanyEntityMapper,

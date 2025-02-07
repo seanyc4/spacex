@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.domain.cache
+package com.seancoyle.feature.launch.implementation.data.network
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result

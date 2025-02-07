@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.di
 
 import com.seancoyle.feature.launch.implementation.data.cache.LaunchCacheDataSourceImpl
-import com.seancoyle.feature.launch.implementation.domain.cache.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.network.LaunchCacheDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

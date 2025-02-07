@@ -9,10 +9,10 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkMapper
 import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkMapper
-import com.seancoyle.feature.launch.implementation.domain.cache.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.implementation.data.network.LaunchPreferencesDataSource
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
-import com.seancoyle.feature.launch.implementation.domain.network.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource
 import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
 import javax.inject.Inject
 

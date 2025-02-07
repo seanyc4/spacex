@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
-import com.seancoyle.feature.launch.implementation.domain.network.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
