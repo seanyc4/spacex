@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
+import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.INSERT_SUCCESS
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
@@ -23,7 +23,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     private lateinit var insertLaunchesToCacheUseCase: InsertLaunchesToCacheUseCase
 
     @MockK
-    private lateinit var spaceXRepository: SpaceXRepository
+    private lateinit var launchPreferencesRepository: LaunchPreferencesRepository
 
     @MockK
     private lateinit var launchOptions: LaunchOptions
@@ -35,14 +35,14 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         MockKAnnotations.init(this)
         underTest = GetLaunchesApiAndCacheUseCaseImpl(
             insertLaunchesToCacheUseCase = insertLaunchesToCacheUseCase,
-            spaceXRepository = spaceXRepository,
+            launchRepository = launchPreferencesRepository,
             launchOptions = launchOptions
         )
     }
 
     @Test
     fun `invoke should emit success result when network and cache operations are successful`() = runTest {
-        coEvery { spaceXRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchPreferencesRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Success(INSERT_SUCCESS)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
@@ -55,7 +55,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when network fetch fails`() = runTest {
         val networkError = DataError.NETWORK_UNKNOWN_ERROR
-        coEvery { spaceXRepository.getLaunches(launchOptions) } returns Result.Error(networkError)
+        coEvery { launchPreferencesRepository.getLaunches(launchOptions) } returns Result.Error(networkError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
         underTest().collect { results.add(it) }
@@ -67,7 +67,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when cache operation fails`() = runTest {
         val cacheError = DataError.CACHE_ERROR
-        coEvery { spaceXRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchPreferencesRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Error(cacheError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()

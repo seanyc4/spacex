@@ -31,9 +31,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import io.mockk.impl.annotations.MockK
 
-class SpaceXRepositoryImplTest {
+class LaunchPreferencesRepositoryImplTest {
 
-    private lateinit var repository: SpaceXRepositoryImpl
+    private lateinit var repository: LaunchPreferencesRepositoryImpl
 
     @MockK
     private lateinit var companyNetworkDataSource: CompanyNetworkDataSource
@@ -65,7 +65,7 @@ class SpaceXRepositoryImplTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        repository = SpaceXRepositoryImpl(
+        repository = LaunchPreferencesRepositoryImpl(
             companyNetworkDataSource = companyNetworkDataSource,
             launchNetworkDataSource = launchNetworkDataSource,
             launchCacheDataSource = launchCacheDataSource,

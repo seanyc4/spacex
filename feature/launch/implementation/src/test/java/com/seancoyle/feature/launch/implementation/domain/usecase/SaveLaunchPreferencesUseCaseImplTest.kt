@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
+import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
@@ -13,14 +13,14 @@ import org.junit.Test
 class SaveLaunchPreferencesUseCaseImplTest {
 
     @MockK(relaxed = true)
-    private lateinit var spaceXRepository: SpaceXRepository
+    private lateinit var launchPreferencesRepository: LaunchPreferencesRepository
 
     private lateinit var underTest: SaveLaunchPreferencesUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = SaveLaunchPreferencesUseCaseImpl(spaceXRepository)
+        underTest = SaveLaunchPreferencesUseCaseImpl(launchPreferencesRepository)
     }
 
     @Test
@@ -36,7 +36,7 @@ class SaveLaunchPreferencesUseCaseImplTest {
         )
 
         coVerify {
-            spaceXRepository.saveLaunchPreferences(
+            launchPreferencesRepository.saveLaunchPreferences(
                 order = order,
                 launchStatus = launchStatus,
                 launchYear = launchYear

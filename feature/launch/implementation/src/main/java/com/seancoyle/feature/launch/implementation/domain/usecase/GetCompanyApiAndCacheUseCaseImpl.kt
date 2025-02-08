@@ -3,14 +3,14 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
+import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     private val insertCompanyToCacheUseCase: InsertCompanyToCacheUseCase,
-    private val spaceXRepository: SpaceXRepository
+    private val companyRepository: CompanyRepository
 ) : GetCompanyApiAndCacheUseCase {
 
     override operator fun invoke(): Flow<Result<Company, DataError>> = flow {
@@ -18,7 +18,7 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     }
 
     private suspend fun getCompanyFromNetwork(): Result<Company, DataError> {
-        return when (val networkResult = spaceXRepository.getCompany()) {
+        return when (val networkResult = companyRepository.getCompany()) {
             is Result.Success -> cacheData(networkResult.data)
             is Result.Error -> Result.Error(networkResult.error)
         }

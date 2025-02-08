@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.domain.repository.SpaceXRepository
+import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.COMPANY_INSERT_SUCCESS
 import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
@@ -21,7 +21,7 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
     private lateinit var insertCompanyToCacheUseCase: InsertCompanyToCacheUseCase
 
     @MockK
-    private lateinit var spaceXRepository: SpaceXRepository
+    private lateinit var launchPreferencesRepository: LaunchPreferencesRepository
 
     private lateinit var underTest: GetCompanyApiAndCacheUseCase
 
@@ -30,13 +30,13 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
         MockKAnnotations.init(this)
         underTest = GetCompanyApiAndCacheUseCaseImpl(
             insertCompanyToCacheUseCase = insertCompanyToCacheUseCase,
-            spaceXRepository = spaceXRepository
+            companyRepository = launchPreferencesRepository
         )
     }
 
     @Test
     fun `invoke should return company from cache on network success and cache success`() = runTest {
-        coEvery { spaceXRepository.getCompany() } returns Result.Success(companyModel)
+        coEvery { launchPreferencesRepository.getCompany() } returns Result.Success(companyModel)
         coEvery { insertCompanyToCacheUseCase(companyModel) } returns Result.Success(COMPANY_INSERT_SUCCESS)
 
         val results = mutableListOf<Result<Company, DataError>>()
@@ -49,7 +49,7 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
     @Test
     fun `invoke should return error when network fails`() = runTest {
         val error = DataError.NETWORK_UNKNOWN_ERROR
-        coEvery { spaceXRepository.getCompany() } returns Result.Error(error)
+        coEvery { launchPreferencesRepository.getCompany() } returns Result.Error(error)
 
         val results = mutableListOf<Result<Company, DataError>>()
         underTest().collect { results.add(it) }
@@ -61,7 +61,7 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
     @Test
     fun `invoke should return cache error on network success and cache failure`() = runTest {
         val cacheError = DataError.CACHE_ERROR
-        coEvery { spaceXRepository.getCompany() } returns Result.Success(companyModel)
+        coEvery { launchPreferencesRepository.getCompany() } returns Result.Success(companyModel)
         coEvery { insertCompanyToCacheUseCase(companyModel) } returns Result.Error(cacheError)
 
         val results = mutableListOf<Result<Company, DataError>>()
