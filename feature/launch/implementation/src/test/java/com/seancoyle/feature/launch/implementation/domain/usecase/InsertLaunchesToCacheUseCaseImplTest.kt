@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
-import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
+import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -16,14 +16,14 @@ import kotlin.test.assertTrue
 class InsertLaunchesToCacheUseCaseImplTest {
 
     @MockK
-    private lateinit var launchPreferencesRepository: LaunchPreferencesRepository
+    private lateinit var launchRepository: LaunchRepository
 
     private lateinit var underTest: InsertLaunchesToCacheUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = InsertLaunchesToCacheUseCaseImpl(launchPreferencesRepository)
+        underTest = InsertLaunchesToCacheUseCaseImpl(launchRepository)
     }
 
     @Test
@@ -31,7 +31,7 @@ class InsertLaunchesToCacheUseCaseImplTest {
         val expectedResult = longArrayOf(1L)
         val insertResult: Result<LongArray, DataError> = Result.Success(expectedResult)
 
-        coEvery { launchPreferencesRepository.insertLaunches(launchesModel) } returns insertResult
+        coEvery { launchRepository.insertLaunches(launchesModel) } returns insertResult
 
         val result = underTest(launchesModel)
 
@@ -43,7 +43,7 @@ class InsertLaunchesToCacheUseCaseImplTest {
     fun `invoke should return error when data source fails`() = runTest {
         val errorResult: Result<LongArray, DataError> = Result.Error(DataError.CACHE_ERROR)
 
-        coEvery { launchPreferencesRepository.insertLaunches(launchesModel) } returns errorResult
+        coEvery { launchRepository.insertLaunches(launchesModel) } returns errorResult
 
         val result = underTest(launchesModel)
 
