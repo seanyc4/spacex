@@ -81,7 +81,7 @@ class SpaceXRepositoryImplTest {
     @Test
     fun `getCompany returns mapped company on success`() = runTest {
         coEvery { companyNetworkDataSource.getCompany() } returns Result.Success(companyDto)
-        every { companyNetworkMapper.mapFromEntity(companyDto) } returns companyModel
+        every { companyNetworkMapper.dtoToDomain(companyDto) } returns companyModel
 
         val result = repository.getCompany()
 
@@ -89,13 +89,13 @@ class SpaceXRepositoryImplTest {
         assertEquals(companyModel, (result).data)
 
         coVerify { companyNetworkDataSource.getCompany() }
-        verify { companyNetworkMapper.mapFromEntity(companyDto) }
+        verify { companyNetworkMapper.dtoToDomain(companyDto) }
     }
 
     @Test
     fun `getLaunches returns mapped launches on success`() = runTest {
         coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns Result.Success(launchesDto)
-        every { launchNetworkMapper.mapEntityToList(LaunchesDto(listOf(launchDto))) } returns launchesModel
+        every { launchNetworkMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
 
         val result = repository.getLaunches(launchOptions)
 
@@ -103,7 +103,7 @@ class SpaceXRepositoryImplTest {
         assertEquals(launchesModel, (result).data)
 
         coVerify { launchNetworkDataSource.getLaunches(launchOptions) }
-        verify { launchNetworkMapper.mapEntityToList(LaunchesDto(listOf(launchDto))) }
+        verify { launchNetworkMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) }
     }
 
     @Test
@@ -126,7 +126,7 @@ class SpaceXRepositoryImplTest {
         val launchStatusEntity = LaunchStatusEntity.SUCCESS
         val page = 1
         val launches = listOf(mockk<LaunchTypes.Launch>())
-        every { launchCacheMapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
+        every { launchCacheMapper.toLaunchStatusEntity(launchStatus) } returns launchStatusEntity
         coEvery { launchCacheDataSource.paginateLaunches(launchYear, order, launchStatusEntity, page) } returns Result.Success(launchesEntity)
         every { launchCacheMapper.entityToDomainList(launchesEntity) } returns launches
 
@@ -136,7 +136,7 @@ class SpaceXRepositoryImplTest {
         assertEquals(launches, (result).data)
 
         coVerify { launchCacheDataSource.paginateLaunches(launchYear, order, launchStatusEntity, page) }
-        verify { launchCacheMapper.mapToLaunchStatusEntity(launchStatus) }
+        verify { launchCacheMapper.toLaunchStatusEntity(launchStatus) }
         verify { launchCacheMapper.entityToDomainList(launchesEntity) }
     }
 
@@ -155,7 +155,7 @@ class SpaceXRepositoryImplTest {
     @Test
     fun `insertLaunch returns result on success`() = runTest {
         val id = 1L
-        every { launchCacheMapper.mapToEntity(launchModel) } returns launchEntity
+        every { launchCacheMapper.domainToEntity(launchModel) } returns launchEntity
         coEvery { launchCacheDataSource.insert(launchEntity) } returns Result.Success(id)
 
         val result = repository.insertLaunch(launchModel)
@@ -163,14 +163,14 @@ class SpaceXRepositoryImplTest {
         assertTrue(result is Result.Success)
         assertEquals(id, (result).data)
 
-        verify { launchCacheMapper.mapToEntity(launchModel) }
+        verify { launchCacheMapper.domainToEntity(launchModel) }
         coVerify { launchCacheDataSource.insert(launchEntity) }
     }
 
     @Test
     fun `insertLaunches returns result on success`() = runTest {
         val ids = longArrayOf(1L)
-        every { launchCacheMapper.mapToEntity(launchModel) } returns launchEntity
+        every { launchCacheMapper.domainToEntity(launchModel) } returns launchEntity
         coEvery { launchCacheDataSource.insertList(launchesEntity) } returns Result.Success(ids)
 
         val result = repository.insertLaunches(launchesModel)
@@ -178,14 +178,14 @@ class SpaceXRepositoryImplTest {
         assertTrue(result is Result.Success)
         assertEquals(ids, (result).data)
 
-        verify { launchCacheMapper.mapToEntity(launchModel) }
+        verify { launchCacheMapper.domainToEntity(launchModel) }
         coVerify { launchCacheDataSource.insertList(launchesEntity) }
     }
 
     @Test
     fun `deleteList returns result on success`() = runTest {
         val count = 1
-        every { launchCacheMapper.mapToEntity(launchModel) } returns launchEntity
+        every { launchCacheMapper.domainToEntity(launchModel) } returns launchEntity
         coEvery { launchCacheDataSource.deleteList(launchesEntity) } returns Result.Success(count)
 
         val result = repository.deleteList(launchesModel)
@@ -193,7 +193,7 @@ class SpaceXRepositoryImplTest {
         assertTrue(result is Result.Success)
         assertEquals(count, (result).data)
 
-        verify { launchCacheMapper.mapToEntity(launchModel) }
+        verify { launchCacheMapper.domainToEntity(launchModel) }
         coVerify { launchCacheDataSource.deleteList(launchesEntity) }
     }
 
@@ -227,7 +227,7 @@ class SpaceXRepositoryImplTest {
         val id = "1"
         val launch = mockk<LaunchTypes.Launch>()
         coEvery { launchCacheDataSource.getById(id) } returns Result.Success(launchEntity)
-        every { launchCacheMapper.mapFromEntity(launchEntity) } returns launch
+        every { launchCacheMapper.entityToDomain(launchEntity) } returns launch
 
         val result = repository.getById(id)
 
@@ -235,7 +235,7 @@ class SpaceXRepositoryImplTest {
         assertEquals(launch, (result).data)
 
         coVerify { launchCacheDataSource.getById(id) }
-        verify { launchCacheMapper.mapFromEntity(launchEntity) }
+        verify { launchCacheMapper.entityToDomain(launchEntity) }
     }
 
     @Test
@@ -268,7 +268,7 @@ class SpaceXRepositoryImplTest {
     @Test
     fun `insertCompany returns result on success`() = runTest {
         val id = 1L
-        every { companyCacheMapper.mapToEntity(companyModel) } returns companyEntity
+        every { companyCacheMapper.domainToEntity(companyModel) } returns companyEntity
         coEvery { companyCacheDataSource.insert(companyEntity) } returns Result.Success(id)
 
         val result = repository.insertCompany(companyModel)
@@ -276,14 +276,14 @@ class SpaceXRepositoryImplTest {
         assertTrue(result is Result.Success)
         assertEquals(id, (result).data)
 
-        verify { companyCacheMapper.mapToEntity(companyModel) }
+        verify { companyCacheMapper.domainToEntity(companyModel) }
         coVerify { companyCacheDataSource.insert(companyEntity) }
     }
 
     @Test
     fun `getCompanyFromCache returns mapped company on success`() = runTest {
         coEvery { companyCacheDataSource.getCompany() } returns Result.Success(companyEntity)
-        every { companyCacheMapper.mapFromEntity(companyEntity) } returns companyModel
+        every { companyCacheMapper.entityToDomain(companyEntity) } returns companyModel
 
         val result = repository.getCompanyFromCache()
 
@@ -291,7 +291,7 @@ class SpaceXRepositoryImplTest {
         assertEquals(companyModel, (result).data)
 
         coVerify { companyCacheDataSource.getCompany() }
-        verify { companyCacheMapper.mapFromEntity(companyEntity) }
+        verify { companyCacheMapper.entityToDomain(companyEntity) }
     }
 
     @Test

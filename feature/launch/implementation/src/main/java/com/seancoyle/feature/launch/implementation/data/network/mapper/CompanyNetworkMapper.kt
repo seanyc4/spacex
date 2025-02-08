@@ -9,7 +9,7 @@ internal class CompanyNetworkMapper @Inject constructor(
     private val numberFormatter: NumberFormatter
 ) {
 
-    fun mapFromEntity(dto: CompanyDto): Company {
+    fun dtoToDomain(dto: CompanyDto): Company {
         return with(dto) {
             Company(
                 id = "",

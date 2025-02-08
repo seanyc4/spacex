@@ -47,7 +47,7 @@ class LaunchNetworkMapperTest {
         every { dateTransformer.getLaunchDaysDifference(launchModel.launchDateLocalDateTime) } returns "5 days"
         every { dateTransformer.isPastLaunch(launchModel.launchDateLocalDateTime) } returns false
 
-        val result = underTest.mapEntityToList(launchesDto)
+        val result = underTest.dtoToDomainList(launchesDto)
 
         assertNotNull(result)
         assertEquals(1, result.size)

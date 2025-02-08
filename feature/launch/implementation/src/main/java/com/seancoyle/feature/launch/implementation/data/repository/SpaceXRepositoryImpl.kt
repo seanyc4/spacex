@@ -34,14 +34,14 @@ internal class SpaceXRepositoryImpl @Inject constructor(
 
     override suspend fun getCompany(): Result<Company, DataError> {
         return when (val result = companyNetworkDataSource.getCompany()) {
-            is Result.Success -> Result.Success(companyNetworkMapper.mapFromEntity(result.data))
+            is Result.Success -> Result.Success(companyNetworkMapper.dtoToDomain(result.data))
             is Result.Error -> Result.Error(result.error)
         }
     }
 
     override suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError> {
         return when (val result = launchNetworkDataSource.getLaunches(launchOptions)) {
-            is Result.Success -> Result.Success(launchNetworkMapper.mapEntityToList(result.data))
+            is Result.Success -> Result.Success(launchNetworkMapper.dtoToDomainList(result.data))
             is Result.Error -> Result.Error(result.error)
         }
     }
@@ -64,7 +64,7 @@ internal class SpaceXRepositoryImpl @Inject constructor(
         launchStatus: LaunchStatus,
         page: Int
     ): Result<List<LaunchTypes>, DataError> {
-        val launchStatusEntity = launchCacheMapper.mapToLaunchStatusEntity(launchStatus)
+        val launchStatusEntity = launchCacheMapper.toLaunchStatusEntity(launchStatus)
         return when (val result = launchCacheDataSource.paginateLaunches(
             launchYear = launchYear,
             order = order,
@@ -81,15 +81,15 @@ internal class SpaceXRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertLaunch(launch: LaunchTypes.Launch): Result<Long, DataError> {
-        return launchCacheDataSource.insert(launchCacheMapper.mapToEntity(launch))
+        return launchCacheDataSource.insert(launchCacheMapper.domainToEntity(launch))
     }
 
     override suspend fun insertLaunches(launches: List<LaunchTypes.Launch>): Result<LongArray, DataError> {
-        return launchCacheDataSource.insertList(launches.map { launchCacheMapper.mapToEntity(it) })
+        return launchCacheDataSource.insertList(launches.map { launchCacheMapper.domainToEntity(it) })
     }
 
     override suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError> {
-        return launchCacheDataSource.deleteList(launches.map { launchCacheMapper.mapToEntity(it) })
+        return launchCacheDataSource.deleteList(launches.map { launchCacheMapper.domainToEntity(it) })
     }
 
     override suspend fun deleteAll(): Result<Unit, DataError> {
@@ -102,7 +102,7 @@ internal class SpaceXRepositoryImpl @Inject constructor(
 
     override suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError> {
         return when (val result = launchCacheDataSource.getById(id)) {
-            is Result.Success -> Result.Success(result.data?.let { launchCacheMapper.mapFromEntity(it) })
+            is Result.Success -> Result.Success(result.data?.let { launchCacheMapper.entityToDomain(it) })
             is Result.Error -> Result.Error(result.error)
         }
     }
@@ -119,12 +119,12 @@ internal class SpaceXRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertCompany(company: Company): Result<Long, DataError> {
-        return companyCacheDataSource.insert(companyCacheMapper.mapToEntity(company))
+        return companyCacheDataSource.insert(companyCacheMapper.domainToEntity(company))
     }
 
     override suspend fun getCompanyFromCache(): Result<Company?, DataError> {
         return when (val result = companyCacheDataSource.getCompany()) {
-            is Result.Success -> Result.Success(result.data?.let { companyCacheMapper.mapFromEntity(it) })
+            is Result.Success -> Result.Success(result.data?.let { companyCacheMapper.entityToDomain(it) })
             is Result.Error -> Result.Error(result.error)
         }
     }

@@ -16,14 +16,14 @@ import javax.inject.Inject
 internal class LaunchEntityMapper @Inject constructor() {
 
     fun entityToDomainList(entities: List<LaunchEntity>): List<LaunchTypes> {
-        return entities.map { entity -> mapFromEntity(entity) }
+        return entities.map { entity -> entityToDomain(entity) }
     }
 
     fun domainToEntityList(launches: List<LaunchTypes.Launch>): List<LaunchEntity> {
-        return launches.map { item -> mapToEntity(item) }
+        return launches.map { item -> domainToEntity(item) }
     }
 
-    fun mapFromEntity(entity: LaunchEntity): LaunchTypes.Launch {
+    fun entityToDomain(entity: LaunchEntity): LaunchTypes.Launch {
         return with(entity) {
             LaunchTypes.Launch(
                 id = id,
@@ -49,13 +49,13 @@ internal class LaunchEntityMapper @Inject constructor() {
         }
     }
 
-    fun mapToEntity(entity: LaunchTypes.Launch): LaunchEntity {
+    fun domainToEntity(entity: LaunchTypes.Launch): LaunchEntity {
         return with(entity) {
             LaunchEntity(
                 id = id,
                 launchDate = launchDate,
                 launchDateLocalDateTime = launchDateLocalDateTime,
-                launchStatus = mapToLaunchStatusEntity(launchStatus),
+                launchStatus = toLaunchStatusEntity(launchStatus),
                 launchYear = launchYear,
                 links = LinksEntity(
                     missionImage = links.missionImage,
@@ -75,7 +75,7 @@ internal class LaunchEntityMapper @Inject constructor() {
         }
     }
 
-    fun mapToLaunchStatusEntity(launchStatus: LaunchStatus): LaunchStatusEntity {
+    fun toLaunchStatusEntity(launchStatus: LaunchStatus): LaunchStatusEntity {
         return when (launchStatus) {
             LaunchStatus.SUCCESS -> LaunchStatusEntity.SUCCESS
             LaunchStatus.FAILED -> LaunchStatusEntity.FAILED

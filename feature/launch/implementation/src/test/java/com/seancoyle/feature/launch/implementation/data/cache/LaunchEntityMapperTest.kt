@@ -18,7 +18,7 @@ class LaunchEntityMapperTest {
 
     @Test
     fun `mapFromEntity correctly maps from LaunchEntity to LaunchTypes Launch`() {
-        val model = underTest.mapFromEntity(launchEntity)
+        val model = underTest.entityToDomain(launchEntity)
 
         with(model) {
             assertEquals(launchEntity.id, id)
@@ -36,13 +36,13 @@ class LaunchEntityMapperTest {
 
     @Test
     fun `mapToEntity correctly maps from LaunchTypes Launch to LaunchEntity`() {
-        val entity = underTest.mapToEntity(launchModel)
+        val entity = underTest.domainToEntity(launchModel)
 
         with(entity) {
             assertEquals(launchModel.id, id)
             assertEquals(launchModel.launchDate, launchDate)
             assertEquals(launchModel.launchDateLocalDateTime, launchDateLocalDateTime)
-            assertEquals(underTest.mapToLaunchStatusEntity(launchModel.launchStatus), launchStatus)
+            assertEquals(underTest.toLaunchStatusEntity(launchModel.launchStatus), launchStatus)
             assertEquals(launchModel.launchYear, launchYear)
             assertEquals(launchModel.links.missionImage, links.missionImage)
             assertEquals(launchModel.missionName, missionName)
@@ -83,7 +83,7 @@ class LaunchEntityMapperTest {
     @Test
     fun `mapToLaunchStatusEntity correctly maps LaunchStatus to LaunchStatusEntity`() {
         val domain = LaunchStatus.SUCCESS
-        val entity = underTest.mapToLaunchStatusEntity(domain)
+        val entity = underTest.toLaunchStatusEntity(domain)
 
         assertEquals(LaunchStatusEntity.SUCCESS, entity)
     }

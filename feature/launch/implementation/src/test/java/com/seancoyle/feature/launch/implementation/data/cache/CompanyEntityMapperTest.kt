@@ -23,7 +23,7 @@ class CompanyEntityMapperTest {
             summary = "Summary"
         )
 
-        val model = mapper.mapFromEntity(entity)
+        val model = mapper.entityToDomain(entity)
 
         with(model) {
             assertEquals(entity.id, id)
@@ -49,7 +49,7 @@ class CompanyEntityMapperTest {
             summary = "Summary"
         )
 
-        val entity = mapper.mapToEntity(model)
+        val entity = mapper.domainToEntity(model)
 
         with(entity) {
             assertEquals(model.id, id)

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 internal class CompanyEntityMapper @Inject constructor() {
 
-    fun mapFromEntity(entity: CompanyEntity): Company {
+    fun entityToDomain(entity: CompanyEntity): Company {
         return with(entity) {
             Company(
                 id = id,
@@ -21,7 +21,7 @@ internal class CompanyEntityMapper @Inject constructor() {
         }
     }
 
-    fun mapToEntity(domain: Company): CompanyEntity {
+    fun domainToEntity(domain: Company): CompanyEntity {
         return with(domain) {
             CompanyEntity(
                 id = "1",

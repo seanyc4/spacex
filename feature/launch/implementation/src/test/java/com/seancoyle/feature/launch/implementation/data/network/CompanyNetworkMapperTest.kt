@@ -31,7 +31,7 @@ class CompanyNetworkMapperTest {
         every { numberFormatter.formatNumber(100) } returns "100"
         every { numberFormatter.formatNumber(74000000000L) } returns "74,000,000,000"
 
-        val result = mapper.mapFromEntity(companyDto)
+        val result = mapper.dtoToDomain(companyDto)
 
         assertNotNull(result)
         with(result) {
@@ -57,7 +57,7 @@ class CompanyNetworkMapperTest {
         )
         every { numberFormatter.formatNumber(null) } returns "0"
 
-        val result = mapper.mapFromEntity(companyDto)
+        val result = mapper.dtoToDomain(companyDto)
 
         assertNotNull(result)
         with(result) {

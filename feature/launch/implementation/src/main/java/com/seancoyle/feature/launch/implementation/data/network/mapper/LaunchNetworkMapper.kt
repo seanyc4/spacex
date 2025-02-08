@@ -17,7 +17,7 @@ internal class LaunchNetworkMapper @Inject constructor(
     private val dateTransformer: DateTransformer
 ) {
 
-    fun mapEntityToList(entity: LaunchesDto): List<LaunchTypes.Launch> {
+    fun dtoToDomainList(entity: LaunchesDto): List<LaunchTypes.Launch> {
         return entity.docs.map { item ->
             with(item) {
                 val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
