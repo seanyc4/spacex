@@ -12,6 +12,6 @@ internal class GetNumLaunchesCacheUseCaseImpl @Inject constructor(
 ) : GetNumLaunchesCacheUseCase {
 
     override operator fun invoke(): Flow<Result<Int?, DataError>> = flow {
-        emit(launchRepository.getTotalEntries())
+        emit(launchRepository.getTotalEntriesCache())
     }
 }

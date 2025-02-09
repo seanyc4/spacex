@@ -27,7 +27,7 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     }
 
     private suspend fun getLaunchesFromNetwork(): Result<Unit, DataError> {
-        return when (val networkResult = launchRepository.getLaunches(launchOptions)) {
+        return when (val networkResult = launchRepository.getLaunchesApi(launchOptions)) {
             is Result.Success -> {
                 val transformedLaunches = transformLaunchData(networkResult.data)
                 cacheData(transformedLaunches)
@@ -37,7 +37,7 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     }
 
     private suspend fun cacheData(launches: List<LaunchTypes.Launch>): Result<Unit, DataError> {
-        return when (val cacheResult = launchRepository.insertList(launches)) {
+        return when (val cacheResult = launchRepository.insertLaunchesCache(launches)) {
             is Result.Success -> Result.Success(Unit)
             is Result.Error -> Result.Error(cacheResult.error)
         }

@@ -1,16 +1,16 @@
-package com.seancoyle.feature.launch.implementation.data.cache
+package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
-import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDiskDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -31,7 +31,7 @@ class CompanyDiskDataSourceImplTest {
     @MockK
     private lateinit var dao: CompanyDao
 
-    @MockK(relaxed = true)
+    @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
     private lateinit var underTest: CompanyDiskDataSource
@@ -47,21 +47,24 @@ class CompanyDiskDataSourceImplTest {
     }
 
     @Test
-    fun `getCompany returns mapped company when DAO provides an entity`() = runTest {
-        coEvery { dao.getCompanyInfo() } returns companyEntity
+    fun `get returns mapped company when DAO provides an entity`() = runTest {
+        coEvery { dao.getCompany() } returns companyEntity
 
         val result = underTest.get()
+
+        coVerify { dao.getCompany() }
 
         assertTrue(result is Result.Success)
         assertEquals(companyEntity, result.data)
-        coVerify { dao.getCompanyInfo() }
     }
 
     @Test
-    fun `getCompany returns null when DAO provides no entity`() = runTest {
-        coEvery { dao.getCompanyInfo() } returns null
+    fun `get returns null when DAO provides no entity`() = runTest {
+        coEvery { dao.getCompany() } returns null
 
         val result = underTest.get()
+
+        coVerify { dao.getCompany() }
 
         assertTrue(result is Result.Success && result.data == null)
     }
@@ -73,8 +76,9 @@ class CompanyDiskDataSourceImplTest {
 
         val result = underTest.insert(companyEntity)
 
-        assertTrue(result is Result.Success && result.data == entityId)
         coVerify { dao.insert(companyEntity) }
+
+        assertTrue(result is Result.Success && result.data == entityId)
     }
 
     @Test
@@ -83,7 +87,8 @@ class CompanyDiskDataSourceImplTest {
 
         val result = underTest.deleteAll()
 
-        assertTrue(result is Result.Success)
         coVerify { dao.deleteAll() }
+
+        assertTrue(result is Result.Success)
     }
 }

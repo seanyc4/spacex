@@ -1,7 +1,5 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
-import com.seancoyle.core.common.dataformatter.DateFormatter
-import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
@@ -22,9 +20,7 @@ import javax.inject.Inject
 internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     private val getCompanyFromCacheUseCase: GetCompanyCacheUseCase,
     private val getLaunchesFromCacheUseCase: PaginateLaunchesCacheUseCase,
-    private val numberFormatter: NumberFormatter,
-    private val dateFormatter: DateFormatter,
-    private val dateTransformer: DateTransformer
+    private val numberFormatter: NumberFormatter
 ) : MergedLaunchesCacheUseCase {
 
     companion object {

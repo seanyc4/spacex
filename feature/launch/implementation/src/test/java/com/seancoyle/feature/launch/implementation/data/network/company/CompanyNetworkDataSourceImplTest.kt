@@ -1,16 +1,16 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyApiService
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyNetworkDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -28,7 +28,7 @@ class CompanyNetworkDataSourceImplTest {
     @MockK
     private lateinit var api: CompanyApiService
 
-    @MockK(relaxed = true)
+    @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
     private lateinit var underTest: CompanyNetworkDataSource
@@ -49,6 +49,8 @@ class CompanyNetworkDataSourceImplTest {
 
         val result = underTest.getCompanyApi()
 
+        coVerify { api.getCompany() }
+
         assertTrue(result is Result.Success)
         assertEquals(companyDto, result.data)
     }
@@ -59,6 +61,8 @@ class CompanyNetworkDataSourceImplTest {
         coEvery { api.getCompany() } throws exception
 
         val result = underTest.getCompanyApi()
+
+        coVerify { api.getCompany() }
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_UNKNOWN_ERROR, result.error)

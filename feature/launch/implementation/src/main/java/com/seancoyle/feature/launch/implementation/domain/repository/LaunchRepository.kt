@@ -8,15 +8,15 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 
 internal interface LaunchRepository {
-    suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<Unit, DataError>
-    suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError>
-    suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError>
-    suspend fun deleteAll(): Result<Unit, DataError>
-    suspend fun deleteById(id: String): Result<Int, DataError>
-    suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError>
-    suspend fun getAll(): Result<List<LaunchTypes>, DataError>
-    suspend fun getTotalEntries(): Result<Int, DataError>
-    suspend fun paginateLaunches(
+    suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): Result<Unit, DataError>
+    suspend fun getLaunchesApi(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError>
+    suspend fun deleteLaunhesCache(launches: List<LaunchTypes.Launch>): Result<Int, DataError>
+    suspend fun deleteAllCache(): Result<Unit, DataError>
+    suspend fun deleteByIdCache(id: String): Result<Int, DataError>
+    suspend fun getByIdCache(id: String): Result<LaunchTypes.Launch?, DataError>
+    suspend fun getAllCache(): Result<List<LaunchTypes>, DataError>
+    suspend fun getTotalEntriesCache(): Result<Int, DataError>
+    suspend fun paginateCache(
         launchYear: String,
         order: Order,
         launchStatus: LaunchStatus,

@@ -1,10 +1,9 @@
-package com.seancoyle.feature.launch.implementation.data.repository
+package com.seancoyle.feature.launch.implementation.data.repository.company
 
+import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRepositoryImpl
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoEntityMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
@@ -30,7 +29,7 @@ class CompanyRepositoryImplTest {
     private lateinit var companyDiskDataSource: CompanyDiskDataSource
 
     @MockK
-    private lateinit var companyDtoDomainMapper: CompanyDtoDomainMapper
+    private lateinit var companyDtoEntityMapper: CompanyDtoEntityMapper
 
     @MockK
     private lateinit var companyCacheMapper: CompanyDomainEntityMapper
@@ -45,37 +44,60 @@ class CompanyRepositoryImplTest {
             companyNetworkDataSource = companyNetworkDataSource,
             companyDiskDataSource = companyDiskDataSource,
             companyCacheMapper = companyCacheMapper,
-            companyDtoEntityMapper = TODO()
+            companyDtoEntityMapper = companyDtoEntityMapper
         )
     }
 
     @Test
-    fun `getCompany returns mapped company on success`() = runTest {
+    fun `getCompanyApi success returns companyDto and inserts to cache success`() = runTest {
         coEvery { companyNetworkDataSource.getCompanyApi() } returns Result.Success(companyDto)
-        every { companyDtoDomainMapper.dtoToDomain(companyDto) } returns companyModel
+        every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
+        coEvery { companyDiskDataSource.insert(companyEntity) } returns Result.Success(1)
 
         val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Success)
-        assertEquals(companyModel, (result).data)
+        assertEquals(Unit, (result).data)
 
-        coVerify { companyNetworkDataSource.getCompanyApi() }
-        verify { companyDtoDomainMapper.dtoToDomain(companyDto) }
+        coVerify {
+            companyNetworkDataSource.getCompanyApi()
+            companyDiskDataSource.insert(companyEntity)
+        }
+        verify { companyDtoEntityMapper.dtoToEntity(companyDto) }
     }
 
     @Test
-    fun `insertCompany returns result on success`() = runTest {
-        val id = 1L
-        every { companyCacheMapper.domainToEntity(companyModel) } returns companyEntity
-        coEvery { companyDiskDataSource.insert(companyEntity) } returns Result.Success(id)
+    fun `getCompanyApi success returns error`() = runTest {
+        val expected = DataError.NETWORK_UNKNOWN_ERROR
+        coEvery { companyNetworkDataSource.getCompanyApi() } returns Result.Error(expected)
 
-        val result = underTest.insertCompany(companyModel)
+        val result = underTest.getCompanyApi()
 
-        assertTrue(result is Result.Success)
-        assertEquals(id, (result).data)
+        assertTrue(result is Result.Error)
+        assertEquals(expected, (result).error)
 
-        verify { companyCacheMapper.domainToEntity(companyModel) }
-        coVerify { companyDiskDataSource.insert(companyEntity) }
+        coVerify {
+            companyNetworkDataSource.getCompanyApi()
+        }
+    }
+
+    @Test
+    fun `getCompanyApi success returns companyDto and inserts to cache error`() = runTest {
+        val expected = DataError.CACHE_ERROR
+        coEvery { companyNetworkDataSource.getCompanyApi() } returns Result.Success(companyDto)
+        every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
+        coEvery { companyDiskDataSource.insert(companyEntity) } returns Result.Error(expected)
+
+        val result = underTest.getCompanyApi()
+
+        assertTrue(result is Result.Error)
+        assertEquals(expected, (result).error)
+
+        coVerify {
+            companyNetworkDataSource.getCompanyApi()
+            companyDiskDataSource.insert(companyEntity)
+        }
+        verify { companyDtoEntityMapper.dtoToEntity(companyDto) }
     }
 
     @Test

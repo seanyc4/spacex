@@ -22,7 +22,7 @@ internal class CompanyDiskDataSourceImpl @Inject constructor(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
         ) {
-            dao.getCompanyInfo()
+            dao.getCompany()
         }
     }
 

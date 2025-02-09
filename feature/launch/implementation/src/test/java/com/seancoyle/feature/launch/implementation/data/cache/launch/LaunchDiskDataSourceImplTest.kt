@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache
+package com.seancoyle.feature.launch.implementation.data.cache.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.Result
@@ -7,7 +7,6 @@ import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDiskDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
@@ -15,6 +14,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -32,7 +32,7 @@ class LaunchDiskDataSourceImplTest {
     @MockK
     private lateinit var dao: LaunchDao
 
-    @MockK(relaxed = true)
+    @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
     private lateinit var underTest: LaunchDiskDataSource
@@ -48,7 +48,7 @@ class LaunchDiskDataSourceImplTest {
     }
 
     @Test
-    fun `filterLaunchList returns mapped launches when DAO provides data`() = runTest {
+    fun `paginateLaunches returns mapped launches when DAO provides data`() = runTest {
         val launchYear = "2022"
         val order = Order.ASC
         val launchStatusEntity = LaunchStatusEntity.ALL
@@ -72,8 +72,6 @@ class LaunchDiskDataSourceImplTest {
             page = page
         )
 
-        assertTrue(result is Result.Success)
-        assertEquals(launchesEntity, result.data)
         coVerify {
             dao.paginateLaunches(
                 launchYear = launchYear,
@@ -83,6 +81,9 @@ class LaunchDiskDataSourceImplTest {
                 pageSize = pageSize
             )
         }
+
+        assertTrue(result is Result.Success)
+        assertEquals(launchesEntity, result.data)
     }
 
     @Test
@@ -92,9 +93,10 @@ class LaunchDiskDataSourceImplTest {
 
         val result = underTest.getById(launchId)
 
+        coVerify { dao.getById(launchId) }
+
         assertTrue(result is Result.Success)
         assertEquals(launchEntity, result.data)
-        coVerify { dao.getById(launchId) }
     }
 
     @Test
@@ -102,6 +104,8 @@ class LaunchDiskDataSourceImplTest {
         coEvery { dao.getAll() } returns launchesEntity
 
         val result = underTest.getAll()
+
+        coVerify { dao.getAll() }
 
         assertTrue(result is Result.Success)
         assertEquals(launchesEntity, result.data)
@@ -114,9 +118,10 @@ class LaunchDiskDataSourceImplTest {
 
         val result = underTest.deleteById(launchId)
 
+        coVerify { dao.deleteById(launchId) }
+
         assertTrue(result is Result.Success)
         assertEquals(1, result.data)
-        coVerify { dao.deleteById(launchId) }
     }
 
     @Test
@@ -125,7 +130,8 @@ class LaunchDiskDataSourceImplTest {
 
         val result = underTest.deleteAll()
 
-        assertTrue(result is Result.Success)
         coVerify { dao.deleteAll() }
+
+        assertTrue(result is Result.Success)
     }
 }

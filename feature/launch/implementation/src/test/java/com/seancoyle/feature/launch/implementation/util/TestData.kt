@@ -30,18 +30,13 @@ import java.time.LocalDateTime
 
 internal object TestData {
 
-    val INSERT_SUCCESS = longArrayOf(1L)
-    const val COMPANY_INSERT_SUCCESS = 1L
-
     val companyModel = Company(
-        id = "1",
-        employees = "100",
+        employees = 100,
         founded = 2000,
         founder = "Elon Musk",
         launchSites = 4,
         name = "SpaceX",
-        valuation = "74,000,000,000L",
-        summary = "Summary"
+        valuation = 74000000000L
     )
 
     val companyDto = CompanyDto(
@@ -55,13 +50,12 @@ internal object TestData {
 
     val companyEntity = CompanyEntity(
         id = "1",
-        employees = "100",
+        employees = 100,
         founded = 2000,
         founder = "founder",
         launchSites = 4,
         name = "name",
-        valuation = "74,000,000,000L",
-        summary = "summary"
+        valuation = 74000000000L
     )
 
     val launchModel = LaunchTypes.Launch(
@@ -80,8 +74,7 @@ internal object TestData {
         rocket = Rocket("Falcon 9 Block 5"),
         launchDateStatus = LaunchDateStatus.FUTURE,
         launchDays = "5 days",
-        launchDaysResId = 0,
-        launchStatusIconResId = 0
+        isLaunchSuccess = true
     )
 
     val launchesModel = listOf(
@@ -105,8 +98,7 @@ internal object TestData {
         rocket = RocketEntity("Falcon 9 Block 5"),
         launchDateStatus = LaunchDateStatusEntity.FUTURE,
         launchDays = "5 days",
-        launchDaysResId = 0,
-        launchStatusIconResId = 0
+        isLaunchSuccess = true
     )
 
     val launchesEntity = listOf(

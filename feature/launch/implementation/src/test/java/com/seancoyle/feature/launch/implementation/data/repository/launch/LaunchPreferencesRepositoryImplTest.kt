@@ -1,9 +1,7 @@
-package com.seancoyle.feature.launch.implementation.data.repository
+package com.seancoyle.feature.launch.implementation.data.repository.launch
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.*
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchPreferencesDataSource
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchPreferencesRepositoryImpl
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import io.mockk.*
 import kotlinx.coroutines.test.runTest

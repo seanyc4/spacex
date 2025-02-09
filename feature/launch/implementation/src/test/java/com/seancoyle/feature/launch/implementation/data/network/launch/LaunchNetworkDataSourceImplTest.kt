@@ -1,17 +1,16 @@
-package com.seancoyle.feature.launch.implementation.data.network
+package com.seancoyle.feature.launch.implementation.data.network.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchApiService
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchNetworkDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -29,7 +28,7 @@ class LaunchNetworkDataSourceImplTest {
     @MockK
     private lateinit var api: LaunchApiService
 
-    @MockK(relaxed = true)
+    @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
     private lateinit var underTest: LaunchNetworkDataSource

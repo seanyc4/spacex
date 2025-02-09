@@ -1,32 +1,30 @@
-package com.seancoyle.feature.launch.implementation.data.cache
+package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class CompanyDomainEntityMapperTest {
 
-    private val mapper = CompanyDomainEntityMapper()
+    private val underTest = CompanyDomainEntityMapper()
 
     @Test
-    fun `mapFromEntity correctly maps from CompanyEntity to Company`() {
+    fun `entityToDomain correctly maps from CompanyEntity to Company`() {
         val entity = CompanyEntity(
             id = "1",
-            employees = "1000",
+            employees = 1000,
             founded = 2002,
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "100000000000",
-            summary = "Summary"
+            valuation = 100000000000L
         )
 
-        val model = mapper.entityToDomain(entity)
+        val model = underTest.entityToDomain(entity)
 
         with(model) {
-            assertEquals(entity.id, id)
+            assertEquals(entity.id, "1")
             assertEquals(entity.employees, employees)
             assertEquals(entity.founded, founded)
             assertEquals(entity.founder, founder)
@@ -37,22 +35,19 @@ class CompanyDomainEntityMapperTest {
     }
 
     @Test
-    fun `mapToEntity correctly maps from Company to CompanyEntity`() {
+    fun `domainToEntity correctly maps from Company to CompanyEntity`() {
         val model = Company(
-            id = "1",
-            employees = "1000",
+            employees = 1000,
             founded = 2002,
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "100000000000",
-            summary = "Summary"
+            valuation = 100000000000,
         )
 
-        val entity = mapper.domainToEntity(model)
+        val entity = underTest.domainToEntity(model)
 
         with(entity) {
-            assertEquals(model.id, id)
             assertEquals(model.employees, employees)
             assertEquals(model.founded, founded)
             assertEquals(model.founder, founder)

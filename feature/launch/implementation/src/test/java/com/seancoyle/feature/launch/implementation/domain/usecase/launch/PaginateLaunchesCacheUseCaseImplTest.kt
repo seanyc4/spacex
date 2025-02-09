@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.domain.usecase
+package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
@@ -6,11 +6,10 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
-import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -39,7 +38,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
         val page = 1
 
         coEvery {
-            launchRepository.paginateLaunches(
+            launchRepository.paginateCache(
                 launchYear = year,
                 order = order,
                 launchStatus = status,
@@ -55,6 +54,8 @@ class PaginateLaunchesCacheUseCaseImplTest {
             page = page
         ).collect { results.add(it) }
 
+        coVerify { launchRepository.paginateCache(year, order, status, page) }
+
         assertTrue(results.first() is Result.Success)
         assertEquals(launchesModel, (results.first() as Result.Success).data)
     }
@@ -68,7 +69,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
         val error = DataError.CACHE_ERROR
 
         coEvery {
-            launchRepository.paginateLaunches(
+            launchRepository.paginateCache(
                 launchYear = year,
                 order = order,
                 launchStatus = status,
@@ -83,6 +84,8 @@ class PaginateLaunchesCacheUseCaseImplTest {
             launchStatus = status,
             page = page
         ).collect { results.add(it) }
+
+        coVerify { launchRepository.paginateCache(year, order, status, page) }
 
         assertTrue(results.first() is Result.Error)
         assertEquals(error, (results.first() as Result.Error).error)
