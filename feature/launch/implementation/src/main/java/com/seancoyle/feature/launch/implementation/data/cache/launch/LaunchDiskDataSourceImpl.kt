@@ -11,7 +11,7 @@ import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ internal class LaunchDiskDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : LaunchCacheDataSource {
+) : LaunchDiskDataSource {
 
     override suspend fun paginate(
         launchYear: String,

@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
 import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDiskDataSourceImpl
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ internal abstract class LaunchCacheDataSourceModule {
     @Binds
     abstract fun bindsLaunchCacheDataSource(
         impl: LaunchDiskDataSourceImpl
-    ): LaunchCacheDataSource
+    ): LaunchDiskDataSource
 }

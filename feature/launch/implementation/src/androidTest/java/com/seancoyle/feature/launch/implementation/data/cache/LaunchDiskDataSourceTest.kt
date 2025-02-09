@@ -9,7 +9,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -34,7 +34,7 @@ private const val DATA = 1000
 @HiltAndroidTest
 @Suppress("UNCHECKED_CAST")
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class LaunchCacheDataSourceTest {
+internal class LaunchDiskDataSourceTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -42,7 +42,7 @@ internal class LaunchCacheDataSourceTest {
     private lateinit var validLaunchYears: List<String>
 
     @Inject
-    lateinit var underTest: LaunchCacheDataSource
+    lateinit var underTest: LaunchDiskDataSource
 
     @Before
     fun setup() {

@@ -13,13 +13,13 @@ import javax.inject.Inject
 
 internal class LaunchRepositoryImpl @Inject constructor(
     private val launchNetworkDataSource: LaunchNetworkDataSource,
-    private val launchCacheDataSource: LaunchCacheDataSource,
+    private val launchDiskDataSource: LaunchDiskDataSource,
     private val launchDtoToDomainMapper: LaunchDtoDomainMapper,
     private val launchCacheMapper: LaunchDomainEntityMapper
 ): LaunchRepository {
 
     override suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<Unit, DataError> {
-        return launchCacheDataSource.insertList(launchCacheMapper.domainToEntityList(launches))
+        return launchDiskDataSource.insertList(launchCacheMapper.domainToEntityList(launches))
     }
 
     override suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError> {
@@ -36,7 +36,7 @@ internal class LaunchRepositoryImpl @Inject constructor(
         page: Int
     ): Result<List<LaunchTypes>, DataError> {
         val launchStatusEntity = launchCacheMapper.mapToLaunchStatusEntity(launchStatus)
-        return when (val result = launchCacheDataSource.paginate(
+        return when (val result = launchDiskDataSource.paginate(
             launchYear = launchYear,
             order = order,
             launchStatus = launchStatusEntity,
@@ -48,33 +48,33 @@ internal class LaunchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError> {
-        return launchCacheDataSource.deleteList(launches.map { launchCacheMapper.domainToEntity(it) })
+        return launchDiskDataSource.deleteList(launches.map { launchCacheMapper.domainToEntity(it) })
     }
 
     override suspend fun deleteAll(): Result<Unit, DataError> {
-        return launchCacheDataSource.deleteAll()
+        return launchDiskDataSource.deleteAll()
     }
 
     override suspend fun deleteById(id: String): Result<Int, DataError> {
-        return launchCacheDataSource.deleteById(id)
+        return launchDiskDataSource.deleteById(id)
     }
 
     override suspend fun getById(id: String): Result<LaunchTypes.Launch?, DataError> {
-        return when (val result = launchCacheDataSource.getById(id)) {
+        return when (val result = launchDiskDataSource.getById(id)) {
             is Result.Success -> Result.Success(result.data?.let { launchCacheMapper.entityToDomain(it) })
             is Result.Error -> Result.Error(result.error)
         }
     }
 
     override suspend fun getAll(): Result<List<LaunchTypes>, DataError> {
-        return when (val result = launchCacheDataSource.getAll()) {
+        return when (val result = launchDiskDataSource.getAll()) {
             is Result.Success -> Result.Success(launchCacheMapper.entityToDomainList(result.data))
             is Result.Error -> Result.Error(result.error)
         }
     }
 
     override suspend fun getTotalEntries(): Result<Int, DataError> {
-        return launchCacheDataSource.getTotalEntries()
+        return launchDiskDataSource.getTotalEntries()
     }
 
 }

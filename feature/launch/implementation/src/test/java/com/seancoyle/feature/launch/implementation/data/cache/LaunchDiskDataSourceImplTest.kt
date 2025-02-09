@@ -8,7 +8,7 @@ import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDiskDataSourceImpl
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
 import io.mockk.MockKAnnotations
@@ -35,7 +35,7 @@ class LaunchDiskDataSourceImplTest {
     @MockK(relaxed = true)
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: LaunchCacheDataSource
+    private lateinit var underTest: LaunchDiskDataSource
 
     @Before
     fun setup() {

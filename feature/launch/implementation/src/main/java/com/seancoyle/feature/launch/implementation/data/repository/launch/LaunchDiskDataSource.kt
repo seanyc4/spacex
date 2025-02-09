@@ -6,7 +6,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 
-internal interface LaunchCacheDataSource {
+internal interface LaunchDiskDataSource {
 
     suspend fun paginate(
         launchYear: String,
