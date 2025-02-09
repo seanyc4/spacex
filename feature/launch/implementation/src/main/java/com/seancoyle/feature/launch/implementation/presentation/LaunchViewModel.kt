@@ -18,22 +18,7 @@ import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissNotificationEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.LoadNextPageEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NewSearchEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.OpenLinkEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SetFilterStateEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
@@ -87,7 +72,7 @@ internal class LaunchViewModel @Inject constructor(
             onEvent(CreateMergedLaunchesEvent)
         } else {
             // Fresh app launch - get data from network
-            onEvent(GetCompanyApiAndCacheEvent)
+            onEvent(GetSpaceXDataEvent)
         }
     }
 
@@ -116,8 +101,6 @@ internal class LaunchViewModel @Inject constructor(
                 is DismissFilterDialogEvent -> displayFilterDialog(false)
                 is DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is DismissNotificationEvent -> dismissNotification()
-                is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
-                is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
                 is LoadNextPageEvent -> loadNextPage(event.page)
                 is NewSearchEvent -> newSearch()
@@ -131,6 +114,7 @@ internal class LaunchViewModel @Inject constructor(
                     year = event.launchYear
                 )
                 is SwipeToRefreshEvent -> swipeToRefresh()
+                is GetSpaceXDataEvent -> getSpaceXDataUseCase()
             }
 
         }
@@ -140,48 +124,6 @@ internal class LaunchViewModel @Inject constructor(
         uiState.update { currentState ->
             currentState.isSuccess { it.copy(notificationState = event.notificationState) }
         }
-    }
-
-    private suspend fun getLaunchesApiAndCacheUseCase() {
-        launchesComponent.getLaunchesApiAndCacheUseCase()
-            .onStart { uiState.update { LaunchesUiState.Loading } }
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> onEvent(CreateMergedLaunchesEvent)
-                    is Result.Error -> {
-                        uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Dialog,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-    }
-
-    private suspend fun getCompanyApiAndCacheUseCase() {
-        launchesComponent.getCompanyApiAndCacheUseCase()
-            .onStart { uiState.update { LaunchesUiState.Loading } }
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> onEvent(GetLaunchesApiAndCacheEvent)
-                    is Result.Error -> {
-                        uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Dialog,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
     }
 
     private suspend fun paginateLaunchesCacheUseCase() {
@@ -214,6 +156,27 @@ internal class LaunchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getSpaceXDataUseCase() {
+        launchesComponent.getSpaceXDataUseCase()
+            .onStart { uiState.update { LaunchesUiState.Loading } }
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> onEvent(CreateMergedLaunchesEvent)
+                    is Result.Error -> {
+                        uiState.update {
+                            LaunchesUiState.Error(
+                                errorNotificationState = NotificationState(
+                                    message = result.error.asStringResource(),
+                                    uiComponentType = UiComponentType.Dialog,
+                                    notificationType = NotificationType.Error
+                                )
+                            )
+                        }
+                    }
+                }
+            }
     }
 
     private suspend fun mergedLaunchesCacheUseCase() {
@@ -254,7 +217,7 @@ internal class LaunchViewModel @Inject constructor(
         val updatedLaunches = result.data.map { launchType ->
             when (launchType) {
                 is LaunchTypes.CompanySummary -> {
-                    launchType.copy(company = launchType.company.getSummary(appStringResource.get()))
+                    launchType.copy(summary = launchType.getSummary(appStringResource.get()))
                 }
 
                 is LaunchTypes.Launch -> {
@@ -331,7 +294,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun swipeToRefresh() {
         clearQueryParameters()
         clearListState()
-        onEvent(GetCompanyApiAndCacheEvent)
+        onEvent(GetSpaceXDataEvent)
     }
 
     private fun setLaunchFilterState(

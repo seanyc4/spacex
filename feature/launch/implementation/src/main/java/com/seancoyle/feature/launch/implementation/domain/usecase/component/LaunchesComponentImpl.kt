@@ -11,6 +11,7 @@ import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUse
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetCompanyApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetCompanyCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.GetSpaceXDataUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.PaginateLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.SaveLaunchPreferencesUseCase
@@ -19,6 +20,7 @@ import javax.inject.Inject
 import dagger.Lazy
 
 internal class LaunchesComponentImpl @Inject constructor(
+    private val getSpaceXDataUseCase: GetSpaceXDataUseCase,
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
     private val paginateLaunchesCacheUseCase: Lazy<PaginateLaunchesCacheUseCase>,
     private val mergedLaunchesCacheUseCase: MergedLaunchesCacheUseCase,
@@ -28,8 +30,12 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(): Flow<Result<List<LaunchTypes.Launch>, DataError>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<Result<Unit, DataError>> {
         return getLaunchesApiCacheUseCase.invoke()
+    }
+
+    override fun getSpaceXDataUseCase(): Flow<Result<Unit, DataError>> {
+        return getSpaceXDataUseCase.invoke()
     }
 
     override fun paginateLaunchesCacheUseCase(
@@ -64,7 +70,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         return getCompanyCacheUseCase.invoke()
     }
 
-    override fun getCompanyApiAndCacheUseCase(): Flow<Result<Company, DataError>> {
+    override fun getCompanyApiAndCacheUseCase(): Flow<Result<Unit, DataError>> {
         return getCompanyApiCacheUseCase.invoke()
     }
 

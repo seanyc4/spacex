@@ -2,9 +2,9 @@ package com.seancoyle.feature.launch.implementation.presentation
 
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
-import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
 
@@ -20,7 +20,7 @@ fun LaunchDateStatus.getDateStringRes(): Int = when (this) {
     LaunchDateStatus.FUTURE -> R.string.days_from_now
 }
 
-fun Company.getSummary(appStringResource: AppStringResource): Company {
+fun LaunchTypes.CompanySummary.getSummary(appStringResource: AppStringResource): String {
     val summary = appStringResource.getString(
         R.string.company_info,
         arrayOf(
@@ -32,7 +32,7 @@ fun Company.getSummary(appStringResource: AppStringResource): Company {
             this.valuation
         )
     )
-    return this.copy(summary = summary)
+    return summary
 }
 
 fun Links?.getLinks() = listOfNotNull(

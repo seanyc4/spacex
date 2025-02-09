@@ -86,7 +86,7 @@ private fun RenderGridSections(
     when (launchItem) {
         is LaunchTypes.SectionTitle -> LaunchHeading(launchItem)
 
-        is LaunchTypes.CompanySummary -> CompanySummaryCard(launchItem.company.summary)
+        is LaunchTypes.CompanySummary -> CompanySummaryCard(launchItem.summary)
 
         is LaunchTypes.Launch -> {
             LaunchCard(

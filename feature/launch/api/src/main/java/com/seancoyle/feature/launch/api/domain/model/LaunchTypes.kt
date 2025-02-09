@@ -9,7 +9,13 @@ import java.time.LocalDateTime
 sealed interface LaunchTypes {
     data class CompanySummary(
         val id: String,
-        val company: Company
+        val summary: String,
+        val name: String,
+        val founder: String,
+        val founded: Int,
+        val employees: String,
+        val launchSites: Int,
+        val valuation: String
     ) : LaunchTypes
 
     data class SectionTitle(

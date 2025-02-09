@@ -4,6 +4,6 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import kotlinx.coroutines.flow.Flow
 
-internal interface GetCompanyApiAndCacheUseCase {
+internal interface GetSpaceXDataUseCase {
     operator fun invoke(): Flow<Result<Unit, DataError>>
 }

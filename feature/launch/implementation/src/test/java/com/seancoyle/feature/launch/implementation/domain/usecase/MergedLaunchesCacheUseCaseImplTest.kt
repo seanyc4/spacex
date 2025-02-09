@@ -76,7 +76,7 @@ class MergedLaunchesCacheUseCaseImplTest {
         assertNotNull(data)
         assertTrue(data.size > 1)
         assertTrue(data.any { it is LaunchTypes.SectionTitle && it.title == HEADER })
-        assertTrue(data.any { it is LaunchTypes.CompanySummary && it.company == companyModel })
+        assertTrue(data.any { it is LaunchTypes.CompanySummary && it.summary == companyModel })
         assertTrue(data.any { it is LaunchTypes.SectionTitle && it.title == CAROUSEL })
         assertTrue(data.any { it is LaunchTypes.Carousel && it.items.all { item -> carouselModel.items.contains(item) } })
         assertTrue(data.any { it is LaunchTypes.SectionTitle && it.title == GRID })

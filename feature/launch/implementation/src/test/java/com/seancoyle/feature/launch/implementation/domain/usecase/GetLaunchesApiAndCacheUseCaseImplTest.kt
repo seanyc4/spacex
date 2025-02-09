@@ -42,7 +42,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit success result when network and cache operations are successful`() = runTest {
-        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Success(INSERT_SUCCESS)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
@@ -55,7 +55,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when network fetch fails`() = runTest {
         val networkError = DataError.NETWORK_UNKNOWN_ERROR
-        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Error(networkError)
+        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Error(networkError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
         underTest().collect { results.add(it) }
@@ -67,7 +67,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when cache operation fails`() = runTest {
         val cacheError = DataError.CACHE_ERROR
-        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Error(cacheError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()

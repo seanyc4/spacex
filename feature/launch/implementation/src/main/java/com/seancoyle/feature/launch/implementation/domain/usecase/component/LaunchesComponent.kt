@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
+    fun getSpaceXDataUseCase(): Flow<Result<Unit, DataError>>
+
     fun paginateLaunchesCacheUseCase(
         year: String,
         order: Order,
@@ -25,11 +27,11 @@ interface LaunchesComponent {
         page: Int
     ): Flow<Result<List<LaunchTypes>, DataError>>
 
-    fun getLaunchesApiAndCacheUseCase(): Flow<Result<List<LaunchTypes.Launch>, DataError>>
+    fun getLaunchesApiAndCacheUseCase(): Flow<Result<Unit, DataError>>
 
     fun getCompanyCacheUseCase(): Flow<Result<Company?, DataError>>
 
-    fun getCompanyApiAndCacheUseCase(): Flow<Result<Company, DataError>>
+    fun getCompanyApiAndCacheUseCase(): Flow<Result<Unit, DataError>>
 
     suspend fun getLaunchPreferencesUseCase(): LaunchPrefs
 

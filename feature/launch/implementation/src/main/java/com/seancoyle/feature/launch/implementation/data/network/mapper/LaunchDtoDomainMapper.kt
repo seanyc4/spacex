@@ -1,7 +1,5 @@
 package com.seancoyle.feature.launch.implementation.data.network.mapper
 
-import com.seancoyle.core.common.dataformatter.DateFormatter
-import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -12,23 +10,20 @@ import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchesDto
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-internal class LaunchNetworkMapper @Inject constructor(
-    private val dateFormatter: DateFormatter,
-    private val dateTransformer: DateTransformer
-) {
+internal class LaunchDtoDomainMapper @Inject constructor() {
 
     fun dtoToDomainList(entity: LaunchesDto): List<LaunchTypes.Launch> {
         return entity.docs.map { item ->
             with(item) {
-                val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
+              //  val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
                 val launchSuccess = isLaunchSuccess
 
                 LaunchTypes.Launch(
-                    id = flightNumber.toString() + localDateTime,
-                    launchDate = dateTransformer.formatDateTimeToString(localDateTime),
-                    launchDateLocalDateTime = localDateTime,
+                    id = flightNumber.toString(),
+                    launchDate = launchDate.orEmpty(),
+                    launchDateLocalDateTime = LocalDateTime.now(),
                     launchStatus = mapIsLaunchSuccessToStatus(launchSuccess),
-                    launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
+                    launchYear = "",
                     links = Links(
                         missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
                         articleLink = links?.articleLink,
@@ -39,8 +34,8 @@ internal class LaunchNetworkMapper @Inject constructor(
                     rocket = Rocket(
                         rocketNameAndType = "${rocket?.name}/${rocket?.type}",
                     ),
-                    launchDateStatus = mapLaunchDateToStatus(localDateTime),
-                    launchDays = dateTransformer.getLaunchDaysDifference(localDateTime),
+                    launchDateStatus = ,
+                    launchDays = "",
                     launchDaysResId = 0,
                     launchStatusIconResId = 0
                 )

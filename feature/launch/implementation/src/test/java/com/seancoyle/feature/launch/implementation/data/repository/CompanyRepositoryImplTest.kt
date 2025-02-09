@@ -2,9 +2,9 @@ package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.implementation.data.cache.CompanyCacheDataSource
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyDomainEntityMapper
 import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkDataSource
-import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
@@ -30,10 +30,10 @@ class CompanyRepositoryImplTest {
     private lateinit var companyCacheDataSource: CompanyCacheDataSource
 
     @MockK
-    private lateinit var companyNetworkMapper: CompanyNetworkMapper
+    private lateinit var companyDtoDomainMapper: CompanyDtoDomainMapper
 
     @MockK
-    private lateinit var companyCacheMapper: CompanyEntityMapper
+    private lateinit var companyCacheMapper: CompanyDomainEntityMapper
 
     private lateinit var underTest: CompanyRepository
 
@@ -44,7 +44,7 @@ class CompanyRepositoryImplTest {
         underTest = CompanyRepositoryImpl(
             companyNetworkDataSource = companyNetworkDataSource,
             companyCacheDataSource = companyCacheDataSource,
-            companyNetworkMapper = companyNetworkMapper,
+            companyDtoDomainMapper = companyDtoDomainMapper,
             companyCacheMapper = companyCacheMapper
         )
     }
@@ -52,7 +52,7 @@ class CompanyRepositoryImplTest {
     @Test
     fun `getCompany returns mapped company on success`() = runTest {
         coEvery { companyNetworkDataSource.getCompany() } returns Result.Success(companyDto)
-        every { companyNetworkMapper.dtoToDomain(companyDto) } returns companyModel
+        every { companyDtoDomainMapper.dtoToDomain(companyDto) } returns companyModel
 
         val result = underTest.getCompany()
 
@@ -60,7 +60,7 @@ class CompanyRepositoryImplTest {
         assertEquals(companyModel, (result).data)
 
         coVerify { companyNetworkDataSource.getCompany() }
-        verify { companyNetworkMapper.dtoToDomain(companyDto) }
+        verify { companyDtoDomainMapper.dtoToDomain(companyDto) }
     }
 
     @Test

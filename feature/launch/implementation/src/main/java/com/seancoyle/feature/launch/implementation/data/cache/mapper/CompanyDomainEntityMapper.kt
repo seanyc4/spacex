@@ -4,19 +4,17 @@ import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
 import javax.inject.Inject
 
-internal class CompanyEntityMapper @Inject constructor() {
+internal class CompanyDomainEntityMapper @Inject constructor() {
 
     fun entityToDomain(entity: CompanyEntity): Company {
         return with(entity) {
             Company(
-                id = id,
                 employees = employees,
                 founded = founded,
                 founder = founder,
                 launchSites = launchSites,
                 name = name,
-                valuation = valuation,
-                summary = summary
+                valuation = valuation
             )
         }
     }
@@ -30,8 +28,7 @@ internal class CompanyEntityMapper @Inject constructor() {
                 founder = founder,
                 launchSites = launchSites,
                 name = name,
-                valuation = valuation,
-                summary = summary
+                valuation = valuation
             )
         }
     }

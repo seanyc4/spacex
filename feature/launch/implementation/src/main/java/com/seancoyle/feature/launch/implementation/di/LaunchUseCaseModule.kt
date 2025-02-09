@@ -10,10 +10,8 @@ import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPrefe
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.GetNumLaunchesCacheUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyToCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertCompanyToCacheUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.InsertLaunchesToCacheUseCaseImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.GetSpaceXDataUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.GetSpaceXDataUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponentImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.MergedLaunchesCacheUseCase
@@ -30,6 +28,11 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 internal abstract class LaunchUseCaseModule {
+
+    @Binds
+    abstract fun bindGetSpaceXDataUseCase(
+        impl: GetSpaceXDataUseCaseImpl
+    ): GetSpaceXDataUseCase
 
     @Binds
     abstract fun bindsGetLaunchesApiAndCacheUseCase(
@@ -57,11 +60,6 @@ internal abstract class LaunchUseCaseModule {
     ): LaunchesComponent
 
     @Binds
-    abstract fun bindsInsertLaunchesToCacheUseCase(
-        impl: InsertLaunchesToCacheUseCaseImpl
-    ): InsertLaunchesToCacheUseCase
-
-    @Binds
     abstract fun bindsGetCompanyApiAndCacheUseCase(
         impl: GetCompanyApiAndCacheUseCaseImpl
     ): GetCompanyApiAndCacheUseCase
@@ -70,11 +68,6 @@ internal abstract class LaunchUseCaseModule {
     abstract fun bindsGetCompanyCacheUseCase(
         impl: GetCompanyCacheUseCaseImpl
     ): GetCompanyCacheUseCase
-
-    @Binds
-    abstract fun bindsInsertCompanyInfoToCacheUseCase(
-        impl: InsertCompanyToCacheUseCaseImpl
-    ): InsertCompanyToCacheUseCase
 
     @Binds
     abstract fun bindsSaveLaunchPreferencesUseCase(

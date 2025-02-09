@@ -2,13 +2,13 @@ package com.seancoyle.feature.launch.implementation.data.cache
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyEntityMapper
+import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyDomainEntityMapper
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class CompanyEntityMapperTest {
+class CompanyDomainEntityMapperTest {
 
-    private val mapper = CompanyEntityMapper()
+    private val mapper = CompanyDomainEntityMapper()
 
     @Test
     fun `mapFromEntity correctly maps from CompanyEntity to Company`() {

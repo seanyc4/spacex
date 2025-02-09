@@ -9,7 +9,7 @@ import com.seancoyle.feature.launch.implementation.data.cache.LaunchCacheDataSou
 import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
 import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource
 import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchesDto
-import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.launchDto
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
@@ -40,7 +40,7 @@ class LaunchRepositoryImplTest {
     private lateinit var launchNetworkDataSource: LaunchNetworkDataSource
 
     @MockK
-    private lateinit var launchNetworkMapper: LaunchNetworkMapper
+    private lateinit var launchDtoDomainMapper: LaunchDtoDomainMapper
 
     @MockK
     private lateinit var launchCacheMapper: LaunchEntityMapper
@@ -53,7 +53,7 @@ class LaunchRepositoryImplTest {
         underTest = LaunchRepositoryImpl(
             launchNetworkDataSource = launchNetworkDataSource,
             launchCacheDataSource = launchCacheDataSource,
-            launchNetworkMapper = launchNetworkMapper,
+            launchDtoDomainMapper = launchDtoDomainMapper,
             launchCacheMapper = launchCacheMapper
         )
     }
@@ -63,15 +63,15 @@ class LaunchRepositoryImplTest {
         coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns Result.Success(
             launchesDto
         )
-        every { launchNetworkMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
+        every { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
 
-        val result = underTest.getLaunches(launchOptions)
+        val result = underTest.getLaunchesAndCache(launchOptions)
 
         assertTrue(result is Result.Success)
         assertEquals(launchesModel, (result).data)
 
         coVerify { launchNetworkDataSource.getLaunches(launchOptions) }
-        verify { launchNetworkMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) }
+        verify { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) }
     }
 
     @Test

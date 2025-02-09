@@ -4,7 +4,7 @@ import com.seancoyle.core.common.dataformatter.DateFormatter
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import io.mockk.MockKAnnotations
@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class LaunchNetworkMapperTest {
+class LaunchDtoDomainMapperTest {
 
     @MockK
     private lateinit var dateFormatter: DateFormatter
@@ -24,12 +24,12 @@ class LaunchNetworkMapperTest {
     @MockK
     private lateinit var dateTransformer: DateTransformer
 
-    private lateinit var underTest: LaunchNetworkMapper
+    private lateinit var underTest: LaunchDtoDomainMapper
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = LaunchNetworkMapper(
+        underTest = LaunchDtoDomainMapper(
             dateFormatter = dateFormatter,
             dateTransformer = dateTransformer
         )

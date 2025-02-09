@@ -13,6 +13,6 @@ internal class GetCompanyCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyCacheUseCase {
 
     override operator fun invoke(): Flow<Result<Company?, DataError>> = flow {
-        emit(companyRepository.getCompany())
+        emit(companyRepository.getCompanyFromCache())
     }
 }

@@ -6,13 +6,12 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.Links
 
 internal sealed interface LaunchEvents {
+    data object GetSpaceXDataEvent : LaunchEvents
     data object CreateMergedLaunchesEvent : LaunchEvents
     data object DismissBottomSheetEvent : LaunchEvents
     data object DismissFilterDialogEvent : LaunchEvents
     data object DisplayFilterDialogEvent : LaunchEvents
     data object DismissNotificationEvent : LaunchEvents
-    data object GetCompanyApiAndCacheEvent : LaunchEvents
-    data object GetLaunchesApiAndCacheEvent : LaunchEvents
     data object NewSearchEvent : LaunchEvents
     data object PaginateLaunchesCacheEvent : LaunchEvents
     data object SwipeToRefreshEvent : LaunchEvents

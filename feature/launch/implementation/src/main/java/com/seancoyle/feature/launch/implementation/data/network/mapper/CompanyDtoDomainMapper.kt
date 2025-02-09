@@ -1,25 +1,20 @@
 package com.seancoyle.feature.launch.implementation.data.network.mapper
 
-import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
 import javax.inject.Inject
 
-internal class CompanyNetworkMapper @Inject constructor(
-    private val numberFormatter: NumberFormatter
-) {
+internal class CompanyDtoDomainMapper @Inject constructor() {
 
     fun dtoToDomain(dto: CompanyDto): Company {
         return with(dto) {
             Company(
-                id = "",
-                employees = numberFormatter.formatNumber(employees?.toLong()),
+                employees = employees ?: 0,
                 founded = founded ?: 0,
                 founder = founder.orEmpty(),
                 launchSites = launchSites ?: 0,
                 name = name.orEmpty(),
-                valuation = numberFormatter.formatNumber(valuation),
-                summary = ""
+                valuation = valuation ?: 0L,
             )
         }
     }

@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.network
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
-import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyNetworkMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -13,17 +13,17 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class CompanyNetworkMapperTest {
+class CompanyDtoDomainMapperTest {
 
     @MockK
     private lateinit var numberFormatter: NumberFormatter
 
-    private lateinit var mapper: CompanyNetworkMapper
+    private lateinit var mapper: CompanyDtoDomainMapper
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        mapper = CompanyNetworkMapper(numberFormatter)
+        mapper = CompanyDtoDomainMapper(numberFormatter)
     }
 
     @Test
