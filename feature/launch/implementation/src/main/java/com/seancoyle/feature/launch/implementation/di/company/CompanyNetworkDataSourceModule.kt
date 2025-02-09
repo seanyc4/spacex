@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class CompanyNetworkDataSourceModule {
 
     @Binds
-    abstract fun bindsCompanyInfoNetworkDataSource(
+    abstract fun bindsCompanyNetworkDataSource(
         impl: CompanyNetworkDataSourceImpl
     ): CompanyNetworkDataSource
 }

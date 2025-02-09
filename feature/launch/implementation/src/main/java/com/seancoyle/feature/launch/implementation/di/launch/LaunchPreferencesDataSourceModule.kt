@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class LaunchPreferencesDataSourceModule {
 
     @Binds
-    abstract fun bindsLaunchPreferencesDataSource(
+    abstract fun bindLaunchPreferencesDataSource(
         impl: LaunchPreferencesDataSourceImpl
     ): LaunchPreferencesDataSource
 }

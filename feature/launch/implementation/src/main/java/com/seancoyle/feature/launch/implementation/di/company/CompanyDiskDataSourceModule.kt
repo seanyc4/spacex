@@ -9,10 +9,10 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class CompanyCacheDataSourceModule {
+internal abstract class CompanyDiskDataSourceModule {
 
     @Binds
-    abstract fun bindsCompanyCacheDataSource(
+    abstract fun bindsCompanyDiskDataSource(
         impl: CompanyDiskDataSourceImpl
     ): CompanyDiskDataSource
 }

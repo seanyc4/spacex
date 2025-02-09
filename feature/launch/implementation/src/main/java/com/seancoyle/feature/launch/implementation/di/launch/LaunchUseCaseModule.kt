@@ -35,47 +35,47 @@ internal abstract class LaunchUseCaseModule {
     ): GetSpaceXDataUseCase
 
     @Binds
-    abstract fun bindsGetLaunchesApiAndCacheUseCase(
+    abstract fun bindGetLaunchesApiAndCacheUseCase(
         impl: GetLaunchesApiAndCacheUseCaseImpl
     ): GetLaunchesApiAndCacheUseCase
 
     @Binds
-    abstract fun bindsGetNumLaunchItemsCacheUseCase(
+    abstract fun bindGetNumLaunchItemsCacheUseCase(
         impl: GetNumLaunchesCacheUseCaseImpl
     ): GetNumLaunchesCacheUseCase
 
     @Binds
-    abstract fun bindsSortAndFilterLaunchesCacheUseCase(
+    abstract fun bindPaginateLaunchesCacheUseCase(
         impl: PaginateLaunchesCacheUseCaseImpl
     ): PaginateLaunchesCacheUseCase
 
     @Binds
-    abstract fun bindsMergedLaunchesCacheUseCase(
+    abstract fun bindMergedLaunchesCacheUseCase(
         impl: MergedLaunchesCacheUseCaseImpl
     ): MergedLaunchesCacheUseCase
 
     @Binds
-    abstract fun bindsLaunchesComponent(
+    abstract fun bindLaunchesComponent(
         impl: LaunchesComponentImpl
     ): LaunchesComponent
 
     @Binds
-    abstract fun bindsGetCompanyApiAndCacheUseCase(
+    abstract fun bindGetCompanyApiAndCacheUseCase(
         impl: GetCompanyApiAndCacheUseCaseImpl
     ): GetCompanyApiAndCacheUseCase
 
     @Binds
-    abstract fun bindsGetCompanyCacheUseCase(
+    abstract fun bindGetCompanyCacheUseCase(
         impl: GetCompanyCacheUseCaseImpl
     ): GetCompanyCacheUseCase
 
     @Binds
-    abstract fun bindsSaveLaunchPreferencesUseCase(
+    abstract fun bindSaveLaunchPreferencesUseCase(
         impl: SaveLaunchPreferencesUseCaseImpl
     ): SaveLaunchPreferencesUseCase
 
     @Binds
-    abstract fun bindsGetLaunchPreferencesUseCase(
+    abstract fun bindGetLaunchPreferencesUseCase(
         impl: GetLaunchPreferencesUseCaseImpl
     ): GetLaunchPreferencesUseCase
 }

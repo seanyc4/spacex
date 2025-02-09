@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class LaunchNetworkDataSourceModule {
 
     @Binds
-    abstract fun bindsLaunchNetworkDataSource(
+    abstract fun bindLaunchNetworkDataSource(
         impl: LaunchNetworkDataSourceImpl
     ): LaunchNetworkDataSource
 }
