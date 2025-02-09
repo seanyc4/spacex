@@ -16,7 +16,7 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     }
 
     private suspend fun getCompanyFromNetwork(): Result<Unit, DataError> {
-        return when (val networkResult = companyRepository.getCompany()) {
+        return when (val networkResult = companyRepository.getCompanyApi()) {
             is Result.Success -> Result.Success(Unit)
             is Result.Error -> Result.Error(networkResult.error)
         }

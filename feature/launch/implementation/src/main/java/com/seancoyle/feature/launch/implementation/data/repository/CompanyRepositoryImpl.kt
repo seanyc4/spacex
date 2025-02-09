@@ -17,7 +17,7 @@ internal class CompanyRepositoryImpl @Inject constructor(
     private val companyCacheMapper: CompanyDomainEntityMapper
 ): CompanyRepository {
 
-    override suspend fun getCompany(): Result<Unit, DataError> {
+    override suspend fun getCompanyApi(): Result<Unit, DataError> {
         return when (val result = companyNetworkDataSource.getCompany()) {
             is Result.Success -> {
                 companyCacheDataSource.insert(companyDtoEntityMapper.dtoToEntity(result.data))

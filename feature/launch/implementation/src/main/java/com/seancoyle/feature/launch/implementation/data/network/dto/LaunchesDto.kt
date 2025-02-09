@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 internal data class LaunchesDto(
     @SerializedName("docs")
-    val docs: List<LaunchDto>,
+    val launches: List<LaunchDto>,
 )
 
 internal data class LaunchDto(

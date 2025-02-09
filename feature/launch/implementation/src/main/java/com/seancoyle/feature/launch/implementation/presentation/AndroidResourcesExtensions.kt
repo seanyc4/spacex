@@ -1,12 +1,12 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
 import com.seancoyle.core.domain.AppStringResource
-import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
+import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
 
 fun LaunchStatus.getDrawableRes(): Int = when (this) {
     LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
@@ -35,8 +35,8 @@ fun LaunchTypes.CompanySummary.getSummary(appStringResource: AppStringResource):
     return summary
 }
 
-fun Links?.getLinks() = listOfNotNull(
-    this?.articleLink?.let { BottomSheetLinks(R.string.article, it) },
-    this?.webcastLink?.let { BottomSheetLinks(R.string.webcast, it) },
-    this?.wikiLink?.let { BottomSheetLinks(R.string.wikipedia, it) }
+fun LinksUi?.getLinks() = listOfNotNull(
+    this?.articleLink?.let { BottomSheetLinksUi(R.string.article, it) },
+    this?.webcastLink?.let { BottomSheetLinksUi(R.string.webcast, it) },
+    this?.wikiLink?.let { BottomSheetLinksUi(R.string.wikipedia, it) }
 )

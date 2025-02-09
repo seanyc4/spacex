@@ -1,9 +1,5 @@
 package com.seancoyle.feature.launch.api.domain.model
 
-import android.os.Parcelable
-import androidx.annotation.Keep
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 sealed interface LaunchTypes {
@@ -33,7 +29,6 @@ sealed interface LaunchTypes {
         val items: List<RocketWithMission>
     ) : LaunchTypes
 
-    @Keep
     data class Launch(
         val id: String,
         val launchDate: String,
@@ -45,32 +40,16 @@ sealed interface LaunchTypes {
         val rocket: Rocket,
         val launchDateStatus: LaunchDateStatus,
         val launchDays: String,
-        val launchDaysResId: Int,
-        val launchStatusIconResId: Int
+        val isLaunchSuccess: Boolean
     ) : LaunchTypes
 }
 
-@Parcelize
-@Keep
 data class Links(
-    @SerializedName("missionImage")
     val missionImage: String,
-    @SerializedName("articleLink")
     val articleLink: String?,
-    @SerializedName("webcastLink")
     val webcastLink: String?,
-    @SerializedName("wikiLink")
     val wikiLink: String?,
-) : Parcelable
-
-@Parcelize
-@Keep
-data class BottomSheetLinks(
-    @SerializedName("nameResId")
-    val nameResId: Int,
-    @SerializedName("link")
-    val link: String?
-) : Parcelable
+)
 
 data class Rocket(
     val rocketNameAndType: String,

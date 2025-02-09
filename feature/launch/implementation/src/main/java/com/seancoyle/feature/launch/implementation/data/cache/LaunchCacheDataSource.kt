@@ -15,7 +15,7 @@ internal interface LaunchCacheDataSource {
         page: Int
     ): Result<List<LaunchEntity>, DataError>
 
-    suspend fun insert(launch: LaunchEntity): Result<Long, DataError>
+    suspend fun insert(launch: LaunchEntity): Result<Unit, DataError>
 
     suspend fun deleteById(id: String): Result<Int, DataError>
 
@@ -29,6 +29,6 @@ internal interface LaunchCacheDataSource {
 
     suspend fun getTotalEntries(): Result<Int, DataError>
 
-    suspend fun insertList(launches: List<LaunchEntity>): Result<LongArray, DataError>
+    suspend fun insertList(launches: List<LaunchEntity>): Result<Unit, DataError>
 
 }

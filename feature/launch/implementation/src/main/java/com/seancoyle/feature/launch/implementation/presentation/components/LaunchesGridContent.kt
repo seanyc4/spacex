@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
@@ -36,7 +36,7 @@ private const val GRID_COLUMN_SIZE = 2
 @FlowPreview
 @Composable
 internal fun LaunchesGridContent(
-    launches: List<LaunchTypes>,
+    launches: List<LaunchTypesUiModel>,
     paginationState: PaginationState,
     scrollState: LaunchesScrollState,
     onEvent: (LaunchEvents) -> Unit,
@@ -56,7 +56,7 @@ internal fun LaunchesGridContent(
             itemsIndexed(
                 items = launches,
                 span = { _, item ->
-                    GridItemSpan(if (item is LaunchTypes.Grid) 1 else 2)
+                    GridItemSpan(if (item is LaunchTypesUiModel.GridUi) 1 else 2)
                 }
             ) { index, launchItem ->
 
@@ -80,29 +80,29 @@ internal fun LaunchesGridContent(
 
 @Composable
 private fun RenderGridSections(
-    launchItem: LaunchTypes,
+    launchItem: LaunchTypesUiModel,
     onEvent: (LaunchEvents) -> Unit
 ) {
     when (launchItem) {
-        is LaunchTypes.SectionTitle -> LaunchHeading(launchItem)
+        is LaunchTypesUiModel.SectionTitleUi -> LaunchHeading(launchItem)
 
-        is LaunchTypes.CompanySummary -> CompanySummaryCard(launchItem.summary)
+        is LaunchTypesUiModel.CompanySummaryUi -> CompanySummaryCard(launchItem.summary)
 
-        is LaunchTypes.Launch -> {
+        is LaunchTypesUiModel.LaunchUi -> {
             LaunchCard(
                 launchItem = launchItem,
                 onEvent = { onEvent(HandleLaunchClickEvent(launchItem.links)) }
             )
         }
 
-        is LaunchTypes.Grid -> {
+        is LaunchTypesUiModel.GridUi -> {
             LaunchGridCard(
                 launchItem = launchItem,
                 onEvent = { onEvent(HandleLaunchClickEvent(launchItem.items.links)) },
             )
         }
 
-        is LaunchTypes.Carousel -> {
+        is LaunchTypesUiModel.CarouselUi -> {
             LazyRow {
                 itemsIndexed(launchItem.items) { _, carouselItem ->
                     LaunchCarouselCard(

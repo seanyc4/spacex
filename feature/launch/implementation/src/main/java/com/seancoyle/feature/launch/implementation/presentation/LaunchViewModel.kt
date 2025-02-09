@@ -13,9 +13,12 @@ import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
+import com.seancoyle.feature.launch.implementation.presentation.model.RocketUi
+import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
@@ -213,24 +216,91 @@ internal class LaunchViewModel @Inject constructor(
             }
     }
 
-    private fun updateLaunchesWithAndroidResources(result: Result.Success<List<LaunchTypes>>): List<LaunchTypes> {
-        val updatedLaunches = result.data.map { launchType ->
+    private fun updateLaunchesWithAndroidResources(
+        result: Result.Success<List<LaunchTypes>>
+    ): List<LaunchTypesUiModel> {
+        return result.data.map { launchType ->
             when (launchType) {
                 is LaunchTypes.CompanySummary -> {
-                    launchType.copy(summary = launchType.getSummary(appStringResource.get()))
+                    LaunchTypesUiModel.CompanySummaryUi(
+                        id = launchType.id,
+                        summary = launchType.getSummary(appStringResource.get()),
+                        name = launchType.name,
+                        founder = launchType.founder,
+                        founded = launchType.founded.toString(),
+                        employees = launchType.employees,
+                        launchSites = launchType.launchSites.toString(),
+                        valuation = launchType.valuation
+                    )
                 }
 
                 is LaunchTypes.Launch -> {
-                    launchType.copy(
+                    LaunchTypesUiModel.LaunchUi(
+                        id = launchType.id,
+                        launchDate = launchType.launchDate,
+                        launchYear = launchType.launchYear,
+                        launchStatus = launchType.launchStatus,
+                        links = LinksUi(
+                            missionImage = launchType.links.missionImage,
+                            articleLink = launchType.links.articleLink,
+                            webcastLink = launchType.links.webcastLink,
+                            wikiLink = launchType.links.wikiLink
+                        ),
+                        missionName = launchType.missionName,
+                        rocket = RocketUi(
+                            rocketNameAndType = launchType.rocket.rocketNameAndType
+                        ),
+                        launchDateStatus = launchType.launchDateStatus,
+                        launchDays = launchType.launchDays,
                         launchDaysResId = launchType.launchDateStatus.getDateStringRes(),
                         launchStatusIconResId = launchType.launchStatus.getDrawableRes()
                     )
                 }
 
-                else -> launchType
+                is LaunchTypes.SectionTitle -> {
+                    LaunchTypesUiModel.SectionTitleUi(
+                        id = launchType.id,
+                        title = launchType.title
+                    )
+                }
+
+                is LaunchTypes.Grid -> {
+                    LaunchTypesUiModel.GridUi(
+                        id = launchType.id,
+                        items = RocketWithMissionUi(
+                            links = LinksUi(
+                                missionImage = launchType.items.links.missionImage,
+                                articleLink = launchType.items.links.articleLink,
+                                webcastLink = launchType.items.links.webcastLink,
+                                wikiLink = launchType.items.links.wikiLink
+                            ),
+                            rocket = RocketUi(
+                                rocketNameAndType = launchType.items.rocket.rocketNameAndType
+                            )
+                        )
+                    )
+                }
+
+                is LaunchTypes.Carousel -> {
+                    LaunchTypesUiModel.CarouselUi(
+                        id = launchType.id,
+                        items = launchType.items.map { rocketWithMission ->
+                            RocketWithMissionUi(
+                                links = LinksUi(
+                                    missionImage = rocketWithMission.links.missionImage,
+                                    articleLink = rocketWithMission.links.articleLink,
+                                    webcastLink = rocketWithMission.links.webcastLink,
+                                    wikiLink = rocketWithMission.links.wikiLink
+                                ),
+                                rocket = RocketUi(
+                                    rocketNameAndType = rocketWithMission.rocket.rocketNameAndType
+                                )
+                            )
+                        }
+                    )
+                }
             }
         }
-        return updatedLaunches
     }
 
     private fun openLink(link: String) {
@@ -360,7 +430,7 @@ internal class LaunchViewModel @Inject constructor(
         )
     }
 
-    private suspend fun handleLaunchClick(links: Links?) {
+    private suspend fun handleLaunchClick(links: LinksUi?) {
         val bottomSheetLinks = links.getLinks()
 
         if (bottomSheetLinks.isNotEmpty()) {

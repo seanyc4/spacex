@@ -8,7 +8,8 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 
 internal interface LaunchRepository {
-    suspend fun getLaunchesAndCache(launchOptions: LaunchOptions): Result<Unit, DataError>
+    suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<Unit, DataError>
+    suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError>
     suspend fun deleteList(launches: List<LaunchTypes.Launch>): Result<Int, DataError>
     suspend fun deleteAll(): Result<Unit, DataError>
     suspend fun deleteById(id: String): Result<Int, DataError>

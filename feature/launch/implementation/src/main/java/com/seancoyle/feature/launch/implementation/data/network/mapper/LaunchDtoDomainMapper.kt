@@ -13,17 +13,11 @@ import javax.inject.Inject
 internal class LaunchDtoDomainMapper @Inject constructor() {
 
     fun dtoToDomainList(entity: LaunchesDto): List<LaunchTypes.Launch> {
-        return entity.docs.map { item ->
+        return entity.launches.map { item ->
             with(item) {
-              //  val localDateTime = dateFormatter.formatDate(launchDate.orEmpty())
-                val launchSuccess = isLaunchSuccess
-
                 LaunchTypes.Launch(
                     id = flightNumber.toString(),
                     launchDate = launchDate.orEmpty(),
-                    launchDateLocalDateTime = LocalDateTime.now(),
-                    launchStatus = mapIsLaunchSuccessToStatus(launchSuccess),
-                    launchYear = "",
                     links = Links(
                         missionImage = links?.patch?.missionImage ?: DEFAULT_LAUNCH_IMAGE,
                         articleLink = links?.articleLink,
@@ -34,26 +28,14 @@ internal class LaunchDtoDomainMapper @Inject constructor() {
                     rocket = Rocket(
                         rocketNameAndType = "${rocket?.name}/${rocket?.type}",
                     ),
-                    launchDateStatus = ,
+                    isLaunchSuccess = isLaunchSuccess ?: false,
+                    launchDateLocalDateTime = LocalDateTime.now(),
+                    launchYear = "",
+                    launchStatus = LaunchStatus.UNKNOWN,
+                    launchDateStatus = LaunchDateStatus.PAST,
                     launchDays = "",
-                    launchDaysResId = 0,
-                    launchStatusIconResId = 0
                 )
             }
         }
     }
-
-    private fun mapIsLaunchSuccessToStatus(isLaunchSuccess: Boolean?) =
-        when (isLaunchSuccess) {
-            true -> { LaunchStatus.SUCCESS }
-            false -> { LaunchStatus.FAILED }
-            else -> { LaunchStatus.UNKNOWN }
-        }
-
-    private fun mapLaunchDateToStatus(localDateTime: LocalDateTime) =
-        if (dateTransformer.isPastLaunch(localDateTime)) {
-            LaunchDateStatus.PAST
-        } else {
-            LaunchDateStatus.FUTURE
-        }
 }

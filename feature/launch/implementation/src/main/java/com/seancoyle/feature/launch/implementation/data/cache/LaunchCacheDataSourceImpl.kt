@@ -40,7 +40,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(launch: LaunchEntity): Result<Long, DataError> {
+    override suspend fun insert(launch: LaunchEntity): Result<Unit, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -49,7 +49,7 @@ internal class LaunchCacheDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertList(launches: List<LaunchEntity>): Result<LongArray, DataError> {
+    override suspend fun insertList(launches: List<LaunchEntity>): Result<Unit, DataError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics

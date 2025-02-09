@@ -8,7 +8,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.cache.LaunchCacheDataSource
 import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
 import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource
-import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchDtoEntityMapper
+import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import javax.inject.Inject
@@ -16,16 +16,17 @@ import javax.inject.Inject
 internal class LaunchRepositoryImpl @Inject constructor(
     private val launchNetworkDataSource: LaunchNetworkDataSource,
     private val launchCacheDataSource: LaunchCacheDataSource,
-    private val launchDtoEntityMapper: LaunchDtoEntityMapper,
+    private val launchDtoToDomainMapper: LaunchDtoDomainMapper,
     private val launchCacheMapper: LaunchEntityMapper
 ): LaunchRepository {
 
-    override suspend fun getLaunchesAndCache(launchOptions: LaunchOptions): Result<Unit, DataError> {
+    override suspend fun insertList(launches: List<LaunchTypes.Launch>): Result<Unit, DataError> {
+        return launchCacheDataSource.insertList(launchCacheMapper.domainToEntityList(launches))
+    }
+
+    override suspend fun getLaunches(launchOptions: LaunchOptions): Result<List<LaunchTypes.Launch>, DataError> {
         return when (val result = launchNetworkDataSource.getLaunches(launchOptions)) {
-            is Result.Success -> {
-                launchCacheDataSource.insertList(launchDtoEntityMapper.dtoToEntitynList(result.data.docs))
-                Result.Success(Unit)
-            }
+            is Result.Success -> Result.Success(launchDtoToDomainMapper.dtoToDomainList(result.data))
             is Result.Error -> Result.Error(result.error)
         }
     }
@@ -36,7 +37,7 @@ internal class LaunchRepositoryImpl @Inject constructor(
         launchStatus: LaunchStatus,
         page: Int
     ): Result<List<LaunchTypes>, DataError> {
-        val launchStatusEntity = launchCacheMapper.toLaunchStatusEntity(launchStatus)
+        val launchStatusEntity = launchCacheMapper.mapToLaunchStatusEntity(launchStatus)
         return when (val result = launchCacheDataSource.paginateLaunches(
             launchYear = launchYear,
             order = order,
