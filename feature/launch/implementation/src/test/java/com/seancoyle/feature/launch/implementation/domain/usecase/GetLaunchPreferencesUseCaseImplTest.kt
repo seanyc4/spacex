@@ -4,8 +4,8 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
-import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.GetLaunchPreferencesUseCaseImpl
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

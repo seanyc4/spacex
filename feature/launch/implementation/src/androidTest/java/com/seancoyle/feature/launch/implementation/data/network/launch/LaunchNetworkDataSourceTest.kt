@@ -9,7 +9,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest

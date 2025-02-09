@@ -3,6 +3,8 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK

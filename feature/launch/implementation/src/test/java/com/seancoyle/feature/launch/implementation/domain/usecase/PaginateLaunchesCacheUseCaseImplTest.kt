@@ -6,6 +6,8 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

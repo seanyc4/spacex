@@ -6,6 +6,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchesApiAndCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.util.TestData.INSERT_SUCCESS
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
@@ -42,7 +43,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit success result when network and cache operations are successful`() = runTest {
-        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Success(INSERT_SUCCESS)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
@@ -55,7 +56,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when network fetch fails`() = runTest {
         val networkError = DataError.NETWORK_UNKNOWN_ERROR
-        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Error(networkError)
+        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Error(networkError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()
         underTest().collect { results.add(it) }
@@ -67,7 +68,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when cache operation fails`() = runTest {
         val cacheError = DataError.CACHE_ERROR
-        coEvery { launchRepository.getLaunchesAndCache(launchOptions) } returns Result.Success(launchesModel)
+        coEvery { launchRepository.getLaunches(launchOptions) } returns Result.Success(launchesModel)
         coEvery { insertLaunchesToCacheUseCase(launchesModel) } returns Result.Error(cacheError)
 
         val results = mutableListOf<Result<List<LaunchTypes.Launch>, DataError>>()

@@ -3,6 +3,8 @@ package com.seancoyle.feature.launch.implementation.domain.usecase
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

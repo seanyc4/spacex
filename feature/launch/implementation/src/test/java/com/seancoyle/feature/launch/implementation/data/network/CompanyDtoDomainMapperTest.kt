@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.network
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
-import com.seancoyle.feature.launch.implementation.data.network.dto.CompanyDto
-import com.seancoyle.feature.launch.implementation.data.network.mapper.CompanyDtoDomainMapper
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDto
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.every

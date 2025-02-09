@@ -5,11 +5,12 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.cache.LaunchCacheDataSource
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.LaunchEntityMapper
-import com.seancoyle.feature.launch.implementation.data.network.LaunchNetworkDataSource
-import com.seancoyle.feature.launch.implementation.data.network.dto.LaunchesDto
-import com.seancoyle.feature.launch.implementation.data.network.mapper.LaunchDtoDomainMapper
+import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDomainEntityMapper
+import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchesDto
+import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchDtoDomainMapper
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchCacheDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRepositoryImpl
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.launchDto
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
@@ -43,7 +44,7 @@ class LaunchRepositoryImplTest {
     private lateinit var launchDtoDomainMapper: LaunchDtoDomainMapper
 
     @MockK
-    private lateinit var launchCacheMapper: LaunchEntityMapper
+    private lateinit var launchCacheMapper: LaunchDomainEntityMapper
 
     private lateinit var underTest: LaunchRepository
 
@@ -65,7 +66,7 @@ class LaunchRepositoryImplTest {
         )
         every { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
 
-        val result = underTest.getLaunchesAndCache(launchOptions)
+        val result = underTest.getLaunches(launchOptions)
 
         assertTrue(result is Result.Success)
         assertEquals(launchesModel, (result).data)
@@ -83,7 +84,7 @@ class LaunchRepositoryImplTest {
         val page = 1
         val launches = listOf(mockk<LaunchTypes.Launch>())
         every { launchCacheMapper.toLaunchStatusEntity(launchStatus) } returns launchStatusEntity
-        coEvery { launchCacheDataSource.paginateLaunches(launchYear, order, launchStatusEntity, page) } returns Result.Success(
+        coEvery { launchCacheDataSource.paginate(launchYear, order, launchStatusEntity, page) } returns Result.Success(
             launchesEntity
         )
         every { launchCacheMapper.entityToDomainList(launchesEntity) } returns launches
@@ -93,7 +94,7 @@ class LaunchRepositoryImplTest {
         assertTrue(result is Result.Success)
         assertEquals(launches, (result).data)
 
-        coVerify { launchCacheDataSource.paginateLaunches(launchYear, order, launchStatusEntity, page) }
+        coVerify { launchCacheDataSource.paginate(launchYear, order, launchStatusEntity, page) }
         verify { launchCacheMapper.toLaunchStatusEntity(launchStatus) }
         verify { launchCacheMapper.entityToDomainList(launchesEntity) }
     }

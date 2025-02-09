@@ -6,6 +6,6 @@ import com.seancoyle.feature.launch.api.domain.model.Company
 
 interface CompanyRepository {
     suspend fun getCompanyApi(): Result<Unit, DataError>
-    suspend fun getCompanyFromCache(): Result<Company?, DataError>
+    suspend fun getCompanyCache(): Result<Company?, DataError>
     suspend fun deleteAllCompanyCache(): Result<Unit, DataError>
 }

@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.cache
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.cache.mapper.CompanyDomainEntityMapper
+import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
 import org.junit.Test
 import kotlin.test.assertEquals
 

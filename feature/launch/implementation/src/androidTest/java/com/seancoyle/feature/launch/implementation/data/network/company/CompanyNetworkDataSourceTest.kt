@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
-import com.seancoyle.feature.launch.implementation.data.network.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -64,7 +64,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setBody(companyResponse)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Success)
         assertEquals(result.data, expectedCompany)
@@ -77,7 +77,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
     }
@@ -89,7 +89,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_TIMEOUT, result.error)
@@ -102,7 +102,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_NOT_FOUND, result.error)
@@ -115,7 +115,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_UNAUTHORIZED, result.error)
@@ -128,7 +128,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
@@ -141,7 +141,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_CONNECTION_FAILED, result.error)
@@ -154,7 +154,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_FORBIDDEN, result.error)
@@ -167,7 +167,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_TIMEOUT, result.error)
@@ -180,7 +180,7 @@ internal class CompanyNetworkDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
         )
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_PAYLOAD_TOO_LARGE, result.error)

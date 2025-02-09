@@ -4,6 +4,9 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyApiService
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyNetworkDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -44,7 +47,7 @@ class CompanyNetworkDataSourceImplTest {
     fun `getCompany returns company DTO when API call is successful`() = runTest {
         coEvery { api.getCompany() } returns companyDto
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Success)
         assertEquals(companyDto, result.data)
@@ -55,7 +58,7 @@ class CompanyNetworkDataSourceImplTest {
         val exception = RuntimeException("Network Failure")
         coEvery { api.getCompany() } throws exception
 
-        val result = underTest.getCompany()
+        val result = underTest.getCompanyApi()
 
         assertTrue(result is Result.Error)
         assertEquals(DataError.NETWORK_UNKNOWN_ERROR, result.error)
