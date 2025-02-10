@@ -141,7 +141,7 @@ internal class LaunchViewModel @Inject constructor(
                     // Pagination - We append the next 30 rows to the current state as a new list
                     // This triggers a recompose and keeps immutability
                     uiState.update { currentState ->
-                        val updatedLaunches = updateLaunchesWithAndroidResources(result)
+                        val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
                         currentState.isSuccess {
                             val paginatedLaunches = it.launches + (updatedLaunches)
                             it.copy(
@@ -193,9 +193,8 @@ internal class LaunchViewModel @Inject constructor(
                 when (result) {
                     is Result.Success -> {
                         uiState.update {
-                            val updatedLaunches = updateLaunchesWithAndroidResources(result)
                             LaunchesUiState.Success(
-                                launches = updatedLaunches,
+                                launches = result.data.map { it.toUiModel(appStringResource) },
                                 paginationState = PaginationState.None
                             )
                         }
@@ -214,93 +213,6 @@ internal class LaunchViewModel @Inject constructor(
                     }
                 }
             }
-    }
-
-    private fun updateLaunchesWithAndroidResources(
-        result: Result.Success<List<LaunchTypes>>
-    ): List<LaunchTypesUiModel> {
-        return result.data.map { launchType ->
-            when (launchType) {
-                is LaunchTypes.CompanySummary -> {
-                    LaunchTypesUiModel.CompanySummaryUi(
-                        id = launchType.id,
-                        summary = launchType.getSummary(appStringResource.get()),
-                        name = launchType.name,
-                        founder = launchType.founder,
-                        founded = launchType.founded.toString(),
-                        employees = launchType.employees,
-                        launchSites = launchType.launchSites.toString(),
-                        valuation = launchType.valuation
-                    )
-                }
-
-                is LaunchTypes.Launch -> {
-                    LaunchTypesUiModel.LaunchUi(
-                        id = launchType.id,
-                        launchDate = launchType.launchDate,
-                        launchYear = launchType.launchYear,
-                        launchStatus = launchType.launchStatus,
-                        links = LinksUi(
-                            missionImage = launchType.links.missionImage,
-                            articleLink = launchType.links.articleLink,
-                            webcastLink = launchType.links.webcastLink,
-                            wikiLink = launchType.links.wikiLink
-                        ),
-                        missionName = launchType.missionName,
-                        rocket = RocketUi(
-                            rocketNameAndType = launchType.rocket.rocketNameAndType
-                        ),
-                        launchDateStatus = launchType.launchDateStatus,
-                        launchDays = launchType.launchDays,
-                        launchDaysResId = launchType.launchDateStatus.getDateStringRes(),
-                        launchStatusIconResId = launchType.launchStatus.getDrawableRes()
-                    )
-                }
-
-                is LaunchTypes.SectionTitle -> {
-                    LaunchTypesUiModel.SectionTitleUi(
-                        id = launchType.id,
-                        title = launchType.title
-                    )
-                }
-
-                is LaunchTypes.Grid -> {
-                    LaunchTypesUiModel.GridUi(
-                        id = launchType.id,
-                        items = RocketWithMissionUi(
-                            links = LinksUi(
-                                missionImage = launchType.items.links.missionImage,
-                                articleLink = launchType.items.links.articleLink,
-                                webcastLink = launchType.items.links.webcastLink,
-                                wikiLink = launchType.items.links.wikiLink
-                            ),
-                            rocket = RocketUi(
-                                rocketNameAndType = launchType.items.rocket.rocketNameAndType
-                            )
-                        )
-                    )
-                }
-
-                is LaunchTypes.Carousel -> {
-                    LaunchTypesUiModel.CarouselUi(
-                        id = launchType.id,
-                        items = launchType.items.map { rocketWithMission ->
-                            RocketWithMissionUi(
-                                links = LinksUi(
-                                    missionImage = rocketWithMission.links.missionImage,
-                                    articleLink = rocketWithMission.links.articleLink,
-                                    webcastLink = rocketWithMission.links.webcastLink,
-                                    wikiLink = rocketWithMission.links.wikiLink
-                                ),
-                                rocket = RocketUi(
-                                    rocketNameAndType = rocketWithMission.rocket.rocketNameAndType
-                                )
-                            )
-                        }
-                    )
-                }
-            }
-        }
     }
 
     private fun openLink(link: String) {
