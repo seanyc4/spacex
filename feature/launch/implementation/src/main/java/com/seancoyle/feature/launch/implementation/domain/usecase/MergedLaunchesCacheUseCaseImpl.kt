@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
+import com.seancoyle.core.common.numberformatter.NumberFormatter
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.Result
 import com.seancoyle.core.domain.Order
@@ -7,16 +8,19 @@ import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.RocketWithMission
+import com.seancoyle.feature.launch.implementation.domain.usecase.company.GetCompanyCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.util.UUID
 import javax.inject.Inject
 
 internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
     private val getCompanyFromCacheUseCase: GetCompanyCacheUseCase,
-    private val getLaunchesFromCacheUseCase: PaginateLaunchesCacheUseCase
+    private val getLaunchesFromCacheUseCase: PaginateLaunchesCacheUseCase,
+    private val numberFormatter: NumberFormatter
 ) : MergedLaunchesCacheUseCase {
 
     companion object {
@@ -100,7 +104,15 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         val filteredLaunches = launches.filterIsInstance<LaunchTypes.Launch>()
         val mergedLaunches = mutableListOf<LaunchTypes>().apply {
             add(LaunchTypes.SectionTitle(UUID.randomUUID().toString(), HEADER))
-            add(LaunchTypes.CompanySummary(UUID.randomUUID().toString(), company))
+            add(LaunchTypes.CompanySummary(UUID.randomUUID().toString(),
+                summary = "",
+                name = company.name,
+                founder = company.founder,
+                founded = company.founded,
+                employees = numberFormatter.formatNumber(company.employees.toLong()),
+                launchSites = company.launchSites,
+                valuation = numberFormatter.formatNumber(company.valuation)
+            ))
             add(LaunchTypes.SectionTitle(UUID.randomUUID().toString(), CAROUSEL))
             add(buildCarousel(filteredLaunches))
             add(LaunchTypes.SectionTitle(UUID.randomUUID().toString(), GRID))

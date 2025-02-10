@@ -13,27 +13,15 @@ import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Links
-import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
-import com.seancoyle.feature.launch.implementation.domain.usecase.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
+import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
+import com.seancoyle.feature.launch.implementation.presentation.model.RocketUi
+import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.CreateMergedLaunchesEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissNotificationEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetCompanyApiAndCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.GetLaunchesApiAndCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.LoadNextPageEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NewSearchEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.OpenLinkEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.PaginateLaunchesCacheEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SetFilterStateEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
@@ -87,7 +75,7 @@ internal class LaunchViewModel @Inject constructor(
             onEvent(CreateMergedLaunchesEvent)
         } else {
             // Fresh app launch - get data from network
-            onEvent(GetCompanyApiAndCacheEvent)
+            onEvent(GetSpaceXDataEvent)
         }
     }
 
@@ -116,8 +104,6 @@ internal class LaunchViewModel @Inject constructor(
                 is DismissFilterDialogEvent -> displayFilterDialog(false)
                 is DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is DismissNotificationEvent -> dismissNotification()
-                is GetCompanyApiAndCacheEvent -> getCompanyApiAndCacheUseCase()
-                is GetLaunchesApiAndCacheEvent -> getLaunchesApiAndCacheUseCase()
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
                 is LoadNextPageEvent -> loadNextPage(event.page)
                 is NewSearchEvent -> newSearch()
@@ -131,6 +117,7 @@ internal class LaunchViewModel @Inject constructor(
                     year = event.launchYear
                 )
                 is SwipeToRefreshEvent -> swipeToRefresh()
+                is GetSpaceXDataEvent -> getSpaceXDataUseCase()
             }
 
         }
@@ -140,48 +127,6 @@ internal class LaunchViewModel @Inject constructor(
         uiState.update { currentState ->
             currentState.isSuccess { it.copy(notificationState = event.notificationState) }
         }
-    }
-
-    private suspend fun getLaunchesApiAndCacheUseCase() {
-        launchesComponent.getLaunchesApiAndCacheUseCase()
-            .onStart { uiState.update { LaunchesUiState.Loading } }
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> onEvent(CreateMergedLaunchesEvent)
-                    is Result.Error -> {
-                        uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Dialog,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-    }
-
-    private suspend fun getCompanyApiAndCacheUseCase() {
-        launchesComponent.getCompanyApiAndCacheUseCase()
-            .onStart { uiState.update { LaunchesUiState.Loading } }
-            .collect { result ->
-                when (result) {
-                    is Result.Success -> onEvent(GetLaunchesApiAndCacheEvent)
-                    is Result.Error -> {
-                        uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Dialog,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
     }
 
     private suspend fun paginateLaunchesCacheUseCase() {
@@ -196,7 +141,7 @@ internal class LaunchViewModel @Inject constructor(
                     // Pagination - We append the next 30 rows to the current state as a new list
                     // This triggers a recompose and keeps immutability
                     uiState.update { currentState ->
-                        val updatedLaunches = updateLaunchesWithAndroidResources(result)
+                        val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
                         currentState.isSuccess {
                             val paginatedLaunches = it.launches + (updatedLaunches)
                             it.copy(
@@ -216,6 +161,27 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
+    private suspend fun getSpaceXDataUseCase() {
+        launchesComponent.getSpaceXDataUseCase()
+            .onStart { uiState.update { LaunchesUiState.Loading } }
+            .collect { result ->
+                when (result) {
+                    is Result.Success -> onEvent(CreateMergedLaunchesEvent)
+                    is Result.Error -> {
+                        uiState.update {
+                            LaunchesUiState.Error(
+                                errorNotificationState = NotificationState(
+                                    message = result.error.asStringResource(),
+                                    uiComponentType = UiComponentType.Dialog,
+                                    notificationType = NotificationType.Error
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+    }
+
     private suspend fun mergedLaunchesCacheUseCase() {
         launchesComponent.createMergedLaunchesCacheUseCase(
             year = getSearchYearState(),
@@ -227,9 +193,8 @@ internal class LaunchViewModel @Inject constructor(
                 when (result) {
                     is Result.Success -> {
                         uiState.update {
-                            val updatedLaunches = updateLaunchesWithAndroidResources(result)
                             LaunchesUiState.Success(
-                                launches = updatedLaunches,
+                                launches = result.data.map { it.toUiModel(appStringResource) },
                                 paginationState = PaginationState.None
                             )
                         }
@@ -248,26 +213,6 @@ internal class LaunchViewModel @Inject constructor(
                     }
                 }
             }
-    }
-
-    private fun updateLaunchesWithAndroidResources(result: Result.Success<List<LaunchTypes>>): List<LaunchTypes> {
-        val updatedLaunches = result.data.map { launchType ->
-            when (launchType) {
-                is LaunchTypes.CompanySummary -> {
-                    launchType.copy(company = launchType.company.getSummary(appStringResource.get()))
-                }
-
-                is LaunchTypes.Launch -> {
-                    launchType.copy(
-                        launchDaysResId = launchType.launchDateStatus.getDateStringRes(),
-                        launchStatusIconResId = launchType.launchStatus.getDrawableRes()
-                    )
-                }
-
-                else -> launchType
-            }
-        }
-        return updatedLaunches
     }
 
     private fun openLink(link: String) {
@@ -331,7 +276,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun swipeToRefresh() {
         clearQueryParameters()
         clearListState()
-        onEvent(GetCompanyApiAndCacheEvent)
+        onEvent(GetSpaceXDataEvent)
     }
 
     private fun setLaunchFilterState(
@@ -397,7 +342,7 @@ internal class LaunchViewModel @Inject constructor(
         )
     }
 
-    private suspend fun handleLaunchClick(links: Links?) {
+    private suspend fun handleLaunchClick(links: LinksUi?) {
         val bottomSheetLinks = links.getLinks()
 
         if (bottomSheetLinks.isNotEmpty()) {

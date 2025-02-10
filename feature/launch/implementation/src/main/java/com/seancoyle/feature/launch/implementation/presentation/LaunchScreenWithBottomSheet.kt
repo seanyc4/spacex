@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
-import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetDivider
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetExitButton
@@ -24,6 +23,7 @@ import com.seancoyle.feature.launch.implementation.presentation.components.Launc
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetTitle
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
+import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
@@ -144,7 +144,7 @@ internal fun LaunchBottomSheetScreen(
 
 @Composable
 private fun BottomSheetContent(
-    bottomSheetLinks: List<BottomSheetLinks>?,
+    bottomSheetLinks: List<BottomSheetLinksUi>?,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {

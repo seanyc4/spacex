@@ -42,11 +42,8 @@ data class LaunchEntity(
     @ColumnInfo(name="launchDaysDifference")
     val launchDays: String,
 
-    @ColumnInfo(name="launchDaysResId")
-    val launchDaysResId: Int,
-
-    @ColumnInfo(name="launchStatusIconResId")
-    val launchStatusIconResId: Int
+    @ColumnInfo(name="isLaunchSuccess")
+    val isLaunchSuccess: Boolean
 )
 
 @Keep
