@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchNetworkDataSourceImpl
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchRemoteDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ internal abstract class LaunchNetworkDataSourceModule {
 
     @Binds
     abstract fun bindLaunchNetworkDataSource(
-        impl: LaunchNetworkDataSourceImpl
-    ): LaunchNetworkDataSource
+        impl: LaunchRemoteDataSourceImpl
+    ): LaunchRemoteDataSource
 }

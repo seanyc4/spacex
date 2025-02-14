@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataSourceError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import io.mockk.MockKAnnotations
@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class LaunchNetworkDataSourceImplTest {
+class LaunchRemoteDataSourceImplTest {
 
     @get:Rule
     val testDispatcher = TestCoroutineRule()
@@ -31,12 +31,12 @@ class LaunchNetworkDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: LaunchNetworkDataSource
+    private lateinit var underTest: LaunchRemoteDataSource
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = LaunchNetworkDataSourceImpl(
+        underTest = LaunchRemoteDataSourceImpl(
             api = api,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher.testCoroutineDispatcher

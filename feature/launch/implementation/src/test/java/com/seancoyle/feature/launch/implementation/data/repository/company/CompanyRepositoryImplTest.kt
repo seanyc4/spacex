@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 class CompanyRepositoryImplTest {
 
     @MockK
-    private lateinit var companyNetworkDataSource: CompanyNetworkDataSource
+    private lateinit var companyRemoteDataSource: CompanyRemoteDataSource
 
     @MockK
     private lateinit var companyLocalDataSource: CompanyLocalDataSource
@@ -41,7 +41,7 @@ class CompanyRepositoryImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = CompanyRepositoryImpl(
-            companyNetworkDataSource = companyNetworkDataSource,
+            companyRemoteDataSource = companyRemoteDataSource,
             companyLocalDataSource = companyLocalDataSource,
             companyCacheMapper = companyCacheMapper,
             companyDtoEntityMapper = companyDtoEntityMapper
@@ -50,7 +50,7 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache success`() = runTest {
-        coEvery { companyNetworkDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Success(1)
 
@@ -60,7 +60,7 @@ class CompanyRepositoryImplTest {
         assertEquals(Unit, (result).data)
 
         coVerify {
-            companyNetworkDataSource.getCompanyApi()
+            companyRemoteDataSource.getCompanyApi()
             companyLocalDataSource.insert(companyEntity)
         }
         verify { companyDtoEntityMapper.dtoToEntity(companyDto) }
@@ -69,7 +69,7 @@ class CompanyRepositoryImplTest {
     @Test
     fun `getCompanyApi success returns error`() = runTest {
         val expected = DataSourceError.NETWORK_UNKNOWN_ERROR
-        coEvery { companyNetworkDataSource.getCompanyApi() } returns LaunchResult.Error(expected)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Error(expected)
 
         val result = underTest.getCompanyApi()
 
@@ -77,14 +77,14 @@ class CompanyRepositoryImplTest {
         assertEquals(expected, (result).error)
 
         coVerify {
-            companyNetworkDataSource.getCompanyApi()
+            companyRemoteDataSource.getCompanyApi()
         }
     }
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache error`() = runTest {
         val expected = DataSourceError.CACHE_ERROR
-        coEvery { companyNetworkDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Error(expected)
 
@@ -94,7 +94,7 @@ class CompanyRepositoryImplTest {
         assertEquals(expected, (result).error)
 
         coVerify {
-            companyNetworkDataSource.getCompanyApi()
+            companyRemoteDataSource.getCompanyApi()
             companyLocalDataSource.insert(companyEntity)
         }
         verify { companyDtoEntityMapper.dtoToEntity(companyDto) }

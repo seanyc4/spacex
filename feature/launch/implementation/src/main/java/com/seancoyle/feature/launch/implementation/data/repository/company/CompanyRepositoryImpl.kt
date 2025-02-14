@@ -10,14 +10,14 @@ import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepo
 import javax.inject.Inject
 
 internal class CompanyRepositoryImpl @Inject constructor(
-    private val companyNetworkDataSource: CompanyNetworkDataSource,
+    private val companyRemoteDataSource: CompanyRemoteDataSource,
     private val companyLocalDataSource: CompanyLocalDataSource,
     private val companyDtoEntityMapper: CompanyDtoEntityMapper,
     private val companyCacheMapper: CompanyDomainEntityMapper
 ) : CompanyRepository {
 
     override suspend fun getCompanyApi(): LaunchResult<Unit, DataSourceError> {
-        return when (val result = companyNetworkDataSource.getCompanyApi()) {
+        return when (val result = companyRemoteDataSource.getCompanyApi()) {
             is LaunchResult.Success -> insertCompanyIntoCache(result.data)
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }

@@ -33,10 +33,10 @@ import kotlin.test.assertTrue
 class LaunchRepositoryImplTest {
 
     @MockK
-    private lateinit var launchDiskDataSource: LaunchDiskDataSource
+    private lateinit var launchLocalDataSource: LaunchLocalDataSource
 
     @MockK
-    private lateinit var launchNetworkDataSource: LaunchNetworkDataSource
+    private lateinit var launchRemoteDataSource: LaunchRemoteDataSource
 
     @MockK
     private lateinit var launchDtoDomainMapper: LaunchDtoDomainMapper
@@ -50,8 +50,8 @@ class LaunchRepositoryImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchRepositoryImpl(
-            launchNetworkDataSource = launchNetworkDataSource,
-            launchDiskDataSource = launchDiskDataSource,
+            launchRemoteDataSource = launchRemoteDataSource,
+            launchLocalDataSource = launchLocalDataSource,
             launchDtoToDomainMapper = launchDtoDomainMapper,
             launchDomainEntityMapper = launchDomainEntityMapper
         )
@@ -59,7 +59,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `getLaunches returns mapped launches on success`() = runTest {
-        coEvery { launchNetworkDataSource.getLaunches(launchOptions) } returns LaunchResult.Success(launchesDto)
+        coEvery { launchRemoteDataSource.getLaunches(launchOptions) } returns LaunchResult.Success(launchesDto)
         every { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
 
         val result = underTest.getLaunchesApi(launchOptions)
@@ -67,7 +67,7 @@ class LaunchRepositoryImplTest {
         assertTrue(result is LaunchResult.Success)
         assertEquals(launchesModel, (result).data)
 
-        coVerify { launchNetworkDataSource.getLaunches(launchOptions) }
+        coVerify { launchRemoteDataSource.getLaunches(launchOptions) }
         verify { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) }
     }
 
@@ -80,14 +80,14 @@ class LaunchRepositoryImplTest {
         val page = 1
         val launches = listOf(mockk<LaunchTypes.Launch>())
         every { launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
-        coEvery { launchDiskDataSource.paginate(launchYear, order, launchStatusEntity, page) } returns LaunchResult.Success(
+        coEvery { launchLocalDataSource.paginate(launchYear, order, launchStatusEntity, page) } returns LaunchResult.Success(
             launchesEntity
         )
         every { launchDomainEntityMapper.entityToDomainList(launchesEntity) } returns launches
 
         val result = underTest.paginateCache(launchYear, order, launchStatus, page)
 
-        coVerify { launchDiskDataSource.paginate(launchYear, order, launchStatusEntity, page) }
+        coVerify { launchLocalDataSource.paginate(launchYear, order, launchStatusEntity, page) }
         verify { launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus) }
         verify { launchDomainEntityMapper.entityToDomainList(launchesEntity) }
 
@@ -98,12 +98,12 @@ class LaunchRepositoryImplTest {
     @Test
     fun `insertLaunches returns result on success`() = runTest {
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
-        coEvery { launchDiskDataSource.insertList(launchesEntity) } returns LaunchResult.Success(Unit)
+        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns LaunchResult.Success(Unit)
 
         val result = underTest.insertLaunchesCache(launchesModel)
 
         verify { launchDomainEntityMapper.domainToEntityList(launchesModel) }
-        coVerify { launchDiskDataSource.insertList(launchesEntity) }
+        coVerify { launchLocalDataSource.insertList(launchesEntity) }
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(Unit, (result).data)
@@ -113,12 +113,12 @@ class LaunchRepositoryImplTest {
     fun `insertLaunches returns error`() = runTest {
         val expected = DataSourceError.CACHE_ERROR
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
-        coEvery { launchDiskDataSource.insertList(launchesEntity) } returns LaunchResult.Error(expected)
+        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns LaunchResult.Error(expected)
 
         val result = underTest.insertLaunchesCache(launchesModel)
 
         verify { launchDomainEntityMapper.domainToEntityList(launchesModel) }
-        coVerify { launchDiskDataSource.insertList(launchesEntity) }
+        coVerify { launchLocalDataSource.insertList(launchesEntity) }
 
         assertTrue(result is LaunchResult.Error)
         assertEquals(expected, (result).error)
@@ -128,12 +128,12 @@ class LaunchRepositoryImplTest {
     fun `deleteList returns result on success`() = runTest {
         val count = 1
         every { launchDomainEntityMapper.domainToEntity(launchModel) } returns launchEntity
-        coEvery { launchDiskDataSource.deleteList(launchesEntity) } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.deleteList(launchesEntity) } returns LaunchResult.Success(count)
 
         val result = underTest.deleteLaunhesCache(launchesModel)
 
         verify { launchDomainEntityMapper.domainToEntity(launchModel) }
-        coVerify { launchDiskDataSource.deleteList(launchesEntity) }
+        coVerify { launchLocalDataSource.deleteList(launchesEntity) }
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(count, (result).data)
@@ -141,11 +141,11 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `deleteAll returns result on success`() = runTest {
-        coEvery { launchDiskDataSource.deleteAll() } returns LaunchResult.Success(Unit)
+        coEvery { launchLocalDataSource.deleteAll() } returns LaunchResult.Success(Unit)
 
         val result = underTest.deleteAllCache()
 
-        coVerify { launchDiskDataSource.deleteAll() }
+        coVerify { launchLocalDataSource.deleteAll() }
 
         assertTrue(result is LaunchResult.Success)
     }
@@ -154,11 +154,11 @@ class LaunchRepositoryImplTest {
     fun `deleteById returns result on success`() = runTest {
         val id = "1"
         val count = 1
-        coEvery { launchDiskDataSource.deleteById(id) } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.deleteById(id) } returns LaunchResult.Success(count)
 
         val result = underTest.deleteByIdCache(id)
 
-        coVerify { launchDiskDataSource.deleteById(id) }
+        coVerify { launchLocalDataSource.deleteById(id) }
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(count, (result).data)
@@ -168,12 +168,12 @@ class LaunchRepositoryImplTest {
     fun `getById returns mapped launch on success`() = runTest {
         val id = "1"
         val launch = mockk<LaunchTypes.Launch>()
-        coEvery { launchDiskDataSource.getById(id) } returns LaunchResult.Success(launchEntity)
+        coEvery { launchLocalDataSource.getById(id) } returns LaunchResult.Success(launchEntity)
         every { launchDomainEntityMapper.entityToDomain(launchEntity) } returns launch
 
         val result = underTest.getByIdCache(id)
 
-        coVerify { launchDiskDataSource.getById(id) }
+        coVerify { launchLocalDataSource.getById(id) }
         verify { launchDomainEntityMapper.entityToDomain(launchEntity) }
 
         assertTrue(result is LaunchResult.Success)
@@ -182,12 +182,12 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `getAll returns mapped launches on success`() = runTest {
-        coEvery { launchDiskDataSource.getAll() } returns LaunchResult.Success(launchesEntity)
+        coEvery { launchLocalDataSource.getAll() } returns LaunchResult.Success(launchesEntity)
         every { launchDomainEntityMapper.entityToDomainList(launchesEntity) } returns launchesModel
 
         val result = underTest.getAllCache()
 
-        coVerify { launchDiskDataSource.getAll() }
+        coVerify { launchLocalDataSource.getAll() }
         verify { launchDomainEntityMapper.entityToDomainList(launchesEntity) }
 
         assertTrue(result is LaunchResult.Success)
@@ -197,11 +197,11 @@ class LaunchRepositoryImplTest {
     @Test
     fun `getTotalEntries returns result on success`() = runTest {
         val count = 10
-        coEvery { launchDiskDataSource.getTotalEntries() } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(count)
 
         val result = underTest.getTotalEntriesCache()
 
-        coVerify { launchDiskDataSource.getTotalEntries() }
+        coVerify { launchLocalDataSource.getTotalEntries() }
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(count, (result).data)

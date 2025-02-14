@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.DataSourceError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -24,7 +24,7 @@ import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class CompanyNetworkDataSourceTest {
+internal class CompanyRemoteDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -33,7 +33,7 @@ internal class CompanyNetworkDataSourceTest {
     lateinit var mockWebServer : MockWebServer
 
     @Inject
-    lateinit var underTest: CompanyNetworkDataSource
+    lateinit var underTest: CompanyRemoteDataSource
 
     @Before
     fun init() {

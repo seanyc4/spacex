@@ -12,21 +12,21 @@ import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepos
 import javax.inject.Inject
 
 internal class LaunchRepositoryImpl @Inject constructor(
-    private val launchNetworkDataSource: LaunchNetworkDataSource,
-    private val launchDiskDataSource: LaunchDiskDataSource,
+    private val launchRemoteDataSource: LaunchRemoteDataSource,
+    private val launchLocalDataSource: LaunchLocalDataSource,
     private val launchDtoToDomainMapper: LaunchDtoDomainMapper,
     private val launchDomainEntityMapper: LaunchDomainEntityMapper
 ): LaunchRepository {
 
     override suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, DataSourceError> {
-        return when (val result = launchDiskDataSource.insertList(launchDomainEntityMapper.domainToEntityList(launches))) {
+        return when (val result = launchLocalDataSource.insertList(launchDomainEntityMapper.domainToEntityList(launches))) {
             is LaunchResult.Success -> LaunchResult.Success(Unit)
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
     override suspend fun getLaunchesApi(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, DataSourceError> {
-        return when (val result = launchNetworkDataSource.getLaunches(launchOptions)) {
+        return when (val result = launchRemoteDataSource.getLaunches(launchOptions)) {
             is LaunchResult.Success -> LaunchResult.Success(launchDtoToDomainMapper.dtoToDomainList(result.data))
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
@@ -39,7 +39,7 @@ internal class LaunchRepositoryImpl @Inject constructor(
         page: Int
     ): LaunchResult<List<LaunchTypes>, DataSourceError> {
         val launchStatusEntity = launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus)
-        return when (val result = launchDiskDataSource.paginate(
+        return when (val result = launchLocalDataSource.paginate(
             launchYear = launchYear,
             order = order,
             launchStatus = launchStatusEntity,
@@ -51,33 +51,33 @@ internal class LaunchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteLaunhesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Int, DataSourceError> {
-        return launchDiskDataSource.deleteList(launches.map { launchDomainEntityMapper.domainToEntity(it) })
+        return launchLocalDataSource.deleteList(launches.map { launchDomainEntityMapper.domainToEntity(it) })
     }
 
     override suspend fun deleteAllCache(): LaunchResult<Unit, DataSourceError> {
-        return launchDiskDataSource.deleteAll()
+        return launchLocalDataSource.deleteAll()
     }
 
     override suspend fun deleteByIdCache(id: String): LaunchResult<Int, DataSourceError> {
-        return launchDiskDataSource.deleteById(id)
+        return launchLocalDataSource.deleteById(id)
     }
 
     override suspend fun getByIdCache(id: String): LaunchResult<LaunchTypes.Launch?, DataSourceError> {
-        return when (val result = launchDiskDataSource.getById(id)) {
+        return when (val result = launchLocalDataSource.getById(id)) {
             is LaunchResult.Success -> LaunchResult.Success(result.data?.let { launchDomainEntityMapper.entityToDomain(it) })
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
     override suspend fun getAllCache(): LaunchResult<List<LaunchTypes>, DataSourceError> {
-        return when (val result = launchDiskDataSource.getAll()) {
+        return when (val result = launchLocalDataSource.getAll()) {
             is LaunchResult.Success -> LaunchResult.Success(launchDomainEntityMapper.entityToDomainList(result.data))
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
     override suspend fun getTotalEntriesCache(): LaunchResult<Int, DataSourceError> {
-        return launchDiskDataSource.getTotalEntries()
+        return launchLocalDataSource.getTotalEntries()
     }
 
 }

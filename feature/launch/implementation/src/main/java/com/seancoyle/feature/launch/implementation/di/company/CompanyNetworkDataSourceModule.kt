@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.di.company
 
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyNetworkDataSourceImpl
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyRemoteDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ internal abstract class CompanyNetworkDataSourceModule {
 
     @Binds
     abstract fun bindsCompanyNetworkDataSource(
-        impl: CompanyNetworkDataSourceImpl
-    ): CompanyNetworkDataSource
+        impl: CompanyRemoteDataSourceImpl
+    ): CompanyRemoteDataSource
 }

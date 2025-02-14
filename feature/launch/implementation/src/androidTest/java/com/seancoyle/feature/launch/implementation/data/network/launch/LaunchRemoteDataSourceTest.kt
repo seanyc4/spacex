@@ -9,7 +9,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -29,7 +29,7 @@ import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class LaunchNetworkDataSourceTest {
+internal class LaunchRemoteDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -41,7 +41,7 @@ internal class LaunchNetworkDataSourceTest {
     lateinit var mockWebServer: MockWebServer
 
     @Inject
-    lateinit var underTest: LaunchNetworkDataSource
+    lateinit var underTest: LaunchRemoteDataSource
 
     @Before
     fun init() {

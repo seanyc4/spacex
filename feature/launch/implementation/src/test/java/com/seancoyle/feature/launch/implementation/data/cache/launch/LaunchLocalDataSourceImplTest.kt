@@ -7,7 +7,7 @@ import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchDiskDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
 import io.mockk.MockKAnnotations
@@ -35,7 +35,7 @@ class LaunchLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: LaunchDiskDataSource
+    private lateinit var underTest: LaunchLocalDataSource
 
     @Before
     fun setup() {

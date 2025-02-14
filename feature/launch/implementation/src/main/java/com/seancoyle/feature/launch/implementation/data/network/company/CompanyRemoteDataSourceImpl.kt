@@ -1,28 +1,27 @@
-package com.seancoyle.feature.launch.implementation.data.network.launch
+package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
 import com.seancoyle.core.common.result.DataSourceError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class LaunchNetworkDataSourceImpl @Inject constructor(
-    private val api: LaunchApiService,
+internal class CompanyRemoteDataSourceImpl @Inject constructor(
+    private val api: CompanyApiService,
     private val dataSourceErrorMapper: RemoteDataSourceErrorMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : LaunchNetworkDataSource {
+) : CompanyRemoteDataSource {
 
-    override suspend fun getLaunches(launchOptions: LaunchOptions): LaunchResult<LaunchesDto, DataSourceError> {
+    override suspend fun getCompanyApi(): LaunchResult<CompanyDto, DataSourceError> {
         return withContext(ioDispatcher) {
             runCatching {
-                api.getLaunches(launchOptions)
+                api.getCompany()
             }.fold(
                 onSuccess = { result ->
                     result?.let { LaunchResult.Success(it) }
