@@ -26,7 +26,7 @@ class CompanyRepositoryImplTest {
     private lateinit var companyNetworkDataSource: CompanyNetworkDataSource
 
     @MockK
-    private lateinit var companyDiskDataSource: CompanyDiskDataSource
+    private lateinit var companyLocalDataSource: CompanyLocalDataSource
 
     @MockK
     private lateinit var companyDtoEntityMapper: CompanyDtoEntityMapper
@@ -42,7 +42,7 @@ class CompanyRepositoryImplTest {
         MockKAnnotations.init(this)
         underTest = CompanyRepositoryImpl(
             companyNetworkDataSource = companyNetworkDataSource,
-            companyDiskDataSource = companyDiskDataSource,
+            companyLocalDataSource = companyLocalDataSource,
             companyCacheMapper = companyCacheMapper,
             companyDtoEntityMapper = companyDtoEntityMapper
         )
@@ -52,7 +52,7 @@ class CompanyRepositoryImplTest {
     fun `getCompanyApi success returns companyDto and inserts to cache success`() = runTest {
         coEvery { companyNetworkDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
-        coEvery { companyDiskDataSource.insert(companyEntity) } returns LaunchResult.Success(1)
+        coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Success(1)
 
         val result = underTest.getCompanyApi()
 
@@ -61,7 +61,7 @@ class CompanyRepositoryImplTest {
 
         coVerify {
             companyNetworkDataSource.getCompanyApi()
-            companyDiskDataSource.insert(companyEntity)
+            companyLocalDataSource.insert(companyEntity)
         }
         verify { companyDtoEntityMapper.dtoToEntity(companyDto) }
     }
@@ -86,7 +86,7 @@ class CompanyRepositoryImplTest {
         val expected = DataSourceError.CACHE_ERROR
         coEvery { companyNetworkDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
-        coEvery { companyDiskDataSource.insert(companyEntity) } returns LaunchResult.Error(expected)
+        coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Error(expected)
 
         val result = underTest.getCompanyApi()
 
@@ -95,14 +95,14 @@ class CompanyRepositoryImplTest {
 
         coVerify {
             companyNetworkDataSource.getCompanyApi()
-            companyDiskDataSource.insert(companyEntity)
+            companyLocalDataSource.insert(companyEntity)
         }
         verify { companyDtoEntityMapper.dtoToEntity(companyDto) }
     }
 
     @Test
     fun `getCompanyFromCache returns mapped company on success`() = runTest {
-        coEvery { companyDiskDataSource.get() } returns LaunchResult.Success(companyEntity)
+        coEvery { companyLocalDataSource.get() } returns LaunchResult.Success(companyEntity)
         every { companyCacheMapper.entityToDomain(companyEntity) } returns companyModel
 
         val result = underTest.getCompanyCache()
@@ -110,19 +110,19 @@ class CompanyRepositoryImplTest {
         assertTrue(result is LaunchResult.Success)
         assertEquals(companyModel, (result).data)
 
-        coVerify { companyDiskDataSource.get() }
+        coVerify { companyLocalDataSource.get() }
         verify { companyCacheMapper.entityToDomain(companyEntity) }
     }
 
     @Test
     fun `deleteAllCompanyCache returns result on success`() = runTest {
-        coEvery { companyDiskDataSource.deleteAll() } returns LaunchResult.Success(Unit)
+        coEvery { companyLocalDataSource.deleteAll() } returns LaunchResult.Success(Unit)
 
         val result = underTest.deleteAllCompanyCache()
 
         assertTrue(result is LaunchResult.Success)
 
-        coVerify { companyDiskDataSource.deleteAll() }
+        coVerify { companyLocalDataSource.deleteAll() }
     }
 
 }

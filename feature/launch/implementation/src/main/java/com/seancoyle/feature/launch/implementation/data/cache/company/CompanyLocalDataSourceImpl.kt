@@ -7,7 +7,7 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.database.entities.CompanyEntity
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
     private val dao: CompanyDao,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : CompanyDiskDataSource {
+) : CompanyLocalDataSource {
 
     override suspend fun get(): LaunchResult<CompanyEntity?, DataSourceError> {
         return safeCacheCall(

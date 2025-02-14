@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -34,7 +34,7 @@ class CompanyLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: CompanyDiskDataSource
+    private lateinit var underTest: CompanyLocalDataSource
 
     @Before
     fun setup() {

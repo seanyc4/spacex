@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.data.cache
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class CompanyDiskDataSourceTest {
+internal class CompanyLocalDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -28,7 +28,7 @@ internal class CompanyDiskDataSourceTest {
     private lateinit var givenCompany: Company
 
     @Inject
-    lateinit var underTest: CompanyDiskDataSource
+    lateinit var underTest: CompanyLocalDataSource
 
     @Before
     fun setup() {

@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 internal class CompanyRepositoryImpl @Inject constructor(
     private val companyNetworkDataSource: CompanyNetworkDataSource,
-    private val companyDiskDataSource: CompanyDiskDataSource,
+    private val companyLocalDataSource: CompanyLocalDataSource,
     private val companyDtoEntityMapper: CompanyDtoEntityMapper,
     private val companyCacheMapper: CompanyDomainEntityMapper
 ) : CompanyRepository {
@@ -24,21 +24,21 @@ internal class CompanyRepositoryImpl @Inject constructor(
     }
 
     private suspend fun insertCompanyIntoCache(companyDto: CompanyDto): LaunchResult<Unit, DataSourceError> {
-        return when (val result = companyDiskDataSource.insert(companyDtoEntityMapper.dtoToEntity(companyDto))) {
+        return when (val result = companyLocalDataSource.insert(companyDtoEntityMapper.dtoToEntity(companyDto))) {
             is LaunchResult.Success -> LaunchResult.Success(Unit)
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
     override suspend fun getCompanyCache(): LaunchResult<Company?, DataSourceError> {
-        return when (val result = companyDiskDataSource.get()) {
+        return when (val result = companyLocalDataSource.get()) {
             is LaunchResult.Success -> LaunchResult.Success(result.data?.let { companyCacheMapper.entityToDomain(it) })
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
     override suspend fun deleteAllCompanyCache(): LaunchResult<Unit, DataSourceError> {
-        return companyDiskDataSource.deleteAll()
+        return companyLocalDataSource.deleteAll()
     }
 
 }
