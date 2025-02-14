@@ -4,11 +4,13 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataSourceError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,6 +33,9 @@ class LaunchRemoteDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
+    @RelaxedMockK
+    private lateinit var remoteDataSourceErrorMapper: RemoteDataSourceErrorMapper
+
     private lateinit var underTest: LaunchRemoteDataSource
 
     @Before
@@ -38,6 +43,7 @@ class LaunchRemoteDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchRemoteDataSourceImpl(
             api = api,
+            remoteDataSourceErrorMapper = remoteDataSourceErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher.testCoroutineDispatcher
         )
@@ -55,7 +61,9 @@ class LaunchRemoteDataSourceImplTest {
 
     @Test
     fun `getLaunches returns DataError when API call fails`() = runTest {
-        coEvery { api.getLaunches(launchOptions) } throws RuntimeException("Network failure")
+        val exception = RuntimeException("Network Failure")
+        coEvery { api.getLaunches(launchOptions) } throws exception
+        every { remoteDataSourceErrorMapper.map(exception) } returns DataSourceError.NETWORK_UNKNOWN_ERROR
 
         val result = underTest.getLaunches(launchOptions)
 

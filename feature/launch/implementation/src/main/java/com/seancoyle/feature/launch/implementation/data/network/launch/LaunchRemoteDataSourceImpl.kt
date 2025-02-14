@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 internal class LaunchRemoteDataSourceImpl @Inject constructor(
     private val api: LaunchApiService,
-    private val dataSourceErrorMapper: RemoteDataSourceErrorMapper,
+    private val remoteDataSourceErrorMapper: RemoteDataSourceErrorMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LaunchRemoteDataSource {
@@ -31,7 +31,7 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
                 onFailure = { exception ->
                     Timber.e(exception)
                     crashlytics.logException(exception)
-                    LaunchResult.Error(dataSourceErrorMapper.map(exception))
+                    LaunchResult.Error(remoteDataSourceErrorMapper.map(exception))
                 }
             )
         }
