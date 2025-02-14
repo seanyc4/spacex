@@ -7,8 +7,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.seancoyle.feature.launch.api.domain.model.BottomSheetLinks
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import io.mockk.MockKAnnotations
@@ -91,15 +91,15 @@ class LaunchBottomSheetTest {
         private const val DEFAULT_WIKI = "https://www.wikipedia.com"
 
         private val bottomSheetLinks = listOf(
-            BottomSheetLinks(
+            BottomSheetLinksUi(
                 link = DEFAULT_ARTICLE,
                 nameResId = R.string.article
             ),
-            BottomSheetLinks(
+            BottomSheetLinksUi(
                 link = DEFAULT_WEBCAST,
                 nameResId = R.string.webcast
             ),
-            BottomSheetLinks(
+            BottomSheetLinksUi(
                 link = DEFAULT_WIKI,
                 nameResId = R.string.wikipedia
             ),

@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.RocketWithMission
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 
 @Composable
 internal fun LaunchHeading(
-    launchHeading: LaunchTypes.SectionTitle,
+    launchHeading: LaunchTypesUiModel.SectionTitleUi,
     modifier: Modifier = Modifier,
 ) {
     Text(
@@ -76,7 +76,7 @@ internal fun CompanySummaryCard(
 
 @Composable
 internal fun LaunchCard(
-    launchItem: LaunchTypes.Launch,
+    launchItem: LaunchTypesUiModel.LaunchUi,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -184,7 +184,7 @@ internal fun LaunchCardDynamicText(
 
 @Composable
 internal fun LaunchCarouselCard(
-    launchItem: RocketWithMission,
+    launchItem: RocketWithMissionUi,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -214,7 +214,7 @@ internal fun LaunchCarouselCard(
 
 @Composable
 internal fun LaunchGridCard(
-    launchItem: LaunchTypes.Grid,
+    launchItem: LaunchTypesUiModel.GridUi,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {

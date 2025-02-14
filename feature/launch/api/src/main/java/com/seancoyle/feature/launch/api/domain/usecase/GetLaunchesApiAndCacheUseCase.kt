@@ -1,10 +1,9 @@
 package com.seancoyle.feature.launch.api.domain.usecase
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import kotlinx.coroutines.flow.Flow
 
 interface GetLaunchesApiAndCacheUseCase {
-    operator fun invoke(): Flow<Result<List<LaunchTypes.Launch>, DataError>>
+    operator fun invoke(): Flow<LaunchResult<Unit, DataSourceError>>
 }

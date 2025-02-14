@@ -39,7 +39,7 @@ import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.domain.model.UIErrors
+import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
