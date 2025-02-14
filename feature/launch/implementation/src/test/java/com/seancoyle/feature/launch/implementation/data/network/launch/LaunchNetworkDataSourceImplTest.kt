@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.network.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchNetworkDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
@@ -49,7 +49,7 @@ class LaunchNetworkDataSourceImplTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(launchesDto, result.data)
     }
 
@@ -59,7 +59,7 @@ class LaunchNetworkDataSourceImplTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_UNKNOWN_ERROR, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_UNKNOWN_ERROR, result.error)
     }
 }

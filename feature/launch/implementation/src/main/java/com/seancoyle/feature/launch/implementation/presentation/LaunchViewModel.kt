@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
@@ -12,13 +12,9 @@ import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
-import com.seancoyle.feature.launch.implementation.presentation.model.RocketUi
-import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
@@ -137,7 +133,7 @@ internal class LaunchViewModel @Inject constructor(
             page = getPageState()
         ).collect { result ->
             when (result) {
-                is Result.Success -> {
+                is LaunchResult.Success -> {
                     // Pagination - We append the next 30 rows to the current state as a new list
                     // This triggers a recompose and keeps immutability
                     uiState.update { currentState ->
@@ -152,7 +148,7 @@ internal class LaunchViewModel @Inject constructor(
                     }
                 }
 
-                is Result.Error -> {
+                is LaunchResult.Error -> {
                     uiState.update { currentState ->
                         currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
                     }
@@ -166,8 +162,8 @@ internal class LaunchViewModel @Inject constructor(
             .onStart { uiState.update { LaunchesUiState.Loading } }
             .collect { result ->
                 when (result) {
-                    is Result.Success -> onEvent(CreateMergedLaunchesEvent)
-                    is Result.Error -> {
+                    is LaunchResult.Success -> onEvent(CreateMergedLaunchesEvent)
+                    is LaunchResult.Error -> {
                         uiState.update {
                             LaunchesUiState.Error(
                                 errorNotificationState = NotificationState(
@@ -191,7 +187,7 @@ internal class LaunchViewModel @Inject constructor(
         ).distinctUntilChanged()
             .collect { result ->
                 when (result) {
-                    is Result.Success -> {
+                    is LaunchResult.Success -> {
                         uiState.update {
                             LaunchesUiState.Success(
                                 launches = result.data.map { it.toUiModel(appStringResource) },
@@ -200,7 +196,7 @@ internal class LaunchViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Error -> {
+                    is LaunchResult.Error -> {
                         uiState.update {
                             LaunchesUiState.Error(
                                 errorNotificationState = NotificationState(

@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.component
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
@@ -30,11 +30,11 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(): Flow<Result<Unit, DataError>> {
+    override fun getLaunchesApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataSourceError>> {
         return getLaunchesApiCacheUseCase.invoke()
     }
 
-    override fun getSpaceXDataUseCase(): Flow<Result<Unit, DataError>> {
+    override fun getSpaceXDataUseCase(): Flow<LaunchResult<Unit, DataSourceError>> {
         return getSpaceXDataUseCase.invoke()
     }
 
@@ -43,7 +43,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>, DataError>> {
+    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> {
         return paginateLaunchesCacheUseCase.get().invoke(
             launchYear = year,
             order = order,
@@ -57,7 +57,7 @@ internal class LaunchesComponentImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<Result<List<LaunchTypes>, DataError>> {
+    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> {
         return mergedLaunchesCacheUseCase.invoke(
             year = year,
             order = order,
@@ -66,11 +66,11 @@ internal class LaunchesComponentImpl @Inject constructor(
         )
     }
 
-    override fun getCompanyCacheUseCase(): Flow<Result<Company?, DataError>> {
+    override fun getCompanyCacheUseCase(): Flow<LaunchResult<Company?, DataSourceError>> {
         return getCompanyCacheUseCase.invoke()
     }
 
-    override fun getCompanyApiAndCacheUseCase(): Flow<Result<Unit, DataError>> {
+    override fun getCompanyApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataSourceError>> {
         return getCompanyApiCacheUseCase.invoke()
     }
 

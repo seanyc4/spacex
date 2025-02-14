@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -29,41 +29,41 @@ class GetNumLaunchesCacheUseCaseImplTest {
     @Test
     fun `invoke should emit the correct number of entries when data is available`() = runTest {
         val totalEntries = 42
-        coEvery { launchRepository.getTotalEntriesCache() } returns Result.Success(totalEntries)
+        coEvery { launchRepository.getTotalEntriesCache() } returns LaunchResult.Success(totalEntries)
 
-        val results = mutableListOf<Result<Int?, DataError>>()
+        val results = mutableListOf<LaunchResult<Int?, DataSourceError>>()
         underTest().collect { results.add(it) }
 
         coVerify { launchRepository.getTotalEntriesCache() }
 
-        assertTrue(results.first() is Result.Success)
-        assertEquals(totalEntries, (results.first() as Result.Success).data)
+        assertTrue(results.first() is LaunchResult.Success)
+        assertEquals(totalEntries, (results.first() as LaunchResult.Success).data)
     }
 
     @Test
     fun `invoke should emit error when no entries are found`() = runTest {
-        coEvery { launchRepository.getTotalEntriesCache() } returns Result.Error(DataError.CACHE_DATA_NULL)
+        coEvery { launchRepository.getTotalEntriesCache() } returns LaunchResult.Error(DataSourceError.CACHE_DATA_NULL)
 
-        val results = mutableListOf<Result<Int?, DataError>>()
+        val results = mutableListOf<LaunchResult<Int?, DataSourceError>>()
         underTest().collect { results.add(it) }
 
         coVerify { launchRepository.getTotalEntriesCache() }
 
-        assertTrue(results.first() is Result.Error)
-        assertEquals(DataError.CACHE_DATA_NULL, (results.first() as Result.Error).error)
+        assertTrue(results.first() is LaunchResult.Error)
+        assertEquals(DataSourceError.CACHE_DATA_NULL, (results.first() as LaunchResult.Error).error)
     }
 
     @Test
     fun `invoke should emit an error when there is a problem accessing cache`() = runTest {
-        val error = DataError.CACHE_ERROR
-        coEvery { launchRepository.getTotalEntriesCache() } returns Result.Error(error)
+        val error = DataSourceError.CACHE_ERROR
+        coEvery { launchRepository.getTotalEntriesCache() } returns LaunchResult.Error(error)
 
-        val results = mutableListOf<Result<Int?, DataError>>()
+        val results = mutableListOf<LaunchResult<Int?, DataSourceError>>()
         underTest().collect { results.add(it) }
 
         coVerify { launchRepository.getTotalEntriesCache() }
 
-        assertTrue(results.first() is Result.Error)
-        assertEquals(error, (results.first() as Result.Error).error)
+        assertTrue(results.first() is LaunchResult.Error)
+        assertEquals(error, (results.first() as LaunchResult.Error).error)
     }
 }

@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.company
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,14 +11,14 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     private val companyRepository: CompanyRepository
 ) : GetCompanyApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<Result<Unit, DataError>> = flow {
+    override operator fun invoke(): Flow<LaunchResult<Unit, DataSourceError>> = flow {
         emit(getCompanyFromNetwork())
     }
 
-    private suspend fun getCompanyFromNetwork(): Result<Unit, DataError> {
+    private suspend fun getCompanyFromNetwork(): LaunchResult<Unit, DataSourceError> {
         return when (val networkResult = companyRepository.getCompanyApi()) {
-            is Result.Success -> Result.Success(Unit)
-            is Result.Error -> Result.Error(networkResult.error)
+            is LaunchResult.Success -> LaunchResult.Success(Unit)
+            is LaunchResult.Error -> LaunchResult.Error(networkResult.error)
         }
     }
 }

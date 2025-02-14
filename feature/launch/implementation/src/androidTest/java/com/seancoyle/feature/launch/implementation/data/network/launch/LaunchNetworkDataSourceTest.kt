@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.network.launch
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
@@ -64,7 +64,7 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
 
         // We skip checking item.launchDays as its dynamic and changes based on the date
         result.data.forEachIndexed { index, item ->
@@ -89,7 +89,7 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -101,8 +101,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_TIMEOUT, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_TIMEOUT, result.error)
     }
 
     @Test
@@ -114,8 +114,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_NOT_FOUND, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_NOT_FOUND, result.error)
     }
 
     @Test
@@ -127,8 +127,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_UNAUTHORIZED, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_UNAUTHORIZED, result.error)
     }
 
     @Test
@@ -140,8 +140,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
     }
 
     @Test
@@ -153,8 +153,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_CONNECTION_FAILED, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_CONNECTION_FAILED, result.error)
     }
 
     @Test
@@ -166,8 +166,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_FORBIDDEN, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_FORBIDDEN, result.error)
     }
 
     @Test
@@ -179,8 +179,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_TIMEOUT, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_TIMEOUT, result.error)
     }
 
     @Test
@@ -192,8 +192,8 @@ internal class LaunchNetworkDataSourceTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
     }
 
     private val expectedLaunches = listOf(

@@ -8,5 +8,5 @@ internal interface CompanyApiService {
     }
 
     @GET(COMPANY_URL)
-    suspend fun getCompany(): CompanyDto
+    suspend fun getCompany(): CompanyDto?
 }

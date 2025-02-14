@@ -3,8 +3,8 @@ package com.seancoyle.core.data
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.data.CacheConstants.CACHE_TIMEOUT
 import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT
 import kotlinx.coroutines.CancellationException
@@ -22,33 +22,33 @@ suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
     crashlytics: Crashlytics? = null,
     apiCall: suspend () -> T
-): Result<T, DataError> {
+): LaunchResult<T, DataSourceError> {
     return withContext(dispatcher) {
         try {
             withTimeout(NETWORK_TIMEOUT) {
-                Result.Success(apiCall.invoke())
+                LaunchResult.Success(apiCall.invoke())
             }
         } catch (throwable: Throwable) {
             crashlytics?.logException(throwable)
             throwable.printStackTrace()
             when (throwable) {
                 is TimeoutCancellationException -> {
-                    Result.Error(DataError.NETWORK_TIMEOUT)
+                    LaunchResult.Error(DataSourceError.NETWORK_TIMEOUT)
                 }
 
                 is IOException -> {
-                    Result.Error(DataError.NETWORK_CONNECTION_FAILED)
+                    LaunchResult.Error(DataSourceError.NETWORK_CONNECTION_FAILED)
                 }
 
                 is HttpException -> {
                     when (throwable.code()) {
-                        401 -> Result.Error(DataError.NETWORK_UNAUTHORIZED)
-                        403 -> Result.Error(DataError.NETWORK_FORBIDDEN)
-                        404 -> Result.Error(DataError.NETWORK_NOT_FOUND)
-                        408 -> Result.Error(DataError.NETWORK_TIMEOUT)
-                        413 -> Result.Error(DataError.NETWORK_PAYLOAD_TOO_LARGE)
-                        500 -> Result.Error(DataError.NETWORK_INTERNAL_SERVER_ERROR)
-                        else -> Result.Error(DataError.NETWORK_UNKNOWN_ERROR)
+                        401 -> LaunchResult.Error(DataSourceError.NETWORK_UNAUTHORIZED)
+                        403 -> LaunchResult.Error(DataSourceError.NETWORK_FORBIDDEN)
+                        404 -> LaunchResult.Error(DataSourceError.NETWORK_NOT_FOUND)
+                        408 -> LaunchResult.Error(DataSourceError.NETWORK_TIMEOUT)
+                        413 -> LaunchResult.Error(DataSourceError.NETWORK_PAYLOAD_TOO_LARGE)
+                        500 -> LaunchResult.Error(DataSourceError.NETWORK_INTERNAL_SERVER_ERROR)
+                        else -> LaunchResult.Error(DataSourceError.NETWORK_UNKNOWN_ERROR)
                     }
                 }
 
@@ -58,7 +58,7 @@ suspend fun <T> safeApiCall(
                 }
 
                 else ->
-                    Result.Error(DataError.NETWORK_UNKNOWN_ERROR)
+                    LaunchResult.Error(DataSourceError.NETWORK_UNKNOWN_ERROR)
             }
         }
     }
@@ -68,27 +68,27 @@ suspend fun <T> safeCacheCall(
     dispatcher: CoroutineDispatcher,
     crashlytics: Crashlytics? = null,
     cacheCall: suspend () -> T
-): Result<T, DataError> {
+): LaunchResult<T, DataSourceError> {
     return withContext(dispatcher) {
         try {
             // throws TimeoutCancellationException
             withTimeout(CACHE_TIMEOUT) {
-                Result.Success(cacheCall.invoke())
+                LaunchResult.Success(cacheCall.invoke())
             }
         } catch (throwable: Throwable) {
             crashlytics?.logException(throwable)
             throwable.printStackTrace()
             when (throwable) {
                 is TimeoutCancellationException -> {
-                    Result.Error(DataError.CACHE_ERROR_TIMEOUT)
+                    LaunchResult.Error(DataSourceError.CACHE_ERROR_TIMEOUT)
                 }
 
                 is SQLiteConstraintException -> {
-                    Result.Error(DataError.CACHE_CONSTRAINT_VIOLATION)
+                    LaunchResult.Error(DataSourceError.CACHE_CONSTRAINT_VIOLATION)
                 }
 
                 is SQLiteException -> {
-                    Result.Error(DataError.CACHE_ERROR)
+                    LaunchResult.Error(DataSourceError.CACHE_ERROR)
                 }
 
                 is CancellationException -> {
@@ -97,7 +97,7 @@ suspend fun <T> safeCacheCall(
                 }
 
                 else -> {
-                    Result.Error(DataError.CACHE_UNKNOWN_DATABASE_ERROR)
+                    LaunchResult.Error(DataSourceError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
         }

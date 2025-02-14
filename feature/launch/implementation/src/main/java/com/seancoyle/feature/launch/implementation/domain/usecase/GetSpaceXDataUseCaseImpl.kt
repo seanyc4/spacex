@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.company.GetCompanyApiAndCacheUseCase
 import javax.inject.Inject
@@ -14,26 +14,26 @@ internal class GetSpaceXDataUseCaseImpl @Inject constructor(
     private val getLaunchesApiAndCacheUseCase: GetLaunchesApiAndCacheUseCase
 ) : GetSpaceXDataUseCase {
 
-    override operator fun invoke(): Flow<Result<Unit, DataError>> = flow {
+    override operator fun invoke(): Flow<LaunchResult<Unit, DataSourceError>> = flow {
         combine(
             getCompanyApiAndCacheUseCase(),
             getLaunchesApiAndCacheUseCase()
         ) { companyResult, launchesResult ->
             when {
-                companyResult is Result.Success && launchesResult is Result.Success -> {
-                    Result.Success(Unit)
+                companyResult is LaunchResult.Success && launchesResult is LaunchResult.Success -> {
+                    LaunchResult.Success(Unit)
                 }
 
-                companyResult is Result.Error -> {
-                    Result.Error(companyResult.error)
+                companyResult is LaunchResult.Error -> {
+                    LaunchResult.Error(companyResult.error)
                 }
 
-                launchesResult is Result.Error -> {
-                    Result.Error(launchesResult.error)
+                launchesResult is LaunchResult.Error -> {
+                    LaunchResult.Error(launchesResult.error)
                 }
 
                 else -> {
-                    Result.Error(DataError.NETWORK_CONNECTION_FAILED)
+                    LaunchResult.Error(DataSourceError.NETWORK_CONNECTION_FAILED)
                 }
             }
         }.collect { combinedResult ->

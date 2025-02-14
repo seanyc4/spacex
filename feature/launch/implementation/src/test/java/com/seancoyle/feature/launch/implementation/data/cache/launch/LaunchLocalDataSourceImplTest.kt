@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.cache.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
@@ -82,7 +82,7 @@ class LaunchLocalDataSourceImplTest {
             )
         }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(launchesEntity, result.data)
     }
 
@@ -95,7 +95,7 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.getById(launchId) }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(launchEntity, result.data)
     }
 
@@ -107,7 +107,7 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.getAll() }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(launchesEntity, result.data)
     }
 
@@ -120,7 +120,7 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.deleteById(launchId) }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(1, result.data)
     }
 
@@ -132,6 +132,6 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.deleteAll() }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
     }
 }

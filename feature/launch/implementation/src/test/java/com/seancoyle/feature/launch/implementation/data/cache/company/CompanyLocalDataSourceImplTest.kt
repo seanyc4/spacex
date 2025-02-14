@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
@@ -54,7 +54,7 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.getCompany() }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(companyEntity, result.data)
     }
 
@@ -66,7 +66,7 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.getCompany() }
 
-        assertTrue(result is Result.Success && result.data == null)
+        assertTrue(result is LaunchResult.Success && result.data == null)
     }
 
     @Test
@@ -78,7 +78,7 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.insert(companyEntity) }
 
-        assertTrue(result is Result.Success && result.data == entityId)
+        assertTrue(result is LaunchResult.Success && result.data == entityId)
     }
 
     @Test
@@ -89,6 +89,6 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.deleteAll() }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
     }
 }

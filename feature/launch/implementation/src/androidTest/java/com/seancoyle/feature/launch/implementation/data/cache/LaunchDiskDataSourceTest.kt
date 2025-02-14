@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
@@ -69,7 +69,7 @@ internal class LaunchDiskDataSourceTest {
 
         val result = underTest.getById(id = "1")
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(expectedResult, result.data)
     }
 
@@ -79,7 +79,7 @@ internal class LaunchDiskDataSourceTest {
 
         val result = underTest.getAll()
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertNotNull(result.data)
         result.data.filterIsInstance<List<LaunchTypes.Launch>>()
         assertTrue { expectedResult.containsAll(result.data) }
@@ -91,7 +91,7 @@ internal class LaunchDiskDataSourceTest {
 
         val result = underTest.getTotalEntries()
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(expectedResult.size, result.data)
     }
 
@@ -102,13 +102,13 @@ internal class LaunchDiskDataSourceTest {
 
         val preDeleteResult = underTest.getById(expectedResult.id)
 
-        assertTrue(preDeleteResult is Result.Success)
+        assertTrue(preDeleteResult is LaunchResult.Success)
         assertEquals(expectedResult, preDeleteResult.data)
 
         underTest.deleteById(expectedResult.id)
 
         val postDeleteResult = underTest.getById(expectedResult.id)
-        assertTrue(postDeleteResult is Result.Success)
+        assertTrue(postDeleteResult is LaunchResult.Success)
         assertNull(postDeleteResult.data, "Launch item should be null after deletion.")
     }
 
@@ -123,8 +123,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         checkDateOrderAscending(result.data)
@@ -141,8 +141,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         checkDateOrderDescending(result.data)
@@ -160,8 +160,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         assertTrue { result.data.all { it.launchYear == launchYear } }
@@ -180,8 +180,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         assertTrue { result.data.all { it.launchYear == launchYear } }
@@ -200,8 +200,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isEmpty())
     }
@@ -217,8 +217,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         checkDateOrderDescending(result.data)
@@ -236,8 +236,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         checkDateOrderDescending(result.data)
@@ -255,8 +255,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         assertTrue { expectedResult.containsAll(result.data) }
@@ -274,8 +274,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue(result.data.isNotEmpty())
         checkDateOrderDescending(result.data)
@@ -293,8 +293,8 @@ internal class LaunchDiskDataSourceTest {
             page = PAGE,
         )
 
-        assertTrue(result is Result.Success)
-        result as Result.Success<List<LaunchTypes.Launch>>
+        assertTrue(result is LaunchResult.Success)
+        result as LaunchResult.Success<List<LaunchTypes.Launch>>
 
         assertTrue { result.data.isEmpty() }
     }

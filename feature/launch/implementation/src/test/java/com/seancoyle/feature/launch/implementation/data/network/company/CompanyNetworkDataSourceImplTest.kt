@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyNetworkDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
@@ -51,7 +51,7 @@ class CompanyNetworkDataSourceImplTest {
 
         coVerify { api.getCompany() }
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(companyDto, result.data)
     }
 
@@ -64,7 +64,7 @@ class CompanyNetworkDataSourceImplTest {
 
         coVerify { api.getCompany() }
 
-        assertTrue(result is Result.Error)
-        assertEquals(DataError.NETWORK_UNKNOWN_ERROR, result.error)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(DataSourceError.NETWORK_UNKNOWN_ERROR, result.error)
     }
 }

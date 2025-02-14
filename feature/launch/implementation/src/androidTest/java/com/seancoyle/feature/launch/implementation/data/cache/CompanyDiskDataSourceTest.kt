@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -57,11 +57,11 @@ internal class CompanyDiskDataSourceTest {
     fun insertCompany_confirmInserted() = runTest {
         val insertResult = underTest.insert(givenCompany)
 
-        assertTrue(insertResult is Result.Success)
+        assertTrue(insertResult is LaunchResult.Success)
 
         val result = underTest.get()
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(givenCompany, result.data)
     }
 
@@ -71,7 +71,7 @@ internal class CompanyDiskDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertEquals(givenCompany, result.data)
     }
 
@@ -83,7 +83,7 @@ internal class CompanyDiskDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result is Result.Success)
+        assertTrue(result is LaunchResult.Success)
         assertNull(result.data)
     }
 }

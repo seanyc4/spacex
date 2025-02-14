@@ -1,9 +1,9 @@
 package com.seancoyle.feature.launch.implementation.data.repository.company
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDto
 
 internal interface CompanyNetworkDataSource {
-    suspend fun getCompanyApi(): Result<CompanyDto, DataError>
+    suspend fun getCompanyApi(): LaunchResult<CompanyDto, DataSourceError>
 }

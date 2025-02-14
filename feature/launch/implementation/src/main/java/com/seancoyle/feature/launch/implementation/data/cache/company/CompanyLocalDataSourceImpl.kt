@@ -2,8 +2,8 @@ package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.data.safeCacheCall
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.database.entities.CompanyEntity
@@ -17,7 +17,7 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyDiskDataSource {
 
-    override suspend fun get(): Result<CompanyEntity?, DataError> {
+    override suspend fun get(): LaunchResult<CompanyEntity?, DataSourceError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -26,7 +26,7 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(company: CompanyEntity): Result<Long, DataError> {
+    override suspend fun insert(company: CompanyEntity): LaunchResult<Long, DataSourceError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics
@@ -35,7 +35,7 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAll(): Result<Unit, DataError> {
+    override suspend fun deleteAll(): LaunchResult<Unit, DataSourceError> {
         return safeCacheCall(
             dispatcher = ioDispatcher,
             crashlytics = crashlytics

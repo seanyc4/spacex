@@ -1,6 +1,6 @@
 package com.seancoyle.core.common.result
 
-enum class DataError : ErrorType {
+enum class DataSourceError: ErrorType {
     NETWORK_TIMEOUT,
     NETWORK_PAYLOAD_TOO_LARGE,
     NETWORK_CONNECTION_FAILED,

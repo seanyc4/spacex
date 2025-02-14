@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
-import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.Result
+import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
@@ -44,9 +44,9 @@ class PaginateLaunchesCacheUseCaseImplTest {
                 launchStatus = status,
                 page = page
             )
-        } returns Result.Success(launchesModel)
+        } returns LaunchResult.Success(launchesModel)
 
-        val results = mutableListOf<Result<List<LaunchTypes>?, DataError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, DataSourceError>>()
         underTest(
             launchYear = year,
             order = order,
@@ -56,8 +56,8 @@ class PaginateLaunchesCacheUseCaseImplTest {
 
         coVerify { launchRepository.paginateCache(year, order, status, page) }
 
-        assertTrue(results.first() is Result.Success)
-        assertEquals(launchesModel, (results.first() as Result.Success).data)
+        assertTrue(results.first() is LaunchResult.Success)
+        assertEquals(launchesModel, (results.first() as LaunchResult.Success).data)
     }
 
     @Test
@@ -66,7 +66,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
         val order = Order.DESC
         val status = LaunchStatus.SUCCESS
         val page = 1
-        val error = DataError.CACHE_ERROR
+        val error = DataSourceError.CACHE_ERROR
 
         coEvery {
             launchRepository.paginateCache(
@@ -75,9 +75,9 @@ class PaginateLaunchesCacheUseCaseImplTest {
                 launchStatus = status,
                 page = page
             )
-        } returns Result.Error(error)
+        } returns LaunchResult.Error(error)
 
-        val results = mutableListOf<Result<List<LaunchTypes>?, DataError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, DataSourceError>>()
         underTest(
             launchYear = year,
             order = order,
@@ -87,7 +87,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
 
         coVerify { launchRepository.paginateCache(year, order, status, page) }
 
-        assertTrue(results.first() is Result.Error)
-        assertEquals(error, (results.first() as Result.Error).error)
+        assertTrue(results.first() is LaunchResult.Error)
+        assertEquals(error, (results.first() as LaunchResult.Error).error)
     }
 }
