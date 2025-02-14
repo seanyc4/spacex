@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.api.domain.model.Company
+import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -25,7 +25,7 @@ internal class CompanyLocalDataSourceTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    private lateinit var givenCompany: Company
+    private lateinit var givenCompany: CompanyEntity
 
     @Inject
     lateinit var underTest: CompanyLocalDataSource
@@ -33,15 +33,14 @@ internal class CompanyLocalDataSourceTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        givenCompany = Company(
-            id = "1",
-            employees = UUID.randomUUID().toString(),
+        givenCompany = CompanyEntity(
+            id = UUID.randomUUID().toString(),
+            employees = UUID.randomUUID().hashCode(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
             launchSites = UUID.randomUUID().hashCode(),
             name = UUID.randomUUID().toString(),
-            valuation = UUID.randomUUID().toString(),
-            summary = UUID.randomUUID().toString()
+            valuation = UUID.randomUUID().hashCode().toLong(),
         )
 
         // Clear cache

@@ -350,8 +350,7 @@ internal class LaunchLocalDataSourceTest {
             rocket = Rocket(rocketNameAndType = "Falcon 9"),
             launchDateStatus = if (Random.nextBoolean()) LaunchDateStatus.PAST else LaunchDateStatus.FUTURE,
             launchDays = "${Random.nextInt(-1000, 1000)}d",
-            launchDaysResId = 0,
-            launchStatusIconResId = 0
+            isLaunchSuccess = true
         )
     }
 

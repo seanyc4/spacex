@@ -34,6 +34,9 @@ class CompanyLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
+    @RelaxedMockK
+    private lateinit var localDataSourceErrorMapper: LocalDataSourceErrorMapper
+
     private lateinit var underTest: CompanyLocalDataSource
 
     @Before
@@ -41,6 +44,7 @@ class CompanyLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = CompanyLocalDataSourceImpl(
             dao = dao,
+            localDataSourceErrorMapper = localDataSourceErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher
         )

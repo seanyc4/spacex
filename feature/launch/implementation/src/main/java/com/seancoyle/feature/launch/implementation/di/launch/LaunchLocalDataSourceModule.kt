@@ -9,10 +9,10 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class LaunchDiskDataSourceModule {
+internal abstract class LaunchLocalDataSourceModule {
 
     @Binds
-    abstract fun bindLaunchDiskDataSource(
+    abstract fun bindLaunchLocalDataSource(
         impl: LaunchLocalDataSourceImpl
     ): LaunchLocalDataSource
 }

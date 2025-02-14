@@ -215,8 +215,7 @@ internal class LaunchRemoteDataSourceTest {
             ),
             launchDateStatus = LaunchDateStatus.PAST,
             launchDays = "+/- 579d",
-            launchDaysResId = 0,
-            launchStatusIconResId = 0
+            isLaunchSuccess = true
         ),
         LaunchTypes.Launch(
             id = "1032022-10-04T15:22",
@@ -236,8 +235,7 @@ internal class LaunchRemoteDataSourceTest {
             ),
             launchDateStatus = LaunchDateStatus.PAST,
             launchDays = "+/- 560d",
-            launchDaysResId = 0,
-            launchStatusIconResId = 0
+            isLaunchSuccess = false
         )
     )
 }

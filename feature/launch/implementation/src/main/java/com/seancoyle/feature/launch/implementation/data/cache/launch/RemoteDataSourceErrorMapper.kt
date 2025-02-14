@@ -10,14 +10,8 @@ import kotlin.coroutines.cancellation.CancellationException
 internal class RemoteDataSourceErrorMapper @Inject constructor() {
     fun map(throwable: Throwable?): DataSourceError {
         return when (throwable) {
-            is TimeoutCancellationException -> {
-                DataSourceError.NETWORK_TIMEOUT
-            }
-
-            is IOException -> {
-                DataSourceError.NETWORK_CONNECTION_FAILED
-            }
-
+            is TimeoutCancellationException -> DataSourceError.NETWORK_TIMEOUT
+            is IOException -> DataSourceError.NETWORK_CONNECTION_FAILED
             is HttpException -> {
                 when (throwable.code()) {
                     401 -> DataSourceError.NETWORK_UNAUTHORIZED
@@ -29,11 +23,7 @@ internal class RemoteDataSourceErrorMapper @Inject constructor() {
                     else -> DataSourceError.NETWORK_UNKNOWN_ERROR
                 }
             }
-
-            is CancellationException -> {
-                throw throwable
-            }
-
+            is CancellationException -> throw throwable
             else -> DataSourceError.NETWORK_UNKNOWN_ERROR
         }
     }

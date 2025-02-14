@@ -9,10 +9,10 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class CompanyNetworkDataSourceModule {
+internal abstract class CompanyRemoteDataSourceModule {
 
     @Binds
-    abstract fun bindsCompanyNetworkDataSource(
+    abstract fun bindCompanyRemoteDataSource(
         impl: CompanyRemoteDataSourceImpl
     ): CompanyRemoteDataSource
 }
