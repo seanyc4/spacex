@@ -11,7 +11,7 @@ import com.seancoyle.feature.launch.implementation.data.repository.company.Compa
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-internal class CompanyDiskDataSourceImpl @Inject constructor(
+internal class CompanyLocalDataSourceImpl @Inject constructor(
     private val dao: CompanyDao,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher

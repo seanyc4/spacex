@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.company
 
-import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDiskDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyLocalDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyDiskDataSource
 import dagger.Binds
 import dagger.Module
@@ -13,6 +13,6 @@ internal abstract class CompanyDiskDataSourceModule {
 
     @Binds
     abstract fun bindsCompanyDiskDataSource(
-        impl: CompanyDiskDataSourceImpl
+        impl: CompanyLocalDataSourceImpl
     ): CompanyDiskDataSource
 }

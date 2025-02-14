@@ -15,7 +15,7 @@ import com.seancoyle.feature.launch.implementation.data.repository.launch.Launch
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-internal class LaunchDiskDataSourceImpl @Inject constructor(
+internal class LaunchLocalDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher

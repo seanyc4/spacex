@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class LaunchDiskDataSourceImplTest {
+class LaunchLocalDataSourceImplTest {
 
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
@@ -40,7 +40,7 @@ class LaunchDiskDataSourceImplTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = LaunchDiskDataSourceImpl(
+        underTest = LaunchLocalDataSourceImpl(
             dao = dao,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher

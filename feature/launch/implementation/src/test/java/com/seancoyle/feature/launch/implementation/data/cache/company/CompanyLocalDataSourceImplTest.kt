@@ -21,7 +21,7 @@ import org.junit.Test
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class CompanyDiskDataSourceImplTest {
+class CompanyLocalDataSourceImplTest {
 
     @get: Rule
     val testCoroutineRule = TestCoroutineRule()
@@ -39,7 +39,7 @@ class CompanyDiskDataSourceImplTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = CompanyDiskDataSourceImpl(
+        underTest = CompanyLocalDataSourceImpl(
             dao = dao,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher
