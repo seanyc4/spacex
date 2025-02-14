@@ -1,0 +1,74 @@
+name: APK Size
+
+on:
+  workflow_call:
+
+jobs:
+  apkSize:
+    runs-on: ubuntu-latest
+    name: Compare APK sizes
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download branch APK
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-branch
+      - name: Download main APK
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-main
+      - name: Compare APK sizes
+        run: |
+          file1="app-debug-main.apk"
+          file2="app-debug-branch.apk"
+          file_size_one_kb=`du -k "$file1" | cut -f1`
+          file_size_two_kb=`du -k "$file2" | cut -f1`
+
+          file_size_one_mb=$(echo $file_size_one_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+          file_size_two_mb=$(echo $file_size_two_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+
+          if [[ $file_size_one_kb == $file_size_two_kb ]]; then
+              echo "OUTPUT=✅  APK size has not changed." >> $GITHUB_ENV
+          elif [[ "$file_size_one_kb" -gt "$file_size_two_kb" ]]; then
+              change=$((file_size_one_kb-file_size_two_kb))
+              file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+              echo "OUTPUT=📉  New APK is ${file_size} smaller." >> $GITHUB_ENV
+          elif [[ "$file_size_two_kb" -gt "$file_size_one_kb" ]]; then
+              change=$((file_size_two_kb-file_size_one_kb))
+              file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+              echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
+          fi
+
+      - name: Find Existing Comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "APK size"
+
+      - name: Create or Update Comment
+        if: steps.find-comment.outputs.comment-id == ''
+        uses: peter-evans/create-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **APK Size Report**
+                  
+            ${{ env.OUTPUT }}
+
+      - name: Update Existing Comment
+        if: steps.find-comment.outputs.comment-id != ''
+        uses: peter-evans/update-comment@v3
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          body: |
+            **APK Size Report**
+                  
+            ${{ env.OUTPUT }}
