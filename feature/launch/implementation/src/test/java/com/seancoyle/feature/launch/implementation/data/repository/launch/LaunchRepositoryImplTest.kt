@@ -123,8 +123,10 @@ class LaunchRepositoryImplTest {
     @Test
     fun `insertLaunches returns error`() = runTest {
         val expected = LocalError.CACHE_ERROR
+        val throwable = Throwable()
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
-        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns Result.failure(Throwable())
+        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns Result.failure(throwable)
+        every { localErrorMapper.map(throwable) } returns expected
 
         val result = underTest.insertLaunchesCache(launchesModel)
 

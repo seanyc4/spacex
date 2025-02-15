@@ -80,7 +80,9 @@ class CompanyRepositoryImplTest {
     @Test
     fun `getCompanyApi success returns error`() = runTest {
         val expected = RemoteError.NETWORK_UNKNOWN_ERROR
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.failure(Throwable())
+        val throwable = Throwable()
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.failure(throwable)
+        every { remoteErrorMapper.map(throwable) } returns expected
 
         val result = underTest.getCompanyApi()
 
@@ -99,6 +101,7 @@ class CompanyRepositoryImplTest {
         coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns Result.failure(throwable)
+        every { localErrorMapper.map(throwable) } returns expected
 
         val result = underTest.getCompanyApi()
 
