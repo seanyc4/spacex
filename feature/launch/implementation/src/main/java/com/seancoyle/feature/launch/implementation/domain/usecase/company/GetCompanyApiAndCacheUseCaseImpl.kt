@@ -12,13 +12,7 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
 ) : GetCompanyApiAndCacheUseCase {
 
     override operator fun invoke(): Flow<LaunchResult<Unit, DataError>> = flow {
-        emit(getCompanyFromNetwork())
+        emit(companyRepository.getCompanyApi())
     }
 
-    private suspend fun getCompanyFromNetwork(): LaunchResult<Unit, DataError> {
-        return when (val networkResult = companyRepository.getCompanyApi()) {
-            is LaunchResult.Success -> LaunchResult.Success(Unit)
-            is LaunchResult.Error -> LaunchResult.Error(networkResult.error)
-        }
-    }
 }
