@@ -1,9 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.LaunchError
-import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -47,15 +44,13 @@ internal class CompanyRemoteDataSourceTest {
 
     @Test
     fun whenAPISuccessful_getCompanyReturnsCompanyData() = runTest {
-        val expectedCompany = Company(
-            id = "",
-            employees = "7،000",
+        val expectedCompany = CompanyDto(
+            employees = 7000,
             founded = 2002,
             founder = "Elon Musk",
             launchSites = 3,
             name = "SpaceX",
-            valuation = "27،500،000،000",
-            summary = ""
+            valuation = 27500000000L,
         )
 
         mockWebServer.enqueue(
@@ -66,8 +61,8 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(result.data, expectedCompany)
+        assertTrue(result.isSuccess)
+        assertEquals(result.getOrNull(), expectedCompany)
     }
 
     @Test
@@ -79,7 +74,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -91,8 +86,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_TIMEOUT, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -104,8 +98,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_NOT_FOUND, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -117,8 +110,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_UNAUTHORIZED, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -130,8 +122,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -143,8 +134,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_CONNECTION_FAILED, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -156,8 +146,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_FORBIDDEN, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -169,8 +158,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_TIMEOUT, result.error)
+        assertTrue(result.isFailure)
     }
 
     @Test
@@ -182,8 +170,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LaunchError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
+        assertTrue(result.isFailure)
     }
 
 }
