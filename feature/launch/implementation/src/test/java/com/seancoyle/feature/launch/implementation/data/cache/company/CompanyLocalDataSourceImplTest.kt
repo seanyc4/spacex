@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.CompanyDao
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
@@ -34,9 +33,6 @@ class CompanyLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    @RelaxedMockK
-    private lateinit var localErrorMapper: LocalErrorMapper
-
     private lateinit var underTest: CompanyLocalDataSource
 
     @Before
@@ -44,7 +40,6 @@ class CompanyLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = CompanyLocalDataSourceImpl(
             dao = dao,
-            localDataSourceErrorMapper = localErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher
         )
@@ -58,8 +53,8 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.getCompany() }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(companyEntity, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(companyEntity, result.getOrNull())
     }
 
     @Test
@@ -70,7 +65,7 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.getCompany() }
 
-        assertTrue(result is LaunchResult.Success && result.data == null)
+        assertTrue(result.isSuccess && result.getOrNull() == null)
     }
 
     @Test
@@ -82,7 +77,7 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.insert(companyEntity) }
 
-        assertTrue(result is LaunchResult.Success && result.data == entityId)
+        assertTrue(result.isSuccess && result.getOrNull() == entityId)
     }
 
     @Test
@@ -93,6 +88,6 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.deleteAll() }
 
-        assertTrue(result is LaunchResult.Success)
+        assertTrue(result.isSuccess)
     }
 }

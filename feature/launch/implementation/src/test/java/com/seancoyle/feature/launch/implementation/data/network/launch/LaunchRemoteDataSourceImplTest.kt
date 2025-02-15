@@ -1,16 +1,12 @@
 package com.seancoyle.feature.launch.implementation.data.network.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,9 +29,6 @@ class LaunchRemoteDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    @RelaxedMockK
-    private lateinit var remoteErrorMapper: RemoteErrorMapper
-
     private lateinit var underTest: LaunchRemoteDataSource
 
     @Before
@@ -43,7 +36,6 @@ class LaunchRemoteDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchRemoteDataSourceImpl(
             api = api,
-            remoteDataSourceErrorMapper = remoteErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher.testCoroutineDispatcher
         )
@@ -55,19 +47,18 @@ class LaunchRemoteDataSourceImplTest {
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesDto, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(launchesDto, result.getOrNull())
     }
 
     @Test
     fun `getLaunches returns DataError when API call fails`() = runTest {
         val exception = RuntimeException("Network Failure")
         coEvery { api.getLaunches(launchOptions) } throws exception
-        every { remoteErrorMapper.map(exception) } returns RemoteError.NETWORK_UNKNOWN_ERROR
 
         val result = underTest.getLaunches(launchOptions)
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(RemoteError.NETWORK_UNKNOWN_ERROR, result.error)
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
     }
 }

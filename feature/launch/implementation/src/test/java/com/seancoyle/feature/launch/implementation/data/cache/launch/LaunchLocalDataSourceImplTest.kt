@@ -1,13 +1,11 @@
 package com.seancoyle.feature.launch.implementation.data.cache.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
@@ -36,9 +34,6 @@ class LaunchLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    @RelaxedMockK
-    private lateinit var localErrorMapper: LocalErrorMapper
-
     private lateinit var underTest: LaunchLocalDataSource
 
     @Before
@@ -46,7 +41,6 @@ class LaunchLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchLocalDataSourceImpl(
             dao = dao,
-            localDataSourceErrorMapper = localErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
@@ -87,8 +81,8 @@ class LaunchLocalDataSourceImplTest {
             )
         }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesEntity, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(launchesEntity, result.getOrNull())
     }
 
     @Test
@@ -100,8 +94,8 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.getById(launchId) }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(launchEntity, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(launchEntity, result.getOrNull())
     }
 
     @Test
@@ -112,8 +106,8 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.getAll() }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesEntity, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(launchesEntity, result.getOrNull())
     }
 
     @Test
@@ -125,8 +119,8 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.deleteById(launchId) }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(1, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(1, result.getOrNull())
     }
 
     @Test
@@ -137,6 +131,6 @@ class LaunchLocalDataSourceImplTest {
 
         coVerify { dao.deleteAll() }
 
-        assertTrue(result is LaunchResult.Success)
+        assertTrue(result.isSuccess)
     }
 }
