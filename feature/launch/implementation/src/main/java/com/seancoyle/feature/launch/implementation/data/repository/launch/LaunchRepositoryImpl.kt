@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.repository.launch
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.RemoteError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -18,14 +19,14 @@ internal class LaunchRepositoryImpl @Inject constructor(
     private val launchDomainEntityMapper: LaunchDomainEntityMapper
 ): LaunchRepository {
 
-    override suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, DataSourceError> {
+    override suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
         return when (val result = launchLocalDataSource.insertList(launchDomainEntityMapper.domainToEntityList(launches))) {
             is LaunchResult.Success -> LaunchResult.Success(Unit)
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
-    override suspend fun getLaunchesApi(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, DataSourceError> {
+    override suspend fun getLaunchesApi(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
         return when (val result = launchRemoteDataSource.getLaunches(launchOptions)) {
             is LaunchResult.Success -> LaunchResult.Success(launchDtoToDomainMapper.dtoToDomainList(result.data))
             is LaunchResult.Error -> LaunchResult.Error(result.error)
@@ -37,7 +38,7 @@ internal class LaunchRepositoryImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): LaunchResult<List<LaunchTypes>, DataSourceError> {
+    ): LaunchResult<List<LaunchTypes>, LocalError> {
         val launchStatusEntity = launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus)
         return when (val result = launchLocalDataSource.paginate(
             launchYear = launchYear,
@@ -50,33 +51,33 @@ internal class LaunchRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteLaunhesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Int, DataSourceError> {
+    override suspend fun deleteLaunhesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Int, LocalError> {
         return launchLocalDataSource.deleteList(launches.map { launchDomainEntityMapper.domainToEntity(it) })
     }
 
-    override suspend fun deleteAllCache(): LaunchResult<Unit, DataSourceError> {
+    override suspend fun deleteAllCache(): LaunchResult<Unit, LocalError> {
         return launchLocalDataSource.deleteAll()
     }
 
-    override suspend fun deleteByIdCache(id: String): LaunchResult<Int, DataSourceError> {
+    override suspend fun deleteByIdCache(id: String): LaunchResult<Int, LocalError> {
         return launchLocalDataSource.deleteById(id)
     }
 
-    override suspend fun getByIdCache(id: String): LaunchResult<LaunchTypes.Launch?, DataSourceError> {
+    override suspend fun getByIdCache(id: String): LaunchResult<LaunchTypes.Launch?, LocalError> {
         return when (val result = launchLocalDataSource.getById(id)) {
             is LaunchResult.Success -> LaunchResult.Success(result.data?.let { launchDomainEntityMapper.entityToDomain(it) })
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
-    override suspend fun getAllCache(): LaunchResult<List<LaunchTypes>, DataSourceError> {
+    override suspend fun getAllCache(): LaunchResult<List<LaunchTypes>, LocalError> {
         return when (val result = launchLocalDataSource.getAll()) {
             is LaunchResult.Success -> LaunchResult.Success(launchDomainEntityMapper.entityToDomainList(result.data))
             is LaunchResult.Error -> LaunchResult.Error(result.error)
         }
     }
 
-    override suspend fun getTotalEntriesCache(): LaunchResult<Int, DataSourceError> {
+    override suspend fun getTotalEntriesCache(): LaunchResult<Int, LocalError> {
         return launchLocalDataSource.getTotalEntries()
     }
 

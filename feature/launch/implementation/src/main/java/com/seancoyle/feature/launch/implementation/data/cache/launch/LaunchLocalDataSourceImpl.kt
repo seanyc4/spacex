@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.cache.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
@@ -29,7 +29,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatusEntity,
         page: Int
-    ): LaunchResult<List<LaunchEntity>, DataSourceError> {
+    ): LaunchResult<List<LaunchEntity>, LocalError> {
         return withContext(ioDispatcher) {
             runCatching {
                 dao.paginateLaunches(
@@ -46,7 +46,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(launch: LaunchEntity): LaunchResult<Unit, DataSourceError> {
+    override suspend fun insert(launch: LaunchEntity): LaunchResult<Unit, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.insert(launch) }
                 .fold(
@@ -56,7 +56,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertList(launches: List<LaunchEntity>): LaunchResult<Unit, DataSourceError> {
+    override suspend fun insertList(launches: List<LaunchEntity>): LaunchResult<Unit, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.insertList(launches) }
                 .fold(
@@ -66,7 +66,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteList(launches: List<LaunchEntity>): LaunchResult<Int, DataSourceError> {
+    override suspend fun deleteList(launches: List<LaunchEntity>): LaunchResult<Int, LocalError> {
         val ids = launches.map { it.id }
         return withContext(ioDispatcher) {
             runCatching { dao.deleteList(ids) }
@@ -77,7 +77,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAll(): LaunchResult<Unit, DataSourceError> {
+    override suspend fun deleteAll(): LaunchResult<Unit, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.deleteAll() }
                 .fold(
@@ -87,7 +87,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteById(id: String): LaunchResult<Int, DataSourceError> {
+    override suspend fun deleteById(id: String): LaunchResult<Int, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.deleteById(id) }
                 .fold(
@@ -97,7 +97,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getById(id: String): LaunchResult<LaunchEntity?, DataSourceError> {
+    override suspend fun getById(id: String): LaunchResult<LaunchEntity?, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.getById(id) }
                 .fold(
@@ -107,7 +107,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): LaunchResult<List<LaunchEntity>, DataSourceError> {
+    override suspend fun getAll(): LaunchResult<List<LaunchEntity>, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.getAll() }
                 .fold(
@@ -117,7 +117,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTotalEntries(): LaunchResult<Int, DataSourceError> {
+    override suspend fun getTotalEntries(): LaunchResult<Int, LocalError> {
         return withContext(ioDispatcher) {
             runCatching { dao.getTotalEntries() }
                 .fold(
@@ -127,7 +127,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    private fun handleException(exception: Throwable): LaunchResult.Error<DataSourceError> {
+    private fun handleException(exception: Throwable): LaunchResult.Error<LocalError> {
         Timber.e(exception)
         crashlytics.logException(exception)
         return LaunchResult.Error(localDataSourceErrorMapper.map(exception))

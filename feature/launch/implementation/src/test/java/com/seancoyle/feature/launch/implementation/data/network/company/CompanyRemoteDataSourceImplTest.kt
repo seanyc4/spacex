@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
@@ -66,7 +66,7 @@ class CompanyRemoteDataSourceImplTest {
     fun `getCompany returns DataError when API call fails`() = runTest {
         val exception = RuntimeException("Network Failure")
         coEvery { api.getCompany() } throws exception
-        every { remoteDataSourceErrorMapper.map(exception) } returns DataSourceError.NETWORK_UNKNOWN_ERROR
+        every { remoteDataSourceErrorMapper.map(exception) } returns RemoteError.NETWORK_UNKNOWN_ERROR
 
         val result = underTest.getCompanyApi()
 
@@ -74,6 +74,6 @@ class CompanyRemoteDataSourceImplTest {
         verify { crashlytics.logException(exception) }
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_UNKNOWN_ERROR, result.error)
+        assertEquals(RemoteError.NETWORK_UNKNOWN_ERROR, result.error)
     }
 }

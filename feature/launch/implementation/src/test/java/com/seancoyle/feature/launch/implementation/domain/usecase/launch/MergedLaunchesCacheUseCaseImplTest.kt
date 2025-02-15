@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.test.TestCoroutineRule
@@ -65,15 +65,15 @@ class MergedLaunchesCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit merged results when both company and launches are available`() = runTest {
-        val companyResult: Flow<LaunchResult<Company, DataSourceError>> = flowOf(LaunchResult.Success(companyModel))
-        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> = flowOf(LaunchResult.Success(launchesModel))
+        val companyResult: Flow<LaunchResult<Company, LocalError>> = flowOf(LaunchResult.Success(companyModel))
+        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, LocalError>> = flowOf(LaunchResult.Success(launchesModel))
 
         coEvery { getCompanyFromCacheUseCase() } returns companyResult
         coEvery { getLaunchesFromCacheUseCase(any(), any(), any(), any()) } returns launchesResult
         every { numberFormatter.formatNumber(100) } returns "100"
         every { numberFormatter.formatNumber(74000000000) } returns "74,000,000,000"
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>, LocalError>>()
 
         underTest(
             year = "2024",
@@ -110,15 +110,15 @@ class MergedLaunchesCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit error when there is an error fetching company`() = runTest {
-        val error = DataSourceError.CACHE_ERROR
+        val error = LocalError.CACHE_ERROR
         val launches = listOf<LaunchTypes>()
-        val companyResult: Flow<LaunchResult<Company?, DataSourceError>> = flowOf(LaunchResult.Error(error))
-        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> = flowOf(LaunchResult.Success(launches))
+        val companyResult: Flow<LaunchResult<Company?, LocalError>> = flowOf(LaunchResult.Error(error))
+        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, LocalError>> = flowOf(LaunchResult.Success(launches))
 
         coEvery { getCompanyFromCacheUseCase() } returns companyResult
         coEvery { getLaunchesFromCacheUseCase(any(), any(), any(), any()) } returns launchesResult
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>, LocalError>>()
 
         underTest(
             year = "2024",
@@ -140,13 +140,13 @@ class MergedLaunchesCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit error when no launches are found`() = runTest {
-        val companyResult: Flow<LaunchResult<Company, DataSourceError>> = flowOf(LaunchResult.Success(companyModel))
-        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> = flowOf(LaunchResult.Error(DataSourceError.CACHE_ERROR_NO_RESULTS))
+        val companyResult: Flow<LaunchResult<Company, LocalError>> = flowOf(LaunchResult.Success(companyModel))
+        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, LocalError>> = flowOf(LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS))
 
         coEvery { getCompanyFromCacheUseCase() } returns companyResult
         coEvery { getLaunchesFromCacheUseCase(any(), any(), any(), any()) } returns launchesResult
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>, LocalError>>()
 
         underTest(
             year = "2024",
@@ -163,18 +163,18 @@ class MergedLaunchesCacheUseCaseImplTest {
         }
 
         assertTrue(results.first() is LaunchResult.Error)
-        assertEquals(DataSourceError.CACHE_ERROR_NO_RESULTS, (results.first() as LaunchResult.Error).error)
+        assertEquals(LocalError.CACHE_ERROR_NO_RESULTS, (results.first() as LaunchResult.Error).error)
     }
 
     @Test
-    fun `invoke should emit error when network issues occur fetching company`() = runTest {
-        val error = DataSourceError.NETWORK_CONNECTION_FAILED
-        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> = flowOf(LaunchResult.Success(launchesModel))
+    fun `invoke should emit error when cache issues occur fetching company`() = runTest {
+        val error = LocalError.CACHE_ERROR_NO_RESULTS
+        val launchesResult: Flow<LaunchResult<List<LaunchTypes>, LocalError>> = flowOf(LaunchResult.Success(launchesModel))
 
         coEvery { getCompanyFromCacheUseCase() } returns flowOf(LaunchResult.Error(error))
         coEvery { getLaunchesFromCacheUseCase(any(), any(), any(), any()) } returns launchesResult
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>, LocalError>>()
 
         underTest(
             year = "2024",

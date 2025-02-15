@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.LaunchError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
@@ -92,7 +92,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_TIMEOUT, result.error)
+        assertEquals(LaunchError.NETWORK_TIMEOUT, result.error)
     }
 
     @Test
@@ -105,7 +105,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_NOT_FOUND, result.error)
+        assertEquals(LaunchError.NETWORK_NOT_FOUND, result.error)
     }
 
     @Test
@@ -118,7 +118,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_UNAUTHORIZED, result.error)
+        assertEquals(LaunchError.NETWORK_UNAUTHORIZED, result.error)
     }
 
     @Test
@@ -131,7 +131,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
+        assertEquals(LaunchError.NETWORK_INTERNAL_SERVER_ERROR, result.error)
     }
 
     @Test
@@ -144,7 +144,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_CONNECTION_FAILED, result.error)
+        assertEquals(LaunchError.NETWORK_CONNECTION_FAILED, result.error)
     }
 
     @Test
@@ -157,7 +157,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_FORBIDDEN, result.error)
+        assertEquals(LaunchError.NETWORK_FORBIDDEN, result.error)
     }
 
     @Test
@@ -170,7 +170,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_TIMEOUT, result.error)
+        assertEquals(LaunchError.NETWORK_TIMEOUT, result.error)
     }
 
     @Test
@@ -183,7 +183,7 @@ internal class CompanyRemoteDataSourceTest {
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
+        assertEquals(LaunchError.NETWORK_PAYLOAD_TOO_LARGE, result.error)
     }
 
 }

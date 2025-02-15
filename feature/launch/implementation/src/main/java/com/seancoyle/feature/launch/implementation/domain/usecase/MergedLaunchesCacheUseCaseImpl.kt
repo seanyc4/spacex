@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.numberformatter.NumberFormatter
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.Company
@@ -37,7 +37,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>> = flow {
+    ): Flow<LaunchResult<List<LaunchTypes>, LocalError>> = flow {
         combine(
             getCompanyInfo().distinctUntilChanged(),
             getLaunches(
@@ -66,11 +66,11 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
                 }
 
                 launchesData.isNullOrEmpty() -> {
-                    LaunchResult.Error(DataSourceError.CACHE_ERROR_NO_RESULTS)
+                    LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
                 }
 
                 else -> {
-                    LaunchResult.Error(DataSourceError.CACHE_UNKNOWN_DATABASE_ERROR)
+                    LaunchResult.Error(LocalError.CACHE_UNKNOWN_DATABASE_ERROR)
                 }
             }
 
@@ -79,7 +79,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun getCompanyInfo(): Flow<LaunchResult<Company?, DataSourceError>> {
+    private fun getCompanyInfo(): Flow<LaunchResult<Company?, LocalError>> {
         return getCompanyFromCacheUseCase()
     }
 
@@ -88,7 +88,7 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Flow<LaunchResult<List<LaunchTypes>?, DataSourceError>> {
+    ): Flow<LaunchResult<List<LaunchTypes>?, LocalError>> {
         return getLaunchesFromCacheUseCase(
             launchYear = launchYear,
             order = order,

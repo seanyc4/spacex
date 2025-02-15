@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.repository.company
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoEntityMapper
@@ -68,7 +68,7 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyApi success returns error`() = runTest {
-        val expected = DataSourceError.NETWORK_UNKNOWN_ERROR
+        val expected = RemoteError.NETWORK_UNKNOWN_ERROR
         coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Error(expected)
 
         val result = underTest.getCompanyApi()
@@ -83,7 +83,7 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache error`() = runTest {
-        val expected = DataSourceError.CACHE_ERROR
+        val expected = LocalError.CACHE_ERROR
         coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Error(expected)

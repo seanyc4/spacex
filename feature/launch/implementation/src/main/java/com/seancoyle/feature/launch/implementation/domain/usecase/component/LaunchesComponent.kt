@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.component
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.Company
@@ -11,27 +12,27 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
-    fun getSpaceXDataUseCase(): Flow<LaunchResult<Unit, DataSourceError>>
+    fun getSpaceXDataUseCase(): Flow<LaunchResult<Unit, DataError>>
 
     fun paginateLaunchesCacheUseCase(
         year: String,
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>>
+    ): Flow<LaunchResult<List<LaunchTypes>, LocalError>>
 
     fun createMergedLaunchesCacheUseCase(
         year: String,
         order: Order,
         launchFilter: LaunchStatus,
         page: Int
-    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>>
+    ): Flow<LaunchResult<List<LaunchTypes>, LocalError>>
 
-    fun getLaunchesApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataSourceError>>
+    fun getLaunchesApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataError>>
 
-    fun getCompanyCacheUseCase(): Flow<LaunchResult<Company?, DataSourceError>>
+    fun getCompanyCacheUseCase(): Flow<LaunchResult<Company?, LocalError>>
 
-    fun getCompanyApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataSourceError>>
+    fun getCompanyApiAndCacheUseCase(): Flow<LaunchResult<Unit, DataError>>
 
     suspend fun getLaunchPreferencesUseCase(): LaunchPrefs
 

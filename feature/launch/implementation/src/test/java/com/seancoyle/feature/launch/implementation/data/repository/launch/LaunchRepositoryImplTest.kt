@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.repository.launch
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchStatusEntity
@@ -111,7 +111,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `insertLaunches returns error`() = runTest {
-        val expected = DataSourceError.CACHE_ERROR
+        val expected = LocalError.CACHE_ERROR
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
         coEvery { launchLocalDataSource.insertList(launchesEntity) } returns LaunchResult.Error(expected)
 

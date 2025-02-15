@@ -2,7 +2,8 @@ package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
 import com.seancoyle.core.common.dataformatter.DateFormatter
 import com.seancoyle.core.common.dataformatter.DateTransformer
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
@@ -59,7 +60,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         every { dateTransformer.getLaunchDaysDifference(launchModel.launchDateLocalDateTime) } returns "5 days"
         every { dateTransformer.isPastLaunch(launchModel.launchDateLocalDateTime) } returns false
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify {
@@ -81,10 +82,10 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
 
     @Test
     fun `invoke should emit error when network fetch fails`() = runTest {
-        val networkError = DataSourceError.NETWORK_UNKNOWN_ERROR
+        val networkError = RemoteError.NETWORK_UNKNOWN_ERROR
         coEvery { launchRepository.getLaunchesApi(launchOptions) } returns LaunchResult.Error(networkError)
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify { launchRepository.getLaunchesApi(launchOptions) }
@@ -96,7 +97,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should emit error when cache operation fails`() = runTest {
         val expectedLaunchDate = "2024-01-01"
-        val cacheError = DataSourceError.CACHE_ERROR
+        val cacheError = LocalError.CACHE_ERROR
         coEvery { launchRepository.getLaunchesApi(launchOptions) } returns LaunchResult.Success(launchesModel)
         coEvery { launchRepository.insertLaunchesCache(launchesModel) } returns LaunchResult.Error(cacheError)
         every { dateFormatter.formatDate(expectedLaunchDate) } returns launchModel.launchDateLocalDateTime
@@ -105,7 +106,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         every { dateTransformer.getLaunchDaysDifference(launchModel.launchDateLocalDateTime) } returns "5 days"
         every { dateTransformer.isPastLaunch(launchModel.launchDateLocalDateTime) } returns false
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify {
@@ -130,7 +131,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         coEvery { launchRepository.getLaunchesApi(launchOptions) } returns LaunchResult.Success(emptyList())
         coEvery { launchRepository.insertLaunchesCache(emptyList()) } returns LaunchResult.Success(Unit)
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify {
@@ -153,7 +154,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         every { dateTransformer.getLaunchDaysDifference(launchModel.launchDateLocalDateTime) } returns "5 days"
         every { dateTransformer.isPastLaunch(launchModel.launchDateLocalDateTime) } returns false
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify { launchRepository.insertLaunchesCache(withArg { transformedLaunches ->
@@ -176,7 +177,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
     @Test
     fun `invoke should return error if transformation succeeds but cache insert fails`() = runTest {
         val expectedLaunchDate = "2024-01-01"
-        val cacheError = DataSourceError.CACHE_ERROR
+        val cacheError = LocalError.CACHE_ERROR
         coEvery { launchRepository.getLaunchesApi(launchOptions) } returns LaunchResult.Success(launchesModel)
         coEvery { launchRepository.insertLaunchesCache(any()) } returns LaunchResult.Error(cacheError)
         every { dateFormatter.formatDate(expectedLaunchDate) } returns launchModel.launchDateLocalDateTime
@@ -185,7 +186,7 @@ class GetLaunchesApiAndCacheUseCaseImplTest {
         every { dateTransformer.getLaunchDaysDifference(launchModel.launchDateLocalDateTime) } returns "5 days"
         every { dateTransformer.isPastLaunch(launchModel.launchDateLocalDateTime) } returns false
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify {
