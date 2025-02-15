@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.company
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import io.mockk.MockKAnnotations
@@ -30,7 +31,7 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
     fun `invoke should return company from API on success `() = runTest {
         coEvery { companyRepository.getCompanyApi() } returns LaunchResult.Success(Unit)
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify { companyRepository.getCompanyApi() }
@@ -41,10 +42,10 @@ class GetCompanyApiServiceAndCacheUseCaseImplTest {
 
     @Test
     fun `invoke should return error when network fails`() = runTest {
-        val error = DataSourceError.NETWORK_UNKNOWN_ERROR
+        val error = RemoteError.NETWORK_UNKNOWN_ERROR
         coEvery { companyRepository.getCompanyApi() } returns LaunchResult.Error(error)
 
-        val results = mutableListOf<LaunchResult<Unit, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Unit, DataError>>()
         underTest().collect { results.add(it) }
 
         coVerify { companyRepository.getCompanyApi() }

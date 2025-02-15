@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.company
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
@@ -32,7 +32,7 @@ class GetCompanyCacheUseCaseImplTest {
     fun `invoke should return company from cache on success`() = runTest {
         coEvery { companyRepository.getCompanyCache() } returns LaunchResult.Success(companyModel)
 
-        val results = mutableListOf<LaunchResult<Company?, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Company?, LocalError>>()
         underTest().collect { results.add(it) }
 
         coVerify { companyRepository.getCompanyCache() }
@@ -43,11 +43,11 @@ class GetCompanyCacheUseCaseImplTest {
 
     @Test
     fun `invoke should return error when cache is empty`() = runTest {
-        val error = DataSourceError.CACHE_ERROR_NO_RESULTS
+        val error = LocalError.CACHE_ERROR_NO_RESULTS
         coEvery { companyRepository.getCompanyCache() } returns LaunchResult.Error(error)
 
 
-        val results = mutableListOf<LaunchResult<Company?, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Company?, LocalError>>()
         underTest().collect { results.add(it) }
 
         coVerify { companyRepository.getCompanyCache() }
@@ -58,10 +58,10 @@ class GetCompanyCacheUseCaseImplTest {
 
     @Test
     fun `invoke should return error when cache access fails`() = runTest {
-        val error = DataSourceError.CACHE_ERROR
+        val error = LocalError.CACHE_ERROR
         coEvery { companyRepository.getCompanyCache() } returns LaunchResult.Error(error)
 
-        val results = mutableListOf<LaunchResult<Company?, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<Company?, LocalError>>()
         underTest().collect { results.add(it) }
 
         coVerify { companyRepository.getCompanyCache() }

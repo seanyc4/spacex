@@ -2,7 +2,8 @@ package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
 import com.seancoyle.core.common.dataformatter.DateFormatter
 import com.seancoyle.core.common.dataformatter.DateTransformer
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -22,11 +23,11 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val dateTransformer: DateTransformer
 ) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<LaunchResult<Unit, DataSourceError>> = flow {
+    override operator fun invoke(): Flow<LaunchResult<Unit, DataError>> = flow {
         emit(getLaunchesFromNetwork())
     }
 
-    private suspend fun getLaunchesFromNetwork(): LaunchResult<Unit, DataSourceError> {
+    private suspend fun getLaunchesFromNetwork(): LaunchResult<Unit, DataError> {
         return when (val networkResult = launchRepository.getLaunchesApi(launchOptions)) {
             is LaunchResult.Success -> {
                 val transformedLaunches = transformLaunchData(networkResult.data)
@@ -36,7 +37,7 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         }
     }
 
-    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, DataSourceError> {
+    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
         return when (val cacheResult = launchRepository.insertLaunchesCache(launches)) {
             is LaunchResult.Success -> LaunchResult.Success(Unit)
             is LaunchResult.Error -> LaunchResult.Error(cacheResult.error)

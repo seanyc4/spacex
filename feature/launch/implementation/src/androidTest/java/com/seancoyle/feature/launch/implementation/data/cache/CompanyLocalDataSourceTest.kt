@@ -56,12 +56,12 @@ internal class CompanyLocalDataSourceTest {
     fun insertCompany_confirmInserted() = runTest {
         val insertResult = underTest.insert(givenCompany)
 
-        assertTrue(insertResult is LaunchResult.Success)
+        assertTrue(insertResult.isSuccess)
 
         val result = underTest.get()
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(givenCompany, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(givenCompany, result.getOrNull())
     }
 
     @Test
@@ -70,8 +70,8 @@ internal class CompanyLocalDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(givenCompany, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(givenCompany, result.getOrNull())
     }
 
     @Test
@@ -82,7 +82,7 @@ internal class CompanyLocalDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result is LaunchResult.Success)
-        assertNull(result.data)
+        assertTrue(result.isSuccess)
+        assertNull(result.getOrNull())
     }
 }

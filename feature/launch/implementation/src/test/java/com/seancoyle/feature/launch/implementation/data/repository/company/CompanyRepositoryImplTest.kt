@@ -1,8 +1,10 @@
 package com.seancoyle.feature.launch.implementation.data.repository.company
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
+import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
+import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoEntityMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
@@ -13,6 +15,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -34,6 +37,12 @@ class CompanyRepositoryImplTest {
     @MockK
     private lateinit var companyCacheMapper: CompanyDomainEntityMapper
 
+    @RelaxedMockK
+    private lateinit var remoteErrorMapper: RemoteErrorMapper
+
+    @RelaxedMockK
+    private lateinit var localErrorMapper: LocalErrorMapper
+
     private lateinit var underTest: CompanyRepository
 
 
@@ -44,15 +53,17 @@ class CompanyRepositoryImplTest {
             companyRemoteDataSource = companyRemoteDataSource,
             companyLocalDataSource = companyLocalDataSource,
             companyCacheMapper = companyCacheMapper,
-            companyDtoEntityMapper = companyDtoEntityMapper
+            companyDtoEntityMapper = companyDtoEntityMapper,
+            remoteErrorMapper = remoteErrorMapper,
+            localErrorMapper = localErrorMapper
         )
     }
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache success`() = runTest {
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
-        coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Success(1)
+        coEvery { companyLocalDataSource.insert(companyEntity) } returns Result.success(1)
 
         val result = underTest.getCompanyApi()
 
@@ -68,8 +79,10 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyApi success returns error`() = runTest {
-        val expected = DataSourceError.NETWORK_UNKNOWN_ERROR
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Error(expected)
+        val expected = RemoteError.NETWORK_UNKNOWN_ERROR
+        val throwable = Throwable()
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.failure(throwable)
+        every { remoteErrorMapper.map(throwable) } returns expected
 
         val result = underTest.getCompanyApi()
 
@@ -83,10 +96,12 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache error`() = runTest {
-        val expected = DataSourceError.CACHE_ERROR
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
+        val expected = LocalError.CACHE_ERROR
+        val throwable = Throwable()
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
-        coEvery { companyLocalDataSource.insert(companyEntity) } returns LaunchResult.Error(expected)
+        coEvery { companyLocalDataSource.insert(companyEntity) } returns Result.failure(throwable)
+        every { localErrorMapper.map(throwable) } returns expected
 
         val result = underTest.getCompanyApi()
 
@@ -102,7 +117,7 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `getCompanyFromCache returns mapped company on success`() = runTest {
-        coEvery { companyLocalDataSource.get() } returns LaunchResult.Success(companyEntity)
+        coEvery { companyLocalDataSource.get() } returns Result.success(companyEntity)
         every { companyCacheMapper.entityToDomain(companyEntity) } returns companyModel
 
         val result = underTest.getCompanyCache()
@@ -116,7 +131,7 @@ class CompanyRepositoryImplTest {
 
     @Test
     fun `deleteAllCompanyCache returns result on success`() = runTest {
-        coEvery { companyLocalDataSource.deleteAll() } returns LaunchResult.Success(Unit)
+        coEvery { companyLocalDataSource.deleteAll() } returns Result.success(Unit)
 
         val result = underTest.deleteAllCompanyCache()
 

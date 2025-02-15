@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -13,5 +13,5 @@ internal interface PaginateLaunchesCacheUseCase {
         order: Order,
         launchStatus: LaunchStatus,
         page: Int
-    ): Flow<LaunchResult<List<LaunchTypes>, DataSourceError>>
+    ): Flow<LaunchResult<List<LaunchTypes>, LocalError>>
 }

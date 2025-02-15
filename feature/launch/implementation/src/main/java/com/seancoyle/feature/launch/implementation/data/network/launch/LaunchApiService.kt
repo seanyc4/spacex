@@ -12,5 +12,5 @@ internal interface LaunchApiService {
     @POST(URL)
     suspend fun getLaunches(
         @Body options: LaunchOptions
-    ): LaunchesDto?
+    ): LaunchesDto
 }

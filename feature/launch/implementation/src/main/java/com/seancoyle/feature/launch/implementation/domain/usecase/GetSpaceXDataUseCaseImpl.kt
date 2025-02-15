@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.company.GetCompanyApiAndCacheUseCase
@@ -14,7 +15,7 @@ internal class GetSpaceXDataUseCaseImpl @Inject constructor(
     private val getLaunchesApiAndCacheUseCase: GetLaunchesApiAndCacheUseCase
 ) : GetSpaceXDataUseCase {
 
-    override operator fun invoke(): Flow<LaunchResult<Unit, DataSourceError>> = flow {
+    override operator fun invoke(): Flow<LaunchResult<Unit, DataError>> = flow {
         combine(
             getCompanyApiAndCacheUseCase(),
             getLaunchesApiAndCacheUseCase()
@@ -33,7 +34,7 @@ internal class GetSpaceXDataUseCaseImpl @Inject constructor(
                 }
 
                 else -> {
-                    LaunchResult.Error(DataSourceError.NETWORK_CONNECTION_FAILED)
+                    LaunchResult.Error(RemoteError.NETWORK_CONNECTION_FAILED)
                 }
             }
         }.collect { combinedResult ->

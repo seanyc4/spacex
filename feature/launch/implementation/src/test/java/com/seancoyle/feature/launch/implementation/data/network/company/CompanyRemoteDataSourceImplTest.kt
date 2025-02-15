@@ -1,16 +1,12 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataSourceError
-import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
@@ -34,9 +30,6 @@ class CompanyRemoteDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    @RelaxedMockK
-    private lateinit var remoteDataSourceErrorMapper: RemoteDataSourceErrorMapper
-
     private lateinit var underTest: CompanyRemoteDataSource
 
     @Before
@@ -44,7 +37,6 @@ class CompanyRemoteDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = CompanyRemoteDataSourceImpl(
             api = api,
-            remoteDataSourceErrorMapper = remoteDataSourceErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
@@ -58,22 +50,21 @@ class CompanyRemoteDataSourceImplTest {
 
         coVerify { api.getCompany() }
 
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(companyDto, result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(companyDto, result.getOrNull())
     }
 
     @Test
     fun `getCompany returns DataError when API call fails`() = runTest {
         val exception = RuntimeException("Network Failure")
         coEvery { api.getCompany() } throws exception
-        every { remoteDataSourceErrorMapper.map(exception) } returns DataSourceError.NETWORK_UNKNOWN_ERROR
 
         val result = underTest.getCompanyApi()
 
         coVerify { api.getCompany() }
         verify { crashlytics.logException(exception) }
 
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(DataSourceError.NETWORK_UNKNOWN_ERROR, result.error)
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
     }
 }

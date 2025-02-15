@@ -1,12 +1,14 @@
 package com.seancoyle.feature.launch.implementation.data.repository.launch
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDomainEntityMapper
+import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchesDto
 import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
@@ -22,6 +24,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -44,6 +47,12 @@ class LaunchRepositoryImplTest {
     @MockK
     private lateinit var launchDomainEntityMapper: LaunchDomainEntityMapper
 
+    @RelaxedMockK
+    private lateinit var remoteErrorMapper: RemoteErrorMapper
+
+    @RelaxedMockK
+    private lateinit var localErrorMapper: LocalErrorMapper
+
     private lateinit var underTest: LaunchRepository
 
     @Before
@@ -53,13 +62,15 @@ class LaunchRepositoryImplTest {
             launchRemoteDataSource = launchRemoteDataSource,
             launchLocalDataSource = launchLocalDataSource,
             launchDtoToDomainMapper = launchDtoDomainMapper,
-            launchDomainEntityMapper = launchDomainEntityMapper
+            launchDomainEntityMapper = launchDomainEntityMapper,
+            remoteErrorMapper = remoteErrorMapper,
+            localErrorMapper = localErrorMapper
         )
     }
 
     @Test
     fun `getLaunches returns mapped launches on success`() = runTest {
-        coEvery { launchRemoteDataSource.getLaunches(launchOptions) } returns LaunchResult.Success(launchesDto)
+        coEvery { launchRemoteDataSource.getLaunches(launchOptions) } returns Result.success(launchesDto)
         every { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
 
         val result = underTest.getLaunchesApi(launchOptions)
@@ -80,7 +91,7 @@ class LaunchRepositoryImplTest {
         val page = 1
         val launches = listOf(mockk<LaunchTypes.Launch>())
         every { launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
-        coEvery { launchLocalDataSource.paginate(launchYear, order, launchStatusEntity, page) } returns LaunchResult.Success(
+        coEvery { launchLocalDataSource.paginate(launchYear, order, launchStatusEntity, page) } returns Result.success(
             launchesEntity
         )
         every { launchDomainEntityMapper.entityToDomainList(launchesEntity) } returns launches
@@ -98,7 +109,7 @@ class LaunchRepositoryImplTest {
     @Test
     fun `insertLaunches returns result on success`() = runTest {
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
-        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns LaunchResult.Success(Unit)
+        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns Result.success(Unit)
 
         val result = underTest.insertLaunchesCache(launchesModel)
 
@@ -111,9 +122,11 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `insertLaunches returns error`() = runTest {
-        val expected = DataSourceError.CACHE_ERROR
+        val expected = LocalError.CACHE_ERROR
+        val throwable = Throwable()
         every { launchDomainEntityMapper.domainToEntityList(launchesModel) } returns launchesEntity
-        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns LaunchResult.Error(expected)
+        coEvery { launchLocalDataSource.insertList(launchesEntity) } returns Result.failure(throwable)
+        every { localErrorMapper.map(throwable) } returns expected
 
         val result = underTest.insertLaunchesCache(launchesModel)
 
@@ -128,7 +141,7 @@ class LaunchRepositoryImplTest {
     fun `deleteList returns result on success`() = runTest {
         val count = 1
         every { launchDomainEntityMapper.domainToEntity(launchModel) } returns launchEntity
-        coEvery { launchLocalDataSource.deleteList(launchesEntity) } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.deleteList(launchesEntity) } returns Result.success(count)
 
         val result = underTest.deleteLaunhesCache(launchesModel)
 
@@ -141,7 +154,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `deleteAll returns result on success`() = runTest {
-        coEvery { launchLocalDataSource.deleteAll() } returns LaunchResult.Success(Unit)
+        coEvery { launchLocalDataSource.deleteAll() } returns Result.success(Unit)
 
         val result = underTest.deleteAllCache()
 
@@ -154,7 +167,7 @@ class LaunchRepositoryImplTest {
     fun `deleteById returns result on success`() = runTest {
         val id = "1"
         val count = 1
-        coEvery { launchLocalDataSource.deleteById(id) } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.deleteById(id) } returns Result.success(count)
 
         val result = underTest.deleteByIdCache(id)
 
@@ -168,7 +181,7 @@ class LaunchRepositoryImplTest {
     fun `getById returns mapped launch on success`() = runTest {
         val id = "1"
         val launch = mockk<LaunchTypes.Launch>()
-        coEvery { launchLocalDataSource.getById(id) } returns LaunchResult.Success(launchEntity)
+        coEvery { launchLocalDataSource.getById(id) } returns Result.success(launchEntity)
         every { launchDomainEntityMapper.entityToDomain(launchEntity) } returns launch
 
         val result = underTest.getByIdCache(id)
@@ -182,7 +195,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `getAll returns mapped launches on success`() = runTest {
-        coEvery { launchLocalDataSource.getAll() } returns LaunchResult.Success(launchesEntity)
+        coEvery { launchLocalDataSource.getAll() } returns Result.success(launchesEntity)
         every { launchDomainEntityMapper.entityToDomainList(launchesEntity) } returns launchesModel
 
         val result = underTest.getAllCache()
@@ -197,7 +210,7 @@ class LaunchRepositoryImplTest {
     @Test
     fun `getTotalEntries returns result on success`() = runTest {
         val count = 10
-        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(count)
+        coEvery { launchLocalDataSource.getTotalEntries() } returns Result.success(count)
 
         val result = underTest.getTotalEntriesCache()
 

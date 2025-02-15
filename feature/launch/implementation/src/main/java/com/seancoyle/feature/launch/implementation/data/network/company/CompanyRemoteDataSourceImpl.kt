@@ -2,9 +2,6 @@ package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.di.IODispatcher
-import com.seancoyle.core.common.result.DataSourceError
-import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -13,24 +10,20 @@ import javax.inject.Inject
 
 internal class CompanyRemoteDataSourceImpl @Inject constructor(
     private val api: CompanyApiService,
-    private val remoteDataSourceErrorMapper: RemoteDataSourceErrorMapper,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CompanyRemoteDataSource {
 
-    override suspend fun getCompanyApi(): LaunchResult<CompanyDto, DataSourceError> {
+    override suspend fun getCompanyApi(): Result<CompanyDto> {
         return withContext(ioDispatcher) {
             runCatching {
                 api.getCompany()
             }.fold(
-                onSuccess = { result ->
-                    result?.let { LaunchResult.Success(it) }
-                        ?: LaunchResult.Error(DataSourceError.NETWORK_DATA_NULL)
-                },
+                onSuccess = { Result.success(it) },
                 onFailure = { exception ->
                     Timber.e(exception)
                     crashlytics.logException(exception)
-                    LaunchResult.Error(remoteDataSourceErrorMapper.map(exception))
+                    Result.failure(exception)
                 }
             )
         }

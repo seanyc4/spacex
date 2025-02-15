@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase.launch
 
-import com.seancoyle.core.common.result.DataSourceError
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -46,7 +46,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
             )
         } returns LaunchResult.Success(launchesModel)
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, LocalError>>()
         underTest(
             launchYear = year,
             order = order,
@@ -66,7 +66,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
         val order = Order.DESC
         val status = LaunchStatus.SUCCESS
         val page = 1
-        val error = DataSourceError.CACHE_ERROR
+        val error = LocalError.CACHE_ERROR
 
         coEvery {
             launchRepository.paginateCache(
@@ -77,7 +77,7 @@ class PaginateLaunchesCacheUseCaseImplTest {
             )
         } returns LaunchResult.Error(error)
 
-        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, DataSourceError>>()
+        val results = mutableListOf<LaunchResult<List<LaunchTypes>?, LocalError>>()
         underTest(
             launchYear = year,
             order = order,
