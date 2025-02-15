@@ -7,7 +7,7 @@ import java.io.IOException
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-internal class RemoteDataSourceErrorMapper @Inject constructor() {
+internal class RemoteErrorMapper @Inject constructor() {
     fun map(throwable: Throwable): RemoteError {
         return when (throwable) {
             is TimeoutCancellationException -> RemoteError.NETWORK_TIMEOUT

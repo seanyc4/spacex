@@ -7,7 +7,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-internal class LocalDataSourceErrorMapper @Inject constructor() {
+internal class LocalErrorMapper @Inject constructor() {
     fun map(throwable: Throwable): LocalError {
         return when (throwable) {
             is TimeoutCancellationException -> LocalError.CACHE_ERROR_TIMEOUT

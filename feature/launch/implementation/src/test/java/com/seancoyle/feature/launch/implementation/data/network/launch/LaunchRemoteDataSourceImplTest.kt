@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteDataSourceErrorMapper
+import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
@@ -34,7 +34,7 @@ class LaunchRemoteDataSourceImplTest {
     private lateinit var crashlytics: Crashlytics
 
     @RelaxedMockK
-    private lateinit var remoteDataSourceErrorMapper: RemoteDataSourceErrorMapper
+    private lateinit var remoteErrorMapper: RemoteErrorMapper
 
     private lateinit var underTest: LaunchRemoteDataSource
 
@@ -43,7 +43,7 @@ class LaunchRemoteDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchRemoteDataSourceImpl(
             api = api,
-            remoteDataSourceErrorMapper = remoteDataSourceErrorMapper,
+            remoteDataSourceErrorMapper = remoteErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testDispatcher.testCoroutineDispatcher
         )
@@ -63,7 +63,7 @@ class LaunchRemoteDataSourceImplTest {
     fun `getLaunches returns DataError when API call fails`() = runTest {
         val exception = RuntimeException("Network Failure")
         coEvery { api.getLaunches(launchOptions) } throws exception
-        every { remoteDataSourceErrorMapper.map(exception) } returns RemoteError.NETWORK_UNKNOWN_ERROR
+        every { remoteErrorMapper.map(exception) } returns RemoteError.NETWORK_UNKNOWN_ERROR
 
         val result = underTest.getLaunches(launchOptions)
 

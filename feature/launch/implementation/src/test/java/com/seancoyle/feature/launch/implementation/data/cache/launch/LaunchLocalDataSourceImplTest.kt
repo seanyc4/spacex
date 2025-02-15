@@ -7,7 +7,7 @@ import com.seancoyle.core.test.TestCoroutineRule
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.implementation.data.cache.company.LocalDataSourceErrorMapper
+import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
@@ -37,7 +37,7 @@ class LaunchLocalDataSourceImplTest {
     private lateinit var crashlytics: Crashlytics
 
     @RelaxedMockK
-    private lateinit var localDataSourceErrorMapper: LocalDataSourceErrorMapper
+    private lateinit var localErrorMapper: LocalErrorMapper
 
     private lateinit var underTest: LaunchLocalDataSource
 
@@ -46,7 +46,7 @@ class LaunchLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchLocalDataSourceImpl(
             dao = dao,
-            localDataSourceErrorMapper = localDataSourceErrorMapper,
+            localDataSourceErrorMapper = localErrorMapper,
             crashlytics = crashlytics,
             ioDispatcher = testCoroutineRule.testCoroutineDispatcher
         )
