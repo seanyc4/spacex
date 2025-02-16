@@ -52,7 +52,7 @@ class CompanyRepositoryImplTest {
         underTest = CompanyRepositoryImpl(
             companyRemoteDataSource = companyRemoteDataSource,
             companyLocalDataSource = companyLocalDataSource,
-            companyCacheMapper = companyCacheMapper,
+            companyDomainEntityMapper = companyCacheMapper,
             companyDtoEntityMapper = companyDtoEntityMapper,
             remoteErrorMapper = remoteErrorMapper,
             localErrorMapper = localErrorMapper

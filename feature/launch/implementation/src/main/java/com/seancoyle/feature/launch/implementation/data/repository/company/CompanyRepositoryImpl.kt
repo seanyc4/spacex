@@ -16,7 +16,7 @@ internal class CompanyRepositoryImpl @Inject constructor(
     private val companyRemoteDataSource: CompanyRemoteDataSource,
     private val companyLocalDataSource: CompanyLocalDataSource,
     private val companyDtoEntityMapper: CompanyDtoEntityMapper,
-    private val companyCacheMapper: CompanyDomainEntityMapper,
+    private val companyDomainEntityMapper: CompanyDomainEntityMapper,
     private val remoteErrorMapper: RemoteErrorMapper,
     private val localErrorMapper: LocalErrorMapper
 ) : CompanyRepository {
@@ -37,7 +37,7 @@ internal class CompanyRepositoryImpl @Inject constructor(
 
     override suspend fun getCompanyCache(): LaunchResult<Company?, LocalError> {
         return companyLocalDataSource.get().fold(
-            onSuccess = { LaunchResult.Success(it?.let { companyCacheMapper.entityToDomain(it) })},
+            onSuccess = { LaunchResult.Success(it?.let { companyDomainEntityMapper.entityToDomain(it) })},
             onFailure = { LaunchResult.Error(localErrorMapper.map(it)) }
         )
     }
