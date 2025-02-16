@@ -1,12 +1,9 @@
-package com.seancoyle.feature.launch.implementation.presentation
+package com.seancoyle.spacex.acceptance.launch
 
-import androidx.activity.ComponentActivity
 import androidx.annotation.CallSuper
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
-import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany
-import com.seancoyle.feature.launch.implementation.data.network.launch.MockWebServerResponseLaunches
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
+import com.seancoyle.spacex.presentation.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -25,27 +22,8 @@ open class LaunchBase {
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-   /* @Inject
-    internal lateinit var getCompanyApiAndCacheUseCase: GetCompanyApiAndCacheUseCase*/
-
-   /* @Inject
-    internal lateinit var getLaunchesApiAndCacheUseCase: GetCompanyApiAndCacheUseCase*/
-   /* @Inject
-    internal lateinit var launchCacheDataSource: LaunchCacheDataSource
-
-    @Inject
-    internal lateinit var launchNetworkDataSource: LaunchNetworkDataSource
-
-    @Inject
-    internal lateinit var companyCacheDataSource: CompanyCacheDataSource
-
-    @Inject
-    internal lateinit var companyInfoNetworkDataSource: CompanyNetworkDataSource*/
-
-    @Inject
-    internal lateinit var launchOptions: LaunchOptions
 
     @Inject
     lateinit var mockWebServer: MockWebServer
@@ -57,7 +35,7 @@ open class LaunchBase {
     fun setup() {
         hiltRule.inject()
         Intents.init()
-        getTestDataAndInsertToFakeDatabase()
+        setupMockWebServer()
     }
 
     @After
@@ -68,9 +46,7 @@ open class LaunchBase {
         mockWebServer.shutdown()
     }
 
-    private fun getTestDataAndInsertToFakeDatabase() = runTest {
-      /*  launchCacheDataSource.deleteAll()
-        companyCacheDataSource.deleteAll()*/
+    private fun setupMockWebServer() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -81,8 +57,5 @@ open class LaunchBase {
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
-
-      /*  getCompanyApiAndCacheUseCase.invoke()
-        getLaunchesApiAndCacheUseCase.invoke()*/
     }
 }

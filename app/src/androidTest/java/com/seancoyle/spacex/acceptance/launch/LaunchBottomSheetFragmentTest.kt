@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.presentation
+package com.seancoyle.spacex.acceptance.launch
 
 import android.app.Instrumentation
 import android.content.Intent
@@ -33,7 +33,7 @@ internal class LaunchBottomSheetFragmentTest: LaunchBase() {
     fun verifyLaunchBottomSheetIsDisplayedOnCTA() {
         // Not all items have links, no links will display an info dialog
         // hard code a position which guarantees links
-        val position = 30
+        val position = 9
 
         composeTestRule.apply {
             waitUntilAtLeastOneExists(hasTestTag(launchGridTag))
@@ -51,20 +51,20 @@ internal class LaunchBottomSheetFragmentTest: LaunchBase() {
     @Test
     fun launchBottomSheetArticleLinkCTAOpensExternalBrowser() {
         val articleLink = "https://spaceflightnow.com/2022/03/19/spacex-stretches-rocket-reuse-record-with-another-starlink-launch/"
-        launchBottomSheetLinkOpensExternalBrowser(30, articleString, articleLink)
+        launchBottomSheetLinkOpensExternalBrowser(8, articleString, articleLink)
     }
 
     @Test
     fun launchBottomSheetWebcastLinkCTAOpensExternalBrowser() {
         val webcastString by composeTestRule.stringResource(R.string.webcast)
         val webcastLink = "https://youtu.be/0giA6VZOICs"
-        launchBottomSheetLinkOpensExternalBrowser(30, webcastString, webcastLink)
+        launchBottomSheetLinkOpensExternalBrowser(8, webcastString, webcastLink)
     }
 
     @Test
     fun launchBottomSheetWikiLinkCTAOpensExternalBrowser() {
         val wikiLink = "https://en.wikipedia.org/wiki/Starlink"
-        launchBottomSheetLinkOpensExternalBrowser(30, wikiString, wikiLink)
+        launchBottomSheetLinkOpensExternalBrowser(8, wikiString, wikiLink)
     }
 
     @Test
