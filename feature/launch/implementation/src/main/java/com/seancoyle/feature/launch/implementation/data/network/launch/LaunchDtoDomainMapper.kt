@@ -12,7 +12,7 @@ import javax.inject.Inject
 internal class LaunchDtoDomainMapper @Inject constructor() {
 
     fun dtoToDomainList(entity: LaunchesDto): List<LaunchTypes.Launch> {
-        return entity.launches.map { item ->
+        return entity.launches?.map { item ->
             with(item) {
                 LaunchTypes.Launch(
                     id = flightNumber.toString(),
@@ -35,6 +35,6 @@ internal class LaunchDtoDomainMapper @Inject constructor() {
                     launchDays = "",
                 )
             }
-        }
+        }.orEmpty()
     }
 }

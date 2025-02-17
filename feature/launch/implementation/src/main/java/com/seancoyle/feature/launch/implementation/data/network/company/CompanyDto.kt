@@ -1,23 +1,27 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
-import com.google.gson.annotations.SerializedName
+import androidx.annotation.Keep
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
+@Keep
 internal data class CompanyDto(
-    @SerializedName("employees")
+    @SerialName("employees")
     val employees: Int?,
 
-    @SerializedName("founded")
+    @SerialName("founded")
     val founded: Int?,
 
-    @SerializedName("founder")
+    @SerialName("founder")
     val founder: String?,
 
-    @SerializedName("launch_sites")
+    @SerialName("launch_sites")
     val launchSites: Int?,
 
-    @SerializedName("name")
+    @SerialName("name")
     val name: String?,
 
-    @SerializedName("valuation")
+    @SerialName("valuation")
     val valuation: Long?,
 )
