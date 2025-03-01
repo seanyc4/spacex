@@ -123,6 +123,7 @@ internal class LaunchViewModel @Inject constructor(
         uiState.update { currentState ->
             currentState.isSuccess { it.copy(notificationState = event.notificationState) }
         }
+        TODO()
     }
 
     private suspend fun paginateLaunchesCacheUseCase() {
