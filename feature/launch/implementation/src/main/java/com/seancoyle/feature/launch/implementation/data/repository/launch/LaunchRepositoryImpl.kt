@@ -8,8 +8,6 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDomainEntityMapper
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import javax.inject.Inject
@@ -17,9 +15,7 @@ import javax.inject.Inject
 internal class LaunchRepositoryImpl @Inject constructor(
     private val launchRemoteDataSource: LaunchRemoteDataSource,
     private val launchLocalDataSource: LaunchLocalDataSource,
-    private val launchDtoToDomainMapper: LaunchDtoDomainMapper,
     private val launchDomainEntityMapper: LaunchDomainEntityMapper,
-    private val remoteErrorMapper: RemoteErrorMapper,
     private val localErrorMapper: LocalErrorMapper
 ): LaunchRepository {
 
@@ -31,10 +27,7 @@ internal class LaunchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLaunchesApi(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
-        return launchRemoteDataSource.getLaunches(launchOptions).fold(
-            onSuccess = { LaunchResult.Success(launchDtoToDomainMapper.dtoToDomainList(it)) },
-            onFailure = { LaunchResult.Error(remoteErrorMapper.map(it)) }
-        )
+        return launchRemoteDataSource.getLaunches(launchOptions)
     }
 
     override suspend fun paginateCache(

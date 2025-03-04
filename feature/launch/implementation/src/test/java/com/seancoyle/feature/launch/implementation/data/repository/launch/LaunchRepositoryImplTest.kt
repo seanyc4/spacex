@@ -8,15 +8,10 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchDomainEntityMapper
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchesDto
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchDtoDomainMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
-import com.seancoyle.feature.launch.implementation.util.TestData.launchDto
 import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
 import com.seancoyle.feature.launch.implementation.util.TestData.launchOptions
-import com.seancoyle.feature.launch.implementation.util.TestData.launchesDto
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
 import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
 import io.mockk.MockKAnnotations
@@ -42,13 +37,7 @@ class LaunchRepositoryImplTest {
     private lateinit var launchRemoteDataSource: LaunchRemoteDataSource
 
     @MockK
-    private lateinit var launchDtoDomainMapper: LaunchDtoDomainMapper
-
-    @MockK
     private lateinit var launchDomainEntityMapper: LaunchDomainEntityMapper
-
-    @RelaxedMockK
-    private lateinit var remoteErrorMapper: RemoteErrorMapper
 
     @RelaxedMockK
     private lateinit var localErrorMapper: LocalErrorMapper
@@ -61,25 +50,21 @@ class LaunchRepositoryImplTest {
         underTest = LaunchRepositoryImpl(
             launchRemoteDataSource = launchRemoteDataSource,
             launchLocalDataSource = launchLocalDataSource,
-            launchDtoToDomainMapper = launchDtoDomainMapper,
             launchDomainEntityMapper = launchDomainEntityMapper,
-            remoteErrorMapper = remoteErrorMapper,
             localErrorMapper = localErrorMapper
         )
     }
 
     @Test
     fun `getLaunches returns mapped launches on success`() = runTest {
-        coEvery { launchRemoteDataSource.getLaunches(launchOptions) } returns Result.success(launchesDto)
-        every { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) } returns launchesModel
+        coEvery { launchRemoteDataSource.getLaunches(launchOptions) } returns LaunchResult.Success(launchesModel)
 
         val result = underTest.getLaunchesApi(launchOptions)
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesModel, (result).data)
+        assertEquals(launchesModel, result.data)
 
         coVerify { launchRemoteDataSource.getLaunches(launchOptions) }
-        verify { launchDtoDomainMapper.dtoToDomainList(LaunchesDto(listOf(launchDto))) }
     }
 
     @Test
