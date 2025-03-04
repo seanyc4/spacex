@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.company
+package com.seancoyle.feature.launch.implementation.data.mapper
 
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException

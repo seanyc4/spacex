@@ -1,13 +1,14 @@
-package com.seancoyle.feature.launch.implementation.data.cache.company
+package com.seancoyle.feature.launch.implementation.data.mapper
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
+import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDto
+import org.junit.Assert.*
 import org.junit.Test
-import kotlin.test.assertEquals
 
-class CompanyDomainEntityMapperTest {
+class CompanyMapperTest {
 
-    private val underTest = CompanyDomainEntityMapper()
+    private val underTest = CompanyMapper()
 
     @Test
     fun `entityToDomain correctly maps from CompanyEntity to Company`() {
@@ -56,4 +57,51 @@ class CompanyDomainEntityMapperTest {
             assertEquals(model.valuation, valuation)
         }
     }
+
+    @Test
+    fun `dtoToDomain correctly maps from CompanyDto to Company`() {
+        val dto = CompanyDto(
+            employees = 1000,
+            founded = 2002,
+            founder = "Elon Musk",
+            launchSites = 3,
+            name = "SpaceX",
+            valuation = 100000000000
+        )
+
+        val model = underTest.dtoToDomain(dto)
+
+        with(model) {
+            assertEquals(dto.employees, employees)
+            assertEquals(dto.founded, founded)
+            assertEquals(dto.founder, founder)
+            assertEquals(dto.launchSites, launchSites)
+            assertEquals(dto.name, name)
+            assertEquals(dto.valuation, valuation)
+        }
+    }
+
+    @Test
+    fun `dtoToEntity correctly maps from CompanyDto to CompanyEntity`() {
+        val dto = CompanyDto(
+            employees = 1000,
+            founded = 2002,
+            founder = "Elon Musk",
+            launchSites = 3,
+            name = "SpaceX",
+            valuation = 100000000000
+        )
+
+        val entity = underTest.dtoToEntity(dto)
+
+        with(entity) {
+            assertEquals(dto.employees, employees)
+            assertEquals(dto.founded, founded)
+            assertEquals(dto.founder, founder)
+            assertEquals(dto.launchSites, launchSites)
+            assertEquals(dto.name, name)
+            assertEquals(dto.valuation, valuation)
+        }
+    }
+
 }

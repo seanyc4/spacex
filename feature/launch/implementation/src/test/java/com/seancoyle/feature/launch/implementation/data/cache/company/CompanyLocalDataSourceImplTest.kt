@@ -1,34 +1,37 @@
 package com.seancoyle.feature.launch.implementation.data.cache.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.core.common.result.DataError.LocalError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.dao.CompanyDao
+import com.seancoyle.feature.launch.implementation.data.mapper.CompanyMapper
+import com.seancoyle.feature.launch.implementation.data.mapper.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyEntity
+import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestDispatcher
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CompanyLocalDataSourceImplTest {
-
-    @get: Rule
-    val testCoroutineRule = TestCoroutineRule()
-
-    private var testDispatcher: TestDispatcher = testCoroutineRule.testCoroutineDispatcher
 
     @MockK
     private lateinit var dao: CompanyDao
+
+    @MockK
+    private lateinit var companyMapper: CompanyMapper
+
+    @RelaxedMockK
+    private lateinit var localErrorMapper: LocalErrorMapper
 
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
@@ -41,20 +44,23 @@ class CompanyLocalDataSourceImplTest {
         underTest = CompanyLocalDataSourceImpl(
             dao = dao,
             crashlytics = crashlytics,
-            ioDispatcher = testDispatcher
+            errorMapper = localErrorMapper,
+            mapper = companyMapper
         )
     }
 
     @Test
     fun `get returns mapped company when DAO provides an entity`() = runTest {
         coEvery { dao.getCompany() } returns companyEntity
+        every { companyMapper.entityToDomain(companyEntity) } returns companyModel
 
         val result = underTest.get()
 
         coVerify { dao.getCompany() }
+        verify { companyMapper.entityToDomain(companyEntity) }
 
-        assertTrue(result.isSuccess)
-        assertEquals(companyEntity, result.getOrNull())
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(companyModel, result.data)
     }
 
     @Test
@@ -65,19 +71,21 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.getCompany() }
 
-        assertTrue(result.isSuccess && result.getOrNull() == null)
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(LocalError.CACHE_ERROR_NO_RESULTS, result.error)
     }
 
     @Test
     fun `insert company calls DAO and returns a success result`() = runTest {
         val entityId = 1L
         coEvery { dao.insert(companyEntity) } returns entityId
+        every { companyMapper.domainToEntity(companyModel) } returns companyEntity
 
-        val result = underTest.insert(companyEntity)
+        val result = underTest.insert(companyModel)
 
         coVerify { dao.insert(companyEntity) }
 
-        assertTrue(result.isSuccess && result.getOrNull() == entityId)
+        assertTrue(result is LaunchResult.Success && result.data == entityId)
     }
 
     @Test
@@ -88,6 +96,6 @@ class CompanyLocalDataSourceImplTest {
 
         coVerify { dao.deleteAll() }
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
     }
 }

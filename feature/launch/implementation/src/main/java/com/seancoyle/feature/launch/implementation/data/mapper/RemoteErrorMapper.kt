@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.launch
+package com.seancoyle.feature.launch.implementation.data.mapper
 
 import com.seancoyle.core.common.result.DataError.RemoteError
 import kotlinx.coroutines.TimeoutCancellationException

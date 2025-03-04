@@ -37,7 +37,7 @@ interface LaunchDao {
         ORDER BY launchDateLocalDateTime DESC
     """
     )
-    fun getAll(): List<LaunchEntity>
+    fun getAll(): List<LaunchEntity>?
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
@@ -252,6 +252,6 @@ suspend fun LaunchDao.paginateLaunches(
         }
 
         else ->
-            getAll()
+            getAll() ?: emptyList()
     }
 }

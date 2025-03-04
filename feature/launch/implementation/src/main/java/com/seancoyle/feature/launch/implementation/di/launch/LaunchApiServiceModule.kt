@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchApiService
+import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ internal object LaunchApiServiceModule {
     @Provides
     fun provideLaunchApi(
         retrofit: Retrofit
-    ): LaunchApiService {
-        return retrofit.create(LaunchApiService::class.java)
+    ): LaunchApi {
+        return retrofit.create(LaunchApi::class.java)
     }
 }
