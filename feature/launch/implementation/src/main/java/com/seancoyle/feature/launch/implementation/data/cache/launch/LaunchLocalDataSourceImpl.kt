@@ -9,7 +9,8 @@ import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
+import com.seancoyle.feature.launch.implementation.data.mapper.LaunchMapper
+import com.seancoyle.feature.launch.implementation.data.mapper.LocalErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,7 +19,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val crashlytics: Crashlytics,
     private val localErrorMapper: LocalErrorMapper,
-    private val launchDomainEntityMapper: LaunchDomainEntityMapper
+    private val launchMapper: LaunchMapper
 ) : LaunchLocalDataSource {
 
     override suspend fun paginate(
@@ -28,7 +29,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         page: Int
     ): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
         return runCatching {
-            val launchStatusEntity = launchDomainEntityMapper.mapToLaunchStatusEntity(launchStatus)
+            val launchStatusEntity = launchMapper.mapToLaunchStatusEntity(launchStatus)
             dao.paginateLaunches(
                 launchYear = launchYear,
                 launchStatus = launchStatusEntity,
@@ -38,7 +39,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             )
         }.fold(
             onSuccess = {
-                LaunchResult.Success(launchDomainEntityMapper.entityToDomainList(it))
+                LaunchResult.Success(launchMapper.entityToDomainList(it))
             },
             onFailure = {
                 Timber.e(it)
@@ -49,7 +50,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insert(launch: LaunchTypes.Launch): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.insert(launchDomainEntityMapper.domainToEntity(launch)) }
+        return runCatching { dao.insert(launchMapper.domainToEntity(launch)) }
             .fold(
                 onSuccess = { LaunchResult.Success(Unit) },
                 onFailure = {
@@ -61,7 +62,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insertList(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.insertList(launchDomainEntityMapper.domainToEntityList(launches)) }
+        return runCatching { dao.insertList(launchMapper.domainToEntityList(launches)) }
             .fold(
                 onSuccess = { LaunchResult.Success(Unit) },
                 onFailure = {
@@ -114,7 +115,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             .fold(
                 onSuccess = { result ->
                     result?.let {
-                        LaunchResult.Success(launchDomainEntityMapper.entityToDomain(it))
+                        LaunchResult.Success(launchMapper.entityToDomain(it))
                     } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
                 },
                 onFailure = {
@@ -130,7 +131,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             .fold(
                 onSuccess = { result ->
                     result?.let {
-                        LaunchResult.Success(launchDomainEntityMapper.entityToDomainList(it))
+                        LaunchResult.Success(launchMapper.entityToDomainList(it))
                     } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
                 },
                 onFailure = {

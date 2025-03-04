@@ -3,10 +3,11 @@ package com.seancoyle.feature.launch.implementation.data.network.company
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.implementation.data.network.launch.RemoteErrorMapper
+import com.seancoyle.feature.launch.implementation.data.mapper.CompanyMapper
+import com.seancoyle.feature.launch.implementation.data.mapper.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
+import com.seancoyle.feature.launch.implementation.util.TestData.companyModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,22 +15,19 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@ExperimentalCoroutinesApi
 class CompanyRemoteDataSourceImplTest {
-
-    @get:Rule
-    val testCoroutineRule = TestCoroutineRule()
 
     @MockK
     private lateinit var api: CompanyApi
+
+    @MockK
+    private lateinit var companyMapper: CompanyMapper
 
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
@@ -45,20 +43,23 @@ class CompanyRemoteDataSourceImplTest {
         underTest = CompanyRemoteDataSourceImpl(
             api = api,
             crashlytics = crashlytics,
-            remoteErrorMapper = remoteErrorMapper
+            errorMapper = remoteErrorMapper,
+            mapper = companyMapper
         )
     }
 
     @Test
     fun `getCompany returns company DTO when API call is successful`() = runTest {
         coEvery { api.getCompany() } returns companyDto
+        every { companyMapper.dtoToDomain(companyDto) } returns companyModel
 
         val result = underTest.getCompanyApi()
 
         coVerify { api.getCompany() }
+        verify { companyMapper.dtoToDomain(companyDto) }
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(companyDto, result.data)
+        assertEquals(companyModel, result.data)
     }
 
     @Test
@@ -68,7 +69,7 @@ class CompanyRemoteDataSourceImplTest {
 
         coEvery { api.getCompany() } throws throwable
         every { remoteErrorMapper.map(throwable) } returns expected
-
+        every { companyMapper.dtoToDomain(companyDto) } returns companyModel
 
         val result = underTest.getCompanyApi()
 
