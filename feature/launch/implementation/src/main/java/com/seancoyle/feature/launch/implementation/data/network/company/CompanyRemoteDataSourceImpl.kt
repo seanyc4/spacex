@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataError.RemoteError.NETWORK_DATA_NULL
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
+import com.seancoyle.feature.launch.implementation.data.network.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import timber.log.Timber
 import javax.inject.Inject
