@@ -1,6 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.network.company.MockWebServerResponseCompany.companyResponse
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -44,7 +46,7 @@ internal class CompanyRemoteDataSourceTest {
 
     @Test
     fun whenAPISuccessful_getCompanyReturnsCompanyData() = runTest {
-        val expectedCompany = CompanyDto(
+        val expectedCompany = Company(
             employees = 7000,
             founded = 2002,
             founder = "Elon Musk",
@@ -61,8 +63,8 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isSuccess)
-        assertEquals(result.getOrNull(), expectedCompany)
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(result.data, expectedCompany)
     }
 
     @Test
@@ -74,7 +76,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -86,7 +88,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -98,7 +100,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -110,7 +112,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -122,7 +124,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -134,7 +136,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -146,7 +148,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -158,7 +160,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
     @Test
@@ -170,7 +172,7 @@ internal class CompanyRemoteDataSourceTest {
 
         val result = underTest.getCompanyApi()
 
-        assertTrue(result.isFailure)
+        assertTrue(result is LaunchResult.Error)
     }
 
 }

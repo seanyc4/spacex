@@ -1,8 +1,9 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.database.entities.CompanyEntity
+import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -15,7 +16,6 @@ import org.junit.runner.RunWith
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @HiltAndroidTest
@@ -25,7 +25,7 @@ internal class CompanyLocalDataSourceTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    private lateinit var givenCompany: CompanyEntity
+    private lateinit var givenCompany: Company
 
     @Inject
     lateinit var underTest: CompanyLocalDataSource
@@ -33,8 +33,7 @@ internal class CompanyLocalDataSourceTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        givenCompany = CompanyEntity(
-            id = UUID.randomUUID().toString(),
+        givenCompany = Company(
             employees = UUID.randomUUID().hashCode(),
             founded = UUID.randomUUID().hashCode(),
             founder = UUID.randomUUID().toString(),
@@ -56,12 +55,12 @@ internal class CompanyLocalDataSourceTest {
     fun insertCompany_confirmInserted() = runTest {
         val insertResult = underTest.insert(givenCompany)
 
-        assertTrue(insertResult.isSuccess)
+        assertTrue(insertResult is LaunchResult.Success)
 
         val result = underTest.get()
 
-        assertTrue(result.isSuccess)
-        assertEquals(givenCompany, result.getOrNull())
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(givenCompany, result.data)
     }
 
     @Test
@@ -70,8 +69,8 @@ internal class CompanyLocalDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result.isSuccess)
-        assertEquals(givenCompany, result.getOrNull())
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(givenCompany, result.data)
     }
 
     @Test
@@ -82,7 +81,7 @@ internal class CompanyLocalDataSourceTest {
 
         val result = underTest.get()
 
-        assertTrue(result.isSuccess)
-        assertNull(result.getOrNull())
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(LocalError.CACHE_ERROR_NO_RESULTS, result.error)
     }
 }

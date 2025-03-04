@@ -1,16 +1,15 @@
 package com.seancoyle.feature.launch.implementation.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.DataError.LocalError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
-import com.seancoyle.database.entities.LaunchDateStatusEntity
-import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LinksEntity
-import com.seancoyle.database.entities.RocketEntity
 import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.network.launch.LinksDto
-import com.seancoyle.feature.launch.implementation.data.network.launch.PatchDto
+import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.api.domain.model.Rocket
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -56,7 +55,7 @@ internal class LaunchLocalDataSourceTest {
         underTest.deleteAll()
     }
 
-    private suspend fun insertTestData(num: Int = DATA): List<LaunchEntity> {
+    private suspend fun insertTestData(num: Int = DATA): List<LaunchTypes.Launch> {
         val givenList = createLaunchListTest(num)
         underTest.insertList(givenList)
         return givenList
@@ -70,9 +69,8 @@ internal class LaunchLocalDataSourceTest {
 
         val result = underTest.getById(id = "1")
 
-        assertTrue(result.isSuccess)
-        assertEquals(expectedResult, result.getOrNull())
-    }
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(expectedResult, result.data)}
 
     @Test
     fun insertLaunchesGetLaunchesSuccess() = runTest {
@@ -80,10 +78,9 @@ internal class LaunchLocalDataSourceTest {
 
         val result = underTest.getAll()
 
-        assertTrue(result.isSuccess)
-        assertNotNull(result.getOrNull())
-        result.getOrNull()?.filterIsInstance<List<LaunchTypes.Launch>>()
-        assertTrue { expectedResult.containsAll(result.getOrNull()!!) }
+        assertTrue(result is LaunchResult.Success)
+        assertNotNull(result.data.filterIsInstance<List<LaunchTypes.Launch>>())
+        assertTrue { expectedResult.containsAll(result.data) }
     }
 
     @Test
@@ -92,9 +89,8 @@ internal class LaunchLocalDataSourceTest {
 
         val result = underTest.getTotalEntries()
 
-        assertTrue(result.isSuccess)
-        assertEquals(expectedResult.size, result.getOrNull())
-    }
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(expectedResult.size, result.data)}
 
     @Test
     fun insertLaunchDeleteLaunchConfirmDeleted() = runTest {
@@ -103,14 +99,13 @@ internal class LaunchLocalDataSourceTest {
 
         val preDeleteResult = underTest.getById(expectedResult.id)
 
-        assertTrue(preDeleteResult.isSuccess)
-        assertEquals(expectedResult, preDeleteResult.getOrNull())
-
+        assertTrue(preDeleteResult is LaunchResult.Success)
+        assertEquals(expectedResult, preDeleteResult.data)
         underTest.deleteById(expectedResult.id)
 
         val postDeleteResult = underTest.getById(expectedResult.id)
-        assertTrue(postDeleteResult.isSuccess)
-        assertNull(postDeleteResult.getOrNull(), "Launch item should be null after deletion.")
+        assertTrue(postDeleteResult is LaunchResult.Error)
+        assertEquals(LocalError.CACHE_ERROR_NO_RESULTS, postDeleteResult.error)
     }
 
     @Test
@@ -120,14 +115,14 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.ASC,
-            launchStatus = LaunchStatusEntity.SUCCESS,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        checkDateOrderAscending(result.getOrNull()!!)
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderAscending(result.data)
     }
 
     @Test
@@ -137,14 +132,14 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.SUCCESS,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        checkDateOrderDescending(result.getOrNull()!!)
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
     }
 
     @Test
@@ -155,15 +150,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = launchYear,
             order = Order.ASC,
-            launchStatus = LaunchStatusEntity.ALL,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        assertTrue { result.getOrNull()!!.all { it.launchYear == launchYear } }
-        checkDateOrderAscending(result.getOrNull()!!)
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { result.data.all { it.launchYear == launchYear } }
+        checkDateOrderAscending(result.data)
     }
 
     @Test
@@ -174,15 +169,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = launchYear,
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.ALL,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        assertTrue { result.getOrNull()!!.all { it.launchYear == launchYear } }
-        checkDateOrderDescending(result.getOrNull()!!)
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { result.data.all { it.launchYear == launchYear } }
+        checkDateOrderDescending(result.data)
     }
 
     @Test
@@ -193,13 +188,13 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = invalidYear,
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.ALL,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isEmpty())
+        assertTrue(result.data.isEmpty())
     }
 
     @Test
@@ -209,15 +204,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.SUCCESS,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        checkDateOrderDescending(result.getOrNull()!!)
-        assertTrue { result.getOrNull()!!.all { it.launchStatus == LaunchStatusEntity.SUCCESS } }
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.SUCCESS } }
     }
 
     @Test
@@ -227,15 +222,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.FAILED,
+            launchStatus = LaunchStatus.FAILED,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        checkDateOrderDescending(result.getOrNull()!!)
-        assertTrue { result.getOrNull()!!.all { it.launchStatus == LaunchStatusEntity.FAILED } }
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.FAILED } }
     }
 
     @Test
@@ -245,15 +240,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.ALL,
+            launchStatus = LaunchStatus.ALL,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        assertTrue { expectedResult.containsAll(result.getOrNull()!!) }
-        checkDateOrderDescending(result.getOrNull()!!)
+        assertTrue(result.data.isNotEmpty())
+        assertTrue { expectedResult.containsAll(result.data) }
+        checkDateOrderDescending(result.data)
     }
 
     @Test
@@ -263,15 +258,15 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = "",
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.UNKNOWN,
+            launchStatus = LaunchStatus.UNKNOWN,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue(result.getOrNull()!!.isNotEmpty())
-        checkDateOrderDescending(result.getOrNull()!!)
-        assertTrue { result.getOrNull()!!.all { it.launchStatus == LaunchStatusEntity.UNKNOWN } }
+        assertTrue(result.data.isNotEmpty())
+        checkDateOrderDescending(result.data)
+        assertTrue { result.data.all { it.launchStatus == LaunchStatus.UNKNOWN } }
     }
 
     @Test
@@ -281,16 +276,16 @@ internal class LaunchLocalDataSourceTest {
         val result = underTest.paginate(
             launchYear = year,
             order = Order.DESC,
-            launchStatus = LaunchStatusEntity.SUCCESS,
+            launchStatus = LaunchStatus.SUCCESS,
             page = PAGE,
         )
 
-        assertTrue(result.isSuccess)
+        assertTrue(result is LaunchResult.Success)
 
-        assertTrue { result.getOrNull()!!.isEmpty() }
+        assertTrue { result.data.isEmpty() }
     }
 
-    private fun checkDateOrderAscending(launchList: List<LaunchEntity>) {
+    private fun checkDateOrderAscending(launchList: List<LaunchTypes.Launch>) {
         launchList.zipWithNext().forEach { (current, next) ->
             assertTrue(
                 current.launchDateLocalDateTime <= next.launchDateLocalDateTime,
@@ -299,7 +294,7 @@ internal class LaunchLocalDataSourceTest {
         }
     }
 
-private fun checkDateOrderDescending(launches: List<LaunchEntity>) {
+private fun checkDateOrderDescending(launches: List<LaunchTypes.Launch>) {
         launches.zipWithNext().forEach { (current, next) ->
             assertTrue(
                 current.launchDateLocalDateTime >= next.launchDateLocalDateTime,
@@ -311,35 +306,35 @@ private fun checkDateOrderDescending(launches: List<LaunchEntity>) {
     private fun createLaunchListTest(
         num: Int,
         id: String = UUID.randomUUID().toString()
-    ): List<LaunchEntity> {
+    ): List<LaunchTypes.Launch> {
         return List(num) {
             createLaunchEntity(id = id)
         }
     }
 
-    private fun createLaunchEntity(id: String): LaunchEntity {
+    private fun createLaunchEntity(id: String): LaunchTypes.Launch {
         val randomLaunchState = Random.nextInt(0, 4)
         val now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
-        return LaunchEntity(
+        return LaunchTypes.Launch(
             id = id,
             launchDate = now.toLocalDate().toString(),
             launchDateLocalDateTime = now,
             launchYear = validLaunchYears.random(),
             launchStatus = when (randomLaunchState) {
-                0 -> LaunchStatusEntity.SUCCESS
-                1 -> LaunchStatusEntity.FAILED
-                2 -> LaunchStatusEntity.UNKNOWN
-                else -> LaunchStatusEntity.ALL
+                0 -> LaunchStatus.SUCCESS
+                1 -> LaunchStatus.FAILED
+                2 -> LaunchStatus.UNKNOWN
+                else -> LaunchStatus.ALL
             },
-            links = LinksEntity(
+            links = Links(
                 articleLink = "https://www.google.com",
                 webcastLink = "https://www.youtube.com",
                 wikiLink = "https://www.wikipedia.org",
                 missionImage = DEFAULT_LAUNCH_IMAGE
             ),
             missionName = UUID.randomUUID().toString(),
-            rocket = RocketEntity(rocketNameAndType = "Falcon 9"),
-            launchDateStatus = if (Random.nextBoolean()) LaunchDateStatusEntity.PAST else LaunchDateStatusEntity.FUTURE,
+            rocket = Rocket(rocketNameAndType = "Falcon 9"),
+            launchDateStatus = if (Random.nextBoolean()) LaunchDateStatus.PAST else LaunchDateStatus.FUTURE,
             launchDays = "${Random.nextInt(-1000, 1000)}d",
             isLaunchSuccess = true
         )
