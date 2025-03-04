@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 internal class LaunchDomainEntityMapper @Inject constructor() {
 
-    fun entityToDomainList(entities: List<LaunchEntity>): List<LaunchTypes> {
+    fun entityToDomainList(entities: List<LaunchEntity>): List<LaunchTypes.Launch> {
         return entities.map { entity -> entityToDomain(entity) }
     }
 

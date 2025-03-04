@@ -15,7 +15,7 @@ internal interface LaunchRepository {
     suspend fun deleteAllCache(): LaunchResult<Unit, LocalError>
     suspend fun deleteByIdCache(id: String): LaunchResult<Int, LocalError>
     suspend fun getByIdCache(id: String): LaunchResult<LaunchTypes.Launch?, LocalError>
-    suspend fun getAllCache(): LaunchResult<List<LaunchTypes>, LocalError>
+    suspend fun getAllCache(): LaunchResult<List<LaunchTypes.Launch>, LocalError>
     suspend fun getTotalEntriesCache(): LaunchResult<Int, LocalError>
     suspend fun paginateCache(
         launchYear: String,
