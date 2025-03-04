@@ -4,7 +4,6 @@ import com.seancoyle.core.common.result.DataError.*
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
 import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoEntityMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
@@ -38,9 +37,6 @@ class CompanyRepositoryImplTest {
     private lateinit var companyCacheMapper: CompanyDomainEntityMapper
 
     @RelaxedMockK
-    private lateinit var remoteErrorMapper: RemoteErrorMapper
-
-    @RelaxedMockK
     private lateinit var localErrorMapper: LocalErrorMapper
 
     private lateinit var underTest: CompanyRepository
@@ -54,14 +50,13 @@ class CompanyRepositoryImplTest {
             companyLocalDataSource = companyLocalDataSource,
             companyCacheMapper = companyCacheMapper,
             companyDtoEntityMapper = companyDtoEntityMapper,
-            remoteErrorMapper = remoteErrorMapper,
             localErrorMapper = localErrorMapper
         )
     }
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache success`() = runTest {
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.success(companyDto)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns Result.success(1)
 
@@ -80,25 +75,21 @@ class CompanyRepositoryImplTest {
     @Test
     fun `getCompanyApi success returns error`() = runTest {
         val expected = RemoteError.NETWORK_UNKNOWN_ERROR
-        val throwable = Throwable()
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.failure(throwable)
-        every { remoteErrorMapper.map(throwable) } returns expected
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Error(expected)
 
         val result = underTest.getCompanyApi()
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(expected, (result).error)
+        assertEquals(expected, result.error)
 
-        coVerify {
-            companyRemoteDataSource.getCompanyApi()
-        }
+        coVerify { companyRemoteDataSource.getCompanyApi() }
     }
 
     @Test
     fun `getCompanyApi success returns companyDto and inserts to cache error`() = runTest {
         val expected = LocalError.CACHE_ERROR
         val throwable = Throwable()
-        coEvery { companyRemoteDataSource.getCompanyApi() } returns Result.success(companyDto)
+        coEvery { companyRemoteDataSource.getCompanyApi() } returns LaunchResult.Success(companyDto)
         every { companyDtoEntityMapper.dtoToEntity(companyDto) } returns companyEntity
         coEvery { companyLocalDataSource.insert(companyEntity) } returns Result.failure(throwable)
         every { localErrorMapper.map(throwable) } returns expected

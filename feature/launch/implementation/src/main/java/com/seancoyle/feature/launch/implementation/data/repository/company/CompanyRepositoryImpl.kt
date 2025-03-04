@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyDomainEntityMapper
 import com.seancoyle.feature.launch.implementation.data.cache.company.LocalErrorMapper
-import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDto
 import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDtoEntityMapper
 import com.seancoyle.feature.launch.implementation.domain.repository.CompanyRepository
@@ -17,15 +16,14 @@ internal class CompanyRepositoryImpl @Inject constructor(
     private val companyLocalDataSource: CompanyLocalDataSource,
     private val companyDtoEntityMapper: CompanyDtoEntityMapper,
     private val companyCacheMapper: CompanyDomainEntityMapper,
-    private val remoteErrorMapper: RemoteErrorMapper,
     private val localErrorMapper: LocalErrorMapper
 ) : CompanyRepository {
 
     override suspend fun getCompanyApi(): LaunchResult<Unit, DataError> {
-        return companyRemoteDataSource.getCompanyApi().fold(
-            onSuccess = { insertCompanyIntoCache(it) },
-            onFailure = { LaunchResult.Error(remoteErrorMapper.map(it)) }
-        )
+        return when (val result = companyRemoteDataSource.getCompanyApi()) {
+            is LaunchResult.Success -> insertCompanyIntoCache(result.data)
+            is LaunchResult.Error -> LaunchResult.Error(result.error)
+        }
     }
 
     private suspend fun insertCompanyIntoCache(companyDto: CompanyDto): LaunchResult<Unit, LocalError> {

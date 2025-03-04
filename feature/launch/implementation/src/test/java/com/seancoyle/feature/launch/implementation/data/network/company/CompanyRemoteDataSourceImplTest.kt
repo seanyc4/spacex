@@ -1,12 +1,16 @@
 package com.seancoyle.feature.launch.implementation.data.network.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.result.DataError.RemoteError
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.implementation.data.cache.launch.RemoteErrorMapper
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import com.seancoyle.feature.launch.implementation.util.TestData.companyDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
@@ -25,10 +29,13 @@ class CompanyRemoteDataSourceImplTest {
     val testCoroutineRule = TestCoroutineRule()
 
     @MockK
-    private lateinit var api: CompanyApiService
+    private lateinit var api: CompanyApi
 
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
+
+    @RelaxedMockK
+    private lateinit var remoteErrorMapper: RemoteErrorMapper
 
     private lateinit var underTest: CompanyRemoteDataSource
 
@@ -38,7 +45,7 @@ class CompanyRemoteDataSourceImplTest {
         underTest = CompanyRemoteDataSourceImpl(
             api = api,
             crashlytics = crashlytics,
-            ioDispatcher = testCoroutineRule.testCoroutineDispatcher
+            remoteErrorMapper = remoteErrorMapper
         )
     }
 
@@ -50,21 +57,25 @@ class CompanyRemoteDataSourceImplTest {
 
         coVerify { api.getCompany() }
 
-        assertTrue(result.isSuccess)
-        assertEquals(companyDto, result.getOrNull())
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(companyDto, result.data)
     }
 
     @Test
     fun `getCompany returns DataError when API call fails`() = runTest {
-        val exception = RuntimeException("Network Failure")
-        coEvery { api.getCompany() } throws exception
+        val expected = RemoteError.NETWORK_UNKNOWN_ERROR
+        val throwable = Throwable()
+
+        coEvery { api.getCompany() } throws throwable
+        every { remoteErrorMapper.map(throwable) } returns expected
+
 
         val result = underTest.getCompanyApi()
 
         coVerify { api.getCompany() }
-        verify { crashlytics.logException(exception) }
+        verify { crashlytics.logException(throwable) }
 
-        assertTrue(result.isFailure)
-        assertEquals(exception, result.exceptionOrNull())
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(expected, result.error)
     }
 }

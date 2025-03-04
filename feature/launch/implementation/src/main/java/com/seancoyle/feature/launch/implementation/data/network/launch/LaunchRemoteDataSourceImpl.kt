@@ -10,7 +10,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class LaunchRemoteDataSourceImpl @Inject constructor(
-    private val api: LaunchApiService,
+    private val api: LaunchApi,
     private val crashlytics: Crashlytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LaunchRemoteDataSource {

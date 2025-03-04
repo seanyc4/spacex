@@ -24,7 +24,7 @@ class LaunchRemoteDataSourceImplTest {
     val testDispatcher = TestCoroutineRule()
 
     @MockK
-    private lateinit var api: LaunchApiService
+    private lateinit var api: LaunchApi
 
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
