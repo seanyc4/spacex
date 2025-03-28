@@ -1,55 +1,61 @@
 package com.seancoyle.feature.launch.implementation.data.network.launch
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class LaunchesDto(
-    @SerializedName("docs")
+    @SerialName("docs")
     val launches: List<LaunchDto>,
 )
 
+@Serializable
 internal data class LaunchDto(
-    @SerializedName("flight_number")
+    @SerialName("flight_number")
     val flightNumber: Int?,
 
-    @SerializedName("date_utc")
+    @SerialName("date_utc")
     val launchDate: String?,
 
-    @SerializedName("links")
+    @SerialName("links")
     val links: LinksDto?,
 
-    @SerializedName("name")
+    @SerialName("name")
     val missionName: String?,
 
-    @SerializedName("rocket")
+    @SerialName("rocket")
     val rocket: RocketDto?,
 
-    @SerializedName("success")
+    @SerialName("success")
     val isLaunchSuccess: Boolean?,
 )
 
+@Serializable
 internal data class LinksDto(
-    @SerializedName("patch")
+    @SerialName("patch")
     val patch: PatchDto?,
 
-    @SerializedName("article")
+    @SerialName("article")
     val articleLink: String?,
 
-    @SerializedName("webcast")
+    @SerialName("webcast")
     val webcastLink: String?,
 
-    @SerializedName("wikipedia")
+    @SerialName("wikipedia")
     val wikiLink: String?,
 )
 
+@Serializable
 internal data class RocketDto(
-    @SerializedName("name")
+    @SerialName("name")
     val name: String?,
 
-    @SerializedName("type")
+    @SerialName("type")
     val type: String?,
 )
 
+@Serializable
 internal data class PatchDto(
-    @SerializedName("small")
+    @SerialName("small")
     val missionImage: String?
 )
