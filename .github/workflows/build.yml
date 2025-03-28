@@ -25,3 +25,33 @@ jobs:
         with:
           name: apk-branch
           path: app/build/outputs/apk/debug/app-debug-branch.apk
+
+      - name: Get Run ID
+        id: get_run_id
+        run: echo "run_id=${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: Install qrencode
+        run: sudo apt-get install -y qrencode
+
+      # Generate QR Code for APK Download
+      - name: Generate QR Code
+        run: |
+          APK_URL="https://github.com/${{ github.repository }}/actions/runs/${{ env.run_id }}"
+          qrencode -o qr.png "$APK_URL"
+
+      #  Upload QR Code to GitHub Pages
+      - name: Deploy QR Code to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          destination_dir: qr-codes
+
+      # Post PR Comment with QR Code
+      - name: Comment on PR with QR Code
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 **Download APK by scanning this QR Code:**
+            ![QR Code](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/qr-codes/qr.png)
