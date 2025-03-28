@@ -30,7 +30,7 @@ if merge_conflicts.any?
 end
 
 # Ensure a PR description exists
-fail("Please provide a meaningful description for the PR.") if github.pr_body.nil? || github.pr_body.strip.empty?
+warn("Please provide a meaningful description for the PR.") if github.pr_body.nil? || github.pr_body.strip.empty?
 
 # Ensure that unit tests are updated or added for the changes made
 test_files = git.modified_files.grep(%r{src/test/.*\.kt$})

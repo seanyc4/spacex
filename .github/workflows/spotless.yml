@@ -1,0 +1,29 @@
+name: Spotless
+
+on:
+  workflow_call:
+
+jobs:
+  spotless:
+    name: Apply Spotless Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_PAT }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run Spotless
+        run: bash ./gradlew spotlessApply
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Apply Spotless code formatting"

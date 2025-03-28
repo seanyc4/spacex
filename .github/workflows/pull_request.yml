@@ -17,6 +17,9 @@ concurrency:
 
 jobs:
 
+  spotless:
+      uses: ./.github/workflows/spotless.yml
+
   danger:
     uses: ./.github/workflows/danger.yml
 
