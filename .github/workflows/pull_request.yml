@@ -20,6 +20,9 @@ jobs:
   danger:
     uses: ./.github/workflows/danger.yml
 
+  qrCode:
+    uses: ./.github/workflows/qr_code.yml
+
   unit-tests:
     uses: ./.github/workflows/unit_test.yml
 
