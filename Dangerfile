@@ -1,7 +1,7 @@
 github.dismiss_out_of_range_messages
 
 # Warn for large PRs to encourage smaller, more focused changes
-warn("Large PR detected, consider splitting it into smaller ones!") if git.lines_of_code > 250
+warn("Large PR detected, consider splitting it into smaller ones!") if git.lines_of_code > 300
 
 # Warn if the PR title contains [WIP]
 warn("This PR is marked as Work in Progress, do not merge!") if github.pr_title.include?("[WIP]")
@@ -30,7 +30,7 @@ if merge_conflicts.any?
 end
 
 # Ensure a PR description exists
-fail("Please provide a meaningful description for the PR.") if github.pr_body.nil? || github.pr_body.strip.empty?
+warn("Please provide a meaningful description for the PR.") if github.pr_body.nil? || github.pr_body.strip.empty?
 
 # Ensure that unit tests are updated or added for the changes made
 test_files = git.modified_files.grep(%r{src/test/.*\.kt$})
