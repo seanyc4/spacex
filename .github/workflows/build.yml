@@ -25,3 +25,44 @@ jobs:
         with:
           name: apk-branch
           path: app/build/outputs/apk/debug/app-debug-branch.apk
+
+      - name: Get Run ID
+        id: get_run_id
+        run: echo "run_id=${{ github.run_id }}" >> $GITHUB_ENV
+
+
+    # - name: Install qrencode
+    #   run: sudo apt-get install -y qrencode
+
+    # # Generate QR Code for APK Download
+    # - name: Generate QR Code
+    #   run: |
+    #     APK_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    #     mkdir -p qr-codes/${{ github.event.pull_request.number }}
+    #     qrencode -o qr-codes/${{ github.event.pull_request.number }}/qr.png "$APK_URL"
+
+    # #  Upload QR Code
+    # - name: Upload QR Code
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: qr-code
+    #     path: qr-codes/${{ github.event.pull_request.number }}/qr.png
+
+
+      # Get Artifact URL for the QR Code
+      - name: Get Artifact URL
+        id: get-artifact-url
+        run: |
+          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload.outputs.artifact_id }}"
+          echo "Artifact URL: $artifact_url"
+          echo "::set-output name=artifact_url::$artifact_url"
+
+      # Post PR Comment with QR Code
+      - name: Post PR Comment with APK QR Code
+        uses: kentaro-m/qr-code-commenter-action@v0.1.2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          content: "${{ steps.get-artifact-url.outputs.artifact_url }}"
+          comment: |
+            :rocket: Scan this QR code to download the APK.
+            {qrcode}
