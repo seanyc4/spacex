@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.api.domain.model
 
-import com.google.errorprone.annotations.Keep
+import androidx.annotation.Keep
 import com.seancoyle.core.domain.Order
 
 /**

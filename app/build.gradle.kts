@@ -13,7 +13,7 @@ plugins {
     id(libs.plugins.kotlinParcelize.get().pluginId)
     id(libs.plugins.hilt.get().pluginId)
     kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId)  version libs.versions.kotlin
+    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId) version libs.versions.kotlin
 }
 
 android {
@@ -108,7 +108,6 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.coreKtx)
     implementation(libs.fragmentKtx)
-    implementation(libs.googleGson)
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.livedataktx)
     implementation(libs.lifecycle.savedstate)

@@ -9,10 +9,15 @@ plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     id(libs.plugins.kotlinKsp.get().pluginId)
     kotlin(libs.plugins.android.get().pluginId)
+    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId) version libs.versions.kotlin
 }
 
 android {
     namespace = "com.seancoyle.feature.launch.implementation"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
@@ -38,8 +43,9 @@ dependencies {
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable)
+    implementation(libs.kotlin.serialization)
     implementation(libs.square.retrofit.core)
-    implementation(libs.square.retrofit.gson)
+    implementation(libs.square.retrofit.serialization)
     implementation(libs.square.loggingInterceptor)
 
     androidTestImplementation(projects.core.test)

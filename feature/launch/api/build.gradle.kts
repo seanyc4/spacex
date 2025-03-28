@@ -14,5 +14,4 @@ android {
 dependencies {
     api(projects.core.common)
     api(projects.core.domain)
-    implementation(libs.googleGson)
 }
