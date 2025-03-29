@@ -21,14 +21,17 @@ jobs:
       - name: Build
         run: |
           bash ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-branch.apk
+          # Get the app version dynamically from the build
+          VERSION=$(./gradlew -q printVersion)
+          # Rename APK to match the desired format
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/spacexDev-release_${VERSION}_app_version.apk
 
       - name: Upload branch APK
         id: upload
         uses: actions/upload-artifact@v4
         with:
           name: apk-branch
-          path: app/build/outputs/apk/debug/app-debug-branch.apk
+          path: app/build/outputs/apk/debug/spacexDev-release_${VERSION}_app_version.apk
 
       # Get Artifact URL for the QR Code
       - name: Get Artifact URL
@@ -38,7 +41,7 @@ jobs:
           ARTIFACT_ID=$(curl -s \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
-            jq -r '.artifacts[] | select(.name=="apk-branch") | .id')
+            jq -r '.artifacts[] | select(.name=="spacexDev-release_apk") | .id')
           
           # Construct the full artifact URL
           artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/$ARTIFACT_ID"
