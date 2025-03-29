@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,44 +17,33 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
       - name: Build
         run: |
           bash ./gradlew :app:assembleDebug
           mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-branch.apk
+
       - name: Upload branch APK
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: apk-branch
           path: app/build/outputs/apk/debug/app-debug-branch.apk
 
-      - name: Get Run ID
-        id: get_run_id
-        run: echo "run_id=${{ github.run_id }}" >> $GITHUB_ENV
-
-
-    # - name: Install qrencode
-    #   run: sudo apt-get install -y qrencode
-
-    # # Generate QR Code for APK Download
-    # - name: Generate QR Code
-    #   run: |
-    #     APK_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-    #     mkdir -p qr-codes/${{ github.event.pull_request.number }}
-    #     qrencode -o qr-codes/${{ github.event.pull_request.number }}/qr.png "$APK_URL"
-
-    # #  Upload QR Code
-    # - name: Upload QR Code
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: qr-code
-    #     path: qr-codes/${{ github.event.pull_request.number }}/qr.png
-
-
       # Get Artifact URL for the QR Code
       - name: Get Artifact URL
         id: get-artifact-url
         run: |
-          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload.outputs.artifact_id }}"
+          # Get artifact ID using GitHub API
+          ARTIFACT_ID=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
+            jq -r '.artifacts[] | select(.name=="apk-branch") | .id')
+          
+          # Construct the full artifact URL
+          artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/$ARTIFACT_ID"
+          
+          # Output the artifact URL
           echo "Artifact URL: $artifact_url"
           echo "::set-output name=artifact_url::$artifact_url"
 
