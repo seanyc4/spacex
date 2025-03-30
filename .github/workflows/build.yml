@@ -55,12 +55,37 @@ jobs:
           echo "Artifact URL: $artifact_url"
           echo "::set-output name=artifact_url::$artifact_url"
 
-      # Post PR Comment with QR Code
-      - name: Post PR Comment with APK QR Code
+      # Debugging: List all PR comments
+      - name: List PR Comments (Debugging)
+        run: |
+          curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+
+      # Find Existing PR Comment
+      - name: Find PR Comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: ":rocket: Scan this QR code to download the APK."
+
+      # Delete Existing Comment (if found)
+      - name: Delete PR Comment (if exists)
+        if: steps.find-comment.outputs.comment-id
+        run: |
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.find-comment.outputs.comment-id }}"
+
+      # Post or Update PR Comment with QR Code
+      - name: Post or Update PR Comment with APK QR Code
         uses: kentaro-m/qr-code-commenter-action@v0.1.2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           content: "${{ steps.get-artifact-url.outputs.artifact_url }}"
+          comment-id: "${{ steps.find-comment.outputs.comment-id }}"
           comment: |
             :rocket: Scan this QR code to download the APK.
             {qrcode}
