@@ -31,6 +31,11 @@ jobs:
           # Rename APK to match the desired format
           mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/spacexDev-release_${VERSION}.apk
 
+      # Get the current date and time
+      - name: Get current date and time
+        id: datetime
+        run: echo "datetime=$(date +'%Y-%m-%d at %H:%M:%S')" >> $GITHUB_ENV
+
       # Upload APK
       - name: Upload branch APK
         id: upload
@@ -76,6 +81,8 @@ jobs:
             ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
             
             [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+            
+            Built on **${{ env.datetime }}**
 
       - name: Update comment
         if: steps.fc.outputs.comment-id != ''
@@ -89,3 +96,5 @@ jobs:
             ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
             
             [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+            
+            Built on **${{ env.datetime }}**
