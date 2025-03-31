@@ -20,15 +20,14 @@ jobs:
   danger:
     uses: ./.github/workflows/danger.yml
 
+  build:
+    uses: ./.github/workflows/build.yml
+
   unit-tests:
+    needs: build
     uses: ./.github/workflows/unit_test.yml
 
   uiTests:
+    needs: build
     uses: ./.github/workflows/ui_test.yml
 
-  generateBundles:
-    uses: ./.github/workflows/generate_bundles.yml
-
-  apkSize:
-    needs: generateBundles
-    uses: ./.github/workflows/apk_size.yml

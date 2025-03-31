@@ -53,19 +53,9 @@ jobs:
           comment-author: "github-actions[bot]"
           body-includes: "APK size"
 
-      - name: Create or Update Comment
-        if: steps.find-comment.outputs.comment-id == ''
-        uses: peter-evans/create-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **APK Size Report**
-                  
-            ${{ env.OUTPUT }}
-
       - name: Update Existing Comment
         if: steps.find-comment.outputs.comment-id != ''
-        uses: peter-evans/update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           body: |

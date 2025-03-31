@@ -39,3 +39,9 @@ tasks.register("printAndroidTestModules") {
         }
     }
 }
+
+tasks.register("printAppVersionName") {
+    doLast {
+        println(Android.versionName)
+    }
+}
