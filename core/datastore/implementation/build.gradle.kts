@@ -14,7 +14,6 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.datastore.api)
-
     implementation(libs.dataStore.preferences)
 
     testImplementation(libs.bundles.unitTestBundle)

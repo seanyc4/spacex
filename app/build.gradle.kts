@@ -37,8 +37,8 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -96,7 +96,6 @@ dependencies {
     implementation(projects.core.datastore.implementation)
     implementation(projects.core.datastoreProto)
     implementation(projects.core.domain)
-    implementation(projects.core.hiltUiTest)
     implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.database)
@@ -121,8 +120,9 @@ dependencies {
     // debugImplementation(libs.squareLeakcanary)
 
     // Android Test Dependencies
-    androidTestImplementation(libs.bundles.androidTestBundle)
+    androidTestImplementation(projects.core.hiltUiTest)
     androidTestImplementation(projects.core.test)
+    androidTestImplementation(libs.bundles.androidTestBundle)
     testImplementation(libs.bundles.unitTestBundle)
     debugImplementation(libs.compose.uiTestManifest)
     implementation(libs.compose.uiTestManifest)
