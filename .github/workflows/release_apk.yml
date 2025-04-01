@@ -35,22 +35,9 @@ jobs:
             VERSION=$(./gradlew -q printAppVersionName)
             echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-        # Sign the APK
-        - name: Sign Android release
-          uses: r0adkll/sign-android-release@v1
-          id: sign_app
-          with:
-            releaseDirectory: app/build/outputs/apk/release
-            signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-            alias: ${{ secrets.ALIAS }}
-            keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-            keyPassword: ${{ secrets.KEY_PASSWORD }}
-          env:
-            BUILD_TOOLS_VERSION: "34.0.0"
-
         # Rename APK
         - name: Rename APK
-          run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/spacex-release_${VERSION}.apk
+          run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/spacexDev-release_${VERSION}.apk
 
         # Get the current date and time
         - name: Get current date and time
@@ -62,8 +49,8 @@ jobs:
           id: upload
           uses: actions/upload-artifact@v4
           with:
-            name: spacex-release_${{ env.VERSION }}
-            path: app/build/outputs/apk/release/spacex-release_${{ env.VERSION }}.apk
+            name: spacexDev-release_${{ env.VERSION }}
+            path: app/build/outputs/apk/release/spacexDev-release_${{ env.VERSION }}.apk
 
         # Get Artifact URL for the QR Code
         - name: Get Artifact URL
@@ -73,7 +60,7 @@ jobs:
             ARTIFACT_ID=$(curl -s \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
-              jq -r ".artifacts[] | select(.name==\"spacex-release_${{ env.VERSION }}\") | .id")
+              jq -r ".artifacts[] | select(.name==\"spacexDev-release_${{ env.VERSION }}\") | .id")
 
             # Construct the full artifact URL
             artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/$ARTIFACT_ID"
@@ -101,7 +88,7 @@ jobs:
 
               ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
 
-              [Download spacex-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+              [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
 
               Built on **${{ env.datetime }}**
 
@@ -116,9 +103,6 @@ jobs:
 
               ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
 
-              [Download spacex-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+              [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
 
               Built on **${{ env.datetime }}**
-
-
-

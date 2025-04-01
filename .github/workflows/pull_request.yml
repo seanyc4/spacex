@@ -31,7 +31,7 @@ jobs:
     uses: ./.github/workflows/release_apk.yml
     secrets: inherit
 
-  uiTests:
+  ui-tests:
     needs: build
     uses: ./.github/workflows/ui_test.yml
 
