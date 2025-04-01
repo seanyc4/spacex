@@ -63,7 +63,7 @@ jobs:
 
       # Rename APK
       - name: Rename APK
-        run: mv app/build/outputs/bundle/release/app-release-unsigned-signed.aab app/build/outputs/apk/release/spacex-release_${VERSION}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/apk/release/spacex-release_${VERSION}.aab
 
       # Deploy to Google Play
       - name: Deploy Bundle to google Play
