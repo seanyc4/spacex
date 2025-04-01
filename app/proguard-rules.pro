@@ -31,7 +31,6 @@
 -optimizations !field/*,!method/*,!class/*,!code/simplification/*,!code/merging,!code/removal/exception,code/removal/simple,code/removal/advanced
 -flattenpackagehierarchy
 
-
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
@@ -125,3 +124,60 @@
 -keep class kotlinx.coroutines.android.AndroidDispatcherFactory { *; }
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepnames class kotlinx.** { *; }
+
+# Keep all generated Dagger/Hilt components and prevent obfuscation
+-keepnames class * {
+    @dagger.hilt.android.internal.managers.* *;
+}
+
+# Keep all Hilt-generated components and modules
+-keep class dagger.hilt.** { *; }
+-keep class hilt_aggregated_deps.** { *; }
+-keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
+
+# Keep Hilt entry points (Hilt modules, bindings, and injected fields)
+-keep class * {
+    @dagger.hilt.InstallIn *;
+    @dagger.hilt.EntryPoint *;
+    @dagger.hilt.android.HiltAndroidApp *;
+    @dagger.hilt.android.lifecycle.HiltViewModel *;
+    @dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories$InternalFactoryFactory *;
+}
+
+# Keep constructors of Hilt-injected classes
+-keepclassmembers class * {
+    @javax.inject.Inject <init>(...);
+}
+
+# Keep Hilt ViewModel factory methods
+-keepclassmembers class * {
+    @dagger.hilt.android.lifecycle.HiltViewModel *;
+}
+
+# Keep Hilt-injected activities, fragments, and services
+-keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+-keep class * extends dagger.hilt.internal.GeneratedComponentManager { *; }
+-keep class * extends dagger.hilt.android.HiltAndroidApp { *; }
+
+# Keep Hilt-related metadata classes
+-keep class androidx.hilt.* { *; }
+
+-dontwarn com.sun.jna.FunctionMapper
+-dontwarn com.sun.jna.JNIEnv
+-dontwarn com.sun.jna.Library
+-dontwarn com.sun.jna.Native
+-dontwarn com.sun.jna.Platform
+-dontwarn com.sun.jna.Pointer
+-dontwarn com.sun.jna.Structure
+-dontwarn com.sun.jna.platform.win32.Kernel32
+-dontwarn com.sun.jna.platform.win32.Win32Exception
+-dontwarn com.sun.jna.platform.win32.WinDef$LPVOID
+-dontwarn com.sun.jna.platform.win32.WinNT$HANDLE
+-dontwarn com.sun.jna.win32.StdCallLibrary
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn java.lang.instrument.ClassDefinition
+-dontwarn java.lang.instrument.IllegalClassFormatException
+-dontwarn java.lang.instrument.UnmodifiableClassException
+-dontwarn org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher
+-dontwarn org.slf4j.Logger
+-dontwarn org.slf4j.LoggerFactory

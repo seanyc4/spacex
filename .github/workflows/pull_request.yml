@@ -27,7 +27,11 @@ jobs:
     needs: build
     uses: ./.github/workflows/unit_test.yml
 
-  uiTests:
+  release-apk:
+    needs: unit-tests
+    uses: ./.github/workflows/release_apk.yml
+    secrets: inherit
+
+  ui-tests:
     needs: build
     uses: ./.github/workflows/ui_test.yml
-

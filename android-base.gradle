@@ -14,14 +14,8 @@ android {
         consumerProguardFiles "consumer-proguard-rules.pro"
     }
 
-    buildTypes {
-        debug {
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    buildFeatures {
+        buildConfig true
     }
 
     compileOptions {

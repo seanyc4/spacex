@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.LintOptions
-
 apply {
     from("$rootDir/hilt.gradle")
     from("$rootDir/android-base-ui.gradle")
@@ -37,8 +35,8 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -129,4 +127,3 @@ dependencies {
     debugImplementation(projects.core.hiltUiTest)
 
 }
-
