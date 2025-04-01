@@ -19,12 +19,6 @@ jobs:
         - name: Setup Android SDK
           uses: android-actions/setup-android@v3
 
-        - name: Add secrets
-          run: |
-            cat > local.properties << ENDOFFILE
-            API_KEY=${{ secrets.API_KEY }}
-            ENDOFFILE
-
         # Build Release APK
         - name: Build Release APK
           run: ./gradlew :app:assembleRelease --stacktrace
@@ -35,9 +29,22 @@ jobs:
             VERSION=$(./gradlew -q printAppVersionName)
             echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
+        # Sign the APK with a test key
+        - name: Sign Android release with test key
+          uses: r0adkll/sign-android-release@v1
+          id: sign_app
+          with:
+            releaseDirectory: app/build/outputs/apk/release
+            signingKeyBase64: ${{ secrets.TEST_SIGNING_KEY }}
+            alias: ${{ secrets.TEST_ALIAS }}
+            keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
+            keyPassword: ${{ secrets.TEST_KEY_PASSWORD }}
+          env:
+            BUILD_TOOLS_VERSION: "34.0.0"
+
         # Rename APK
         - name: Rename APK
-          run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/spacexDev-release_${VERSION}.apk
+          run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/spacexDev-release_${VERSION}.apk
 
         # Get the current date and time
         - name: Get current date and time
