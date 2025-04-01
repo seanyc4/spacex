@@ -31,6 +31,11 @@
 -optimizations !field/*,!method/*,!class/*,!code/simplification/*,!code/merging,!code/removal/exception,code/removal/simple,code/removal/advanced
 -flattenpackagehierarchy
 
+# Keep DataStore fields
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* {
+   <fields>;
+}
+-keep class com.seancoyle.feature.launch.implementation.di.launch.LaunchPreferencesDataStoreProtoModule { *; }
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -125,3 +130,40 @@
 -keep class kotlinx.coroutines.android.AndroidDispatcherFactory { *; }
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepnames class kotlinx.** { *; }
+
+# Keep all generated Dagger/Hilt components and prevent obfuscation
+-keepnames class * {
+    @dagger.hilt.android.internal.managers.* *;
+}
+
+# Keep all Hilt-generated components and modules
+-keep class dagger.hilt.** { *; }
+-keep class hilt_aggregated_deps.** { *; }
+-keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
+
+# Keep Hilt entry points (Hilt modules, bindings, and injected fields)
+-keep class * {
+    @dagger.hilt.InstallIn *;
+    @dagger.hilt.EntryPoint *;
+    @dagger.hilt.android.HiltAndroidApp *;
+    @dagger.hilt.android.lifecycle.HiltViewModel *;
+    @dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories$InternalFactoryFactory *;
+}
+
+# Keep constructors of Hilt-injected classes
+-keepclassmembers class * {
+    @javax.inject.Inject <init>(...);
+}
+
+# Keep Hilt ViewModel factory methods
+-keepclassmembers class * {
+    @dagger.hilt.android.lifecycle.HiltViewModel *;
+}
+
+# Keep Hilt-injected activities, fragments, and services
+-keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+-keep class * extends dagger.hilt.internal.GeneratedComponentManager { *; }
+-keep class * extends dagger.hilt.android.HiltAndroidApp { *; }
+
+# Keep Hilt-related metadata classes
+-keep class androidx.hilt.* { *; }
