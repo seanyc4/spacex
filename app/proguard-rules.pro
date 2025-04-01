@@ -161,3 +161,23 @@
 
 # Keep Hilt-related metadata classes
 -keep class androidx.hilt.* { *; }
+
+-dontwarn com.sun.jna.FunctionMapper
+-dontwarn com.sun.jna.JNIEnv
+-dontwarn com.sun.jna.Library
+-dontwarn com.sun.jna.Native
+-dontwarn com.sun.jna.Platform
+-dontwarn com.sun.jna.Pointer
+-dontwarn com.sun.jna.Structure
+-dontwarn com.sun.jna.platform.win32.Kernel32
+-dontwarn com.sun.jna.platform.win32.Win32Exception
+-dontwarn com.sun.jna.platform.win32.WinDef$LPVOID
+-dontwarn com.sun.jna.platform.win32.WinNT$HANDLE
+-dontwarn com.sun.jna.win32.StdCallLibrary
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn java.lang.instrument.ClassDefinition
+-dontwarn java.lang.instrument.IllegalClassFormatException
+-dontwarn java.lang.instrument.UnmodifiableClassException
+-dontwarn org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher
+-dontwarn org.slf4j.Logger
+-dontwarn org.slf4j.LoggerFactory

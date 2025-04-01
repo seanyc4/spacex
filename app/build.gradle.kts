@@ -37,7 +37,7 @@ android {
             manifestPlaceholders["enableCrashReporting"] = false
         }
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(

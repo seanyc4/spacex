@@ -15,10 +15,6 @@ plugins {
 android {
     namespace = "com.seancoyle.feature.launch.implementation"
 
-    buildFeatures {
-        buildConfig = true
-    }
-
     defaultConfig {
         testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
     }
