@@ -31,12 +31,6 @@
 -optimizations !field/*,!method/*,!class/*,!code/simplification/*,!code/merging,!code/removal/exception,code/removal/simple,code/removal/advanced
 -flattenpackagehierarchy
 
-# Keep DataStore fields
--keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* {
-   <fields>;
-}
--keep class com.seancoyle.feature.launch.implementation.di.launch.LaunchPreferencesDataStoreProtoModule { *; }
-
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
