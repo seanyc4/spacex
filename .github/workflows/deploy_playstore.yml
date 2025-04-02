@@ -71,4 +71,4 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ env.VERSION }}.aab
           track: internal
           status: "completed"
-          whatsNewDirectory: whatsNew/
+          whatsNewDirectory: whatsNew
