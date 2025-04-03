@@ -79,7 +79,7 @@ jobs:
 
       # Rename Signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${VERSION}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ env.VERSION }}.aab
 
       # Debug: List files to check if the AAB file exists
       - name: List Files in Release Directory
@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${VERSION}.aab
+          path: app/build/outputs/bundle/release/spacex-release_${{ env.VERSION }}.aab
 
   # Deploy to Google Play
   deploy:
