@@ -81,6 +81,10 @@ jobs:
       - name: Rename Signed AAB
         run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${VERSION}.aab
 
+      # Debug: List files to check if the AAB file exists
+      - name: List Files in Release Directory
+        run: ls -al app/build/outputs/bundle/release/
+
       # Upload Signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
@@ -95,6 +99,13 @@ jobs:
     needs: build-sign
 
     steps:
+      # Download Signed AAB
+      - name: Download AAB Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-bundle
+          path: app/build/outputs/bundle/release/
+
       # Deploy to Play store
       - name: Deploy Bundle to google Play
         uses: r0adkll/upload-google-play@v1.1.3
