@@ -30,13 +30,20 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      # Add 1 to github.run_number and store it as an environment variable
+      - name: Increment run number
+        id: increment_run_number
+        run: |
+          INCREMENTED_RUN_NUMBER=$((github.run_number + 1))
+          echo "INCREMENTED_RUN_NUMBER=${INCREMENTED_RUN_NUMBER}" >> $GITHUB_ENV
+
       - name: Version Bump
         id: version
         uses: chkfung/android-version-actions@v1.2.3
         with:
           gradlePath: app/build.gradle.kts
-          versionCode: ${{ github.run_number }}
-          versionName: 1.${{ github.run_number }}.0
+          versionCode: ${{ env.INCREMENTED_RUN_NUMBER }}
+          versionName: 1.${{ env.INCREMENTED_RUN_NUMBER }}.0
 
   build-sign:
     name: Build & Sign
