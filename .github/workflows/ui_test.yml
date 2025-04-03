@@ -63,6 +63,3 @@ jobs:
         with:
           report_paths: '**/build/outputs/androidTest-results/connected/**/*.xml'
           title: UI Test Results
-
-
-          
