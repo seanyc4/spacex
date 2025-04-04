@@ -28,7 +28,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Version Bump
         id: version
@@ -47,7 +46,7 @@ jobs:
           newVersionName="$major.$newMinor.$patch"
           
           # Replace versionName in Android.kt
-          sed -i -E "s/(versionName = \")([0-9]+\.[0-9]+\.[0-9]+)(\")/\1$newVersionName\3/" "$file"
+          sed -i -E "s/(versionName = \")[^\"]+(\")/\1${newVersionName}\2/" "$file"
           echo "Updated versionName to $newVersionName"
           
           # Extract and bump versionCode
@@ -73,7 +72,7 @@ jobs:
     needs: version-bump
 
     outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
