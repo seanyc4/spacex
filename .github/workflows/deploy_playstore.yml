@@ -89,7 +89,7 @@ jobs:
   deploy:
     name: Deploy to Play Store
     runs-on: ubuntu-latest
-    needs: build-sign
+    needs: [build-sign, version-bump]
 
     steps:
       # Download Signed AAB
