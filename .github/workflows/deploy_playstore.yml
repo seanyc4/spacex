@@ -33,7 +33,7 @@ jobs:
 
       - name: Version Bump
         id: version
-        run: .github/scripts/version-bump.sh
+        run: chmod +x .github/scripts/version-bump.sh
 
       - name: Commit & Push changes
         uses: actions-js/push@master
