@@ -45,3 +45,9 @@ tasks.register("printAppVersionName") {
         println(Android.versionName)
     }
 }
+
+tasks.register("printAppVersionCode") {
+    doLast {
+        println(Android.versionCode)
+    }
+}

@@ -30,20 +30,42 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      # Add 1 to github.run_number and store it as an environment variable
-      - name: Increment run number
-        id: increment_run_number
-        run: |
-          INCREMENTED_RUN_NUMBER=$((github.run_number + 1))
-          echo "INCREMENTED_RUN_NUMBER=${INCREMENTED_RUN_NUMBER}" >> $GITHUB_ENV
-
       - name: Version Bump
         id: version
-        uses: chkfung/android-version-actions@v1.2.3
+        run: |
+          file="buildSrc/src/main/kotlin/Android.kt"
+          currentVersionName=$(./gradlew -q printAppVersionName)
+          currentVersionCode=$(./gradlew -q printAppVersionCode)
+          
+          # Extract current versionName (e.g. 1.0.0)
+          major=$(echo $currentVersionName | cut -d' ' -f1)
+          minor=$(echo $currentVersionName | cut -d' ' -f2)
+          patch=$(echo $currentVersionName | cut -d' ' -f3)
+          
+          # Bump minor version
+          newMinor=$((minor + 1))
+          newVersionName="$major.$newMinor.$patch"
+          
+          # Replace versionName in Android.kt
+          sed -i -E "s/(versionName = \")([0-9]+\.[0-9]+\.[0-9]+)(\")/\1$newVersionName\3/" "$file"
+          echo "Updated versionName to $newVersionName"
+          
+          # Extract and bump versionCode
+          currentVersionCode=$(grep 'versionCode' "$file" | sed -E 's/.*= ([0-9]+)/\1/')
+          newVersionCode=$((currentVersionCode + 1))
+          
+          # Replace versionCode in Android.kt
+          sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$file"
+          echo "Updated versionCode to $newVersionCode"
+          
+          # Export for commit message
+          echo "NEW_VERSION_NAME=$newVersionName" >> $GITHUB_ENV
+          echo "::set-output name=version::${NEW_VERSION_NAME}"
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
         with:
-          gradlePath: app/build.gradle.kts
-          versionCode: ${{ env.INCREMENTED_RUN_NUMBER }}
-          versionName: 1.${{ env.INCREMENTED_RUN_NUMBER }}.0
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build-sign:
     name: Build & Sign
@@ -67,14 +89,6 @@ jobs:
       - name: Assemble Release Bundle
         run: ./gradlew :app:bundleRelease --stacktrace
 
-      # Get app version
-      - name: Get App Version
-        id: get_version
-        run: |
-          VERSION=$(./gradlew -q printAppVersionName)
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=version::${VERSION}"
-
       # Sign the production bundle
       - name: Sign Android Production Release
         uses: r0adkll/sign-android-release@v1
@@ -90,14 +104,14 @@ jobs:
 
       # Rename Signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ env.VERSION }}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
 
       # Upload Signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${{ env.VERSION }}.aab
+          path: app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
 
   # Deploy to Google Play
   deploy:
