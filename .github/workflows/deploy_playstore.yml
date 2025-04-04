@@ -18,6 +18,8 @@ jobs:
   version-bump:
     name: Version Bump
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     #needs: [unit-tests, ui-tests]
 
     steps:
@@ -36,11 +38,9 @@ jobs:
           currentVersionName=$(./gradlew -q printAppVersionName)
           currentVersionCode=$(./gradlew -q printAppVersionCode)
           
-          # Extract current versionName (e.g. 1.0.0)
-          major=$(echo $currentVersionName | cut -d' ' -f1)
-          minor=$(echo $currentVersionName | cut -d' ' -f2)
-          patch=$(echo $currentVersionName | cut -d' ' -f3)
-          
+          # Correctly split versionName (e.g. 1.8.0 → major=1, minor=8, patch=0)
+          IFS='.' read -r major minor patch <<< "$currentVersionName"
+  
           # Bump minor version
           newMinor=$((minor + 1))
           newVersionName="$major.$newMinor.$patch"
@@ -58,8 +58,7 @@ jobs:
           echo "Updated versionCode to $newVersionCode"
           
           # Export for commit message
-          echo "NEW_VERSION_NAME=$newVersionName" >> $GITHUB_ENV
-          echo "::set-output name=version::${NEW_VERSION_NAME}"
+          echo "version=$newVersionName" >> $GITHUB_OUTPUT
 
       - name: Commit & Push changes
         uses: actions-js/push@master
@@ -72,7 +71,7 @@ jobs:
     needs: version-bump
 
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ needs.version-bump.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -103,14 +102,14 @@ jobs:
 
       # Rename Signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ needs.build-sign.outputs.version }}.aab
 
       # Upload Signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
+          path: app/build/outputs/bundle/release/spacex-release_${{ needs.build-sign.outputs.version }}.aab
 
   # Deploy to Google Play
   deploy:
@@ -135,4 +134,4 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ needs.build-sign.outputs.version }}.aab
           track: internal
           status: "completed"
-          whatsNewDirectory: whatsNew
+#          whatsNewDirectory: whatsNew
