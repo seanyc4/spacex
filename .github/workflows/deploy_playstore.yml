@@ -19,7 +19,7 @@ jobs:
     name: Version Bump
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
     #needs: [unit-tests, ui-tests]
 
     steps:
