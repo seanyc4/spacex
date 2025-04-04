@@ -76,14 +76,14 @@ jobs:
 
       # Rename Signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version  }}.aab
 
       # Upload Signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
+          path: app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version }}.aab
 
   # Deploy to Google Play
   deploy:
@@ -105,7 +105,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_AUTH_JSON }}
           packageName: com.seancoyle.spacex
-          releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ env.NEW_VERSION_NAME }}.aab
+          releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version  }}.aab
           track: internal
           status: "completed"
 #          whatsNewDirectory: whatsNew
