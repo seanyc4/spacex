@@ -33,32 +33,7 @@ jobs:
 
       - name: Version Bump
         id: version
-        run: |
-          file="buildSrc/src/main/kotlin/Android.kt"
-          currentVersionName=$(./gradlew -q printAppVersionName)
-          currentVersionCode=$(./gradlew -q printAppVersionCode)
-          
-          # Correctly split versionName (e.g. 1.8.0 → major=1, minor=8, patch=0)
-          IFS='.' read -r major minor patch <<< "$currentVersionName"
-  
-          # Bump minor version
-          newMinor=$((minor + 1))
-          newVersionName="$major.$newMinor.$patch"
-          
-          # Replace versionName in Android.kt
-          sed -i -E "s/(versionName = \")[^\"]+(\")/\1${newVersionName}\2/" "$file"
-          echo "Updated versionName to $newVersionName"
-          
-          # Extract and bump versionCode
-          currentVersionCode=$(grep 'versionCode' "$file" | sed -E 's/.*= ([0-9]+)/\1/')
-          newVersionCode=$((currentVersionCode + 1))
-          
-          # Replace versionCode in Android.kt
-          sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$file"
-          echo "Updated versionCode to $newVersionCode"
-          
-          # Export for commit message
-          echo "version=$newVersionName" >> $GITHUB_ENV
+        run: ./scripts/version-bump.sh
 
       - name: Commit & Push changes
         uses: actions-js/push@master
