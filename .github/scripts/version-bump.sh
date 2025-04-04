@@ -26,4 +26,4 @@ sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$file"
 echo "Updated versionCode to $newVersionCode"
 
 # Export version for subsequent steps
-echo "NEW_VERSION_NAME=$newVersionName" >> $GITHUB_ENV
+echo "NEW_VERSION_NAME=$newVersionName" >> $GITHUB_OUTPUT
