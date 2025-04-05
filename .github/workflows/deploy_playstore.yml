@@ -14,33 +14,10 @@ jobs:
     uses: ./.github/workflows/ui_test.yml
     secrets: inherit
 
-  # Bump the version code and name only after tests pass
   version-bump:
-    name: Version Bump
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
+    uses: ./.github/workflows/version_bump.yml
     #needs: [unit-tests, ui-tests]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Version Bump
-        id: version
-        run: |
-          chmod +x .github/scripts/version-bump.sh
-          .github/scripts/version-bump.sh
-
-      - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit
 
   build-sign:
     name: Build & Sign

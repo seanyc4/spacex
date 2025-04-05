@@ -1,0 +1,35 @@
+name: Version Bump
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "The new version name"
+        value: ${{ jobs.version-bump.outputs.version }}
+
+jobs:
+  version-bump:
+    name: Version Bump
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Version Bump
+        id: version
+        run: |
+          chmod +x .github/scripts/version-bump.sh
+          .github/scripts/version-bump.sh
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
