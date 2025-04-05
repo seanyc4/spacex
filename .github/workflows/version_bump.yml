@@ -29,6 +29,7 @@ jobs:
           chmod +x .github/scripts/version-bump.sh
           .github/scripts/version-bump.sh
 
+      # Commit version bump to main branch
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
