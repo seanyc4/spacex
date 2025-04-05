@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: release-playstore
+  cancel-in-progress: true
+
 jobs:
   unit-tests:
     uses: ./.github/workflows/unit_test.yml
