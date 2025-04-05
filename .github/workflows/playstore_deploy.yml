@@ -1,35 +1,17 @@
-name: Deploy to PLay Store
+name: Deploy AAB to Play Store
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
-
-  unit-tests:
-    uses: ./.github/workflows/unit_test.yml
-
-  ui-tests:
-    uses: ./.github/workflows/ui_test.yml
-    secrets: inherit
-
-  version-bump:
-    uses: ./.github/workflows/version_bump.yml
-    #needs: [unit-tests, ui-tests]
-    secrets: inherit
-
-  assemble-release:
-    uses: ./.github/workflows/assemble_release_aab.yml
-    needs: version-bump
-    secrets: inherit
-    with:
-      version: ${{ needs.version-bump.outputs.version }}
-
   deploy-playstore:
     name: Deploy to Play Store
     runs-on: ubuntu-latest
-    needs: [assemble-release, version-bump]
+    needs: [ assemble-release, version-bump ]
 
     steps:
       # Download Signed AAB
@@ -48,4 +30,4 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version  }}.aab
           track: internal
           status: "completed"
-#          whatsNewDirectory: whatsNew
+  #          whatsNewDirectory: whatsNew
