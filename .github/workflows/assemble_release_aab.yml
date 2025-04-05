@@ -2,7 +2,10 @@ name: Assemble Release AAB
 
 on:
   workflow_call:
-
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   build-sign:
@@ -38,11 +41,11 @@ jobs:
 
       # Rename Signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version  }}.aab
+        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ inputs.version  }}.aab
 
       # Upload Signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version }}.aab
+          path: app/build/outputs/bundle/release/spacex-release_${{ inputs.version }}.aab

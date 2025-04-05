@@ -23,6 +23,8 @@ jobs:
     uses: ./.github/workflows/assemble_release_aab.yml
     needs: version-bump
     secrets: inherit
+    with:
+      version: ${{ needs.version-bump.outputs.version }}
 
   deploy-playstore:
     name: Deploy to Play Store
