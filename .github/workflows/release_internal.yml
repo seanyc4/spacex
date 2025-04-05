@@ -28,7 +28,8 @@ jobs:
 
   deploy-playstore:
     uses: ./.github/workflows/playstore_deploy.yml
-    needs: [ assemble-release, version-bump ]
+    needs: [assemble-release, version-bump]
     secrets: inherit
     with:
-        version: ${{ needs.version-bump.outputs.version }}
+      version: ${{ needs.version-bump.outputs.version }}
+
