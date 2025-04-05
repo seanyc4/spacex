@@ -51,7 +51,7 @@ jobs:
           
               ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
           
-              [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+              [Download spacexDev-release_${{ inputs.version }}.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
           
               Built on **${{ env.datetime }}**
 
@@ -66,6 +66,6 @@ jobs:
           
               ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${{ steps.get-artifact-url.outputs.artifact_url }})
           
-              [Download spacexDev-release.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
+              [Download spacexDev-release_${{ inputs.version }}.apk](${{ steps.get-artifact-url.outputs.artifact_url }})
           
               Built on **${{ env.datetime }}**
