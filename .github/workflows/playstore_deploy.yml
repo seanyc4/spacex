@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  deploy-playstore:
+  deploy:
     name: Deploy to Play Store
     runs-on: ubuntu-latest
     needs: [ assemble-release, version-bump ]
