@@ -19,18 +19,25 @@ jobs:
   danger:
     uses: ./.github/workflows/danger.yml
 
-  build:
-    uses: ./.github/workflows/assemble_dev_release_apk.yml
+  assemble-debug:
+    uses: ./.github/workflows/assemble_debug.yml
 
   unit-tests:
-    needs: build
+    needs: assemble-debug
     uses: ./.github/workflows/unit_test.yml
 
-  release-apk:
+  ui-tests:
+    needs: assemble-debug
+    uses: ./.github/workflows/ui_test.yml
+
+  assemble-dev-release-apk:
     needs: unit-tests
-    uses: ./.github/workflows/release_apk.yml
+    uses: ./.github/workflows/assemble_dev_release_apk.yml
     secrets: inherit
 
-  ui-tests:
-    needs: build
-    uses: ./.github/workflows/ui_test.yml
+  comment-qr-code:
+    uses: ./.github/workflows/comment_qr_code.yml
+    needs: assemble-dev-release-apk
+    secrets: inherit
+    with:
+      version: ${{ needs.assemble-dev-release-apk.outputs.version }}

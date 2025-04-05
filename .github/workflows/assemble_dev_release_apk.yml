@@ -11,16 +11,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.get-version.outputs.version }}
+      version: ${{ steps.get-version.outputs.VERSION }}
 
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
+
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -46,7 +48,7 @@ jobs:
         id: get-version
         run: |
           VERSION=$(./gradlew -q printAppVersionName)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       # Rename signed APK
       - name: Rename Signed APK
