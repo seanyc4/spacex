@@ -1,0 +1,60 @@
+name: Build Dev Release APK
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "App version"
+        value: ${{ jobs.build.outputs.version }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Build release APK
+      - name: Assemble APK
+        run: ./gradlew :app:assembleRelease --stacktrace
+
+      # Sign the APK with a test key
+      - name: Sign Android release with test key
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.TEST_SIGNING_KEY }}
+          alias: ${{ secrets.TEST_ALIAS }}
+          keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.TEST_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+
+      # Get the current app version
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION=$(./gradlew -q printAppVersionName)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # Rename signed APK
+      - name: Rename Signed APK
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/spacexDev-release_${VERSION}.apk
+
+      # Upload APK
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spacexDev-release_${{ env.VERSION }}
+          path: app/build/outputs/apk/release/spacexDev-release_${{ env.VERSION }}.apk

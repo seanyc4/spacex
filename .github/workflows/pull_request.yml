@@ -20,7 +20,7 @@ jobs:
     uses: ./.github/workflows/danger.yml
 
   build:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/assemble_dev_release_apk.yml
 
   unit-tests:
     needs: build

@@ -16,6 +16,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
       - name: Assemble app debug APK
         run: |
           bash ./gradlew :app:assembleDebug
