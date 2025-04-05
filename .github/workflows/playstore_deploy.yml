@@ -27,7 +27,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_AUTH_JSON }}
           packageName: com.seancoyle.spacex
-          releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ needs.version-bump.outputs.version  }}.aab
+          releaseFiles: app/build/outputs/bundle/release/spacex-release_${{ inputs.version }}.aab
           track: internal
           status: "completed"
   #          whatsNewDirectory: whatsNew
