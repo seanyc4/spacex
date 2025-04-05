@@ -16,7 +16,7 @@ jobs:
 
   version-bump:
     uses: ./.github/workflows/version_bump.yml
-    #needs: [unit-tests, ui-tests]
+    needs: [unit-tests, ui-tests]
     secrets: inherit
 
   assemble-release:
