@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   unit-tests:
     uses: ./.github/workflows/unit_test.yml
 
@@ -32,4 +31,3 @@ jobs:
     secrets: inherit
     with:
       version: ${{ needs.version-bump.outputs.version }}
-
