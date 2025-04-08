@@ -1,0 +1,21 @@
+#!/bin/bash
+
+file1="app-debug-main.apk"
+file2="app-debug-branch.apk"
+file_size_one_kb=`du -k "$file1" | cut -f1`
+file_size_two_kb=`du -k "$file2" | cut -f1`
+
+file_size_one_mb=$(echo $file_size_one_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+file_size_two_mb=$(echo $file_size_two_kb | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+
+if [[ $file_size_one_kb == $file_size_two_kb ]]; then
+    echo "OUTPUT=✅  APK size has not changed." >> $GITHUB_ENV
+elif [[ "$file_size_one_kb" -gt "$file_size_two_kb" ]]; then
+    change=$((file_size_one_kb-file_size_two_kb))
+    file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+    echo "OUTPUT=📉  New APK is ${file_size} smaller." >> $GITHUB_ENV
+elif [[ "$file_size_two_kb" -gt "$file_size_one_kb" ]]; then
+    change=$((file_size_two_kb-file_size_one_kb))
+    file_size=$(echo $change | tail -1 | awk {'print $1'} | awk '{ total = $1 / 1024 ; printf("%.2fMB\n", total) }')
+    echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
+fi
