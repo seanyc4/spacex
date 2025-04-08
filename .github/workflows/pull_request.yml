@@ -22,6 +22,10 @@ jobs:
   assemble-debug:
     uses: ./.github/workflows/assemble_debug.yml
 
+  apk-size:
+    needs: assemble-debug
+    uses: ./.github/workflows/apk_size.yml
+
   unit-tests:
     needs: assemble-debug
     uses: ./.github/workflows/unit_test.yml

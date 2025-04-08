@@ -10,19 +10,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
+
       - name: Download branch APK
         uses: actions/download-artifact@v4
         with:
           name: apk-branch
+
       - name: Download main APK
         uses: actions/download-artifact@v4
         with:
           name: apk-main
+
       - name: Compare APK sizes
         run: |
           file1="app-debug-main.apk"
@@ -45,20 +49,32 @@ jobs:
               echo "OUTPUT=📈  New APK is ${file_size} larger." >> $GITHUB_ENV
           fi
 
-      - name: Find Existing Comment
-        id: find-comment
+      # Create or update comment with APK size
+      - name: Find Comment
         uses: peter-evans/find-comment@v3
+        id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: "github-actions[bot]"
+          comment-author: 'github-actions[bot]'
           body-includes: "APK size"
 
-      - name: Update Existing Comment
-        if: steps.find-comment.outputs.comment-id != ''
+      - name: Create comment
+        if: steps.fc.outputs.comment-id == ''
         uses: peter-evans/create-or-update-comment@v4
         with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             **APK Size Report**
                   
+            ${{ env.OUTPUT }}
+
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            **APK Size Report**
+
             ${{ env.OUTPUT }}
