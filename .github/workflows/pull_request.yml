@@ -1,6 +1,7 @@
 name: Pull Request
 
 permissions:
+  checks: write
   contents: read
   actions: read
   pull-requests: write
