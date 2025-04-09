@@ -30,7 +30,7 @@ jobs:
       
             # Output the artifact URL
             echo "Artifact URL: $artifact_url"
-            echo "::set-output name=artifact_url::$artifact_url"
+            echo "artifact_url=$artifact_url" >> $GITHUB_OUTPUT
           
       # Create or update comment with QR code
       - name: Find Comment
