@@ -45,8 +45,8 @@ jobs:
       # Rename signed AAB
       - name: Rename Signed AAB
         run: |
-          chmod +x scripts/rename_release_bundle.sh
-          ./scripts/rename_release_bundle.sh "${{ inputs.version }}"
+          chmod +x .github/scripts/rename_release_bundle.sh
+          .github/scripts/rename_release_bundle.sh "${{ inputs.version }}"
 
       # Upload signed AAB
       - name: Upload AAB as Artifact

@@ -29,8 +29,8 @@ jobs:
 
       - name: Compare APK sizes
         run: |
-          chmod +x .github/scripts/compare-apk-sizes.sh
-          .github/scripts/compare-apk-sizes.sh
+          chmod +x .github/scripts/compare_apk_sizes.sh
+          .github/scripts/compare_apk_sizes.sh
 
       # Create or update comment with APK size
       - name: Find Comment
