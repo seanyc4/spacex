@@ -2,6 +2,10 @@ name: Compare APK Sizes
 
 on:
   workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   apk-size:
@@ -20,17 +24,17 @@ jobs:
       - name: Download branch APK
         uses: actions/download-artifact@v4
         with:
-          name: apk-branch
+          name: spacex-debug_${{ inputs.version }}
 
       - name: Download main APK
         uses: actions/download-artifact@v4
         with:
-          name: apk-main
+          name: spacex-debug-main
 
       - name: Compare APK sizes
         run: |
           chmod +x .github/scripts/compare_apk_sizes.sh
-          .github/scripts/compare_apk_sizes.sh
+          .github/scripts/compare_apk_sizes.sh "${{ inputs.version }}"
 
       # Create or update comment with APK size
       - name: Find Comment

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-file1="app-debug-main.apk"
-file2="app-debug-branch.apk"
+VERSION=$1
+file1="spacex-debug-main.apk"
+file2="spacex-debug_$VERSION.apk"
 file_size_one_kb=`du -k "$file1" | cut -f1`
 file_size_two_kb=`du -k "$file2" | cut -f1`
 

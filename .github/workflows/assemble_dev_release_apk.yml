@@ -2,16 +2,14 @@ name: Build Dev Release APK
 
 on:
   workflow_call:
-    outputs:
+    inputs:
       version:
-        description: "App version"
-        value: ${{ jobs.build.outputs.version }}
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.get-version.outputs.version }}
 
     steps:
       - name: Checkout
@@ -55,11 +53,11 @@ jobs:
       - name: Rename Signed APK
         run: |
           chmod +x .github/scripts/rename_release_apk.sh
-          .github/scripts/rename_release_apk.sh "${{ steps.get-version.outputs.version }}"
+          .github/scripts/rename_release_apk.sh "${{ inputs.version }}"
 
       # Upload APK
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: spacexDev-release_${{ steps.get-version.outputs.version }}
-          path: app/build/outputs/apk/release/spacexDev-release_${{ steps.get-version.outputs.version }}.apk
+          name: spacexDev-release_${{ inputs.version }}
+          path: app/build/outputs/apk/release/spacexDev-release_${{ inputs.version }}.apk

@@ -20,12 +20,20 @@ jobs:
   danger:
     uses: ./.github/workflows/danger.yml
 
+  get-version:
+    uses: ./.github/workflows/get_version_name.yml
+
   assemble-debug:
+    needs: get-version
     uses: ./.github/workflows/assemble_debug.yml
+    with:
+      version: ${{ needs.get-version.outputs.version }}
 
   apk-size:
-    needs: assemble-debug
+    needs: [assemble-debug, get-version]
     uses: ./.github/workflows/apk_size.yml
+    with:
+      version: ${{ needs.get-version.outputs.version }}
 
   unit-tests:
     needs: assemble-debug
@@ -36,13 +44,15 @@ jobs:
     uses: ./.github/workflows/ui_test.yml
 
   assemble-dev-release-apk:
-    needs: unit-tests
+    needs: [unit-tests, get-version]
     uses: ./.github/workflows/assemble_dev_release_apk.yml
+    with:
+      version: ${{ needs.get-version.outputs.version }}
     secrets: inherit
 
   comment-qr-code:
     uses: ./.github/workflows/comment_qr_code.yml
-    needs: assemble-dev-release-apk
+    needs: [assemble-dev-release-apk, get-version]
     secrets: inherit
     with:
-      version: ${{ needs.assemble-dev-release-apk.outputs.version }}
+      version: ${{ needs.get-version.outputs.version }}
