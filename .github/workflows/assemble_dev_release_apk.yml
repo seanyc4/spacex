@@ -14,9 +14,10 @@ jobs:
       version: ${{ steps.get-version.outputs.version }}
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
