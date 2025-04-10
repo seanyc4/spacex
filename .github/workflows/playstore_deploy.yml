@@ -17,7 +17,7 @@ jobs:
       - name: Download AAB Artifact
         uses: actions/download-artifact@v4
         with:
-          name: release-bundle
+          name: release-bundle_${{ inputs.version }}
           path: app/build/outputs/bundle/release/
 
       # Deploy to Play store
