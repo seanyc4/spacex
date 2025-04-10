@@ -5,7 +5,7 @@ on:
 
 jobs:
   uiTest:
-    name: Run UI Tests
+    name: Run
     runs-on: ubuntu-latest
     strategy:
       matrix:

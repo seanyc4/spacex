@@ -1,0 +1,28 @@
+name: App Version
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "The current version name"
+        value: ${{ jobs.get-version-name.outputs.version }}
+
+jobs:
+  get-version-name:
+    name: Fetch
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION=$(./gradlew -q printAppVersionName)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Print version to log for visibility
+          echo "Version Code: $VERSION"

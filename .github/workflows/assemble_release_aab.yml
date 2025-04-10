@@ -12,8 +12,13 @@ jobs:
     name: Build & Sign
     runs-on: ubuntu-latest
 
+    env:
+      BUILD_TOOLS_VERSION: "34.0.0"
+      BUNDLE_NAME: spacex-release_${{ inputs.version }}.aab
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: set up JDK
         uses: actions/setup-java@v4
@@ -36,16 +41,16 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: "34.0.0"
 
       # Rename signed AAB
       - name: Rename Signed AAB
-        run: mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/spacex-release_${{ inputs.version  }}.aab
+        run: |
+          chmod +x .github/scripts/rename_release_bundle.sh
+          .github/scripts/rename_release_bundle.sh "${{ inputs.version }}"
 
       # Upload signed AAB
       - name: Upload AAB as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-bundle
-          path: app/build/outputs/bundle/release/spacex-release_${{ inputs.version }}.aab
+          name: release-bundle-${{ inputs.version }}
+          path: app/build/outputs/bundle/release/${{ env.BUNDLE_NAME }}

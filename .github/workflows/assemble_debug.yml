@@ -2,13 +2,21 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
 
+    env:
+      APK_NAME: spacex-debug_${{ inputs.version }}.apk
+
     steps:
-      - name: Checkout
+      - name: Checkout Current Branch
         uses: actions/checkout@v4
 
       - name: Set up JDK
@@ -18,28 +26,33 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      # Assemble debug APK
       - name: Assemble Debug APK
         run: |
-          bash ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-branch.apk
+          ./gradlew :app:assembleDebug
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/${{ env.APK_NAME }}
 
+      # Upload debug APK
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk-branch
-          path: app/build/outputs/apk/debug/app-debug-branch.apk
+          name: spacex-debug_${{ inputs.version }}
+          path: app/build/outputs/apk/debug/${{ env.APK_NAME }}
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: 'main'
-      - name: Assemble Main Branch APK
+      # Checkout Main
+      - name: Checkout main branch into temp dir
         run: |
-          bash ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-main.apk
+          git clone --depth=1 --branch=main https://github.com/${{ github.repository }} /tmp/main
 
-      - name: Upload Main Branch APK
+      # Assemble main APK
+      - name: Assemble Main Branch Debug APK
+        run: |
+          ./gradlew :app:assembleDebug
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/spacex-debug-main.apk
+
+      # Upload main APK
+      - name: Upload Main Branch Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk-main
-          path: app/build/outputs/apk/debug/app-debug-main.apk
+          name: spacex-debug-main
+          path: app/build/outputs/apk/debug/spacex-debug-main.apk

@@ -15,7 +15,8 @@ jobs:
       version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -26,8 +27,8 @@ jobs:
       - name: Version Bump
         id: version
         run: |
-          chmod +x .github/scripts/version-bump.sh
-          .github/scripts/version-bump.sh
+          chmod +x .github/scripts/version_bump.sh
+          .github/scripts/version_bump.sh
 
       # Commit version bump to main branch
       - name: Commit & Push changes
