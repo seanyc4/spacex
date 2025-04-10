@@ -1,4 +1,4 @@
-name: Fetch Version
+name: App Version
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   get-version-name:
-    name: Get Version Name
+    name: Fetch
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get-version.outputs.version }}

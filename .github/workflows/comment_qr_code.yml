@@ -9,6 +9,7 @@ on:
 
 jobs:
   comment:
+    name: Comment
     runs-on: ubuntu-latest
 
     steps:

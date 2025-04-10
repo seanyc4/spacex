@@ -9,6 +9,7 @@ on:
 
 jobs:
   apk-size:
+    name: Analyse
     runs-on: ubuntu-latest
 
     steps:

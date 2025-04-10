@@ -9,7 +9,12 @@ on:
 
 jobs:
   build:
+    name: Build & Sign
     runs-on: ubuntu-latest
+
+    env:
+      BUILD_TOOLS_VERSION: "34.0.0"
+      APK_NAME: spacexDev-release_${{ inputs.version }}.apk
 
     steps:
       - name: Checkout
@@ -21,9 +26,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
 
       # Build release APK
       - name: Assemble APK
@@ -39,15 +41,6 @@ jobs:
           alias: ${{ secrets.TEST_ALIAS }}
           keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.TEST_KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: "34.0.0"
-
-      # Get the current app version
-      - name: Get version
-        id: get-version
-        run: |
-          VERSION=$(./gradlew -q printAppVersionName)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       # Rename signed APK
       - name: Rename Signed APK
@@ -55,9 +48,9 @@ jobs:
           chmod +x .github/scripts/rename_release_apk.sh
           .github/scripts/rename_release_apk.sh "${{ inputs.version }}"
 
-      # Upload APK
+      # Upload signed APK
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: spacexDev-release_${{ inputs.version }}
-          path: app/build/outputs/apk/release/spacexDev-release_${{ inputs.version }}.apk
+          path: app/build/outputs/apk/release/${{ env.APK_NAME }}

@@ -5,7 +5,7 @@ on:
 
 jobs:
   unitTest:
-    name: Run Unit Tests
+    name: Run
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
