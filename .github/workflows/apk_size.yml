@@ -33,9 +33,7 @@ jobs:
           name: spacex-debug-main
 
       - name: Compare APK sizes
-        run: |
-          chmod +x .github/scripts/compare_apk_sizes.sh
-          .github/scripts/compare_apk_sizes.sh "${{ inputs.version }}"
+        run: .github/scripts/compare_apk_sizes.sh "${{ inputs.version }}"
 
       # Create or update comment with APK size
       - name: Find Comment
