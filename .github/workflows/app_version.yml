@@ -20,9 +20,4 @@ jobs:
 
       - name: Get version
         id: get-version
-        run: |
-          VERSION=$(./gradlew -q printAppVersionName)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          
-          # Print version to log for visibility
-          echo "Version Code: $VERSION"
+        run: .github/scripts/get_version.sh
