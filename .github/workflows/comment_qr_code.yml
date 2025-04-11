@@ -13,25 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Get Date/Time
         id: datetime
-        run: echo "datetime=$(date +'%Y-%m-%d at %H:%M:%S')" >> $GITHUB_ENV
+        run: .github/scripts/get_current_datetime.sh
 
       - name: Get Artifact URL
         id: get-artifact-url
-        run: |
-            # Get artifact ID using GitHub API
-            ARTIFACT_ID=$(curl -s \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
-              jq -r ".artifacts[] | select(.name==\"spacexDev-release_${{ inputs.version }}\") | .id")
-      
-            # Construct the full artifact URL
-            artifact_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/$ARTIFACT_ID"
-      
-            # Output the artifact URL
-            echo "Artifact URL: $artifact_url"
-            echo "artifact_url=$artifact_url" >> $GITHUB_OUTPUT
+        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "spacexDev-release_${{ inputs.version }}"
           
       # Create or update comment with QR code
       - name: Find Comment

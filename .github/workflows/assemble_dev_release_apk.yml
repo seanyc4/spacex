@@ -44,9 +44,7 @@ jobs:
 
       # Rename signed APK
       - name: Rename Signed APK
-        run: |
-          chmod +x .github/scripts/rename_release_apk.sh
-          .github/scripts/rename_release_apk.sh "${{ inputs.version }}"
+        run: .github/scripts/rename_release_apk.sh "${{ inputs.version }}"
 
       # Upload signed APK
       - name: Upload APK as Artifact

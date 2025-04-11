@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file="buildSrc/src/main/kotlin/Android.kt"
+location="buildSrc/src/main/kotlin/Android.kt"
 
 # Get current version name and version code
 currentVersionName=$(./gradlew -q printAppVersionName)
@@ -14,15 +14,15 @@ newMinor=$((minor + 1))
 newVersionName="$major.$newMinor.$patch"
 
 # Replace versionName in Android.kt
-sed -i -E "s/(versionName = \")[^\"]+(\")/\1${newVersionName}\2/" "$file"
+sed -i -E "s/(versionName = \")[^\"]+(\")/\1${newVersionName}\2/" "$location"
 echo "Updated versionName to $newVersionName"
 
 # Extract and bump versionCode
-currentVersionCode=$(grep 'versionCode' "$file" | sed -E 's/.*= ([0-9]+)/\1/')
+currentVersionCode=$(grep 'versionCode' "$location" | sed -E 's/.*= ([0-9]+)/\1/')
 newVersionCode=$((currentVersionCode + 1))
 
 # Replace versionCode in Android.kt
-sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$file"
+sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$location"
 echo "Updated versionCode to $newVersionCode"
 
 # Export version for subsequent steps
