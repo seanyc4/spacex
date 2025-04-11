@@ -20,10 +20,12 @@ jobs:
         id: datetime
         run: .github/scripts/get_current_datetime.sh
 
+      # Build URL for the APK artifact
       - name: Get APK URL
         id: get-artifact-url
         run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "spacexDev-release_${{ inputs.version }}"
 
+      # Generates QR code message for PR comment
       - name: Render comment body
         id: render-comment
         run: .github/scripts/render_qr_code_comment.sh \
