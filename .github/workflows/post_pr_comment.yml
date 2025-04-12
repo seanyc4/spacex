@@ -11,23 +11,24 @@ on:
         required: true
 
 jobs:
-  comment:
+  post:
+    name: Post
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Download rendered_comment.md from qr_code workflow
       - name: Download rendered comment
         uses: actions/download-artifact@v4
         with:
           name: rendered-comment
           path: ./comment
 
-      - name: Set file path
-        id: set-file-path
-        run: |
-            echo "BODY_PATH=./comment/rendered_comment.md" >> $GITHUB_ENV
+      # Save comment path to environment variable
+      - name: Save body path
+        run: echo "BODY_PATH=./comment/rendered_comment.md" >> $GITHUB_ENV
 
       - name: Find existing comment
         id: fc
