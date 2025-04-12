@@ -44,15 +44,22 @@ jobs:
     uses: ./.github/workflows/ui_test.yml
 
   assemble-dev-release-apk:
-    needs: [unit-tests, app-version]
+    needs: [app-version]
     uses: ./.github/workflows/assemble_dev_release_apk.yml
     with:
       version: ${{ needs.app-version.outputs.version }}
     secrets: inherit
 
   qr-code:
-    uses: ./.github/workflows/comment_qr_code.yml
+    uses: ./.github/workflows/qr_code.yml
     needs: [assemble-dev-release-apk, app-version]
     secrets: inherit
     with:
       version: ${{ needs.app-version.outputs.version }}
+
+  post-comment:
+    uses: ./.github/workflows/post_pr_comment.yml
+    needs: qr-code
+    with:
+      issue-number: ${{ github.event.pull_request.number }}
+      comment-trigger: Scan this QR code to download the release APK.

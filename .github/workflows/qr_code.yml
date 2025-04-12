@@ -6,11 +6,16 @@ on:
       version:
         required: true
         type: string
+    outputs:
+      comment:
+        value: ${{ jobs.comment.outputs.comment }}
 
 jobs:
   comment:
     name: Comment
     runs-on: ubuntu-latest
+    outputs:
+      comment: ${{ steps.render-comment.outputs.comment }}
 
     steps:
       - name: Checkout
@@ -34,26 +39,8 @@ jobs:
           "${{ inputs.version }}" \
           "${{ env.datetime }}"
 
-      # Create or update comment with QR code
-      - name: Find Comment
-        uses: peter-evans/find-comment@v3
-        id: fc
+      - name: Upload rendered comment
+        uses: actions/upload-artifact@v4
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Scan this QR code to download the release APK.
-
-      - name: Create comment
-        if: steps.fc.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body-path: ${{ steps.render-comment.outputs.comment_file }}
-
-      - name: Update comment
-        if: steps.fc.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: replace
-          body-path: ${{ steps.render-comment.outputs.comment_file }}
+          name: rendered-comment
+          path: .github/templates/rendered_comment.md

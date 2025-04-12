@@ -19,4 +19,4 @@ sed \
   "$TEMPLATE_FILE" > "$RENDERED_FILE"
 
 # Output path for use in workflow
-echo "comment_file=$RENDERED_FILE" >> "$GITHUB_OUTPUT"
+echo "comment=$RENDERED_FILE" >> "$GITHUB_OUTPUT"
