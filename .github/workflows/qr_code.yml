@@ -27,7 +27,6 @@ jobs:
 
       # Generates QR code message for PR comment
       - name: Render comment body
-        id: render-comment
         run: .github/scripts/render_qr_code_comment.sh \
           "${{ steps.get-artifact-url.outputs.artifact_url }}" \
           "${{ steps.get-artifact-url.outputs.artifact_url_encoded }}" \
@@ -38,5 +37,5 @@ jobs:
       - name: Upload rendered comment
         uses: actions/upload-artifact@v4
         with:
-          name: rendered-comment
-          path: .github/templates/rendered_comment.md
+          name: qr-code-rendered-comment
+          path: .github/templates/qr_code_rendered_comment.md

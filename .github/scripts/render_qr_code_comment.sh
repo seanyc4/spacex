@@ -2,7 +2,7 @@
 set -e
 
 TEMPLATE_FILE=".github/templates/qr_code_comment.md"
-RENDERED_FILE=".github/templates/rendered_comment.md"
+RENDERED_FILE=".github/templates/qr_code_rendered_comment.md"
 
 # Inputs (sanitize to remove whitespace or newlines)
 ARTIFACT_URL="$(echo "$1" | tr -d '\n\r' | xargs)"
