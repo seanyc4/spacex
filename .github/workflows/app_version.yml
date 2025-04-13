@@ -18,6 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Runs script to get app version from a gradle task
       - name: Get version
         id: get-version
         run: .github/scripts/get_version.sh
