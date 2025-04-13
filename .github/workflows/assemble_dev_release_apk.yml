@@ -29,7 +29,7 @@ jobs:
 
       # Build release APK
       - name: Assemble APK
-        run: ./gradlew :app:assembleRelease --stacktrace
+        run: .github/scripts/assemble_release_apk.sh
 
       # Sign the APK with a test key
       - name: Sign Android release with test key
@@ -44,7 +44,7 @@ jobs:
 
       # Rename signed APK
       - name: Rename Signed APK
-        run: .github/scripts/rename_release_apk.sh "${{ inputs.version }}"
+        run: ./.github/scripts/rename_artifact.sh "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "app/build/outputs/apk/release/${{ env.APK_NAME }}"
 
       # Upload signed APK
       - name: Upload APK as Artifact
