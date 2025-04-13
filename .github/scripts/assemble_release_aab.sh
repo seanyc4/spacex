@@ -2,4 +2,4 @@
 set -e
 
 # Build Debug APK
-./gradlew ::app:assembleRelease --stacktrace
+./gradlew :app:bundleRelease --stacktrace

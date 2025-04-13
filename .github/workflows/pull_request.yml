@@ -54,7 +54,7 @@ jobs:
   # 🏗️ Build - Dev Release APK
   # -------------------------------------
   assemble-dev-release-apk:
-    needs: [ app-version ]
+    needs: [ app-version, unit-tests ]
     uses: ./.github/workflows/assemble_dev_release_apk.yml
     with:
       version: ${{ needs.app-version.outputs.version }}
