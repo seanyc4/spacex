@@ -29,6 +29,21 @@ jobs:
     with:
       version: ${{ needs.app-version.outputs.version }}
 
+  unit-tests:
+    needs: assemble-debug
+    uses: ./.github/workflows/unit_test.yml
+
+  ui-tests:
+    needs: assemble-debug
+    uses: ./.github/workflows/ui_test.yml
+
+  assemble-dev-release-apk:
+    needs: [ app-version, unit-tests ]
+    uses: ./.github/workflows/assemble_dev_release_apk.yml
+    with:
+      version: ${{ needs.app-version.outputs.version }}
+    secrets: inherit
+
   apk-size:
     needs: [assemble-debug, app-version]
     uses: ./.github/workflows/apk_size.yml
@@ -43,21 +58,6 @@ jobs:
       comment-trigger: APK size
       artifact-name: apk-size-rendered-comment
       file-name: apk_size_rendered_comment.md
-
-  unit-tests:
-    needs: assemble-debug
-    uses: ./.github/workflows/unit_test.yml
-
-  ui-tests:
-    needs: assemble-debug
-    uses: ./.github/workflows/ui_test.yml
-
-  assemble-dev-release-apk:
-    needs: [app-version, unit-tests]
-    uses: ./.github/workflows/assemble_dev_release_apk.yml
-    with:
-      version: ${{ needs.app-version.outputs.version }}
-    secrets: inherit
 
   generate-qr-code:
     uses: ./.github/workflows/qr_code.yml

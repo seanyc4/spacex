@@ -18,5 +18,5 @@ sed \
   -e "s|{{datetime}}|$DATETIME|g" \
   "$TEMPLATE_FILE" > "$RENDERED_FILE"
 
-# Output path for use in workflow
+# Output rendered file path for use in workflow
 echo "comment=$RENDERED_FILE" >> "$GITHUB_OUTPUT"
