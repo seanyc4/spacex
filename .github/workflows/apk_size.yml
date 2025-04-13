@@ -22,6 +22,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # Download APKs from the main and branch builds
       - name: Download branch APK
         uses: actions/download-artifact@v4
         with:
@@ -38,7 +39,7 @@ jobs:
           "${{ inputs.version }}" \
           "${{ github.head_ref }}" \
 
-      # Uploads file to be accessed in the post_pr-comment workflow
+      # Uploads PR comment template to be accessed in the post_pr-comment workflow
       - name: Upload rendered comment
         uses: actions/upload-artifact@v4
         with:

@@ -10,6 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  # -------------------------------------
+  # ✅ Testing - Unit & UI
+  # -------------------------------------
   unit-tests:
     uses: ./.github/workflows/unit_test.yml
 
@@ -17,11 +21,17 @@ jobs:
     uses: ./.github/workflows/ui_test.yml
     secrets: inherit
 
+  # -------------------------------------
+  # 🔖 Versioning - Bump Version Code & Name
+  # -------------------------------------
   version-bump:
     uses: ./.github/workflows/version_bump.yml
     needs: [unit-tests, ui-tests]
     secrets: inherit
 
+  # -------------------------------------
+  # 🏗️ Build - Release AAB
+  # -------------------------------------
   assemble-release:
     uses: ./.github/workflows/assemble_release_aab.yml
     needs: version-bump
@@ -29,6 +39,9 @@ jobs:
     with:
       version: ${{ needs.version-bump.outputs.version }}
 
+  # -------------------------------------
+  # 🚀 Deployment - Google Play Store
+  # -------------------------------------
   deploy-playstore:
     uses: ./.github/workflows/playstore_deploy.yml
     needs: [assemble-release, version-bump]
