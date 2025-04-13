@@ -28,9 +28,7 @@ jobs:
 
       # Assemble debug APK
       - name: Assemble Debug APK
-        run: |
-          ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/${{ env.APK_NAME }}
+        run: .github/scripts/assemble_debug_apk.sh "spacex-debug_${{ inputs.version }}.apk"
 
       # Upload debug APK
       - name: Upload Debug APK
@@ -46,9 +44,7 @@ jobs:
 
       # Assemble main APK
       - name: Assemble Main Branch Debug APK
-        run: |
-          ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/spacex-debug-main.apk
+        run: .github/scripts/assemble_debug_apk.sh "spacex-debug-main.apk"
 
       # Upload main APK
       - name: Upload Main Branch Debug APK
