@@ -1,6 +1,7 @@
 ## 📦 APK Size Report
 
 **Version:** `{{version}}`
+**Branch:** `{{branch}}`
 
 | APK Variant | Size     |
 |-------------|----------|

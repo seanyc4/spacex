@@ -6,6 +6,7 @@ RENDERED_FILE=".github/templates/apk_size_rendered_comment.md"
 
 # Inputs (sanitize to remove whitespace or newlines)
 VERSION="$(echo "$1" | tr -d '\n\r' | xargs)"
+BRANCH="$(echo "$2" | tr -d '\n\r' | xargs)"
 
 main_apk="spacex-debug-main.apk"
 branch_apk="spacex-debug_$VERSION.apk"
@@ -31,6 +32,7 @@ fi
 # Render the markdown with placeholder replacement
 sed \
   -e "s|{{version}}|$VERSION|g" \
+  -e "s|{{branch}}|$BRANCH|g" \
   -e "s|{{main_size}}|$main_mb|g" \
   -e "s|{{branch_size}}|$branch_mb|g" \
   -e "s|{{result}}|$result|g" \

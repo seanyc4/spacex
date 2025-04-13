@@ -35,7 +35,8 @@ jobs:
       # Generates APK size message for PR comment
       - name: Render comment body
         run: .github/scripts/render_apk_size_comment.sh \
-          "${{ inputs.version }}"
+          "${{ inputs.version }}" \
+          "${{ github.head_ref }}" \
 
       # Uploads file to be accessed in the post_pr-comment workflow
       - name: Upload rendered comment
