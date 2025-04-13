@@ -39,8 +39,7 @@ jobs:
 
       # Checkout Main
       - name: Checkout main branch into temp dir
-        run: |
-          git clone --depth=1 --branch=main https://github.com/${{ github.repository }} /tmp/main
+        run: .github/scripts/clone_branch.sh "https://github.com/${{ github.repository }}" "main"
 
       # Assemble main APK
       - name: Assemble Main Branch Debug APK
