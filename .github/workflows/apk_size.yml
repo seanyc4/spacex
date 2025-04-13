@@ -32,35 +32,15 @@ jobs:
         with:
           name: spacex-debug-main
 
-      - name: Compare APK sizes
-        run: .github/scripts/compare_apk_sizes.sh "${{ inputs.version }}"
+      # Generates APK size message for PR comment
+      - name: Render comment body
+        run: .github/scripts/render_apk_size_comment.sh \
+          "${{ inputs.version }}" \
+          "${{ github.head_ref }}" \
 
-      # Create or update comment with APK size
-      - name: Find Comment
-        uses: peter-evans/find-comment@v3
-        id: fc
+      # Uploads file to be accessed in the post_pr-comment workflow
+      - name: Upload rendered comment
+        uses: actions/upload-artifact@v4
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: "APK size"
-
-      - name: Create comment
-        if: steps.fc.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **APK Size Report**
-                  
-            ${{ env.OUTPUT }}
-
-      - name: Update comment
-        if: steps.fc.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            **APK Size Report**
-
-            ${{ env.OUTPUT }}
+          name: apk-size-rendered-comment
+          path: .github/templates/apk_size_rendered_comment.md

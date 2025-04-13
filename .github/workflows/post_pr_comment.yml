@@ -1,0 +1,60 @@
+name: Post PR Comment
+
+on:
+  workflow_call:
+    inputs:
+      issue-number:
+        type: number
+        required: true
+      comment-trigger:
+        type: string
+        required: true
+      artifact-name:
+        type: string
+        required: true
+      file-name:
+          type: string
+          required: true
+
+jobs:
+  post:
+    name: Post
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Download rendered_comment.md from qr_code workflow
+      - name: Download rendered comment
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ./comment
+
+      # Save comment path to environment variable
+      - name: Save body path
+        run: echo "BODY_PATH=./comment/${{ inputs.file-name }}" >> $GITHUB_ENV
+
+      - name: Find existing comment
+        id: fc
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ inputs.issue-number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: ${{ inputs.comment-trigger }}
+
+      - name: Create comment
+        if: steps.fc.outputs.comment-id == ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ inputs.issue-number }}
+          body-path: ${{ env.BODY_PATH }}
+
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body-path: ${{ env.BODY_PATH }}

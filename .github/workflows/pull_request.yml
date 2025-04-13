@@ -29,12 +29,6 @@ jobs:
     with:
       version: ${{ needs.app-version.outputs.version }}
 
-  apk-size:
-    needs: [assemble-debug, app-version]
-    uses: ./.github/workflows/apk_size.yml
-    with:
-      version: ${{ needs.app-version.outputs.version }}
-
   unit-tests:
     needs: assemble-debug
     uses: ./.github/workflows/unit_test.yml
@@ -44,15 +38,39 @@ jobs:
     uses: ./.github/workflows/ui_test.yml
 
   assemble-dev-release-apk:
-    needs: [unit-tests, app-version]
+    needs: [ app-version, unit-tests ]
     uses: ./.github/workflows/assemble_dev_release_apk.yml
     with:
       version: ${{ needs.app-version.outputs.version }}
     secrets: inherit
 
-  qr-code:
-    uses: ./.github/workflows/comment_qr_code.yml
+  apk-size:
+    needs: [assemble-debug, app-version]
+    uses: ./.github/workflows/apk_size.yml
+    with:
+      version: ${{ needs.app-version.outputs.version }}
+
+  comment-apk-size:
+    uses: ./.github/workflows/post_pr_comment.yml
+    needs: apk-size
+    with:
+      issue-number: ${{ github.event.pull_request.number }}
+      comment-trigger: APK size
+      artifact-name: apk-size-rendered-comment
+      file-name: apk_size_rendered_comment.md
+
+  generate-qr-code:
+    uses: ./.github/workflows/qr_code.yml
     needs: [assemble-dev-release-apk, app-version]
     secrets: inherit
     with:
       version: ${{ needs.app-version.outputs.version }}
+
+  comment-qr-code:
+    uses: ./.github/workflows/post_pr_comment.yml
+    needs: generate-qr-code
+    with:
+      issue-number: ${{ github.event.pull_request.number }}
+      comment-trigger: Scan this QR code to download the release APK.
+      artifact-name: qr-code-rendered-comment
+      file-name: qr_code_rendered_comment.md
