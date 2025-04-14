@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# Inputs
 GITHUB_TOKEN="$1"
 REPO="$2"
 RUN_ID="$3"
