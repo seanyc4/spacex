@@ -16,10 +16,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'gradle'
 
+      # Runs unit tests
       - name: Unit tests
         run: .github/scripts/run_unit_tests.sh
 
+      # Publishes a summary table of the test results
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
         if: always()
