@@ -48,19 +48,19 @@ jobs:
       version: ${{ needs.get-current-version.outputs.version }}
 
   # -------------------------------------
-  # 🔖 Versioning - Bump Version Code & Name
-  # -------------------------------------
-  version-bump:
-    uses: ./.github/workflows/version_bump.yml
-    needs: [deploy-playstore]
-    secrets: inherit
-
-  # -------------------------------------
   # 🔖 Tag - Git Tag the Release Version
   # -------------------------------------
   tag-release:
     uses: ./.github/workflows/tag_release.yml
-    needs: [version-bump]
+    needs: [deploy-playstore, get-current-version]
     secrets: inherit
     with:
-      version: ${{ needs.version-bump.outputs.version }}
+      version: ${{ needs.get-current-version.outputs.version }}
+
+  # -------------------------------------
+  # 🔖 Versioning - Bump Version Code & Name
+  # -------------------------------------
+  version-bump:
+    uses: ./.github/workflows/version_bump.yml
+    needs: [tag-release]
+    secrets: inherit
