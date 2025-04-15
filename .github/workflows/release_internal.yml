@@ -2,8 +2,8 @@ name: Deploy to PLay Store
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 concurrency:
   group: release-playstore
