@@ -14,9 +14,12 @@ jobs:
 
       - name: Get the PR that triggered this push
         id: find_pr
-        uses: actions/github-script@v7
-        with:
-          script-path: .github/scripts/label_check.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: .github/scripts/label_check.sh
 
       - name: Exit if label is missing
         if: steps.find_pr.outputs.has_label != 'true'
