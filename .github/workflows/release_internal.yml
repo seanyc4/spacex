@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: release-internal-${{ github.run_id }}
+  group: release-internal
   cancel-in-progress: false
 
 jobs:
