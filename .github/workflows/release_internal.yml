@@ -1,12 +1,12 @@
-name: Deploy to Play Store
+name: Release Internal
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 concurrency:
-  group: release-playstore
+  group: release-internal
   cancel-in-progress: true
 
 jobs:
@@ -14,11 +14,9 @@ jobs:
   # ✅ Testing - Unit & UI
   # -------------------------------------
   unit-tests:
-    if: ${{ github.event.head_commit.message == 'Internal Release' }}
     uses: ./.github/workflows/unit_test.yml
 
   ui-tests:
-    if: ${{ github.event.head_commit.message == 'Internal Release' }}
     uses: ./.github/workflows/ui_test.yml
     secrets: inherit
 
