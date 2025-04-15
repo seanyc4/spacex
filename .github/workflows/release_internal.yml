@@ -2,8 +2,8 @@ name: Deploy to Play Store
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
 
 concurrency:
   group: release-playstore
@@ -12,39 +12,64 @@ concurrency:
 jobs:
 
   # -------------------------------------
+  # 🏷️ PR Label Check - Release Internal
+  # -------------------------------------
+  label-check:
+    uses: ./.github/workflows/trigger_release_internal.yml
+
+  # -------------------------------------
   # ✅ Testing - Unit & UI
   # -------------------------------------
   unit-tests:
     uses: ./.github/workflows/unit_test.yml
+    needs: [label-check]
 
   ui-tests:
     uses: ./.github/workflows/ui_test.yml
+    needs: [label-check]
     secrets: inherit
 
   # -------------------------------------
-  # 🔖 Versioning - Bump Version Code & Name
+  # 🔖 Versioning - Read Current Version
   # -------------------------------------
-  version-bump:
-    uses: ./.github/workflows/version_bump.yml
-    needs: [unit-tests, ui-tests]
-    secrets: inherit
+  get-current-version:
+    uses: ./.github/workflows/app_version.yml
+    needs: [label-check]
 
   # -------------------------------------
   # 🏗️ Build - Release AAB
   # -------------------------------------
   assemble-release:
     uses: ./.github/workflows/assemble_release_aab.yml
-    needs: version-bump
+    needs: [get-current-version]
     secrets: inherit
     with:
-      version: ${{ needs.version-bump.outputs.version }}
+      version: ${{ needs.get-current-version.outputs.version }}
 
   # -------------------------------------
   # 🚀 Deployment - Google Play Store
   # -------------------------------------
   deploy-playstore:
     uses: ./.github/workflows/playstore_deploy.yml
-    needs: [assemble-release, version-bump]
+    needs: [assemble-release, get-current-version]
+    secrets: inherit
+    with:
+      version: ${{ needs.get-current-version.outputs.version }}
+
+  # -------------------------------------
+  # 🔖 Versioning - Bump Version Code & Name
+  # -------------------------------------
+  version-bump:
+    uses: ./.github/workflows/version_bump.yml
+    needs: [deploy-playstore]
+    secrets: inherit
+
+  # -------------------------------------
+  # 🔖 Tag - Git Tag the Release Version
+  # -------------------------------------
+  tag-release:
+    uses: ./.github/workflows/tag_release.yml
+    needs: [version-bump]
     secrets: inherit
     with:
       version: ${{ needs.version-bump.outputs.version }}
