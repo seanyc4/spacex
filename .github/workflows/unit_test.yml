@@ -29,3 +29,4 @@ jobs:
         with:
           report_paths: '**/build/test-results/**/TEST-*.xml'
           check_name: Unit Test Results
+          fail_on_failure: true
