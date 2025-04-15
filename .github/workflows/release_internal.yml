@@ -16,6 +16,7 @@ jobs:
   # -------------------------------------
   label-check:
     uses: ./.github/workflows/trigger_release_internal.yml
+    secrets: inherit
 
   # -------------------------------------
   # ✅ Testing - Unit & UI
