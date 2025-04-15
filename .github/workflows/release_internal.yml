@@ -12,22 +12,15 @@ concurrency:
 jobs:
 
   # -------------------------------------
-  # 🏷️ PR Label Check - Release Internal
-  # -------------------------------------
-  label-check:
-    uses: ./.github/workflows/trigger_release_internal.yml
-    secrets: inherit
-
-  # -------------------------------------
   # ✅ Testing - Unit & UI
   # -------------------------------------
   unit-tests:
+    if: contains(github.event.pull_request.labels.*.name, 'Release Internal')
     uses: ./.github/workflows/unit_test.yml
-    needs: [label-check]
 
   ui-tests:
+    if: contains(github.event.pull_request.labels.*.name, 'Release Internal')
     uses: ./.github/workflows/ui_test.yml
-    needs: [label-check]
     secrets: inherit
 
   # -------------------------------------
@@ -35,7 +28,7 @@ jobs:
   # -------------------------------------
   get-current-version:
     uses: ./.github/workflows/app_version.yml
-    needs: [label-check]
+    needs: [unit-tests, ui-tests]
 
   # -------------------------------------
   # 🏗️ Build - Release AAB
