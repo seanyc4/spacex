@@ -53,11 +53,9 @@ jobs:
         run: .github/scripts/get_version.sh
 
       - name: Create and push git tag
-        env:
-          PAT: ${{ secrets.GH_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "ci@github.com"
           git tag "v${{ steps.version.outputs.version }}"
-          git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
-          git push origin "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}" --force
+          sleep 5
