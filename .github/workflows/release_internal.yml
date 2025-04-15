@@ -14,11 +14,11 @@ jobs:
   # ✅ Testing - Unit & UI
   # -------------------------------------
   unit-tests:
-    if: contains(github.event.pull_request.labels.*.name, 'Internal-Release')
+    if: contains(github.event.pull_request.labels.*.name, 'Internal_Release')
     uses: ./.github/workflows/unit_test.yml
 
   ui-tests:
-    if: contains(github.event.pull_request.labels.*.name, 'Internal-Release')
+    if: contains(github.event.pull_request.labels.*.name, 'Internal_Release')
     uses: ./.github/workflows/ui_test.yml
     secrets: inherit
 
