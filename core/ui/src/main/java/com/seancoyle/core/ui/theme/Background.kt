@@ -6,9 +6,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 
 @Immutable
-data class BackgroundTheme(
+data class AppTheme(
     val color: Color = Color.Unspecified,
     val tonalElevation: Dp = Dp.Unspecified,
 )
 
-val LocalBackgroundTheme = staticCompositionLocalOf { BackgroundTheme() }
+val LocalAppTheme = staticCompositionLocalOf { AppTheme() }

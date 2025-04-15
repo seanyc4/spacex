@@ -12,36 +12,36 @@ import androidx.compose.ui.unit.dp
 @ExperimentalMaterialApi
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     androidTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorPalette = if (isDarkTheme) DarkColorPalette else LightColorPalette
 
-    val defaultBackgroundTheme = BackgroundTheme(
-        color = colorScheme.background,
+    val defaultTheme = AppTheme(
+        color = colorPalette.background,
         tonalElevation = 2.dp,
     )
-    val backgroundTheme = when {
-        androidTheme ->if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
-        else -> defaultBackgroundTheme
+    val appTheme = when {
+        androidTheme -> if (isDarkTheme) DarkAndroidTheme else LightAndroidTheme
+        else -> defaultTheme
     }
 
     CompositionLocalProvider(
-        LocalBackgroundTheme provides backgroundTheme,
+        LocalAppTheme provides appTheme,
     ) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = colorPalette,
             typography = AppTypography,
             content = content
         )
     }
 }
 
-val LightAndroidBackgroundTheme = BackgroundTheme(color = md_theme_light_background)
-val DarkAndroidBackgroundTheme = BackgroundTheme(color = md_theme_dark_background)
+val LightAndroidTheme = AppTheme(color = md_theme_light_background)
+val DarkAndroidTheme = AppTheme(color = md_theme_dark_background)
 
-private val LightColorScheme = lightColorScheme(
+private val LightColorPalette = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -73,7 +73,7 @@ private val LightColorScheme = lightColorScheme(
     scrim = md_theme_light_scrim
 )
 
-val DarkColorScheme = darkColorScheme(
+val DarkColorPalette = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,
