@@ -11,6 +11,9 @@ COMMIT_SHA="$COMMIT_SHA"
 response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/commits/$COMMIT_SHA/pulls")
 
+# Print the response to debug the structure
+echo "API Response: $response"
+
 # Check if we got a PR, otherwise fail
 if [ $(echo "$response" | jq '. | length') -eq 0 ]; then
   echo "No PR associated with this commit"
