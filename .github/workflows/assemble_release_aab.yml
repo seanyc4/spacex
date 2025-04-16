@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-and-sign.yml
+    uses: ./.github/workflows/build_sign.yml
     with:
       version:        ${{ inputs.version }}
       assembleScript: .github/scripts/assemble_release_aab.sh

@@ -37,8 +37,10 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      # Build release artifact
       - run: ${{ inputs.assembleScript }}
 
+      # Sign the artifact with a test key
       - uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: ${{ inputs.outputDir }}
@@ -47,10 +49,12 @@ jobs:
           keyStorePassword: ${{ secrets.keyStorePassword }}
           keyPassword: ${{ secrets.keyPassword }}
 
+      # Rename signed artifact
       - run: |
           mv "${{ inputs.outputDir }}/${{ inputs.unsignedName }}" \
              "${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}"
 
+      # Upload the signed artifact
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
