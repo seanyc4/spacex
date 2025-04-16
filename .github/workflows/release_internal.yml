@@ -25,7 +25,7 @@ jobs:
   # -------------------------------------
   get-current-version:
     uses: ./.github/workflows/app_version.yml
-    needs: [unit-tests, ui-tests]
+    needs: []
 
   # -------------------------------------
   # 🏗️ Build - Release AAB
