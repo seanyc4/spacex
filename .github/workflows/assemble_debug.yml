@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     env:
       APK_NAME: spacex-debug_${{ inputs.version }}.apk
