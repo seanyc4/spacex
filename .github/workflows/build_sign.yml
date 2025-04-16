@@ -50,9 +50,7 @@ jobs:
           keyPassword: ${{ secrets.keyPassword }}
 
       # Rename signed artifact
-      - run: |
-          mv "${{ inputs.outputDir }}/${{ inputs.unsignedName }}" \
-             "${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}"
+      - run: ./.github/scripts/rename_artifact.sh "${{ inputs.outputDir }}/${{ inputs.unsignedName }}" "${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}"
 
       # Upload the signed artifact
       - uses: actions/upload-artifact@v4
