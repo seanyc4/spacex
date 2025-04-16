@@ -1,9 +1,6 @@
 on:
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
       assembleScript:
         required: true
         type: string
@@ -13,7 +10,7 @@ on:
       unsignedName:
         required: true
         type: string
-      artifactPrefix:
+      artifactName:
         required: true
         type: string
     secrets:
@@ -27,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
-      ARTIFACT_NAME: ${{ inputs.artifactPrefix }}_${{ inputs.version }}
+      ARTIFACT_NAME: ${{ inputs.artifactName }}
     steps:
       - uses: actions/checkout@v4
 

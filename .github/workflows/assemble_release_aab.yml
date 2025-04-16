@@ -10,11 +10,10 @@ jobs:
   build:
     uses: ./.github/workflows/build_sign.yml
     with:
-      version:        ${{ inputs.version }}
       assembleScript: .github/scripts/assemble_release_aab.sh
       outputDir:      app/build/outputs/bundle/release
       unsignedName:   app-release.aab
-      artifactPrefix: spacex-release
+      artifactName:   spacex-release_${{ inputs.version }}.aab
     secrets:
       signingKey:       ${{ secrets.SIGNING_KEY }}
       alias:            ${{ secrets.ALIAS }}

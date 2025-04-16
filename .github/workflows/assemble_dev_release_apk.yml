@@ -10,11 +10,10 @@ jobs:
   build:
     uses: ./.github/workflows/build_sign.yml
     with:
-      version:        ${{ inputs.version }}
       assembleScript: .github/scripts/assemble_release_apk.sh
       outputDir:      app/build/outputs/apk/release
       unsignedName:   app-release-unsigned-signed.apk
-      artifactPrefix: spacexDev-release
+      artifactName:   spacexDev-release_${{ inputs.version }}.apk
     secrets:
       signingKey:       ${{ secrets.TEST_SIGNING_KEY }}
       alias:            ${{ secrets.TEST_ALIAS }}
