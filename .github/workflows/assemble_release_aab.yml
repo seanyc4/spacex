@@ -1,5 +1,4 @@
 name: Assemble Release AAB
-
 on:
   workflow_call:
     inputs:
@@ -8,47 +7,16 @@ on:
         type: string
 
 jobs:
-  build-sign:
-    name: Build & Sign
-    runs-on: ubuntu-latest
-
-    env:
-      BUILD_TOOLS_VERSION: "34.0.0"
-      BUNDLE_NAME: spacex-release_${{ inputs.version }}.aab
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      # Build release AAB
-      - name: Assemble Release Bundle
-        run: .github/scripts/assemble_release_aab.sh
-
-      # Sign the production bundle
-      - name: Sign Android Production Release
-        uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      # Rename signed AAB
-      - name: Rename Signed AAB
-        run: ./.github/scripts/rename_artifact.sh "app/build/outputs/bundle/release/app-release.aab" "app/build/outputs/bundle/release/${{ env.BUNDLE_NAME }}"
-
-      # Upload signed AAB
-      - name: Upload AAB as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-bundle_${{ inputs.version }}
-          path: app/build/outputs/bundle/release/${{ env.BUNDLE_NAME }}
+  build:
+    uses: ./.github/workflows/build-and-sign.yml
+    with:
+      version:        ${{ inputs.version }}
+      assembleScript: .github/scripts/assemble_release_aab.sh
+      outputDir:      app/build/outputs/bundle/release
+      unsignedName:   app-release.aab
+      artifactPrefix: spacex-release
+    secrets:
+      signingKey:       ${{ secrets.SIGNING_KEY }}
+      alias:            ${{ secrets.ALIAS }}
+      keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+      keyPassword:      ${{ secrets.KEY_PASSWORD }}
