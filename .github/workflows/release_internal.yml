@@ -45,7 +45,7 @@ jobs:
     needs: [assemble-release, get-current-version]
     secrets: inherit
     with:
-      version: ${{ needs.get-current-version.outputs.version }}
+      version: ${{ needs.assemble-release.outputs.version }}
 
   # -------------------------------------
   # 🔖 Tag - Git Tag the Release Version

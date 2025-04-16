@@ -5,9 +5,13 @@ on:
       version:
         required: true
         type: string
+    outputs:
+      artifactName: ${{ steps.build.outputs.artifactName }}
 
 jobs:
   build:
+    outputs:
+      version: ${{ steps.build.outputs.artifactName }}
     uses: ./.github/workflows/build_sign.yml
     with:
       assembleScript: .github/scripts/assemble_release_aab.sh
@@ -19,3 +23,5 @@ jobs:
       alias:            ${{ secrets.ALIAS }}
       keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
       keyPassword:      ${{ secrets.KEY_PASSWORD }}
+  outputs:
+    artifactName: ${{ jobs.build.outputs.artifactName }}
