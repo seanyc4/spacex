@@ -1,5 +1,4 @@
 name: Build Dev Release APK
-
 on:
   workflow_call:
     inputs:
@@ -9,46 +8,15 @@ on:
 
 jobs:
   build:
-    name: Build & Sign
-    runs-on: ubuntu-latest
-
-    env:
-      BUILD_TOOLS_VERSION: "34.0.0"
-      APK_NAME: spacexDev-release_${{ inputs.version }}.apk
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      # Build release APK
-      - name: Assemble APK
-        run: .github/scripts/assemble_release_apk.sh
-
-      # Sign the APK with a test key
-      - name: Sign Android release with test key
-        uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.TEST_SIGNING_KEY }}
-          alias: ${{ secrets.TEST_ALIAS }}
-          keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.TEST_KEY_PASSWORD }}
-
-      # Rename signed APK
-      - name: Rename Signed APK
-        run: ./.github/scripts/rename_artifact.sh "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "app/build/outputs/apk/release/${{ env.APK_NAME }}"
-
-      # Upload signed APK
-      - name: Upload APK as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: spacexDev-release_${{ inputs.version }}
-          path: app/build/outputs/apk/release/${{ env.APK_NAME }}
+    uses: ./.github/workflows/build_sign.yml
+    with:
+      version:        ${{ inputs.version }}
+      assembleScript: .github/scripts/assemble_release_apk.sh
+      outputDir:      app/build/outputs/apk/release
+      unsignedName:   app-release-unsigned-signed.apk
+      artifactPrefix: spacexDev-release
+    secrets:
+      signingKey:       ${{ secrets.TEST_SIGNING_KEY }}
+      alias:            ${{ secrets.TEST_ALIAS }}
+      keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
+      keyPassword:      ${{ secrets.TEST_KEY_PASSWORD }}
