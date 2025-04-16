@@ -1,30 +1,27 @@
 on:
   workflow_call:
     inputs:
-      assembleScript:
-        required: true
-        type: string
-      outputDir:
-        required: true
-        type: string
-      unsignedName:
-        required: true
-        type: string
-      artifactName:
-        required: true
-        type: string
+      assembleScript: { required: true, type: string }
+      outputDir: { required: true, type: string }
+      unsignedName: { required: true, type: string }
+      artifactName: { required: true, type: string }
     secrets:
       signingKey:       { required: true }
       alias:            { required: true }
       keyStorePassword: { required: true }
       keyPassword:      { required: true }
+    outputs:
+      artifactName: ${{ steps.artifact-name.outputs.artifactName }}
 
 jobs:
   build-sign:
     runs-on: ubuntu-latest
+    outputs:
+      artifactName: ${{ steps.artifact-name.outputs.artifactName }}
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
       ARTIFACT_NAME: ${{ inputs.artifactName }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -48,6 +45,11 @@ jobs:
 
       # Rename signed artifact
       - run: ./.github/scripts/rename_artifact.sh "${{ inputs.outputDir }}/${{ inputs.unsignedName }}" "${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}"
+
+      # Send ARTIFACT_NAME to the parent workflow
+      - name: Set artifact output name
+        id: artifact-name
+        run: echo "artifactName=${{ env.ARTIFACT_NAME }}" >> $GITHUB_OUTPUT
 
       # Upload the signed artifact
       - uses: actions/upload-artifact@v4
