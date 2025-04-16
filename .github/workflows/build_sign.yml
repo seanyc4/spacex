@@ -11,7 +11,8 @@ on:
       keyStorePassword: { required: true }
       keyPassword:      { required: true }
     outputs:
-      artifactName: ${{ steps.artifact-name.outputs.artifactName }}
+      artifactName:
+        value: ${{ jobs.build-sign.outputs.artifactName }}
 
 jobs:
   build-sign:
