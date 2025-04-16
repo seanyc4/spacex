@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     outputs:
-      version: ${{ steps.build.outputs.artifactName }}
+      version: ${{ job.build.outputs.artifactName }}
     uses: ./.github/workflows/build_sign.yml
     with:
       assembleScript: .github/scripts/assemble_release_aab.sh
