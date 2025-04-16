@@ -6,7 +6,8 @@ on:
         required: true
         type: string
     outputs:
-      artifactName: ${{ jobs.build.outputs.artifactName }}
+      artifactName:
+        value: ${{ jobs.build.outputs.artifactName }}
 
 jobs:
   build:
