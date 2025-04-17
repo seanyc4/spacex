@@ -1,0 +1,38 @@
+name: Nightly Release Internal
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "1 5 3 8 1-4" # Every Mon-Thur at 3am
+    #- cron: "0 3 * * 1-4" # Every Mon-Thur at 3am
+
+jobs:
+  calculateTag:
+    name: Calculate Release Tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update build version
+        run: |
+          git tag -l | xargs git tag -d
+          git fetch --tags
+          next_tag=""
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          commit_count="$(git rev-list $latest_tag..HEAD --count)"
+          if [[ $commit_count != "0" ]]; then
+            last_version="${latest_tag##*.}"
+            next_version=$((last_version + 1))
+            appended_version="${latest_tag%.*}.$next_version"
+            next_tag=$appended_version
+          fi
+          if [ -z "$next_tag" ]
+          then
+              exit 1
+          else
+              echo "RELEASE_TAG=${next_tag}" >> $GITHUB_ENV
+          fi
+      - uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: ${{ env.RELEASE_TAG }}
+          token: ${{ secrets.GH_TOKEN }}
