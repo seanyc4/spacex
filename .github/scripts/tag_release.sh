@@ -25,7 +25,7 @@ if [[ $commit_count != "0" ]]; then
   next_tag="${major}.${next_minor}.0"    # Construct new tag (e.g. "1.34.0")
 
   echo "Next release tag: $next_tag"
-  echo "RELEASE_TAG=$next_tag" >> $GITHUB_ENV
+  echo "RELEASE_TAG=$next_tag" >> $GITHUB_OUTPUT
 else
   echo "No new commits. Skipping release."
   exit 1

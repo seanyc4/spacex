@@ -11,7 +11,7 @@ jobs:
   # 🔖 Checks for Commits & Generates Release Tag
   # ---------------------------------------------
   generate-tag:
-    name: 🔖 Generate Release Tag
+    name: Generate Release Tag
     runs-on: ubuntu-latest
     outputs:
       release_tag: ${{ steps.set-tag.outputs.RELEASE_TAG }}
@@ -44,5 +44,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
-          tag: ${{ needs.generate-tag.outputs.release_tag }}
+          tag: ${{ needs.generate-tag.outputs.RELEASE_TAG }}
           token: ${{ secrets.GH_TOKEN }}
