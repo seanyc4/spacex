@@ -1,6 +1,7 @@
 name: Post PR Comment
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       issue-number:

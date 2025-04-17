@@ -1,6 +1,7 @@
 name: Generate QR Code
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       artifactName:

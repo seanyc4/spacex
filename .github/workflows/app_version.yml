@@ -1,6 +1,7 @@
 name: App Version
 
 on:
+  workflow_dispatch:
   workflow_call:
     outputs:
       version:
