@@ -23,7 +23,7 @@ jobs:
       # Build URL for the APK artifact
       - name: Get APK URL
         id: get-artifact-url
-        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "{{ inputs.artifactName }}"
+        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "${{ inputs.artifactName }}"
 
       # Generates QR code message for PR comment
       - name: Render comment body

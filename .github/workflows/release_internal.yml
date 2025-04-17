@@ -18,7 +18,6 @@ jobs:
 
   ui-tests:
     uses: ./.github/workflows/ui_test.yml
-    secrets: inherit
 
   # -------------------------------------
   # 🔖 Versioning - Read Current Version

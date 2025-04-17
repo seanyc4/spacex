@@ -86,7 +86,7 @@ jobs:
     needs: [assemble-dev-release-apk]
     secrets: inherit
     with:
-      version: ${{ needs.assemble-dev-release-apk.outputs.artifactName }}
+      artifactName: ${{ needs.assemble-dev-release-apk.outputs.artifactName }}
 
   comment-qr-code:
     uses: ./.github/workflows/post_pr_comment.yml
