@@ -3,7 +3,7 @@ name: Nightly Release Internal
 on:
   workflow_dispatch:
   schedule:
-    - cron: "45 14 17 1-4"  # minute hour day month day-of-week
+    - cron: "47 14 17 4 1-4"  # minute hour day month day-of-week
 
     #- cron: "0 3 * * 1-4" # Every Mon-Thur at 3am
 
