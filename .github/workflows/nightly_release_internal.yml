@@ -3,7 +3,7 @@ name: Nightly Release Internal
 on:
   workflow_dispatch:
   schedule:
-    - cron: "07 15 * * 1-4"  # Every Mon–Thu at 14:47 UTC (15:47 UK/BST)
+    - cron: "12 16 * * 1-4"  # Every Mon–Thu at 14:47 UTC (15:47 UK/BST)
 
 jobs:
   calculateTag:
