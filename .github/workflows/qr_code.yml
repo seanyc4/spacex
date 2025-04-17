@@ -3,7 +3,7 @@ name: Generate QR Code
 on:
   workflow_call:
     inputs:
-      version:
+      artifactName:
         required: true
         type: string
 
@@ -23,14 +23,14 @@ jobs:
       # Build URL for the APK artifact
       - name: Get APK URL
         id: get-artifact-url
-        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "spacexDev-release_${{ inputs.version }}"
+        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "${{ inputs.artifactName }}"
 
       # Generates QR code message for PR comment
       - name: Render comment body
         run: .github/scripts/render_qr_code_comment.sh \
           "${{ steps.get-artifact-url.outputs.artifact_url }}" \
           "${{ steps.get-artifact-url.outputs.artifact_url_encoded }}" \
-          "${{ inputs.version }}" \
+          "${{ inputs.artifactName }}" \
           "${{ env.datetime }}"
 
       # Uploads file to be accessed in the post_pr-comment workflow

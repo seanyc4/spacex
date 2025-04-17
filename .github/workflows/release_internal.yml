@@ -18,14 +18,13 @@ jobs:
 
   ui-tests:
     uses: ./.github/workflows/ui_test.yml
-    secrets: inherit
 
   # -------------------------------------
   # 🔖 Versioning - Read Current Version
   # -------------------------------------
   get-current-version:
     uses: ./.github/workflows/app_version.yml
-    needs: []
+    needs: [unit-tests, ui-tests]
 
   # -------------------------------------
   # 🏗️ Build - Release AAB
