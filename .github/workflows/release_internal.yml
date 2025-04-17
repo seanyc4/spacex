@@ -47,9 +47,19 @@ jobs:
       artifactName: ${{ needs.assemble-release.outputs.artifactName }}
 
   # -------------------------------------
+  # 🔖 Tag - Git Tag the Release Version
+  # -------------------------------------
+  tag-release:
+    uses: ./.github/workflows/tag_release.yml
+    needs: [deploy-playstore, get-current-version]
+    secrets: inherit
+    with:
+      version: ${{ needs.get-current-version.outputs.version }}
+
+  # -------------------------------------
   # 🔖 Versioning - Bump Version Code & Name
   # -------------------------------------
   version-bump:
     uses: ./.github/workflows/version_bump.yml
-    needs: [deploy-playstore]
+    needs: [tag-release]
     secrets: inherit

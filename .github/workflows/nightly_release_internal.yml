@@ -3,26 +3,43 @@ name: Nightly Release Internal
 on:
   workflow_dispatch:
   schedule:
-    - cron: "03 * * 1-4"  # Every Mon–Thu at 03:00 UTC (03:00 UK/BST)
+    - cron: "22 15 * * 1-4"  # Every Mon–Thu at 14:47 UTC (15:47 UK/BST)
 
 jobs:
-  generateTag:
-    name: Generate Release Tag
+  calculateTag:
+    name: Calculate Release Tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # ---------------------------------------------
-      # 🔖 Checks for Commits & Generates Release Tag
-      # ---------------------------------------------
-      - name: 🔧 Run tag release script
-        run: .github/scripts/tag_release.sh
+      - name: 🔍 Log trigger context
+        run: |
+            echo "Triggered by event: ${{ github.event_name }}"
+            echo "Workflow run at (UTC): $(date -u)"
+            echo "Repository: ${{ github.repository }}"
+            echo "Branch: ${{ github.ref }}"
+            echo "Actor: ${{ github.actor }}"
 
-      # ---------------------------------------------
-      # 🚀 Tags the Release & Generates Release Notes
-      # ---------------------------------------------
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
+      - name: Update build version
+        run: |
+          git tag -l | xargs git tag -d
+          git fetch --tags
+          next_tag=""
+          latest_tag="$(git tag --sort=committerdate | tail -1)"
+          commit_count="$(git rev-list $latest_tag..HEAD --count)"
+          if [[ $commit_count != "0" ]]; then
+            last_version="${latest_tag##*.}"
+            next_version=$((last_version + 1))
+            appended_version="${latest_tag%.*}.$next_version"
+            next_tag=$appended_version
+          fi
+          if [ -z "$next_tag" ]
+          then
+              exit 1
+          else
+              echo "RELEASE_TAG=${next_tag}" >> $GITHUB_ENV
+          fi
+      - uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
           tag: ${{ env.RELEASE_TAG }}
