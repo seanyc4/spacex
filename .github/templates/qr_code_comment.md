@@ -2,6 +2,6 @@
 
 ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{artifact_url_encoded}})
 
-[Download spacexDev-release_{{version}}.apk]({{artifact_url}})
+[Download {{artifactName}}]({{artifact_url}})
 
 Built on **{{datetime}}**

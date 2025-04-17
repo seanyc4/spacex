@@ -83,10 +83,10 @@ jobs:
   # -------------------------------------
   generate-qr-code:
     uses: ./.github/workflows/qr_code.yml
-    needs: [assemble-dev-release-apk, app-version]
+    needs: [assemble-dev-release-apk]
     secrets: inherit
     with:
-      version: ${{ needs.app-version.outputs.version }}
+      version: ${{ needs.assemble-dev-release-apk.outputs.artifactName }}
 
   comment-qr-code:
     uses: ./.github/workflows/post_pr_comment.yml

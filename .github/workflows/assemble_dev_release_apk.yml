@@ -5,6 +5,9 @@ on:
       version:
         required: true
         type: string
+    outputs:
+      artifactName:
+        value: ${{ jobs.build.outputs.artifactName }}
 
 jobs:
   build:
