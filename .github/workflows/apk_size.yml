@@ -1,6 +1,7 @@
 name: Compare APK Sizes
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       version:

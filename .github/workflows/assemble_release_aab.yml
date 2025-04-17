@@ -1,6 +1,7 @@
 name: Assemble Release AAB
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       version:
