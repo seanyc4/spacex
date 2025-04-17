@@ -52,5 +52,5 @@ jobs:
   # -------------------------------------
   version-bump:
     uses: ./.github/workflows/version_bump.yml
-    needs: [tag-release]
+    needs: [deploy-playstore]
     secrets: inherit
