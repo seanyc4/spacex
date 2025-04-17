@@ -3,7 +3,7 @@ name: Nightly Release Internal
 on:
   workflow_dispatch:
   schedule:
-    - cron: "56 14 * * 1-4"  # Every Mon–Thu at 14:47 UTC (15:47 UK/BST)
+    - cron: "07 15 * * 1-4"  # Every Mon–Thu at 14:47 UTC (15:47 UK/BST)
 
 jobs:
   calculateTag:
@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: 🔍 Log trigger context
+        run: |
+            echo "Triggered by event: ${{ github.event_name }}"
+            echo "Workflow run at (UTC): $(date -u)"
+            echo "Repository: ${{ github.repository }}"
+            echo "Branch: ${{ github.ref }}"
+            echo "Actor: ${{ github.actor }}"
+
       - name: Update build version
         run: |
           git tag -l | xargs git tag -d
