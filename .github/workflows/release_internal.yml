@@ -46,11 +46,3 @@ jobs:
     secrets: inherit
     with:
       artifactName: ${{ needs.assemble-release.outputs.artifactName }}
-
-  # -------------------------------------
-  # 🔖 Versioning - Bump Version Code & Name
-  # -------------------------------------
-  version-bump:
-    uses: ./.github/workflows/version_bump.yml
-    needs: [deploy-playstore]
-    secrets: inherit

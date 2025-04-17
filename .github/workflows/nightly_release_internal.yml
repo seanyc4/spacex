@@ -6,24 +6,43 @@ on:
     - cron: "0 2 * * 1-4"  # Every Mon–Thu at 02:00 UTC (03:00 UK/BST)
 
 jobs:
-  generateTag:
-    name: Generate Release Tag
+
+  # ---------------------------------------------
+  # 🔖 Checks for Commits & Generates Release Tag
+  # ---------------------------------------------
+  generate-tag:
+    name: 🔖 Generate Release Tag
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.set-tag.outputs.RELEASE_TAG }}
+
     steps:
       - uses: actions/checkout@v4
-
-      # ---------------------------------------------
-      # 🔖 Checks for Commits & Generates Release Tag
-      # ---------------------------------------------
-      - name: 🔧 Run tag release script
+      - name: Run tag release script
+        id: set-tag
         run: .github/scripts/tag_release.sh
 
-      # ---------------------------------------------
-      # 🚀 Tags the Release & Generates Release Notes
-      # ---------------------------------------------
+  # ----------------------------------------
+  # 🧩 Versioning - Bump Version Code & Name
+  # ----------------------------------------
+  version-bump:
+    name: Version Bump
+    needs: generate-tag
+    uses: ./.github/workflows/version_bump.yml
+    secrets: inherit
+
+  # ---------------------------------------------
+  # 🚀 Tags the Release & Generates Release Notes
+  # ---------------------------------------------
+  github-release:
+    name: GitHub Release
+    needs: [generate-tag, version-bump]
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
-          tag: ${{ env.RELEASE_TAG }}
+          tag: ${{ needs.generate-tag.outputs.release_tag }}
           token: ${{ secrets.GH_TOKEN }}
