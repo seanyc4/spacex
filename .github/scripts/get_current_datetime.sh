@@ -5,4 +5,4 @@ set -e
 DATETIME=$(date +'%Y-%m-%d at %H:%M:%S')
 
 # Export to GitHub environment for downstream use
-echo "datetime=$DATETIME" >> "$GITHUB_ENV"
+echo "date-time=$DATETIME" >> "$GITHUB_ENV"

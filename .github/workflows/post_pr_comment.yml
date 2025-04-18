@@ -2,20 +2,17 @@ name: Post PR Comment
 
 on:
   workflow_dispatch:
+    inputs:
+      issue-number: { required: true, type: string }
+      comment-trigger: { required: true, type: string }
+      artifact-name: { required: true, type: string }
+      file-name: { required: true, type: string }
   workflow_call:
     inputs:
-      issue-number:
-        type: number
-        required: true
-      comment-trigger:
-        type: string
-        required: true
-      artifact-name:
-        type: string
-        required: true
-      file-name:
-          type: string
-          required: true
+      issue-number: { required: true, type: string }
+      comment-trigger: { required: true, type: string }
+      artifact-name: { required: true, type: string }
+      file-name: { required: true, type: string }
 
 jobs:
   post:

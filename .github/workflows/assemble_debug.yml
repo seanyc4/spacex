@@ -4,17 +4,19 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
+      version: { required: true, type: string }
+    outputs:
+        artifact-name:
+            value: ${{ jobs.build.outputs.artifact-name }}
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     env:
       APK_NAME: spacex-debug_${{ inputs.version }}.apk
+    outputs:
+      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
 
     steps:
       - name: Checkout Current Branch
@@ -29,13 +31,13 @@ jobs:
 
       # Assemble debug APK
       - name: Assemble Debug APK
-        run: .github/scripts/assemble_debug_apk.sh "spacex-debug_${{ inputs.version }}.apk"
+        run: .github/scripts/assemble_debug_apk.sh "${{ env.APK_NAME }}"
 
       # Upload debug APK
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: spacex-debug_${{ inputs.version }}
+          name: ${{ env.APK_NAME }}
           path: app/build/outputs/apk/debug/${{ env.APK_NAME }}
 
       # Checkout Main
@@ -52,3 +54,8 @@ jobs:
         with:
           name: spacex-debug-main
           path: app/build/outputs/apk/debug/spacex-debug-main.apk
+
+      # Output APK name
+      - name: Set job output from env
+        id: set-output
+        run: echo "artifact-name=$APK_NAME" >> $GITHUB_OUTPUT

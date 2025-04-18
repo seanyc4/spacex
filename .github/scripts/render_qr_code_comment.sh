@@ -12,10 +12,10 @@ DATETIME="$(echo "$4" | xargs)"
 
 # Render the markdown with placeholder replacement
 sed \
-  -e "s|{{artifact_url}}|$ARTIFACT_URL|g" \
-  -e "s|{{artifact_url_encoded}}|$ARTIFACT_URL_ENCODED|g" \
-  -e "s|{{artifactName}}|$ARTIFACT_NAME|g" \
-  -e "s|{{datetime}}|$DATETIME|g" \
+  -e "s|{{artifact-url}}|$ARTIFACT_URL|g" \
+  -e "s|{{artifact-url-encoded}}|$ARTIFACT_URL_ENCODED|g" \
+  -e "s|{{artifact-name}}|$ARTIFACT_NAME|g" \
+  -e "s|{{date-time}}|$DATETIME|g" \
   "$TEMPLATE_FILE" > "$RENDERED_FILE"
 
 # Output rendered file path for use in workflow

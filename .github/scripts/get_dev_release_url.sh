@@ -25,5 +25,5 @@ artifact_url="https://github.com/$REPO/actions/runs/$RUN_ID/artifacts/$ARTIFACT_
 ENCODED_URL=$(jq -rn --arg url "$artifact_url" '$url|@uri')
 
 # Output both original and encoded
-echo "artifact_url=$artifact_url" >> "$GITHUB_OUTPUT"
-echo "artifact_url_encoded=$ENCODED_URL" >> "$GITHUB_OUTPUT"
+echo "artifact-url=$artifact_url" >> "$GITHUB_OUTPUT"
+echo "artifact-url-encoded=$ENCODED_URL" >> "$GITHUB_OUTPUT"

@@ -65,10 +65,10 @@ jobs:
   # 📏 APK Size Analysis + PR Comment
   # -------------------------------------
   apk-size:
-    needs: [assemble-debug, app-version]
+    needs: [assemble-debug]
     uses: ./.github/workflows/apk_size.yml
     with:
-      version: ${{ needs.app-version.outputs.version }}
+      artifact-name: ${{ needs.assemble-debug.outputs.artifact-name }}
 
   comment-apk-size:
     uses: ./.github/workflows/post_pr_comment.yml
@@ -87,7 +87,7 @@ jobs:
     needs: [assemble-dev-release-apk]
     secrets: inherit
     with:
-      artifactName: ${{ needs.assemble-dev-release-apk.outputs.artifactName }}
+      artifact-name: ${{ needs.assemble-dev-release-apk.outputs.artifact-name }}
 
   comment-qr-code:
     uses: ./.github/workflows/post_pr_comment.yml

@@ -2,11 +2,11 @@ name: Generate QR Code
 
 on:
   workflow_dispatch:
+    inputs:
+      artifact-name: { required: true, type: string }
   workflow_call:
     inputs:
-      artifactName:
-        required: true
-        type: string
+      artifact-name: { required: true, type: string }
 
 jobs:
   build:
@@ -24,15 +24,15 @@ jobs:
       # Build URL for the APK artifact
       - name: Get APK URL
         id: get-artifact-url
-        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "${{ inputs.artifactName }}"
+        run: .github/scripts/get_dev_release_url.sh "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}" "${{ github.run_id }}" "${{ inputs.artifact-name }}"
 
       # Generates QR code message for PR comment
       - name: Render comment body
         run: .github/scripts/render_qr_code_comment.sh \
-          "${{ steps.get-artifact-url.outputs.artifact_url }}" \
-          "${{ steps.get-artifact-url.outputs.artifact_url_encoded }}" \
-          "${{ inputs.artifactName }}" \
-          "${{ env.datetime }}"
+          "${{ steps.get-artifact-url.outputs.artifact-url }}" \
+          "${{ steps.get-artifact-url.outputs.artifact-url-encoded }}" \
+          "${{ inputs.artifact-name }}" \
+          "${{ env.date-time }}"
 
       # Uploads file to be accessed in the post_pr-comment workflow
       - name: Upload rendered comment
