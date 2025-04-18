@@ -1,4 +1,4 @@
-name: Build
+name: Assemble Debug APK
 
 on:
   workflow_dispatch:

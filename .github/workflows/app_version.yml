@@ -1,4 +1,4 @@
-name: App Version
+name: Get Current App Version
 
 on:
   workflow_dispatch:
