@@ -1,9 +1,10 @@
 name: Nightly Release Internal
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: "0 2 * * 1-4"  # Every Mon–Thu at 02:00 UTC (03:00 UK/BST)
+
+  workflow_dispatch:
 
 jobs:
 
