@@ -4,23 +4,21 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
+      version: { required: true, type: string }
     outputs:
-      artifactName:
-        value: ${{ jobs.build.outputs.artifactName }}
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
 
 jobs:
   build:
     uses: ./.github/workflows/build_sign.yml
     with:
-      assembleScript: .github/scripts/assemble_release_apk.sh
-      outputDir:      app/build/outputs/apk/release
-      unsignedName:   app-release-unsigned-signed.apk
-      artifactName:   spacexDev-release_${{ inputs.version }}.apk
+      assemble-script: .github/scripts/assemble_release_apk.sh
+      output-dir:      app/build/outputs/apk/release
+      unsigned-name:   app-release-unsigned-signed.apk
+      artifact-name:   spacexDev-release_${{ inputs.version }}.apk
     secrets:
-      signingKey:       ${{ secrets.TEST_SIGNING_KEY }}
+      signing-key:       ${{ secrets.TEST_SIGNING_KEY }}
       alias:            ${{ secrets.TEST_ALIAS }}
-      keyStorePassword: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
-      keyPassword:      ${{ secrets.TEST_KEY_PASSWORD }}
+      keystore-password: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
+      key-password:      ${{ secrets.TEST_KEY_PASSWORD }}

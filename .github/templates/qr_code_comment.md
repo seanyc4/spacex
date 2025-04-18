@@ -2,6 +2,6 @@
 
 ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{artifact_url_encoded}})
 
-[Download {{artifactName}}]({{artifact_url}})
+[Download {{artifact-name}}]({{artifact_url}})
 
-Built on **{{datetime}}**
+Built on **{{date-time}}**

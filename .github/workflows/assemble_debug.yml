@@ -4,15 +4,12 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
+      version: { required: true, type: string }
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     env:
       APK_NAME: spacex-debug_${{ inputs.version }}.apk
 
@@ -29,7 +26,7 @@ jobs:
 
       # Assemble debug APK
       - name: Assemble Debug APK
-        run: .github/scripts/assemble_debug_apk.sh "spacex-debug_${{ inputs.version }}.apk"
+        run: .github/scripts/assemble_debug_apk.sh "${{ env.APK_NAME }}"
 
       # Upload debug APK
       - name: Upload Debug APK

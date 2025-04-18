@@ -2,11 +2,12 @@ name: Deploy AAB to Play Store
 
 on:
   workflow_dispatch:
+    inputs:
+      artifact-name: { required: true, type: string }
+
   workflow_call:
     inputs:
-      artifactName:
-        required: true
-        type: string
+      artifact-name: { required: true, type: string }
 
 jobs:
   deploy:
@@ -18,7 +19,7 @@ jobs:
       - name: Download AAB Artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.artifactName }}
+          name: ${{ inputs.artifact-name }}
           path: app/build/outputs/bundle/release/
 
       # Deploy to Play store
@@ -27,7 +28,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_AUTH_JSON }}
           packageName: com.seancoyle.spacex
-          releaseFiles: app/build/outputs/bundle/release/${{ inputs.artifactName }}
+          releaseFiles: app/build/outputs/bundle/release/${{ inputs.artifact-name }}
           track: internal
           status: "completed"
   #          whatsNewDirectory: whatsNew

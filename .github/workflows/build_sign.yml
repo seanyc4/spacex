@@ -3,31 +3,30 @@ name: Build and Sign APK/AAB
 on:
   workflow_call:
     inputs:
-      assembleScript: { required: true, type: string }
-      outputDir: { required: true, type: string }
-      unsignedName: { required: true, type: string }
-      artifactName: { required: true, type: string }
+      assemble-script: { required: true, type: string }
+      output-dir:      { required: true, type: string }
+      unsigned-name:   { required: true, type: string }
+      artifact-name:   { required: true, type: string }
     secrets:
-      signingKey:       { required: true }
-      alias:            { required: true }
-      keyStorePassword: { required: true }
-      keyPassword:      { required: true }
+      signing-key:       { required: true }
+      alias:             { required: true }
+      keystore-password: { required: true }
+      key-password:      { required: true }
     outputs:
       artifactName:
-        value: ${{ jobs.build-sign.outputs.artifactName }}
+        value: ${{ jobs.build-sign.outputs.artifact-name }}
 
 jobs:
   build-sign:
     runs-on: ubuntu-latest
     outputs:
-      artifactName: ${{ steps.artifact-name.outputs.artifactName }}
+      artifact-name: ${{ steps.artifact-name.outputs.artifact-name }}
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
-      ARTIFACT_NAME: ${{ inputs.artifactName }}
+      ARTIFACT_NAME: ${{ inputs.artifact-name }}
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -35,27 +34,27 @@ jobs:
           cache: 'gradle'
 
       # Build release artifact
-      - run: ${{ inputs.assembleScript }}
+      - run: ${{ inputs.assemble-script }}
 
       # Sign the artifact with a test key
       - uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: ${{ inputs.outputDir }}
-          signingKeyBase64: ${{ secrets.signingKey }}
+          releaseDirectory: ${{ inputs.output-dir }}
+          signingKeyBase64: ${{ secrets.signing-key }}
           alias: ${{ secrets.alias }}
-          keyStorePassword: ${{ secrets.keyStorePassword }}
-          keyPassword: ${{ secrets.keyPassword }}
+          keyStorePassword: ${{ secrets.keystore-password }}
+          keyPassword: ${{ secrets.key-password }}
 
       # Rename signed artifact
-      - run: ./.github/scripts/rename_artifact.sh "${{ inputs.outputDir }}/${{ inputs.unsignedName }}" "${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}"
+      - run: ./.github/scripts/rename_artifact.sh "${{ inputs.output-dir }}/${{ inputs.unsigned-name }}" "${{ inputs.output-dir }}/${{ env.ARTIFACT_NAME }}"
 
       # Send ARTIFACT_NAME to the parent workflow
       - name: Set artifact output name
         id: artifact-name
-        run: echo "artifactName=${{ env.ARTIFACT_NAME }}" >> $GITHUB_OUTPUT
+        run: echo "artifact-name=${{ env.ARTIFACT_NAME }}" >> $GITHUB_OUTPUT
 
       # Upload the signed artifact
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ inputs.outputDir }}/${{ env.ARTIFACT_NAME }}
+          path: ${{ inputs.output-dir }}/${{ env.ARTIFACT_NAME }}
