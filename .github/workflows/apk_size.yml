@@ -2,11 +2,12 @@ name: Compare APK Sizes
 
 on:
   workflow_dispatch:
+    inputs:
+      version: { required: true, type: string }
+
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
+      version: { required: true, type: string }
 
 jobs:
   apk-size:

@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      version:
-        required: true
-        type: string
+      version: { required: true, type: string }
 
 jobs:
   build:
