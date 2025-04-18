@@ -31,4 +31,4 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/${{ inputs.artifact-name }}
           track: internal
           status: "completed"
-  #          whatsNewDirectory: whatsNew
+  #          whatsNewDirectory: whatsnew
