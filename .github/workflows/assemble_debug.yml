@@ -37,7 +37,7 @@ jobs:
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: spacex-debug_${{ inputs.version }}
+          name: ${{ env.APK_NAME }}
           path: app/build/outputs/apk/debug/${{ env.APK_NAME }}
 
       # Checkout Main

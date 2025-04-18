@@ -3,11 +3,11 @@ name: Compare APK Sizes
 on:
   workflow_dispatch:
     inputs:
-      version: { required: true, type: string }
+      artifact-name: { required: true, type: string }
 
   workflow_call:
     inputs:
-      version: { required: true, type: string }
+      artifact-name: { required: true, type: string }
 
 jobs:
   apk-size:
@@ -28,7 +28,7 @@ jobs:
       - name: Download branch APK
         uses: actions/download-artifact@v4
         with:
-          name: spacex-debug_${{ inputs.version }}
+          name: ${{ inputs.artifact-name }}
 
       - name: Download main APK
         uses: actions/download-artifact@v4
@@ -38,7 +38,7 @@ jobs:
       # Generates APK size message for PR comment
       - name: Render comment body
         run: .github/scripts/render_apk_size_comment.sh \
-          "${{ inputs.version }}" \
+          "${{ inputs.artifact-name }}" \
           "${{ github.head_ref }}" \
 
       # Uploads PR comment template to be accessed in the post_pr-comment workflow
