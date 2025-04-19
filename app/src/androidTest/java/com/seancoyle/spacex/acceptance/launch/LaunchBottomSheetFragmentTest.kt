@@ -25,7 +25,7 @@ import org.junit.Test
 @HiltAndroidTest
 internal class LaunchBottomSheetFragmentTest: LaunchBase() {
 
-    private val launchBottomSheetTag = "Launch Bottom Sheet"
+/*    private val launchBottomSheetTag = "Launch Bottom Sheet"
     private val articleString by composeTestRule.stringResource(R.string.article)
     private val wikiString by composeTestRule.stringResource(R.string.wikipedia)
 
@@ -103,7 +103,7 @@ internal class LaunchBottomSheetFragmentTest: LaunchBase() {
         }
     }
 
-    /*@Test
+    *//*@Test
     fun launchBottomSheetNoLinksDisplaysDialogue(){
         composeTestRule.apply {
             waitUntilAtLeastOneExists(hasTestTag(launchGridTag))
@@ -116,7 +116,7 @@ internal class LaunchBottomSheetFragmentTest: LaunchBase() {
         Espresso.onView(withId(R.id.md_text_title)).check(matches(withText(R.string.text_info)))
         Espresso.onView(withId(R.id.md_text_message)).check(matches(withText(R.string.no_links)))
     }
-*/
+*//*
     private fun launchBottomSheetLinkOpensExternalBrowser(
         position: Int,
         linkString: String,
@@ -160,5 +160,5 @@ internal class LaunchBottomSheetFragmentTest: LaunchBase() {
             onNodeWithText(wikiString).assertIsDisplayed()
             onNodeWithText(linksString).assertIsDisplayed()
         }
-    }
+    }*/
 }

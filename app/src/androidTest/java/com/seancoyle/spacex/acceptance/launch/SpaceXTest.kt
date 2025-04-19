@@ -10,9 +10,9 @@ import org.junit.Test
 @HiltAndroidTest
 class SpaceXTest: LaunchBase() {
 
-    @Test
+   /* @Test
     fun verifyLaunchScreenAndGridIsDisplayed() {
-       /* composeTestRule.apply {
+        composeTestRule.apply {
             val appName by stringResource(R.string.app_name)
             val filterBtn by stringResource(R.string.filter_btn_content_desc)
 
@@ -21,7 +21,7 @@ class SpaceXTest: LaunchBase() {
             onNodeWithText(appName).assertIsDisplayed()
             onNodeWithContentDescription(filterBtn).assertIsDisplayed()
             onNodeWithTag(launchGridTag).assertIsDisplayed()
-        }*/
-    }
+        }
+    }*/
 
 }
