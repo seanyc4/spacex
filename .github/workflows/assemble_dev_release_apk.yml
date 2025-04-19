@@ -19,6 +19,6 @@ jobs:
       artifact-name:   spacexDev-release_${{ inputs.version }}.apk
     secrets:
       signing-key:       ${{ secrets.TEST_SIGNING_KEY }}
-      alias:            ${{ secrets.TEST_ALIAS }}
+      alias:             ${{ secrets.TEST_ALIAS }}
       keystore-password: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
       key-password:      ${{ secrets.TEST_KEY_PASSWORD }}
