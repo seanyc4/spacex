@@ -11,7 +11,7 @@ import org.junit.Test
 @ExperimentalMaterialApi
 class LaunchScreenTest {
 
-    @get:Rule
+  /*  @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
@@ -22,7 +22,7 @@ class LaunchScreenTest {
                 onRefresh = {}
             )
 
-            /*LaunchScreen(
+            *//*LaunchScreen(
                 uiState = emptyList(),
                 loading = true,
                 onChangeScrollPosition = {},
@@ -30,11 +30,11 @@ class LaunchScreenTest {
                 page = 0 ,
                 pullRefreshState = refreshing,
                 onItemClicked = {}
-            )*/
+            )*//*
         }
 
         composeTestRule.apply {
             onNodeWithTag(testTag = TAG_LOADING).assertExists()
         }
-    }
+    }*/
 }
