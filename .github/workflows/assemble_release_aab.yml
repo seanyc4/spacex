@@ -6,19 +6,19 @@ on:
     inputs:
       version: { required: true, type: string }
     outputs:
-      artifactName:
-        value: ${{ jobs.build.outputs.artifactName }}
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
 
 jobs:
   build:
     uses: ./.github/workflows/build_sign.yml
     with:
-      assembleScript: .github/scripts/assemble_release_aab.sh
-      outputDir:      app/build/outputs/bundle/release
-      unsignedName:   app-release.aab
-      artifactName:   spacex-release_${{ inputs.version }}.aab
+      assemble-script: .github/scripts/assemble_release_aab.sh
+      output-dir:      app/build/outputs/bundle/release
+      unsigned-name:   app-release.aab
+      artifact-name:   spacex-release_${{ inputs.version }}.aab
     secrets:
-      signingKey:       ${{ secrets.SIGNING_KEY }}
-      alias:            ${{ secrets.ALIAS }}
-      keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-      keyPassword:      ${{ secrets.KEY_PASSWORD }}
+      signing-key:       ${{ secrets.SIGNING_KEY }}
+      alias:             ${{ secrets.ALIAS }}
+      keystore-password: ${{ secrets.KEY_STORE_PASSWORD }}
+      key-password:      ${{ secrets.KEY_PASSWORD }}
