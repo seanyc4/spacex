@@ -17,7 +17,7 @@ updates:
       prefix: "[DEPENDABOT]"
     labels:
     - "Dependency Update"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
     groups:
       kotlin-updates:
         patterns:
