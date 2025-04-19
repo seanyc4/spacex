@@ -41,9 +41,9 @@ jobs:
         with:
           releaseDirectory: ${{ inputs.output-dir }}
           signingKeyBase64: ${{ secrets.signing-key }}
-          alias: ${{ secrets.alias }}
+          alias:            ${{ secrets.alias }}
           keyStorePassword: ${{ secrets.keystore-password }}
-          keyPassword: ${{ secrets.key-password }}
+          keyPassword:      ${{ secrets.key-password }}
 
       # Rename signed artifact
       - run: ./.github/scripts/rename_artifact.sh "${{ inputs.output-dir }}/${{ inputs.unsigned-name }}" "${{ inputs.output-dir }}/${{ env.ARTIFACT_NAME }}"
