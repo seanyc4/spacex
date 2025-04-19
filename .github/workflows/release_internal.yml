@@ -45,4 +45,4 @@ jobs:
     needs: [assemble-release, get-current-version]
     secrets: inherit
     with:
-      artifactName: ${{ needs.assemble-release.outputs.artifactName }}
+      artifact-name: ${{ needs.assemble-release.outputs.artifact-name }}
