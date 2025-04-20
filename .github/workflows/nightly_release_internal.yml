@@ -55,16 +55,16 @@ jobs:
       - name: Set up dynamic branch name
         id: version
         run: |
-            NEW_VERSION_NAME=$(bash .github/scripts/version_bump.sh --dry-run) # or however you get it
-            echo "NEW_VERSION_NAME=$NEW_VERSION_NAME" >> $GITHUB_OUTPUT
+          NEW_VERSION_NAME=$(bash .github/scripts/version_bump.sh --dry-run | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | tr -d '\n')
+          echo "new_branch=version-bump/$NEW_VERSION_NAME" >> "$GITHUB_OUTPUT"
 
       - name: Wait for PR merge
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           BRANCH_NAME=${{ steps.version.outputs.new_branch }}
-
           echo "🔍 Looking for PR from branch: $BRANCH_NAME"
+
           PR_NUMBER=$(gh pr list --state open --head "$BRANCH_NAME" --json number -q '.[0].number')
 
           if [ -z "$PR_NUMBER" ]; then
@@ -75,7 +75,7 @@ jobs:
           echo "⏳ Waiting for PR #$PR_NUMBER to be merged..."
           for i in {1..30}; do
             MERGED_AT=$(gh pr view "$PR_NUMBER" --json mergedAt -q '.mergedAt')
-            if [ "$MERGED_AT" != "null" ] && [ -n "$MERGED_AT" ]; then
+            if [ "$MERGED_AT" != "null" ]; then
               echo "✅ PR #$PR_NUMBER has been merged at $MERGED_AT"
               exit 0
             fi
