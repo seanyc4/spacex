@@ -55,8 +55,9 @@ jobs:
       - name: Set up dynamic branch name
         id: version
         run: |
-            NEW_VERSION_NAME=$(bash .github/scripts/version_bump.sh --dry-run) # or however you get it
-            echo "NEW_VERSION_NAME=$NEW_VERSION_NAME" >> $GITHUB_OUTPUT
+          NEW_VERSION_NAME=$(bash .github/scripts/version_bump.sh --dry-run | grep -oE '[0-9]+$' | tr -d '\n')
+          echo "new_branch=version-bump/$NEW_VERSION_NAME" >> "$GITHUB_OUTPUT"
+      
 
       - name: Wait for PR merge
         env:
