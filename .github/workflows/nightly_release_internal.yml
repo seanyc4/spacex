@@ -75,7 +75,7 @@ jobs:
           echo "⏳ Waiting for PR #$PR_NUMBER to be merged..."
           for i in {1..30}; do
             MERGED_AT=$(gh pr view "$PR_NUMBER" --json mergedAt -q '.mergedAt')
-            if [ "$MERGED_AT" != "null" ]; then
+            if [ -n "$MERGED_AT" ]; then
               echo "✅ PR #$PR_NUMBER has been merged at $MERGED_AT"
               exit 0
             fi
@@ -85,6 +85,7 @@ jobs:
 
           echo "❌ Timeout reached. PR #$PR_NUMBER was not merged."
           exit 1
+      
       
       
 
