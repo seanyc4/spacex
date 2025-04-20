@@ -32,12 +32,58 @@ jobs:
     uses: ./.github/workflows/version_bump.yml
     secrets: inherit
 
-  # ---------------------------------------------
+  # -------------------------------------------------
+  # ⏳ Wait for version bump PR to be merged
+  # -------------------------------------------------
+
+  wait-for-version-bump-merge:
+    name: ⏳ Wait for Version Bump PR Merge
+    needs: version-bump
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI (manual download)
+        run: |
+          curl -sSL https://github.com/cli/cli/releases/download/v2.47.0/gh_2.47.0_linux_amd64.tar.gz -o gh.tar.gz
+          tar -xzf gh.tar.gz
+          sudo mv gh_2.47.0_linux_amd64/bin/gh /usr/local/bin/gh
+          gh --version
+
+      - name: Wait for PR merge
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          PR_NUMBER=$(gh pr list --state open --head version-bump --json number -q '.[0].number')
+          if [ -z "$PR_NUMBER" ]; then
+            echo "❌ No open PR found with head branch 'version-bump'"
+            exit 1
+          fi
+          
+          echo "Waiting for PR #$PR_NUMBER to be merged..."
+          for i in {1..30}; do
+            MERGED_AT=$(gh pr view "$PR_NUMBER" --json mergedAt -q '.mergedAt')
+            if [ "$MERGED_AT" != "null" ]; then
+              echo "✅ PR #$PR_NUMBER has been merged at $MERGED_AT"
+              exit 0
+            fi
+            echo "⏳ Still waiting... attempt $i"
+            sleep 30
+          done
+          
+          echo "❌ Timeout reached. PR #$PR_NUMBER was not merged."
+          exit 1
+      
+      
+
+      # ---------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
   # ---------------------------------------------
   github-release:
     name: GitHub Release
-    needs: [generate-tag, version-bump]
+    needs: [generate-tag, wait-for-version-bump-merge]
     runs-on: ubuntu-latest
 
     steps:
