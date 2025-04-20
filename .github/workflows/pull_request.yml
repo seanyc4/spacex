@@ -9,9 +9,7 @@ permissions:
 on:
   workflow_dispatch:
   pull_request:
-    types:
-      - opened
-      - synchronize
+    types: [opened, synchronize, labeled]
 
 concurrency:
   group: pr-${{ github.event.pull_request.number || github.ref }}
@@ -23,12 +21,14 @@ jobs:
   # 🧪 Static Analysis / Tooling
   # -------------------------------------
   danger:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
     uses: ./.github/workflows/danger.yml
 
   # -------------------------------------
   # 🔖 Versioning
   # -------------------------------------
   app-version:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
     uses: ./.github/workflows/app_version.yml
 
   # -------------------------------------
