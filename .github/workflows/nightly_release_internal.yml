@@ -42,35 +42,43 @@ jobs:
 
     steps:
       - name: Install GitHub CLI
-        uses: cli/cli-action@v2
-
-      - name: Find and wait for version bump PR to merge
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-            echo "Looking for open version bump PR..."
-            PR_NUMBER=$(gh pr list --state open --author "@me" --label "autoversion" --json number --jq '.[0].number')
-            
-            if [ -z "$PR_NUMBER" ]; then
-              echo "No open version bump PR found. Exiting."
-              exit 1
-            fi
-            
-            echo "Waiting for PR #$PR_NUMBER to be merged..."
-            for i in {1..30}; do
-              PR_MERGED=$(gh pr view $PR_NUMBER --json merged --jq '.merged')
-              if [ "$PR_MERGED" == "true" ]; then
-                echo "PR #$PR_NUMBER has been merged!"
-                exit 0
-              fi
-              echo "Still waiting... ($i/30)"
-              sleep 30
-            done
-            
-            echo "Timeout: PR was not merged in time."
-            exit 1
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh -y
 
-  # ---------------------------------------------
+      - name: Authenticate GH CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Wait for Version Bump PR to be Merged
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Looking for open version bump PR..."
+          PR_NUMBER=$(gh pr list --state open --author "@me" --label "autoversion" --json number --jq '.[0].number')
+          
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No open version bump PR found. Exiting."
+            exit 1
+          fi
+          
+          echo "Waiting for PR #$PR_NUMBER to be merged..."
+          for i in {1..30}; do
+            PR_MERGED=$(gh pr view $PR_NUMBER --json merged --jq '.merged')
+            if [ "$PR_MERGED" == "true" ]; then
+              echo "PR #$PR_NUMBER has been merged!"
+              exit 0
+            fi
+            echo "Still waiting... ($i/30)"
+            sleep 30
+          done
+          
+          echo "Timeout: PR was not merged in time."
+          exit 1
+    
+
+    # ---------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
   # ---------------------------------------------
   github-release:
