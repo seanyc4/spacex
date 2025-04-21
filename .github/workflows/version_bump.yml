@@ -16,25 +16,21 @@ jobs:
       version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Version Bump
-        id: version
-        run: .github/scripts/version_bump.sh
-
       - name: Generate token from GitHub App
         id: generate_token
         uses: tibdex/github-app-token@v2.1.0
         with:
           app_id: ${{ secrets.RELEASE_BOT_ID }}
           private_key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Version Bump
+        id: version
+        run: .github/scripts/version_bump.sh
 
       - name: Create Pull Request
         id: cpr
