@@ -3,7 +3,7 @@ name: Deploy AAB to Play Store
 on:
   workflow_dispatch:
     inputs:
-      artifact-name: { required: true, type: string }
+      artifact-name: { required: true, type: string, description: "Artifact name" }
 
   workflow_call:
     inputs:

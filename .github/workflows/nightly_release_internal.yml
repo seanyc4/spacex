@@ -7,23 +7,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  # ---------------------------------------
+  # ------------------------------------------------
   # 🔖 Checks for Commits & Tags Release
-  # ---------------------------------------
+  # ------------------------------------------------
   tag-release:
     uses: ./.github/workflows/tag_release.yml
 
-  # -------------------------------------------
+  # ------------------------------------------------
   # 🧩 Versioning - Bump Version Code & Name
-  # -------------------------------------------
+  # ------------------------------------------------
   version-bump:
     needs: [tag-release]
     uses: ./.github/workflows/version_bump.yml
     secrets: inherit
 
-  # -----------------------------------------------
+  # ------------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
-  # -----------------------------------------------
+  # ------------------------------------------------
   github-release:
     needs: [tag-release, poll-version-bump-pr-merge]
     uses: ./.github/workflows/github_release.yml
