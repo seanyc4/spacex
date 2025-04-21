@@ -2,6 +2,9 @@ name: Assemble Dev Release APK
 
 on:
   workflow_dispatch:
+    inputs:
+      version: { required: true, type: string, description: "Version Name" }
+
   workflow_call:
     inputs:
       version: { required: true, type: string }

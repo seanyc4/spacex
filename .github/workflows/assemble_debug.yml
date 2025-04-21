@@ -2,12 +2,15 @@ name: Assemble Debug APK
 
 on:
   workflow_dispatch:
+    inputs:
+      version: { required: true, type: string, description: "Version Name" }
+
   workflow_call:
     inputs:
       version: { required: true, type: string }
     outputs:
-        artifact-name:
-            value: ${{ jobs.build.outputs.artifact-name }}
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
 
 jobs:
   build:
