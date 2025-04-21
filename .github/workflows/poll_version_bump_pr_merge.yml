@@ -1,0 +1,19 @@
+name: Poll for Version Bump PR Merge
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  poll:
+    name: Poll for Version Bump PR Merge
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for Version Bump PR to be merged
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: .github/scripts/poll_version_bump_pr_merged.sh
