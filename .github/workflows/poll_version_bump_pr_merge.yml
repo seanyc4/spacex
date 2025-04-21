@@ -16,4 +16,4 @@ jobs:
       - name: Wait for Version Bump PR to be merged
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: .github/scripts/wait_for_version_bump_merge.sh
+        run: .github/scripts/poll_version_bump_pr_merged.sh
