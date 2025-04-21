@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 # Run version bump dry run to extract the new version
