@@ -19,7 +19,7 @@ jobs:
   # ------------------------------------------
   version-bump:
     needs: [tag-release]
-    uses: ./.github/workflows/version_bump_old.yml
+    uses: ./.github/workflows/version_bump.yml
     secrets: inherit
 
   # ------------------------------------------
