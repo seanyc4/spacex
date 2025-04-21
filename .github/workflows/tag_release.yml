@@ -1,0 +1,25 @@
+name: Tag Release
+
+on:
+  workflow_call:
+    outputs:
+      release_tag:
+        description: "The generated release tag"
+        value: ${{ jobs.tag.outputs.release_tag }}
+
+  workflow_dispatch:
+
+jobs:
+  tag:
+    name: Generate Release Tag
+    runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.set-tag.outputs.RELEASE_TAG }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run tag release script
+        id: set-tag
+        run: .github/scripts/tag_release.sh
