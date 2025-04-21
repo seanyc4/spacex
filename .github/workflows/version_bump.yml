@@ -16,14 +16,17 @@ jobs:
       version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
 
     steps:
+      - name: Generate token from GitHub App
+        id: generate_token
+        uses: peter-murray/workflow-application-token-action@v4
+        with:
+          application_id: ${{ secrets.RELEASE_BOT_ID }}
+          application_private_key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Version Bump
         id: version
@@ -31,21 +34,24 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          commit-message: "chore: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
+          token: ${{ steps.generate_token.outputs.token }}
+          commit-message: "[RELEASE BOT]: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
           branch: version-bump/${{ steps.version.outputs.NEW_VERSION_NAME }}
-          title: "chore: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
+          title: "[RELEASE BOT]: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
           body: |
             This PR was automatically created to bump the app version to `${{ steps.version.outputs.NEW_VERSION_NAME }}`
           base: main
           delete-branch: true
           draft: false
+          labels: |
+            Skip CI
+            Release Process
 
       - name: Enable Auto-merge
         if: ${{ steps.cpr.outputs.pull-request-url != '' }}
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
             gh pr merge "${{ steps.cpr.outputs.pull-request-url }}" --merge --auto
