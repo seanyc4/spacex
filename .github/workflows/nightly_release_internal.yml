@@ -8,99 +8,34 @@ on:
 
 jobs:
 
-  # ---------------------------------------------
-  # 🔖 Checks for Commits & Generates Release Tag
-  # ---------------------------------------------
-  generate-tag:
-    name: Generate Release Tag
-    runs-on: ubuntu-latest
-    outputs:
-      release_tag: ${{ steps.set-tag.outputs.RELEASE_TAG }}
+  # ------------------------------------------
+  # 🔖 Checks for Commits & Tags Release
+  # ------------------------------------------
+  tag-release:
+    uses: ./.github/workflows/tag_release.yml
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run tag release script
-        id: set-tag
-        run: .github/scripts/tag_release.sh
-
-  # ----------------------------------------
+  # ------------------------------------------
   # 🧩 Versioning - Bump Version Code & Name
-  # ----------------------------------------
+  # ------------------------------------------
   version-bump:
-    name: Version Bump
-    needs: generate-tag
+    needs: [tag-release]
     uses: ./.github/workflows/version_bump.yml
     secrets: inherit
 
-  # -------------------------------------------------
+  # ------------------------------------------
   # ⏳ Wait for version bump PR to be merged
-  # -------------------------------------------------
+  # ------------------------------------------
+  poll-version-bump-pr-merge:
+    needs: [version-bump]
+    uses: ./.github/workflows/poll_version_bump_pr_merge.yml
+    secrets: inherit
 
-  wait-for-version-bump-merge:
-    name: ⏳ Wait for Version Bump PR Merge
-    needs: version-bump
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install GitHub CLI (manual download)
-        run: |
-          curl -sSL https://github.com/cli/cli/releases/download/v2.47.0/gh_2.47.0_linux_amd64.tar.gz -o gh.tar.gz
-          tar -xzf gh.tar.gz
-          sudo mv gh_2.47.0_linux_amd64/bin/gh /usr/local/bin/gh
-          gh --version
-
-      - name: Set up dynamic branch name
-        id: version
-        run: |
-          NEW_VERSION_NAME=$(bash .github/scripts/version_bump.sh --dry-run | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | tr -d '\n')
-          echo "new_branch=version-bump/$NEW_VERSION_NAME" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for PR merge
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          BRANCH_NAME=${{ steps.version.outputs.new_branch }}
-          echo "🔍 Looking for PR from branch: $BRANCH_NAME"
-
-          PR_NUMBER=$(gh pr list --state open --head "$BRANCH_NAME" --json number -q '.[0].number')
-
-          if [ -z "$PR_NUMBER" ]; then
-            echo "❌ No open PR found with head branch '$BRANCH_NAME'"
-            exit 1
-          fi
-
-          echo "⏳ Waiting for PR #$PR_NUMBER to be merged..."
-          for i in {1..90}; do   # 90 attempts × 30s = 45 minutes
-            MERGED_AT=$(gh pr view "$PR_NUMBER" --json mergedAt -q '.mergedAt')
-            if [ -n "$MERGED_AT" ]; then
-            echo "✅ PR #$PR_NUMBER has been merged at $MERGED_AT"
-            exit 0
-            fi
-            echo "⏳ Still waiting... attempt $i"
-            sleep 30
-            done
-
-          echo "❌ Timeout reached. PR #$PR_NUMBER was not merged."
-          exit 1
-      
-      
-      
-
-      # ---------------------------------------------
+  # ----------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
-  # ---------------------------------------------
+  # ----------------------------------------------
   github-release:
-    name: GitHub Release
-    needs: [generate-tag, wait-for-version-bump-merge]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          generateReleaseNotes: true
-          tag: ${{ needs.generate-tag.outputs.RELEASE_TAG }}
-          token: ${{ secrets.GH_TOKEN }}
+    needs: [tag-release, poll-version-bump-pr-merge]
+    uses: ./.github/workflows/github_release.yml
+    with:
+      release_tag: ${{ needs.tag-release.outputs.RELEASE_TAG }}
+    secrets: inherit
