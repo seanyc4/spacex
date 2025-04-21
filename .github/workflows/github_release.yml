@@ -1,0 +1,19 @@
+name: GitHub Release
+
+on:
+  workflow_call:
+    inputs:
+      release_tag: { required: true, type: string }
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: ${{ inputs.release_tag }}
+          token: ${{ secrets.GH_TOKEN }}
