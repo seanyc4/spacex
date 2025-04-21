@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   # ------------------------------------------
   # 🔖 Checks for Commits & Tags Release
   # ------------------------------------------
@@ -36,6 +35,6 @@ jobs:
   github-release:
     needs: [tag-release, poll-version-bump-pr-merge]
     uses: ./.github/workflows/github_release.yml
+    secrets: inherit
     with:
       release_tag: ${{ needs.tag-release.outputs.RELEASE_TAG }}
-    secrets: inherit

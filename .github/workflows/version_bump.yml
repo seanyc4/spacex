@@ -29,19 +29,29 @@ jobs:
         id: version
         run: .github/scripts/version_bump.sh
 
+      - name: Generate token from GitHub App
+        id: generate_token
+        uses: tibdex/github-app-token@v2.1.0
+        with:
+          app_id: ${{ secrets.RELEASE_BOT_ID }}
+          private_key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          commit-message: "chore: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
+          token: ${{ steps.generate_token.outputs.token }}
+          commit-message: "[RELEASE BOT]: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
           branch: version-bump/${{ steps.version.outputs.NEW_VERSION_NAME }}
-          title: "chore: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
+          title: "[RELEASE BOT]: bump version to ${{ steps.version.outputs.NEW_VERSION_NAME }}"
           body: |
             This PR was automatically created to bump the app version to `${{ steps.version.outputs.NEW_VERSION_NAME }}`
           base: main
           delete-branch: true
           draft: false
+          labels: |
+            Skip CI
+            Release Process
 
       - name: Enable Auto-merge
         if: ${{ steps.cpr.outputs.pull-request-url != '' }}
