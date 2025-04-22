@@ -25,7 +25,7 @@ jobs:
   # 🚀 Tags the Release & Generates Release Notes
   # ------------------------------------------------
   github-release:
-    needs: [tag-release, poll-version-bump-pr-merge]
+    needs: [tag-release, version-bump]
     uses: ./.github/workflows/github_release.yml
     with:
       release_tag: ${{ needs.tag-release.outputs.RELEASE_TAG }}
