@@ -10,7 +10,7 @@ on:
 
 jobs:
   version-bump:
-    name: Version Bump
+    name: Version Bump & Commit
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
@@ -21,6 +21,7 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+      # Bump Android app version
       - name: Version Bump
         id: version
         run: .github/scripts/version_bump.sh
