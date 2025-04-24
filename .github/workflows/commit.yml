@@ -1,0 +1,19 @@
+name: Commit Version Bump
+
+on:
+  workflow_dispatch:
+
+jobs:
+  commit-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          message: "[RELEASE BOT]: commit version bump"

@@ -2,6 +2,10 @@ name: Version Bump
 
 on:
   workflow_dispatch:
+    inputs:
+      version_name: { required: false, type: string, description: "Set versionName (e.g. 2.0.0)" }
+      version_code: { required: false, type: string, description: "Set versionCode (e.g. 200)" }
+
   workflow_call:
     outputs:
       version:
@@ -23,10 +27,4 @@ jobs:
 
       - name: Version Bump
         id: version
-        run: .github/scripts/version_bump.sh
-
-      # Commit version bump to main branch
-      - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
+        run: .github/scripts/version_bump.sh "${{ github.event.inputs.version_name }}" "${{ github.event.inputs.version_code }}"

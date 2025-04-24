@@ -22,10 +22,18 @@ jobs:
     secrets: inherit
 
   # ------------------------------------------------
+  # 📝 Commits Version Bump Changes to Main
+  # ------------------------------------------------
+  commit-changes:
+    needs: [version-bump]
+    uses: ./.github/workflows/commit.yml
+    secrets: inherit
+
+  # ------------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
   # ------------------------------------------------
   github-release:
-    needs: [tag-release, version-bump]
+    needs: [tag-release, commit-changes]
     uses: ./.github/workflows/github_release.yml
     with:
       release_tag: ${{ needs.tag-release.outputs.RELEASE_TAG }}
