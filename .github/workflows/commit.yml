@@ -2,6 +2,7 @@ name: Commit Version Bump
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   commit-version:
