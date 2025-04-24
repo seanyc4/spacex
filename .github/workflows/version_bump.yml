@@ -28,9 +28,3 @@ jobs:
       - name: Version Bump
         id: version
         run: .github/scripts/version_bump.sh "${{ github.event.inputs.version_name }}" "${{ github.event.inputs.version_code }}"
-
-      # Commit version bump to main branch
-      #- name: Commit & Push changes
-      #  uses: actions-js/push@master
-      #  with:
-      #    github_token: ${{ secrets.GH_TOKEN }}
