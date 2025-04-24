@@ -3,14 +3,14 @@ name: Version Bump
 on:
   workflow_dispatch:
     inputs:
-      version_name: { required: false, type: string, description: "Set versionName (e.g. 2.0.0)" }
-      version_code: { required: false, type: string, description: "Set versionCode (e.g. 200)" }
+      version-name: { required: false, type: string, description: "Set versionName (e.g. 2.0.0)" }
+      version-code: { required: false, type: string, description: "Set versionCode (e.g. 200)" }
 
   workflow_call:
     outputs:
-      version:
-        description: "The new version name"
-        value: ${{ jobs.version-bump.outputs.version }}
+      version: { description: "The new version name", value: ${{ jobs.version-bump.outputs.version }} }
+      artifact-name: { description: "Name of uploaded artifact", value: ${{ jobs.version-bump.artifact-name }} }
+      file-path: { description: "Location of file", value: ${{ jobs.version-bump.file-path }} }
 
 jobs:
   version-bump:
@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
+      artifact-name: version-bump
+      file-path: buildSrc/src/main/kotlin
 
     steps:
       - name: Checkout
@@ -25,6 +27,15 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+      # Increase the Android app version name & code
       - name: Version Bump
         id: version
         run: .github/scripts/version_bump.sh "${{ github.event.inputs.version_name }}" "${{ github.event.inputs.version_code }}"
+
+      # Upload the file changes to be used in the commit.yml workflow
+      - name: Upload bumped file
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-bump
+          path: buildSrc/src/main/kotlin/Android.kt
+
