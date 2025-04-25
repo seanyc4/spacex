@@ -3,9 +3,9 @@ name: Tag Release
 on:
   workflow_call:
     outputs:
-      release_tag:
+      release-tag:
         description: "The generated release tag"
-        value: ${{ jobs.tag.outputs.release_tag }}
+        value: ${{ jobs.tag.outputs.release-tag }}
 
   workflow_dispatch:
 
@@ -14,7 +14,7 @@ jobs:
     name: Generate Release Tag
     runs-on: ubuntu-latest
     outputs:
-      release_tag: ${{ steps.set-tag.outputs.RELEASE_TAG }}
+      release-tag: ${{ steps.set-tag.outputs.release-tag }}
 
     steps:
       - name: Checkout
