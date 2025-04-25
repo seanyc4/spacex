@@ -19,5 +19,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
-          tag: ${{ inputs.release_tag }}
+          tag: ${{ inputs.release-tag }}
           token: ${{ secrets.GH_TOKEN }}
