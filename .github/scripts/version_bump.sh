@@ -43,4 +43,6 @@ sed -i -E "s/(versionCode = )([0-9]+)/\1$newVersionCode/" "$location"
 echo "✅ Updated versionCode to $newVersionCode"
 
 # Export version for subsequent steps
-echo "NEW_VERSION_NAME=$newVersionName" >> $GITHUB_OUTPUT
+echo "new-version-name=$newVersionName" >> $GITHUB_OUTPUT
+echo "file_path=buildSrc/src/main/kotlin" >> $GITHUB_OUTPUT
+echo "file_name=Android.kt" >> $GITHUB_OUTPUT
