@@ -8,18 +8,24 @@ on:
 
   workflow_call:
     outputs:
-      version: { description: "The new version name", value: ${{ jobs.version-bump.outputs.version }} }
-      artifact-name: { description: "Name of uploaded artifact", value: ${{ jobs.version-bump.artifact-name }} }
-      file-path: { description: "Location of file", value: ${{ jobs.version-bump.file-path }} }
+      version:
+        description: "The new version name"
+        value: ${{ jobs.version-bump.outputs.version }}
+      artifact-name:
+        description: "Name of uploaded artifact"
+        value: ${{ jobs.version-bump.outputs.artifact-name }}
+      file-path:
+        description: "Location of file"
+        value: ${{ jobs.version-bump.outputs.file-path }}
 
 jobs:
   version-bump:
     name: Version Bump
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.NEW_VERSION_NAME }}
-      artifact-name: version-bump
-      file-path: buildSrc/src/main/kotlin
+      version: ${{ steps.version.outputs.new-version-name }}
+      artifact-name: ${{ steps.version.outputs.artifact_name }}
+      file-path: ${{ steps.version.outputs.file_path }}
 
     steps:
       - name: Checkout
@@ -38,4 +44,3 @@ jobs:
         with:
           name: version-bump
           path: buildSrc/src/main/kotlin/Android.kt
-

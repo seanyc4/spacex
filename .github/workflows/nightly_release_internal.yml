@@ -39,5 +39,5 @@ jobs:
     needs: [tag-release, commit-changes]
     uses: ./.github/workflows/github_release.yml
     with:
-      release-tag: ${{ needs.tag-release.outputs.RELEASE_TAG }}
+      release-tag: ${{ needs.tag-release.outputs.release-tag }}
     secrets: inherit
