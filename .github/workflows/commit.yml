@@ -24,7 +24,8 @@ jobs:
           path: ${{ inputs.file-path }}
 
       - name: Move bumped file back
-        run: "mv ${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" buildSrc/src/main/kotlin/Android.kt
+        run: |
+          mv "${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" buildSrc/src/main/kotlin/Android.kt
 
       - name: Commit & Push changes
         uses: actions-js/push@master
