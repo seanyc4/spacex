@@ -44,5 +44,6 @@ echo "✅ Updated versionCode to $newVersionCode"
 
 # Export version for subsequent steps
 echo "new-version-name=$newVersionName" >> $GITHUB_OUTPUT
-echo "file_path=buildSrc/src/main/kotlin" >> $GITHUB_OUTPUT
-echo "file_name=Android.kt" >> $GITHUB_OUTPUT
+echo "file-path=buildSrc/src/main/kotlin" >> $GITHUB_OUTPUT
+echo "file-name=Android.kt" >> $GITHUB_OUTPUT
+echo "artifact-name=version-bump" >> $GITHUB_OUTPUT

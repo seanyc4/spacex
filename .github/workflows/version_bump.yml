@@ -27,9 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.new-version-name }}
-      artifact-name: ${{ steps.version.outputs.artifact_name }}
-      file-path: ${{ steps.version.outputs.file_path }}
-      file-name: ${{ steps.version.outputs.file_name }}
+      artifact-name: ${{ steps.version.outputs.artifact-name }}
+      file-path: ${{ steps.version.outputs.file-path }}
+      file-name: ${{ steps.version.outputs.file-name }}
 
     steps:
       - name: Checkout
