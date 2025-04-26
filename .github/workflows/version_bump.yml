@@ -17,6 +17,9 @@ on:
       file-path:
         description: "Location of file"
         value: ${{ jobs.version-bump.outputs.file-path }}
+      file-name:
+        description: "Name of file"
+        value: ${{ jobs.version-bump.outputs.file-name }}
 
 jobs:
   version-bump:
@@ -26,6 +29,7 @@ jobs:
       version: ${{ steps.version.outputs.new-version-name }}
       artifact-name: ${{ steps.version.outputs.artifact_name }}
       file-path: ${{ steps.version.outputs.file_path }}
+      file-name: ${{ steps.version.outputs.file_name }}
 
     steps:
       - name: Checkout

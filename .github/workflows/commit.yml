@@ -6,6 +6,7 @@ on:
     inputs:
       artifact-name: { description: "Name of uploaded artifact", type: string, required: true }
       file-path: { description: "Location of file", type: string, required: true }
+      file-name: { description: "Name of file", type: string, required: true }
 
 jobs:
   commit-version:
@@ -23,7 +24,7 @@ jobs:
           path: ${{ inputs.file-path }}
 
       - name: Move bumped file back
-        run: mv version-bump/buildSrc/src/main/kotlin/Android.kt buildSrc/src/main/kotlin/Android.kt
+        run: "mv ${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" buildSrc/src/main/kotlin/Android.kt
 
       - name: Commit & Push changes
         uses: actions-js/push@master

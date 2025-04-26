@@ -31,6 +31,7 @@ jobs:
     with:
       artifact-name: ${{ needs.version-bump.outputs.artifact-name }}
       file-path: ${{ needs.version-bump.outputs.file-path }}
+      file-name: ${{ needs.version-bump.outputs.file-name }}
 
   # ------------------------------------------------
   # 🚀 Tags the Release & Generates Release Notes
