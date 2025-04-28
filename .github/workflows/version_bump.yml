@@ -53,5 +53,6 @@ jobs:
         if: ${{ steps.cpr.outputs.pull-request-url != '' }}
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
             gh pr merge "${{ steps.cpr.outputs.pull-request-url }}" --merge --auto
