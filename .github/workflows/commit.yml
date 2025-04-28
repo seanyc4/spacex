@@ -23,6 +23,13 @@ jobs:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.file-path }}
 
+      - name: Show files after download
+        run: |
+          echo "Listing structure under ${{ inputs.file-path }}"
+          ls -alR "${{ inputs.file-path }}"
+          echo "Full filesystem layout:"
+          tree || true  # tree might not be installed, so don't fail if missing
+
       - name: Move downloaded file back
         run: |
           mv "${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" "${{ inputs.file-path }}/${{ inputs.file-name }}"
