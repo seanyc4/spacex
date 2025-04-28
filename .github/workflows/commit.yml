@@ -23,9 +23,9 @@ jobs:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.file-path }}
 
-      - name: Move downloaded files
+      - name: Move downloaded file back
         run: |
-          mv "${{ inputs.file-path }}/${{ inputs.artifact-name }}/*" "${{ inputs.file-path }}/"
+          mv "${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" "${{ inputs.file-path }}/${{ inputs.file-name }}"
           rm -rf "${{ inputs.file-path }}/${{ inputs.artifact-name }}"
 
       - name: Commit & Push changes
