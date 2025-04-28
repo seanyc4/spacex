@@ -28,10 +28,7 @@ jobs:
           echo "Searching for the downloaded file:"
           find "${{ inputs.file-path }}" -type f
 
-      - name: Move downloaded file back
-        run: |
-          mv "${{ inputs.file-path }}/${{ inputs.artifact-name }}/${{ inputs.file-name }}" "${{ inputs.file-path }}/${{ inputs.file-name }}"
-          rm -rf "${{ inputs.file-path }}/${{ inputs.artifact-name }}"
+      
 
       - name: Commit & Push changes
         uses: actions-js/push@master
