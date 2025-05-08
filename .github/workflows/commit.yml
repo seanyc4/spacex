@@ -6,7 +6,6 @@ on:
     inputs:
       artifact-name: { description: "Name of uploaded artifact", type: string, required: true }
       file-path: { description: "Location of file", type: string, required: true }
-      file-name: { description: "Name of file", type: string, required: true }
 
 jobs:
   commit-version:
@@ -22,13 +21,6 @@ jobs:
         with:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.file-path }}
-
-      - name: Find downloaded file
-        run: |
-          echo "Searching for the downloaded file:"
-          find "${{ inputs.file-path }}" -type f
-
-      
 
       - name: Commit & Push changes
         uses: actions-js/push@master
