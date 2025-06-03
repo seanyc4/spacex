@@ -1,10 +1,6 @@
 name: Compare APK Sizes
 
 on:
-  workflow_dispatch:
-    inputs:
-      artifact-name: { required: true, type: string, description: "Artifact name" }
-
   workflow_call:
     inputs:
       artifact-name: { required: true, type: string }
