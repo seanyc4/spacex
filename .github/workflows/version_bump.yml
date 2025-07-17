@@ -21,7 +21,7 @@ on:
 jobs:
   version-bump:
     name: Version Bump
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     outputs:
       version: ${{ steps.version.outputs.new-version-name }}
       artifact-name: ${{ steps.version.outputs.artifact-name }}

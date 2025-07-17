@@ -18,7 +18,7 @@ on:
 
 jobs:
   build-sign:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     outputs:
       artifact-name: ${{ steps.artifact-name.outputs.artifact-name }}
     env:

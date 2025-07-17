@@ -7,7 +7,7 @@ on:
 jobs:
   uiTest:
     name: Run
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     strategy:
       matrix:
         api-level: [ 29 ]

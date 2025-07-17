@@ -11,7 +11,7 @@ on:
 jobs:
   get-version-name:
     name: Fetch
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     outputs:
       version: ${{ steps.get-version.outputs.version }}
 

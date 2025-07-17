@@ -9,7 +9,7 @@ on:
 
 jobs:
   commit-version:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
