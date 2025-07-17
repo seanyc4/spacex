@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.data.cache.launch
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
-import com.seancoyle.core.datastore.LaunchPreferencesProto
+import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject

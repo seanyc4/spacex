@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.core.datastore.proto"
+    namespace = "com.seancoyle.core.datastore_proto"
 
     defaultConfig {
         consumerProguardFiles("consumer-proguard-rules.pro")
@@ -44,4 +44,5 @@ androidComponents {
 
 dependencies {
     api(libs.protobuf.kotlin.lite)
+    api(libs.dataStore)
 }
