@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-import "com/seancoyle/core/datastore/order.proto";
-import "com/seancoyle/core/datastore/launch_status.proto";
+import "com/seancoyle/core/datastore_proto/order.proto";
+import "com/seancoyle/core/datastore_proto/launch_status.proto";
 
-option java_package = "com.seancoyle.core.datastore";
+option java_package = "com.seancoyle.core.datastore_proto";
 option java_multiple_files = true;
 
 message LaunchPreferencesProto {

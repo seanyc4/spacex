@@ -34,7 +34,6 @@ dependencies {
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)
-    implementation(libs.dataStore)
     implementation(libs.glideCompose)
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)

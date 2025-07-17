@@ -4,10 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.crashlytics.printLogDebug
-import com.seancoyle.core.datastore.LaunchPreferencesProto
-import com.seancoyle.core.datastore.LaunchStatusProto
-import com.seancoyle.core.datastore.OrderProto
-import com.seancoyle.core.datastore.copy
+import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
+import com.seancoyle.core.datastore_proto.LaunchStatusProto
+import com.seancoyle.core.datastore_proto.OrderProto
+import com.seancoyle.core.datastore_proto.copy
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
