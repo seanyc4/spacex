@@ -117,7 +117,6 @@ internal class LaunchViewModel @Inject constructor(
                 is SwipeToRefreshEvent -> swipeToRefresh()
                 is GetSpaceXDataEvent -> getSpaceXDataUseCase()
             }
-
         }
     }
 
@@ -213,10 +212,8 @@ internal class LaunchViewModel @Inject constructor(
             }
     }
 
-    private fun openLink(link: String) {
-        viewModelScope.launch {
-            _linkEvent.emit(link)
-        }
+    private suspend fun openLink(link: String) {
+        _linkEvent.emit(link)
     }
 
     private fun LaunchesUiState.isSuccess(updateState: (LaunchesUiState.Success) -> LaunchesUiState): LaunchesUiState {
@@ -241,7 +238,7 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private fun newSearch() {
+    private suspend fun newSearch() {
         clearListState()
         resetPageState()
         newSearchEvent()
@@ -317,21 +314,19 @@ internal class LaunchViewModel @Inject constructor(
         savedStateHandle[LAUNCH_LIST_STATE_KEY] = _scrollState.value
     }
 
-    private fun saveLaunchPreferences(
+    private suspend fun saveLaunchPreferences(
         order: Order,
         launchStatus: LaunchStatus,
         launchYear: String
     ) {
-        viewModelScope.launch {
-            launchesComponent.saveLaunchPreferencesUseCase(
-                order = order,
-                launchStatus = launchStatus,
-                launchYear = launchYear
-            )
-        }
+        launchesComponent.saveLaunchPreferencesUseCase(
+            order = order,
+            launchStatus = launchStatus,
+            launchYear = launchYear
+        )
     }
 
-    private fun newSearchEvent() {
+    private suspend fun newSearchEvent() {
         onEvent(CreateMergedLaunchesEvent)
         saveLaunchPreferences(
             order = getOrderState(),
