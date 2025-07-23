@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.mapper
 
 import com.seancoyle.database.entities.CompanyEntity
 import com.seancoyle.feature.launch.api.domain.model.Company
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyDto
+import com.seancoyle.feature.launch.implementation.data.remote.company.CompanyDto
 import javax.inject.Inject
 
 internal class CompanyMapper @Inject constructor() {

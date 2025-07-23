@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchRemoteDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchRemoteDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchRemoteDataSource
 import dagger.Binds
 import dagger.Module

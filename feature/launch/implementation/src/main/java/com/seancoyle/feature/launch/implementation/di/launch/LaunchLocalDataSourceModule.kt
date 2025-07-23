@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.cache.launch.LaunchLocalDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.local.launch.LaunchLocalDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
 import dagger.Binds
 import dagger.Module

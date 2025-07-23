@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.company
 
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyApi
+import com.seancoyle.feature.launch.implementation.data.remote.company.CompanyApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

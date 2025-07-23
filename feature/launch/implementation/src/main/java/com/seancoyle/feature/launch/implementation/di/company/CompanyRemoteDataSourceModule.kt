@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.company
 
-import com.seancoyle.feature.launch.implementation.data.network.company.CompanyRemoteDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.remote.company.CompanyRemoteDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyRemoteDataSource
 import dagger.Binds
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.launch
+package com.seancoyle.feature.launch.implementation.data.local.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.LocalError
@@ -30,16 +30,17 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     ): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
         return runCatching {
             val launchStatusEntity = launchMapper.mapToLaunchStatusEntity(launchStatus)
-            dao.paginateLaunches(
+            val result = dao.paginateLaunches(
                 launchYear = launchYear,
                 launchStatus = launchStatusEntity,
                 page = page,
                 order = order,
                 pageSize = PAGINATION_PAGE_SIZE
             )
+            launchMapper.entityToDomainList(result)
         }.fold(
-            onSuccess = {
-                LaunchResult.Success(launchMapper.entityToDomainList(it))
+            onSuccess = { mappedResult ->
+                LaunchResult.Success(mappedResult)
             },
             onFailure = {
                 Timber.e(it)

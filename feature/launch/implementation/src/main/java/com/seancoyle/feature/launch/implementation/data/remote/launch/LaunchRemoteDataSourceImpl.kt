@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.network.launch
+package com.seancoyle.feature.launch.implementation.data.remote.launch
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.RemoteError
@@ -20,11 +20,11 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getLaunches(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
         return runCatching {
-            api.getLaunches(launchOptions)
+            val result = api.getLaunches(launchOptions)
+            mapper.dtoToDomainList(result)
         }.fold(
-            onSuccess = { result ->
-                result?.let { LaunchResult.Success(mapper.dtoToDomainList(it)) }
-                    ?: LaunchResult.Error(RemoteError.NETWORK_DATA_NULL)
+            onSuccess = { mappedResult ->
+                LaunchResult.Success(mappedResult)
             },
             onFailure = { exception ->
                 Timber.e(exception)
@@ -33,4 +33,5 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
             }
         )
     }
+
 }
