@@ -11,7 +11,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.model.Links
 import com.seancoyle.feature.launch.api.domain.model.Rocket
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchesDto
+import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchesDto
 import java.time.LocalDateTime
 
 import javax.inject.Inject

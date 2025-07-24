@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.launch
+package com.seancoyle.feature.launch.implementation.data.local.launch
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
@@ -8,7 +8,8 @@ import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-class LaunchPreferencesSerializer @Inject constructor() : Serializer<LaunchPreferencesProto> {
+internal class LaunchPreferencesSerializer @Inject constructor() : Serializer<LaunchPreferencesProto> {
+
     override val defaultValue: LaunchPreferencesProto = LaunchPreferencesProto.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): LaunchPreferencesProto =
@@ -21,4 +22,5 @@ class LaunchPreferencesSerializer @Inject constructor() : Serializer<LaunchPrefe
     override suspend fun writeTo(t: LaunchPreferencesProto, output: OutputStream) {
         t.writeTo(output)
     }
+
 }

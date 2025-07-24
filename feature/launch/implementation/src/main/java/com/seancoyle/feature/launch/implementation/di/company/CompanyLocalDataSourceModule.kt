@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.company
 
-import com.seancoyle.feature.launch.implementation.data.cache.company.CompanyLocalDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.local.company.CompanyLocalDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.company.CompanyLocalDataSource
 import dagger.Binds
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.launch
+package com.seancoyle.feature.launch.implementation.data.local.launch
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
@@ -21,6 +21,7 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<LaunchPreferencesProto>,
     private val crashlytics: Crashlytics
 ) : LaunchPreferencesDataSource {
+
     override suspend fun saveLaunchPreferences(
         order: Order,
         launchStatus: LaunchStatus,
@@ -50,4 +51,5 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
         launchStatus = LaunchStatus.valueOf(this.launchStatus.name),
         launchYear = this.launchDate
     )
+
 }

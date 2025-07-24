@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.network.company
+package com.seancoyle.feature.launch.implementation.data.remote.company
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

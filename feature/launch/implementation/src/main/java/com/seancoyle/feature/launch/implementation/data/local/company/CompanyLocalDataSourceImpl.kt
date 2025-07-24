@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache.company
+package com.seancoyle.feature.launch.implementation.data.local.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.LocalError
@@ -57,4 +57,5 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
                 }
             )
     }
+
 }

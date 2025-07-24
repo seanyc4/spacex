@@ -1,8 +1,7 @@
-package com.seancoyle.feature.launch.implementation.data.network.company
+package com.seancoyle.feature.launch.implementation.data.remote.company
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
-import com.seancoyle.core.common.result.DataError.RemoteError.NETWORK_DATA_NULL
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.api.domain.model.Company
 import com.seancoyle.feature.launch.implementation.data.mapper.CompanyMapper
@@ -20,11 +19,11 @@ internal class CompanyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCompanyApi(): LaunchResult<Company, DataError> {
         return runCatching {
-            api.getCompany()
+            val result = api.getCompany()
+            mapper.dtoToDomain(result)
         }.fold(
-            onSuccess = { result ->
-                result?.let { LaunchResult.Success(mapper.dtoToDomain(it)) }
-                    ?: LaunchResult.Error(NETWORK_DATA_NULL)
+            onSuccess = { mappedResult ->
+                LaunchResult.Success(mappedResult)
             },
             onFailure = { exception ->
                 Timber.e(exception)
@@ -33,4 +32,5 @@ internal class CompanyRemoteDataSourceImpl @Inject constructor(
             }
         )
     }
+
 }

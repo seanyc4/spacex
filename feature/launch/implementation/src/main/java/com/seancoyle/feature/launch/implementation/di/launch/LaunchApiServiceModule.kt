@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.network.launch.LaunchApi
+import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
