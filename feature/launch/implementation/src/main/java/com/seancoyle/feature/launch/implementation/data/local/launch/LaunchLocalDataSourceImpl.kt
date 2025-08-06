@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.local.launch
 
+import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
@@ -28,7 +29,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         launchStatus: LaunchStatus,
         page: Int
     ): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
-        return runCatching {
+        return runSuspendCatching {
             val launchStatusEntity = launchMapper.mapToLaunchStatusEntity(launchStatus)
             val result = dao.paginateLaunches(
                 launchYear = launchYear,
@@ -51,108 +52,116 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insert(launch: LaunchTypes.Launch): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.insert(launchMapper.domainToEntity(launch)) }
-            .fold(
-                onSuccess = { LaunchResult.Success(Unit) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.insert(launchMapper.domainToEntity(launch))
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun insertList(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.insertList(launchMapper.domainToEntityList(launches)) }
-            .fold(
-                onSuccess = { LaunchResult.Success(Unit) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.insertList(launchMapper.domainToEntityList(launches))
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun deleteList(launches: List<LaunchTypes.Launch>): LaunchResult<Int, LocalError> {
         val ids = launches.map { it.id }
-        return runCatching { dao.deleteList(ids) }
-            .fold(
-                onSuccess = { LaunchResult.Success(it) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.deleteList(ids)
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun deleteAll(): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.deleteAll() }
-            .fold(
-                onSuccess = { LaunchResult.Success(Unit) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.deleteAll()
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun deleteById(id: String): LaunchResult<Int, LocalError> {
-        return runCatching { dao.deleteById(id) }
-            .fold(
-                onSuccess = { LaunchResult.Success(it) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.deleteById(id)
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun getById(id: String): LaunchResult<LaunchTypes.Launch?, LocalError> {
-        return runCatching { dao.getById(id) }
-            .fold(
-                onSuccess = { result ->
-                    result?.let {
-                        LaunchResult.Success(launchMapper.entityToDomain(it))
-                    } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
-                },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.getById(id)
+        }.fold(
+            onSuccess = { result ->
+                result?.let {
+                    LaunchResult.Success(launchMapper.entityToDomain(it))
+                } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
+            },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun getAll(): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
-        return runCatching { dao.getAll() }
-            .fold(
-                onSuccess = { result ->
-                    result?.let {
-                        LaunchResult.Success(launchMapper.entityToDomainList(it))
-                    } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
-                },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.getAll()
+        }.fold(
+            onSuccess = { result ->
+                result?.let {
+                    LaunchResult.Success(launchMapper.entityToDomainList(it))
+                } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
+            },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
     override suspend fun getTotalEntries(): LaunchResult<Int, LocalError> {
-        return runCatching { dao.getTotalEntries() }
-            .fold(
-                onSuccess = { LaunchResult.Success(it) },
-                onFailure = {
-                    Timber.e(it)
-                    crashlytics.logException(it)
-                    LaunchResult.Error(localErrorMapper.map(it))
-                }
-            )
+        return runSuspendCatching {
+            dao.getTotalEntries()
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(localErrorMapper.map(it))
+            }
+        )
     }
 
 }
