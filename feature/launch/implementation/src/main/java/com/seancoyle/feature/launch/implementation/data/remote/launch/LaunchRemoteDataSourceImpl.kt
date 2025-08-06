@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.remote.launch
 
+import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
@@ -19,7 +20,7 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
 ) : LaunchRemoteDataSource {
 
     override suspend fun getLaunches(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
-        return runCatching {
+        return runSuspendCatching {
             val result = api.getLaunches(launchOptions)
             mapper.dtoToDomainList(result)
         }.fold(
