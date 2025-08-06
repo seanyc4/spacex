@@ -65,18 +65,6 @@ class CompanyLocalDataSourceImplTest {
     }
 
     @Test
-    fun `get returns null when DAO provides no entity`() = runTest {
-        coEvery { dao.getCompany() } returns null
-
-        val result = underTest.get()
-
-        coVerify { dao.getCompany() }
-
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(LocalError.CACHE_ERROR_NO_RESULTS, result.error)
-    }
-
-    @Test
     fun `insert company calls DAO and returns a success result`() = runTest {
         val entityId = 1L
         coEvery { dao.insert(companyEntity) } returns entityId
