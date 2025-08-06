@@ -14,6 +14,7 @@ internal class LocalErrorMapper @Inject constructor() {
             is SQLiteConstraintException -> LocalError.CACHE_CONSTRAINT_VIOLATION
             is SQLiteException -> LocalError.CACHE_ERROR
             is NullPointerException -> LocalError.CACHE_DATA_NULL
+            is IllegalStateException -> LocalError.CACHE_ERROR_NO_RESULTS
             else -> LocalError.CACHE_UNKNOWN_DATABASE_ERROR
         }
     }
