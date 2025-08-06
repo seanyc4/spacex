@@ -10,9 +10,9 @@ import com.seancoyle.core.domain.Order
  */
 @Keep
 data class LaunchPrefs(
-    val order: Order,
-    val launchStatus: LaunchStatus,
-    val launchYear: String
+    val order: Order = Order.ASC,
+    val launchStatus: LaunchStatus = LaunchStatus.ALL,
+    val launchYear: String = ""
 )
 
 @Keep
