@@ -13,7 +13,8 @@ internal class LocalErrorMapper @Inject constructor() {
             is TimeoutCancellationException -> LocalError.CACHE_ERROR_TIMEOUT
             is SQLiteConstraintException -> LocalError.CACHE_CONSTRAINT_VIOLATION
             is SQLiteException -> LocalError.CACHE_ERROR
-            is CancellationException -> throw throwable
+            is NullPointerException -> LocalError.CACHE_DATA_NULL
+            is IllegalStateException -> LocalError.CACHE_ERROR_NO_RESULTS
             else -> LocalError.CACHE_UNKNOWN_DATABASE_ERROR
         }
     }

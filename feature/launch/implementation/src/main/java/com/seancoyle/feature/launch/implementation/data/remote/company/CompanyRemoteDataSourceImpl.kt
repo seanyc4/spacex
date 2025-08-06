@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.remote.company
 
+import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
@@ -18,7 +19,7 @@ internal class CompanyRemoteDataSourceImpl @Inject constructor(
 ) : CompanyRemoteDataSource {
 
     override suspend fun getCompanyApi(): LaunchResult<Company, DataError> {
-        return runCatching {
+        return runSuspendCatching {
             val result = api.getCompany()
             mapper.dtoToDomain(result)
         }.fold(

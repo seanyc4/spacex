@@ -10,7 +10,7 @@ import com.seancoyle.database.entities.CompanyEntity
 interface CompanyDao {
 
     @Query("SELECT * FROM company_info")
-    suspend fun getCompany(): CompanyEntity?
+    suspend fun getCompany(): CompanyEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(company: CompanyEntity): Long

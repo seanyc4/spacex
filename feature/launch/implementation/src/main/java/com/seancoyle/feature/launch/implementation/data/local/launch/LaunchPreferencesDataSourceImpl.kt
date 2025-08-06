@@ -1,13 +1,10 @@
 package com.seancoyle.feature.launch.implementation.data.local.launch
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
+import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
-import com.seancoyle.core.datastore_proto.LaunchStatusProto
-import com.seancoyle.core.datastore_proto.OrderProto
-import com.seancoyle.core.datastore_proto.copy
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -27,29 +24,24 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
         launchStatus: LaunchStatus,
         launchYear: String
     ) {
-        try {
+        runSuspendCatching {
             dataStore.updateData { preferences ->
-                preferences.copy {
-                    this.order = OrderProto.valueOf(order.name)
-                    this.launchStatus = LaunchStatusProto.valueOf(launchStatus.name)
-                    this.launchDate = launchYear
-                }
+                preferences.toProto(order, launchStatus, launchYear)
             }
-        } catch (ioException: IOException) {
-            printLogDebug(this.javaClass.name, ioException.message.toString())
-            crashlytics.logException(ioException)
+        }.getOrElse { exception ->
+            printLogDebug(this.javaClass.name, exception.message.toString())
+            crashlytics.logException(exception)
         }
     }
 
     override suspend fun getLaunchPreferences(): LaunchPrefs {
-        val preferences = dataStore.data.first()
-        return preferences.toModel()
+        return runSuspendCatching {
+            dataStore.data.first().toModel()
+        }.getOrElse { exception ->
+            printLogDebug(this.javaClass.name, exception.message.toString())
+            crashlytics.logException(exception)
+            LaunchPrefs()
+        }
     }
-
-    private fun LaunchPreferencesProto.toModel(): LaunchPrefs = LaunchPrefs(
-        order = Order.valueOf(this.order.name),
-        launchStatus = LaunchStatus.valueOf(this.launchStatus.name),
-        launchYear = this.launchDate
-    )
 
 }
