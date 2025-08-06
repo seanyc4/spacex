@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.data.local.company
 
+import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
@@ -19,43 +20,43 @@ internal class CompanyLocalDataSourceImpl @Inject constructor(
 ) : CompanyLocalDataSource {
 
     override suspend fun get(): LaunchResult<Company, LocalError> {
-        return runCatching { dao.getCompany() }
-            .fold(
-                onSuccess = { result ->
-                    result?.let {
-                        LaunchResult.Success(mapper.entityToDomain(it))
-                    } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
-                },
-                onFailure = { exception ->
-                    Timber.e(exception)
-                    crashlytics.logException(exception)
-                    LaunchResult.Error(errorMapper.map(exception))
-                }
-            )
+        return runSuspendCatching {
+            val result = dao.getCompany()
+            mapper.entityToDomain(result)
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = { exception ->
+                Timber.e(exception)
+                crashlytics.logException(exception)
+                LaunchResult.Error(errorMapper.map(exception))
+            }
+        )
     }
 
     override suspend fun insert(company: Company): LaunchResult<Long, LocalError> {
-        return runCatching { dao.insert(mapper.domainToEntity(company)) }
-            .fold(
-                onSuccess = { LaunchResult.Success(it) },
-                onFailure = { exception ->
-                    Timber.e(exception)
-                    crashlytics.logException(exception)
-                    LaunchResult.Error(errorMapper.map(exception))
-                }
-            )
+        return runSuspendCatching {
+            dao.insert(mapper.domainToEntity(company))
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = { exception ->
+                Timber.e(exception)
+                crashlytics.logException(exception)
+                LaunchResult.Error(errorMapper.map(exception))
+            }
+        )
     }
 
     override suspend fun deleteAll(): LaunchResult<Unit, LocalError> {
-        return runCatching { dao.deleteAll() }
-            .fold(
-                onSuccess = { LaunchResult.Success(Unit) },
-                onFailure = { exception ->
-                    Timber.e(exception)
-                    crashlytics.logException(exception)
-                    LaunchResult.Error(errorMapper.map(exception))
-                }
-            )
+        return runSuspendCatching {
+            dao.deleteAll()
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = { exception ->
+                Timber.e(exception)
+                crashlytics.logException(exception)
+                LaunchResult.Error(errorMapper.map(exception))
+            }
+        )
     }
 
 }
