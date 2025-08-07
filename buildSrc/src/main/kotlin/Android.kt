@@ -3,6 +3,6 @@ object Android {
     const val compileSdk = 35
     const val minSdk = 26
     const val targetSdk = 34
-    const val versionCode = 59
-    const val versionName = "1.59.0"
+    const val versionCode = 60
+    const val versionName = "1.60.0"
 }
