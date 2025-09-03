@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.0"
+agp = "8.13.0"
 androidHilt = "1.2.0"
 androidxTestExt = "1.2.1"
 appCompat = "1.7.0"
