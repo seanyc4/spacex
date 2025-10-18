@@ -55,6 +55,7 @@ android {
     }
 
     baselineProfile {
+        saveInSrc = true
         automaticGenerationDuringBuild = true
         dexLayoutOptimization = true
     }
