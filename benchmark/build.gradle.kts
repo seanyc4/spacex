@@ -29,11 +29,24 @@ android {
 
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
+
+    // Configure a managed device for running the macrobenchmark tests
+    testOptions.managedDevices.localDevices {
+        create("pixel6Api33") {
+            device = "Pixel 6"
+            apiLevel = 33
+            systemImageSource = "aosp"
+        }
+    }
 }
 
 baselineProfile {
+    // This specifies the managed devices to use that you run the tests on.
+    managedDevices.clear()
+    managedDevices += "pixel6Api33"
+
     // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
-    useConnectedDevices = true
+    useConnectedDevices = false
 }
 
 dependencies {
