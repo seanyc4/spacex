@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -19,11 +20,17 @@ android {
             isDebuggable = true
             signingConfig = getByName("debug").signingConfig
             matchingFallbacks += listOf("release")
+            proguardFiles("benchmark-rules.pro")
         }
     }
 
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
+}
+
+baselineProfile {
+    // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
+    useConnectedDevices = true
 }
 
 dependencies {
