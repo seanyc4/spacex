@@ -5,13 +5,14 @@ apply {
 }
 
 plugins {
-    alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.compose)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -86,6 +87,7 @@ android {
 }
 
 dependencies {
+    baselineProfile(projects.benchmark)
     implementation(projects.core.common)
     implementation(projects.core.data)
     implementation(projects.core.datastore.api)
@@ -110,6 +112,7 @@ dependencies {
     implementation(libs.navigation.dynamic)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.profileInstaller)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)
     implementation(libs.timber)
