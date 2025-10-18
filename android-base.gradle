@@ -31,7 +31,9 @@ android {
     }
 
     sourceSets {
-        getByName("test").resources.srcDir("src/test/res")
+        if (findByName("test") != null) {
+            getByName("test").resources.srcDir("src/test/res")
+        }
     }
 
     testOptions {

@@ -1,3 +1,7 @@
+apply{
+    from("$rootDir/android-base.gradle")
+}
+
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin)
