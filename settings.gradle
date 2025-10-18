@@ -1,14 +1,22 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        gradlePluginPortal()
         mavenCentral()
     }
-    enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 }
 
 rootProject.name='SpaceX'
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include ':app'
 include ':core:common'
 include ':core:data'
@@ -23,3 +31,4 @@ include ':database'
 include ':feature:launch:api'
 include ':feature:launch:implementation'
 include ':feature:launch:test'
+include ':build-logic'

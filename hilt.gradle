@@ -1,6 +1,3 @@
-apply plugin: libs.plugins.hilt.get().pluginId
-apply plugin: libs.plugins.kotlinKsp.get().pluginId
-
 dependencies {
     implementation(libs.hilt.android)
     androidTestImplementation(libs.hilt.androidTesting)

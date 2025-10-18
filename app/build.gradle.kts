@@ -5,13 +5,13 @@ apply {
 }
 
 plugins {
-    alias(libs.plugins.compose.compiler)
-    id(libs.plugins.androidApplication.get().pluginId)
-    id(libs.plugins.kotlinKsp.get().pluginId)
-    id(libs.plugins.kotlinParcelize.get().pluginId)
-    id(libs.plugins.hilt.get().pluginId)
-    kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId) version libs.versions.kotlin
+    alias(libs.plugins.compose)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -47,12 +47,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {

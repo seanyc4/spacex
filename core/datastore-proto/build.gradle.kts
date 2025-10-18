@@ -4,8 +4,11 @@ apply {
 }
 
 plugins {
-    id(libs.plugins.androidLibrary.get().pluginId)
-    id(libs.plugins.protobuf.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {

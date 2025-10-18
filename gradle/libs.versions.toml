@@ -20,7 +20,7 @@ junit4 = "4.13.2"
 kotlin = "2.2.0"
 kotlinCoroutines = "1.10.2"
 kotlinImmutable = "0.3.8"
-kotlinKSP = "2.2.0-2.0.2"
+ksp = "2.2.0-2.0.2"
 kotlinSerialization = "1.8.1"
 kotlinxDateTime = "0.6.2"
 leakCanary = "2.14"
@@ -110,7 +110,7 @@ kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
-kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKSP" }
+kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
 # Kotlin Testing
@@ -173,18 +173,18 @@ test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
-android = { id = "android" }
-androidApplication = { id = "com.android.application" }
-androidLibrary = { id = "com.android.library" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-hilt = { id = "dagger.hilt.android.plugin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp"  }
+android-test = { id = "com.android.test", version.ref = "agp" }
+compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
-kotlinAndroid = { id = "kotlin-android" }
-kotlinKsp = { id = "com.google.devtools.ksp" }
-kotlinParcelize = { id = "kotlin-parcelize" }
-kotlinSerializationPlugin = { id = "plugin.serialization" }
-protobuf = { id = "com.google.protobuf" }
-
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp",  version.ref = "ksp" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 androidTestBundle = [

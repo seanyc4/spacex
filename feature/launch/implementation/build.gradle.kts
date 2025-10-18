@@ -6,10 +6,12 @@ apply {
 }
 
 plugins {
-    id(libs.plugins.androidLibrary.get().pluginId)
-    id(libs.plugins.kotlinKsp.get().pluginId)
-    kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId) version libs.versions.kotlin
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
