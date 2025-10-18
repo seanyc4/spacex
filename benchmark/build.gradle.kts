@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 apply{
     from("$rootDir/android-base.gradle")
 }
@@ -31,8 +33,8 @@ android {
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
     // Configure a managed device for running the macrobenchmark tests
-    testOptions.managedDevices.localDevices {
-        create("pixel6Api33") {
+    testOptions.managedDevices.devices {
+        create<ManagedVirtualDevice>("pixel6Api33") {
             device = "Pixel 6"
             apiLevel = 33
             systemImageSource = "aosp"
