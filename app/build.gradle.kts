@@ -35,12 +35,6 @@ android {
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = false
         }
-        create("benchmark") {
-            initWith(buildTypes.getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-            isDebuggable = false
-        }
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -51,6 +45,18 @@ android {
                 "consumer-proguard-rules.pro"
             )
         }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+            proguardFiles("benchmark-rules.pro")
+        }
+    }
+
+    baselineProfile {
+        automaticGenerationDuringBuild = true
+        dexLayoutOptimization = true
     }
 
     compileOptions {

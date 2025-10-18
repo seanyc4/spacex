@@ -12,7 +12,6 @@ android {
     namespace = "com.seancoyle.benchmark"
     defaultConfig {
         minSdk = 29
-        compileSdk = Android.compileSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
