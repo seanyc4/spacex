@@ -27,7 +27,7 @@ leakCanary = "2.14"
 lifecycle = "2.9.0"
 mockk = "1.13.14"  # .15 & .16 are bugged
 navigation = "2.8.9"
-macroBenchmark = " 1.4.1"
+macroBenchmark = "1.4.1"
 profileInstaller = "1.4.1"
 okHttp = "4.12.0"
 okhttpIdling = "1.0.0"
@@ -180,6 +180,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp"  }
 android-test = { id = "com.android.test", version.ref = "agp" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "macroBenchmark"}
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
