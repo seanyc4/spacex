@@ -34,6 +34,12 @@ android {
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = false
         }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true

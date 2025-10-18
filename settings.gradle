@@ -18,6 +18,8 @@ rootProject.name='SpaceX'
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include ':app'
+include ':benchmark'
+include ':build-logic'
 include ':core:common'
 include ':core:data'
 include ':core:datastore:api'
@@ -31,4 +33,3 @@ include ':database'
 include ':feature:launch:api'
 include ':feature:launch:implementation'
 include ':feature:launch:test'
-include ':build-logic'
