@@ -30,12 +30,13 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
+        debug {
             isMinifyEnabled = false
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = false
         }
-        getByName("release") {
+
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
