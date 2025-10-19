@@ -21,7 +21,7 @@ jobs:
         java-version: '17'
 
     - name: Install GMD
-      run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-33;aosp;arm64-v8a"
+      run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;aosp;arm64-v8a"
 
     - name: Accept Android licenses
       run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
