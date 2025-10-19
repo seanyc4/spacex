@@ -27,9 +27,9 @@ android {
 
     // Setup GMD for running the baseline profile generation
     testOptions.managedDevices.allDevices {
-        create<ManagedVirtualDevice>("pixel6Api34") {
+        create<ManagedVirtualDevice>("pixel6Api33") {
             device = "Pixel 6"
-            apiLevel = 34
+            apiLevel = 33
             systemImageSource = "aosp"
         }
     }
@@ -37,7 +37,7 @@ android {
 
 baselineProfile {
     managedDevices.clear()
-    managedDevices += "pixel6Api34"
+    managedDevices += "pixel6Api33"
 
     // If using a connected device it needs to be rooted or API 33 and higher.
     useConnectedDevices = false
