@@ -5,13 +5,14 @@ apply {
 }
 
 plugins {
-    alias(libs.plugins.compose.compiler)
-    id(libs.plugins.androidApplication.get().pluginId)
-    id(libs.plugins.kotlinKsp.get().pluginId)
-    id(libs.plugins.kotlinParcelize.get().pluginId)
-    id(libs.plugins.hilt.get().pluginId)
-    kotlin(libs.plugins.android.get().pluginId)
-    kotlin(libs.plugins.kotlinSerializationPlugin.get().pluginId) version libs.versions.kotlin
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -29,34 +30,39 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
+        debug {
             isMinifyEnabled = false
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = false
         }
-        getByName("release") {
+
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-                "consumer-proguard-rules.pro"
+                "proguard-rules.pro"
             )
+        }
+
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+            proguardFiles("benchmark-rules.pro")
         }
     }
 
-    buildFeatures {
-        compose = true
+    baselineProfile {
+        saveInSrc = true
+        automaticGenerationDuringBuild = false
+        dexLayoutOptimization = true
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        jvmToolchain(17)
     }
 
     buildFeatures {
@@ -88,6 +94,7 @@ android {
 }
 
 dependencies {
+    baselineProfile(projects.benchmark)
     implementation(projects.core.common)
     implementation(projects.core.data)
     implementation(projects.core.datastore.api)
@@ -112,6 +119,7 @@ dependencies {
     implementation(libs.navigation.dynamic)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.profileInstaller)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)
     implementation(libs.timber)

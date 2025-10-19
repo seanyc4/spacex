@@ -28,11 +28,18 @@ jobs:
     needs: [unit-tests, ui-tests]
 
   # -------------------------------------
+  # 📈 Generate Baseline Profile
+  # -------------------------------------
+  generate-baseline-profile:
+    uses: ./.github/workflows/generate_baseline_profile.yaml
+    needs: [unit-tests, ui-tests]
+
+  # -------------------------------------
   # 🏗️ Build - Release AAB
   # -------------------------------------
   assemble-release:
     uses: ./.github/workflows/assemble_release_aab.yml
-    needs: [get-current-version]
+    needs: [get-current-version, generate-baseline-profile]
     secrets: inherit
     with:
       version: ${{ needs.get-current-version.outputs.version }}

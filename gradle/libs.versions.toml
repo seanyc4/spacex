@@ -1,7 +1,6 @@
 [versions]
-agp = "8.10.0"
+agp = "8.13.0"
 androidHilt = "1.2.0"
-androidxTestExt = "1.2.1"
 appCompat = "1.7.0"
 composeBom = "2025.07.00"
 composeConstraintLayout = "1.1.1"
@@ -10,23 +9,26 @@ composeNavigation = "2.9.2"
 composeWindowSize = "1.3.2"
 coreKtx = "1.16.0"
 datastore = "1.1.4"
-espressoCore = "3.6.1"
+espressoCore = "3.7.0"
 firebaseBoM = "34.0.0"
 fragment = "1.8.6"
 glideCompose = "1.0.0-beta01"
 hiltNavigationCompose = "1.2.0"
 hilt = "2.56.2"
+junit = "1.3.0"
 junit4 = "4.13.2"
 kotlin = "2.2.0"
 kotlinCoroutines = "1.10.2"
 kotlinImmutable = "0.3.8"
-kotlinKSP = "2.2.0-2.0.2"
+ksp = "2.2.0-2.0.2"
 kotlinSerialization = "1.8.1"
 kotlinxDateTime = "0.6.2"
 leakCanary = "2.14"
 lifecycle = "2.9.0"
 mockk = "1.13.14"  # .15 & .16 are bugged
 navigation = "2.8.9"
+macroBenchmark = "1.4.1"
+profileInstaller = "1.4.1"
 okHttp = "4.12.0"
 okhttpIdling = "1.0.0"
 protobuf = "4.31.1"
@@ -41,6 +43,7 @@ testCore = "1.6.1"
 testRules = "1.6.1"
 testRunner = "1.6.2"
 timber = "5.0.1"
+uiautomator = "2.3.0"
 
 
 [libraries]
@@ -108,7 +111,7 @@ kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
-kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKSP" }
+kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
 # Kotlin Testing
@@ -125,6 +128,10 @@ lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx"
 navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigation" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+
+# Performance
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "macroBenchmark" }
+profileInstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileInstaller" }
 
 # Protobuf
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
@@ -151,7 +158,7 @@ scalingPixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingP
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
 
 # TestDependecies
-test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExt" }
+test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "junit" }
 test-espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 test-okhttp-idlingResource = { module = "com.jakewharton.espresso:okhttp3-idling-resource", version.ref = "okhttpIdling" }
 test-junit4 = { module = "junit:junit", version.ref = "junit4" }
@@ -162,23 +169,27 @@ test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCore" }
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
 test-testRules = { module = "androidx.test:rules", version.ref = "testRules" }
 test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
+junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
-android = { id = "android" }
-androidApplication = { id = "com.android.application" }
-androidLibrary = { id = "com.android.library" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-hilt = { id = "dagger.hilt.android.plugin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp"  }
+android-test = { id = "com.android.test", version.ref = "agp" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "macroBenchmark"}
+compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
-kotlinAndroid = { id = "kotlin-android" }
-kotlinKsp = { id = "com.google.devtools.ksp" }
-kotlinParcelize = { id = "kotlin-parcelize" }
-kotlinSerializationPlugin = { id = "plugin.serialization" }
-protobuf = { id = "com.google.protobuf" }
-
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp",  version.ref = "ksp" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 androidTestBundle = [
