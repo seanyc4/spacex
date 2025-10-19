@@ -25,7 +25,7 @@ android {
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
-    // Setup GMD for running the baseline profile generation locally
+    // Setup GMD for running the baseline profile generation
     testOptions.managedDevices.allDevices {
         create<ManagedVirtualDevice>("pixel6Api34") {
             device = "Pixel 6"
