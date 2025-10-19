@@ -14,16 +14,13 @@ android {
         buildConfig true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
     kotlin {
         sourceSets {
             main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
             test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
         }
+
+        jvmToolchain(17)
     }
 
     lint {

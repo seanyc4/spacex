@@ -41,10 +41,10 @@ android {
             manifestPlaceholders["enableCrashReporting"] = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-                "consumer-proguard-rules.pro"
+                "proguard-rules.pro"
             )
         }
+
         create("benchmark") {
             initWith(buildTypes.getByName("release"))
             signingConfig = signingConfigs.getByName("debug")
@@ -60,9 +60,8 @@ android {
         dexLayoutOptimization = true
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    kotlin {
+        jvmToolchain(17)
     }
 
     buildFeatures {
