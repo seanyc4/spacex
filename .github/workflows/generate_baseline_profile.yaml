@@ -1,6 +1,8 @@
 name: Generate Baseline Profile
 
-on: workflow_call
+on:
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   generate-baseline-profile:
