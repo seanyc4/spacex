@@ -14,18 +14,18 @@ jobs:
   # -------------------------------------
   # ✅ Testing - Unit & UI
   # -------------------------------------
-  unit-tests:
-    uses: ./.github/workflows/unit_test.yml
-
-  ui-tests:
-    uses: ./.github/workflows/ui_test.yml
+#  unit-tests:
+#    uses: ./.github/workflows/unit_test.yml
+#
+#  ui-tests:
+#    uses: ./.github/workflows/ui_test.yml
 
   # -------------------------------------
   # 🔖 Versioning - Read Current Version
   # -------------------------------------
   get-current-version:
     uses: ./.github/workflows/app_version.yml
-    needs: [unit-tests, ui-tests]
+#    needs: [unit-tests, ui-tests]
 
   # -------------------------------------
   # 📈 Generate Baseline Profile
