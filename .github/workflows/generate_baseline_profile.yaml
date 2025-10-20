@@ -8,9 +8,6 @@ jobs:
   generate-baseline-profile:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    strategy:
-      matrix:
-        api-level: [ 33 ]
 
     steps:
     - name: Checkout
@@ -28,11 +25,5 @@ jobs:
     - name: Enable KVM - Hardware Acceleration
       run: .github/scripts/ui_test_hardware_acceleration.sh
 
-#    - name: Install GMD
-#      run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;aosp_atd;arm64-v8a"
-#
-#    - name: Accept Android licenses
-#      run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
     - name: Generate profile
-      run: ./gradlew :app:generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --stacktrace
+      run: ./gradlew :app:generateBaselineProfile --stacktrace
