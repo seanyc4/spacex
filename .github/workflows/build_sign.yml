@@ -33,13 +33,15 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      # Set up Android SDK for baseline profile generation
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      # Enable KVM for hardware acceleration required for baseline profile generation
       - name: Enable KVM - Hardware Acceleration
         run: .github/scripts/ui_test_hardware_acceleration.sh
 
-      # Build release artifact
+      # Build release artifact with baseline profile
       - run: ${{ inputs.assemble-script }}
 
       # Sign the artifact with a test key
