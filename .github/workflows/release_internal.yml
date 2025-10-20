@@ -14,32 +14,32 @@ jobs:
   # -------------------------------------
   # ✅ Testing - Unit & UI
   # -------------------------------------
-#  unit-tests:
-#    uses: ./.github/workflows/unit_test.yml
-#
-#  ui-tests:
-#    uses: ./.github/workflows/ui_test.yml
+  unit-tests:
+    uses: ./.github/workflows/unit_test.yml
+
+  ui-tests:
+    uses: ./.github/workflows/ui_test.yml
 
   # -------------------------------------
   # 🔖 Versioning - Read Current Version
   # -------------------------------------
   get-current-version:
     uses: ./.github/workflows/app_version.yml
-#    needs: [unit-tests, ui-tests]
+    needs: [unit-tests, ui-tests]
 
   # -------------------------------------
   # 📈 Generate Baseline Profile
   # -------------------------------------
-  generate-baseline-profile:
-    uses: ./.github/workflows/generate_baseline_profile.yaml
-#    needs: [unit-tests, ui-tests]
+#  generate-baseline-profile:
+#   uses: ./.github/workflows/generate_baseline_profile.yaml
+#   needs: [unit-tests, ui-tests]
 
   # -------------------------------------
   # 🏗️ Build - Release AAB
   # -------------------------------------
   assemble-release:
     uses: ./.github/workflows/assemble_release_aab.yml
-    needs: [get-current-version, generate-baseline-profile]
+    needs: [get-current-version]
     secrets: inherit
     with:
       version: ${{ needs.get-current-version.outputs.version }}
