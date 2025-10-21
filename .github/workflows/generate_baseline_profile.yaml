@@ -19,9 +19,6 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
     - name: Enable KVM - Hardware Acceleration
       run: .github/scripts/ui_test_hardware_acceleration.sh
 
