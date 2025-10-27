@@ -40,7 +40,7 @@ jobs:
 
       # Upload the file changes to be used in the commit.yml workflow
       - name: Upload bumped file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: version-bump
           path: buildSrc/src/main/kotlin/
