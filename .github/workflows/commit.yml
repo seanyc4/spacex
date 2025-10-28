@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Download artifact file
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.file-path }}
