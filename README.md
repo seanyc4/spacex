@@ -33,6 +33,8 @@ SpaceX connects to the SpaceX API at https://github.com/r-spacex/SpaceX-API
 * Timber
 * Glide Compose
 * TOML Dependency Catalog
+* GitHub Actions CI/CD
+* Baseline Profile & Startup Profile integrated with CI/CD
 
 ## Testing
 

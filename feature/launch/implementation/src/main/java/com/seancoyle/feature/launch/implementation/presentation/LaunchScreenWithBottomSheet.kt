@@ -32,11 +32,8 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEven
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
-import kotlinx.coroutines.FlowPreview
 
 @ExperimentalMaterialApi
-@ExperimentalMaterial3Api
-@FlowPreview
 @Composable
 internal fun LaunchScreenWithBottomSheet(
     uiState: LaunchesUiState,
@@ -74,8 +71,6 @@ internal fun LaunchScreenWithBottomSheet(
     SwipeToRefreshComposable(uiState, pullRefreshState)
 }
 
-@ExperimentalMaterialApi
-@FlowPreview
 @Composable
 internal fun LaunchScreen(
     uiState: LaunchesUiState,
@@ -116,7 +111,7 @@ internal fun LaunchScreen(
     }
 }
 
-@ExperimentalMaterial3Api
+@OptIn( ExperimentalMaterial3Api::class)
 @Composable
 internal fun LaunchBottomSheetScreen(
     bottomSheetUiState: BottomSheetUiState,

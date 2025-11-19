@@ -60,5 +60,4 @@ internal class LaunchRepositoryImpl @Inject constructor(
     override suspend fun getTotalEntriesCache(): LaunchResult<Int, LocalError> {
         return launchLocalDataSource.getTotalEntries()
     }
-
 }

@@ -10,5 +10,4 @@ internal interface LaunchRemoteDataSource {
     suspend fun getLaunches(
         launchOptions: LaunchOptions
     ): LaunchResult<List<LaunchTypes.Launch>, RemoteError>
-
 }

@@ -10,5 +10,4 @@ internal interface CompanyApi {
 
     @GET(COMPANY_URL)
     suspend fun getCompany(): CompanyDto
-
 }

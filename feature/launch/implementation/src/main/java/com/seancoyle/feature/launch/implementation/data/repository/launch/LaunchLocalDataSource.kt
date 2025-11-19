@@ -30,5 +30,4 @@ internal interface LaunchLocalDataSource {
     suspend fun getTotalEntries(): LaunchResult<Int, LocalError>
 
     suspend fun insertList(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError>
-
 }

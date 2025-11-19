@@ -146,5 +146,4 @@ internal class MergedLaunchesCacheUseCaseImpl @Inject constructor(
             }
         )
     }
-
 }

@@ -14,5 +14,4 @@ internal class GetCompanyApiAndCacheUseCaseImpl @Inject constructor(
     override operator fun invoke(): Flow<LaunchResult<Unit, DataError>> = flow {
         emit(companyRepository.getCompanyApi())
     }
-
 }
