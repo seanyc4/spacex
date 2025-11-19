@@ -14,5 +14,4 @@ internal interface LaunchApi {
     suspend fun getLaunches(
         @Body options: LaunchOptions
     ): LaunchesDto
-
 }

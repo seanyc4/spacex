@@ -360,5 +360,4 @@ internal class LaunchViewModel @Inject constructor(
     private companion object {
         const val LAUNCH_LIST_STATE_KEY = "launches.list.position.key"
     }
-
 }

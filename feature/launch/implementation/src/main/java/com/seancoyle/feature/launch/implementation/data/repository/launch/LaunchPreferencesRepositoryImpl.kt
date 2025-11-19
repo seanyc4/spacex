@@ -25,5 +25,4 @@ internal class LaunchPreferencesRepositoryImpl @Inject constructor(
     override suspend fun getLaunchPreferences(): LaunchPrefs {
         return launchPreferencesDataSource.getLaunchPreferences()
     }
-
 }

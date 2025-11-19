@@ -15,46 +15,48 @@ import com.seancoyle.feature.launch.implementation.presentation.model.RocketUi
 import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import dagger.Lazy
 
-internal fun LaunchTypes.toUiModel(appStringResource: Lazy<AppStringResource>): LaunchTypesUiModel = when (this) {
-    is LaunchTypes.CompanySummary -> LaunchTypesUiModel.CompanySummaryUi(
-        id = id,
-        summary = getSummary(appStringResource.get()),
-        name = name,
-        founder = founder,
-        founded = founded.toString(),
-        employees = employees,
-        launchSites = launchSites.toString(),
-        valuation = valuation
-    )
-    is LaunchTypes.Launch -> LaunchTypesUiModel.LaunchUi(
-        id = id,
-        launchDate = launchDate,
-        launchYear = launchYear,
-        launchStatus = launchStatus,
-        links = links.toUiModel(),
-        missionName = missionName,
-        rocket = rocket.toUiModel(),
-        launchDateStatus = launchDateStatus,
-        launchDays = launchDays,
-        launchDaysResId = launchDateStatus.getDateStringRes(),
-        launchStatusIconResId = launchStatus.getDrawableRes()
-    )
-    is LaunchTypes.SectionTitle -> LaunchTypesUiModel.SectionTitleUi(
-        id = id,
-        title = title
-    )
+internal fun LaunchTypes.toUiModel(appStringResource: Lazy<AppStringResource>): LaunchTypesUiModel =
+    when (this) {
+        is LaunchTypes.CompanySummary -> LaunchTypesUiModel.CompanySummaryUi(
+            id = id,
+            summary = getSummary(appStringResource.get()),
+            name = name,
+            founder = founder,
+            founded = founded.toString(),
+            employees = employees,
+            launchSites = launchSites.toString(),
+            valuation = valuation
+        )
 
-    is LaunchTypes.Grid -> LaunchTypesUiModel.GridUi(
-        id = id,
-        items = items.toUiModel()
-    )
+        is LaunchTypes.Launch -> LaunchTypesUiModel.LaunchUi(
+            id = id,
+            launchDate = launchDate,
+            launchYear = launchYear,
+            launchStatus = launchStatus,
+            links = links.toUiModel(),
+            missionName = missionName,
+            rocket = rocket.toUiModel(),
+            launchDateStatus = launchDateStatus,
+            launchDays = launchDays,
+            launchDaysResId = launchDateStatus.getDateStringRes(),
+            launchStatusIconResId = launchStatus.getDrawableRes()
+        )
 
-    is LaunchTypes.Carousel -> LaunchTypesUiModel.CarouselUi(
-        id = id,
-        items = items.map { it.toUiModel() }
-    )
-    else -> throw IllegalArgumentException("Unknown type")
-}
+        is LaunchTypes.SectionTitle -> LaunchTypesUiModel.SectionTitleUi(
+            id = id,
+            title = title
+        )
+
+        is LaunchTypes.Grid -> LaunchTypesUiModel.GridUi(
+            id = id,
+            items = items.toUiModel()
+        )
+
+        is LaunchTypes.Carousel -> LaunchTypesUiModel.CarouselUi(
+            id = id,
+            items = items.map { it.toUiModel() }
+        )
+    }
 
 fun Links.toUiModel() = LinksUi(
     missionImage = missionImage,
@@ -104,4 +106,3 @@ fun LinksUi?.getLinks() = listOfNotNull(
     this?.webcastLink?.let { BottomSheetLinksUi(R.string.webcast, it) },
     this?.wikiLink?.let { BottomSheetLinksUi(R.string.wikipedia, it) }
 )
-

@@ -52,5 +52,4 @@ open class NetworkModule {
 
         return client.build()
     }
-
 }

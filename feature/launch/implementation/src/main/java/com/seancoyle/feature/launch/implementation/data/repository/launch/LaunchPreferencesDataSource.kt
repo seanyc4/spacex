@@ -13,5 +13,4 @@ interface LaunchPreferencesDataSource {
     )
 
     suspend fun getLaunchPreferences(): LaunchPrefs
-
 }

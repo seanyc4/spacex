@@ -33,5 +33,4 @@ internal class CompanyRepositoryImpl @Inject constructor(
     override suspend fun deleteAllCompanyCache(): LaunchResult<Unit, LocalError> {
         return companyLocalDataSource.deleteAll()
     }
-
 }

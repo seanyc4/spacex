@@ -71,5 +71,4 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         } else {
             LaunchDateStatus.FUTURE
         }
-
 }

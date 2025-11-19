@@ -134,5 +134,4 @@ internal class LaunchMapper @Inject constructor() {
             }
         }
     }
-
 }

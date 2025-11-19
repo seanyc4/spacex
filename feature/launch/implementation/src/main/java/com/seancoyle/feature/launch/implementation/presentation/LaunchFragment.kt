@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.implementation.presentation
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -22,7 +20,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
@@ -45,16 +42,11 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEven
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 @ExperimentalMaterialApi
-@ExperimentalMaterial3Api
-@ExperimentalComposeUiApi
 @ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchFragment : Fragment() {
 
@@ -148,10 +140,10 @@ internal class LaunchFragment : Fragment() {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(url.toString())
+                    url.toString().toUri()
                 )
             )
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             viewModel.onEvent(
                 NotificationEvent(
                     notificationState = NotificationState(

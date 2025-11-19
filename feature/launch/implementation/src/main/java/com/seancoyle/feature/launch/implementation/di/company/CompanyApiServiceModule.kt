@@ -19,5 +19,4 @@ internal object CompanyApiServiceModule {
     ): CompanyApi {
         return retrofit.create(CompanyApi::class.java)
     }
-
 }

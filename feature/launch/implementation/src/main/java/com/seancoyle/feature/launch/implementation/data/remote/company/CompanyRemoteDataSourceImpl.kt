@@ -33,5 +33,4 @@ internal class CompanyRemoteDataSourceImpl @Inject constructor(
             }
         )
     }
-
 }

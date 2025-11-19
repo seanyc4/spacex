@@ -22,5 +22,4 @@ internal class LaunchPreferencesSerializer @Inject constructor() : Serializer<La
     override suspend fun writeTo(t: LaunchPreferencesProto, output: OutputStream) {
         t.writeTo(output)
     }
-
 }
