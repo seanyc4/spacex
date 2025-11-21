@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CAROUSEL_ROW
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.HandleLaunchClickEvent
@@ -100,7 +102,9 @@ private fun RenderGridSections(
         }
 
         is LaunchTypesUiModel.CarouselUi -> {
-            LazyRow {
+            LazyRow(
+                modifier = Modifier.semantics { contentDescription = LAUNCH_CAROUSEL_ROW }
+            ) {
                 itemsIndexed(launchItem.items) { _, carouselItem ->
                     LaunchCarouselCard(
                         launchItem = carouselItem,
