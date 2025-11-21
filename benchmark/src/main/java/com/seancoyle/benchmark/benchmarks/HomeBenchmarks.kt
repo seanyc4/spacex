@@ -14,6 +14,7 @@ import com.seancoyle.benchmark.BenchmarkConstants.SPACEX
 import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
 import com.seancoyle.benchmark.actions.scrollHorizontalView
 import com.seancoyle.benchmark.actions.scrollVerticalView
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CAROUSEL_ROW
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -80,7 +81,7 @@ class HomeBenchmarks {
             measureBlock = {
                 uiAutomator {
                     startApp(SPACEX)
-                    scrollHorizontalView(id = "LaunchCarouselRow")
+                    scrollHorizontalView(id = LAUNCH_CAROUSEL_ROW)
                 }
             }
         )
