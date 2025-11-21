@@ -9,6 +9,7 @@ import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants.SPACEX
 import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
@@ -48,6 +49,7 @@ class StartupBenchmark {
             measureBlock = {
                 uiAutomator {
                     startApp(SPACEX)
+                    onElement { textAsString() == "HEADER" && isVisibleToUser }
                 }
             }
         )
