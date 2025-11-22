@@ -15,7 +15,7 @@ internal fun LaunchRoute(
     viewModel: LaunchViewModel,
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
-    isLandscape: Boolean
+    isLandscape: Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val filterState by viewModel.filterState.collectAsStateWithLifecycle()
@@ -34,6 +34,6 @@ internal fun LaunchRoute(
         filterState = filterState,
         isLandscape = isLandscape,
         bottomSheetState = bottomSheetState,
-        pullRefreshState = pullRefreshState
+        pullRefreshState = pullRefreshState,
     )
 }

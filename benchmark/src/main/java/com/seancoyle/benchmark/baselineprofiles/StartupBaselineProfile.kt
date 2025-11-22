@@ -3,7 +3,11 @@ package com.seancoyle.benchmark.baselineprofiles
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.seancoyle.benchmark.BenchmarkConstants.APP_PACKAGE_NAME
+import androidx.test.uiautomator.uiAutomator
+import com.seancoyle.benchmark.BenchmarkConstants.SPACEX
+import com.seancoyle.benchmark.actions.scrollHorizontalView
+import com.seancoyle.benchmark.actions.scrollVerticalView
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CAROUSEL_ROW
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,11 +24,14 @@ class StartupBaselineProfile {
 
     @Test
     fun generate() = baselineProfileRule.collect(
-        APP_PACKAGE_NAME,
+        packageName = SPACEX,
         includeInStartupProfile = true
-    ){
-        pressHome()
-        startActivityAndWait()
+    ) {
+        uiAutomator {
+            startApp(SPACEX)
+            scrollHorizontalView(id = LAUNCH_CAROUSEL_ROW)
+            scrollVerticalView()
+        }
     }
 
 }

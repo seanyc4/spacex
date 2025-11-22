@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
@@ -49,7 +50,7 @@ internal fun LaunchScreenWithBottomSheet(
         uiState = uiState,
         onEvent = onEvent,
         scrollState = scrollState,
-        snackbarHostState = snackbarHostState
+        snackbarHostState = snackbarHostState,
     )
 
     if (filterState.isVisible) {
@@ -78,8 +79,13 @@ internal fun LaunchScreen(
     onEvent: (LaunchEvents) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
+
+    ReportDrawnWhen { uiState is LaunchesUiState.Success || uiState is LaunchesUiState.Error }
+
     when (uiState) {
+
         is LaunchesUiState.Success -> {
+
             LaunchesGridContent(
                 launches = uiState.launches,
                 paginationState = uiState.paginationState,
