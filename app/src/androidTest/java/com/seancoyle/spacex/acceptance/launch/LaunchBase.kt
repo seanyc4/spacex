@@ -1,5 +1,6 @@
 package com.seancoyle.spacex.acceptance.launch
 
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import androidx.annotation.CallSuper
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
@@ -28,7 +29,7 @@ open class LaunchBase {
     @Inject
     lateinit var mockWebServer: MockWebServer
 
-    protected val launchGridTag = "Launch Grid"
+    protected val launchGridTag = LAUNCH_GRID
 
     @Before
     @CallSuper

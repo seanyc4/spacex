@@ -91,7 +91,7 @@ internal class LaunchFragment : Fragment() {
                         viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
-                        isLandscape = isLandscape
+                        isLandscape = isLandscape,
                     )
                 }
             }

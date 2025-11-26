@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
@@ -132,7 +133,7 @@ internal fun LaunchCard(
             ) {
                 Image(
                     painter = painterResource(id = launchItem.launchStatusIconResId),
-                    contentDescription = "Launch Status icon"
+                    contentDescription = LAUNCH_STATUS_ICON
                 )
             }
         }
