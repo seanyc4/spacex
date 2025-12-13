@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.repository.launch
+package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.*

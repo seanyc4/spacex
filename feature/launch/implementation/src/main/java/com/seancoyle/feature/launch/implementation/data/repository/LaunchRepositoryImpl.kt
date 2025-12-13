@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.repository.launch
+package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.DataError.LocalError
@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import javax.inject.Inject
 
@@ -19,8 +18,8 @@ internal class LaunchRepositoryImpl @Inject constructor(
         return launchLocalDataSource.insertList(launches)
     }
 
-    override suspend fun getLaunchesApi(launchOptions: LaunchOptions): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
-        return launchRemoteDataSource.getLaunches(launchOptions)
+    override suspend fun getLaunchesApi(offset: Int): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
+        return launchRemoteDataSource.getLaunches(offset)
     }
 
     override suspend fun paginateCache(
