@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di.launch
 
-import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchApi
+import com.seancoyle.feature.launch.implementation.data.remote.LaunchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object LaunchApiServiceModule {
+internal object LaunchApiModule {
 
     @Singleton
     @Provides
