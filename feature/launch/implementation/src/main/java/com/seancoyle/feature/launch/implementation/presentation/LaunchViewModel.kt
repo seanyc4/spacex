@@ -6,11 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
-import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.UiComponentType
-import com.seancoyle.core.ui.extensions.asStringResource
-import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
@@ -25,7 +21,6 @@ import com.seancoyle.feature.launch.implementation.presentation.state.Pagination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,6 +29,8 @@ import dagger.Lazy
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+private const val SCROLL_STATE_KEY = "launches.scroll.state.key"
+
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -41,7 +38,8 @@ internal class LaunchViewModel @Inject constructor(
     private val appStringResource: Lazy<AppStringResource>
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<LaunchesUiState> = MutableStateFlow(LaunchesUiState.Loading)
+    private val _uiState: MutableStateFlow<LaunchesUiState> =
+        MutableStateFlow(LaunchesUiState.Loading)
     var uiState = _uiState.asStateFlow()
 
     private val _filterState = MutableStateFlow(LaunchesFilterState())
@@ -64,21 +62,22 @@ internal class LaunchViewModel @Inject constructor(
             restoreFilterAndOrderState()
             restoreStateOnProcessDeath()
             loadDataOnAppLaunchOrRestore()
+         //   observeLaunchesCacheUseCase()
         }
     }
 
     private fun loadDataOnAppLaunchOrRestore() {
-        if (getScrollPositionState() != 0) {
+        /*if (getScrollPositionState() != 0) {
             // Restoring state from cache data
-            onEvent(CreateMergedLaunchesEvent)
+              observeLaunchesCacheUseCase()
         } else {
-            // Fresh app launch - get data from network
-            onEvent(GetSpaceXDataEvent)
-        }
+            // Fresh app launch - get data from network*/
+            onEvent(PaginateLaunchesNetworkEvent)
+       // }
     }
 
     private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchesScrollState>(LAUNCH_LIST_STATE_KEY)?.let { scrollState ->
+        savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)?.let { scrollState ->
             this._scrollState.value = scrollState
         }
     }
@@ -97,25 +96,25 @@ internal class LaunchViewModel @Inject constructor(
     fun onEvent(event: LaunchEvents) {
         viewModelScope.launch {
             when (event) {
-                is CreateMergedLaunchesEvent -> mergedLaunchesCacheUseCase()
                 is DismissBottomSheetEvent -> dismissBottomSheet()
                 is DismissFilterDialogEvent -> displayFilterDialog(false)
                 is DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is DismissNotificationEvent -> dismissNotification()
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
-                is LoadNextPageEvent -> loadNextPage(event.page)
+                is LoadNextPageEvent ->  Unit //loadNextPage(event.page)
                 is NewSearchEvent -> newSearch()
                 is NotificationEvent -> updateNotificationState(event)
                 is OpenLinkEvent -> openLink(event.url)
-                is PaginateLaunchesCacheEvent -> paginateLaunchesCacheUseCase()
+                is PaginateLaunchesCacheEvent -> Unit //paginateLaunchesCacheUseCase()
+                is PaginateLaunchesNetworkEvent -> paginateLaunchesNetworkUseCase()
                 is SaveScrollPositionEvent -> setScrollPositionState(event.position)
                 is SetFilterStateEvent -> setLaunchFilterState(
                     order = event.order,
                     launchStatus = event.launchStatus,
                     year = event.launchYear
                 )
+
                 is SwipeToRefreshEvent -> swipeToRefresh()
-                is GetSpaceXDataEvent -> getSpaceXDataUseCase()
             }
         }
     }
@@ -124,6 +123,87 @@ internal class LaunchViewModel @Inject constructor(
         _uiState.update { currentState ->
             currentState.isSuccess { it.copy(notificationState = event.notificationState) }
         }
+    }
+
+    private fun observeLaunchesCacheUseCase() {
+        viewModelScope.launch {
+            launchesComponent.observeLaunchesUseCase()
+                .onStart {
+                    _uiState.update { currentState ->
+                        currentState.isSuccess { it.copy(paginationState = PaginationState.Loading) }
+                    }
+                 }
+                .collect { result ->
+                    when (result) {
+                        is LaunchResult.Success -> {
+                            setIsLastPageState(result.data.size < PAGINATION_LIMIT)
+                            _uiState.update { currentState ->
+                                currentState.isSuccess {
+                                    it.copy(
+                                        launches = result.data.map { it.toUiModel(appStringResource) },
+                                        paginationState = PaginationState.None,
+                                    )
+                                }
+                            }
+                        }
+
+                        is LaunchResult.Error -> {
+                            _uiState.update { currentState ->
+                                currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    private suspend fun paginateLaunchesNetworkUseCase() {
+        if (getIsLastPageState()) return
+        val currentPage = getPageState()
+
+        launchesComponent.getLaunchesApiAndCacheUseCase(currentPage)
+            .onStart {
+                _uiState.update { currentState ->
+                    if (currentPage == 0) LaunchesUiState.Loading
+                    else currentState.isSuccess {
+                        it.copy(paginationState = PaginationState.Loading)
+                    }
+                }
+            }
+            .collect { result ->
+                when (result) {
+                    is LaunchResult.Success -> {
+                        val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
+
+                        if (currentPage == 0) {
+                            _uiState.update {
+                                LaunchesUiState.Success(
+                                    launches = updatedLaunches,
+                                    paginationState = PaginationState.None,
+                                )
+                            }
+                        } else {
+                            _uiState.update { currentState ->
+                                currentState.isSuccess {
+                                    val paginatedLaunches = it.launches + (updatedLaunches)
+                                    it.copy(
+                                        launches = paginatedLaunches,
+                                        paginationState = PaginationState.None
+                                    )
+                                }
+                            }
+                        }
+
+                        incrementPage()
+                    }
+
+                    is LaunchResult.Error -> {
+                        _uiState.update { currentState ->
+                            currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
+                        }
+                    }
+                }
+            }
     }
 
     private suspend fun paginateLaunchesCacheUseCase() {
@@ -135,17 +215,19 @@ internal class LaunchViewModel @Inject constructor(
         ).collect { result ->
             when (result) {
                 is LaunchResult.Success -> {
-                    // Pagination - We append the next 30 rows to the current state as a new list
-                    // This triggers a recompose and keeps immutability
-                    _uiState.update { currentState ->
-                        val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
-                        currentState.isSuccess {
-                            val paginatedLaunches = it.launches + (updatedLaunches)
-                            it.copy(
-                                launches = paginatedLaunches,
-                                paginationState = PaginationState.None
-                            )
-                        }
+                    _uiState.update {
+                        LaunchesUiState.Success(
+                            launches = result.data.map { it.toUiModel(appStringResource) },
+                            paginationState = PaginationState.None,
+                        )
+                        /* val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
+                         currentState.isSuccess {
+                             val paginatedLaunches = it.launches + (updatedLaunches)
+                             it.copy(
+                                 launches = paginatedLaunches,
+                                 paginationState = PaginationState.None
+                             )
+                         }*/
                     }
                 }
 
@@ -156,60 +238,6 @@ internal class LaunchViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private suspend fun getSpaceXDataUseCase() {
-        launchesComponent.getSpaceXDataUseCase()
-            .onStart { _uiState.update { LaunchesUiState.Loading } }
-            .collect { result ->
-                when (result) {
-                    is LaunchResult.Success -> onEvent(CreateMergedLaunchesEvent)
-                    is LaunchResult.Error -> {
-                        _uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Dialog,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-    }
-
-    private suspend fun mergedLaunchesCacheUseCase() {
-        launchesComponent.createMergedLaunchesCacheUseCase(
-            year = getSearchYearState(),
-            order = getOrderState(),
-            launchFilter = getLaunchStatusState(),
-            page = getPageState()
-        ).distinctUntilChanged()
-            .collect { result ->
-                when (result) {
-                    is LaunchResult.Success -> {
-                        _uiState.update {
-                            LaunchesUiState.Success(
-                                launches = result.data.map { it.toUiModel(appStringResource) },
-                                paginationState = PaginationState.None
-                            )
-                        }
-                    }
-
-                    is LaunchResult.Error -> {
-                        _uiState.update {
-                            LaunchesUiState.Error(
-                                errorNotificationState = NotificationState(
-                                    message = result.error.asStringResource(),
-                                    uiComponentType = UiComponentType.Snackbar,
-                                    notificationType = NotificationType.Error
-                                )
-                            )
-                        }
-                    }
-                }
-            }
     }
 
     private suspend fun openLink(link: String) {
@@ -245,15 +273,16 @@ internal class LaunchViewModel @Inject constructor(
         displayFilterDialog(false)
     }
 
-    private fun loadNextPage(position: Int) {
-        if ((position + 1) >= (getPageState() * PAGINATION_PAGE_SIZE)) {
+    /*private fun loadNextPage(position: Int) {
+        if ((position + 1) >= (getPageState() * PAGINATION_LIMIT)) {
             incrementPage()
             onEvent(PaginateLaunchesCacheEvent)
         }
-    }
+    }*/
 
     private fun getScrollPositionState() = _scrollState.value.scrollPosition
     private fun getPageState() = _scrollState.value.page
+    private fun getIsLastPageState() = _scrollState.value.isLastPage
     private fun getSearchYearState() = _filterState.value.launchYear
     private fun getOrderState() = _filterState.value.order
     private fun getLaunchStatusState() = _filterState.value.launchStatus
@@ -271,7 +300,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun swipeToRefresh() {
         clearQueryParameters()
         clearListState()
-        onEvent(GetSpaceXDataEvent)
+        onEvent(PaginateLaunchesNetworkEvent)
     }
 
     private fun setLaunchFilterState(
@@ -293,11 +322,14 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun resetPageState() {
-        _scrollState.update { currentState -> currentState.copy(page = 1) }
+        _scrollState.update { currentState -> currentState.copy(page = 0, isLastPage = false, scrollPosition = 0) }
     }
 
     private fun setPageState(pageNum: Int) {
         _scrollState.update { currentState -> currentState.copy(page = pageNum) }
+    }
+    private fun setIsLastPageState(isLastPage: Boolean) {
+        _scrollState.update { currentState -> currentState.copy(isLastPage = isLastPage) }
     }
 
     private fun setScrollPositionState(position: Int) {
@@ -310,8 +342,8 @@ internal class LaunchViewModel @Inject constructor(
         setPageState(incrementedPage)
     }
 
-    fun saveState() {
-        savedStateHandle[LAUNCH_LIST_STATE_KEY] = _scrollState.value
+    fun saveScrollState() {
+        savedStateHandle[SCROLL_STATE_KEY] = _scrollState.value
     }
 
     private suspend fun saveLaunchPreferences(
@@ -327,7 +359,7 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private suspend fun newSearchEvent() {
-        onEvent(CreateMergedLaunchesEvent)
+        // onEvent(CreateMergedLaunchesEvent)
         saveLaunchPreferences(
             order = getOrderState(),
             launchStatus = getLaunchStatusState(),
@@ -357,7 +389,4 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    private companion object {
-        const val LAUNCH_LIST_STATE_KEY = "launches.list.position.key"
-    }
 }
