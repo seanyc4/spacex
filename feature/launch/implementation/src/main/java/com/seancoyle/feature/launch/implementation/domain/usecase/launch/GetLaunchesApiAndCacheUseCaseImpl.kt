@@ -5,11 +5,10 @@ import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.Flow
@@ -18,17 +17,19 @@ import javax.inject.Inject
 
 internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
     private val launchRepository: LaunchRepository,
-    private val launchOptions: LaunchOptions,
     private val dateFormatter: DateFormatter,
     private val dateTransformer: DateTransformer
 ) : GetLaunchesApiAndCacheUseCase {
 
-    override operator fun invoke(): Flow<LaunchResult<Unit, DataError>> = flow {
-        emit(getLaunchesFromNetwork())
+    override operator fun invoke(
+        currentPage: Int
+    ): Flow<LaunchResult<List<LaunchTypes.Launch>, DataError>> = flow {
+        emit(getLaunchesFromNetwork(currentPage))
     }
 
-    private suspend fun getLaunchesFromNetwork(): LaunchResult<Unit, DataError> {
-        return when (val networkResult = launchRepository.getLaunchesApi(launchOptions)) {
+    private suspend fun getLaunchesFromNetwork(currentPage: Int): LaunchResult<List<LaunchTypes.Launch>, DataError> {
+        val offset = currentPage * PAGINATION_LIMIT
+        return when (val networkResult = launchRepository.getLaunchesApi(offset)) {
             is LaunchResult.Success -> {
                 val transformedLaunches = transformLaunchData(networkResult.data)
                 cacheData(transformedLaunches)
@@ -37,9 +38,9 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         }
     }
 
-    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
+    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
         return when (val cacheResult = launchRepository.insertLaunchesCache(launches)) {
-            is LaunchResult.Success -> LaunchResult.Success(Unit)
+            is LaunchResult.Success -> LaunchResult.Success(launches)
             is LaunchResult.Error -> LaunchResult.Error(cacheResult.error)
         }
     }
@@ -50,20 +51,12 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
             launch.copy(
                 launchDate = dateTransformer.formatDateTimeToString(localDateTime),
                 launchDateLocalDateTime = localDateTime,
-                launchStatus = mapIsLaunchSuccessToStatus(launch.isLaunchSuccess),
                 launchYear = dateTransformer.returnYearOfLaunch(localDateTime),
                 launchDateStatus = mapLaunchDateToStatus(localDateTime),
                 launchDays = dateTransformer.getLaunchDaysDifference(localDateTime)
             )
         }
     }
-
-    private fun mapIsLaunchSuccessToStatus(isLaunchSuccess: Boolean?) =
-        when (isLaunchSuccess) {
-            true -> { LaunchStatus.SUCCESS }
-            false -> { LaunchStatus.FAILED }
-            else -> { LaunchStatus.UNKNOWN }
-        }
 
     private fun mapLaunchDateToStatus(localDateTime: LocalDateTime) =
         if (dateTransformer.isPastLaunch(localDateTime)) {

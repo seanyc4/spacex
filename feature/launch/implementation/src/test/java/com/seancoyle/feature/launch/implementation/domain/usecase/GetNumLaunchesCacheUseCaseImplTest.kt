@@ -1,8 +1,10 @@
-package com.seancoyle.feature.launch.implementation.domain.usecase.launch
+package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCaseImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
