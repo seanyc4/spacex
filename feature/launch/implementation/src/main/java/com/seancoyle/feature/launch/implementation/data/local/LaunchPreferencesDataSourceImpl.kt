@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.local.launch
+package com.seancoyle.feature.launch.implementation.data.local
 
 import androidx.datastore.core.DataStore
 import com.seancoyle.core.common.coroutines.runSuspendCatching
@@ -8,7 +8,7 @@ import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchPreferencesDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.LaunchPreferencesDataSource
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.local.launch
+package com.seancoyle.feature.launch.implementation.data.local
 
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import com.seancoyle.core.datastore_proto.LaunchStatusProto

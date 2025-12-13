@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.local.launch
+package com.seancoyle.feature.launch.implementation.data.local
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
