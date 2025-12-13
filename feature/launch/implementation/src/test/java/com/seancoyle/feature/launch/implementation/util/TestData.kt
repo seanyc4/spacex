@@ -1,175 +1,381 @@
 package com.seancoyle.feature.launch.implementation.util
 
-import com.seancoyle.database.entities.CompanyEntity
+import com.seancoyle.database.entities.AgencyEntity
+import com.seancoyle.database.entities.ImageEntity
 import com.seancoyle.database.entities.LaunchDateStatusEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LinksEntity
+import com.seancoyle.database.entities.MissionEntity
+import com.seancoyle.database.entities.NetPrecisionEntity
+import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
-import com.seancoyle.feature.launch.api.LaunchConstants.LAUNCH_OPTIONS_ROCKET
-import com.seancoyle.feature.launch.api.LaunchConstants.LAUNCH_OPTIONS_SORT
-import com.seancoyle.feature.launch.api.domain.model.Company
+import com.seancoyle.feature.launch.api.domain.model.Agency
+import com.seancoyle.feature.launch.api.domain.model.Image
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Links
+import com.seancoyle.feature.launch.api.domain.model.Mission
+import com.seancoyle.feature.launch.api.domain.model.NetPrecision
+import com.seancoyle.feature.launch.api.domain.model.Pad
+import com.seancoyle.feature.launch.api.domain.model.Program
 import com.seancoyle.feature.launch.api.domain.model.Rocket
-import com.seancoyle.feature.launch.api.domain.model.RocketWithMission
-import com.seancoyle.feature.launch.implementation.data.remote.company.CompanyDto
-import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchDto
-import com.seancoyle.feature.launch.implementation.data.remote.launch.LaunchesDto
-import com.seancoyle.feature.launch.implementation.data.remote.launch.LinksDto
-import com.seancoyle.feature.launch.implementation.data.remote.launch.PatchDto
-import com.seancoyle.feature.launch.implementation.data.remote.launch.RocketDto
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchOptions
-import com.seancoyle.feature.launch.implementation.domain.model.Options
-import com.seancoyle.feature.launch.implementation.domain.model.Populate
-import com.seancoyle.feature.launch.implementation.domain.model.Select
-import com.seancoyle.feature.launch.implementation.domain.model.Sort
+import com.seancoyle.feature.launch.implementation.data.remote.AgencyDto
+import com.seancoyle.feature.launch.implementation.data.remote.ImageDto
+import com.seancoyle.feature.launch.implementation.data.remote.LaunchDto
+import com.seancoyle.feature.launch.implementation.data.remote.LaunchesDto
+import com.seancoyle.feature.launch.implementation.data.remote.MissionDto
+import com.seancoyle.feature.launch.implementation.data.remote.NetPrecisionDto
+import com.seancoyle.feature.launch.implementation.data.remote.PadDto
+import com.seancoyle.feature.launch.implementation.data.remote.ProgramDto
+import com.seancoyle.feature.launch.implementation.data.remote.RocketDto
+import com.seancoyle.feature.launch.implementation.data.remote.StatusDto
 import java.time.LocalDateTime
 
 internal object TestData {
 
-    val companyModel = Company(
-        employees = 100,
-        founded = 2000,
-        founder = "Elon Musk",
-        launchSites = 4,
-        name = "SpaceX",
-        valuation = 74000000000L
+    fun createStatusDto(
+        id: Int? = 1,
+        name: String? = "Success",
+        abbrev: String? = "Success",
+        description: String? = "Current T-0 confirmed by official or reliable sources."
+    ) = StatusDto(id, name, abbrev, description)
+
+    fun createNetPrecisionDto(
+        id: Int? = 1,
+        name: String? = "Minute",
+        abbrev: String? = "MIN",
+        description: String? = "The T-0 is accurate to the minute."
+    ) = NetPrecisionDto(id, name, abbrev, description)
+
+    fun createImageDto(
+        id: Int? = 1296,
+        name: String? = "Starlink night fairing",
+        imageUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+        thumbnailUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+        credit: String? = "SpaceX"
+    ) = ImageDto(id, name, imageUrl, thumbnailUrl, credit)
+
+    fun createLaunchDto(
+        id: String? = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
+        name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
+        responseMode: String? = "list",
+        status: StatusDto? = createStatusDto(),
+        lastUpdated: String? = "2025-12-05T18:39:36Z",
+        net: String? = "2025-12-13T05:34:00Z",
+        netPrecision: NetPrecisionDto? = createNetPrecisionDto(),
+        windowEnd: String? = "2025-12-13T09:34:00Z",
+        windowStart: String? = "2025-12-13T05:34:00Z",
+        image: ImageDto? = createImageDto(),
+        infographic: String? = null,
+        probability: Int? = null,
+        weatherConcerns: String? = null,
+        failReason: String? = null,
+        launchServiceProvider: AgencyDto? = null,
+        rocket: RocketDto? = null,
+        mission: MissionDto? = null,
+        pad: PadDto? = null,
+        webcastLive: Boolean? = false,
+        program: List<ProgramDto>? = null,
+        orbitalLaunchAttemptCount: Int? = null,
+        locationLaunchAttemptCount: Int? = null,
+        padLaunchAttemptCount: Int? = null,
+        agencyLaunchAttemptCount: Int? = null,
+        orbitalLaunchAttemptCountYear: Int? = null,
+        locationLaunchAttemptCountYear: Int? = null,
+        padLaunchAttemptCountYear: Int? = null,
+        agencyLaunchAttemptCountYear: Int? = null
+    ) = LaunchDto(
+        id = id,
+        url = url,
+        name = name,
+        responseMode = responseMode,
+        status = status,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision,
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image,
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider,
+        rocket = rocket,
+        mission = mission,
+        pad = pad,
+        webcastLive = webcastLive,
+        program = program,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear
     )
 
-    val companyDto = CompanyDto(
-        employees = 100,
-        founded = 2000,
-        founder = "Elon Musk",
-        launchSites = 4,
-        name = "SpaceX",
-        valuation = 74000000000L
+    fun createLaunchesDto(
+        count: Int? = 109,
+        next: String? = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list&offset=10&ordering=net",
+        previous: String? = null,
+        results: List<LaunchDto>? = listOf(createLaunchDto())
+    ) = LaunchesDto(count, next, previous, results)
+
+
+    // Entity Factory Functions
+
+    fun createNetPrecisionEntity(
+        id: Int? = 1,
+        name: String? = "Minute",
+        abbrev: String? = "MIN",
+        description: String? = "The T-0 is accurate to the minute."
+    ) = NetPrecisionEntity(id, name, abbrev, description)
+
+    fun createImageEntity(
+        id: Int? = 1296,
+        name: String? = "Starlink night fairing",
+        imageUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+        thumbnailUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+        credit: String? = "SpaceX"
+    ) = ImageEntity(id, name, imageUrl, thumbnailUrl, credit)
+
+    fun createLaunchEntity(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
+        name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
+        responseMode: String? = "list",
+        lastUpdated: String? = "2025-12-05T18:39:36Z",
+        net: String? = "2025-12-13T05:34:00Z",
+        netPrecision: NetPrecisionEntity? = createNetPrecisionEntity(),
+        windowEnd: String? = "2025-12-13T09:34:00Z",
+        windowStart: String? = "2025-12-13T05:34:00Z",
+        image: ImageEntity? = createImageEntity(),
+        infographic: String? = null,
+        probability: Int? = null,
+        weatherConcerns: String? = null,
+        failReason: String? = null,
+        launchServiceProvider: AgencyEntity? = null,
+        rocket: RocketEntity? = null,
+        mission: MissionEntity? = null,
+        pad: PadEntity? = null,
+        webcastLive: Boolean? = false,
+        program: List<ProgramEntity>? = null,
+        orbitalLaunchAttemptCount: Int? = null,
+        locationLaunchAttemptCount: Int? = null,
+        padLaunchAttemptCount: Int? = null,
+        agencyLaunchAttemptCount: Int? = null,
+        orbitalLaunchAttemptCountYear: Int? = null,
+        locationLaunchAttemptCountYear: Int? = null,
+        padLaunchAttemptCountYear: Int? = null,
+        agencyLaunchAttemptCountYear: Int? = null,
+        launchDate: String? = "2025-12-13T05:34:00Z",
+        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
+        launchYear: String? = "2025",
+        launchDateStatus: LaunchDateStatusEntity = LaunchDateStatusEntity.PAST,
+        launchStatus: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
+        launchDays: String? = "0 days"
+    ) = LaunchEntity(
+        id = id,
+        url = url,
+        name = name,
+        responseMode = responseMode,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision,
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image,
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider,
+        rocket = rocket,
+        mission = mission,
+        pad = pad,
+        webcastLive = webcastLive,
+        program = program,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        launchDate = launchDate,
+        launchDateLocalDateTime = launchDateLocalDateTime,
+        launchYear = launchYear,
+        launchDateStatus = launchDateStatus,
+        launchStatus = launchStatus,
+        launchDays = launchDays
     )
 
-    val companyEntity = CompanyEntity(
-        id = "1",
-        employees = 100,
-        founded = 2000,
-        founder = "founder",
-        launchSites = 4,
-        name = "name",
-        valuation = 74000000000L
+
+    // Domain Model Factory Functions
+
+    fun createNetPrecision(
+        id: Int? = 1,
+        name: String? = "Minute",
+        abbrev: String? = "MIN",
+        description: String? = "The T-0 is accurate to the minute."
+    ) = NetPrecision(id, name, abbrev, description)
+
+    fun createImage(
+        id: Int? = 1296,
+        name: String? = "Starlink night fairing",
+        imageUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+        thumbnailUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+        credit: String? = "SpaceX"
+    ) = Image(id, name, imageUrl, thumbnailUrl, credit)
+
+    fun createLaunch(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
+        name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
+        responseMode: String? = "list",
+        lastUpdated: String? = "2025-12-05T18:39:36Z",
+        net: String? = "2025-12-13T05:34:00Z",
+        netPrecision: NetPrecision? = createNetPrecision(),
+        windowEnd: String? = "2025-12-13T09:34:00Z",
+        windowStart: String? = "2025-12-13T05:34:00Z",
+        image: Image? = createImage(),
+        infographic: String? = null,
+        probability: Int? = null,
+        weatherConcerns: String? = null,
+        failReason: String? = null,
+        launchServiceProvider: Agency? = null,
+        rocket: Rocket? = null,
+        mission: Mission? = null,
+        pad: Pad? = null,
+        webcastLive: Boolean? = false,
+        program: List<Program>? = null,
+        orbitalLaunchAttemptCount: Int? = null,
+        locationLaunchAttemptCount: Int? = null,
+        padLaunchAttemptCount: Int? = null,
+        agencyLaunchAttemptCount: Int? = null,
+        orbitalLaunchAttemptCountYear: Int? = null,
+        locationLaunchAttemptCountYear: Int? = null,
+        padLaunchAttemptCountYear: Int? = null,
+        agencyLaunchAttemptCountYear: Int? = null,
+        launchDate: String? = "2025-12-13T05:34:00Z",
+        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
+        launchYear: String? = null,
+        launchDateStatus: LaunchDateStatus? = null,
+        launchStatus: LaunchStatus = LaunchStatus.UNKNOWN,
+        launchDays: String? = null
+    ) = LaunchTypes.Launch(
+        id = id,
+        url = url,
+        name = name,
+        responseMode = responseMode,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision,
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image,
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider,
+        rocket = rocket,
+        mission = mission,
+        pad = pad,
+        webcastLive = webcastLive,
+        program = program,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        launchDate = launchDate,
+        launchDateLocalDateTime = launchDateLocalDateTime,
+        launchYear = launchYear,
+        launchDateStatus = launchDateStatus,
+        launchStatus = launchStatus,
+        launchDays = launchDays
     )
 
-    val launchModel = LaunchTypes.Launch(
-        id = "5",
-        launchDate = "2024-01-01",
-        launchDateLocalDateTime = LocalDateTime.of(2024, 1, 1, 0, 0),
-        launchYear = "2024",
-        launchStatus = LaunchStatus.SUCCESS,
-        links = Links(
-            missionImage = "https://example.com/mission3.jpg",
-            articleLink = "https://example.com/article3",
-            webcastLink = "https://example.com/webcast3",
-            wikiLink = "https://example.com/wiki3"
-        ),
-        missionName = "Starlink Mission",
-        rocket = Rocket("Falcon 9 Block 5"),
-        launchDateStatus = LaunchDateStatus.FUTURE,
-        launchDays = "5 days",
-        isLaunchSuccess = true
+    // Launch after all the business logic is applied from the use case
+    fun createLaunchTransformed(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
+        name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
+        responseMode: String? = "list",
+        lastUpdated: String? = "2025-12-05T18:39:36Z",
+        net: String? = "2025-12-13T05:34:00Z",
+        netPrecision: NetPrecision? = createNetPrecision(),
+        windowEnd: String? = "2025-12-13T09:34:00Z",
+        windowStart: String? = "2025-12-13T05:34:00Z",
+        image: Image? = createImage(),
+        infographic: String? = null,
+        probability: Int? = null,
+        weatherConcerns: String? = null,
+        failReason: String? = null,
+        launchServiceProvider: Agency? = null,
+        rocket: Rocket? = null,
+        mission: Mission? = null,
+        pad: Pad? = null,
+        webcastLive: Boolean? = false,
+        program: List<Program>? = null,
+        orbitalLaunchAttemptCount: Int? = null,
+        locationLaunchAttemptCount: Int? = null,
+        padLaunchAttemptCount: Int? = null,
+        agencyLaunchAttemptCount: Int? = null,
+        orbitalLaunchAttemptCountYear: Int? = null,
+        locationLaunchAttemptCountYear: Int? = null,
+        padLaunchAttemptCountYear: Int? = null,
+        agencyLaunchAttemptCountYear: Int? = null,
+        launchDate: String? = "2025-12-13T05:34:00Z",
+        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
+        launchYear: String? = "2025",
+        launchDateStatus: LaunchDateStatus? = LaunchDateStatus.PAST,
+        launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
+        launchDays: String? = "0 days"
+    ) = LaunchTypes.Launch(
+        id = id,
+        url = url,
+        name = name,
+        responseMode = responseMode,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision,
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image,
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider,
+        rocket = rocket,
+        mission = mission,
+        pad = pad,
+        webcastLive = webcastLive,
+        program = program,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        launchDate = launchDate,
+        launchDateLocalDateTime = launchDateLocalDateTime,
+        launchYear = launchYear,
+        launchDateStatus = launchDateStatus,
+        launchStatus = launchStatus,
+        launchDays = launchDays
     )
 
-    val launchesModel = listOf(
-        launchModel,
-        launchModel
-    )
-
-    val launchEntity = LaunchEntity(
-        id = "5",
-        launchDate = "2024-01-01",
-        launchDateLocalDateTime = LocalDateTime.of(2024, 1, 1, 0, 0),
-        launchYear = "2024",
-        launchStatus = LaunchStatusEntity.SUCCESS,
-        links = LinksEntity(
-            missionImage = "https://example.com/mission3.jpg",
-            articleLink = "https://example.com/article3",
-            webcastLink = "https://example.com/webcast3",
-            wikiLink = "https://example.com/wiki3"
-        ),
-        missionName = "Starlink Mission",
-        rocket = RocketEntity("Falcon 9 Block 5"),
-        launchDateStatus = LaunchDateStatusEntity.FUTURE,
-        launchDays = "5 days",
-        isLaunchSuccess = true
-    )
-
-    val launchesEntity = listOf(
-        launchEntity,
-        launchEntity
-    )
-
-    val launchDto = LaunchDto(
-        flightNumber = 136,
-        launchDate = "2024-01-01T00:00:00Z",
-        links = LinksDto(
-            patch = PatchDto(missionImage = "https://example.com/images/missions/patch_small_136.png"),
-            articleLink = null,
-            webcastLink = "https://youtube.com/watch?v=xyz9876",
-            wikiLink = "https://en.wikipedia.org/wiki/SpaceX_Starlink_Mission"
-        ),
-        missionName = "Starlink Mission",
-        rocket = RocketDto(
-            name = "Falcon Heavy",
-            type = "Block 5"
-        ),
-        isLaunchSuccess = true
-    )
-
-    val launchesDto = LaunchesDto(
-        listOf(launchDto)
-    )
-
-    val launchOptions = LaunchOptions(
-        options = Options(
-            populate = listOf(
-                Populate(
-                    path = LAUNCH_OPTIONS_ROCKET,
-                    select = Select(
-                        name = 1,
-                        type = 2
-                    )
-                )
-            ),
-            sort = Sort(
-                flightNumber = LAUNCH_OPTIONS_SORT,
-            ),
-            limit = 500
-        )
-    )
-
-    val carouselModel = LaunchTypes.Carousel(
-        id = "1",
-        items = listOf(
-            RocketWithMission(
-                links = Links(
-                    missionImage = "https://example.com/mission3.jpg",
-                    articleLink = "https://example.com/article3",
-                    webcastLink = "https://example.com/webcast3",
-                    wikiLink = "https://example.com/wiki3"
-                ),
-                rocket = Rocket("Falcon 9 Block 5")
-            ),
-        )
-    )
-
-    val gridModel = LaunchTypes.Grid(
-        id = "1",
-        RocketWithMission(
-            links = Links(
-                missionImage = "https://example.com/mission3.jpg",
-                articleLink = "https://example.com/article3",
-                webcastLink = "https://example.com/webcast3",
-                wikiLink = "https://example.com/wiki3"
-            ),
-            rocket = Rocket("Falcon 9 Block 5")
-        ),
-    )
 }

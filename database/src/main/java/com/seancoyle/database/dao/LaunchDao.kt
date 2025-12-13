@@ -34,7 +34,7 @@ interface LaunchDao {
         """
         SELECT * 
         FROM launch
-        ORDER BY launchDateLocalDateTime DESC
+        ORDER BY launch_date_local DESC
     """
     )
     fun getAll(): List<LaunchEntity>?
@@ -45,8 +45,8 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE launchStatus = :launchFilter
-        ORDER BY launchDateLocalDateTime DESC 
+        WHERE launch_status = :launchFilter
+        ORDER BY launch_date_local DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -60,8 +60,8 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        WHERE launchStatus = :launchFilter
-        ORDER BY launchDateLocalDateTime ASC 
+        WHERE launch_status = :launchFilter
+        ORDER BY launch_date_local ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -76,9 +76,9 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :year
-        AND launchStatus = :launchFilter
-        ORDER BY launchDateLocalDateTime DESC 
+        WHERE launch_year = :year
+        AND launch_status = :launchFilter
+        ORDER BY launch_date_local DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -93,9 +93,9 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :year
-        AND launchStatus = :launchFilter
-        ORDER BY launchDateLocalDateTime ASC 
+        WHERE launch_year = :year
+        AND launch_status = :launchFilter
+        ORDER BY launch_date_local ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -110,8 +110,8 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :year
-        ORDER BY launchDateLocalDateTime DESC 
+        WHERE launch_year = :year
+        ORDER BY launch_date_local DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -125,8 +125,8 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch 
-        WHERE launchYear = :year
-        ORDER BY launchDateLocalDateTime ASC 
+        WHERE launch_year = :year
+        ORDER BY launch_date_local ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -140,7 +140,7 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        ORDER BY launchDateLocalDateTime DESC 
+        ORDER BY launch_date_local DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -153,7 +153,7 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        ORDER BY launchDateLocalDateTime ASC 
+        ORDER BY launch_date_local ASC 
         LIMIT :pageSize
         OFFSET :offset
         """

@@ -6,7 +6,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.seancoyle.core.common.di.ApplicationScope
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
-import com.seancoyle.feature.launch.implementation.data.local.launch.LaunchPreferencesSerializer
+import com.seancoyle.feature.launch.implementation.data.local.LaunchPreferencesSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

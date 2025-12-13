@@ -14,12 +14,13 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import com.seancoyle.feature.launch.implementation.BuildConfig
 
-const val BASE_URL = "https://api.spacexdata.com/"
+const val PROD_BASE_URL = "https://ll.thespacedevs.com/"
+const val DEV_BASE_URL = "https://lldev.thespacedevs.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
 open class NetworkModule {
-    protected open fun baseUrl() = BASE_URL
+    protected open fun baseUrl() = if (BuildConfig.DEBUG) DEV_BASE_URL else PROD_BASE_URL
 
     @Singleton
     @Provides
@@ -27,6 +28,9 @@ open class NetworkModule {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
+            coerceInputValues = true
+            explicitNulls = false
+            encodeDefaults = true
         }
 
         return Retrofit.Builder()
@@ -40,8 +44,8 @@ open class NetworkModule {
     @Provides
     internal fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder()
-            .callTimeout(10L, TimeUnit.SECONDS)
-            .connectTimeout(10L, TimeUnit.SECONDS)
+            .callTimeout(20L, TimeUnit.SECONDS)
+            .connectTimeout(20L, TimeUnit.SECONDS)
 
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor().apply {
