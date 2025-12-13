@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.local.launch
+package com.seancoyle.feature.launch.implementation.data.local
 
 import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
@@ -7,20 +7,16 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
-import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_PAGE_SIZE
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.data.mapper.LaunchMapper
-import com.seancoyle.feature.launch.implementation.data.mapper.LocalErrorMapper
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
+import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LaunchLocalDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
-    private val crashlytics: Crashlytics,
-    private val localErrorMapper: LocalErrorMapper,
-    private val launchMapper: LaunchMapper
+    private val crashlytics: Crashlytics
 ) : LaunchLocalDataSource {
 
     override suspend fun paginate(
@@ -30,15 +26,15 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         page: Int
     ): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
         return runSuspendCatching {
-            val launchStatusEntity = launchMapper.mapToLaunchStatusEntity(launchStatus)
+            val launchStatusEntity = launchStatus.toEntity()
             val result = dao.paginateLaunches(
                 launchYear = launchYear,
                 launchStatus = launchStatusEntity,
                 page = page,
                 order = order,
-                pageSize = PAGINATION_PAGE_SIZE
+                pageSize = PAGINATION_LIMIT
             )
-            launchMapper.entityToDomainList(result)
+            result.toDomain()
         }.fold(
             onSuccess = { mappedResult ->
                 LaunchResult.Success(mappedResult)
@@ -46,33 +42,33 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
 
     override suspend fun insert(launch: LaunchTypes.Launch): LaunchResult<Unit, LocalError> {
         return runSuspendCatching {
-            dao.insert(launchMapper.domainToEntity(launch))
+            dao.insert(launch.toEntity())
         }.fold(
             onSuccess = { LaunchResult.Success(Unit) },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
 
     override suspend fun insertList(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
         return runSuspendCatching {
-            dao.insertList(launchMapper.domainToEntityList(launches))
+            dao.insertList(launches.toEntity())
         }.fold(
             onSuccess = { LaunchResult.Success(Unit) },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -86,7 +82,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -99,7 +95,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -112,7 +108,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -123,13 +119,13 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }.fold(
             onSuccess = { result ->
                 result?.let {
-                    LaunchResult.Success(launchMapper.entityToDomain(it))
+                    LaunchResult.Success(it.toDomain())
                 } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
             },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -140,13 +136,13 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         }.fold(
             onSuccess = { result ->
                 result?.let {
-                    LaunchResult.Success(launchMapper.entityToDomainList(it))
+                    LaunchResult.Success(it.toDomain())
                 } ?: LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
             },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }
@@ -159,7 +155,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                LaunchResult.Error(localErrorMapper.map(it))
+                LaunchResult.Error(map(it))
             }
         )
     }

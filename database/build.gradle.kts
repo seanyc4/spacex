@@ -6,6 +6,7 @@ apply {
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -24,5 +25,6 @@ dependencies {
     implementation(projects.core.domain)
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.kotlin.serialization)
     ksp(libs.room.compiler)
 }

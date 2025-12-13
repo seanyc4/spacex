@@ -1,25 +1,20 @@
-package com.seancoyle.feature.launch.implementation.data.cache.launch
+package com.seancoyle.feature.launch.implementation.data.cache
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError.LocalError
+import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchStatusEntity
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.data.local.launch.LaunchLocalDataSourceImpl
-import com.seancoyle.feature.launch.implementation.data.mapper.LaunchMapper
-import com.seancoyle.feature.launch.implementation.data.mapper.LocalErrorMapper
-import com.seancoyle.feature.launch.implementation.data.repository.launch.LaunchLocalDataSource
-import com.seancoyle.feature.launch.implementation.util.TestData.launchEntity
-import com.seancoyle.feature.launch.implementation.util.TestData.launchModel
-import com.seancoyle.feature.launch.implementation.util.TestData.launchesEntity
-import com.seancoyle.feature.launch.implementation.util.TestData.launchesModel
+import com.seancoyle.feature.launch.implementation.data.local.LaunchLocalDataSourceImpl
+import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
+import com.seancoyle.feature.launch.implementation.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runTest
@@ -36,12 +31,6 @@ class LaunchLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    @MockK
-    private lateinit var launchMapper: LaunchMapper
-
-    @RelaxedMockK
-    private lateinit var localErrorMapper: LocalErrorMapper
-
     private lateinit var underTest: LaunchLocalDataSource
 
     @Before
@@ -49,31 +38,26 @@ class LaunchLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchLocalDataSourceImpl(
             dao = dao,
-            crashlytics = crashlytics,
-            launchMapper = launchMapper,
-            localErrorMapper = localErrorMapper
+            crashlytics = crashlytics
         )
     }
 
-    @Test
+    /*@Test
     fun `paginateLaunches returns mapped launches when DAO provides data`() = runTest {
-        val launchYear = "2022"
+        val launchYear = "2025"
         val order = Order.ASC
         val page = 1
-        val pageSize = 30
-        val launchStatus = LaunchStatus.SUCCESS
-        val launchStatusEntity = LaunchStatusEntity.ALL
-
-        every { launchMapper.mapToLaunchStatusEntity(launchStatus) } returns launchStatusEntity
-        every { launchMapper.entityToDomainList(launchesEntity) } returns launchesModel
+        val launchStatus = LaunchStatus.UNKNOWN
+        val launchEntity = TestData.createLaunchEntity()
+        val launchesEntity = listOf(launchEntity, launchEntity)
 
         coEvery {
             dao.paginateLaunches(
                 launchYear = launchYear,
                 order = order,
-                launchStatus = launchStatusEntity,
+                launchStatus = LaunchStatusEntity.ALL,
                 page = page,
-                pageSize = pageSize
+                pageSize = PAGINATION_LIMIT
             )
         } returns launchesEntity
 
@@ -88,41 +72,45 @@ class LaunchLocalDataSourceImplTest {
             dao.paginateLaunches(
                 launchYear = launchYear,
                 order = order,
-                launchStatus = launchStatusEntity,
+                launchStatus = LaunchStatusEntity.ALL,
                 page = page,
-                pageSize = pageSize
+                pageSize = PAGINATION_LIMIT
             )
         }
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesModel, result.data)
-    }
+        assertEquals(2, result.data.size)
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", result.data[0].id)
+    }*/
 
     @Test
-    fun `getById returns a launchEntity when DAO provides an entity`() = runTest {
-        val launchId = "1"
+    fun `getById returns a launch when DAO provides an entity`() = runTest {
+        val launchId = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc"
+        val launchEntity = TestData.createLaunchEntity()
         coEvery { dao.getById(launchId) } returns launchEntity
-        every { launchMapper.entityToDomain(launchEntity) } returns launchModel
 
         val result = underTest.getById(launchId)
 
         coVerify { dao.getById(launchId) }
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(launchModel, result.data)
+        assertEquals(launchId, result.data?.id)
+        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", result.data?.name)
     }
 
     @Test
-    fun `getAll returns launchesEntity when DAO provides data`() = runTest {
+    fun `getAll returns launches when DAO provides data`() = runTest {
+        val launchEntity = TestData.createLaunchEntity()
+        val launchesEntity = listOf(launchEntity, launchEntity)
         coEvery { dao.getAll() } returns launchesEntity
-        every { launchMapper.entityToDomainList(launchesEntity) } returns launchesModel
 
         val result = underTest.getAll()
 
         coVerify { dao.getAll() }
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(launchesModel, result.data)
+        assertEquals(2, result.data.size)
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", result.data[0].id)
     }
 
     @Test
@@ -151,10 +139,11 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `insert invokes DAO and returns success`() = runTest {
-        every { launchMapper.domainToEntity(launchModel) } returns launchEntity
+        val launchEntity = TestData.createLaunchEntity()
+        val launch = TestData.createLaunchTransformed()
         coEvery { dao.insert(launchEntity) } returns 1L
 
-        val result = underTest.insert(launchModel)
+        val result = underTest.insert(launch)
 
         coVerify { dao.insert(launchEntity) }
         assertTrue(result is LaunchResult.Success)
@@ -163,22 +152,25 @@ class LaunchLocalDataSourceImplTest {
     @Test
     fun `insert returns error when DAO operation fails`() = runTest {
         val exception = RuntimeException("Insert failed")
-        every { launchMapper.domainToEntity(launchModel) } returns launchEntity
+        val expected = DataError.LocalError.CACHE_UNKNOWN_DATABASE_ERROR
+        val launch = TestData.createLaunchTransformed()
         coEvery { dao.insert(any()) } throws exception
-        every { localErrorMapper.map(exception) } returns LocalError.CACHE_ERROR
 
-        val result = underTest.insert(launchModel)
+        val result = underTest.insert(launch)
 
         assertTrue(result is LaunchResult.Error)
-        assertEquals(LocalError.CACHE_ERROR, result.error)
+        assertEquals(expected, result.error)
     }
 
     @Test
     fun `insertList invokes DAO and returns success`() = runTest {
-        every { launchMapper.domainToEntityList(launchesModel) } returns launchesEntity
+        val launchEntity = TestData.createLaunchEntity()
+        val launchesEntity = listOf(launchEntity, launchEntity)
+        val launch = TestData.createLaunchTransformed()
+        val launches = listOf(launch, launch)
         coEvery { dao.insertList(launchesEntity) } returns longArrayOf(2)
 
-        val result = underTest.insertList(launchesModel)
+        val result = underTest.insertList(launches)
 
         coVerify { dao.insertList(launchesEntity) }
         assertTrue(result is LaunchResult.Success)

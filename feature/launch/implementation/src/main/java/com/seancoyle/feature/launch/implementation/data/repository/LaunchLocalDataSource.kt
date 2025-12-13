@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.repository.launch
+package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
