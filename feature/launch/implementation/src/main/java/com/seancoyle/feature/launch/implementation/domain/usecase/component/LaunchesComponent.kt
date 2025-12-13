@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
 
+    fun observeLaunchesUseCase(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>>
+
     fun paginateLaunchesCacheUseCase(
         year: String,
         order: Order,
@@ -18,7 +20,7 @@ interface LaunchesComponent {
         page: Int
     ): Flow<LaunchResult<List<LaunchTypes>, LocalError>>
 
-    fun getLaunchesApiAndCacheUseCase(currentPage: Int): Flow<LaunchResult<List<LaunchTypes.Launch>, DataError>>
+    fun getLaunchesApiAndCacheUseCase(currentPage: Int): Flow<LaunchResult<Unit, DataError>>
 
     suspend fun getLaunchPreferencesUseCase(): LaunchPrefs
 

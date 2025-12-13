@@ -6,8 +6,10 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import kotlinx.coroutines.flow.Flow
 
 internal interface LaunchRepository {
+    fun observeAll(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>>
     suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError>
     suspend fun getLaunchesApi(offset: Int): LaunchResult<List<LaunchTypes.Launch>, DataError>
     suspend fun deleteLaunhesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Int, LocalError>

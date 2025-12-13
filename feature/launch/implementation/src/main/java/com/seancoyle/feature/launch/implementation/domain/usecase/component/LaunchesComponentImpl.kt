@@ -9,6 +9,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +20,16 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
     private val paginateLaunchesCacheUseCase: Lazy<PaginateLaunchesCacheUseCase>,
     private val saveLaunchPreferencesUseCase: Lazy<SaveLaunchPreferencesUseCase>,
-    private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase
+    private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase,
+    private val observeLaunchesUseCase: ObserveLaunchesUseCase
 ) : LaunchesComponent {
 
-    override fun getLaunchesApiAndCacheUseCase(currentPage: Int): Flow<LaunchResult<List<LaunchTypes.Launch>, DataError>> {
+    override fun getLaunchesApiAndCacheUseCase(currentPage: Int): Flow<LaunchResult<Unit, DataError>> {
         return getLaunchesApiCacheUseCase.invoke(currentPage)
+    }
+
+    override fun observeLaunchesUseCase(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>> {
+        return observeLaunchesUseCase.invoke()
     }
 
     override fun paginateLaunchesCacheUseCase(

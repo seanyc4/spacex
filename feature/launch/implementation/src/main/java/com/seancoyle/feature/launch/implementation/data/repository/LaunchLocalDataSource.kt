@@ -5,8 +5,11 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import kotlinx.coroutines.flow.Flow
 
 internal interface LaunchLocalDataSource {
+
+    fun observeAll(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>>
 
     suspend fun paginate(
         launchYear: String,

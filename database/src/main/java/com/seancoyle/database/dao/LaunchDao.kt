@@ -8,9 +8,13 @@ import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LaunchDao {
+
+    @Query("SELECT * FROM launch")
+    fun observeAll(): Flow<List<LaunchEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(launch: LaunchEntity): Long

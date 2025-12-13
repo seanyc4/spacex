@@ -23,11 +23,11 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
 
     override operator fun invoke(
         currentPage: Int
-    ): Flow<LaunchResult<List<LaunchTypes.Launch>, DataError>> = flow {
+    ): Flow<LaunchResult<Unit, DataError>> = flow {
         emit(getLaunchesFromNetwork(currentPage))
     }
 
-    private suspend fun getLaunchesFromNetwork(currentPage: Int): LaunchResult<List<LaunchTypes.Launch>, DataError> {
+    private suspend fun getLaunchesFromNetwork(currentPage: Int): LaunchResult<Unit, DataError> {
         val offset = currentPage * PAGINATION_LIMIT
         return when (val networkResult = launchRepository.getLaunchesApi(offset)) {
             is LaunchResult.Success -> {
@@ -38,9 +38,9 @@ internal class GetLaunchesApiAndCacheUseCaseImpl @Inject constructor(
         }
     }
 
-    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<List<LaunchTypes.Launch>, LocalError> {
+    private suspend fun cacheData(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
         return when (val cacheResult = launchRepository.insertLaunchesCache(launches)) {
-            is LaunchResult.Success -> LaunchResult.Success(launches)
+            is LaunchResult.Success -> LaunchResult.Success(Unit)
             is LaunchResult.Error -> LaunchResult.Error(cacheResult.error)
         }
     }

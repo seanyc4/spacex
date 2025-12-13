@@ -11,6 +11,8 @@ import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -18,6 +20,16 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     private val dao: LaunchDao,
     private val crashlytics: Crashlytics
 ) : LaunchLocalDataSource {
+
+    override fun observeAll(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>> {
+        return dao.observeAll().map { result ->
+            if (result.isNotEmpty()) {
+                LaunchResult.Success(result.toDomain())
+            } else {
+                LaunchResult.Error(LocalError.CACHE_ERROR_NO_RESULTS)
+            }
+        }
+    }
 
     override suspend fun paginate(
         launchYear: String,

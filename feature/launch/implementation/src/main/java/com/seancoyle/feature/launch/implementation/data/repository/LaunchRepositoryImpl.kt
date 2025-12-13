@@ -7,12 +7,17 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class LaunchRepositoryImpl @Inject constructor(
     private val launchRemoteDataSource: LaunchRemoteDataSource,
     private val launchLocalDataSource: LaunchLocalDataSource
 ): LaunchRepository {
+
+    override fun observeAll(): Flow<LaunchResult<List<LaunchTypes.Launch>, LocalError>> {
+        return launchLocalDataSource.observeAll()
+    }
 
     override suspend fun insertLaunchesCache(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, LocalError> {
         return launchLocalDataSource.insertList(launches)
