@@ -1,13 +1,16 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seancoyle.core.common.coroutines.stateIn
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
@@ -21,15 +24,17 @@ import com.seancoyle.feature.launch.implementation.presentation.state.Pagination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import dagger.Lazy
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 
 private const val SCROLL_STATE_KEY = "launches.scroll.state.key"
+private const val TAG = "LaunchViewModel"
 
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
@@ -38,46 +43,134 @@ internal class LaunchViewModel @Inject constructor(
     private val appStringResource: Lazy<AppStringResource>
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<LaunchesUiState> =
-        MutableStateFlow(LaunchesUiState.Loading)
-    var uiState = _uiState.asStateFlow()
+    private val _paginationState = MutableStateFlow<PaginationState>(PaginationState.None)
+    val paginationState = _paginationState.asStateFlow()
+
+    private val _notificationState = MutableStateFlow<com.seancoyle.core.ui.NotificationState?>(null)
+    val notificationState = _notificationState.asStateFlow()
 
     private val _filterState = MutableStateFlow(LaunchesFilterState())
-    var filterState = _filterState.asStateFlow()
+    val filterState = _filterState.asStateFlow()
 
-    private val _scrollState = MutableStateFlow(LaunchesScrollState())
-    var scrollState = _scrollState.asStateFlow()
+    private val _scrollState = MutableStateFlow(
+        savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY) ?: LaunchesScrollState()
+    )
+    val scrollState = _scrollState.asStateFlow()
 
     private val _bottomSheetState = MutableStateFlow(BottomSheetUiState())
-    var bottomSheetState = _bottomSheetState.asStateFlow()
+    val bottomSheetState = _bottomSheetState.asStateFlow()
 
     private val _linkEvent = MutableSharedFlow<String>(replay = 0)
-    var linkEvent = _linkEvent.asSharedFlow()
+    val linkEvent = _linkEvent.asSharedFlow()
 
     private val _errorEvent = MutableSharedFlow<UIErrors>(replay = 0)
-    var errorEvent = _errorEvent.asSharedFlow()
+    val errorEvent = _errorEvent.asSharedFlow()
+
+    private var hasCheckedInitialData = false
+
+    private val _isLoading = MutableStateFlow(false)
+
+    init {
+        // Auto-save scroll state to SavedStateHandle whenever it changes
+        viewModelScope.launch {
+            _scrollState.collect { state ->
+                savedStateHandle[SCROLL_STATE_KEY] = state
+                Log.d(TAG, "💾 Auto-saved scroll state: page=${state.page}, isLastPage=${state.isLastPage}")
+            }
+        }
+
+        // Restore state on init
+        restoreStateOnProcessDeath()
+    }
 
     fun init() {
-        if (_uiState.value is LaunchesUiState.Loading) {
-            restoreFilterAndOrderState()
-            restoreStateOnProcessDeath()
-            loadDataOnAppLaunchOrRestore()
-         //   observeLaunchesCacheUseCase()
+        if (hasCheckedInitialData) {
+            Log.d(TAG, "⏭️ init() already processed, skipping")
+            return
+        }
+        hasCheckedInitialData = true
+
+        val savedScrollState = savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)
+
+        if (savedScrollState != null && savedScrollState.page > 0) {
+            Log.d(TAG, "🔄 init() called with saved state - page=${savedScrollState.page}, restoring from cache")
+            // We have saved state from config change with actual progress, don't trigger fresh pagination
+            return
+        }
+
+        Log.d(TAG, "🏁 init() called - fresh start or page 0, savedState=${savedScrollState}")
+        restoreFilterAndOrderState()
+
+        // Observe feedState to detect if we have cached data
+        viewModelScope.launch {
+            feedState.collect { state ->
+                when (state) {
+                    is LaunchesUiState.Success -> {
+                        if (state.launches.isNotEmpty() && getPageState() == 0) {
+                            // We have cached data and page is still 0, calculate correct page
+                            val calculatedPage = (state.launches.size / PAGINATION_LIMIT)
+                            Log.d(TAG, "📦 Found ${state.launches.size} cached items - set page to $calculatedPage")
+                            _scrollState.update { it.copy(page = calculatedPage) }
+                            // Cancel this collector after handling
+                            return@collect
+                        }
+                    }
+                    is LaunchesUiState.Loading -> {
+                        // Still loading, trigger network call after a small delay to let cache load
+                        kotlinx.coroutines.delay(100)
+                        if (feedState.value is LaunchesUiState.Loading) {
+                            // Still loading after delay, no cache exists
+                            Log.d(TAG, "🚀 No cached data detected - triggering initial network pagination")
+                            onEvent(PaginateLaunchesNetworkEvent)
+                            return@collect
+                        }
+                    }
+                    else -> { }
+                }
+            }
         }
     }
 
-    private fun loadDataOnAppLaunchOrRestore() {
-        /*if (getScrollPositionState() != 0) {
-            // Restoring state from cache data
-              observeLaunchesCacheUseCase()
-        } else {
-            // Fresh app launch - get data from network*/
-            onEvent(PaginateLaunchesNetworkEvent)
-       // }
-    }
+    // Main data flow from the use case
+    private val launchesData: StateFlow<List<LaunchTypes.Launch>> =
+        launchesComponent.observeLaunchesUseCase()
+            .map { result ->
+                when (result) {
+                    is LaunchResult.Success -> {
+                        _isLoading.value = false
+                        result.data
+                    }
+                    is LaunchResult.Error -> {
+                        _isLoading.value = false
+                        emptyList()
+                    }
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = emptyList()
+            )
+
+    // Combine data and loading state into final UI state
+    val feedState: StateFlow<LaunchesUiState> = kotlinx.coroutines.flow.combine(
+        launchesData,
+        _isLoading,
+        _notificationState
+    ) { launches, isLoading, notification ->
+        when {
+            isLoading || (launches.isEmpty() && notification == null) -> LaunchesUiState.Loading
+            launches.isEmpty() -> LaunchesUiState.Error(errorNotificationState = notification)
+            else -> LaunchesUiState.Success(
+                launches = launches.map { launch -> launch.toUiModel(appStringResource) }
+            )
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        initialValue = LaunchesUiState.Loading
+    )
 
     private fun restoreStateOnProcessDeath() {
         savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)?.let { scrollState ->
+            Log.d(TAG, "📦 Restoring scroll state from SavedStateHandle: page=${scrollState.page}, isLastPage=${scrollState.isLastPage}")
             this._scrollState.value = scrollState
         }
     }
@@ -120,154 +213,80 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun updateNotificationState(event: NotificationEvent) {
-        _uiState.update { currentState ->
-            currentState.isSuccess { it.copy(notificationState = event.notificationState) }
-        }
-    }
-
-    private fun observeLaunchesCacheUseCase() {
-        viewModelScope.launch {
-            launchesComponent.observeLaunchesUseCase()
-                .onStart {
-                    _uiState.update { currentState ->
-                        currentState.isSuccess { it.copy(paginationState = PaginationState.Loading) }
-                    }
-                 }
-                .collect { result ->
-                    when (result) {
-                        is LaunchResult.Success -> {
-                            setIsLastPageState(result.data.size < PAGINATION_LIMIT)
-                            _uiState.update { currentState ->
-                                currentState.isSuccess {
-                                    it.copy(
-                                        launches = result.data.map { it.toUiModel(appStringResource) },
-                                        paginationState = PaginationState.None,
-                                    )
-                                }
-                            }
-                        }
-
-                        is LaunchResult.Error -> {
-                            _uiState.update { currentState ->
-                                currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
-                            }
-                        }
-                    }
-                }
-        }
+        _notificationState.value = event.notificationState
     }
 
     private suspend fun paginateLaunchesNetworkUseCase() {
-        if (getIsLastPageState()) return
+        Log.d(TAG, "⚙️ paginateLaunchesNetworkUseCase called - isLastPage=${getIsLastPageState()}, paginationState=${_paginationState.value}, isLoading=${_isLoading.value}")
+
+        // Prevent concurrent pagination calls
+        if (getIsLastPageState()) {
+            Log.d(TAG, "🚫 Pagination blocked: isLastPage = true")
+            return
+        }
+        if (_paginationState.value == PaginationState.Loading) {
+            Log.d(TAG, "🚫 Pagination blocked: already loading")
+            return
+        }
+        if (_isLoading.value) {
+            Log.d(TAG, "🚫 Pagination blocked: initial loading")
+            return
+        }
+
         val currentPage = getPageState()
+        Log.d(TAG, "📄 Starting pagination for page: $currentPage")
+
+        // Set loading state before the call
+        if (currentPage == 0) {
+            _isLoading.value = true
+            Log.d(TAG, "🔄 Set _isLoading = true for initial load")
+        } else {
+            _paginationState.value = PaginationState.Loading
+            Log.d(TAG, "🔄 Set paginationState = Loading for page $currentPage")
+        }
 
         launchesComponent.getLaunchesApiAndCacheUseCase(currentPage)
-            .onStart {
-                _uiState.update { currentState ->
-                    if (currentPage == 0) LaunchesUiState.Loading
-                    else currentState.isSuccess {
-                        it.copy(paginationState = PaginationState.Loading)
-                    }
-                }
-            }
             .collect { result ->
                 when (result) {
                     is LaunchResult.Success -> {
-                        val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
+                        // Check if this page had fewer items than the limit
+                        // This tells us if there are more pages available
+                        val fetchedItemsCount = result.data.size
+                        Log.d(TAG, "✅ Fetched $fetchedItemsCount items for page $currentPage")
 
-                        if (currentPage == 0) {
-                            _uiState.update {
-                                LaunchesUiState.Success(
-                                    launches = updatedLaunches,
-                                    paginationState = PaginationState.None,
-                                )
-                            }
-                        } else {
-                            _uiState.update { currentState ->
-                                currentState.isSuccess {
-                                    val paginatedLaunches = it.launches + (updatedLaunches)
-                                    it.copy(
-                                        launches = paginatedLaunches,
-                                        paginationState = PaginationState.None
-                                    )
-                                }
-                            }
-                        }
+                        val isLast = fetchedItemsCount < PAGINATION_LIMIT
+                        setIsLastPageState(isLast)
+                        Log.d(TAG, "📊 isLastPage set to: $isLast (fetched: $fetchedItemsCount, limit: $PAGINATION_LIMIT)")
+
+                        // Data will automatically flow through launchesData and feedState
+                        // Just update pagination state and increment page
+                        _paginationState.value = PaginationState.None
+                        _isLoading.value = false
+                        Log.d(TAG, "🔄 Reset loading states: _isLoading = false, paginationState = None")
 
                         incrementPage()
+                        Log.d(TAG, "➡️ Page incremented to: ${getPageState()}")
                     }
 
                     is LaunchResult.Error -> {
-                        _uiState.update { currentState ->
-                            currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
-                        }
+                        Log.e(TAG, "❌ Pagination error for page $currentPage: ${result.error}")
+                        _paginationState.value = PaginationState.Error
+                        _isLoading.value = false
                     }
                 }
             }
-    }
-
-    private suspend fun paginateLaunchesCacheUseCase() {
-        launchesComponent.paginateLaunchesCacheUseCase(
-            year = getSearchYearState(),
-            order = getOrderState(),
-            launchFilter = getLaunchStatusState(),
-            page = getPageState()
-        ).collect { result ->
-            when (result) {
-                is LaunchResult.Success -> {
-                    _uiState.update {
-                        LaunchesUiState.Success(
-                            launches = result.data.map { it.toUiModel(appStringResource) },
-                            paginationState = PaginationState.None,
-                        )
-                        /* val updatedLaunches = result.data.map { it.toUiModel(appStringResource) }
-                         currentState.isSuccess {
-                             val paginatedLaunches = it.launches + (updatedLaunches)
-                             it.copy(
-                                 launches = paginatedLaunches,
-                                 paginationState = PaginationState.None
-                             )
-                         }*/
-                    }
-                }
-
-                is LaunchResult.Error -> {
-                    _uiState.update { currentState ->
-                        currentState.isSuccess { it.copy(paginationState = PaginationState.Error) }
-                    }
-                }
-            }
-        }
     }
 
     private suspend fun openLink(link: String) {
         _linkEvent.emit(link)
     }
 
-    private fun LaunchesUiState.isSuccess(updateState: (LaunchesUiState.Success) -> LaunchesUiState): LaunchesUiState {
-        return if (this is LaunchesUiState.Success) {
-            updateState(this)
-        } else {
-            this
-        }
-    }
 
     private fun dismissNotification() {
-        _uiState.update { currentState ->
-            currentState.isSuccess {
-                it.copy(notificationState = null)
-            }
-        }
-    }
-
-    private fun clearListState() {
-        _uiState.update { currentState ->
-            currentState.isSuccess { it.copy(launches = emptyList()) }
-        }
+        _notificationState.value = null
     }
 
     private suspend fun newSearch() {
-        clearListState()
         resetPageState()
         newSearchEvent()
         displayFilterDialog(false)
@@ -288,7 +307,6 @@ internal class LaunchViewModel @Inject constructor(
     private fun getLaunchStatusState() = _filterState.value.launchStatus
 
     private fun clearQueryParameters() {
-        clearListState()
         setLaunchFilterState(
             order = Order.DESC,
             launchStatus = LaunchStatus.ALL,
@@ -299,7 +317,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun swipeToRefresh() {
         clearQueryParameters()
-        clearListState()
         onEvent(PaginateLaunchesNetworkEvent)
     }
 
@@ -325,9 +342,6 @@ internal class LaunchViewModel @Inject constructor(
         _scrollState.update { currentState -> currentState.copy(page = 0, isLastPage = false, scrollPosition = 0) }
     }
 
-    private fun setPageState(pageNum: Int) {
-        _scrollState.update { currentState -> currentState.copy(page = pageNum) }
-    }
     private fun setIsLastPageState(isLastPage: Boolean) {
         _scrollState.update { currentState -> currentState.copy(isLastPage = isLastPage) }
     }
@@ -337,14 +351,9 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun incrementPage() {
-        val incrementedPage = _scrollState.value.page + 1
-        _scrollState.update { currentState -> currentState.copy(page = incrementedPage) }
-        setPageState(incrementedPage)
+        _scrollState.update { currentState -> currentState.copy(page = currentState.page + 1) }
     }
 
-    fun saveScrollState() {
-        savedStateHandle[SCROLL_STATE_KEY] = _scrollState.value
-    }
 
     private suspend fun saveLaunchPreferences(
         order: Order,
