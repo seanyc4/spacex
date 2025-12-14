@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LaunchDao {
 
-    @Query("SELECT * FROM launch")
+    @Query("SELECT * FROM launch ORDER BY net ASC")
     fun observeAll(): Flow<List<LaunchEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -38,7 +38,7 @@ interface LaunchDao {
         """
         SELECT * 
         FROM launch
-        ORDER BY launch_date_local DESC
+        ORDER BY net DESC
     """
     )
     fun getAll(): List<LaunchEntity>?
@@ -50,7 +50,7 @@ interface LaunchDao {
         """
         SELECT * FROM launch
         WHERE launch_status = :launchFilter
-        ORDER BY launch_date_local DESC 
+        ORDER BY net DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -65,7 +65,7 @@ interface LaunchDao {
         """
         SELECT * FROM launch
         WHERE launch_status = :launchFilter
-        ORDER BY launch_date_local ASC 
+        ORDER BY net ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -82,7 +82,7 @@ interface LaunchDao {
         SELECT * FROM launch 
         WHERE launch_year = :year
         AND launch_status = :launchFilter
-        ORDER BY launch_date_local DESC 
+        ORDER BY net DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -99,7 +99,7 @@ interface LaunchDao {
         SELECT * FROM launch 
         WHERE launch_year = :year
         AND launch_status = :launchFilter
-        ORDER BY launch_date_local ASC 
+        ORDER BY net ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -115,7 +115,7 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launch_year = :year
-        ORDER BY launch_date_local DESC 
+        ORDER BY net DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -130,7 +130,7 @@ interface LaunchDao {
         """
         SELECT * FROM launch 
         WHERE launch_year = :year
-        ORDER BY launch_date_local ASC 
+        ORDER BY net ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -144,7 +144,7 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        ORDER BY launch_date_local DESC 
+        ORDER BY net DESC 
         LIMIT :pageSize
         OFFSET :offset
         """
@@ -157,7 +157,7 @@ interface LaunchDao {
     @Query(
         """
         SELECT * FROM launch
-        ORDER BY launch_date_local ASC 
+        ORDER BY net ASC 
         LIMIT :pageSize
         OFFSET :offset
         """
