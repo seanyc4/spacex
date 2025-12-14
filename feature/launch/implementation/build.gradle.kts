@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.serialization)
     implementation(libs.square.loggingInterceptor)
+    implementation(libs.compose.runtime.saveable)
 
     androidTestImplementation(projects.core.test)
     androidTestImplementation(projects.core.datastore.api)

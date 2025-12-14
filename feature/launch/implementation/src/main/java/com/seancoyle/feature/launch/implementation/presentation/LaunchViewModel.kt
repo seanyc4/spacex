@@ -1,13 +1,16 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.seancoyle.core.common.coroutines.stateIn
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
+import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
@@ -31,11 +34,12 @@ import dagger.Lazy
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 import kotlinx.coroutines.flow.map
 
-private const val SCROLL_STATE_KEY = "launches.scroll.state.key"
 private const val TAG = "LaunchViewModel"
 
+@OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -43,19 +47,17 @@ internal class LaunchViewModel @Inject constructor(
     private val appStringResource: Lazy<AppStringResource>
 ) : ViewModel() {
 
+    var scrollState by savedStateHandle.saveable { mutableStateOf(LaunchesScrollState()) }
+        private set
+
+    var filterState by savedStateHandle.saveable { mutableStateOf(LaunchesFilterState()) }
+        private set
+
     private val _paginationState = MutableStateFlow<PaginationState>(PaginationState.None)
     val paginationState = _paginationState.asStateFlow()
 
-    private val _notificationState = MutableStateFlow<com.seancoyle.core.ui.NotificationState?>(null)
+    private val _notificationState = MutableStateFlow<NotificationState?>(null)
     val notificationState = _notificationState.asStateFlow()
-
-    private val _filterState = MutableStateFlow(LaunchesFilterState())
-    val filterState = _filterState.asStateFlow()
-
-    private val _scrollState = MutableStateFlow(
-        savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY) ?: LaunchesScrollState()
-    )
-    val scrollState = _scrollState.asStateFlow()
 
     private val _bottomSheetState = MutableStateFlow(BottomSheetUiState())
     val bottomSheetState = _bottomSheetState.asStateFlow()
@@ -68,36 +70,26 @@ internal class LaunchViewModel @Inject constructor(
 
     private var hasCheckedInitialData = false
 
-
     init {
-        // Auto-save scroll state to SavedStateHandle whenever it changes
-        viewModelScope.launch {
-            _scrollState.collect { state ->
-                savedStateHandle[SCROLL_STATE_KEY] = state
-                Log.d(TAG, "💾 Auto-saved scroll state: page=${state.page}, isLastPage=${state.isLastPage}")
-            }
-        }
-
-        // Restore state on init
-        restoreStateOnProcessDeath()
+        // Log initial state when ViewModel is created (restored from SavedStateHandle)
+        Timber.tag(TAG).d("🔄 ViewModel created - Restoring scrollState: page=${scrollState.page}, position=${scrollState.scrollPosition}, isLastPage=${scrollState.isLastPage}")
+        Timber.tag(TAG).d("🔄 ViewModel created - Restoring filterState: order=${filterState.order}, status=${filterState.launchStatus}, year=${filterState.launchYear}")
     }
 
     fun init() {
         if (hasCheckedInitialData) {
-            Log.d(TAG, "⏭️ init() already processed, skipping")
+            Timber.tag(TAG).d("⏭️ init() already processed, skipping")
             return
         }
         hasCheckedInitialData = true
 
-        val savedScrollState = savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)
-
-        if (savedScrollState != null && savedScrollState.page > 0) {
-            Log.d(TAG, "🔄 init() called with saved state - page=${savedScrollState.page}, restoring from cache")
+        if (scrollState.page > 0) {
+            Timber.tag(TAG).d("🔄 init() called with saved state - page=${scrollState.page}, restoring from cache")
             // We have saved state from config change with actual progress, don't trigger fresh pagination
             return
         }
 
-        Log.d(TAG, "🏁 init() called - fresh start or page 0, savedState=${savedScrollState}")
+        Timber.tag(TAG).d("🏁 init() called - fresh start or page 0, savedState=${scrollState}")
         restoreFilterAndOrderState()
 
         // Observe feedState to detect if we have cached data
@@ -108,8 +100,8 @@ internal class LaunchViewModel @Inject constructor(
                         if (state.launches.isNotEmpty() && getPageState() == 0) {
                             // We have cached data and page is still 0, calculate correct page
                             val calculatedPage = (state.launches.size / PAGINATION_LIMIT)
-                            Log.d(TAG, "📦 Found ${state.launches.size} cached items - set page to $calculatedPage")
-                            _scrollState.update { it.copy(page = calculatedPage) }
+                            Timber.tag(TAG).d("📦 Found ${state.launches.size} cached items - set page to $calculatedPage")
+                            scrollState = scrollState.copy(page = calculatedPage)
                             // Cancel this collector after handling
                             return@collect
                         }
@@ -118,8 +110,7 @@ internal class LaunchViewModel @Inject constructor(
                         // Still loading, trigger network call after a small delay to let cache load
                         kotlinx.coroutines.delay(100)
                         if (feedState.value is LaunchesUiState.Loading) {
-                            // Still loading after delay, no cache exists
-                            Log.d(TAG, "🚀 No cached data detected - triggering initial network pagination")
+                            Timber.tag(TAG).d("🚀 No cached data detected - triggering initial network pagination")
                             onEvent(PaginateLaunchesNetworkEvent)
                             return@collect
                         }
@@ -159,13 +150,6 @@ internal class LaunchViewModel @Inject constructor(
         scope = viewModelScope,
         initialValue = LaunchesUiState.Loading
     )
-
-    private fun restoreStateOnProcessDeath() {
-        savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)?.let { scrollState ->
-            Log.d(TAG, "📦 Restoring scroll state from SavedStateHandle: page=${scrollState.page}, isLastPage=${scrollState.isLastPage}")
-            _scrollState.update { scrollState }
-        }
-    }
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch {
@@ -209,24 +193,24 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private suspend fun paginateLaunchesNetworkUseCase() {
-        Log.d(TAG, "⚙️ paginateLaunchesNetworkUseCase called - isLastPage=${getIsLastPageState()}, paginationState=${_paginationState.value}")
+        Timber.tag(TAG).d("⚙️ paginateLaunchesNetworkUseCase called - isLastPage=${getIsLastPageState()}, paginationState=${_paginationState.value}")
 
         // Prevent concurrent pagination calls
         if (getIsLastPageState()) {
-            Log.d(TAG, "🚫 Pagination blocked: isLastPage = true")
+            Timber.tag(TAG).d("🚫 Pagination blocked: isLastPage = true")
             return
         }
         if (_paginationState.value == PaginationState.Loading) {
-            Log.d(TAG, "🚫 Pagination blocked: already loading")
+            Timber.tag(TAG).d("🚫 Pagination blocked: already loading")
             return
         }
 
         val currentPage = getPageState()
-        Log.d(TAG, "📄 Starting pagination for page: $currentPage")
+        Timber.tag(TAG).d("📄 Starting pagination for page: $currentPage")
 
         // Set loading state before the call
         _paginationState.update { PaginationState.Loading }
-        Log.d(TAG, "🔄 Set paginationState = Loading for page $currentPage")
+        Timber.tag(TAG).d("🔄 Set paginationState = Loading for page $currentPage")
 
         launchesComponent.getLaunchesApiAndCacheUseCase(currentPage)
             .collect { result ->
@@ -235,23 +219,23 @@ internal class LaunchViewModel @Inject constructor(
                         // Check if this page had fewer items than the limit
                         // This tells us if there are more pages available
                         val fetchedItemsCount = result.data.size
-                        Log.d(TAG, "✅ Fetched $fetchedItemsCount items for page $currentPage")
+                        Timber.tag(TAG).d("✅ Fetched $fetchedItemsCount items for page $currentPage")
 
                         val isLast = fetchedItemsCount < PAGINATION_LIMIT
                         setIsLastPageState(isLast)
-                        Log.d(TAG, "📊 isLastPage set to: $isLast (fetched: $fetchedItemsCount, limit: $PAGINATION_LIMIT)")
+                        Timber.tag(TAG).d("📊 isLastPage set to: $isLast (fetched: $fetchedItemsCount, limit: $PAGINATION_LIMIT)")
 
                         // Data will automatically flow through launchesData and feedState
                         // Just update pagination state and increment page
                         _paginationState.update { PaginationState.None }
-                        Log.d(TAG, "🔄 Reset loading states: paginationState = None")
+                        Timber.tag(TAG).d("🔄 Reset loading states: paginationState = None")
 
                         incrementPage()
-                        Log.d(TAG, "➡️ Page incremented to: ${getPageState()}")
+                        Timber.tag(TAG).d("➡️ Page incremented to: ${getPageState()}")
                     }
 
                     is LaunchResult.Error -> {
-                        Log.e(TAG, "❌ Pagination error for page $currentPage: ${result.error}")
+                        Timber.tag(TAG).e("❌ Pagination error for page $currentPage: ${result.error}")
                         _paginationState.update { PaginationState.Error }
                     }
                 }
@@ -280,12 +264,12 @@ internal class LaunchViewModel @Inject constructor(
         }
     }*/
 
-    private fun getScrollPositionState() = _scrollState.value.scrollPosition
-    private fun getPageState() = _scrollState.value.page
-    private fun getIsLastPageState() = _scrollState.value.isLastPage
-    private fun getSearchYearState() = _filterState.value.launchYear
-    private fun getOrderState() = _filterState.value.order
-    private fun getLaunchStatusState() = _filterState.value.launchStatus
+    private fun getScrollPositionState() = scrollState.scrollPosition
+    private fun getPageState() = scrollState.page
+    private fun getIsLastPageState() = scrollState.isLastPage
+    private fun getSearchYearState() = filterState.launchYear
+    private fun getOrderState() = filterState.order
+    private fun getLaunchStatusState() = filterState.launchStatus
 
     private fun clearQueryParameters() {
         setLaunchFilterState(
@@ -306,35 +290,38 @@ internal class LaunchViewModel @Inject constructor(
         launchStatus: LaunchStatus,
         year: String
     ) {
-        _filterState.update { currentState ->
-            currentState.copy(
-                order = order,
-                launchStatus = launchStatus,
-                launchYear = year
-            )
-        }
+        filterState = filterState.copy(
+            order = order,
+            launchStatus = launchStatus,
+            launchYear = year
+        )
+        Timber.tag(TAG).d("💾 Updated filterState: order=$order, status=$launchStatus, year=$year")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
-        _filterState.update { currentState -> currentState.copy(isVisible = isDisplayed) }
+        filterState = filterState.copy(isVisible = isDisplayed)
+        Timber.tag(TAG).d("💾 Updated filterState.isVisible: $isDisplayed")
     }
 
     private fun resetPageState() {
-        _scrollState.update { currentState -> currentState.copy(page = 0, isLastPage = false, scrollPosition = 0) }
+        scrollState = scrollState.copy(page = 0, isLastPage = false, scrollPosition = 0)
+        Timber.tag(TAG).d("💾 Reset scrollState: page=0, isLastPage=false, scrollPosition=0")
     }
 
     private fun setIsLastPageState(isLastPage: Boolean) {
-        _scrollState.update { currentState -> currentState.copy(isLastPage = isLastPage) }
+        scrollState = scrollState.copy(isLastPage = isLastPage)
+        Timber.tag(TAG).d("💾 Updated scrollState.isLastPage: $isLastPage")
     }
 
     private fun setScrollPositionState(position: Int) {
-        _scrollState.update { currentState -> currentState.copy(scrollPosition = position) }
+        scrollState = scrollState.copy(scrollPosition = position)
+        Timber.tag(TAG).d("💾 Updated scrollState.scrollPosition: $position")
     }
 
     private fun incrementPage() {
-        _scrollState.update { currentState -> currentState.copy(page = currentState.page + 1) }
+        scrollState = scrollState.copy(page = scrollState.page + 1)
+        Timber.tag(TAG).d("💾 Updated scrollState.page: ${scrollState.page}")
     }
-
 
     private suspend fun saveLaunchPreferences(
         order: Order,
