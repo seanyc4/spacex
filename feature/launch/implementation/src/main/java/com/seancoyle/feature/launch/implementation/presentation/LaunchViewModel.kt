@@ -68,7 +68,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private var hasCheckedInitialData = false
 
-    private val _isLoading = MutableStateFlow(false)
 
     init {
         // Auto-save scroll state to SavedStateHandle whenever it changes
@@ -136,14 +135,8 @@ internal class LaunchViewModel @Inject constructor(
         launchesComponent.observeLaunchesUseCase()
             .map { result ->
                 when (result) {
-                    is LaunchResult.Success -> {
-                        _isLoading.value = false
-                        result.data
-                    }
-                    is LaunchResult.Error -> {
-                        _isLoading.value = false
-                        emptyList()
-                    }
+                    is LaunchResult.Success -> result.data
+                    is LaunchResult.Error -> emptyList()
                 }
             }.stateIn(
                 scope = viewModelScope,
@@ -153,11 +146,10 @@ internal class LaunchViewModel @Inject constructor(
     // Combine data and loading state into final UI state
     val feedState: StateFlow<LaunchesUiState> = kotlinx.coroutines.flow.combine(
         launchesData,
-        _isLoading,
         _notificationState
-    ) { launches, isLoading, notification ->
+    ) { launches, notification ->
         when {
-            isLoading || (launches.isEmpty() && notification == null) -> LaunchesUiState.Loading
+            launches.isEmpty() && notification == null -> LaunchesUiState.Loading
             launches.isEmpty() -> LaunchesUiState.Error(errorNotificationState = notification)
             else -> LaunchesUiState.Success(
                 launches = launches.map { launch -> launch.toUiModel(appStringResource) }
@@ -171,7 +163,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun restoreStateOnProcessDeath() {
         savedStateHandle.get<LaunchesScrollState>(SCROLL_STATE_KEY)?.let { scrollState ->
             Log.d(TAG, "📦 Restoring scroll state from SavedStateHandle: page=${scrollState.page}, isLastPage=${scrollState.isLastPage}")
-            this._scrollState.value = scrollState
+            _scrollState.update { scrollState }
         }
     }
 
@@ -213,11 +205,11 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun updateNotificationState(event: NotificationEvent) {
-        _notificationState.value = event.notificationState
+        _notificationState.update { event.notificationState }
     }
 
     private suspend fun paginateLaunchesNetworkUseCase() {
-        Log.d(TAG, "⚙️ paginateLaunchesNetworkUseCase called - isLastPage=${getIsLastPageState()}, paginationState=${_paginationState.value}, isLoading=${_isLoading.value}")
+        Log.d(TAG, "⚙️ paginateLaunchesNetworkUseCase called - isLastPage=${getIsLastPageState()}, paginationState=${_paginationState.value}")
 
         // Prevent concurrent pagination calls
         if (getIsLastPageState()) {
@@ -228,22 +220,13 @@ internal class LaunchViewModel @Inject constructor(
             Log.d(TAG, "🚫 Pagination blocked: already loading")
             return
         }
-        if (_isLoading.value) {
-            Log.d(TAG, "🚫 Pagination blocked: initial loading")
-            return
-        }
 
         val currentPage = getPageState()
         Log.d(TAG, "📄 Starting pagination for page: $currentPage")
 
         // Set loading state before the call
-        if (currentPage == 0) {
-            _isLoading.value = true
-            Log.d(TAG, "🔄 Set _isLoading = true for initial load")
-        } else {
-            _paginationState.value = PaginationState.Loading
-            Log.d(TAG, "🔄 Set paginationState = Loading for page $currentPage")
-        }
+        _paginationState.update { PaginationState.Loading }
+        Log.d(TAG, "🔄 Set paginationState = Loading for page $currentPage")
 
         launchesComponent.getLaunchesApiAndCacheUseCase(currentPage)
             .collect { result ->
@@ -260,9 +243,8 @@ internal class LaunchViewModel @Inject constructor(
 
                         // Data will automatically flow through launchesData and feedState
                         // Just update pagination state and increment page
-                        _paginationState.value = PaginationState.None
-                        _isLoading.value = false
-                        Log.d(TAG, "🔄 Reset loading states: _isLoading = false, paginationState = None")
+                        _paginationState.update { PaginationState.None }
+                        Log.d(TAG, "🔄 Reset loading states: paginationState = None")
 
                         incrementPage()
                         Log.d(TAG, "➡️ Page incremented to: ${getPageState()}")
@@ -270,8 +252,7 @@ internal class LaunchViewModel @Inject constructor(
 
                     is LaunchResult.Error -> {
                         Log.e(TAG, "❌ Pagination error for page $currentPage: ${result.error}")
-                        _paginationState.value = PaginationState.Error
-                        _isLoading.value = false
+                        _paginationState.update { PaginationState.Error }
                     }
                 }
             }
@@ -283,7 +264,7 @@ internal class LaunchViewModel @Inject constructor(
 
 
     private fun dismissNotification() {
-        _notificationState.value = null
+        _notificationState.update { null }
     }
 
     private suspend fun newSearch() {
