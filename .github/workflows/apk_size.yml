@@ -22,12 +22,12 @@ jobs:
 
       # Download APKs from the main and branch builds
       - name: Download branch APK
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ inputs.artifact-name }}
 
       - name: Download main APK
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: spacex-debug-main
 
