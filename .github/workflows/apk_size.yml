@@ -39,7 +39,7 @@ jobs:
 
       # Uploads PR comment template to be accessed in the post_pr-comment workflow
       - name: Upload rendered comment
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: apk-size-rendered-comment
           path: .github/templates/apk_size_rendered_comment.md

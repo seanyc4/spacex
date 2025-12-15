@@ -43,7 +43,7 @@ jobs:
       # Uploads the log file as an artifact
       - name: Upload UI Test Logs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ui-test-results-log
           path: ui-test-results.log
