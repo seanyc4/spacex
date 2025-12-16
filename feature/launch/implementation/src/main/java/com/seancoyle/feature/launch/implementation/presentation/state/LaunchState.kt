@@ -12,9 +12,7 @@ import kotlinx.parcelize.Parcelize
 internal sealed interface LaunchesUiState {
     @Stable
     data class Success(
-        val launches: List<LaunchTypesUiModel>,
-        val paginationState: PaginationState = PaginationState.None,
-        val notificationState: NotificationState? = null
+        val launches: List<LaunchTypesUiModel>
     ) : LaunchesUiState
 
     data object Loading : LaunchesUiState
@@ -25,9 +23,10 @@ internal sealed interface LaunchesUiState {
 }
 
 internal sealed interface PaginationState {
-    data object None : PaginationState
+    data object Idle : PaginationState
     data object Loading : PaginationState
     data object Error : PaginationState
+    data object EndReached : PaginationState
 }
 
 @Parcelize
@@ -42,7 +41,6 @@ internal data class LaunchesFilterState(
 @Parcelize
 @Stable
 internal data class LaunchesScrollState(
-    val page: Int = 1,
     val scrollPosition: Int = 0
 ) : Parcelable
 

@@ -43,17 +43,18 @@ internal fun map(throwable: Throwable): RemoteError {
 
 internal fun LaunchesDto.toDomain(): List<LaunchTypes.Launch> {
     return results?.mapNotNull { launchDto ->
-        launchDto.toDomain()
+        launchDto.toDomain(this.count ?: 0)
     } ?: emptyList()
 }
 
-private fun LaunchDto.toDomain(): LaunchTypes.Launch? {
+private fun LaunchDto.toDomain(count: Int): LaunchTypes.Launch? {
     val launchId = id ?: return null
     val launchName = name ?: return null
     val launchDate = net ?: return null
 
     return LaunchTypes.Launch(
         id = launchId,
+        count = count,
         url = url,
         name = launchName,
         responseMode = responseMode,
@@ -96,7 +97,11 @@ private fun StatusDto?.toDomain(): LaunchStatus =
         this?.abbrev?.contains("Go", ignoreCase = true) == true -> LaunchStatus.SUCCESS
         this?.abbrev?.contains("Fail", ignoreCase = true) == true -> LaunchStatus.FAILED
         this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.UNKNOWN
-        this?.abbrev?.contains("To Be Determined", ignoreCase = true) == true -> LaunchStatus.UNKNOWN
+        this?.abbrev?.contains(
+            "To Be Determined",
+            ignoreCase = true
+        ) == true -> LaunchStatus.UNKNOWN
+
         else -> LaunchStatus.UNKNOWN
     }
 

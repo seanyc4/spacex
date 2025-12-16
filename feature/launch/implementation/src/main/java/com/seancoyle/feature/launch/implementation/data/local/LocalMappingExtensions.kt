@@ -49,6 +49,7 @@ internal fun List<LaunchEntity>.toDomain(): List<LaunchTypes.Launch> =
 internal fun LaunchEntity.toDomain(): LaunchTypes.Launch =
     LaunchTypes.Launch(
         id = id,
+        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
@@ -235,6 +236,7 @@ internal fun List<LaunchTypes.Launch>.toEntity(): List<LaunchEntity> =
 internal fun LaunchTypes.Launch.toEntity(): LaunchEntity =
     LaunchEntity(
         id = id,
+        count = count,
         url = url,
         name = name,
         responseMode = responseMode,

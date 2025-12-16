@@ -28,10 +28,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.ui)
     implementation(projects.core.data)
-    implementation(projects.database)
+    implementation(projects.core.datastore.api)
     implementation(projects.core.datastoreProto)
+    implementation(projects.core.ui)
+    implementation(projects.database)
     api(projects.feature.launch.api)
 
     implementation(libs.appCompat)

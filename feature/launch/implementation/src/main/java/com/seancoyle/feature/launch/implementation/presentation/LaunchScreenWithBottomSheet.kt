@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
@@ -33,11 +34,14 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEven
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
+import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
 
 @ExperimentalMaterialApi
 @Composable
 internal fun LaunchScreenWithBottomSheet(
     uiState: LaunchesUiState,
+    notificationState: NotificationState?,
+    paginationState: PaginationState,
     filterState: LaunchesFilterState,
     scrollState: LaunchesScrollState,
     bottomSheetState: BottomSheetUiState,
@@ -47,10 +51,12 @@ internal fun LaunchScreenWithBottomSheet(
     isLandscape: Boolean,
 ) {
     LaunchScreen(
-        uiState = uiState,
-        onEvent = onEvent,
+        feedState = uiState,
+        notificationState = notificationState,
+        paginationState = paginationState,
         scrollState = scrollState,
         snackbarHostState = snackbarHostState,
+        onEvent = onEvent,
     )
 
     if (filterState.isVisible) {
@@ -74,26 +80,28 @@ internal fun LaunchScreenWithBottomSheet(
 
 @Composable
 internal fun LaunchScreen(
-    uiState: LaunchesUiState,
+    feedState: LaunchesUiState,
+    notificationState: NotificationState?,
+    paginationState: PaginationState,
     scrollState: LaunchesScrollState,
     onEvent: (LaunchEvents) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
 
-    ReportDrawnWhen { uiState is LaunchesUiState.Success || uiState is LaunchesUiState.Error }
+    ReportDrawnWhen { feedState is LaunchesUiState.Success || feedState is LaunchesUiState.Error }
 
-    when (uiState) {
+    when (feedState) {
 
         is LaunchesUiState.Success -> {
 
             LaunchesGridContent(
-                launches = uiState.launches,
-                paginationState = uiState.paginationState,
+                launches = feedState.launches,
+                paginationState = paginationState,
                 scrollState = scrollState,
                 onEvent = onEvent
             )
 
-            uiState.notificationState?.let { notification ->
+            notificationState?.let { notification ->
                 DisplayNotification(
                     error = notification,
                     onDismissNotification = { onEvent(DismissNotificationEvent) },
@@ -107,7 +115,7 @@ internal fun LaunchScreen(
         }
 
         is LaunchesUiState.Error -> {
-            uiState.errorNotificationState?.let { error ->
+            feedState.errorNotificationState?.let { error ->
                 LaunchErrorScreen(
                     errorMessage = error.message,
                     retryAction = null

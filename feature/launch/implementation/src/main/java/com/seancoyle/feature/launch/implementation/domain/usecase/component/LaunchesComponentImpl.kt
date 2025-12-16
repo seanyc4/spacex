@@ -11,6 +11,8 @@ import com.seancoyle.feature.launch.api.domain.usecase.GetLaunchesApiAndCacheUse
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesCacheUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginateLaunchesUseCase
+import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginationResult
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -19,6 +21,7 @@ import dagger.Lazy
 internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchesApiCacheUseCase: GetLaunchesApiAndCacheUseCase,
     private val paginateLaunchesCacheUseCase: Lazy<PaginateLaunchesCacheUseCase>,
+    private val paginateLaunchesUseCase: PaginateLaunchesUseCase,
     private val saveLaunchPreferencesUseCase: Lazy<SaveLaunchPreferencesUseCase>,
     private val getLaunchPreferencesUseCase: GetLaunchPreferencesUseCase,
     private val observeLaunchesUseCase: ObserveLaunchesUseCase
@@ -44,6 +47,10 @@ internal class LaunchesComponentImpl @Inject constructor(
             launchStatus = launchFilter,
             page = page
         )
+    }
+
+    override fun paginateLaunchesUseCase(): Flow<LaunchResult<PaginationResult, DataError>> {
+        return paginateLaunchesUseCase.invoke()
     }
 
     override suspend fun getLaunchPreferencesUseCase(): LaunchPrefs {

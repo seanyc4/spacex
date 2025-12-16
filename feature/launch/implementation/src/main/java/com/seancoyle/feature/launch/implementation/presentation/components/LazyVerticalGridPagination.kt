@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 internal fun LazyVerticalGridPagination(
     listState: LazyGridState,
     buffer: Int,
-    index: Int,
     onEvent: (LaunchEvents) -> Unit
 ) {
     val loadMore by remember {
@@ -31,7 +30,7 @@ internal fun LazyVerticalGridPagination(
         snapshotFlow { loadMore }
             .distinctUntilChanged()
             .collect {
-                if (it) onEvent(LaunchEvents.LoadNextPageEvent(index))
+                if (it) onEvent(LaunchEvents.LoadNextPageEvent)
             }
     }
 }
