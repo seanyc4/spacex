@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.seancoyle.core.common.crashlytics.printLogDebug
 
 @ExperimentalMaterialApi
@@ -17,7 +18,7 @@ internal fun LaunchRoute(
     snackbarHostState: SnackbarHostState,
     isLandscape: Boolean,
 ) {
-    val uiState by viewModel.feedState.collectAsStateWithLifecycle()
+    val uiState = viewModel.feedState.collectAsLazyPagingItems()
     val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
     val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
     val paginationState by viewModel.paginationState.collectAsStateWithLifecycle()

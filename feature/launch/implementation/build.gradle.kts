@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable)
     implementation(libs.kotlin.serialization)
+    implementation(libs.paging3.runtime)
+    implementation(libs.paging3.compose)
     implementation(libs.square.retrofit.core)
     implementation(libs.square.retrofit.serialization)
     implementation(libs.square.loggingInterceptor)

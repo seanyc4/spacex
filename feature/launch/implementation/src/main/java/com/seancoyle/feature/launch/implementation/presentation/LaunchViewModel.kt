@@ -6,22 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.seancoyle.core.common.coroutines.stateIn
-import com.seancoyle.core.common.result.LaunchResult
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.implementation.domain.usecase.launch.PaginationResult
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,13 +27,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import dagger.Lazy
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
+import androidx.paging.map
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 
 private const val TAG = "LaunchViewModel"
 
@@ -44,7 +42,7 @@ private const val TAG = "LaunchViewModel"
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val launchesComponent: LaunchesComponent,
-    private val appStringResource: Lazy<AppStringResource>
+    private val appStringResource: AppStringResource
 ) : ViewModel() {
 
     var scrollState by savedStateHandle.saveable { mutableStateOf(LaunchesScrollState()) }
@@ -71,66 +69,16 @@ internal class LaunchViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             restoreFilterAndOrderState()
-            loadNextPage()
         }
     }
 
-    val feedState: StateFlow<LaunchesUiState> =
-        launchesComponent.observeLaunchesUseCase()
-            .map { result ->
-                when (result) {
-                    is LaunchResult.Success -> {
-                        LaunchesUiState.Success(
-                            launches = result.data.map { launch ->
-                                launch.toUiModel(appStringResource)
-                            }
-                        )
-                    }
-                    is LaunchResult.Error -> {
-                        LaunchesUiState.Error()
-                    }
-                }
-            }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = LaunchesUiState.Loading
-            )
-
-    private fun loadNextPage() {
-
-        viewModelScope.launch {
-            launchesComponent.paginateLaunchesUseCase()
-                .onStart {
-                    shouldLoadNextPage()
-                    _paginationState.update { PaginationState.Loading }
-                }
-                .collect { result ->
-                when (result) {
-                    is LaunchResult.Success -> {
-                        when (result.data) {
-                            is PaginationResult.Success -> {
-                                _paginationState.update { PaginationState.Idle }
-                            }
-                            is PaginationResult.EndReached -> {
-                                _paginationState.update { PaginationState.EndReached }
-                            }
-                        }
-                    }
-                    is LaunchResult.Error -> {
-                        _paginationState.update { PaginationState.Error }
-                    }
-                }
+    val feedState: Flow<PagingData<LaunchTypesUiModel>> = launchesComponent.observeLaunchesUseCase()
+        .map { pagingData ->
+            pagingData.map { launch ->
+                launch.toUiModel(appStringResource)
             }
         }
-    }
-
-    private fun shouldLoadNextPage() {
-        if (_paginationState.value == PaginationState.Loading ||
-            _paginationState.value == PaginationState.EndReached) {
-            Timber.tag(TAG).d("Pagination blocked: state = ${_paginationState.value}")
-            return
-        }
-    }
+        .cachedIn(viewModelScope)
 
     private fun restoreFilterAndOrderState() {
         viewModelScope.launch {
@@ -151,7 +99,6 @@ internal class LaunchViewModel @Inject constructor(
                 is DisplayFilterDialogEvent -> displayFilterDialog(true)
                 is DismissNotificationEvent -> dismissNotification()
                 is HandleLaunchClickEvent -> handleLaunchClick(event.links)
-                is LoadNextPageEvent -> loadNextPage()
                 is NewSearchEvent -> newSearch()
                 is NotificationEvent -> updateNotificationState(event)
                 is OpenLinkEvent -> openLink(event.url)
@@ -204,7 +151,7 @@ internal class LaunchViewModel @Inject constructor(
         clearQueryParameters()
         // Reset pagination state to allow fetching again
         _paginationState.update { PaginationState.Idle }
-        loadNextPage()
+        //loadData()
     }
 
     private fun setLaunchFilterState(

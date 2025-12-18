@@ -2,8 +2,8 @@ package com.seancoyle.feature.launch.implementation.data.remote
 
 import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
-import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import timber.log.Timber
@@ -14,9 +14,9 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics
 ) : LaunchRemoteDataSource {
 
-    override suspend fun getLaunches(offset: Int): LaunchResult<List<LaunchTypes.Launch>, RemoteError> {
+    override suspend fun getLaunches(page: Int): LaunchResult<List<LaunchTypes.Launch>, Throwable> {
         return runSuspendCatching {
-            val result = api.getUpcomingLaunches(offset)
+            val result = api.getUpcomingLaunches(offset = page * PAGINATION_LIMIT)
             result.toDomain()
         }.fold(
             onSuccess = { mappedResult ->
@@ -25,7 +25,7 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
             onFailure = { exception ->
                 Timber.e(exception)
                 crashlytics.logException(exception)
-                LaunchResult.Error(map(exception))
+                LaunchResult.Error(exception)
             }
         )
     }

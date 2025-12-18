@@ -11,7 +11,6 @@ internal sealed interface LaunchEvents {
     data object DisplayFilterDialogEvent : LaunchEvents
     data object DismissNotificationEvent : LaunchEvents
     data object NewSearchEvent : LaunchEvents
-    data object LoadNextPageEvent : LaunchEvents
     data object SwipeToRefreshEvent : LaunchEvents
     data class HandleLaunchClickEvent(val links: LinksUi) : LaunchEvents
     data class NotificationEvent(val notificationState: NotificationState) : LaunchEvents

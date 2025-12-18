@@ -1,32 +1,59 @@
 package com.seancoyle.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Upsert
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import kotlinx.coroutines.flow.Flow
+
+const val REMOTE_KEY_ID = "launches"
 
 @Dao
 interface LaunchDao {
 
+    @Transaction
+    suspend fun refreshLaunches(launches: List<LaunchEntity>) {
+        deleteAll()
+        upsertAll(launches)
+    }
+
+    @Transaction
+    suspend fun refreshLaunchesWithKeys(
+        launches: List<LaunchEntity>,
+        remoteKeyDao: LaunchRemoteKeyDao,
+        nextPage: Int?,
+        prevPage: Int?,
+        currentPage: Int
+    ) {
+        deleteAll()
+        remoteKeyDao.deleteRemoteKey()
+        upsertAll(launches)
+        remoteKeyDao.upsert(
+            LaunchRemoteKeyEntity(
+                id = REMOTE_KEY_ID,
+                nextKey = nextPage,
+                prevKey = prevPage,
+                currentPage = currentPage
+            )
+        )
+    }
+
     @Query("SELECT * FROM launch ORDER BY net ASC")
-    fun observeAll(): Flow<List<LaunchEntity>>
+    fun pagingSource(): PagingSource<Int, LaunchEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(launch: LaunchEntity): Long
+    @Upsert
+    suspend fun upsert(launch: LaunchEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertList(launches: List<LaunchEntity>): LongArray
+    @Upsert
+    suspend fun upsertAll(launches: List<LaunchEntity>): LongArray
 
     @Query("DELETE FROM launch WHERE id = :id")
     suspend fun deleteById(id: String): Int
-
-    @Query("DELETE FROM launch WHERE id IN (:ids)")
-    suspend fun deleteList(ids: List<String>): Int
 
     @Query("DELETE FROM launch")
     suspend fun deleteAll()
@@ -34,17 +61,11 @@ interface LaunchDao {
     @Query("SELECT * FROM launch WHERE id = :id")
     suspend fun getById(id: String): LaunchEntity?
 
-    @Query(
-        """
-        SELECT * 
-        FROM launch
-        ORDER BY net DESC
-    """
-    )
-    fun getAll(): List<LaunchEntity>?
-
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
+
+
+
 
     @Query(
         """
@@ -256,6 +277,6 @@ suspend fun LaunchDao.paginateLaunches(
         }
 
         else ->
-            getAll() ?: emptyList()
+            emptyList()
     }
 }

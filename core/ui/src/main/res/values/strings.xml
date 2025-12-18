@@ -4,6 +4,7 @@
     <string name="cache_error">Database error</string>
     <string name="cache_error_timeout">Database operation timed out. Please try again.</string>
     <string name="cache_error_no_results">No matching results. Please try again.</string>
+    <string name="cache_error_end_reached">End of results.</string>
     <string name="cache_data_null">Cache data is null</string>
     <string name="constraint_violation">A database constraint was violated.</string>
     <string name="unknown_database_error">Unknown database error occurred.</string>

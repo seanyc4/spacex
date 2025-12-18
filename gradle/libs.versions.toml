@@ -31,11 +31,12 @@ macroBenchmark = "1.4.1"
 profileInstaller = "1.4.1"
 okHttp = "5.3.0"
 okhttpIdling = "1.0.0"
+paging = "3.4.0-beta01"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.4"
 retrofit2 = "3.0.0"
 robolectricVersion = "4.14.1"
-room = "2.7.2"
+room = "2.8.4"
 scalingPixels = "1.1.1"
 splash = "1.0.1"
 testArchCore = "2.2.0"
@@ -45,7 +46,6 @@ testRunner = "1.6.2"
 timber = "5.0.1"
 uiautomator = "2.4.0-alpha06"
 runtimeSaveable = "1.10.0"
-
 
 [libraries]
 # AppCompat
@@ -131,6 +131,10 @@ navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 
+# Paging
+paging3-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
+paging3-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+
 # Performance
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "macroBenchmark" }
 profileInstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileInstaller" }
@@ -152,6 +156,7 @@ square-retrofit-serialization = { module = "com.squareup.retrofit2:converter-kot
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 
 # ScalingPixels
 scalingPixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }

@@ -4,14 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
-
-@Preview
-@Composable
-fun PreviewLaunchHeading() {
-    val launchHeading = LaunchTypesUiModel.SectionTitleUi("12345", "Test title")
-    LaunchHeading(launchHeading)
-}
 
 @Preview
 @Composable

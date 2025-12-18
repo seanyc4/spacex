@@ -17,7 +17,7 @@ sealed interface DataError : Error {
     enum class LocalError : DataError {
         CACHE_ERROR,
         CACHE_ERROR_TIMEOUT,
-        CACHE_ERROR_NO_RESULTS,
+        CACHE_ERROR_END_REACHED,
         CACHE_DATA_NULL,
         CACHE_CONSTRAINT_VIOLATION,
         CACHE_UNKNOWN_DATABASE_ERROR,
