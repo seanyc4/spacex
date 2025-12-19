@@ -33,10 +33,9 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
-import com.seancoyle.feature.launch.implementation.presentation.model.RocketWithMissionUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 
-@Composable
+/*@Composable
 internal fun LaunchHeading(
     launchHeading: LaunchTypesUiModel.SectionTitleUi,
     modifier: Modifier = Modifier,
@@ -50,7 +49,7 @@ internal fun LaunchHeading(
             .padding(dimensionResource(id = R.dimen._8sdp))
             .semantics { testTag = "SECTION HEADING" }
     )
-}
+}*/
 
 @Composable
 internal fun CompanySummaryCard(
@@ -84,9 +83,9 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
+            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
+          //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
@@ -102,7 +101,7 @@ internal fun LaunchCard(
                     .align(Alignment.CenterVertically)
             ) {
                 LaunchCardImage(
-                    imageUrl = launchItem.links.missionImage,
+                    imageUrl = launchItem.image,
                     size = 60.dp
                 )
             }
@@ -123,7 +122,7 @@ internal fun LaunchCard(
             ) {
                 LaunchCardDynamicText(title = launchItem.missionName)
                 LaunchCardDynamicText(title = launchItem.launchDate)
-                LaunchCardDynamicText(title = launchItem.rocket.rocketNameAndType)
+             //   LaunchCardDynamicText(title = launchItem.rocket.rocketNameAndType)
                 LaunchCardDynamicText(title = launchItem.launchDays)
             }
 
@@ -183,9 +182,9 @@ internal fun LaunchCardDynamicText(
     )
 }
 
-@Composable
+/*@Composable
 internal fun LaunchCarouselCard(
-    launchItem: RocketWithMissionUi,
+  //  launchItem: RocketWithMissionUi,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -243,4 +242,4 @@ internal fun LaunchGridCard(
             )
         }
     }
-}
+}*/

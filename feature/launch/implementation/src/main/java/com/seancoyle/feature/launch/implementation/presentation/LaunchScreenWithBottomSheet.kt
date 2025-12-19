@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.core.ui.composables.DisplayNotification
@@ -26,6 +27,7 @@ import com.seancoyle.feature.launch.implementation.presentation.components.Launc
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
@@ -39,7 +41,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.Pagination
 @ExperimentalMaterialApi
 @Composable
 internal fun LaunchScreenWithBottomSheet(
-    uiState: LaunchesUiState,
+    uiState: LazyPagingItems<LaunchTypesUiModel>,
     notificationState: NotificationState?,
     paginationState: PaginationState,
     filterState: LaunchesFilterState,
@@ -80,7 +82,7 @@ internal fun LaunchScreenWithBottomSheet(
 
 @Composable
 internal fun LaunchScreen(
-    feedState: LaunchesUiState,
+    feedState: LazyPagingItems<LaunchTypesUiModel>,
     notificationState: NotificationState?,
     paginationState: PaginationState,
     scrollState: LaunchesScrollState,
@@ -88,29 +90,27 @@ internal fun LaunchScreen(
     snackbarHostState: SnackbarHostState,
 ) {
 
-    ReportDrawnWhen { feedState is LaunchesUiState.Success || feedState is LaunchesUiState.Error }
+   // ReportDrawnWhen { feedState is LaunchesUiState.Success || feedState is LaunchesUiState.Error }
 
-    when (feedState) {
-
-        is LaunchesUiState.Success -> {
+   //when (feedState) {
 
             LaunchesGridContent(
-                launches = feedState.launches,
+                launches = feedState,
                 paginationState = paginationState,
                 scrollState = scrollState,
                 onEvent = onEvent
             )
 
-            notificationState?.let { notification ->
+         /*   notificationState?.let { notification ->
                 DisplayNotification(
                     error = notification,
                     onDismissNotification = { onEvent(DismissNotificationEvent) },
                     snackbarHostState = snackbarHostState
                 )
-            }
+            }*/
         }
 
-        is LaunchesUiState.Loading -> {
+       /* is LaunchesUiState.Loading -> {
             CircularProgressBar()
         }
 
@@ -121,9 +121,9 @@ internal fun LaunchScreen(
                     retryAction = null
                 )
             }
-        }
-    }
-}
+        }*/
+
+
 
 @OptIn( ExperimentalMaterial3Api::class)
 @Composable

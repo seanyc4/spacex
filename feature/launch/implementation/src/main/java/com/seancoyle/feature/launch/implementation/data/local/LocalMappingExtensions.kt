@@ -37,7 +37,7 @@ internal fun map(throwable: Throwable): LocalError {
         is SQLiteConstraintException -> LocalError.CACHE_CONSTRAINT_VIOLATION
         is SQLiteException -> LocalError.CACHE_ERROR
         is NullPointerException -> LocalError.CACHE_DATA_NULL
-        is IllegalStateException -> LocalError.CACHE_ERROR_END_REACHED
+        is IllegalStateException -> LocalError.CACHE_DATA_NULL
         else -> LocalError.CACHE_UNKNOWN_DATABASE_ERROR
     }
 }

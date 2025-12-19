@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
@@ -29,7 +29,7 @@ private const val GRID_COLUMN_SIZE = 2
 
 @Composable
 internal fun LaunchesGridContent(
-    launches: List<LaunchTypesUiModel>,
+    launches: LazyPagingItems<LaunchTypesUiModel>,
     paginationState: PaginationState,
     scrollState: LaunchesScrollState,
     onEvent: (LaunchEvents) -> Unit,
@@ -54,24 +54,32 @@ internal fun LaunchesGridContent(
             state = listState,
             modifier = modifier.semantics { testTag = "Launch Grid" }
         ) {
-            itemsIndexed(
-                items = launches,
-                key = { _, item ->
+            items(
+                count = launches.itemCount,
+                key = { index ->
+                    val item = launches[index]
                     when (item) {
                         is LaunchTypesUiModel.LaunchUi -> item.id
+                        else -> "placeholder_$index"
                     }
                 },
-                span = { _, item ->
-                    GridItemSpan(if (item !is LaunchTypesUiModel.LaunchUi) 1 else 2)
+                span = { index ->
+                    val item = launches[index]
+                    GridItemSpan(
+                        when (item) {
+                            is LaunchTypesUiModel.LaunchUi -> GRID_COLUMN_SIZE
+                            else -> 1
+                        }
+                    )
                 }
-            ) { _, launchItem ->
-
-                RenderGridSections(
-                    launchItem = launchItem,
-                    onEvent = onEvent
-                )
-
-                PaginationState(paginationState)
+            ) { index ->
+                val launchItem = launches[index]
+                if (launchItem != null) {
+                    RenderGridSections(
+                        launchItem = launchItem,
+                        onEvent = onEvent
+                    )
+                }
             }
         }
     }

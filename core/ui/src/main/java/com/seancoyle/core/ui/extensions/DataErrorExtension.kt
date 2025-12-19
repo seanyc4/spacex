@@ -18,7 +18,6 @@ fun DataError.asStringResource(): StringResource {
         RemoteError.NETWORK_PAYLOAD_TOO_LARGE -> StringResource.ResId(R.string.network_payload_too_large)
         LocalError.CACHE_ERROR -> StringResource.ResId(R.string.cache_error)
         LocalError.CACHE_ERROR_TIMEOUT -> StringResource.ResId(R.string.cache_error_timeout)
-        LocalError.CACHE_ERROR_NO_RESULTS -> StringResource.ResId(R.string.cache_error_no_results)
         LocalError.CACHE_DATA_NULL -> StringResource.ResId(R.string.cache_data_null)
         LocalError.CACHE_CONSTRAINT_VIOLATION -> StringResource.ResId(R.string.constraint_violation)
         LocalError.CACHE_UNKNOWN_DATABASE_ERROR -> StringResource.ResId(R.string.unknown_database_error)

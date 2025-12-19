@@ -30,7 +30,7 @@ internal fun LazyVerticalGridPagination(
         snapshotFlow { loadMore }
             .distinctUntilChanged()
             .collect {
-                if (it) onEvent(LaunchEvents.LoadNextPageEvent)
+             //   if (it) onEvent(LaunchEvents.LoadNextPageEvent)
             }
     }
 }

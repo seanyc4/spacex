@@ -100,8 +100,6 @@ internal class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.init()
-
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.linkEvent.collect { link ->
@@ -128,11 +126,6 @@ internal class LaunchFragment : Fragment() {
                 ),
             )
         )
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        viewModel.saveState()
-        super.onSaveInstanceState(outState)
     }
 
     private fun launchWebBrowser(url: String?) {
