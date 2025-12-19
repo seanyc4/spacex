@@ -26,6 +26,7 @@ interface LaunchDao {
     suspend fun refreshLaunchesWithKeys(
         launches: List<LaunchEntity>,
         remoteKeyDao: LaunchRemoteKeyDao,
+        remoteKeys: List<LaunchRemoteKeyEntity>,
         nextPage: Int?,
         prevPage: Int?,
         currentPage: Int
@@ -33,14 +34,7 @@ interface LaunchDao {
         deleteAll()
         remoteKeyDao.deleteRemoteKey()
         upsertAll(launches)
-        remoteKeyDao.upsert(
-            LaunchRemoteKeyEntity(
-                id = REMOTE_KEY_ID,
-                nextKey = nextPage,
-                prevKey = prevPage,
-                currentPage = currentPage
-            )
-        )
+        remoteKeyDao.upsertAll(remoteKeys)
     }
 
     @Query("SELECT * FROM launch ORDER BY net ASC")

@@ -5,8 +5,8 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.database.dao.REMOTE_KEY_ID
 import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import timber.log.Timber
@@ -25,8 +25,11 @@ internal class LaunchRemoteMediator @Inject constructor(
 
     override suspend fun initialize(): InitializeAction {
         val cacheTimeout = TimeUnit.MILLISECONDS.convert(CACHE_TIMEOUT_HOURS, TimeUnit.HOURS)
-        val createdTime = launchLocalDataSource.getRemoteKeyCreationTime(REMOTE_KEY_ID)
-        return if (System.currentTimeMillis().minus(createdTime ?: 0) <= cacheTimeout) {
+        val remoteKeys = launchLocalDataSource.getRemoteKeys()
+        val createdTime = remoteKeys.firstOrNull()?.createdAt
+
+        return if (createdTime != null &&
+                   System.currentTimeMillis().minus(createdTime) <= cacheTimeout) {
             // Cached data is up-to-date, so there is no need to re-fetch
             // from the network.
             Timber.tag(TAG).d("Skipping initial refresh; cache is still valid.")
@@ -47,43 +50,38 @@ internal class LaunchRemoteMediator @Inject constructor(
         return try {
             val page = when (loadType) {
                 LoadType.REFRESH -> {
-                    Timber.tag(TAG).d("LoadType.REFRESH - starting from page $STARTING_PAGE")
-                    STARTING_PAGE
+                    val remoteKeys = getRemoteKeyForFirstItem()
+                    remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE
                 }
 
                 LoadType.PREPEND -> {
-                    Timber.tag(TAG).d("LoadType.PREPEND called - end of pagination reached")
+                    /*val remoteKey = getRemoteKeyForFirstItem()
+                    // If remoteKey is null, that means refresh has never been called
+                    // If prevKey is null, that means we've reached the beginning
+                    val prevKey = remoteKey?.prevKey
+                    Timber.tag(TAG).d("LoadType.PREPEND - prev page: $prevKey")
+                    prevKey?: MediatorResult.Success(endOfPaginationReached = remoteKey != null)*/
                     return MediatorResult.Success(endOfPaginationReached = true)
                 }
 
                 LoadType.APPEND -> {
-                    // Get the last remote key to determine next page
-                    val remoteKey = launchLocalDataSource.getRemoteKey(REMOTE_KEY_ID)
-                    val nextPage = remoteKey?.nextKey
-
-                    if (nextPage == null) {
-                        Timber.tag(TAG)
-                            .d("LoadType.APPEND - no next page, end of pagination reached")
-                        return MediatorResult.Success(endOfPaginationReached = true)
-                    }
-
-                    Timber.tag(TAG).d("LoadType.APPEND - loading page $nextPage")
-                    nextPage
+                    val remoteKey = getRemoteKeyForLastItem()
+                    // If remoteKey is null, that means refresh has never been called
+                    // If nextKey is null, that means we've reached the end
+                    val nextKey = remoteKey?.nextKey
+                    Timber.tag(TAG).d("LoadType.APPEND - next page: $nextKey")
+                    nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
                 }
             }
 
-            // Fetch data from the network
             when (val remoteLaunchesResult = launchRemoteDataSource.getLaunches(page)) {
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
-                    val endOfPaginationReached = launches.isEmpty()
+                    val endOfPaginationReached = launches.size < state.config.pageSize
 
                     // Calculate the next page (null if we've reached the end)
-                    val nextPage = if (endOfPaginationReached) {
-                        null
-                    } else {
-                        page + 1
-                    }
+                    val nextPage = if (endOfPaginationReached) null else page.plus(1)
+                    val prevPage = if (page > 1) page.minus(1) else null
 
                     Timber.tag(TAG).d(
                         "Loaded ${launches.size} items for page $page. " +
@@ -96,7 +94,7 @@ internal class LaunchRemoteMediator @Inject constructor(
                         launchLocalDataSource.refreshLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
-                            prevPage = null,
+                            prevPage = prevPage,
                             currentPage = STARTING_PAGE
 
                         )
@@ -105,7 +103,7 @@ internal class LaunchRemoteMediator @Inject constructor(
                         launchLocalDataSource.appendLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
-                            prevPage = page.minus(1),
+                            prevPage = prevPage,
                             currentPage = page
                         )
                     }
@@ -115,14 +113,12 @@ internal class LaunchRemoteMediator @Inject constructor(
 
                 is LaunchResult.Error -> {
                     Timber.tag(TAG).e("Error loading page $page: ${remoteLaunchesResult.error}")
-                    fallbackToCacheAvailable(loadType)
-                    MediatorResult.Error(remoteLaunchesResult.error)
+                    return fallbackToCacheAvailable(loadType)
                 }
             }
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Exception in load()")
-            fallbackToCacheAvailable(loadType)
-            MediatorResult.Error(e)
+            return fallbackToCacheAvailable(loadType)
         }
     }
 
@@ -147,5 +143,13 @@ internal class LaunchRemoteMediator @Inject constructor(
         }
 
         return MediatorResult.Error(Exception("No cached data available"))
+    }
+
+    private suspend fun getRemoteKeyForFirstItem(): LaunchRemoteKeyEntity? {
+        return launchLocalDataSource.getRemoteKeys().firstOrNull()
+    }
+
+    private suspend fun getRemoteKeyForLastItem(): LaunchRemoteKeyEntity? {
+        return launchLocalDataSource.getRemoteKeys().lastOrNull()
     }
 }

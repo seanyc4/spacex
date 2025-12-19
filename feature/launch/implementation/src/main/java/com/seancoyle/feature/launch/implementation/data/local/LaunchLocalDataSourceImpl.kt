@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
-import com.seancoyle.database.dao.REMOTE_KEY_ID
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
@@ -22,15 +21,15 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics
 ) : LaunchLocalDataSource {
 
-    override suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity? {
+    override suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?> {
         return runSuspendCatching {
-            remoteKeyDao.getRemoteKey(id)
+            remoteKeyDao.getRemoteKeys()
         }.fold(
             onSuccess = { it },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)
-                null
+                emptyList()
             }
         )
     }
@@ -54,12 +53,22 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         prevPage: Int?,
         currentPage: Int
     ) {
+        // Create a remote key for each launch item
+        val remoteKeys = launches.map { launch ->
+            LaunchRemoteKeyEntity(
+                id = launch.id,
+                nextKey = nextPage,
+                prevKey = prevPage,
+                currentPage = currentPage
+            )
+        }
         launchDao.refreshLaunchesWithKeys(
             launches = launches.toEntity(),
             remoteKeyDao = remoteKeyDao,
             nextPage = nextPage,
             prevPage = prevPage,
-            currentPage = currentPage
+            currentPage = currentPage,
+            remoteKeys = remoteKeys
         )
     }
 
@@ -69,15 +78,19 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         prevPage: Int?,
         currentPage: Int
     ) {
-        launchDao.upsertAll(launches.toEntity())
-        remoteKeyDao.upsert(
+        val launchEntities = launches.toEntity()
+        launchDao.upsertAll(launchEntities)
+
+        // Create a remote key for each launch item
+        val remoteKeys = launchEntities.map { launch ->
             LaunchRemoteKeyEntity(
-                id = REMOTE_KEY_ID,
+                id = launch.id,
                 nextKey = nextPage,
                 prevKey = prevPage,
                 currentPage = currentPage
             )
-        )
+        }
+        remoteKeyDao.upsertAll(remoteKeys)
     }
 
     override suspend fun refreshLaunches(launches: List<LaunchTypes.Launch>) {

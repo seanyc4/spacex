@@ -8,7 +8,7 @@ import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 
 internal interface LaunchLocalDataSource {
 
-    suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity?
+    suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?>
 
     suspend fun getRemoteKeyCreationTime(id: String): Long?
 
