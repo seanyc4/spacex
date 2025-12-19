@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
@@ -56,15 +57,13 @@ internal fun LaunchesGridContent(
         ) {
             items(
                 count = launches.itemCount,
-                key = { index ->
-                    val item = launches[index]
+                key = launches.itemKey { item ->
                     when (item) {
                         is LaunchTypesUiModel.LaunchUi -> item.id
-                        else -> "placeholder_$index"
                     }
                 },
                 span = { index ->
-                    val item = launches[index]
+                    val item = launches.peek(index)
                     GridItemSpan(
                         when (item) {
                             is LaunchTypesUiModel.LaunchUi -> GRID_COLUMN_SIZE
