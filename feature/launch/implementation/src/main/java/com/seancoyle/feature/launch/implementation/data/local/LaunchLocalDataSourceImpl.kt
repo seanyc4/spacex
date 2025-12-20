@@ -24,27 +24,31 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     override suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?> {
         return runSuspendCatching {
             remoteKeyDao.getRemoteKeys()
-        }.fold(
-            onSuccess = { it },
-            onFailure = {
-                Timber.e(it)
-                crashlytics.logException(it)
-                emptyList()
-            }
-        )
+        }.getOrElse {
+            Timber.e(it)
+            crashlytics.logException(it)
+            emptyList()
+        }
+    }
+
+    override suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity? {
+        return runSuspendCatching {
+            remoteKeyDao.getRemoteKey(id)
+        }.getOrElse {
+            Timber.e(it)
+            crashlytics.logException(it)
+            null
+        }
     }
 
     override suspend fun getRemoteKeyCreationTime(id: String): Long? {
         return runSuspendCatching {
             remoteKeyDao.getCreationTime(id)
-        }.fold(
-            onSuccess = { it },
-            onFailure = {
-                Timber.e(it)
-                crashlytics.logException(it)
-                null
-            }
-        )
+        }.getOrElse {
+            Timber.e(it)
+            crashlytics.logException(it)
+            null
+        }
     }
 
     override suspend fun refreshLaunchesWithKeys(

@@ -10,6 +10,8 @@ internal interface LaunchLocalDataSource {
 
     suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?>
 
+    suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity?
+
     suspend fun getRemoteKeyCreationTime(id: String): Long?
 
     suspend fun refreshLaunches(launches: List<LaunchTypes.Launch>)

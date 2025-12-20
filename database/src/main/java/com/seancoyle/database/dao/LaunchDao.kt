@@ -11,8 +11,6 @@ import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 
-const val REMOTE_KEY_ID = "launches"
-
 @Dao
 interface LaunchDao {
 

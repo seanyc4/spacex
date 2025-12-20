@@ -50,18 +50,15 @@ internal class LaunchRemoteMediator @Inject constructor(
         return try {
             val page = when (loadType) {
                 LoadType.REFRESH -> {
-                    val remoteKeys = getRemoteKeyForFirstItem()
-                    remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE
+                    val remoteKey = remoteKeyClosestToCurrentPosition(state)
+                    remoteKey?.nextKey?.minus(1) ?: STARTING_PAGE
                 }
 
                 LoadType.PREPEND -> {
-                    /*val remoteKey = getRemoteKeyForFirstItem()
-                    // If remoteKey is null, that means refresh has never been called
-                    // If prevKey is null, that means we've reached the beginning
+                    val remoteKey = getRemoteKeyForFirstItem()
                     val prevKey = remoteKey?.prevKey
                     Timber.tag(TAG).d("LoadType.PREPEND - prev page: $prevKey")
-                    prevKey?: MediatorResult.Success(endOfPaginationReached = remoteKey != null)*/
-                    return MediatorResult.Success(endOfPaginationReached = true)
+                    prevKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
                 }
 
                 LoadType.APPEND -> {
@@ -152,4 +149,13 @@ internal class LaunchRemoteMediator @Inject constructor(
     private suspend fun getRemoteKeyForLastItem(): LaunchRemoteKeyEntity? {
         return launchLocalDataSource.getRemoteKeys().lastOrNull()
     }
+
+    private suspend fun remoteKeyClosestToCurrentPosition(
+        state: PagingState<Int, LaunchEntity>
+    ): LaunchRemoteKeyEntity? {
+        val position = state.anchorPosition ?: return null
+        val item = state.closestItemToPosition(position) ?: return null
+        return launchLocalDataSource.getRemoteKey(item.id)
+    }
+
 }
