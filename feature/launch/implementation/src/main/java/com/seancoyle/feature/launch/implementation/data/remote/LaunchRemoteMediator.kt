@@ -81,7 +81,7 @@ internal class LaunchRemoteMediator @Inject constructor(
 
                     // Calculate the next page (null if we've reached the end)
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
-                    val prevPage = if (page > 1) page.minus(1) else null
+                    val prevPage = if (page >= 1) page.minus(1) else null
 
                     Timber.tag(TAG).d(
                         "Loaded ${launches.size} items for page $page. " +
