@@ -4,11 +4,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.seancoyle.core.common.crashlytics.printLogDebug
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
 @ExperimentalMaterialApi
@@ -22,6 +23,12 @@ internal fun LaunchRoute(
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
     val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshEvent.collectLatest {
+            feedState.refresh()
+        }
+    }
 
     SideEffect {
         Timber.tag("LaunchViewModel").d("LaunchRoute: feedState: $feedState")

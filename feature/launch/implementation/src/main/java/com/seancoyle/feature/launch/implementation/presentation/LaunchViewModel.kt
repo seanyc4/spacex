@@ -58,6 +58,9 @@ internal class LaunchViewModel @Inject constructor(
     private val _errorEvent = MutableSharedFlow<UIErrors>(replay = 0)
     val errorEvent = _errorEvent.asSharedFlow()
 
+    private val _refreshEvent = MutableSharedFlow<Unit>(replay = 0)
+    val refreshEvent = _refreshEvent.asSharedFlow()
+
     init {
         viewModelScope.launch {
             Timber.tag(TAG).d("screenState before init: $screenState")
@@ -139,10 +142,9 @@ internal class LaunchViewModel @Inject constructor(
         )
     }
 
-    private fun swipeToRefresh() {
+    private suspend fun swipeToRefresh() {
         clearQueryParameters()
-        // Reset pagination state to allow fetching again
-        //loadData()
+        _refreshEvent.emit(Unit)
     }
 
     private fun setLaunchFilterState(

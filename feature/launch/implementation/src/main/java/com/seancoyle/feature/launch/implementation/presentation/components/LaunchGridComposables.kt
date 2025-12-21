@@ -56,9 +56,9 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
+            .padding(Dimens.smallMargin),
         //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
+        shape = RoundedCornerShape(Dimens.defaultCornerRadius),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
