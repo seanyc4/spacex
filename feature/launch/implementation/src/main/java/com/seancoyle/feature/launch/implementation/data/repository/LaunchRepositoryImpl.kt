@@ -1,11 +1,9 @@
 package com.seancoyle.feature.launch.implementation.data.repository
 
-import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
-import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
@@ -16,11 +14,11 @@ import javax.inject.Inject
 
 internal class LaunchRepositoryImpl @Inject constructor(
     private val launchLocalDataSource: LaunchLocalDataSource,
-    private val pager: Pager<Int, LaunchEntity>
+    private val pagerFactory: LaunchPagerFactory
 ) : LaunchRepository {
 
     override fun pager(): Flow<PagingData<LaunchTypes.Launch>> {
-        return pager.flow.map {
+        return pagerFactory.create().flow.map {
             it.map { entity -> entity.toDomain() }
         }
     }

@@ -11,14 +11,13 @@ import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDa
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 private const val TAG = "LaunchRemoteMediator"
 private const val STARTING_PAGE = 0
 private const val CACHE_TIMEOUT_HOURS = 1L
 
 @OptIn(ExperimentalPagingApi::class)
-internal class LaunchRemoteMediator @Inject constructor(
+internal class LaunchRemoteMediator(
     private val launchRemoteDataSource: LaunchRemoteDataSource,
     private val launchLocalDataSource: LaunchLocalDataSource
 ) : RemoteMediator<Int, LaunchEntity>() {
@@ -48,6 +47,8 @@ internal class LaunchRemoteMediator @Inject constructor(
         state: PagingState<Int, LaunchEntity>
     ): MediatorResult {
         return try {
+            Timber.tag(TAG).d("loadType: $loadType")
+
             val page = when (loadType) {
                 LoadType.REFRESH -> {
                     val remoteKey = remoteKeyClosestToCurrentPosition(state)
@@ -58,7 +59,8 @@ internal class LaunchRemoteMediator @Inject constructor(
                     val remoteKey = getRemoteKeyForFirstItem()
                     val prevKey = remoteKey?.prevKey
                     Timber.tag(TAG).d("LoadType.PREPEND - prev page: $prevKey")
-                    prevKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
+                    // If prevKey is null, we've reached the beginning
+                    prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
 
                 LoadType.APPEND -> {
@@ -76,27 +78,29 @@ internal class LaunchRemoteMediator @Inject constructor(
                     val launches = remoteLaunchesResult.data
                     val endOfPaginationReached = launches.size < state.config.pageSize
 
-                    // Calculate the next page (null if we've reached the end)
+                    // Calculate the next and previous pages
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
-                    val prevPage = if (page >= 1) page.minus(1) else null
+                    // prevPage should be null if we're at page 0 or below
+                    val prevPage = if (page > 0) page.minus(1) else null
 
                     Timber.tag(TAG).d(
                         "Loaded ${launches.size} items for page $page. " +
-                                "EndReached: $endOfPaginationReached, NextPage: $nextPage"
+                                "EndReached: $endOfPaginationReached, NextPage: $nextPage, PrevPage: $prevPage"
                     )
 
                     // Save to database with remote keys in a transaction
                     if (loadType == LoadType.REFRESH) {
                         // Clear all data and insert fresh data
+                        // When refreshing, we always start from page 0, so prevPage should be null
                         launchLocalDataSource.refreshLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
-                            prevPage = prevPage,
+                            prevPage = null, // Always null on refresh since we're starting fresh
                             currentPage = STARTING_PAGE
 
                         )
                     } else {
-                        // Append data to existing cache
+                        // Append or prepend data to existing cache
                         launchLocalDataSource.appendLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
