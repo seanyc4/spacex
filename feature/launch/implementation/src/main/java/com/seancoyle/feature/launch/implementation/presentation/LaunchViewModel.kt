@@ -18,9 +18,7 @@ import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
-import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,14 +43,8 @@ internal class LaunchViewModel @Inject constructor(
     private val appStringResource: AppStringResource
 ) : ViewModel() {
 
-    var scrollState by savedStateHandle.saveable { mutableStateOf(LaunchesScrollState()) }
+    var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesScreenState()) }
         private set
-
-    var filterState by savedStateHandle.saveable { mutableStateOf(LaunchesFilterState()) }
-        private set
-
-    private val _paginationState = MutableStateFlow<PaginationState>(PaginationState.Idle)
-    val paginationState = _paginationState.asStateFlow()
 
     private val _notificationState = MutableStateFlow<NotificationState?>(null)
     val notificationState = _notificationState.asStateFlow()
@@ -68,7 +60,9 @@ internal class LaunchViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            Timber.tag(TAG).d("screenState before init: $screenState")
             restoreFilterAndOrderState()
+            Timber.tag(TAG).d("screenState after init: $screenState")
         }
     }
 
@@ -91,25 +85,23 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: LaunchEvents) {
-        viewModelScope.launch {
-            when (event) {
-                is DismissBottomSheetEvent -> dismissBottomSheet()
-                is DismissFilterDialogEvent -> displayFilterDialog(false)
-                is DisplayFilterDialogEvent -> displayFilterDialog(true)
-                is DismissNotificationEvent -> dismissNotification()
-                is HandleLaunchClickEvent -> handleLaunchClick(event.links)
-                is NewSearchEvent -> newSearch()
-                is NotificationEvent -> updateNotificationState(event)
-                is OpenLinkEvent -> openLink(event.url)
-                is SaveScrollPositionEvent -> setScrollPositionState(event.position)
-                is SetFilterStateEvent -> setLaunchFilterState(
-                    order = event.order,
-                    launchStatus = event.launchStatus,
-                    year = event.launchYear
-                )
-                is SwipeToRefreshEvent -> swipeToRefresh()
-            }
+    fun onEvent(event: LaunchEvents) = viewModelScope.launch {
+        when (event) {
+            is DismissBottomSheetEvent -> dismissBottomSheet()
+            is DismissFilterDialogEvent -> displayFilterDialog(false)
+            is DisplayFilterDialogEvent -> displayFilterDialog(true)
+            is DismissNotificationEvent -> dismissNotification()
+            is HandleLaunchClickEvent -> handleLaunchClick(event.links)
+            is NewSearchEvent -> newSearch()
+            is NotificationEvent -> updateNotificationState(event)
+            is OpenLinkEvent -> openLink(event.url)
+            is UpdateScrollPositionEvent -> setScrollPositionState(event.position)
+            is UpdateFilterStateEvent -> setLaunchFilterState(
+                order = event.order,
+                launchStatus = event.launchStatus,
+                year = event.launchYear
+            )
+            is SwipeToRefreshEvent -> swipeToRefresh()
         }
     }
 
@@ -135,9 +127,9 @@ internal class LaunchViewModel @Inject constructor(
         // TODO: Implement search/filter logic in data layer
     }
 
-    private fun getSearchYearState() = filterState.launchYear
-    private fun getOrderState() = filterState.order
-    private fun getLaunchStatusState() = filterState.launchStatus
+    private fun getSearchYearState() = screenState.launchYear
+    private fun getOrderState() = screenState.order
+    private fun getLaunchStatusState() = screenState.launchStatus
 
     private fun clearQueryParameters() {
         setLaunchFilterState(
@@ -150,7 +142,6 @@ internal class LaunchViewModel @Inject constructor(
     private fun swipeToRefresh() {
         clearQueryParameters()
         // Reset pagination state to allow fetching again
-        _paginationState.update { PaginationState.Idle }
         //loadData()
     }
 
@@ -159,7 +150,7 @@ internal class LaunchViewModel @Inject constructor(
         launchStatus: LaunchStatus,
         year: String
     ) {
-        filterState = filterState.copy(
+        screenState = screenState.copy(
             order = order,
             launchStatus = launchStatus,
             launchYear = year
@@ -168,12 +159,12 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
-        filterState = filterState.copy(isVisible = isDisplayed)
+        screenState = screenState.copy(isVisible = isDisplayed)
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
     }
 
     private fun setScrollPositionState(position: Int) {
-        scrollState = scrollState.copy(scrollPosition = position)
+        screenState = screenState.copy(scrollPosition = position)
         Timber.tag(TAG).d("Updated scrollState.scrollPosition: $position")
     }
 

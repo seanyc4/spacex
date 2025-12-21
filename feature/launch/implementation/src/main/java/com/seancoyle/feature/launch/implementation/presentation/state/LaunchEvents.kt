@@ -15,8 +15,8 @@ internal sealed interface LaunchEvents {
     data class HandleLaunchClickEvent(val links: LinksUi) : LaunchEvents
     data class NotificationEvent(val notificationState: NotificationState) : LaunchEvents
     data class OpenLinkEvent(val url: String) : LaunchEvents
-    data class SaveScrollPositionEvent(val position: Int) : LaunchEvents
-    data class SetFilterStateEvent(
+    data class UpdateScrollPositionEvent(val position: Int) : LaunchEvents
+    data class UpdateFilterStateEvent(
         val order: Order,
         val launchStatus: LaunchStatus,
         val launchYear: String

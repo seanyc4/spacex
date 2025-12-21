@@ -22,25 +22,13 @@ internal sealed interface LaunchesUiState {
     ) : LaunchesUiState
 }
 
-internal sealed interface PaginationState {
-    data object Idle : PaginationState
-    data object Loading : PaginationState
-    data object Error : PaginationState
-    data object EndReached : PaginationState
-}
-
 @Parcelize
 @Stable
-internal data class LaunchesFilterState(
+internal data class LaunchesScreenState(
     val order: Order = Order.DESC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchYear: String = "",
     val isVisible: Boolean = false,
-) : Parcelable
-
-@Parcelize
-@Stable
-internal data class LaunchesScrollState(
     val scrollPosition: Int = 0
 ) : Parcelable
 

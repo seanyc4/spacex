@@ -1,6 +1,5 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
@@ -16,8 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.composables.CircularProgressBar
-import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchBottomSheetDivider
@@ -31,21 +28,15 @@ import com.seancoyle.feature.launch.implementation.presentation.model.LaunchType
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissNotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.OpenLinkEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesFilterState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
-import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 
 @ExperimentalMaterialApi
 @Composable
 internal fun LaunchScreenWithBottomSheet(
-    uiState: LazyPagingItems<LaunchTypesUiModel>,
+    feedState: LazyPagingItems<LaunchTypesUiModel>,
+    screenState: LaunchesScreenState,
     notificationState: NotificationState?,
-    paginationState: PaginationState,
-    filterState: LaunchesFilterState,
-    scrollState: LaunchesScrollState,
     bottomSheetState: BottomSheetUiState,
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
@@ -53,17 +44,16 @@ internal fun LaunchScreenWithBottomSheet(
     isLandscape: Boolean,
 ) {
     LaunchScreen(
-        feedState = uiState,
+        feedState = feedState,
+        screenState = screenState,
         notificationState = notificationState,
-        paginationState = paginationState,
-        scrollState = scrollState,
         snackbarHostState = snackbarHostState,
         onEvent = onEvent,
     )
 
-    if (filterState.isVisible) {
+    if (screenState.isVisible) {
         FilterDialog(
-            currentFilterState = filterState,
+            currentFilterState = screenState,
             onEvent = onEvent,
             isLandScape = isLandscape
         )
@@ -77,15 +67,14 @@ internal fun LaunchScreenWithBottomSheet(
         )
     }
 
-    SwipeToRefreshComposable(uiState, pullRefreshState)
+    SwipeToRefreshComposable(feedState, pullRefreshState)
 }
 
 @Composable
 internal fun LaunchScreen(
     feedState: LazyPagingItems<LaunchTypesUiModel>,
+    screenState: LaunchesScreenState,
     notificationState: NotificationState?,
-    paginationState: PaginationState,
-    scrollState: LaunchesScrollState,
     onEvent: (LaunchEvents) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
@@ -96,8 +85,7 @@ internal fun LaunchScreen(
 
             LaunchesGridContent(
                 launches = feedState,
-                paginationState = paginationState,
-                scrollState = scrollState,
+                screenState = screenState,
                 onEvent = onEvent
             )
 

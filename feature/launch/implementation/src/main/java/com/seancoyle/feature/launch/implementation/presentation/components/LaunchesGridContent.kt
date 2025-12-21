@@ -16,12 +16,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import com.seancoyle.core.ui.composables.CircularProgressBar
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SaveScrollPositionEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScrollState
-import com.seancoyle.feature.launch.implementation.presentation.state.PaginationState
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.UpdateScrollPositionEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -31,20 +29,12 @@ private const val GRID_COLUMN_SIZE = 2
 @Composable
 internal fun LaunchesGridContent(
     launches: LazyPagingItems<LaunchTypesUiModel>,
-    paginationState: PaginationState,
-    scrollState: LaunchesScrollState,
+    screenState: LaunchesScreenState,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyGridState()
+    val listState = rememberLazyGridState(initialFirstVisibleItemIndex = screenState.scrollPosition)
     ObserveScrollPosition(listState, onEvent)
-
-    // Render pagination detection once, outside the items
-    LazyVerticalGridPagination(
-        listState = listState,
-        buffer = GRID_COLUMN_SIZE,
-        onEvent = onEvent
-    )
 
     Box(
         modifier = modifier
@@ -63,7 +53,7 @@ internal fun LaunchesGridContent(
                     }
                 },
                 span = { index ->
-                    val item = launches.peek(index)
+                    val item = launches[index]
                     GridItemSpan(
                         when (item) {
                             is LaunchTypesUiModel.LaunchUi -> GRID_COLUMN_SIZE
@@ -84,6 +74,23 @@ internal fun LaunchesGridContent(
     }
 }
 
+@OptIn(FlowPreview::class)
+@Composable
+private fun ObserveScrollPosition(
+    listState: LazyGridState,
+    onEvent: (LaunchEvents) -> Unit,
+) {
+    // Observe and save scroll position to view model
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            listState.firstVisibleItemIndex
+        }.debounce(750L)
+            .collectLatest { position ->
+                onEvent(UpdateScrollPositionEvent(position))
+            }
+    }
+}
+
 @Composable
 private fun RenderGridSections(
     launchItem: LaunchTypesUiModel,
@@ -99,33 +106,5 @@ private fun RenderGridSections(
                 }
             )
         }
-    }
-}
-
-
-@Composable
-private fun PaginationState(paginationState: PaginationState) {
-    when (paginationState) {
-        is PaginationState.Loading -> CircularProgressBar()
-        is PaginationState.Error -> {}
-        is PaginationState.Idle -> {}
-        is PaginationState.EndReached -> {}
-    }
-}
-
-@OptIn(FlowPreview::class)
-@Composable
-private fun ObserveScrollPosition(
-    listState: LazyGridState,
-    onEvent: (LaunchEvents) -> Unit,
-) {
-    // Observe and save scroll position to view model
-    LaunchedEffect(listState) {
-        snapshotFlow {
-            listState.firstVisibleItemIndex
-        }.debounce(750L)
-            .collectLatest { position ->
-                onEvent(SaveScrollPositionEvent(position))
-            }
     }
 }

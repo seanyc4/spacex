@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.seancoyle.core.common.crashlytics.printLogDebug
+import timber.log.Timber
 
 @ExperimentalMaterialApi
 @Composable
@@ -18,22 +19,20 @@ internal fun LaunchRoute(
     snackbarHostState: SnackbarHostState,
     isLandscape: Boolean,
 ) {
-    val uiState = viewModel.feedState.collectAsLazyPagingItems()
+    val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
     val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
-    val paginationState by viewModel.paginationState.collectAsStateWithLifecycle()
 
     SideEffect {
-        printLogDebug("LaunchRoute", ": uiState: $uiState")
+        Timber.tag("LaunchViewModel").d("LaunchRoute: feedState: $feedState")
+        Timber.tag("LaunchViewModel").d("LaunchRoute: screenState: ${viewModel.screenState}")
     }
 
     LaunchScreenWithBottomSheet(
-        uiState = uiState,
+        feedState = feedState,
         notificationState = notificationState,
-        paginationState = paginationState,
-        scrollState = viewModel.scrollState,
         snackbarHostState = snackbarHostState,
-        filterState = viewModel.filterState,
+        screenState = viewModel.screenState,
         isLandscape = isLandscape,
         bottomSheetState = bottomSheetState,
         pullRefreshState = pullRefreshState,
