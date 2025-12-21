@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.theme.Dimens
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
@@ -58,8 +57,8 @@ internal fun LaunchCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-          //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
+        //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
@@ -81,10 +80,19 @@ internal fun LaunchCard(
             ) {
                 LaunchCardDynamicText(
                     title = launchItem.missionName,
-                    size = MaterialTheme.typography.titleSmall
+                    size = MaterialTheme.typography.titleSmall,
+                    modifier = modifier.padding(bottom = Dimens.xsMargin)
                 )
-                LaunchCardDynamicText(title = launchItem.launchDate)
-                LaunchCardDynamicText(title = launchItem.launchDays)
+                LaunchCardDynamicText(
+                    title = launchItem.launchDate,
+                    size = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(bottom = Dimens.xsMargin)
+                )
+                LaunchCardDynamicText(
+                    title = launchItem.launchDays,
+                    size = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(bottom = Dimens.xsMargin)
+                )
             }
 
             Column(

@@ -40,21 +40,21 @@ val AppTypography = Typography(
         letterSpacing = 0.sp,
     ),
     headlineLarge = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
     ),
     headlineMedium = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
     ),
     headlineSmall = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 24.sp,
         lineHeight = 32.sp,
@@ -65,7 +65,7 @@ val AppTypography = Typography(
         ),
     ),
     titleLarge = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 22.sp,
         lineHeight = 28.sp,
@@ -76,14 +76,14 @@ val AppTypography = Typography(
         ),
     ),
     titleMedium = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.1.sp,
     ),
     titleSmall = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontFamily = orbitronFontFamily,
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -92,7 +92,7 @@ val AppTypography = Typography(
     // Default text style
     bodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontFamily = groteskFontFamily,
+        fontFamily = orbitronFontFamily,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
@@ -103,14 +103,14 @@ val AppTypography = Typography(
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontFamily = groteskFontFamily,
+        fontFamily = orbitronFontFamily,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
     ),
     bodySmall = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontFamily = groteskFontFamily,
+        fontFamily = orbitronFontFamily,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
