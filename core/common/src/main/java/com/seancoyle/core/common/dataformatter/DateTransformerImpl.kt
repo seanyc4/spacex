@@ -1,5 +1,6 @@
 package com.seancoyle.core.common.dataformatter
 
+import com.seancoyle.core.common.dataformatter.DateFormatConstants.DD_MMMM_YYYY
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -7,18 +8,16 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
-internal class DateTransformerImpl @Inject constructor(
-    private val dateFormat: DateTimeFormatter
-) : DateTransformer {
+internal class DateTransformerImpl @Inject constructor() : DateTransformer {
 
     override fun formatDate(dateString: String?): LocalDateTime {
         return try {
-            val normalizedDate = dateString?.replace("Z", "+0000")
-            ZonedDateTime.parse(normalizedDate, dateFormat).toLocalDateTime()
+            ZonedDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME).toLocalDateTime()
         } catch (e: Exception) {
             throw Exception(e)
         }
     }
+
     private fun Int.addZeroToSingleDateValue(): String {
         return if (this < 10) {
             "0$this"
@@ -32,17 +31,8 @@ internal class DateTransformerImpl @Inject constructor(
     }
 
     override fun formatDateTimeToString(dateTime: LocalDateTime): String {
-        return buildString {
-            append(dateTime.dayOfMonth.addZeroToSingleDateValue())
-            append("-")
-            append(dateTime.monthValue.addZeroToSingleDateValue())
-            append("-")
-            append(dateTime.year.addZeroToSingleDateValue())
-            append(" at ")
-            append(dateTime.hour.addZeroToSingleDateValue())
-            append(":")
-            append(dateTime.minute.addZeroToSingleDateValue())
-        }
+        val formatter = DateTimeFormatter.ofPattern(DD_MMMM_YYYY, java.util.Locale.ENGLISH)
+        return dateTime.format(formatter)
     }
 
     override fun getLaunchDaysDifference(dateTime: LocalDateTime): String {
