@@ -10,7 +10,6 @@ import com.seancoyle.feature.launch.implementation.R
 fun PreviewLaunchCardImage() {
     LaunchCardImage(
         imageUrl = "https://via.placeholder.com/150",
-        size = 60.dp
     )
 }
 

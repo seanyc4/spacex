@@ -5,28 +5,28 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
@@ -49,29 +49,6 @@ internal fun LaunchHeading(
 }*/
 
 @Composable
-internal fun CompanySummaryCard(
-    companySummary: String,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
-        modifier = modifier.padding(8.dp)
-    ) {
-        Text(
-            text = companySummary,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.secondary,
-            textAlign = TextAlign.Start,
-            modifier = modifier
-                .padding(dimensionResource(R.dimen.default_view_margin))
-                .semantics { testTag = "HEADER" }
-        )
-    }
-}
-
-@Composable
 internal fun LaunchCard(
     launchItem: LaunchUi,
     onEvent: (LaunchEvents) -> Unit,
@@ -88,38 +65,25 @@ internal fun LaunchCard(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
                 .semantics { testTag = "LAUNCH CARD" }
         ) {
             Column(
                 modifier = modifier
                     .fillMaxWidth(0.20f)
-                    .padding(end = dimensionResource(id = R.dimen.small_view_margins_8dp))
-                    .align(Alignment.CenterVertically)
             ) {
-                LaunchCardImage(
-                    imageUrl = launchItem.image,
-                    size = 60.dp
-                )
-            }
-
-            Column(
-                modifier = modifier
-                    .fillMaxWidth(0.36f)
-            ) {
-                LaunchCardDefaultText(title = R.string.mission)
-                LaunchCardDefaultText(title = R.string.date_time)
-                LaunchCardDefaultText(title = R.string.rocket)
-                LaunchCardDefaultText(title = launchItem.launchDaysResId)
+                LaunchCardImage(imageUrl = launchItem.image)
             }
 
             Column(
                 modifier = modifier
                     .fillMaxWidth(0.9f)
+                    .padding(dimensionResource(R.dimen.small_view_margins_8dp))
             ) {
-                LaunchCardDynamicText(title = launchItem.missionName)
+                LaunchCardDynamicText(
+                    title = launchItem.missionName,
+                    size = MaterialTheme.typography.titleSmall
+                )
                 LaunchCardDynamicText(title = launchItem.launchDate)
-             //   LaunchCardDynamicText(title = launchItem.rocket.rocketNameAndType)
                 LaunchCardDynamicText(title = launchItem.launchDays)
             }
 
@@ -140,16 +104,14 @@ internal fun LaunchCard(
 @Composable
 internal fun LaunchCardImage(
     modifier: Modifier = Modifier,
-    imageUrl: String,
-    size: Dp
+    imageUrl: String
 ) {
     GlideImage(
         model = imageUrl,
         contentDescription = stringResource(id = R.string.launch_image),
+        failure = placeholder(R.drawable.default_launch_image),
         modifier = modifier
-            .size(size)
-            .padding(dimensionResource(id = R.dimen._4sdp))
-
+            .fillMaxSize()
     )
 }
 
@@ -167,14 +129,16 @@ internal fun LaunchCardDefaultText(
 @Composable
 internal fun LaunchCardDynamicText(
     title: String,
+    size: TextStyle = TextStyle.Default,
+    maxLines: Int = 1,
     modifier: Modifier = Modifier
 ) {
     Text(
         text = title,
-        style = MaterialTheme.typography.bodySmall,
+        style = size,
         color = MaterialTheme.colorScheme.primary,
         overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
+        maxLines = maxLines,
         modifier = modifier
     )
 }

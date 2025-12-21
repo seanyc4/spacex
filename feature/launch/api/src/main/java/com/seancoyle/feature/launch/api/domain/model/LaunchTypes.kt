@@ -15,7 +15,7 @@ sealed interface LaunchTypes {
         val netPrecision: NetPrecision?,
         val windowEnd: String?,
         val windowStart: String?,
-        val image: Image?,
+        val image: Image,
         val infographic: String?,
         val probability: Int?,
         val weatherConcerns: String?,
@@ -53,8 +53,8 @@ data class NetPrecision(
 data class Image(
     val id: Int?,
     val name: String?,
-    val imageUrl: String?,
-    val thumbnailUrl: String?,
+    val imageUrl: String,
+    val thumbnailUrl: String,
     val credit: String?
 )
 
@@ -72,7 +72,7 @@ data class Agency(
     val launchers: String?,
     val spacecraft: String?,
     val parent: String?,
-    val image: Image?,
+    val image: Image,
     val totalLaunchCount: Int?,
     val consecutiveSuccessfulLaunches: Int?,
     val successfulLaunches: Int?,
@@ -160,7 +160,7 @@ data class Program(
     val url: String?,
     val name: String?,
     val description: String?,
-    val image: Image?,
+    val image: Image,
     val startDate: String?,
     val endDate: String?,
     val agencies: List<Agency?>?

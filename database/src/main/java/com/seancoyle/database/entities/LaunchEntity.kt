@@ -46,7 +46,7 @@ data class LaunchEntity(
     val windowStart: String?,
 
     @Embedded(prefix = "image")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="infographic")
     val infographic: String?,
@@ -147,10 +147,10 @@ data class ImageEntity(
     val name: String?,
 
     @ColumnInfo(name="image_url")
-    val imageUrl: String?,
+    val imageUrl: String,
 
     @ColumnInfo(name="thumbnail_url")
-    val thumbnailUrl: String?,
+    val thumbnailUrl: String,
 
     @ColumnInfo(name="credit")
     val credit: String?
@@ -199,7 +199,7 @@ data class AgencyEntity(
     val parent: String?,
 
     @Embedded(prefix = "agency_image")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="total_launch_count")
     val totalLaunchCount: Int?,
@@ -383,7 +383,7 @@ data class ProgramEntity(
     val description: String?,
 
     @Embedded(prefix = "image_")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="start_date")
     val startDate: String?,

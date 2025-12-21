@@ -1,38 +1,34 @@
 package com.seancoyle.feature.launch.implementation.presentation.model
 
 import com.seancoyle.core.common.dataformatter.DateTransformer
-import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.presentation.getDateStringRes
 import com.seancoyle.feature.launch.implementation.presentation.getDrawableRes
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 internal class LaunchUiMapper @Inject constructor(
-    private val appStringResource: AppStringResource,
     private val dateFormatter: DateTransformer
 ) {
 
     operator fun invoke(launch: LaunchTypes.Launch): LaunchUi {
         with(launch) {
+            val locateDateTime = dateFormatter.formatDate(net)
             return LaunchUi(
                 id = id,
-                launchDate = formatDate(net),
-                launchYear = "",
+                launchDate = formatDate(locateDateTime),
                 launchStatus = launchStatus,
-                missionName = "",
-                launchDateStatus = LaunchDateStatus.FUTURE,
-                launchDays = "",
+                missionName = name.orEmpty(),
+                launchDays = dateFormatter.getLaunchDaysDifference(locateDateTime),
                 launchDaysResId = LaunchDateStatus.FUTURE.getDateStringRes(),
                 launchStatusIconResId = launchStatus.getDrawableRes(),
-                image = image?.thumbnailUrl.orEmpty()
+                image = image.thumbnailUrl
             )
         }
     }
 
-    private fun formatDate(net: String?): String {
-        net ?: return ""
-        val locateDateTime = dateFormatter.formatDate(net)
-        return dateFormatter.formatDateTimeToString(locateDateTime)
+    private fun formatDate(date: LocalDateTime): String {
+        return dateFormatter.formatDateTimeToString(date)
     }
 }

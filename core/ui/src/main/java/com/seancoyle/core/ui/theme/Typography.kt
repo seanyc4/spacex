@@ -40,21 +40,21 @@ val AppTypography = Typography(
         letterSpacing = 0.sp,
     ),
     headlineLarge = TextStyle(
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontFamily = orbitronFontFamily,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
     ),
     headlineMedium = TextStyle(
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontFamily = orbitronFontFamily,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
     ),
     headlineSmall = TextStyle(
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontFamily = orbitronFontFamily,
         fontSize = 24.sp,
         lineHeight = 32.sp,
@@ -83,7 +83,7 @@ val AppTypography = Typography(
         letterSpacing = 0.1.sp,
     ),
     titleSmall = TextStyle(
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         fontFamily = orbitronFontFamily,
         fontSize = 14.sp,
         lineHeight = 20.sp,

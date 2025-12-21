@@ -1,6 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
+import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_THUMBNAIL
 import com.seancoyle.feature.launch.api.domain.model.Agency
 import com.seancoyle.feature.launch.api.domain.model.Configuration
 import com.seancoyle.feature.launch.api.domain.model.Country
@@ -63,7 +65,7 @@ private fun LaunchDto.toDomain(count: Int): LaunchTypes.Launch? {
         netPrecision = netPrecision?.toDomain(),
         windowEnd = windowEnd,
         windowStart = windowStart,
-        image = image?.toDomain(),
+        image = image?.toDomain() ?: defaultImage(),
         infographic = infographic,
         probability = probability,
         weatherConcerns = weatherConcerns,
@@ -117,8 +119,8 @@ private fun ImageDto.toDomain() =
     Image(
         id = id,
         name = name,
-        imageUrl = imageUrl,
-        thumbnailUrl = thumbnailUrl,
+        imageUrl = imageUrl ?: DEFAULT_LAUNCH_IMAGE,
+        thumbnailUrl = thumbnailUrl ?: DEFAULT_LAUNCH_THUMBNAIL,
         credit = credit
     )
 
@@ -137,7 +139,7 @@ private fun AgencyDto.toDomain() =
         launchers = launchers,
         spacecraft = spacecraft,
         parent = parent,
-        image = image?.toDomain(),
+        image = image?.toDomain() ?: defaultImage(),
         totalLaunchCount = totalLaunchCount,
         consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
         successfulLaunches = successfulLaunches,
@@ -234,8 +236,17 @@ private fun ProgramDto.toDomain() =
         url = url,
         name = name,
         description = description,
-        image = image?.toDomain(),
+        image = image?.toDomain() ?: defaultImage(),
         startDate = startDate,
         endDate = endDate,
         agencies = agencies?.map { it.toDomain() }
+    )
+
+private fun defaultImage() =
+    Image(
+        id = null,
+        name = null,
+        imageUrl = DEFAULT_LAUNCH_IMAGE,
+        thumbnailUrl = DEFAULT_LAUNCH_THUMBNAIL,
+        credit = null
     )
