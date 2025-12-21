@@ -1,29 +1,10 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
-
-internal fun LaunchTypes.toUiModel(appStringResource: AppStringResource): LaunchTypesUiModel =
-    when (this) {
-        is LaunchTypes.Launch -> LaunchTypesUiModel.LaunchUi(
-            id = id,
-            launchDate = launchDate!!,
-            launchYear = "",
-            launchStatus = launchStatus,
-            missionName = "",
-            launchDateStatus = LaunchDateStatus.FUTURE,
-            launchDays = "",
-            launchDaysResId = LaunchDateStatus.FUTURE.getDateStringRes(),
-            launchStatusIconResId = launchStatus.getDrawableRes(),
-            image = image?.thumbnailUrl.orEmpty()
-        )
-    }
 
 fun LaunchStatus.getDrawableRes(): Int = when (this) {
     LaunchStatus.SUCCESS -> R.drawable.ic_launch_success

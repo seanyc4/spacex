@@ -16,7 +16,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.UpdateScrollPositionEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
@@ -28,7 +28,7 @@ private const val GRID_COLUMN_SIZE = 2
 
 @Composable
 internal fun LaunchesGridContent(
-    launches: LazyPagingItems<LaunchTypesUiModel>,
+    launches: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier
@@ -49,14 +49,14 @@ internal fun LaunchesGridContent(
                 count = launches.itemCount,
                 key = launches.itemKey { item ->
                     when (item) {
-                        is LaunchTypesUiModel.LaunchUi -> item.id
+                        is LaunchUi -> item.id
                     }
                 },
                 span = { index ->
                     val item = launches[index]
                     GridItemSpan(
                         when (item) {
-                            is LaunchTypesUiModel.LaunchUi -> GRID_COLUMN_SIZE
+                            is LaunchUi -> GRID_COLUMN_SIZE
                             else -> 1
                         }
                     )
@@ -93,12 +93,12 @@ private fun ObserveScrollPosition(
 
 @Composable
 private fun RenderGridSections(
-    launchItem: LaunchTypesUiModel,
+    launchItem: LaunchUi,
     onEvent: (LaunchEvents) -> Unit
 ) {
     when (launchItem) {
 
-        is LaunchTypesUiModel.LaunchUi -> {
+        is LaunchUi -> {
             LaunchCard(
                 launchItem = launchItem,
                 onEvent = {

@@ -3,14 +3,11 @@ package com.seancoyle.feature.launch.implementation.presentation.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,7 +29,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 
 /*@Composable
@@ -76,7 +73,7 @@ internal fun CompanySummaryCard(
 
 @Composable
 internal fun LaunchCard(
-    launchItem: LaunchTypesUiModel.LaunchUi,
+    launchItem: LaunchUi,
     onEvent: (LaunchEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {

@@ -24,7 +24,7 @@ import com.seancoyle.feature.launch.implementation.presentation.components.Launc
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissBottomSheetEvent
@@ -34,7 +34,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesSc
 @ExperimentalMaterialApi
 @Composable
 internal fun LaunchScreenWithBottomSheet(
-    feedState: LazyPagingItems<LaunchTypesUiModel>,
+    feedState: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     notificationState: NotificationState?,
     bottomSheetState: BottomSheetUiState,
@@ -72,7 +72,7 @@ internal fun LaunchScreenWithBottomSheet(
 
 @Composable
 internal fun LaunchScreen(
-    feedState: LazyPagingItems<LaunchTypesUiModel>,
+    feedState: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     notificationState: NotificationState?,
     onEvent: (LaunchEvents) -> Unit,

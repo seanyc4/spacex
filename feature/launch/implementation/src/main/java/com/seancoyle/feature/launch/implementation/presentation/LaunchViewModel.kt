@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.seancoyle.core.domain.AppStringResource
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
@@ -29,7 +28,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import androidx.paging.map
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUiMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -40,7 +40,7 @@ private const val TAG = "LaunchViewModel"
 internal class LaunchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val launchesComponent: LaunchesComponent,
-    private val appStringResource: AppStringResource
+    private val mapToUi: LaunchUiMapper,
 ) : ViewModel() {
 
     var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesScreenState()) }
@@ -66,10 +66,10 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    val feedState: Flow<PagingData<LaunchTypesUiModel>> = launchesComponent.observeLaunchesUseCase()
+    val feedState: Flow<PagingData<LaunchUi>> = launchesComponent.observeLaunchesUseCase()
         .map { pagingData ->
             pagingData.map { launch ->
-                launch.toUiModel(appStringResource)
+                mapToUi(launch)
             }
         }
         .cachedIn(viewModelScope)

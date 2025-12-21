@@ -1,12 +1,24 @@
 package com.seancoyle.core.common.dataformatter
 
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
-internal class DateTransformerImpl @Inject constructor() : DateTransformer {
+internal class DateTransformerImpl @Inject constructor(
+    private val dateFormat: DateTimeFormatter
+) : DateTransformer {
 
+    override fun formatDate(dateString: String?): LocalDateTime {
+        return try {
+            val normalizedDate = dateString?.replace("Z", "+0000")
+            ZonedDateTime.parse(normalizedDate, dateFormat).toLocalDateTime()
+        } catch (e: Exception) {
+            throw Exception(e)
+        }
+    }
     private fun Int.addZeroToSingleDateValue(): String {
         return if (this < 10) {
             "0$this"

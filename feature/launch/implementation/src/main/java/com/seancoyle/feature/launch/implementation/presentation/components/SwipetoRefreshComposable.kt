@@ -12,13 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.paging.compose.LazyPagingItems
-import com.seancoyle.feature.launch.implementation.presentation.model.LaunchTypesUiModel
+import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesUiState
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 internal fun SwipeToRefreshComposable(
-    uiState: LazyPagingItems<LaunchTypesUiModel>,
+    uiState: LazyPagingItems<LaunchUi>,
     pullRefreshState: PullRefreshState
 ) {
     Box(
