@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.util.TestData.createImageDto
 import com.seancoyle.feature.launch.implementation.util.TestData.createLaunchDto
 import com.seancoyle.feature.launch.implementation.util.TestData.createLaunchesDto

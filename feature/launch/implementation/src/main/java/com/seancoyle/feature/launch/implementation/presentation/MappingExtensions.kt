@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi

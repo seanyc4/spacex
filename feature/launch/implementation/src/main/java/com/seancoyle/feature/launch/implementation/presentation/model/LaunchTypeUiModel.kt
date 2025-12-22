@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.presentation.model
 
 import android.os.Parcelable
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import kotlinx.parcelize.Parcelize
 
 data class LaunchUi(

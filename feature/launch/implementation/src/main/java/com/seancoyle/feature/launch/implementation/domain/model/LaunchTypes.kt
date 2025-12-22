@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.api.domain.model
+package com.seancoyle.feature.launch.implementation.domain.model
 
 import java.time.LocalDateTime
 

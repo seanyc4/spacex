@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.presentation.state
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
 
 internal sealed interface LaunchEvents {

@@ -1,16 +1,5 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import com.seancoyle.core.domain.AppStringResource
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.impl.annotations.MockK
-import org.junit.Assert.*
-import kotlin.test.Test
-import org.junit.Before
-
 class MappingExtensionsKtTest {
 
    /* @RelaxedMockK

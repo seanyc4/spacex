@@ -15,20 +15,20 @@ import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
-import com.seancoyle.feature.launch.api.domain.model.Agency
-import com.seancoyle.feature.launch.api.domain.model.Configuration
-import com.seancoyle.feature.launch.api.domain.model.Country
-import com.seancoyle.feature.launch.api.domain.model.Image
-import com.seancoyle.feature.launch.api.domain.model.LaunchDateStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.api.domain.model.Location
-import com.seancoyle.feature.launch.api.domain.model.Mission
-import com.seancoyle.feature.launch.api.domain.model.NetPrecision
-import com.seancoyle.feature.launch.api.domain.model.Orbit
-import com.seancoyle.feature.launch.api.domain.model.Pad
-import com.seancoyle.feature.launch.api.domain.model.Program
-import com.seancoyle.feature.launch.api.domain.model.Rocket
+import com.seancoyle.feature.launch.implementation.domain.model.Agency
+import com.seancoyle.feature.launch.implementation.domain.model.Configuration
+import com.seancoyle.feature.launch.implementation.domain.model.Country
+import com.seancoyle.feature.launch.implementation.domain.model.Image
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchDateStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.domain.model.Location
+import com.seancoyle.feature.launch.implementation.domain.model.Mission
+import com.seancoyle.feature.launch.implementation.domain.model.NetPrecision
+import com.seancoyle.feature.launch.implementation.domain.model.Orbit
+import com.seancoyle.feature.launch.implementation.domain.model.Pad
+import com.seancoyle.feature.launch.implementation.domain.model.Program
+import com.seancoyle.feature.launch.implementation.domain.model.Rocket
 import kotlinx.coroutines.TimeoutCancellationException
 
 internal fun map(throwable: Throwable): LocalError {
