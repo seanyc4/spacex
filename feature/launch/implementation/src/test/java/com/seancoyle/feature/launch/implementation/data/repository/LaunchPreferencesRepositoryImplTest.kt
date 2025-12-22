@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.*
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
@@ -26,13 +26,11 @@ class LaunchPreferencesRepositoryImplTest {
     @Test
     fun `saveLaunchPreferences saves preferences`() = runTest {
         val order = Order.ASC
-        val launchStatus = LaunchStatus.SUCCESS
-        val launchYear = "2022"
-        coEvery { launchPreferencesDataSource.saveLaunchPreferences(order, launchStatus, launchYear) } just Runs
+        coEvery { launchPreferencesDataSource.saveLaunchPreferences(order) } just Runs
 
-        underTest.saveLaunchPreferences(order, launchStatus, launchYear)
+        underTest.saveLaunchPreferences(order)
 
-        coVerify { launchPreferencesDataSource.saveLaunchPreferences(order, launchStatus, launchYear) }
+        coVerify { launchPreferencesDataSource.saveLaunchPreferences(order) }
     }
 
     @Test

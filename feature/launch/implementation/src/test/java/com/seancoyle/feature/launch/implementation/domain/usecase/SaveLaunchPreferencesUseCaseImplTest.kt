@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.implementation.domain.usecase
 
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchPreferencesRepository
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCaseImpl
@@ -28,21 +27,11 @@ class SaveLaunchPreferencesUseCaseImplTest {
     @Test
     fun `invoke should call saveLaunchPreferences with correct parameters`() = runTest {
         val order = Order.DESC
-        val launchStatus = LaunchStatus.SUCCESS
-        val launchYear = "2024"
 
-        underTest.invoke(
-            order = order,
-            launchStatus = launchStatus,
-            launchYear = launchYear
-        )
+        underTest.invoke(order)
 
         coVerify {
-            launchPreferencesRepository.saveLaunchPreferences(
-                order = order,
-                launchStatus = launchStatus,
-                launchYear = launchYear
-            )
+            launchPreferencesRepository.saveLaunchPreferences(order)
         }
     }
 }

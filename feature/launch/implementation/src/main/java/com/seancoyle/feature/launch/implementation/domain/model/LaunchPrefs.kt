@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.api.domain.model
+package com.seancoyle.feature.launch.implementation.domain.model
 
 import androidx.annotation.Keep
 import com.seancoyle.core.domain.Order

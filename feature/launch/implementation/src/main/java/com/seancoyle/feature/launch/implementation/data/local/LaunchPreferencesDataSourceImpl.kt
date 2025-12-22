@@ -6,8 +6,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchPreferencesDataSource
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -19,14 +18,10 @@ internal class LaunchPreferencesDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics
 ) : LaunchPreferencesDataSource {
 
-    override suspend fun saveLaunchPreferences(
-        order: Order,
-        launchStatus: LaunchStatus,
-        launchYear: String
-    ) {
+    override suspend fun saveLaunchPreferences(order: Order) {
         runSuspendCatching {
             dataStore.updateData { preferences ->
-                preferences.toProto(order, launchStatus, launchYear)
+                preferences.toProto(order)
             }
         }.getOrElse { exception ->
             printLogDebug(this.javaClass.name, exception.message.toString())
