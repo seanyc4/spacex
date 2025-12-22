@@ -3,9 +3,10 @@ package com.seancoyle.feature.launch.implementation.data.repository
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import com.seancoyle.feature.launch.implementation.data.local.toDomain
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +18,8 @@ internal class LaunchRepositoryImpl @Inject constructor(
     private val pagerFactory: LaunchPagerFactory
 ) : LaunchRepository {
 
-    override fun pager(): Flow<PagingData<LaunchTypes.Launch>> {
-        return pagerFactory.create().flow.map {
+    override fun pager(launchQuery: LaunchQuery): Flow<PagingData<LaunchTypes.Launch>> {
+        return pagerFactory.create(launchQuery).flow.map {
             it.map { entity -> entity.toDomain() }
         }
     }

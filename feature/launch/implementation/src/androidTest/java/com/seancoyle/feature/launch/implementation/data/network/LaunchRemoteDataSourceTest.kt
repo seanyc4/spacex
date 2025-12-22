@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.implementation.data.network
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

@@ -9,8 +9,8 @@ import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.dao.paginateLaunches
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
 import timber.log.Timber
 import javax.inject.Inject

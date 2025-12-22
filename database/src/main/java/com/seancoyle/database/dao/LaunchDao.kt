@@ -35,7 +35,7 @@ interface LaunchDao {
         remoteKeyDao.upsertAll(remoteKeys)
     }
 
-    @Query("SELECT * FROM launch ORDER BY net ASC")
+    @Query("SELECT * FROM launch")
     fun pagingSource(): PagingSource<Int, LaunchEntity>
 
     @Upsert

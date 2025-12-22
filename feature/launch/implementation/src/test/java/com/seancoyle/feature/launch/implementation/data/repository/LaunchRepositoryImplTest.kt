@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.data.repository
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.repository.LaunchRepository
 import com.seancoyle.feature.launch.implementation.util.TestData
 import io.mockk.MockKAnnotations

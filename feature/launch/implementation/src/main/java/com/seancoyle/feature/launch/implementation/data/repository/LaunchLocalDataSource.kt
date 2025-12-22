@@ -3,8 +3,8 @@ package com.seancoyle.feature.launch.implementation.data.repository
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
 
 internal interface LaunchLocalDataSource {
 

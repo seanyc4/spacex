@@ -8,9 +8,10 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
@@ -21,6 +22,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesSc
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +32,7 @@ import timber.log.Timber
 import androidx.paging.map
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUiMapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -61,6 +64,9 @@ internal class LaunchViewModel @Inject constructor(
     private val _refreshEvent = MutableSharedFlow<Unit>(replay = 0)
     val refreshEvent = _refreshEvent.asSharedFlow()
 
+    private val _launchQueryState = MutableStateFlow(LaunchQuery())
+    val launchQueryState = _launchQueryState.asStateFlow()
+
     init {
         viewModelScope.launch {
             Timber.tag(TAG).d("screenState before init: $screenState")
@@ -69,11 +75,16 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    val feedState: Flow<PagingData<LaunchUi>> = launchesComponent.observeLaunchesUseCase()
-        .map { pagingData ->
-            pagingData.map { launch ->
-                mapToUi(launch)
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val feedState: Flow<PagingData<LaunchUi>> = launchQueryState
+        .flatMapLatest { launchQuery ->
+            Timber.tag(TAG).d("Creating new pager for query: $launchQuery")
+            launchesComponent.observeLaunchesUseCase(launchQuery)
+                .map { pagingData ->
+                    pagingData.map { launch ->
+                        mapToUi(launch)
+                    }
+                }
         }
         .cachedIn(viewModelScope)
 
@@ -83,7 +94,7 @@ internal class LaunchViewModel @Inject constructor(
             setLaunchFilterState(
                 order = result.order,
                 launchStatus = result.launchStatus,
-                year = result.launchYear
+                query = result.launchYear
             )
         }
     }
@@ -102,7 +113,7 @@ internal class LaunchViewModel @Inject constructor(
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
                 launchStatus = event.launchStatus,
-                year = event.launchYear
+                query = event.launchYear
             )
             is SwipeToRefreshEvent -> swipeToRefresh()
         }
@@ -121,24 +132,23 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private suspend fun newSearch() {
-        saveLaunchPreferences(
-            order = getOrderState(),
-            launchStatus = getLaunchStatusState(),
-            launchYear = getSearchYearState()
-        )
+        saveLaunchPreferences(order = getOrderState())
         displayFilterDialog(false)
-        // TODO: Implement search/filter logic in data layer
+        _launchQueryState.value = LaunchQuery(
+            query = getQueryState(),
+            order = getOrderState()
+        )
     }
 
-    private fun getSearchYearState() = screenState.launchYear
+    private fun getQueryState() = screenState.query
     private fun getOrderState() = screenState.order
     private fun getLaunchStatusState() = screenState.launchStatus
 
-    private fun clearQueryParameters() {
+    private suspend fun clearQueryParameters() {
         setLaunchFilterState(
-            order = Order.DESC,
+            order = Order.ASC,
             launchStatus = LaunchStatus.ALL,
-            year = ""
+            query = ""
         )
     }
 
@@ -147,17 +157,22 @@ internal class LaunchViewModel @Inject constructor(
         _refreshEvent.emit(Unit)
     }
 
-    private fun setLaunchFilterState(
+    private suspend fun setLaunchFilterState(
         order: Order,
         launchStatus: LaunchStatus,
-        year: String
+        query: String
     ) {
         screenState = screenState.copy(
             order = order,
             launchStatus = launchStatus,
-            launchYear = year
+            query = query
         )
-        Timber.tag(TAG).d("Updated filterState: order=$order, status=$launchStatus, year=$year")
+        _launchQueryState.value = LaunchQuery(
+            query = query,
+            order = order
+        )
+        _refreshEvent.emit(Unit)
+        Timber.tag(TAG).d("Updated filterState: order=$order, status=$launchStatus, year=$query")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
@@ -170,16 +185,8 @@ internal class LaunchViewModel @Inject constructor(
         Timber.tag(TAG).d("Updated scrollState.scrollPosition: $position")
     }
 
-    private suspend fun saveLaunchPreferences(
-        order: Order,
-        launchStatus: LaunchStatus,
-        launchYear: String
-    ) {
-        launchesComponent.saveLaunchPreferencesUseCase(
-            order = order,
-            launchStatus = launchStatus,
-            launchYear = launchYear
-        )
+    private suspend fun saveLaunchPreferences(order: Order) {
+        launchesComponent.saveLaunchPreferencesUseCase(order)
     }
 
     private suspend fun handleLaunchClick(links: LinksUi?) {

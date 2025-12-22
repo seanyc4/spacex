@@ -2,9 +2,9 @@ package com.seancoyle.feature.launch.implementation.domain.usecase.component
 
 import androidx.paging.PagingData
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchPrefs
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.api.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchPrefs
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
@@ -18,23 +18,15 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val observeLaunchesUseCase: ObserveLaunchesUseCase
 ) : LaunchesComponent {
 
-    override fun observeLaunchesUseCase(): Flow<PagingData<LaunchTypes.Launch>> {
-        return observeLaunchesUseCase.invoke()
+    override fun observeLaunchesUseCase(query: LaunchQuery): Flow<PagingData<LaunchTypes.Launch>> {
+        return observeLaunchesUseCase.invoke(query)
     }
 
     override suspend fun getLaunchPreferencesUseCase(): LaunchPrefs {
         return getLaunchPreferencesUseCase.invoke()
     }
 
-    override suspend fun saveLaunchPreferencesUseCase(
-        order: Order,
-        launchStatus: LaunchStatus,
-        launchYear: String
-    ) {
-        saveLaunchPreferencesUseCase.get().invoke(
-            order = order,
-            launchStatus = launchStatus,
-            launchYear = launchYear
-        )
+    override suspend fun saveLaunchPreferencesUseCase(order: Order) {
+        saveLaunchPreferencesUseCase.get().invoke(order)
     }
 }

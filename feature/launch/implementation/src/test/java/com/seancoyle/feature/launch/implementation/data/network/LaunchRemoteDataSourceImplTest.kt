@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.data.network
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.data.remote.LaunchApi
 import com.seancoyle.feature.launch.implementation.data.remote.LaunchRemoteDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource

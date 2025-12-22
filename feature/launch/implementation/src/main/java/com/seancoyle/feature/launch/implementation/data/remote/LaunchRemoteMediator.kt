@@ -5,6 +5,8 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.core.domain.Order
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
@@ -19,7 +21,8 @@ private const val CACHE_TIMEOUT_HOURS = 1L
 @OptIn(ExperimentalPagingApi::class)
 internal class LaunchRemoteMediator(
     private val launchRemoteDataSource: LaunchRemoteDataSource,
-    private val launchLocalDataSource: LaunchLocalDataSource
+    private val launchLocalDataSource: LaunchLocalDataSource,
+    private val launchQuery: LaunchQuery
 ) : RemoteMediator<Int, LaunchEntity>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -27,8 +30,15 @@ internal class LaunchRemoteMediator(
         val remoteKeys = launchLocalDataSource.getRemoteKeys()
         val createdTime = remoteKeys.firstOrNull()?.createdAt
 
+        if (!launchQuery.query.isNullOrEmpty() || launchQuery.order != Order.ASC) {
+            // If there is a search query, always refresh to get relevant results
+            Timber.tag(TAG).d("Launching initial refresh; search query present.")
+            return InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+
         return if (createdTime != null &&
-                   System.currentTimeMillis().minus(createdTime) <= cacheTimeout) {
+            System.currentTimeMillis().minus(createdTime) <= cacheTimeout
+        ) {
             // Cached data is up-to-date, so there is no need to re-fetch
             // from the network.
             Timber.tag(TAG).d("Skipping initial refresh; cache is still valid.")
@@ -69,11 +79,13 @@ internal class LaunchRemoteMediator(
                     // If nextKey is null, that means we've reached the end
                     val nextKey = remoteKey?.nextKey
                     Timber.tag(TAG).d("LoadType.APPEND - next page: $nextKey")
-                    nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
+                    nextKey
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
                 }
             }
 
-            when (val remoteLaunchesResult = launchRemoteDataSource.getLaunches(page)) {
+            when (val remoteLaunchesResult =
+                launchRemoteDataSource.getLaunches(page, launchQuery)) {
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
                     val endOfPaginationReached = launches.size < state.config.pageSize

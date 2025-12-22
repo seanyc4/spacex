@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import kotlinx.parcelize.Parcelize
@@ -27,7 +27,7 @@ internal sealed interface LaunchesUiState {
 internal data class LaunchesScreenState(
     val order: Order = Order.DESC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
-    val launchYear: String = "",
+    val query: String = "",
     val isVisible: Boolean = false,
     val scrollPosition: Int = 0
 ) : Parcelable
