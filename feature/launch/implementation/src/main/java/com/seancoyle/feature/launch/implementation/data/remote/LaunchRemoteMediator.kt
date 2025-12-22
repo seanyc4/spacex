@@ -84,8 +84,8 @@ internal class LaunchRemoteMediator(
                 }
             }
 
-            when (val remoteLaunchesResult =
-                launchRemoteDataSource.getLaunches(page, launchQuery)) {
+            Timber.tag(TAG).d("API call with $page and $launchQuery")
+            when (val remoteLaunchesResult = launchRemoteDataSource.getLaunches(page, launchQuery)) {
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
                     val endOfPaginationReached = launches.size < state.config.pageSize
@@ -104,6 +104,7 @@ internal class LaunchRemoteMediator(
                     if (loadType == LoadType.REFRESH) {
                         // Clear all data and insert fresh data
                         // When refreshing, we always start from page 0, so prevPage should be null
+                        Timber.tag(TAG).d("REFRESH - refreshing cache with new data")
                         launchLocalDataSource.refreshLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
@@ -113,6 +114,7 @@ internal class LaunchRemoteMediator(
                         )
                     } else {
                         // Append or prepend data to existing cache
+                        Timber.tag(TAG).d("$loadType - APPEND - appending data to cache")
                         launchLocalDataSource.appendLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,

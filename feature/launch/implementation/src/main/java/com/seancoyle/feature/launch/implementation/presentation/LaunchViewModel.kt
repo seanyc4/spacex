@@ -38,9 +38,9 @@ private const val TAG = "LaunchViewModel"
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val launchesComponent: LaunchesComponent,
-    private val mapToUi: LaunchUiMapper,
+    private val uiMapper: LaunchUiMapper,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesScreenState()) }
@@ -70,7 +70,7 @@ internal class LaunchViewModel @Inject constructor(
             launchesComponent.observeLaunchesUseCase(launchQuery)
                 .map { pagingData ->
                     pagingData.map { launch ->
-                        mapToUi(launch)
+                        uiMapper(launch)
                     }
                 }
         }
@@ -124,7 +124,7 @@ internal class LaunchViewModel @Inject constructor(
     private fun getQueryState() = screenState.query
     private fun getOrderState() = screenState.order
 
-    private suspend fun clearQueryParameters() {
+    private fun clearQueryParameters() {
         setLaunchFilterState(
             order = Order.ASC,
             launchStatus = LaunchStatus.ALL,
@@ -137,7 +137,7 @@ internal class LaunchViewModel @Inject constructor(
         _refreshEvent.emit(Unit)
     }
 
-    private suspend fun setLaunchFilterState(
+    private fun setLaunchFilterState(
         order: Order,
         launchStatus: LaunchStatus,
         query: String
@@ -151,7 +151,6 @@ internal class LaunchViewModel @Inject constructor(
             query = query,
             order = order
         )
-        _refreshEvent.emit(Unit)
         Timber.tag(TAG).d("Updated filterState: order=$order, status=$launchStatus, year=$query")
     }
 
