@@ -8,7 +8,7 @@ object LaunchConstants {
     const val LAUNCH_EXCEPTION = -1
     const val PAGINATION_LIMIT = 20
     const val INITIAL_LOAD_SIZE = 20
-    const val PREFETCH_DISTANCE = 10
+    const val PREFETCH_DISTANCE = 5
     const val LAUNCH_API_PAGE = "launch_current_page"
     const val LAUNCH_CACHE_END_REACHED = "launch_cache_end_reached"
 }

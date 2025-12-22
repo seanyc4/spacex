@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.implementation.di
 
+import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,8 +45,8 @@ open class NetworkModule {
     @Provides
     internal fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder()
-            .callTimeout(20L, TimeUnit.SECONDS)
-            .connectTimeout(20L, TimeUnit.SECONDS)
+            .callTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
 
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor().apply {
