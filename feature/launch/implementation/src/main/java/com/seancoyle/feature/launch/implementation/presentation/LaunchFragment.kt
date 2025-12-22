@@ -26,8 +26,8 @@ import androidx.fragment.compose.content
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DisplayFilterDialogEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.SwipeToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

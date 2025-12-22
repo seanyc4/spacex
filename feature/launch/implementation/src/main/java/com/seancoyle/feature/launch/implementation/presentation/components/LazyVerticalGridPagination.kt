@@ -7,14 +7,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 internal fun LazyVerticalGridPagination(
     listState: LazyGridState,
     buffer: Int,
-    onEvent: (LaunchEvents) -> Unit
+    onEvent: (LaunchesEvents) -> Unit
 ) {
     val loadMore by remember {
         derivedStateOf {

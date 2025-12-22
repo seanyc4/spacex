@@ -10,7 +10,7 @@ import androidx.compose.ui.test.performClick
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
 import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
@@ -28,7 +28,7 @@ class LaunchBottomSheetTest {
     val composeTestRule = createComposeRule()
 
     @MockK(relaxed = true)
-    private lateinit var onEvent: (LaunchEvents) -> Unit
+    private lateinit var onEvent: (LaunchesEvents) -> Unit
 
     private lateinit var bottomSheetUiState: BottomSheetUiState
 

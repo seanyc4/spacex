@@ -13,8 +13,8 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -87,7 +87,7 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: LaunchEvents) = viewModelScope.launch {
+    fun onEvent(event: LaunchesEvents) = viewModelScope.launch {
         when (event) {
             is DismissFilterDialogEvent -> displayFilterDialog(false)
             is DisplayFilterDialogEvent -> displayFilterDialog(true)

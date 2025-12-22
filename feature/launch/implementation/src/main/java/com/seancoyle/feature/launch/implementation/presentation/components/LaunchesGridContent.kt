@@ -17,8 +17,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.UpdateScrollPositionEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.UpdateScrollPositionEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +30,7 @@ private const val GRID_COLUMN_SIZE = 2
 internal fun LaunchesGridContent(
     launches: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyGridState(initialFirstVisibleItemIndex = screenState.scrollPosition)
@@ -78,7 +78,7 @@ internal fun LaunchesGridContent(
 @Composable
 private fun ObserveScrollPosition(
     listState: LazyGridState,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
 ) {
     // Observe and save scroll position to view model
     LaunchedEffect(listState) {
@@ -94,7 +94,7 @@ private fun ObserveScrollPosition(
 @Composable
 private fun RenderGridSections(
     launchItem: LaunchUi,
-    onEvent: (LaunchEvents) -> Unit
+    onEvent: (LaunchesEvents) -> Unit
 ) {
     when (launchItem) {
 

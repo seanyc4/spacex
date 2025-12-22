@@ -29,7 +29,7 @@ import com.seancoyle.core.ui.theme.Dimens
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 
 /*@Composable
 internal fun LaunchHeading(
@@ -50,7 +50,7 @@ internal fun LaunchHeading(
 @Composable
 internal fun LaunchCard(
     launchItem: LaunchUi,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(

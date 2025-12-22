@@ -10,7 +10,7 @@ import com.seancoyle.feature.launch.implementation.presentation.components.Filte
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 
 @ExperimentalMaterialApi
@@ -21,7 +21,7 @@ internal fun LaunchScreenWithBottomSheet(
     notificationState: NotificationState?,
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
     isLandscape: Boolean,
 ) {
     LaunchScreen(
@@ -48,7 +48,7 @@ internal fun LaunchScreen(
     feedState: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     notificationState: NotificationState?,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
 
