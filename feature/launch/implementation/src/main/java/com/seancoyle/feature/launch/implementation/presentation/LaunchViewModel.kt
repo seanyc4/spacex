@@ -12,10 +12,7 @@ import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
-import com.seancoyle.feature.launch.implementation.presentation.state.BottomSheetUiState
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
@@ -51,15 +48,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private val _notificationState = MutableStateFlow<NotificationState?>(null)
     val notificationState = _notificationState.asStateFlow()
-
-    private val _bottomSheetState = MutableStateFlow(BottomSheetUiState())
-    val bottomSheetState = _bottomSheetState.asStateFlow()
-
-    private val _linkEvent = MutableSharedFlow<String>(replay = 0)
-    val linkEvent = _linkEvent.asSharedFlow()
-
-    private val _errorEvent = MutableSharedFlow<UIErrors>(replay = 0)
-    val errorEvent = _errorEvent.asSharedFlow()
 
     private val _refreshEvent = MutableSharedFlow<Unit>(replay = 0)
     val refreshEvent = _refreshEvent.asSharedFlow()
@@ -101,14 +89,11 @@ internal class LaunchViewModel @Inject constructor(
 
     fun onEvent(event: LaunchEvents) = viewModelScope.launch {
         when (event) {
-            is DismissBottomSheetEvent -> dismissBottomSheet()
             is DismissFilterDialogEvent -> displayFilterDialog(false)
             is DisplayFilterDialogEvent -> displayFilterDialog(true)
             is DismissNotificationEvent -> dismissNotification()
-            is HandleLaunchClickEvent -> handleLaunchClick(event.links)
             is NewSearchEvent -> newSearch()
             is NotificationEvent -> updateNotificationState(event)
-            is OpenLinkEvent -> openLink(event.url)
             is UpdateScrollPositionEvent -> setScrollPositionState(event.position)
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
@@ -121,10 +106,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun updateNotificationState(event: NotificationEvent) {
         _notificationState.update { event.notificationState }
-    }
-
-    private suspend fun openLink(link: String) {
-        _linkEvent.emit(link)
     }
 
     private fun dismissNotification() {
@@ -142,7 +123,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun getQueryState() = screenState.query
     private fun getOrderState() = screenState.order
-    private fun getLaunchStatusState() = screenState.launchStatus
 
     private suspend fun clearQueryParameters() {
         setLaunchFilterState(
@@ -187,27 +167,6 @@ internal class LaunchViewModel @Inject constructor(
 
     private suspend fun saveLaunchPreferences(order: Order) {
         launchesComponent.saveLaunchPreferencesUseCase(order)
-    }
-
-    private suspend fun handleLaunchClick(links: LinksUi?) {
-        val bottomSheetLinks = links.getLinks()
-
-        if (bottomSheetLinks.isNotEmpty()) {
-            _bottomSheetState.update { currentState ->
-                currentState.copy(
-                    isVisible = true,
-                    bottomSheetLinks = bottomSheetLinks
-                )
-            }
-        } else {
-            _errorEvent.emit(UIErrors.NO_LINKS)
-        }
-    }
-
-    private fun dismissBottomSheet() {
-        _bottomSheetState.update { currentState ->
-            currentState.copy(isVisible = false)
-        }
     }
 
 }

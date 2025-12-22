@@ -1,10 +1,7 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,24 +23,12 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
-import com.seancoyle.core.ui.extensions.asStringResource
 import com.seancoyle.core.ui.theme.AppTheme
-import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.model.UIErrors
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NotificationEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.SwipeToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import androidx.core.net.toUri
 
 @AndroidEntryPoint
 @ExperimentalMaterialApi
@@ -98,54 +83,4 @@ internal class LaunchFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.linkEvent.collect { link ->
-                    launchWebBrowser(link)
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.errorEvent.collect { state ->
-                   if(state == UIErrors.NO_LINKS) displayNoLinksError()
-                }
-            }
-        }
-    }
-
-    private fun displayNoLinksError() {
-        viewModel.onEvent(
-            event = NotificationEvent(
-                notificationState = NotificationState(
-                    notificationType = NotificationType.Info,
-                    message = R.string.no_links.asStringResource(),
-                    uiComponentType = UiComponentType.Dialog
-                ),
-            )
-        )
-    }
-
-    private fun launchWebBrowser(url: String?) {
-        try {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    url.toString().toUri()
-                )
-            )
-        } catch (_: ActivityNotFoundException) {
-            viewModel.onEvent(
-                NotificationEvent(
-                    notificationState = NotificationState(
-                        notificationType = NotificationType.Error,
-                        message = R.string.error_links.asStringResource(),
-                        uiComponentType = UiComponentType.Snackbar
-                    )
-                )
-            )
-        }
-    }
 }

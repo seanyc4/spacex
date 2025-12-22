@@ -21,7 +21,6 @@ internal fun LaunchRoute(
     isLandscape: Boolean,
 ) {
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
-    val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
     val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -41,7 +40,6 @@ internal fun LaunchRoute(
         snackbarHostState = snackbarHostState,
         screenState = viewModel.screenState,
         isLandscape = isLandscape,
-        bottomSheetState = bottomSheetState,
         pullRefreshState = pullRefreshState,
         onEvent = viewModel::onEvent,
     )
