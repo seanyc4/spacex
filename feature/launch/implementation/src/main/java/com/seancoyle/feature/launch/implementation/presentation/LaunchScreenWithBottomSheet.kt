@@ -4,8 +4,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.ui.NotificationState
+import com.seancoyle.core.ui.composables.CircularProgressBar
+import com.seancoyle.core.ui.composables.DisplayNotification
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.LaunchesGridContent
 import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
@@ -24,13 +27,20 @@ internal fun LaunchScreenWithBottomSheet(
     onEvent: (LaunchesEvents) -> Unit,
     isLandscape: Boolean,
 ) {
-    LaunchScreen(
-        feedState = feedState,
+
+    LaunchesGridContent(
+        launches = feedState,
         screenState = screenState,
-        notificationState = notificationState,
-        snackbarHostState = snackbarHostState,
-        onEvent = onEvent,
+        onEvent = onEvent
     )
+
+    notificationState?.let { notification ->
+        DisplayNotification(
+            error = notification,
+            onDismissNotification = { onEvent(LaunchesEvents.DismissNotificationEvent) },
+            snackbarHostState = snackbarHostState
+        )
+    }
 
     if (screenState.isVisible) {
         FilterDialog(
@@ -40,46 +50,20 @@ internal fun LaunchScreenWithBottomSheet(
         )
     }
 
-    SwipeToRefreshComposable(feedState, pullRefreshState)
-}
-
-@Composable
-internal fun LaunchScreen(
-    feedState: LazyPagingItems<LaunchUi>,
-    screenState: LaunchesScreenState,
-    notificationState: NotificationState?,
-    onEvent: (LaunchesEvents) -> Unit,
-    snackbarHostState: SnackbarHostState,
-) {
-
-   // ReportDrawnWhen { feedState is LaunchesUiState.Success || feedState is LaunchesUiState.Error }
-
-   //when (feedState) {
-
-            LaunchesGridContent(
-                launches = feedState,
-                screenState = screenState,
-                onEvent = onEvent
-            )
-
-         /*   notificationState?.let { notification ->
-                DisplayNotification(
-                    error = notification,
-                    onDismissNotification = { onEvent(DismissNotificationEvent) },
-                    snackbarHostState = snackbarHostState
-                )
-            }*/
-        }
-
-       /* is LaunchesUiState.Loading -> {
+    when {
+        feedState.loadState.refresh is LoadState.Loading -> {
             CircularProgressBar()
         }
 
-        is LaunchesUiState.Error -> {
-            feedState.errorNotificationState?.let { error ->
-                LaunchErrorScreen(
-                    errorMessage = error.message,
-                    retryAction = null
-                )
-            }
-        }*/
+        feedState.loadState.refresh is LoadState.Error -> {
+            // Initial load error
+        }
+
+        feedState.loadState.append is LoadState.Loading -> {
+            CircularProgressBar()
+        }
+
+    }
+
+    SwipeToRefreshComposable(feedState, pullRefreshState)
+}
