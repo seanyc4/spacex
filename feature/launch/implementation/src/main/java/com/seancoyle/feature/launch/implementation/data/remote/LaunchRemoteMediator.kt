@@ -26,28 +26,28 @@ internal class LaunchRemoteMediator(
 ) : RemoteMediator<Int, LaunchEntity>() {
 
     override suspend fun initialize(): InitializeAction {
-        val cacheTimeout = TimeUnit.MILLISECONDS.convert(CACHE_TIMEOUT_HOURS, TimeUnit.HOURS)
+        val cacheTimeout = TimeUnit.MILLISECONDS.convert(
+            CACHE_TIMEOUT_HOURS,
+            TimeUnit.HOURS
+        )
         val remoteKeys = launchLocalDataSource.getRemoteKeys()
         val createdTime = remoteKeys.firstOrNull()?.createdAt
 
+        // If there is a search query, always refresh to get relevant results
+        // Also refresh if the order is not the default (ASC)
+        Timber.tag(TAG).d("Refresh with search query ${launchQuery.query} " + "& order ${launchQuery.order}.")
         if (!launchQuery.query.isNullOrEmpty() || launchQuery.order != Order.ASC) {
-            // If there is a search query, always refresh to get relevant results
-            Timber.tag(TAG).d("Launching initial refresh; search query present.")
             return InitializeAction.LAUNCH_INITIAL_REFRESH
         }
 
+        // Check if the cache is still valid based on createdAt timestamp &cache timeout
         return if (createdTime != null &&
             System.currentTimeMillis().minus(createdTime) <= cacheTimeout
         ) {
-            // Cached data is up-to-date, so there is no need to re-fetch
-            // from the network.
             Timber.tag(TAG).d("Skipping initial refresh; cache is still valid.")
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
-            // Need to refresh cached data from network; returning
-            // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
-            // APPEND and PREPEND from running until REFRESH succeeds.
-            Timber.tag(TAG).d("Launching initial refresh; cache is stale.")
+            Timber.tag(TAG).d("Initial Refresh; cache is stale - fetching from network.")
             InitializeAction.LAUNCH_INITIAL_REFRESH
         }
     }
@@ -79,8 +79,7 @@ internal class LaunchRemoteMediator(
                     // If nextKey is null, that means we've reached the end
                     val nextKey = remoteKey?.nextKey
                     Timber.tag(TAG).d("LoadType.APPEND - next page: $nextKey")
-                    nextKey
-                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
+                    nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
                 }
             }
 
@@ -89,10 +88,7 @@ internal class LaunchRemoteMediator(
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
                     val endOfPaginationReached = launches.size < state.config.pageSize
-
-                    // Calculate the next and previous pages
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
-                    // prevPage should be null if we're at page 0 or below
                     val prevPage = if (page > 0) page.minus(1) else null
 
                     Timber.tag(TAG).d(

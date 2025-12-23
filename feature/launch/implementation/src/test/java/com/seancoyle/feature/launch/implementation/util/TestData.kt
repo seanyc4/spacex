@@ -138,13 +138,14 @@ internal object TestData {
     fun createImageEntity(
         id: Int? = 1296,
         name: String? = "Starlink night fairing",
-        imageUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
-        thumbnailUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+        imageUrl: String = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+        thumbnailUrl: String = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
         credit: String? = "SpaceX"
     ) = ImageEntity(id, name, imageUrl, thumbnailUrl, credit)
 
     fun createLaunchEntity(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
         responseMode: String? = "list",
@@ -153,7 +154,7 @@ internal object TestData {
         netPrecision: NetPrecisionEntity? = createNetPrecisionEntity(),
         windowEnd: String? = "2025-12-13T09:34:00Z",
         windowStart: String? = "2025-12-13T05:34:00Z",
-        image: ImageEntity? = createImageEntity(),
+        image: ImageEntity = createImageEntity(),
         infographic: String? = null,
         probability: Int? = null,
         weatherConcerns: String? = null,
@@ -180,6 +181,7 @@ internal object TestData {
         launchDays: String? = "0 days"
     ) = LaunchEntity(
         id = id,
+        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
@@ -228,13 +230,14 @@ internal object TestData {
     fun createImage(
         id: Int? = 1296,
         name: String? = "Starlink night fairing",
-        imageUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
-        thumbnailUrl: String? = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+        imageUrl: String = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+        thumbnailUrl: String = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
         credit: String? = "SpaceX"
     ) = Image(id, name, imageUrl, thumbnailUrl, credit)
 
     fun createLaunch(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
         responseMode: String? = "list",
@@ -243,7 +246,7 @@ internal object TestData {
         netPrecision: NetPrecision? = createNetPrecision(),
         windowEnd: String? = "2025-12-13T09:34:00Z",
         windowStart: String? = "2025-12-13T05:34:00Z",
-        image: Image? = createImage(),
+        image: Image = createImage(),
         infographic: String? = null,
         probability: Int? = null,
         weatherConcerns: String? = null,
@@ -270,6 +273,7 @@ internal object TestData {
         launchDays: String? = null
     ) = LaunchTypes.Launch(
         id = id,
+        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
@@ -308,6 +312,7 @@ internal object TestData {
     // Launch after all the business logic is applied from the use case
     fun createLaunchTransformed(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
         responseMode: String? = "list",
@@ -316,7 +321,7 @@ internal object TestData {
         netPrecision: NetPrecision? = createNetPrecision(),
         windowEnd: String? = "2025-12-13T09:34:00Z",
         windowStart: String? = "2025-12-13T05:34:00Z",
-        image: Image? = createImage(),
+        image: Image = createImage(),
         infographic: String? = null,
         probability: Int? = null,
         weatherConcerns: String? = null,
@@ -343,6 +348,7 @@ internal object TestData {
         launchDays: String? = "0 days"
     ) = LaunchTypes.Launch(
         id = id,
+        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
