@@ -16,6 +16,10 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -23,107 +27,116 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.DismissFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.NewSearchEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchEvents.UpdateFilterStateEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DismissFilterDialogEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.NewSearchEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 
 @Composable
 internal fun FilterDialog(
     currentFilterState: LaunchesScreenState,
-    onEvent: (LaunchEvents) -> Unit,
+    onEvent: (LaunchesEvents) -> Unit,
     isLandScape: Boolean,
     modifier: Modifier = Modifier
 ) {
+    var localQuery by remember { mutableStateOf(currentFilterState.query) }
+    var localOrder by remember { mutableStateOf(currentFilterState.order) }
+    var localLaunchStatus by remember { mutableStateOf(currentFilterState.launchStatus) }
+
     AlertDialog(
         onDismissRequest = { onEvent(DismissFilterDialogEvent) },
         title = { Text(stringResource(R.string.filter_options)) },
         text = {
             if (isLandScape) {
-                LandscapeDialogContent(currentFilterState, onEvent, modifier)
+                LandscapeDialogContent(
+                    query = localQuery,
+                    onQueryChange = { localQuery = it },
+                    order = localOrder,
+                    onOrderChange = { localOrder = it },
+                    launchStatus = localLaunchStatus,
+                    onLaunchStatusChange = { localLaunchStatus = it },
+                    modifier = modifier
+                )
             } else {
-                PortraitDialogContent(currentFilterState, onEvent, modifier)
+                PortraitDialogContent(
+                    query = localQuery,
+                    onQueryChange = { localQuery = it },
+                    order = localOrder,
+                    onOrderChange = { localOrder = it },
+                    launchStatus = localLaunchStatus,
+                    onLaunchStatusChange = { localLaunchStatus = it },
+                    modifier = modifier
+                )
             }
         },
-
         confirmButton = {
-            ConfirmButton(onEvent)
+            ConfirmButton {
+                onEvent(
+                    UpdateFilterStateEvent(
+                        order = localOrder,
+                        launchStatus = localLaunchStatus,
+                        launchYear = localQuery
+                    )
+                )
+                onEvent(NewSearchEvent)
+            }
         },
-
         dismissButton = {
-            DismissButton(onEvent)
+            DismissButton { onEvent(DismissFilterDialogEvent) }
         }
     )
 }
 
 @Composable
 private fun PortraitDialogContent(
-    filterState: LaunchesScreenState,
-    onEvent: (LaunchEvents) -> Unit,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    order: Order,
+    onOrderChange: (Order) -> Unit,
+    launchStatus: LaunchStatus,
+    onLaunchStatusChange: (LaunchStatus) -> Unit,
     modifier: Modifier
 ) {
     Column {
-        Text(stringResource(R.string.filter_by_year))
-
-        YearInputField(year = filterState.launchYear, onYearChange = { year ->
-            onEvent(UpdateFilterStateEvent(filterState.order, filterState.launchStatus, year))
-        })
-
+        Text(stringResource(R.string.search))
+        QueryInputField(query = query, onQueryChange = onQueryChange)
         Text(
             text = stringResource(R.string.launch_status),
             modifier = modifier.padding(top = dimensionResource(R.dimen.default_view_margin))
         )
-
         RadioGroup(
-            selectedLaunchStatus = filterState.launchStatus,
-            onLaunchStatusSelected = { status ->
-                onEvent(UpdateFilterStateEvent(filterState.order, status, filterState.launchYear))
-            }
+            selectedLaunchStatus = launchStatus,
+            onLaunchStatusSelected = onLaunchStatusChange
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        OrderSwitch(order = filterState.order, onOrderChange = { order ->
-            onEvent(UpdateFilterStateEvent(order, filterState.launchStatus, filterState.launchYear))
-        })
+        OrderSwitch(order = order, onOrderChange = onOrderChange)
     }
 }
 
 @Composable
 private fun LandscapeDialogContent(
-    filterState: LaunchesScreenState,
-    onEvent: (LaunchEvents) -> Unit,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    order: Order,
+    onOrderChange: (Order) -> Unit,
+    launchStatus: LaunchStatus,
+    onLaunchStatusChange: (LaunchStatus) -> Unit,
     modifier: Modifier
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
-
         Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp)
         ) {
             Text(stringResource(R.string.filter_by_year))
-
-            YearInputField(year = filterState.launchYear, onYearChange = { year ->
-                onEvent(UpdateFilterStateEvent(filterState.order, filterState.launchStatus, year))
-            })
-
+            QueryInputField(query = query, onQueryChange = onQueryChange)
             Spacer(modifier = Modifier.height(16.dp))
-
-            OrderSwitch(order = filterState.order, onOrderChange = { order ->
-                onEvent(
-                    UpdateFilterStateEvent(
-                        order,
-                        filterState.launchStatus,
-                        filterState.launchYear
-                    )
-                )
-            })
+            OrderSwitch(order = order, onOrderChange = onOrderChange)
         }
-
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -131,39 +144,23 @@ private fun LandscapeDialogContent(
         ) {
             Text(text = stringResource(R.string.launch_status))
             RadioGroup(
-                selectedLaunchStatus = filterState.launchStatus,
-                onLaunchStatusSelected = { status ->
-                    onEvent(UpdateFilterStateEvent(filterState.order, status, filterState.launchYear))
-                }
+                selectedLaunchStatus = launchStatus,
+                onLaunchStatusSelected = onLaunchStatusChange
             )
         }
     }
 }
 
 @Composable
-private fun DismissButton(onEvent: (LaunchEvents) -> Unit) {
-    Button(onClick = { onEvent(DismissFilterDialogEvent) }) {
-        Text(stringResource(R.string.text_cancel))
-    }
-}
-
-@Composable
-private fun ConfirmButton(onEvent: (LaunchEvents) -> Unit) {
-    Button(onClick = { onEvent(NewSearchEvent) }) {
-        Text(stringResource(R.string.text_search))
-    }
-}
-
-@Composable
-fun YearInputField(
-    year: String,
-    onYearChange: (String) -> Unit,
-    maxChar: Int = 4
+fun QueryInputField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    maxChar: Int = 16
 ) {
     OutlinedTextField(
-        value = year,
-        onValueChange = { if (it.length <= maxChar) onYearChange(it) },
-        label = { Text(stringResource(R.string.year)) },
+        value = query,
+        onValueChange = { if (it.length <= maxChar) onQueryChange(it) },
+        label = { Text(stringResource(R.string.query)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
@@ -207,5 +204,19 @@ fun RadioGroup(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DismissButton(onEvent: (LaunchesEvents) -> Unit) {
+    Button(onClick = { onEvent(DismissFilterDialogEvent) }) {
+        Text(stringResource(R.string.text_cancel))
+    }
+}
+
+@Composable
+private fun ConfirmButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text(stringResource(R.string.text_search))
     }
 }

@@ -20,6 +20,8 @@
     <string name="wikipedia">Wikipedia</string>
 
     <!-- Filter Dialog -->
+    <string name="search">Search</string>
+    <string name="query">Query</string>
     <string name="filter_options">Filter Options</string>
     <string name="filter_by_year">Filter by Year</string>
     <string name="year">Year</string>
