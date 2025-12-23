@@ -1,4 +1,4 @@
-package com.seancoyle.core.ui.extensions
+package com.seancoyle.core.ui.components
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataError.*

@@ -1,4 +1,4 @@
-package com.seancoyle.core.ui.extensions
+package com.seancoyle.core.ui.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier

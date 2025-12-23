@@ -1,4 +1,4 @@
-package com.seancoyle.core.ui.composables
+package com.seancoyle.core.ui.components.progress
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat

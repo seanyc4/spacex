@@ -1,4 +1,4 @@
-package com.seancoyle.core.ui.theme
+package com.seancoyle.core.ui.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
