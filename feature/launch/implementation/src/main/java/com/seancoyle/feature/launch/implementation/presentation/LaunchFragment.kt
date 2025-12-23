@@ -23,8 +23,8 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
-import com.seancoyle.core.ui.extensions.adaptiveHorizontalPadding
-import com.seancoyle.core.ui.theme.AppTheme
+import com.seancoyle.core.ui.components.modifiers.adaptiveHorizontalPadding
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.SwipeToRefreshEvent

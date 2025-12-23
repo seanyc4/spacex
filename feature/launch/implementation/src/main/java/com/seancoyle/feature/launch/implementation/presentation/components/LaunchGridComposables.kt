@@ -25,27 +25,11 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import com.seancoyle.core.ui.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
-
-/*@Composable
-internal fun LaunchHeading(
-    launchHeading: LaunchTypesUiModel.SectionTitleUi,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = launchHeading.title,
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.secondary,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen._8sdp))
-            .semantics { testTag = "SECTION HEADING" }
-    )
-}*/
 
 @Composable
 internal fun LaunchCard(
@@ -55,8 +39,7 @@ internal fun LaunchCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(Dimens.smallMargin),
+            .fillMaxWidth(),
         //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
         shape = RoundedCornerShape(Dimens.defaultCornerRadius),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
