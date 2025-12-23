@@ -1,9 +1,7 @@
 package com.seancoyle.feature.launch.implementation.data.repository
 
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
 
 internal interface LaunchLocalDataSource {
@@ -11,8 +9,6 @@ internal interface LaunchLocalDataSource {
     suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?>
 
     suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity?
-
-    suspend fun getRemoteKeyCreationTime(id: String): Long?
 
     suspend fun refreshLaunches(launches: List<LaunchTypes.Launch>)
 
@@ -40,10 +36,4 @@ internal interface LaunchLocalDataSource {
 
     suspend fun getTotalEntries(): LaunchResult<Int, Throwable>
 
-    suspend fun paginate(
-        launchYear: String,
-        order: Order,
-        launchStatus: LaunchStatus,
-        page: Int
-    ): LaunchResult<List<LaunchTypes.Launch>, Throwable>
 }

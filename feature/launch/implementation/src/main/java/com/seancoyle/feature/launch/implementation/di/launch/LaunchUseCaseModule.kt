@@ -2,8 +2,6 @@ package com.seancoyle.feature.launch.implementation.di.launch
 
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCaseImpl
-import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCase
-import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetNumLaunchesCacheUseCaseImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponentImpl
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.SaveLaunchPreferencesUseCase
@@ -16,11 +14,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 internal abstract class LaunchUseCaseModule {
-
-    @Binds
-    abstract fun bindGetNumLaunchItemsCacheUseCase(
-        impl: GetNumLaunchesCacheUseCaseImpl
-    ): GetNumLaunchesCacheUseCase
 
     @Binds
     abstract fun bindLaunchesComponent(
