@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.di.launch
+package com.seancoyle.feature.launch.implementation.di
 
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.implementation.domain.usecase.launch.GetLaunchPreferencesUseCaseImpl

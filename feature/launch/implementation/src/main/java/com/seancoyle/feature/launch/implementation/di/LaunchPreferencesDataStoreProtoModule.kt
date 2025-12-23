@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.di.launch
+package com.seancoyle.feature.launch.implementation.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

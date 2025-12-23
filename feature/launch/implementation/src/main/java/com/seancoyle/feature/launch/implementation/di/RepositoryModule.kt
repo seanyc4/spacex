@@ -23,5 +23,4 @@ internal abstract class RepositoryModule {
         impl: LaunchRepositoryImpl
     ): LaunchRepository
 
-
 }

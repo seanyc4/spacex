@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.di.launch
+package com.seancoyle.feature.launch.implementation.di
 
 import com.seancoyle.feature.launch.implementation.data.remote.LaunchRemoteDataSourceImpl
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
