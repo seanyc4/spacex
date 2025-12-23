@@ -1,21 +1,26 @@
 package com.seancoyle.feature.launch.implementation.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.UpdateScrollPositionEvent
@@ -24,8 +29,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
-private const val GRID_COLUMN_SIZE = 2
-
 @Composable
 internal fun LaunchesGridContent(
     launches: LazyPagingItems<LaunchUi>,
@@ -33,17 +36,22 @@ internal fun LaunchesGridContent(
     onEvent: (LaunchesEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyGridState(initialFirstVisibleItemIndex = screenState.scrollPosition)
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = screenState.scrollPosition)
     ObserveScrollPosition(listState, onEvent)
 
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(GRID_COLUMN_SIZE),
+        LazyColumn(
             state = listState,
-            modifier = modifier.semantics { testTag = "Launch Grid" }
+            verticalArrangement = Arrangement.spacedBy(Dimens.mediumMargin),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier =
+                modifier
+                    .semantics { testTag = "Launch Grid" }
+                    .fillMaxSize()
+                    .padding(start = Dimens.mediumMargin, end = Dimens.mediumMargin)
         ) {
             items(
                 count = launches.itemCount,
@@ -52,21 +60,23 @@ internal fun LaunchesGridContent(
                         is LaunchUi -> item.id
                     }
                 },
-                span = { index ->
-                    val item = launches[index]
-                    GridItemSpan(
-                        when (item) {
-                            is LaunchUi -> GRID_COLUMN_SIZE
-                            else -> 1
-                        }
-                    )
-                }
             ) { index ->
                 val launchItem = launches[index]
                 if (launchItem != null) {
                     RenderGridSections(
                         launchItem = launchItem,
                         onEvent = onEvent
+                    )
+                }
+            }
+            item {
+                if (launches.loadState.append is LoadState.Loading) {
+                    CircularProgressBar()
+                }
+                if (launches.loadState.append is LoadState.Error) {
+                    RetryButton(
+                        onClick = { launches.retry() },
+                        modifier = Modifier.padding(vertical = Dimens.mediumMargin)
                     )
                 }
             }
@@ -77,7 +87,7 @@ internal fun LaunchesGridContent(
 @OptIn(FlowPreview::class)
 @Composable
 private fun ObserveScrollPosition(
-    listState: LazyGridState,
+    listState: LazyListState,
     onEvent: (LaunchesEvents) -> Unit,
 ) {
     // Observe and save scroll position to view model
@@ -102,7 +112,7 @@ private fun RenderGridSections(
             LaunchCard(
                 launchItem = launchItem,
                 onEvent = {
-                //    onEvent(HandleLaunchClickEvent(launchItem.links))
+                    //    onEvent(HandleLaunchClickEvent(launchItem.links))
                 }
             )
         }
