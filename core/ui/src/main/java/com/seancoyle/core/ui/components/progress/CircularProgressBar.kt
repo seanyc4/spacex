@@ -1,45 +1,51 @@
 package com.seancoyle.core.ui.components.progress
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.progressSemantics
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 
 const val TAG_LOADING = "loading"
+
 @Composable
 fun CircularProgressBar(
-    isDisplayed: Boolean = true,
-    verticalBias: Float = 0f
+    modifier: Modifier = Modifier
 ) {
-    if (isDisplayed) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent)
-        ) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = verticalBias.dp)
-                    .semantics { testTag = TAG_LOADING },
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
+    Box(
+        modifier = modifier
+            .progressSemantics()
+            .fillMaxSize()
+            .testTag(TAG_LOADING),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(name = "CircularProgressBar - Light Mode")
+@Composable
+private fun CircularProgressBarLightPreview() {
+    AppTheme(isDarkTheme = false) {
+        CircularProgressBar()
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(name = "CircularProgressBar - Dark Mode")
+@Composable
+private fun CircularProgressBarDarkPreview() {
+    AppTheme(isDarkTheme = true) {
+        CircularProgressBar()
     }
 }
