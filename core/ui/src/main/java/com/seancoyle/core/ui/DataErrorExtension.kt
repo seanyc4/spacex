@@ -1,9 +1,7 @@
-package com.seancoyle.core.ui.components
+package com.seancoyle.core.ui
 
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataError.*
-import com.seancoyle.core.ui.R
-import com.seancoyle.core.ui.StringResource
 
 fun DataError.asStringResource(): StringResource {
     return when (this) {
