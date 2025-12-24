@@ -95,7 +95,7 @@ internal class LaunchViewModel @Inject constructor(
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
                 launchStatus = event.launchStatus,
-                query = event.launchYear
+                query = event.query
             )
             is SwipeToRefreshEvent -> swipeToRefresh()
         }

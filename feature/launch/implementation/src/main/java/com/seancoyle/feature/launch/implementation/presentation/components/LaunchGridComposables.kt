@@ -3,12 +3,14 @@ package com.seancoyle.feature.launch.implementation.presentation.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,13 +23,17 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CARD
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 
@@ -39,15 +45,15 @@ internal fun LaunchCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
-        //  .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
+            .fillMaxWidth()
+            .clickable {},
         shape = RoundedCornerShape(Dimens.defaultCornerRadius),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .semantics { testTag = "LAUNCH CARD" }
+                .semantics { testTag = LAUNCH_CARD }
         ) {
             Column(
                 modifier = modifier
@@ -134,64 +140,23 @@ internal fun LaunchCardDynamicText(
     )
 }
 
-/*@Composable
-internal fun LaunchCarouselCard(
-  //  launchItem: RocketWithMissionUi,
-    onEvent: (LaunchEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .size(120.dp)
-            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.links)) },
-        shape = CircleShape,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
-    ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            LaunchCardImage(
-                imageUrl = launchItem.links.missionImage,
-                size = 100.dp
-            )
-        }
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(name = "Launch Card - Dark Mode")
+@Composable
+private fun LaunchCardPreview() {
+    AppTheme(isDarkTheme = true) {
+        LaunchCard(
+            launchItem = LaunchUi(
+                id = "1",
+                missionName = "Starlink Mission",
+                launchDate = "2024-01-15",
+                launchStatus = LaunchStatus.SUCCESS,
+                launchDays = "5 days from now",
+                launchDaysResId = R.string.days_from_now,
+                launchStatusIconResId = R.drawable.ic_launch_success,
+                image = ""
+            ),
+            onEvent = {}
+        )
     }
 }
-
-@Composable
-internal fun LaunchGridCard(
-    launchItem: LaunchTypesUiModel.GridUi,
-    onEvent: (LaunchEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .padding(dimensionResource(id = R.dimen.small_view_margins_8dp))
-            .clickable { onEvent(LaunchEvents.HandleLaunchClickEvent(launchItem.items.links)) },
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
-    ) {
-        Column(
-            modifier = modifier
-                .padding(dimensionResource(id = R.dimen.default_view_margin))
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LaunchCardImage(
-                imageUrl = launchItem.items.links.missionImage,
-                size = 100.dp
-            )
-            LaunchCardDynamicText(
-                title = launchItem.items.rocket.rocketNameAndType,
-                modifier = modifier
-                    .padding(top = dimensionResource(id = R.dimen.small_view_margins_8dp))
-            )
-        }
-    }
-}*/

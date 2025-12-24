@@ -37,4 +37,7 @@
     <string name="text_info">Info</string>
     <string name="text_search">Search</string>
     <string name="asc_desc">Ascending/Descending</string>
+
+    <!-- Actions -->
+    <string name="retry">Retry</string>
 </resources>

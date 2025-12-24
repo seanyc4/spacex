@@ -36,7 +36,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEv
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 
 @Composable
-internal fun FilterDialog(
+internal fun LaunchFilterDialog(
     currentFilterState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
     isLandScape: Boolean,
@@ -78,7 +78,7 @@ internal fun FilterDialog(
                     UpdateFilterStateEvent(
                         order = localOrder,
                         launchStatus = localLaunchStatus,
-                        launchYear = localQuery
+                        query = localQuery
                     )
                 )
                 onEvent(NewSearchEvent)

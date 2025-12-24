@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.api
 
 object LaunchTestTags {
     // Grid and List Tags
+    const val LAUNCH_LAZY_COLUMN = "launch_lazy_column"
     const val LAUNCH_GRID = "launch_grid"
     const val LAUNCH_CAROUSEL_ROW = "launch_carousel_row"
 

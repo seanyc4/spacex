@@ -17,7 +17,7 @@ import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
-internal fun SwipeToRefreshComposable(
+internal fun PullToRefreshIndicator(
     feedState: LazyPagingItems<LaunchUi>,
     pullRefreshState: PullRefreshState
 ) {

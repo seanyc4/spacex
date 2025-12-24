@@ -12,6 +12,6 @@ internal sealed interface LaunchesEvents {
     data class UpdateFilterStateEvent(
         val order: Order,
         val launchStatus: LaunchStatus,
-        val launchYear: String
+        val query: String
     ) : LaunchesEvents
 }

@@ -16,9 +16,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
-import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
+import com.seancoyle.feature.launch.implementation.presentation.components.LaunchFilterDialog
 import com.seancoyle.feature.launch.implementation.presentation.components.Launches
-import com.seancoyle.feature.launch.implementation.presentation.components.SwipeToRefreshComposable
+import com.seancoyle.feature.launch.implementation.presentation.components.PullToRefreshIndicator
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
@@ -97,12 +97,12 @@ private fun LaunchScreen(
     }
 
     if (screenState.isVisible) {
-        FilterDialog(
+        LaunchFilterDialog(
             currentFilterState = screenState,
             onEvent = onEvent,
             isLandScape = isLandscape
         )
     }
 
-    SwipeToRefreshComposable(feedState, pullRefreshState)
+    PullToRefreshIndicator(feedState, pullRefreshState)
 }
