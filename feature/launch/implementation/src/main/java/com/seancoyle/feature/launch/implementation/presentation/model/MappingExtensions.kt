@@ -1,10 +1,8 @@
-package com.seancoyle.feature.launch.implementation.presentation
+package com.seancoyle.feature.launch.implementation.presentation.model
 
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
-import com.seancoyle.feature.launch.implementation.presentation.model.BottomSheetLinksUi
-import com.seancoyle.feature.launch.implementation.presentation.model.LinksUi
 
 fun LaunchStatus.getDrawableRes(): Int = when (this) {
     LaunchStatus.SUCCESS -> R.drawable.ic_launch_success
@@ -17,9 +15,3 @@ fun LaunchDateStatus.getDateStringRes(): Int = when (this) {
     LaunchDateStatus.PAST -> R.string.days_since_now
     LaunchDateStatus.FUTURE -> R.string.days_from_now
 }
-
-fun LinksUi?.getLinks() = listOfNotNull(
-    this?.articleLink?.let { BottomSheetLinksUi(R.string.article, it) },
-    this?.webcastLink?.let { BottomSheetLinksUi(R.string.webcast, it) },
-    this?.wikiLink?.let { BottomSheetLinksUi(R.string.wikipedia, it) }
-)

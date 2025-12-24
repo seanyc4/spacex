@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.presentation.components
+package com.seancoyle.core.ui.components.toolbar
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seancoyle.feature.launch.implementation.R
+import com.seancoyle.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,4 +62,10 @@ fun HomeAppBar(
             },
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeAppBarPreview() {
+    HomeAppBar(onClick = {})
 }

@@ -3,8 +3,6 @@ package com.seancoyle.feature.launch.implementation.presentation.model
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchTypes
-import com.seancoyle.feature.launch.implementation.presentation.getDateStringRes
-import com.seancoyle.feature.launch.implementation.presentation.getDrawableRes
 import java.time.LocalDateTime
 import javax.inject.Inject
 

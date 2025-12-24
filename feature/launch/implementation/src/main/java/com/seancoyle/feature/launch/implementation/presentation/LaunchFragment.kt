@@ -25,7 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
 import com.seancoyle.core.ui.components.modifiers.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.feature.launch.implementation.presentation.components.HomeAppBar
+import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DisplayFilterDialogEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.SwipeToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
