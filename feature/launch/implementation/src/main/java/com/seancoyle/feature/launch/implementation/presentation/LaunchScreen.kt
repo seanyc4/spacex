@@ -96,7 +96,7 @@ private fun LaunchScreen(
         }
     }
 
-    if (screenState.isVisible) {
+    if (screenState.isFilterDialogVisible) {
         LaunchFilterDialog(
             currentFilterState = screenState,
             onEvent = onEvent,

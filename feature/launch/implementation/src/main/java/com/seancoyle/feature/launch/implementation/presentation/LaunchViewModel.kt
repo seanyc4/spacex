@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.implementation.presentation
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,11 +18,9 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEv
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import androidx.paging.map
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
@@ -29,12 +28,15 @@ import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUiMa
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 
 private const val TAG = "LaunchViewModel"
 
-@OptIn(SavedStateHandleSaveableApi::class)
+@OptIn(SavedStateHandleSaveableApi::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 internal class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
@@ -51,9 +53,6 @@ internal class LaunchViewModel @Inject constructor(
     private val _refreshEvent = Channel<Unit>(Channel.BUFFERED)
     val refreshEvent = _refreshEvent.receiveAsFlow()
 
-    private val _launchQueryState = MutableStateFlow(LaunchQuery())
-    val launchQueryState = _launchQueryState.asStateFlow()
-
     init {
         viewModelScope.launch {
             Timber.tag(TAG).d("screenState before init: $screenState")
@@ -62,7 +61,12 @@ internal class LaunchViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    val launchQueryState: StateFlow<LaunchQuery> = snapshotFlow {
+        screenState.query to screenState.order
+    }.map { (query, order) ->
+        LaunchQuery(query = query, order = order)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, LaunchQuery())
+
     val feedState: Flow<PagingData<LaunchUi>> = launchQueryState
         .flatMapLatest { launchQuery ->
             Timber.tag(TAG).d("Creating new pager for query: $launchQuery")
@@ -104,13 +108,8 @@ internal class LaunchViewModel @Inject constructor(
     private suspend fun newSearch() {
         saveLaunchPreferences(order = getOrderState())
         displayFilterDialog(false)
-        _launchQueryState.value = LaunchQuery(
-            query = getQueryState(),
-            order = getOrderState()
-        )
     }
 
-    private fun getQueryState() = screenState.query
     private fun getOrderState() = screenState.order
 
     private fun clearQueryParameters() {
@@ -136,15 +135,11 @@ internal class LaunchViewModel @Inject constructor(
             order = order,
             launchStatus = launchStatus
         )
-        _launchQueryState.value = LaunchQuery(
-            query = query,
-            order = order
-        )
         Timber.tag(TAG).d("Updated filterState: order=$order, status=$launchStatus, year=$query")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
-        screenState = screenState.copy(isVisible = isDisplayed)
+        screenState = screenState.copy(isFilterDialogVisible = isDisplayed)
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
     }
 

@@ -27,6 +27,6 @@ internal data class LaunchesScreenState(
     val query: String = "",
     val order: Order = Order.ASC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
-    val isVisible: Boolean = false,
+    val isFilterDialogVisible: Boolean = false,
     val scrollPosition: Int = 0
 ) : Parcelable
