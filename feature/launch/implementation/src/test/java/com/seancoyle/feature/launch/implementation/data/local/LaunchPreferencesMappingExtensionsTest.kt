@@ -22,7 +22,7 @@ class LaunchPreferencesMappingExtensionsTest {
         assertNotNull(result)
         assertEquals(Order.ASC, result.order)
         assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.launchYear)
+        assertEquals("", result.query)
     }
 
     @Test
@@ -36,7 +36,7 @@ class LaunchPreferencesMappingExtensionsTest {
         assertNotNull(result)
         assertEquals(Order.DESC, result.order)
         assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.launchYear)
+        assertEquals("", result.query)
     }
 
     @Test
@@ -49,7 +49,7 @@ class LaunchPreferencesMappingExtensionsTest {
 
         // Verify that the domain model has the expected default values
         assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.launchYear)
+        assertEquals("", result.query)
     }
 
     @Test

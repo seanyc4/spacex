@@ -72,16 +72,6 @@ class LaunchPagerFactoryTest {
     }
 
     @Test
-    fun `create handles null query in LaunchQuery`() {
-        val launchQuery = LaunchQuery(query = null, order = Order.ASC)
-
-        val result = underTest.create(launchQuery)
-
-        assertNotNull(result)
-        assertNotNull(result.flow)
-    }
-
-    @Test
     fun `create handles empty query string`() {
         val launchQuery = LaunchQuery(query = "", order = Order.DESC)
 

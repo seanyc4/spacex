@@ -54,7 +54,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `pager returns empty flow when no data available`() = runTest {
-        val launchQuery = LaunchQuery(query = null, order = Order.ASC)
+        val launchQuery = LaunchQuery(query = "", order = Order.ASC)
         val mockPager = mockk<Pager<Int, LaunchEntity>>()
         val pagingData = PagingData.empty<LaunchEntity>()
 

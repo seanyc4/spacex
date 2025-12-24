@@ -16,14 +16,18 @@ internal interface LaunchLocalDataSource {
         launches: List<LaunchTypes.Launch>,
         nextPage: Int?,
         prevPage: Int?,
-        currentPage: Int
+        currentPage: Int,
+        cachedQuery: String? = null,
+        cachedOrder: String? = null
     )
 
     suspend fun appendLaunchesWithKeys(
         launches: List<LaunchTypes.Launch>,
         nextPage: Int?,
         prevPage: Int?,
-        currentPage: Int
+        currentPage: Int,
+        cachedQuery: String? = null,
+        cachedOrder: String? = null
     )
 
     suspend fun upsert(launch: LaunchTypes.Launch): LaunchResult<Unit, Throwable>

@@ -41,7 +41,9 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         launches: List<LaunchTypes.Launch>,
         nextPage: Int?,
         prevPage: Int?,
-        currentPage: Int
+        currentPage: Int,
+        cachedQuery: String?,
+        cachedOrder: String?
     ) {
         // Create a remote key for each launch item
         val remoteKeys = launches.map { launch ->
@@ -49,7 +51,9 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
                 id = launch.id,
                 nextKey = nextPage,
                 prevKey = prevPage,
-                currentPage = currentPage
+                currentPage = currentPage,
+                cachedQuery = cachedQuery,
+                cachedOrder = cachedOrder
             )
         }
         launchDao.refreshLaunchesWithKeys(
@@ -66,7 +70,9 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         launches: List<LaunchTypes.Launch>,
         nextPage: Int?,
         prevPage: Int?,
-        currentPage: Int
+        currentPage: Int,
+        cachedQuery: String?,
+        cachedOrder: String?
     ) {
         val launchEntities = launches.toEntity()
         launchDao.upsertAll(launchEntities)
@@ -77,7 +83,9 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
                 id = launch.id,
                 nextKey = nextPage,
                 prevKey = prevPage,
-                currentPage = currentPage
+                currentPage = currentPage,
+                cachedQuery = cachedQuery,
+                cachedOrder = cachedOrder
             )
         }
         remoteKeyDao.upsertAll(remoteKeys)

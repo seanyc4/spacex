@@ -81,7 +81,7 @@ internal class LaunchViewModel @Inject constructor(
             setLaunchFilterState(
                 order = result.order,
                 launchStatus = result.launchStatus,
-                query = result.launchYear
+                query = result.query
             )
         }
     }
@@ -115,9 +115,9 @@ internal class LaunchViewModel @Inject constructor(
 
     private fun clearQueryParameters() {
         setLaunchFilterState(
+            query = "",
             order = Order.ASC,
-            launchStatus = LaunchStatus.ALL,
-            query = ""
+            launchStatus = LaunchStatus.ALL
         )
     }
 
@@ -127,14 +127,14 @@ internal class LaunchViewModel @Inject constructor(
     }
 
     private fun setLaunchFilterState(
+        query: String,
         order: Order,
-        launchStatus: LaunchStatus,
-        query: String
+        launchStatus: LaunchStatus
     ) {
         screenState = screenState.copy(
+            query = query,
             order = order,
-            launchStatus = launchStatus,
-            query = query
+            launchStatus = launchStatus
         )
         _launchQueryState.value = LaunchQuery(
             query = query,

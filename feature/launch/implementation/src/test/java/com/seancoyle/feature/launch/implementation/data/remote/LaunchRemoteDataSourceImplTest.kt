@@ -82,7 +82,7 @@ class LaunchRemoteDataSourceImplTest {
     @Test
     fun `getLaunches returns error when API call fails`() = runTest {
         val page = 0
-        val launchQuery = LaunchQuery(query = null, order = Order.ASC)
+        val launchQuery = LaunchQuery(query = "", order = Order.ASC)
         val offset = 0
         val exception = RuntimeException("Network Failure")
         coEvery {

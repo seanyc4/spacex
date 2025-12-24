@@ -5,7 +5,6 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
@@ -31,16 +30,29 @@ internal class LaunchRemoteMediator(
             TimeUnit.HOURS
         )
         val remoteKeys = launchLocalDataSource.getRemoteKeys()
-        val createdTime = remoteKeys.firstOrNull()?.createdAt
+        val firstKey = remoteKeys.firstOrNull()
+        val createdTime = firstKey?.createdAt
 
-        // If there is a search query, always refresh to get relevant results
-        // Also refresh if the order is not the default (ASC)
-        Timber.tag(TAG).d("Refresh with search query ${launchQuery.query} " + "& order ${launchQuery.order}.")
-        if (!launchQuery.query.isNullOrEmpty() || launchQuery.order != Order.ASC) {
+        // Check if the query parameters have changed from what was cached
+        val cachedQuery = firstKey?.cachedQuery
+        val cachedOrder = firstKey?.cachedOrder
+        val currentQuery = launchQuery.query
+        val currentOrder = launchQuery.order.name
+
+        val queryHasChanged = cachedQuery != currentQuery || cachedOrder != currentOrder
+
+        Timber.tag(TAG).d(
+            "Initialize - Current: query='$currentQuery', order=$currentOrder | " +
+            "Cached: query='$cachedQuery', order=$cachedOrder | Changed: $queryHasChanged"
+        )
+
+        // If query parameters have changed, refresh to get relevant results
+        if (queryHasChanged) {
+            Timber.tag(TAG).d("Query/order changed - refreshing data.")
             return InitializeAction.LAUNCH_INITIAL_REFRESH
         }
 
-        // Check if the cache is still valid based on createdAt timestamp &cache timeout
+        // Check if the cache is still valid based on createdAt timestamp & cache timeout
         return if (createdTime != null &&
             System.currentTimeMillis().minus(createdTime) <= cacheTimeout
         ) {
@@ -57,7 +69,6 @@ internal class LaunchRemoteMediator(
         state: PagingState<Int, LaunchEntity>
     ): MediatorResult {
         return try {
-            Timber.tag(TAG).d("loadType: $loadType")
 
             val page = when (loadType) {
                 LoadType.REFRESH -> {
@@ -105,8 +116,9 @@ internal class LaunchRemoteMediator(
                             launches = launches,
                             nextPage = nextPage,
                             prevPage = null, // Always null on refresh since we're starting fresh
-                            currentPage = STARTING_PAGE
-
+                            currentPage = STARTING_PAGE,
+                            cachedQuery = launchQuery.query,
+                            cachedOrder = launchQuery.order.name
                         )
                     } else {
                         // Append or prepend data to existing cache
@@ -115,7 +127,9 @@ internal class LaunchRemoteMediator(
                             launches = launches,
                             nextPage = nextPage,
                             prevPage = prevPage,
-                            currentPage = page
+                            currentPage = page,
+                            cachedQuery = launchQuery.query,
+                            cachedOrder = launchQuery.order.name
                         )
                     }
 

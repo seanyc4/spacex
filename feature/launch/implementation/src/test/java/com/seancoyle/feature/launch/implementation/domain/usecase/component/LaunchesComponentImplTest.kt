@@ -58,59 +58,11 @@ class LaunchesComponentImplTest {
     }
 
     @Test
-    fun `observeLaunchesUseCase with null query delegates correctly`() = runTest {
-        val launchQuery = LaunchQuery(query = null, order = Order.ASC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
-        val flow = flowOf(pagingData)
-        every { observeLaunchesUseCase.invoke(launchQuery) } returns flow
-
-        val result = underTest.observeLaunchesUseCase(launchQuery)
-        assertNotNull(result)
-        result.collect {}
-    }
-
-    @Test
-    fun `observeLaunchesUseCase with DESC order delegates correctly`() = runTest {
-        val launchQuery = LaunchQuery(query = "SpaceX", order = Order.DESC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
-        val flow = flowOf(pagingData)
-        every { observeLaunchesUseCase.invoke(launchQuery) } returns flow
-
-        val result = underTest.observeLaunchesUseCase(launchQuery)
-        assertNotNull(result)
-        result.collect {}
-    }
-
-    @Test
-    fun `observeLaunchesUseCase with ASC order delegates correctly`() = runTest {
-        val launchQuery = LaunchQuery(query = "Dragon", order = Order.ASC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
-        val flow = flowOf(pagingData)
-        every { observeLaunchesUseCase.invoke(launchQuery) } returns flow
-
-        val result = underTest.observeLaunchesUseCase(launchQuery)
-        assertNotNull(result)
-        result.collect {}
-    }
-
-    @Test
-    fun `observeLaunchesUseCase returns flow from use case`() = runTest {
-        val launchQuery = LaunchQuery(query = "Test", order = Order.DESC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
-        val expectedFlow = flowOf(pagingData)
-        every { observeLaunchesUseCase.invoke(launchQuery) } returns expectedFlow
-
-        val result = underTest.observeLaunchesUseCase(launchQuery)
-        assertEquals(expectedFlow, result)
-        result.collect {}
-    }
-
-    @Test
     fun `getLaunchPreferencesUseCase delegates to use case`() = runTest {
         val preferences = LaunchPrefs(
             order = Order.ASC,
             launchStatus = LaunchStatus.ALL,
-            launchYear = ""
+            query = ""
         )
         coEvery { getLaunchPreferencesUseCase.invoke() } returns preferences
 
@@ -125,7 +77,7 @@ class LaunchesComponentImplTest {
         val preferences = LaunchPrefs(
             order = Order.ASC,
             launchStatus = LaunchStatus.ALL,
-            launchYear = ""
+            query = ""
         )
         coEvery { getLaunchPreferencesUseCase.invoke() } returns preferences
 
@@ -141,7 +93,7 @@ class LaunchesComponentImplTest {
         val preferences = LaunchPrefs(
             order = Order.DESC,
             launchStatus = LaunchStatus.SUCCESS,
-            launchYear = "2024"
+            query = "2024"
         )
         coEvery { getLaunchPreferencesUseCase.invoke() } returns preferences
 
@@ -149,7 +101,7 @@ class LaunchesComponentImplTest {
 
         assertEquals(Order.DESC, result.order)
         assertEquals(LaunchStatus.SUCCESS, result.launchStatus)
-        assertEquals("2024", result.launchYear)
+        assertEquals("2024", result.query)
         coVerify { getLaunchPreferencesUseCase.invoke() }
     }
 

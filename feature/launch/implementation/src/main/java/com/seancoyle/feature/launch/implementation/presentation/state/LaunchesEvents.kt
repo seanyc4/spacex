@@ -10,8 +10,8 @@ internal sealed interface LaunchesEvents {
     data object SwipeToRefreshEvent : LaunchesEvents
     data class UpdateScrollPositionEvent(val position: Int) : LaunchesEvents
     data class UpdateFilterStateEvent(
+        val query: String,
         val order: Order,
         val launchStatus: LaunchStatus,
-        val query: String
     ) : LaunchesEvents
 }

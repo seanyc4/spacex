@@ -31,7 +31,7 @@ class GetLaunchPreferencesUseCaseImplTest {
         val launchPrefs = LaunchPrefs(
             order = Order.DESC,
             launchStatus = LaunchStatus.SUCCESS,
-            launchYear = "2024"
+            query = "2024"
         )
         coEvery { launchPreferencesRepository.getLaunchPreferences() } returns launchPrefs
 

@@ -16,14 +16,14 @@ internal interface LaunchApi {
     suspend fun getUpcomingLaunches(
         @Query(OFFSET) offset: Int = 0,
         @Query(SEARCH) search: String? = null,
-        @Query(ORDERING) ordering: String? = Order.DESC.value
+        @Query(ORDERING) ordering: String? = Order.ASC.value
     ): LaunchesDto
 
     @GET(PREVIOUS_URL)
     suspend fun getPreviousLaunches(
         @Query(OFFSET) offset: Int = 0,
         @Query(SEARCH) search: String? = null,
-        @Query(ORDERING) ordering: String? = Order.DESC.value
+        @Query(ORDERING) ordering: String? = Order.ASC.value
     ): LaunchesDto
 
 }

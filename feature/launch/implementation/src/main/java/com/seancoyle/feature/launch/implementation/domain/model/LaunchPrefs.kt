@@ -12,7 +12,7 @@ import com.seancoyle.core.domain.Order
 data class LaunchPrefs(
     val order: Order = Order.ASC,
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
-    val launchYear: String = ""
+    val query: String = ""
 )
 
 @Keep
