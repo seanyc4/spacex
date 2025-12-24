@@ -63,9 +63,9 @@ internal fun Launches(
             ) { index ->
                 val launchItem = launches[index]
                 if (launchItem != null) {
-                    RenderGridSections(
+                    LaunchCard(
                         launchItem = launchItem,
-                        onEvent = onEvent
+                        onEvent = {}
                     )
                 }
             }
@@ -98,23 +98,5 @@ private fun ObserveScrollPosition(
             .collectLatest { position ->
                 onEvent(UpdateScrollPositionEvent(position))
             }
-    }
-}
-
-@Composable
-private fun RenderGridSections(
-    launchItem: LaunchUi,
-    onEvent: (LaunchesEvents) -> Unit
-) {
-    when (launchItem) {
-
-        is LaunchUi -> {
-            LaunchCard(
-                launchItem = launchItem,
-                onEvent = {
-                    //    onEvent(HandleLaunchClickEvent(launchItem.links))
-                }
-            )
-        }
     }
 }

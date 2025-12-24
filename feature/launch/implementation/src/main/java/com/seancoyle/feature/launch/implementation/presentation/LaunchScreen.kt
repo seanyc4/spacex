@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.feature.launch.implementation.presentation.components.FilterDialog
@@ -35,13 +34,7 @@ internal fun LaunchScreen(
     isLandscape: Boolean,
 ) {
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
-    val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.refreshEvent.collectLatest {
-            feedState.refresh()
-        }
-    }
+    val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
 
     SideEffect {
         Timber.tag("LaunchViewModel").d("LaunchRoute: feedState: $feedState")
@@ -50,13 +43,25 @@ internal fun LaunchScreen(
 
     LaunchScreen(
         feedState = feedState,
-        notificationState = notificationState,
-        snackbarHostState = snackbarHostState,
         screenState = viewModel.screenState,
         isLandscape = isLandscape,
         pullRefreshState = pullRefreshState,
         onEvent = viewModel::onEvent,
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshEvent.collectLatest {
+            feedState.refresh()
+        }
+    }
+
+    notificationState?.let {
+        NotificationHandler(
+            notification = it,
+            onDismissNotification = {},
+            snackbarHostState = snackbarHostState
+        )
+    }
 }
 
 @ExperimentalMaterialApi
@@ -64,9 +69,7 @@ internal fun LaunchScreen(
 private fun LaunchScreen(
     feedState: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
-    notificationState: NotificationState?,
     pullRefreshState: PullRefreshState,
-    snackbarHostState: SnackbarHostState,
     onEvent: (LaunchesEvents) -> Unit,
     isLandscape: Boolean,
 ) {
@@ -91,14 +94,6 @@ private fun LaunchScreen(
                 onEvent = onEvent
             )
         }
-    }
-
-    notificationState?.let { notification ->
-        NotificationHandler(
-            notification = notification,
-            onDismissNotification = { onEvent(LaunchesEvents.DismissNotificationEvent) },
-            snackbarHostState = snackbarHostState
-        )
     }
 
     if (screenState.isVisible) {

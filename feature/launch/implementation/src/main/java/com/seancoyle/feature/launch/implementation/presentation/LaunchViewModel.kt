@@ -17,21 +17,20 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEv
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.*
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import androidx.paging.map
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUiMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 
 private const val TAG = "LaunchViewModel"
 
@@ -46,11 +45,11 @@ internal class LaunchViewModel @Inject constructor(
     var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesScreenState()) }
         private set
 
-    private val _notificationState = MutableStateFlow<NotificationState?>(null)
-    val notificationState = _notificationState.asStateFlow()
+    private val _notificationEvents = Channel<NotificationState>(Channel.BUFFERED)
+    val notificationEvents = _notificationEvents.receiveAsFlow()
 
-    private val _refreshEvent = MutableSharedFlow<Unit>(replay = 0)
-    val refreshEvent = _refreshEvent.asSharedFlow()
+    private val _refreshEvent = Channel<Unit>(Channel.BUFFERED)
+    val refreshEvent = _refreshEvent.receiveAsFlow()
 
     private val _launchQueryState = MutableStateFlow(LaunchQuery())
     val launchQueryState = _launchQueryState.asStateFlow()
@@ -91,9 +90,7 @@ internal class LaunchViewModel @Inject constructor(
         when (event) {
             is DismissFilterDialogEvent -> displayFilterDialog(false)
             is DisplayFilterDialogEvent -> displayFilterDialog(true)
-            is DismissNotificationEvent -> dismissNotification()
             is NewSearchEvent -> newSearch()
-            is NotificationEvent -> updateNotificationState(event)
             is UpdateScrollPositionEvent -> setScrollPositionState(event.position)
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
@@ -102,14 +99,6 @@ internal class LaunchViewModel @Inject constructor(
             )
             is SwipeToRefreshEvent -> swipeToRefresh()
         }
-    }
-
-    private fun updateNotificationState(event: NotificationEvent) {
-        _notificationState.update { event.notificationState }
-    }
-
-    private fun dismissNotification() {
-        _notificationState.update { null }
     }
 
     private suspend fun newSearch() {
@@ -134,7 +123,7 @@ internal class LaunchViewModel @Inject constructor(
 
     private suspend fun swipeToRefresh() {
         clearQueryParameters()
-        _refreshEvent.emit(Unit)
+        _refreshEvent.send(Unit)
     }
 
     private fun setLaunchFilterState(
