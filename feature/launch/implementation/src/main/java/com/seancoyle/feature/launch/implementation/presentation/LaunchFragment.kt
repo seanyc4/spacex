@@ -72,7 +72,7 @@ internal class LaunchFragment : Fragment() {
                         .fillMaxSize()
                         .pullRefresh(pullRefreshState)
                 ) {
-                    LaunchRoute(
+                    LaunchScreen(
                         viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,

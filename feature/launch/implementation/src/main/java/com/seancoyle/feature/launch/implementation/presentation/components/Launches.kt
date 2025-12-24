@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
 @Composable
-internal fun LaunchesGridContent(
+internal fun Launches(
     launches: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
