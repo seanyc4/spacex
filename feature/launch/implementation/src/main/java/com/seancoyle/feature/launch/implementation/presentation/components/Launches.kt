@@ -46,13 +46,13 @@ internal fun Launches(
     ) {
         LazyColumn(
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(Dimens.mediumMargin),
+            verticalArrangement = Arrangement.spacedBy(Dimens.dp8),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier =
                 modifier
                     .semantics { testTag = LAUNCH_LAZY_COLUMN }
                     .fillMaxSize()
-                    .padding(start = Dimens.mediumMargin, end = Dimens.mediumMargin)
+                    .padding(start = Dimens.dp8, end = Dimens.dp8)
         ) {
             items(
                 count = launches.itemCount,
@@ -77,7 +77,7 @@ internal fun Launches(
                 if (launches.loadState.append is LoadState.Error) {
                     RetryButton(
                         onClick = { launches.retry() },
-                        modifier = Modifier.padding(vertical = Dimens.mediumMargin)
+                        modifier = Modifier.padding(vertical = Dimens.dp8)
                     )
                 }
             }

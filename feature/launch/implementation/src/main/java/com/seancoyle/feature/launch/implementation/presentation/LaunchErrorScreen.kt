@@ -33,7 +33,7 @@ fun LaunchErrorScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(Dimens.largeMargin),
+            .padding(Dimens.dp16),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

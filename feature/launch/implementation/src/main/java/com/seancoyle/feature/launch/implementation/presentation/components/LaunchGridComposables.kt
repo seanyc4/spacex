@@ -47,7 +47,7 @@ internal fun LaunchCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable {},
-        shape = RoundedCornerShape(Dimens.defaultCornerRadius),
+        shape = RoundedCornerShape(Dimens.dp10),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
@@ -70,17 +70,17 @@ internal fun LaunchCard(
                 LaunchCardDynamicText(
                     title = launchItem.missionName,
                     size = MaterialTheme.typography.titleSmall,
-                    modifier = modifier.padding(bottom = Dimens.xsMargin)
+                    modifier = modifier.padding(bottom = Dimens.dp4)
                 )
                 LaunchCardDynamicText(
                     title = launchItem.launchDate,
                     size = MaterialTheme.typography.bodyMedium,
-                    modifier = modifier.padding(bottom = Dimens.xsMargin)
+                    modifier = modifier.padding(bottom = Dimens.dp4)
                 )
                 LaunchCardDynamicText(
                     title = launchItem.launchDays,
                     size = MaterialTheme.typography.bodyMedium,
-                    modifier = modifier.padding(bottom = Dimens.xsMargin)
+                    modifier = modifier.padding(bottom = Dimens.dp4)
                 )
             }
 

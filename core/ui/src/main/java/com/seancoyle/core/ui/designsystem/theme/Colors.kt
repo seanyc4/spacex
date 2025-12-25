@@ -1,5 +1,6 @@
 package com.seancoyle.core.ui.designsystem.theme
 
+import androidx.compose.material.Colors
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -8,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 
 val LocalPalette = compositionLocalOf { lightPalette }
 
-data class AppColours(
+data class AppPalette(
     val primary: Color,
     val onPrimary: Color,
     val primaryContainer: Color,
@@ -128,9 +129,24 @@ data class AppColours(
             )
         }
     }
+    fun toMaterialColours() = Colors(
+        primary = primary,
+        onPrimary = onPrimary,
+        primaryVariant = primaryContainer,
+        secondary = secondary,
+        onSecondary = onSecondary,
+        secondaryVariant = secondaryContainer,
+        background = background,
+        onBackground = onBackground,
+        surface = surface,
+        onSurface = onSurface,
+        error = error,
+        onError = onError,
+        isLight = isLight
+    )
 }
 
-val lightPalette = AppColours(
+val lightPalette = AppPalette(
     primary = Color(0xFF006493),
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFCAE6FF),
@@ -170,7 +186,7 @@ val lightPalette = AppColours(
     isLight = true
 )
 
-val darkPalette = AppColours(
+val darkPalette = AppPalette(
     primary = Color(0xFF8DCDFF),
     onPrimary = Color(0xFF00344F),
     primaryContainer = Color(0xFF004B70),
