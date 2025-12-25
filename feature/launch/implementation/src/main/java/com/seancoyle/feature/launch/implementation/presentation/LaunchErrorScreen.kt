@@ -18,10 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 
 @Composable
@@ -46,10 +46,8 @@ fun LaunchErrorScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
+        AppText.headlineLarge(
             text = message.resolve(),
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.error,
             modifier = modifier.fillMaxWidth()
         )

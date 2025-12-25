@@ -48,6 +48,23 @@ data class AppPalette(
     val surfaceDim: Color,
     val isLight: Boolean
 ) {
+
+    fun toMaterialColours() = Colors(
+        primary = primary,
+        onPrimary = onPrimary,
+        primaryVariant = primaryContainer,
+        secondary = secondary,
+        onSecondary = onSecondary,
+        secondaryVariant = secondaryContainer,
+        background = background,
+        onBackground = onBackground,
+        surface = surface,
+        onSurface = onSurface,
+        error = error,
+        onError = onError,
+        isLight = isLight
+    )
+
     val colourScheme: ColorScheme by lazy {
         if (isLight) {
             lightColorScheme(
@@ -129,21 +146,6 @@ data class AppPalette(
             )
         }
     }
-    fun toMaterialColours() = Colors(
-        primary = primary,
-        onPrimary = onPrimary,
-        primaryVariant = primaryContainer,
-        secondary = secondary,
-        onSecondary = onSecondary,
-        secondaryVariant = secondaryContainer,
-        background = background,
-        onBackground = onBackground,
-        surface = surface,
-        onSurface = onSurface,
-        error = error,
-        onError = onError,
-        isLight = isLight
-    )
 }
 
 val lightPalette = AppPalette(
