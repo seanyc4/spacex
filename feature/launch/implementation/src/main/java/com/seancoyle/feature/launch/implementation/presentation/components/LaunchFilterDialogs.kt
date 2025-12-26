@@ -13,7 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +25,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.ui.designsystem.switch.Switch
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
