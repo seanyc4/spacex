@@ -17,4 +17,4 @@ import androidx.compose.ui.tooling.preview.Preview
     uiMode = UI_MODE_NIGHT_YES
 )
 
-internal annotation class PreviewDarkLightMode
+annotation class PreviewDarkLightMode

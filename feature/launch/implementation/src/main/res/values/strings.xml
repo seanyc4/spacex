@@ -4,8 +4,6 @@
     <string name="search">Search</string>
     <string name="mission_name">Mission Name</string>
     <string name="filter_options">Filter Options</string>
-    <string name="filter_by_year">Filter by Year</string>
-    <string name="year">Year</string>
     <string name="launch_status">Filter by Launch Status</string>
 
     <!-- Launch Items -->
