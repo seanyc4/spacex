@@ -60,7 +60,7 @@ internal fun LaunchCard(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.small_view_margins_8dp))
+                    .padding(Dimens.dp8)
             ) {
 
                 AppText.titleSmall(

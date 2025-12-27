@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.implementation.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.progress.ShimmerAnimation
+import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.implementation.R
 
 @Composable
@@ -36,7 +36,6 @@ fun LoadingLaunchCardList(
 ) {
     LazyColumn(modifier = modifier) {
         item { LoadingLaunchHeading() }
-        item { LoadingCompanySummaryCard() }
         item { LoadingLaunchHeading() }
         item {
             LazyRow {
@@ -44,32 +43,6 @@ fun LoadingLaunchCardList(
             }
         }
         item { LoadingLaunchHeading() }
-        items(itemCount) {
-            Row(
-                modifier = modifier.fillMaxWidth()
-            ) {
-                LoadingLaunchGridCard(modifier = modifier.weight(1f))
-                LoadingLaunchGridCard(modifier = modifier.weight(1f))
-            }
-        }
-    }
-}
-
-@Composable
-fun LoadingCompanySummaryCard(modifier: Modifier = Modifier) {
-    ShimmerAnimation(getShimmerColors()) { brush ->
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius)),
-            modifier = modifier.padding(8.dp)
-        ) {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(brush = brush)
-            )
-        }
     }
 }
 
@@ -89,7 +62,7 @@ fun LoadingLaunchCarouselCard(modifier: Modifier = Modifier) {
         Card(
             modifier = modifier
                 .size(120.dp)
-                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
+                .padding(Dimens.dp8),
             shape = CircleShape,
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         ) {
@@ -104,30 +77,13 @@ fun LoadingLaunchCarouselCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoadingLaunchGridCard(modifier: Modifier = Modifier) {
-    ShimmerAnimation(getShimmerColors()) { brush ->
-        Card(
-            modifier = modifier
-                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
-        ) {
-            Box(
-                modifier = modifier
-                    .size(170.dp)
-                    .background(brush = brush)
-            )
-        }
-    }
-}
-
-@Composable
 fun LoadingLaunchCard(modifier: Modifier = Modifier) {
     ShimmerAnimation(getShimmerColors()) { brush ->
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.small_view_margins_8dp)),
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner_radius))
+                .padding(Dimens.dp8),
+            shape = RoundedCornerShape(Dimens.dp8)
         ) {
             Box(
                 modifier = modifier

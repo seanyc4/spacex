@@ -21,12 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.switch.Switch
 import com.seancoyle.core.domain.Order
+import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
@@ -48,7 +49,7 @@ internal fun LaunchFilterDialog(
 
     AlertDialog(
         onDismissRequest = { onEvent(DismissFilterDialogEvent) },
-        title = { Text(stringResource(R.string.filter_options)) },
+        title = { AppText.headlineMedium(stringResource(R.string.filter_options)) },
         text = {
             if (isLandScape) {
                 LandscapeDialogContent(
@@ -101,17 +102,17 @@ private fun PortraitDialogContent(
     modifier: Modifier
 ) {
     Column {
-        Text(stringResource(R.string.search))
+        AppText.bodyLarge(stringResource(R.string.search))
         QueryInputField(query = query, onQueryChange = onQueryChange)
-        Text(
+        AppText.bodyLarge(
             text = stringResource(R.string.launch_status),
-            modifier = modifier.padding(top = dimensionResource(R.dimen.default_view_margin))
+            modifier = modifier.padding(top = Dimens.dp16)
         )
         RadioGroup(
             selectedLaunchStatus = launchStatus,
             onLaunchStatusSelected = onLaunchStatusChange
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimens.dp16))
         OrderSwitch(order = order, onOrderChange = onOrderChange)
     }
 }
@@ -132,7 +133,7 @@ private fun LandscapeDialogContent(
                 .weight(1f)
                 .padding(end = 8.dp)
         ) {
-            Text(stringResource(R.string.filter_by_year))
+            AppText.bodyLarge(stringResource(R.string.filter_by_year))
             QueryInputField(query = query, onQueryChange = onQueryChange)
             Spacer(modifier = Modifier.height(16.dp))
             OrderSwitch(order = order, onOrderChange = onOrderChange)
@@ -142,7 +143,7 @@ private fun LandscapeDialogContent(
                 .weight(1f)
                 .padding(start = 6.dp)
         ) {
-            Text(text = stringResource(R.string.launch_status))
+            AppText.bodyLarge(text = stringResource(R.string.launch_status))
             RadioGroup(
                 selectedLaunchStatus = launchStatus,
                 onLaunchStatusSelected = onLaunchStatusChange
@@ -171,7 +172,7 @@ fun OrderSwitch(
     order: Order,
     onOrderChange: (Order) -> Unit
 ) {
-    Text(text = stringResource(R.string.asc_desc))
+    AppText.bodyLarge(text = stringResource(R.string.asc_desc))
     Switch(
         checked = order == Order.ASC,
         onCheckedChange = { newValue -> onOrderChange(if (newValue) Order.ASC else Order.DESC) }
@@ -198,9 +199,9 @@ fun RadioGroup(
                     onClick = { onLaunchStatusSelected(option) },
                     modifier = modifier.size(40.dp)
                 )
-                Text(
+                AppText.bodyMedium(
                     text = option.name,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
