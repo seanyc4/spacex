@@ -138,16 +138,18 @@ internal class LaunchRemoteMediator(
 
                 is LaunchResult.Error -> {
                     Timber.tag(TAG).e("Error loading page $page: ${remoteLaunchesResult.error}")
-                    return fallbackToCacheAvailable(loadType)
+                    return fallbackToCacheAvailable(loadType, remoteLaunchesResult.error)
                 }
             }
-        } catch (e: Exception) {
-            Timber.tag(TAG).e(e, "Exception in load()")
-            return fallbackToCacheAvailable(loadType)
+        } catch (exception: Exception) {
+            Timber.tag(TAG).e(exception, "Exception in load()")
+            return fallbackToCacheAvailable(loadType, exception)
         }
     }
 
-    private suspend fun fallbackToCacheAvailable(loadType: LoadType): MediatorResult {
+    private suspend fun fallbackToCacheAvailable(
+        loadType: LoadType,
+        exception: Throwable): MediatorResult {
         // Check if we have cached data to fall back to
         val cachedItemCount = when (val totalResult = launchLocalDataSource.getTotalEntries()) {
             is LaunchResult.Success -> totalResult.data
@@ -167,7 +169,7 @@ internal class LaunchRemoteMediator(
             return MediatorResult.Success(endOfPaginationReached = true)
         }
 
-        return MediatorResult.Error(Exception("No cached data available"))
+        return MediatorResult.Error(exception)
     }
 
     private suspend fun getRemoteKeyForFirstItem(): LaunchRemoteKeyEntity? {
