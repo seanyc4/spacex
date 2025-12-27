@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.switch.Switch
 import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.R
@@ -40,7 +43,7 @@ import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesSc
 internal fun LaunchFilterDialog(
     currentFilterState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
-    isLandScape: Boolean,
+    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier
 ) {
     var localQuery by remember { mutableStateOf(currentFilterState.query) }
@@ -51,26 +54,29 @@ internal fun LaunchFilterDialog(
         onDismissRequest = { onEvent(DismissFilterDialogEvent) },
         title = { AppText.headlineMedium(stringResource(R.string.filter_options)) },
         text = {
-            if (isLandScape) {
-                LandscapeDialogContent(
-                    query = localQuery,
-                    onQueryChange = { localQuery = it },
-                    order = localOrder,
-                    onOrderChange = { localOrder = it },
-                    launchStatus = localLaunchStatus,
-                    onLaunchStatusChange = { localLaunchStatus = it },
-                    modifier = modifier
-                )
-            } else {
-                PortraitDialogContent(
-                    query = localQuery,
-                    onQueryChange = { localQuery = it },
-                    order = localOrder,
-                    onOrderChange = { localOrder = it },
-                    launchStatus = localLaunchStatus,
-                    onLaunchStatusChange = { localLaunchStatus = it },
-                    modifier = modifier
-                )
+            when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> {
+                    PortraitDialogContent(
+                        query = localQuery,
+                        onQueryChange = { localQuery = it },
+                        order = localOrder,
+                        onOrderChange = { localOrder = it },
+                        launchStatus = localLaunchStatus,
+                        onLaunchStatusChange = { localLaunchStatus = it },
+                        modifier = modifier
+                    )
+                }
+                else -> {
+                    LandscapeDialogContent(
+                        query = localQuery,
+                        onQueryChange = { localQuery = it },
+                        order = localOrder,
+                        onOrderChange = { localOrder = it },
+                        launchStatus = localLaunchStatus,
+                        onLaunchStatusChange = { localLaunchStatus = it },
+                        modifier = modifier
+                    )
+                }
             }
         },
         confirmButton = {
@@ -133,7 +139,7 @@ private fun LandscapeDialogContent(
                 .weight(1f)
                 .padding(end = 8.dp)
         ) {
-            AppText.bodyLarge(stringResource(R.string.filter_by_year))
+            AppText.bodyLarge(stringResource(R.string.search))
             QueryInputField(query = query, onQueryChange = onQueryChange)
             Spacer(modifier = Modifier.height(16.dp))
             OrderSwitch(order = order, onOrderChange = onOrderChange)
@@ -161,7 +167,10 @@ fun QueryInputField(
     OutlinedTextField(
         value = query,
         onValueChange = { if (it.length <= maxChar) onQueryChange(it) },
-        label = { Text(stringResource(R.string.query)) },
+        label = { AppText.bodyMedium(
+            text = stringResource(R.string.mission_name),
+            color = AppTheme.colors.secondary
+        ) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )

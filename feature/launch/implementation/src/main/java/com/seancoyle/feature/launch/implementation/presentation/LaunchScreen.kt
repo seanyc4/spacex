@@ -5,6 +5,7 @@ package com.seancoyle.feature.launch.implementation.presentation
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -31,7 +32,7 @@ internal fun LaunchScreen(
     viewModel: LaunchViewModel = hiltViewModel(),
     pullRefreshState: PullRefreshState,
     snackbarHostState: SnackbarHostState,
-    isLandscape: Boolean,
+    windowSizeClass: WindowSizeClass,
 ) {
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
@@ -44,7 +45,7 @@ internal fun LaunchScreen(
     LaunchScreen(
         feedState = feedState,
         screenState = viewModel.screenState,
-        isLandscape = isLandscape,
+        windowSizeClass = windowSizeClass,
         pullRefreshState = pullRefreshState,
         onEvent = viewModel::onEvent,
     )
@@ -71,7 +72,7 @@ private fun LaunchScreen(
     screenState: LaunchesScreenState,
     pullRefreshState: PullRefreshState,
     onEvent: (LaunchesEvents) -> Unit,
-    isLandscape: Boolean,
+    windowSizeClass: WindowSizeClass,
 ) {
 
     when {
@@ -100,7 +101,7 @@ private fun LaunchScreen(
         LaunchFilterDialog(
             currentFilterState = screenState,
             onEvent = onEvent,
-            isLandScape = isLandscape
+            windowSizeClass = windowSizeClass
         )
     }
 

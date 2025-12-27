@@ -42,8 +42,7 @@ internal class LaunchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = content {
-        val windowSize = calculateWindowSizeClass(requireActivity())
-        val isLandscape = windowSize.heightSizeClass == WindowHeightSizeClass.Compact
+        val windowSizeClass = calculateWindowSizeClass(requireActivity())
         val snackbarHostState = remember { SnackbarHostState() }
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
@@ -67,7 +66,6 @@ internal class LaunchFragment : Fragment() {
             ) { padding ->
                 Box(
                     Modifier
-                        .adaptiveHorizontalPadding(isLandscape)
                         .padding(padding)
                         .fillMaxSize()
                         .pullRefresh(pullRefreshState)
@@ -76,7 +74,7 @@ internal class LaunchFragment : Fragment() {
                         viewModel = viewModel,
                         pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
-                        isLandscape = isLandscape,
+                        windowSizeClass = windowSizeClass,
                     )
                 }
             }
