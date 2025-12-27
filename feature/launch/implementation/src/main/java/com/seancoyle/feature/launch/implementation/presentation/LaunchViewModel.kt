@@ -25,6 +25,7 @@ import timber.log.Timber
 import androidx.paging.map
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUiMapper
+import com.seancoyle.feature.launch.implementation.presentation.state.PagingEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -50,8 +51,8 @@ internal class LaunchViewModel @Inject constructor(
     private val _notificationEvents = Channel<NotificationState>(Channel.BUFFERED)
     val notificationEvents = _notificationEvents.receiveAsFlow()
 
-    private val _refreshEvent = Channel<Unit>(Channel.BUFFERED)
-    val refreshEvent = _refreshEvent.receiveAsFlow()
+    private val _pagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
+    val pagingEvents = _pagingEvents.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -95,13 +96,14 @@ internal class LaunchViewModel @Inject constructor(
             is DismissFilterDialogEvent -> displayFilterDialog(false)
             is DisplayFilterDialogEvent -> displayFilterDialog(true)
             is NewSearchEvent -> newSearch()
+            is PullToRefreshEvent -> onPullToRefresh()
+            is RetryFetchEvent -> onRetryFetch()
             is UpdateScrollPositionEvent -> setScrollPositionState(event.position)
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
                 launchStatus = event.launchStatus,
                 query = event.query
             )
-            is SwipeToRefreshEvent -> swipeToRefresh()
         }
     }
 
@@ -120,9 +122,13 @@ internal class LaunchViewModel @Inject constructor(
         )
     }
 
-    private suspend fun swipeToRefresh() {
+    private suspend fun onPullToRefresh() {
         clearQueryParameters()
-        _refreshEvent.send(Unit)
+        _pagingEvents.send(PagingEvents.Refresh)
+    }
+
+    private suspend fun onRetryFetch() {
+        _pagingEvents.send(PagingEvents.Retry)
     }
 
     private fun setLaunchFilterState(

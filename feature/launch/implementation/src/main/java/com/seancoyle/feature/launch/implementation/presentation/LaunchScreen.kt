@@ -23,8 +23,10 @@ import com.seancoyle.feature.launch.implementation.presentation.components.PullT
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
-import kotlinx.coroutines.flow.collectLatest
+import com.seancoyle.feature.launch.implementation.presentation.state.PagingEvents
 import timber.log.Timber
+
+private const val TAG = "LaunchScreen"
 
 @ExperimentalMaterialApi
 @Composable
@@ -38,8 +40,8 @@ internal fun LaunchScreen(
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
 
     SideEffect {
-        Timber.tag("LaunchViewModel").d("LaunchRoute: feedState: $feedState")
-        Timber.tag("LaunchViewModel").d("LaunchRoute: screenState: ${viewModel.screenState}")
+        Timber.tag(TAG).d("LaunchRoute: feedState: $feedState")
+        Timber.tag(TAG).d("LaunchRoute: screenState: ${viewModel.screenState}")
     }
 
     LaunchScreen(
@@ -51,8 +53,17 @@ internal fun LaunchScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.refreshEvent.collectLatest {
-            feedState.refresh()
+        viewModel.pagingEvents.collect { event ->
+            when (event) {
+                is PagingEvents.Refresh -> {
+                    Timber.tag(TAG).d("Received PagingEvents.Refresh event")
+                    feedState.refresh()
+                }
+                is PagingEvents.Retry -> {
+                    Timber.tag(TAG).d("Received PagingEvents.Retry event")
+                    feedState.retry()
+                }
+            }
         }
     }
 
@@ -80,7 +91,7 @@ private fun LaunchScreen(
             CircularProgressBar()
         }
         feedState.loadState.refresh is LoadState.Error -> {
-            // Initial load error
+            LaunchErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
         }
         feedState.loadState.prepend is LoadState.Loading -> {
             CircularProgressBar()

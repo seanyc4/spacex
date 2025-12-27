@@ -7,7 +7,8 @@ internal sealed interface LaunchesEvents {
     data object DismissFilterDialogEvent : LaunchesEvents
     data object DisplayFilterDialogEvent : LaunchesEvents
     data object NewSearchEvent : LaunchesEvents
-    data object SwipeToRefreshEvent : LaunchesEvents
+    data object PullToRefreshEvent : LaunchesEvents
+    data object RetryFetchEvent : LaunchesEvents
     data class UpdateScrollPositionEvent(val position: Int) : LaunchesEvents
     data class UpdateFilterStateEvent(
         val query: String,

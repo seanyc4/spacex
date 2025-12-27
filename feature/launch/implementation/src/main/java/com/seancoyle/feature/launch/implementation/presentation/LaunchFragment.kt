@@ -14,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,11 +22,10 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.compose.content
-import com.seancoyle.core.ui.components.modifiers.adaptiveHorizontalPadding
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.SwipeToRefreshEvent
+import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.PullToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,7 +44,7 @@ internal class LaunchFragment : Fragment() {
         val snackbarHostState = remember { SnackbarHostState() }
         val pullRefreshState = rememberPullRefreshState(
             refreshing = false,
-            onRefresh = { viewModel.onEvent(SwipeToRefreshEvent) }
+            onRefresh = { viewModel.onEvent(PullToRefreshEvent) }
         )
 
         AppTheme {

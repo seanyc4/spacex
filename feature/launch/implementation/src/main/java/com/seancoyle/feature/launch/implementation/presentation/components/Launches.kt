@@ -80,7 +80,7 @@ internal fun Launches(
                 if (launches.loadState.append is LoadState.Error) {
                     ButtonPrimary(
                         text = stringResource(R.string.retry),
-                        onClick = { launches.retry() },
+                        onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
                         modifier = Modifier.padding(vertical = Dimens.dp8)
                     )
                 }
