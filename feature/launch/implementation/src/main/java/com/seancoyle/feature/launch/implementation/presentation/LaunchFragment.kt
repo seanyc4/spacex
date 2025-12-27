@@ -6,9 +6,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -25,11 +22,9 @@ import androidx.fragment.compose.content
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.DisplayFilterDialogEvent
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.PullToRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-@ExperimentalMaterialApi
 @ExperimentalMaterial3WindowSizeClassApi
 internal class LaunchFragment : Fragment() {
 
@@ -42,10 +37,6 @@ internal class LaunchFragment : Fragment() {
     ) = content {
         val windowSizeClass = calculateWindowSizeClass(requireActivity())
         val snackbarHostState = remember { SnackbarHostState() }
-        val pullRefreshState = rememberPullRefreshState(
-            refreshing = false,
-            onRefresh = { viewModel.onEvent(PullToRefreshEvent) }
-        )
 
         AppTheme {
             Scaffold(
@@ -66,11 +57,9 @@ internal class LaunchFragment : Fragment() {
                     Modifier
                         .padding(padding)
                         .fillMaxSize()
-                        .pullRefresh(pullRefreshState)
                 ) {
                     LaunchScreen(
                         viewModel = viewModel,
-                        pullRefreshState = pullRefreshState,
                         snackbarHostState = snackbarHostState,
                         windowSizeClass = windowSizeClass,
                     )

@@ -65,7 +65,10 @@ internal class LaunchViewModel @Inject constructor(
     val launchQueryState: StateFlow<LaunchQuery> = snapshotFlow {
         screenState.query to screenState.order
     }.map { (query, order) ->
-        LaunchQuery(query = query, order = order)
+        LaunchQuery(
+            query = query,
+            order = order
+        )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, LaunchQuery())
 
     val feedState: Flow<PagingData<LaunchUi>> = launchQueryState
@@ -124,11 +127,17 @@ internal class LaunchViewModel @Inject constructor(
 
     private suspend fun onPullToRefresh() {
         clearQueryParameters()
+        setRefreshing(true)
         _pagingEvents.send(PagingEvents.Refresh)
     }
 
     private suspend fun onRetryFetch() {
         _pagingEvents.send(PagingEvents.Retry)
+    }
+
+    fun setRefreshing(isRefreshing: Boolean) {
+        screenState = screenState.copy(isRefreshing = isRefreshing)
+        Timber.tag(TAG).d("Updated isRefreshing: $isRefreshing")
     }
 
     private fun setLaunchFilterState(

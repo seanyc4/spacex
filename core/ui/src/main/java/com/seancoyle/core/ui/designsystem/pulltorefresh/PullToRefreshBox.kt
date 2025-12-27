@@ -23,8 +23,8 @@ import kotlinx.coroutines.runBlocking
 fun RefreshableContent(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
-    content: @Composable () -> Unit,
     state: PullToRefreshState = rememberPullToRefreshState(),
+    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshBox(
