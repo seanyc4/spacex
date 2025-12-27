@@ -227,19 +227,3 @@ val darkPalette = AppPalette(
     surfaceDim = Color(0xFF424242),
     isLight = false
 )
-
-internal val primaryColor = Color(0xFFFFFFFF)
-internal val primaryContainerColor = Color(0xFF03A9F4)
-internal val backgroundColor = Color(0xFF212121)
-internal val secondaryColor = Color(0xFF424242)
-internal val surfaceColor = Color(0xFF424242)
-internal val errorColor = Color(0xFFE4342D)
-internal val textPrimaryColor = Color(0xFFFFFFFF)
-internal val textSecondaryColor = Color(0xFF000000)
-
-internal val black = Color(0xFF000000)
-internal val white = Color(0xFFFFFFFF)
-internal val transparent = Color(0x00000000)
-
-internal val seed = Color(0xFF03A9F4)
-internal val Green90 = Color(0xFF5AFF9D)
