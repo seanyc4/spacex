@@ -101,7 +101,6 @@ internal class LaunchViewModel @Inject constructor(
             is NewSearchEvent -> newSearch()
             is PullToRefreshEvent -> onPullToRefresh()
             is RetryFetchEvent -> onRetryFetch()
-            is UpdateScrollPositionEvent -> setScrollPositionState(event.position)
             is UpdateFilterStateEvent -> setLaunchFilterState(
                 order = event.order,
                 launchStatus = event.launchStatus,
@@ -158,7 +157,7 @@ internal class LaunchViewModel @Inject constructor(
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
     }
 
-    private fun setScrollPositionState(position: Int) {
+    fun updateScrollPosition(position: Int) {
         screenState = screenState.copy(scrollPosition = position)
         Timber.tag(TAG).d("Updated scrollState.scrollPosition: $position")
     }

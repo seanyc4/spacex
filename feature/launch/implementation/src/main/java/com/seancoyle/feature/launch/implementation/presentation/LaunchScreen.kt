@@ -76,6 +76,7 @@ internal fun LaunchScreen(
                 screenState = viewModel.screenState,
                 windowSizeClass = windowSizeClass,
                 onEvent = viewModel::onEvent,
+                onUpdateScrollPosition = viewModel::updateScrollPosition
             )
         }
     )
@@ -94,7 +95,8 @@ private fun LaunchScreen(
     feedState: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
+    onUpdateScrollPosition: (Int) -> Unit,
 ) {
 
     when (feedState.loadState.mediator?.refresh) {
@@ -110,7 +112,8 @@ private fun LaunchScreen(
             Launches(
                 launches = feedState,
                 screenState = screenState,
-                onEvent = onEvent
+                onEvent = onEvent,
+                onUpdateScrollPosition = onUpdateScrollPosition
             )
         }
     }

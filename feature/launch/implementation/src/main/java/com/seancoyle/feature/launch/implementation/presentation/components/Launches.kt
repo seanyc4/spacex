@@ -27,7 +27,6 @@ import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_LAZY_COLUMN
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
-import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.UpdateScrollPositionEvent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesScreenState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -38,10 +37,11 @@ internal fun Launches(
     launches: LazyPagingItems<LaunchUi>,
     screenState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
+    onUpdateScrollPosition: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = screenState.scrollPosition)
-    ObserveScrollPosition(listState, onEvent)
+    ObserveScrollPosition(listState, onUpdateScrollPosition)
 
     Box(
         modifier = modifier
@@ -105,7 +105,7 @@ internal fun Launches(
 @Composable
 private fun ObserveScrollPosition(
     listState: LazyListState,
-    onEvent: (LaunchesEvents) -> Unit,
+    onUpdateScrollPosition: (Int) -> Unit,
 ) {
     // Observe and save scroll position to ViewModel
     LaunchedEffect(listState) {
@@ -113,7 +113,7 @@ private fun ObserveScrollPosition(
             listState.firstVisibleItemIndex
         }.debounce(750L)
             .collectLatest { position ->
-                onEvent(UpdateScrollPositionEvent(position))
+                onUpdateScrollPosition(position)
             }
     }
 }
