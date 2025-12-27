@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,12 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
 fun LaunchErrorScreen(
-    message: StringResource,
+    message: StringResource? = null,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,16 +48,28 @@ fun LaunchErrorScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         AppText.headlineLarge(
-            text = message.resolve(),
+            text = message?.resolve() ?: stringResource(R.string.network_connection_failed),
             color = MaterialTheme.colorScheme.error,
             modifier = modifier.fillMaxWidth()
         )
 
         Spacer(modifier = modifier.height(20.dp))
 
-        Button(onClick = onRetry) {
-            Text(stringResource(R.string.retry))
-        }
+        ButtonPrimary(
+            text = stringResource(R.string.retry),
+            onClick = onRetry
+        )
     }
 
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun LaunchErrorScreenPreview() {
+    AppTheme {
+        LaunchErrorScreen(
+            message = null,
+            onRetry = {}
+        )
+    }
 }
