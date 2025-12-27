@@ -14,14 +14,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_LAZY_COLUMN
+import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents.UpdateScrollPositionEvent
@@ -75,7 +78,8 @@ internal fun Launches(
                     CircularProgressBar()
                 }
                 if (launches.loadState.append is LoadState.Error) {
-                    RetryButton(
+                    ButtonPrimary(
+                        text = stringResource(R.string.retry),
                         onClick = { launches.retry() },
                         modifier = Modifier.padding(vertical = Dimens.dp8)
                     )

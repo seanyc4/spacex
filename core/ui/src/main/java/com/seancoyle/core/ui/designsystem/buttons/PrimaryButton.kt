@@ -16,8 +16,8 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 fun ButtonPrimary(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    modifier: Modifier = Modifier,
 ) {
     return Button(
         modifier = modifier
