@@ -86,19 +86,15 @@ private fun LaunchScreen(
     windowSizeClass: WindowSizeClass,
 ) {
 
-    when {
-        feedState.loadState.refresh is LoadState.Loading -> {
+    when (feedState.loadState.mediator?.refresh) {
+        is LoadState.Loading -> {
             CircularProgressBar()
         }
-        feedState.loadState.refresh is LoadState.Error -> {
+
+        is LoadState.Error -> {
             LaunchErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
         }
-        feedState.loadState.prepend is LoadState.Loading -> {
-            CircularProgressBar()
-        }
-        feedState.loadState.prepend is LoadState.Error -> {
 
-        }
         else -> {
             Launches(
                 launches = feedState,

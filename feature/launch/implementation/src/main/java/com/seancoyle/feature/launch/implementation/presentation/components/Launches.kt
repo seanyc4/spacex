@@ -57,6 +57,18 @@ internal fun Launches(
                     .fillMaxSize()
                     .padding(start = Dimens.dp8, end = Dimens.dp8)
         ) {
+            item {
+                if (launches.loadState.mediator?.prepend is LoadState.Loading) {
+                    CircularProgressBar()
+                }
+                if (launches.loadState.mediator?.prepend is LoadState.Error) {
+                    ButtonPrimary(
+                        text = stringResource(R.string.retry),
+                        onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
+                        modifier = Modifier.padding(vertical = Dimens.dp8)
+                    )
+                }
+            }
             items(
                 count = launches.itemCount,
                 key = launches.itemKey { item ->
@@ -74,10 +86,10 @@ internal fun Launches(
                 }
             }
             item {
-                if (launches.loadState.append is LoadState.Loading) {
+                if (launches.loadState.mediator?.append is LoadState.Loading) {
                     CircularProgressBar()
                 }
-                if (launches.loadState.append is LoadState.Error) {
+                if (launches.loadState.mediator?.append is LoadState.Error) {
                     ButtonPrimary(
                         text = stringResource(R.string.retry),
                         onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
@@ -95,7 +107,7 @@ private fun ObserveScrollPosition(
     listState: LazyListState,
     onEvent: (LaunchesEvents) -> Unit,
 ) {
-    // Observe and save scroll position to view model
+    // Observe and save scroll position to ViewModel
     LaunchedEffect(listState) {
         snapshotFlow {
             listState.firstVisibleItemIndex
