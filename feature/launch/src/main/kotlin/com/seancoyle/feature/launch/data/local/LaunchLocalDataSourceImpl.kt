@@ -139,9 +139,9 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
             launchDao.getById(id)
         }.fold(
             onSuccess = { result ->
-                //  result?.let {
-                LaunchResult.Success(result!!.toDomain())
-                //   } ?: LaunchResult.Error(LocalError.CACHE_ERROR_END_REACHED)
+                result?.let {
+                    LaunchResult.Success(result.toDomain())
+                } ?: LaunchResult.Error(Throwable("Item not found"))
             },
             onFailure = {
                 Timber.e(it)
