@@ -66,7 +66,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
         buildConfig = true
     }
@@ -111,15 +110,11 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.appCompat)
     implementation(libs.compose.runtime)
     implementation(libs.coreKtx)
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.savedstate)
     ksp(libs.lifecycle.compiler)
-    implementation(libs.navigation.dynamic)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     implementation(libs.profileInstaller)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)

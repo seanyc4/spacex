@@ -1,9 +1,9 @@
 package com.seancoyle.spacex.presentation
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,7 +28,7 @@ import kotlin.getValue
 
 @AndroidEntryPoint
 @ExperimentalMaterial3WindowSizeClassApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var crashlytics: Crashlytics
