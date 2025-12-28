@@ -59,7 +59,6 @@ internal class LaunchFragment : Fragment() {
                         .fillMaxSize()
                 ) {
                     LaunchScreen(
-                        viewModel = viewModel,
                         snackbarHostState = snackbarHostState,
                         windowSizeClass = windowSizeClass,
                     )
