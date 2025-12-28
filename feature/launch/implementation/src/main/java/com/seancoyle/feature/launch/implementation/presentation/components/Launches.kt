@@ -91,7 +91,7 @@ internal fun Launches(
                     ButtonPrimary(
                         text = stringResource(R.string.retry),
                         onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
-                        modifier = Modifier.padding(vertical = Dimens.dp8)
+                        modifier = Modifier.padding(Dimens.dp4)
                     )
                 }
             }

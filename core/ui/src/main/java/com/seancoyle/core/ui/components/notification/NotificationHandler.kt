@@ -53,7 +53,7 @@ fun NotificationHandler(
             SnackbarNotification(
                 hostState = snackbarHostState,
                 message = notification.message.resolve(),
-                notificationType = notification.notificationType
+                onDismissNotification = onDismissNotification
             )
         }
 
@@ -61,22 +61,14 @@ fun NotificationHandler(
     }
 }
 
-/**
- * Displays a snackbar notification using LaunchedEffect.
- *
- * @param hostState The SnackbarHostState to show the snackbar in
- * @param message The message to display
- * @param notificationType The type of notification (Success/Error/Info) - currently not used but available for future customization
- */
 @Composable
 private fun SnackbarNotification(
     hostState: SnackbarHostState,
     message: String,
-    notificationType: NotificationType
+    onDismissNotification: () -> Unit
 ) {
     LaunchedEffect(message) {
-        // TODO: Customize snackbar appearance based on notificationType
-        // Consider using different colors, icons, or durations for different types
         hostState.showSnackbar(message)
+        onDismissNotification()
     }
 }

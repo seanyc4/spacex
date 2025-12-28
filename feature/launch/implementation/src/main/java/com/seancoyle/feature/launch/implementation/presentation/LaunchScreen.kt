@@ -14,6 +14,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.seancoyle.core.ui.R
+import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
@@ -44,10 +46,18 @@ internal fun LaunchScreen(
     }
 
     LaunchedEffect(feedState.loadState.refresh) {
-        // reset the pull to refresh state
         val refresh = feedState.loadState.refresh
         if (refresh is LoadState.NotLoading && isRefreshing) {
             viewModel.setRefreshing(false)
+        }
+    }
+
+    LaunchedEffect(feedState.loadState.append) {
+        val appendError = feedState.loadState.append as? LoadState.Error
+        appendError?.let {
+            viewModel.emitErrorNotification(
+                StringResource.ResId(R.string.network_connection_failed)
+            )
         }
     }
 
@@ -55,12 +65,10 @@ internal fun LaunchScreen(
         viewModel.pagingEvents.collect { event ->
             when (event) {
                 is PagingEvents.Refresh -> {
-                    Timber.tag(TAG).d("Received PagingEvents.Refresh event")
                     feedState.refresh()
                 }
 
                 is PagingEvents.Retry -> {
-                    Timber.tag(TAG).d("Received PagingEvents.Retry event")
                     feedState.retry()
                 }
             }
@@ -84,7 +92,7 @@ internal fun LaunchScreen(
     notificationState?.let {
         NotificationHandler(
             notification = it,
-            onDismissNotification = {},
+            onDismissNotification = { viewModel.clearNotification() },
             snackbarHostState = snackbarHostState
         )
     }

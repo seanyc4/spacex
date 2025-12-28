@@ -11,7 +11,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.core.domain.Order
-import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents
@@ -34,6 +33,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import com.seancoyle.core.ui.NotificationState
+import com.seancoyle.core.ui.NotificationType
+import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.UiComponentType
 
 private const val TAG = "LaunchViewModel"
 
@@ -166,4 +169,23 @@ internal class LaunchViewModel @Inject constructor(
         launchesComponent.saveLaunchPreferencesUseCase(order)
     }
 
+    fun emitErrorNotification(errorMessage: StringResource) = viewModelScope.launch {
+        _notificationEvents.send(
+            NotificationState(
+                message = errorMessage,
+                uiComponentType = UiComponentType.Snackbar,
+                notificationType = NotificationType.Error
+            )
+        )
+    }
+
+    fun clearNotification() = viewModelScope.launch {
+        _notificationEvents.send(
+            NotificationState(
+                message = StringResource.Text(""),
+                uiComponentType = UiComponentType.None,
+                notificationType = NotificationType.Info
+            )
+        )
+    }
 }
