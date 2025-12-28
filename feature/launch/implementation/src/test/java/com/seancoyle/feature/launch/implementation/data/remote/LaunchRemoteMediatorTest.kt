@@ -348,7 +348,7 @@ class LaunchRemoteMediatorTest {
     }
 
     @Test
-    fun `load append fails returns end of pagination`() = runTest {
+    fun `when load append fails returns error`() = runTest {
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -360,15 +360,34 @@ class LaunchRemoteMediatorTest {
             cachedOrder = "ASC"
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
+        coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Error(Throwable("Network error"))
         coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.APPEND, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertEquals(true, result.endOfPaginationReached)
+        assertTrue(result is RemoteMediator.MediatorResult.Error)
     }
 
+    @Test
+    fun `load append with exception returns error`() = runTest {
+        val pagingState = createPagingState()
+        val remoteKey = LaunchRemoteKeyEntity(
+            id = "last-id",
+            prevKey = 0,
+            nextKey = 1,
+            currentPage = 0,
+            createdAt = System.currentTimeMillis(),
+            cachedQuery = "",
+            cachedOrder = "ASC"
+        )
+        coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
+        coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } throws RuntimeException("Unexpected error")
+        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
+
+        val result = underTest.load(LoadType.APPEND, pagingState)
+
+        assertTrue(result is RemoteMediator.MediatorResult.Error)
+    }
 
     @Test
     fun `load prepend succeeds with more data`() = runTest {
@@ -432,6 +451,48 @@ class LaunchRemoteMediatorTest {
 
         assertTrue(result is RemoteMediator.MediatorResult.Success)
         assertEquals(true, result.endOfPaginationReached)
+    }
+
+    @Test
+    fun `load prepend fails returns error for retry button`() = runTest {
+        val pagingState = createPagingState()
+        val remoteKey = LaunchRemoteKeyEntity(
+            id = "first-id",
+            prevKey = 1,
+            nextKey = 2,
+            currentPage = 1,
+            createdAt = System.currentTimeMillis(),
+            cachedQuery = "",
+            cachedOrder = "ASC"
+        )
+        coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
+        coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
+        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
+
+        val result = underTest.load(LoadType.PREPEND, pagingState)
+
+        assertTrue(result is RemoteMediator.MediatorResult.Error)
+    }
+
+    @Test
+    fun `load prepend with exception returns error for retry button`() = runTest {
+        val pagingState = createPagingState()
+        val remoteKey = LaunchRemoteKeyEntity(
+            id = "first-id",
+            prevKey = 1,
+            nextKey = 2,
+            currentPage = 1,
+            createdAt = System.currentTimeMillis(),
+            cachedQuery = "",
+            cachedOrder = "ASC"
+        )
+        coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
+        coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } throws RuntimeException("Unexpected error")
+        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
+
+        val result = underTest.load(LoadType.PREPEND, pagingState)
+
+        assertTrue(result is RemoteMediator.MediatorResult.Error)
     }
 
     private fun createPagingState(): PagingState<Int, LaunchEntity> {

@@ -163,12 +163,8 @@ internal class LaunchRemoteMediator(
             return MediatorResult.Success(endOfPaginationReached = false)
         }
 
-        // If we're appending and hit an exception, we've reached the end for now
-        if (loadType == LoadType.APPEND) {
-            Timber.tag(TAG).d("Exception during APPEND, ending pagination")
-            return MediatorResult.Success(endOfPaginationReached = true)
-        }
-
+        // For APPEND and PREPEND, return error so retry button can be shown
+        Timber.tag(TAG).d("Exception during $loadType, returning error for retry")
         return MediatorResult.Error(exception)
     }
 

@@ -83,10 +83,11 @@ internal fun Launches(
                 }
             }
             item {
-                if (launches.loadState.mediator?.append is LoadState.Loading) {
+                val appendLoadState = launches.loadState.mediator?.append ?: launches.loadState.append
+                if (appendLoadState is LoadState.Loading) {
                     CircularProgressBar()
                 }
-                if (launches.loadState.mediator?.append is LoadState.Error) {
+                if (appendLoadState is LoadState.Error) {
                     ButtonPrimary(
                         text = stringResource(R.string.retry),
                         onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
