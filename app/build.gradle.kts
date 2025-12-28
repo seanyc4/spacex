@@ -106,7 +106,7 @@ dependencies {
     implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.database)
-    implementation(projects.feature.launch.implementation)
+    implementation(projects.feature.launch)
 
     implementation(libs.appCompat)
     implementation(libs.compose.runtime)
