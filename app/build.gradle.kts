@@ -102,6 +102,7 @@ dependencies {
     implementation(projects.core.datastore.implementation)
     implementation(projects.core.datastoreProto)
     implementation(projects.core.domain)
+    implementation(projects.core.navigation)
     implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.database)

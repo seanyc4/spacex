@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.datastore.api)
     implementation(projects.core.datastoreProto)
+    implementation(projects.core.navigation)
     implementation(projects.core.ui)
     implementation(projects.database)
     api(projects.feature.launch.api)
