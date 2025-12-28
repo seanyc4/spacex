@@ -58,10 +58,7 @@ internal fun Launches(
                     .padding(start = Dimens.dp8, end = Dimens.dp8)
         ) {
             item {
-                if (launches.loadState.mediator?.prepend is LoadState.Loading) {
-                    CircularProgressBar()
-                }
-                if (launches.loadState.mediator?.prepend is LoadState.Error) {
+                if (launches.loadState.prepend is LoadState.Error) {
                     ButtonPrimary(
                         text = stringResource(R.string.retry),
                         onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
