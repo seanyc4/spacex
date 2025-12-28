@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
@@ -50,6 +51,7 @@ fun LaunchErrorScreen(
         AppText.headlineLarge(
             text = message?.resolve() ?: stringResource(R.string.network_connection_failed),
             color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth()
         )
 
