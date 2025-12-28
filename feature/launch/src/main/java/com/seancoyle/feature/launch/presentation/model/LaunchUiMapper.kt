@@ -6,7 +6,7 @@ import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-internal class LaunchUiMapper @Inject constructor(
+class LaunchUiMapper @Inject constructor(
     private val dateFormatter: DateTransformer
 ) {
 

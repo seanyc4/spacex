@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.presentation.state
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 
-internal sealed interface LaunchesEvents {
+sealed interface LaunchesEvents {
     data object DismissFilterDialogEvent : LaunchesEvents
     data object DisplayFilterDialogEvent : LaunchesEvents
     data object NewSearchEvent : LaunchesEvents

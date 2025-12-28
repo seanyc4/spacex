@@ -9,7 +9,7 @@ sealed interface Route : NavKey {
     @Serializable
     data object LaunchList : Route, NavKey
 
-    @Serializable
-    data class LaunchDetails(val launchId: String) : Route, NavKey
+   /* @Serializable
+    data class LaunchDetails(val launchId: String) : Route, NavKey*/
 
 }

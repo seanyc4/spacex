@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -31,10 +32,11 @@ private const val TAG = "LaunchScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LaunchScreen(
+fun LaunchScreen(
     viewModel: LaunchViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
 ) {
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
@@ -84,7 +86,8 @@ internal fun LaunchScreen(
                 screenState = viewModel.screenState,
                 windowSizeClass = windowSizeClass,
                 onEvent = viewModel::onEvent,
-                onUpdateScrollPosition = viewModel::updateScrollPosition
+                onUpdateScrollPosition = viewModel::updateScrollPosition,
+                modifier = modifier
             )
         }
     )
@@ -105,6 +108,7 @@ private fun LaunchScreen(
     onEvent: (LaunchesEvents) -> Unit,
     windowSizeClass: WindowSizeClass,
     onUpdateScrollPosition: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     when (feedState.loadState.mediator?.refresh) {
@@ -121,7 +125,8 @@ private fun LaunchScreen(
                 launches = feedState,
                 screenState = screenState,
                 onEvent = onEvent,
-                onUpdateScrollPosition = onUpdateScrollPosition
+                onUpdateScrollPosition = onUpdateScrollPosition,
+                modifier = modifier
             )
         }
     }

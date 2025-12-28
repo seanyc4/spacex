@@ -41,7 +41,7 @@ private const val TAG = "LaunchViewModel"
 
 @OptIn(SavedStateHandleSaveableApi::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
-internal class LaunchViewModel @Inject constructor(
+class LaunchViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val uiMapper: LaunchUiMapper,
     savedStateHandle: SavedStateHandle,
