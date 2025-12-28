@@ -69,7 +69,7 @@ class MappingExtensionsKtTest {
     @Test
     fun `toUiModel throws exception for unknown type`() {
         val unknownType = mockk<LaunchTypes>(relaxed = true)
-        assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(IllegalArgumentException::class.kotlin) {
             unknownType.toUiModel(appStringResource)
         }
     }*/
