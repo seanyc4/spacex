@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
                     NavigationRoot(
+                        viewModel = viewModel,
                         snackbarHostState = snackbarHostState,
                         windowSizeClass = windowSizeClass,
                         modifier = Modifier.padding(innerPadding)

@@ -10,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -33,7 +32,7 @@ private const val TAG = "LaunchScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchScreen(
-    viewModel: LaunchViewModel = hiltViewModel(),
+    viewModel: LaunchViewModel,
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
@@ -140,3 +139,4 @@ private fun LaunchScreen(
     }
 
 }
+
