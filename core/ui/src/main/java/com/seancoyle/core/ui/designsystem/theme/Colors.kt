@@ -1,6 +1,5 @@
 package com.seancoyle.core.ui.designsystem.theme
 
-import androidx.compose.material.Colors
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -48,22 +47,6 @@ data class AppPalette(
     val surfaceDim: Color,
     val isLight: Boolean
 ) {
-
-    fun toMaterialColours() = Colors(
-        primary = primary,
-        onPrimary = onPrimary,
-        primaryVariant = primaryContainer,
-        secondary = secondary,
-        onSecondary = onSecondary,
-        secondaryVariant = secondaryContainer,
-        background = background,
-        onBackground = onBackground,
-        surface = surface,
-        onSurface = onSurface,
-        error = error,
-        onError = onError,
-        isLight = isLight
-    )
 
     val colourScheme: ColorScheme by lazy {
         if (isLight) {

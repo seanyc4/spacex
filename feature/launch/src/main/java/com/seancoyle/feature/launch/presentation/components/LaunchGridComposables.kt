@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -25,6 +23,7 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.LaunchTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
@@ -102,11 +101,10 @@ internal fun LaunchCardImage(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Preview(name = "Launch Card - Dark Mode")
+@PreviewDarkLightMode
 @Composable
 private fun LaunchCardPreview() {
-    AppTheme(isDarkTheme = true) {
+    AppTheme {
         LaunchCard(
             launchItem = LaunchUi(
                 id = "1",

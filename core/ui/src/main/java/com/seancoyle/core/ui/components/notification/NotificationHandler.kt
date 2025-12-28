@@ -6,8 +6,8 @@ import androidx.compose.runtime.LaunchedEffect
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.UiComponentType
-import com.seancoyle.core.ui.designsystem.dialog.ErrorDialog
-import com.seancoyle.core.ui.designsystem.dialog.InfoDialog
+import com.seancoyle.core.ui.components.dialog.ErrorDialog
+import com.seancoyle.core.ui.components.dialog.InfoDialog
 
 /**
  * Handles the display of notifications based on the [NotificationState].
