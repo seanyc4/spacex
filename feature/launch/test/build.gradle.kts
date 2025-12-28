@@ -15,5 +15,5 @@ android {
 }
 
 dependencies {
-    api(projects.feature.launch.api)
+
 }

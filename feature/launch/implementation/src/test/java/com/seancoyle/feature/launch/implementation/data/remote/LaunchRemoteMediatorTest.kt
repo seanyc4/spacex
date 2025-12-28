@@ -9,8 +9,8 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
-import com.seancoyle.feature.launch.api.LaunchConstants.PREFETCH_DISTANCE
+import com.seancoyle.feature.launch.implementation.LaunchConstants.PAGINATION_LIMIT
+import com.seancoyle.feature.launch.implementation.LaunchConstants.PREFETCH_DISTANCE
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchLocalDataSource
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery

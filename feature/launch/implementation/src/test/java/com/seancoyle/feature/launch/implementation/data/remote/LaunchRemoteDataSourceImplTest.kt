@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.implementation.data.remote
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
-import com.seancoyle.feature.launch.api.LaunchConstants
+import com.seancoyle.feature.launch.implementation.LaunchConstants
 import com.seancoyle.feature.launch.implementation.data.repository.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus

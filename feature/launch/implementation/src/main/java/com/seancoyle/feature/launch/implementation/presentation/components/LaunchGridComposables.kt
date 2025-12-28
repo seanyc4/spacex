@@ -13,7 +13,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -26,7 +25,7 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
-import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CARD
+import com.seancoyle.feature.launch.implementation.LaunchTestTags.LAUNCH_CARD
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi

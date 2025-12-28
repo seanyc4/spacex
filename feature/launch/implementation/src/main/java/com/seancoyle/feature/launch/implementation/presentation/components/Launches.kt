@@ -23,7 +23,7 @@ import androidx.paging.compose.itemKey
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
-import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_LAZY_COLUMN
+import com.seancoyle.feature.launch.implementation.LaunchTestTags.LAUNCH_LAZY_COLUMN
 import com.seancoyle.feature.launch.implementation.R
 import com.seancoyle.feature.launch.implementation.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.implementation.presentation.state.LaunchesEvents

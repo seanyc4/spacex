@@ -6,9 +6,9 @@ import androidx.paging.PagingConfig
 import com.seancoyle.feature.launch.implementation.domain.model.LaunchQuery
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.feature.launch.api.LaunchConstants.INITIAL_LOAD_SIZE
-import com.seancoyle.feature.launch.api.LaunchConstants.PAGINATION_LIMIT
-import com.seancoyle.feature.launch.api.LaunchConstants.PREFETCH_DISTANCE
+import com.seancoyle.feature.launch.implementation.LaunchConstants.INITIAL_LOAD_SIZE
+import com.seancoyle.feature.launch.implementation.LaunchConstants.PAGINATION_LIMIT
+import com.seancoyle.feature.launch.implementation.LaunchConstants.PREFETCH_DISTANCE
 import com.seancoyle.feature.launch.implementation.data.remote.LaunchRemoteMediator
 import javax.inject.Inject
 

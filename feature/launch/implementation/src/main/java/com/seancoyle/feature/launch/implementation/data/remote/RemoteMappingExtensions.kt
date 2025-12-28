@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.implementation.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_IMAGE
-import com.seancoyle.feature.launch.api.LaunchConstants.DEFAULT_LAUNCH_THUMBNAIL
+import com.seancoyle.feature.launch.implementation.LaunchConstants.DEFAULT_LAUNCH_IMAGE
+import com.seancoyle.feature.launch.implementation.LaunchConstants.DEFAULT_LAUNCH_THUMBNAIL
 import com.seancoyle.feature.launch.implementation.domain.model.Agency
 import com.seancoyle.feature.launch.implementation.domain.model.Configuration
 import com.seancoyle.feature.launch.implementation.domain.model.Country

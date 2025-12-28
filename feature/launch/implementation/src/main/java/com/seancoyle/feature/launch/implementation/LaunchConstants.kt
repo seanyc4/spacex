@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.api
+package com.seancoyle.feature.launch.implementation
 
 object LaunchConstants {
     const val LAUNCH_OPTIONS_ROCKET = "rocket"

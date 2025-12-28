@@ -44,7 +44,6 @@ baselineProfile {
 }
 
 dependencies {
-    implementation(projects.feature.launch.api)
     implementation(libs.junit)
     implementation(libs.espresso.core)
     implementation(libs.uiautomator)

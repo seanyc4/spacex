@@ -34,7 +34,6 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.core.ui)
     implementation(projects.database)
-    api(projects.feature.launch.api)
 
     implementation(libs.appCompat)
     implementation(libs.coreKtx)
