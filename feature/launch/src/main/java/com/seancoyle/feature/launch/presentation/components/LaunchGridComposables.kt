@@ -114,8 +114,6 @@ private fun LaunchCardPreview() {
                 launchDate = "2024-01-15",
                 launchStatus = LaunchStatus.SUCCESS,
                 launchDays = "5 days from now",
-                launchDaysResId = R.string.days_from_now,
-                launchStatusIconResId = R.drawable.ic_launch_success,
                 image = ""
             ),
             onEvent = {}

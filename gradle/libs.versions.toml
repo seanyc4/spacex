@@ -15,7 +15,6 @@ junit = "1.3.0"
 junit4 = "4.13.2"
 kotlin = "2.2.21"
 kotlinCoroutines = "1.10.2"
-kotlinImmutable = "0.3.8"
 ksp = "2.3.1"
 kotlinSerialization = "1.9.0"
 kotlinxSerializationCore = "1.9.0"
@@ -36,7 +35,6 @@ protobufPlugin = "0.9.4"
 retrofit2 = "3.0.0"
 robolectricVersion = "4.14.1"
 room = "2.8.4"
-scalingPixels = "1.1.1"
 splash = "1.0.1"
 testArchCore = "2.2.0"
 testCore = "1.6.1"
@@ -47,6 +45,7 @@ uiautomator = "2.4.0-alpha06"
 runtimeSaveable = "1.10.0"
 
 [libraries]
+
 # Compose
 compose-activity = { module = "androidx.activity:activity-compose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -102,7 +101,6 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
 kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
@@ -147,9 +145,6 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
-
-# ScalingPixels
-scalingPixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }
 
 # Serialization
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }

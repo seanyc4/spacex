@@ -17,11 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.progress.ShimmerAnimation
 import com.seancoyle.core.ui.designsystem.theme.Dimens
-import com.seancoyle.feature.launch.R
 
 @Composable
 fun getShimmerColors() = listOf(
@@ -51,7 +49,7 @@ fun LoadingLaunchHeading(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen._8sdp))
+            .padding(Dimens.dp8)
             .height(24.dp)
     )
 }
