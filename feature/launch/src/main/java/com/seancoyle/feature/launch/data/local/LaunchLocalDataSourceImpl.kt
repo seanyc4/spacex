@@ -7,7 +7,7 @@ import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchLocalDataSource
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.domain.model.Launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,7 +38,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun refreshLaunchesWithKeys(
-        launches: List<LaunchTypes.Launch>,
+        launches: List<Launch>,
         nextPage: Int?,
         prevPage: Int?,
         currentPage: Int,
@@ -67,7 +67,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun appendLaunchesWithKeys(
-        launches: List<LaunchTypes.Launch>,
+        launches: List<Launch>,
         nextPage: Int?,
         prevPage: Int?,
         currentPage: Int,
@@ -91,11 +91,11 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         remoteKeyDao.upsertAll(remoteKeys)
     }
 
-    override suspend fun refreshLaunches(launches: List<LaunchTypes.Launch>) {
+    override suspend fun refreshLaunches(launches: List<Launch>) {
         launchDao.refreshLaunches(launches.toEntity())
     }
 
-    override suspend fun upsert(launch: LaunchTypes.Launch): LaunchResult<Unit, Throwable> {
+    override suspend fun upsert(launch: Launch): LaunchResult<Unit, Throwable> {
         return runSuspendCatching {
             launchDao.upsert(launch.toEntity())
         }.fold(
@@ -108,7 +108,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun upsertAll(launches: List<LaunchTypes.Launch>): LaunchResult<Unit, Throwable> {
+    override suspend fun upsertAll(launches: List<Launch>): LaunchResult<Unit, Throwable> {
         return runSuspendCatching {
             launchDao.upsertAll(launches.toEntity())
         }.fold(
@@ -134,7 +134,7 @@ internal class LaunchLocalDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getById(id: String): LaunchResult<LaunchTypes.Launch?, Throwable> {
+    override suspend fun getById(id: String): LaunchResult<Launch?, Throwable> {
         return runSuspendCatching {
             launchDao.getById(id)
         }.fold(

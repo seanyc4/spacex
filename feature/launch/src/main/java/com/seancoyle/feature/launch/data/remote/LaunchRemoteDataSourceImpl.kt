@@ -5,8 +5,8 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.LaunchConstants
 import com.seancoyle.feature.launch.data.repository.LaunchRemoteDataSource
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
     override suspend fun getLaunches(
         page: Int,
         launchQuery: LaunchQuery
-    ): LaunchResult<List<LaunchTypes.Launch>, Throwable> {
+    ): LaunchResult<List<Launch>, Throwable> {
         return runSuspendCatching {
             val result = api.getUpcomingLaunches(
                 offset = page * LaunchConstants.PAGINATION_LIMIT,

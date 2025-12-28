@@ -2,8 +2,8 @@ package com.seancoyle.feature.launch.domain.usecase.launch
 
 import androidx.paging.PagingData
 import com.seancoyle.core.domain.Order
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.repository.LaunchRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -33,7 +33,7 @@ class ObserveLaunchesUseCaseTest {
     @Test
     fun `invoke delegates to repository and returns flow`() = runTest {
         val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
-        val expectedFlow = flowOf(PagingData.empty<LaunchTypes.Launch>())
+        val expectedFlow = flowOf(PagingData.empty<Launch>())
         every { launchRepository.pager(launchQuery) } returns expectedFlow
 
         val result = underTest.invoke(launchQuery)

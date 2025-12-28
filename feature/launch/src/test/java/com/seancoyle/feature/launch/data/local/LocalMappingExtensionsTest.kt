@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.mockk
@@ -299,7 +299,7 @@ class LocalMappingExtensionsTest {
 
     @Test
     fun `empty list of LaunchTypes Launch toEntity returns empty list`() {
-        val launches = emptyList<LaunchTypes.Launch>()
+        val launches = emptyList<Launch>()
 
         val result = launches.toEntity()
 

@@ -7,8 +7,8 @@ import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
@@ -42,18 +42,18 @@ internal fun map(throwable: Throwable): RemoteError {
     }
 }
 
-internal fun LaunchesDto.toDomain(): List<LaunchTypes.Launch> {
+internal fun LaunchesDto.toDomain(): List<Launch> {
     return results?.mapNotNull { launchDto ->
         launchDto.toDomain(this.count ?: 0)
     } ?: emptyList()
 }
 
-private fun LaunchDto.toDomain(count: Int): LaunchTypes.Launch? {
+private fun LaunchDto.toDomain(count: Int): Launch? {
     val launchId = id ?: return null
     val launchName = name ?: return null
     val launchDate = net ?: return null
 
-    return LaunchTypes.Launch(
+    return Launch(
         id = launchId,
         count = count,
         url = url,

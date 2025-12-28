@@ -2,10 +2,10 @@ package com.seancoyle.feature.launch.domain.usecase.component
 
 import androidx.paging.PagingData
 import com.seancoyle.core.domain.Order
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchPreferencesUseCase
@@ -48,7 +48,7 @@ class LaunchesComponentImplTest {
     @Test
     fun `observeLaunchesUseCase delegates to use case with query`() = runTest {
         val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
+        val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
         every { observeLaunchesUseCase.invoke(launchQuery) } returns flow
 
@@ -159,7 +159,7 @@ class LaunchesComponentImplTest {
     @Test
     fun `component can handle multiple sequential calls`() = runTest {
         val launchQuery = LaunchQuery(query = "Test", order = Order.DESC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
+        val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
         val preferences = LaunchPrefs(order = Order.ASC)
 
@@ -179,7 +179,7 @@ class LaunchesComponentImplTest {
     fun `component can observe launches multiple times with different queries`() = runTest {
         val query1 = LaunchQuery(query = "Falcon", order = Order.DESC)
         val query2 = LaunchQuery(query = "Dragon", order = Order.ASC)
-        val pagingData = PagingData.empty<LaunchTypes.Launch>()
+        val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
 
         every { observeLaunchesUseCase.invoke(query1) } returns flow

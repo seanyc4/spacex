@@ -2,9 +2,9 @@ package com.seancoyle.feature.launch.domain.usecase.component
 
 import androidx.paging.PagingData
 import com.seancoyle.core.domain.Order
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchPreferencesUseCase
@@ -18,7 +18,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val observeLaunchesUseCase: ObserveLaunchesUseCase
 ) : LaunchesComponent {
 
-    override fun observeLaunchesUseCase(query: LaunchQuery): Flow<PagingData<LaunchTypes.Launch>> {
+    override fun observeLaunchesUseCase(query: LaunchQuery): Flow<PagingData<Launch>> {
         return observeLaunchesUseCase.invoke(query)
     }
 

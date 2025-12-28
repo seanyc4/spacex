@@ -14,7 +14,6 @@ import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
 import com.seancoyle.feature.launch.domain.model.Pad
@@ -30,6 +29,7 @@ import com.seancoyle.feature.launch.data.remote.PadDto
 import com.seancoyle.feature.launch.data.remote.ProgramDto
 import com.seancoyle.feature.launch.data.remote.RocketDto
 import com.seancoyle.feature.launch.data.remote.StatusDto
+import com.seancoyle.feature.launch.domain.model.Launch
 import java.time.LocalDateTime
 
 internal object TestData {
@@ -271,7 +271,7 @@ internal object TestData {
         launchDateStatus: LaunchDateStatus? = null,
         launchStatus: LaunchStatus = LaunchStatus.UNKNOWN,
         launchDays: String? = null
-    ) = LaunchTypes.Launch(
+    ) = Launch(
         id = id,
         count = count,
         url = url,
@@ -346,7 +346,7 @@ internal object TestData {
         launchDateStatus: LaunchDateStatus? = LaunchDateStatus.PAST,
         launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
         launchDays: String? = "0 days"
-    ) = LaunchTypes.Launch(
+    ) = Launch(
         id = id,
         count = count,
         url = url,

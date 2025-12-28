@@ -19,9 +19,9 @@ import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchTypes
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
@@ -43,11 +43,11 @@ internal fun map(throwable: Throwable): LocalError {
 }
 
 // Entity to Domain mappings
-internal fun List<LaunchEntity>.toDomain(): List<LaunchTypes.Launch> =
+internal fun List<LaunchEntity>.toDomain(): List<Launch> =
     map { it.toDomain() }
 
-internal fun LaunchEntity.toDomain(): LaunchTypes.Launch =
-    LaunchTypes.Launch(
+internal fun LaunchEntity.toDomain(): Launch =
+    Launch(
         id = id,
         count = count,
         url = url,
@@ -230,10 +230,10 @@ private fun LaunchStatusEntity.toDomain(): LaunchStatus =
     }
 
 // Domain to Entity mappings
-internal fun List<LaunchTypes.Launch>.toEntity(): List<LaunchEntity> =
+internal fun List<Launch>.toEntity(): List<LaunchEntity> =
     map { it.toEntity() }
 
-internal fun LaunchTypes.Launch.toEntity(): LaunchEntity =
+internal fun Launch.toEntity(): LaunchEntity =
     LaunchEntity(
         id = id,
         count = count,
