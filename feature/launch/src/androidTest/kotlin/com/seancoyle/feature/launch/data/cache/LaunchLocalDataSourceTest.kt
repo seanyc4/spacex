@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.implementation.data.cache
+package com.seancoyle.feature.launch.data.cache
 
 private const val PAGE = 1
 private const val DATA = 1000

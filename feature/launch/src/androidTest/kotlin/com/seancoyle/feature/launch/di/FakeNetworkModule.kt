@@ -1,9 +1,10 @@
-package com.seancoyle.feature.launch.implementation.di
+package com.seancoyle.feature.launch.di
 
-import com.seancoyle.feature.launch.di.NetworkModule
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+
+private const val LOCAL_URL = "http://localhost:8080/"
 
 @Module
 @TestInstallIn(
@@ -11,5 +12,5 @@ import dagger.hilt.testing.TestInstallIn
     replaces = [NetworkModule::class]
 )
 internal class FakeNetworkModule : NetworkModule() {
-    override fun baseUrl() = "http://localhost:8080/"
+    override fun baseUrl() = LOCAL_URL
 }
