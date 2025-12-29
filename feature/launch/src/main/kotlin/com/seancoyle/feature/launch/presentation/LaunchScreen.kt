@@ -38,18 +38,20 @@ fun LaunchScreen(
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
+    val screenState = viewModel.screenState
+    val isRefreshing = screenState.isRefreshing
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
-    val isRefreshing = viewModel.screenState.isRefreshing
 
     SideEffect {
         Timber.tag(TAG).d("LaunchRoute: feedState: $feedState")
         Timber.tag(TAG).d("LaunchRoute: screenState: ${viewModel.screenState}")
     }
 
-    LaunchedEffect(feedState.loadState.refresh) {
+    // Ensure refresh indicator is hidden after paging source recreation
+    LaunchedEffect(feedState.loadState.refresh, screenState.query, screenState.order, screenState.launchStatus) {
         val refresh = feedState.loadState.refresh
-        if (refresh is LoadState.NotLoading && isRefreshing) {
+        if ((refresh is LoadState.NotLoading || refresh is LoadState.Error) && isRefreshing) {
             viewModel.setRefreshing(false)
         }
     }
@@ -140,4 +142,3 @@ private fun LaunchScreen(
     }
 
 }
-

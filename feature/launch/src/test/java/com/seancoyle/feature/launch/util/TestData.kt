@@ -28,7 +28,7 @@ import com.seancoyle.feature.launch.data.remote.ProgramDto
 import com.seancoyle.feature.launch.data.remote.RocketDto
 import com.seancoyle.feature.launch.data.remote.StatusDto
 import com.seancoyle.feature.launch.domain.model.Launch
-import java.time.LocalDateTime
+import kotlin.random.Random
 
 internal object TestData {
 
@@ -350,5 +350,17 @@ internal object TestData {
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         status = status,
     )
+
+    fun createRandomLaunchList(num: Int): List<Launch> {
+        val statuses = LaunchStatus.entries.filter { it != LaunchStatus.ALL }
+        return List(num) { i ->
+            val status = statuses[Random.nextInt(statuses.size)]
+            createLaunchTransformed(
+                id = "launch_$i",
+                name = "Launch $i",
+                status = status
+            )
+        }
+    }
 
 }

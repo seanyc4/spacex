@@ -199,6 +199,9 @@ fun RadioGroup(
         val options = listOf(
             LaunchStatus.ALL,
             LaunchStatus.SUCCESS,
+            LaunchStatus.GO,
+            LaunchStatus.TBC,
+            LaunchStatus.TBD,
             LaunchStatus.FAILED,
             LaunchStatus.UNKNOWN
         )

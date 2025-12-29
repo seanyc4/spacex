@@ -65,11 +65,12 @@ class LaunchViewModel @Inject constructor(
     }
 
     val launchQueryState: StateFlow<LaunchQuery> = snapshotFlow {
-        screenState.query to screenState.order
-    }.map { (query, order) ->
+        Triple(screenState.query, screenState.order, screenState.launchStatus)
+    }.map { (query, order, launchStatus) ->
         LaunchQuery(
             query = query,
-            order = order
+            order = order,
+            status = if (launchStatus == LaunchStatus.ALL) null else launchStatus
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, LaunchQuery())
 
