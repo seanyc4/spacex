@@ -11,12 +11,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -75,13 +81,21 @@ internal fun LaunchCard(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2
                 )
-                AppText.bodyMedium(
-                    text = launchItem.launchDate,
-                    color = AppTheme.colors.secondary,
-                    modifier = modifier.padding(bottom = Dimens.dp6),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.AccessTime,
+                        contentDescription = stringResource(id = R.string.date_time),
+                        tint = AppTheme.colors.secondary,
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.dp4))
+                    AppText.bodyMedium(
+                        text = launchItem.launchDate,
+                        color = AppTheme.colors.secondary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier.fillMaxWidth(),
