@@ -380,5 +380,5 @@ data class ProgramEntity(
 
 @Keep
 enum class LaunchStatusEntity {
-    SUCCESS, GO, FAILED, UNKNOWN, TBC, TBD, ALL
+    SUCCESS, GO, FAILED, TBC, TBD, ALL
 }

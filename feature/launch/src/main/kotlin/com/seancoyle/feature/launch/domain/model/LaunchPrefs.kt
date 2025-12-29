@@ -22,7 +22,6 @@ enum class LaunchStatus(val text: String, val color: Color) {
     SUCCESS("Success", AppColors.Green),
     GO("Go", AppColors.Green),
     FAILED("Failed", AppColors.Red),
-    UNKNOWN("Unknown", AppColors.Red),
     TBC("TBC", AppColors.Amber),
     TBD("TBD", AppColors.Amber),
     ALL("All", AppColors.Black)

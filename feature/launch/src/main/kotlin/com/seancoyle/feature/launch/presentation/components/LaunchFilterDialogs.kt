@@ -52,7 +52,7 @@ internal fun LaunchFilterDialog(
     var localLaunchStatus by remember { mutableStateOf(currentFilterState.launchStatus) }
 
     AlertDialog(
-        onDismissRequest = { onEvent(LaunchesEvents.DismissFilterDialogEvent) },
+        onDismissRequest = { onEvent(DismissFilterDialogEvent) },
         title = { AppText.headlineMedium(stringResource(R.string.filter_options)) },
         text = {
             when (windowSizeClass.widthSizeClass) {
@@ -203,7 +203,6 @@ fun RadioGroup(
             LaunchStatus.TBC,
             LaunchStatus.TBD,
             LaunchStatus.FAILED,
-            LaunchStatus.UNKNOWN
         )
         options.forEach { option ->
             Row(verticalAlignment = Alignment.CenterVertically) {

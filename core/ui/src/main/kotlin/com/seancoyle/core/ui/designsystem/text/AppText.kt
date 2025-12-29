@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.TextUnit
 import com.seancoyle.core.ui.designsystem.theme.AppTextStyles
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -47,12 +48,13 @@ enum class AppText {
         fontWeight: FontWeight? = null,
         lineHeight: TextUnit? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
+        isUppercase: Boolean = false,
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
         Text(
             modifier = modifier,
-            text = text,
+            text = if (isUppercase) text.uppercase() else text,
             style = style,
             textDecoration = textDecoration,
             textAlign = textAlign,
@@ -77,6 +79,7 @@ enum class AppText {
         fontSize: TextUnit? = null,
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
+        isUppercase: Boolean = false,
         modifier: Modifier = Modifier,
     ) {
         this(
@@ -90,6 +93,7 @@ enum class AppText {
             fontSize = fontSize,
             fontWeight = fontWeight,
             onTextLayout = onTextLayout,
+            isUppercase = isUppercase,
         )
     }
 
@@ -104,11 +108,12 @@ enum class AppText {
         fontSize: TextUnit? = null,
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
+        isUppercase: Boolean = false,
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
         Text(
-            text = annotatedString,
+            text = if (isUppercase) annotatedString.toUpperCase() else annotatedString,
             modifier = modifier,
             style = style,
             textDecoration = textDecoration,

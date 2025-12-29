@@ -252,7 +252,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        status: LaunchStatus = LaunchStatus.UNKNOWN,
+        status: LaunchStatus = LaunchStatus.TBD,
     ) = Launch(
         id = id,
         count = count,

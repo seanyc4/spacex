@@ -7,6 +7,7 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -21,7 +22,14 @@ fun Pill(
     modifier: Modifier = Modifier,
 ) {
     AssistChip(
-        label = { AppText.bodySmall(text = text, color = AppColors.Black) },
+        label = {
+            AppText.bodySmall(
+                text = text,
+                color = AppColors.White,
+                isUppercase = true,
+                fontWeight = FontWeight.ExtraBold
+            )
+        },
         colors = AssistChipDefaults.assistChipColors(containerColor = color),
         border = AssistChipDefaults.assistChipBorder(
             enabled = true,

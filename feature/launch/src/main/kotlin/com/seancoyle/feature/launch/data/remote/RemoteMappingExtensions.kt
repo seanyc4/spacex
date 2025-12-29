@@ -93,7 +93,7 @@ private fun StatusDto?.toDomain(): LaunchStatus =
         this?.abbrev?.contains("Fail", ignoreCase = true) == true -> LaunchStatus.FAILED
         this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.TBC
         this?.abbrev?.contains("To Be Determined", ignoreCase = true) == true -> LaunchStatus.TBD
-        else -> LaunchStatus.UNKNOWN
+        else -> LaunchStatus.TBD
     }
 
 private fun NetPrecisionDto.toDomain() =

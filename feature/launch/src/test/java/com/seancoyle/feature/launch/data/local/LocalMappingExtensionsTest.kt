@@ -79,7 +79,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchEntity toDomain converts to LaunchTypes Launch correctly`() {
+    fun `LaunchEntity toDomain converts to Launch correctly`() {
         val launchEntity = TestData.createLaunchEntity()
 
         val result = launchEntity.toDomain()
@@ -151,7 +151,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchTypes Launch toEntity converts to LaunchEntity correctly`() {
+    fun `Launch toEntity converts to LaunchEntity correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toEntity()
@@ -174,7 +174,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchTypes Launch toEntity converts image correctly`() {
+    fun `Launch toEntity converts image correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toEntity()
@@ -188,7 +188,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchTypes Launch toEntity converts netPrecision correctly`() {
+    fun `Launch toEntity converts netPrecision correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toEntity()
@@ -201,16 +201,16 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchTypes Launch toEntity converts status correctly`() {
+    fun `Launch toEntity converts status correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toEntity()
 
-        assertEquals(LaunchStatusEntity.UNKNOWN, result.status)
+        assertEquals(LaunchStatusEntity.TBD, result.status)
     }
 
     @Test
-    fun `List of LaunchTypes Launch toEntity converts all items`() {
+    fun `List of Launch toEntity converts all items`() {
         val launch1 = TestData.createLaunch(id = "1")
         val launch2 = TestData.createLaunch(id = "2")
         val launches = listOf(launch1, launch2)
@@ -223,7 +223,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `round trip entity to domain to entity maintains data integrity`() {
+    fun `Round trip entity to domain to entity maintains data integrity`() {
         val originalEntity = TestData.createLaunchEntity()
 
         val domain = originalEntity.toDomain()
@@ -271,15 +271,6 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchStatus UNKNOWN maps to LaunchStatusEntity UNKNOWN`() {
-        val status = LaunchStatus.UNKNOWN
-
-        val result = status.toEntity()
-
-        assertEquals(LaunchStatusEntity.UNKNOWN, result)
-    }
-
-    @Test
     fun `LaunchStatus ALL maps to LaunchStatusEntity ALL`() {
         val status = LaunchStatus.ALL
 
@@ -298,7 +289,7 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `empty list of LaunchTypes Launch toEntity returns empty list`() {
+    fun `empty list of Launch toEntity returns empty list`() {
         val launches = emptyList<Launch>()
 
         val result = launches.toEntity()

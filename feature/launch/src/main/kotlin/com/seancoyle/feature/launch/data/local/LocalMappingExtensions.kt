@@ -212,7 +212,6 @@ private fun LaunchStatusEntity.toDomain(): LaunchStatus =
     when (this) {
         LaunchStatusEntity.SUCCESS -> LaunchStatus.SUCCESS
         LaunchStatusEntity.FAILED -> LaunchStatus.FAILED
-        LaunchStatusEntity.UNKNOWN -> LaunchStatus.UNKNOWN
         LaunchStatusEntity.ALL -> LaunchStatus.ALL
         LaunchStatusEntity.GO -> LaunchStatus.GO
         LaunchStatusEntity.TBC -> LaunchStatus.TBC
@@ -382,6 +381,5 @@ internal fun LaunchStatus.toEntity(): LaunchStatusEntity =
         LaunchStatus.GO -> LaunchStatusEntity.GO
         LaunchStatus.TBC -> LaunchStatusEntity.TBC
         LaunchStatus.TBD -> LaunchStatusEntity.TBD
-        LaunchStatus.UNKNOWN -> LaunchStatusEntity.UNKNOWN
         LaunchStatus.ALL -> LaunchStatusEntity.ALL
     }

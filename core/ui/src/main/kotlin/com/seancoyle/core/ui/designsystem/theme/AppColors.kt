@@ -17,7 +17,7 @@ object AppColors {
 
     val seed = Color(0xFF03A9F4)
 
-    val Red = Color(0xFFEF9A9A)
-    val Amber = Color(0xFFFFE082)
-    val Green = Color(0xFFA5D6A7)
+    val Red = Color(0xFFC62828)
+    val Amber = Color(0xFFFF8F00)
+    val Green = Color(0xFF388E3C)
 }
