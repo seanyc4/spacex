@@ -51,7 +51,6 @@ internal fun LaunchesDto.toDomain(): List<Launch> {
 private fun LaunchDto.toDomain(count: Int): Launch? {
     val launchId = id ?: return null
     val launchName = name ?: return null
-    val launchDate = net ?: return null
 
     return Launch(
         id = launchId,
@@ -83,26 +82,17 @@ private fun LaunchDto.toDomain(count: Int): Launch? {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = null,
-        launchYear = null,
-        launchDateStatus = null,
-        launchStatus = status.toDomain(),
-        launchDays = null
+        status = status.toDomain(),
     )
 }
 
 private fun StatusDto?.toDomain(): LaunchStatus =
     when {
         this?.abbrev?.contains("Success", ignoreCase = true) == true -> LaunchStatus.SUCCESS
-        this?.abbrev?.contains("Go", ignoreCase = true) == true -> LaunchStatus.SUCCESS
+        this?.abbrev?.contains("Go", ignoreCase = true) == true -> LaunchStatus.GO
         this?.abbrev?.contains("Fail", ignoreCase = true) == true -> LaunchStatus.FAILED
-        this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.UNKNOWN
-        this?.abbrev?.contains(
-            "To Be Determined",
-            ignoreCase = true
-        ) == true -> LaunchStatus.UNKNOWN
-
+        this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.TBC
+        this?.abbrev?.contains("To Be Determined", ignoreCase = true) == true -> LaunchStatus.TBD
         else -> LaunchStatus.UNKNOWN
     }
 

@@ -129,12 +129,12 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchEntity toDomain converts launchStatus correctly`() {
+    fun `LaunchEntity toDomain converts status correctly`() {
         val launchEntity = TestData.createLaunchEntity()
 
         val result = launchEntity.toDomain()
 
-        assertEquals(LaunchStatus.SUCCESS, result.launchStatus)
+        assertEquals(LaunchStatus.SUCCESS, result.status)
     }
 
     @Test
@@ -201,12 +201,12 @@ class LocalMappingExtensionsTest {
     }
 
     @Test
-    fun `LaunchTypes Launch toEntity converts launchStatus correctly`() {
+    fun `LaunchTypes Launch toEntity converts status correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toEntity()
 
-        assertEquals(LaunchStatusEntity.UNKNOWN, result.launchStatus)
+        assertEquals(LaunchStatusEntity.UNKNOWN, result.status)
     }
 
     @Test
@@ -234,7 +234,7 @@ class LocalMappingExtensionsTest {
         assertEquals(originalEntity.name, entityAgain.name)
         assertEquals(originalEntity.url, entityAgain.url)
         assertEquals(originalEntity.image.imageUrl, entityAgain.image.imageUrl)
-        assertEquals(originalEntity.launchStatus, entityAgain.launchStatus)
+        assertEquals(originalEntity.status, entityAgain.status)
     }
 
     @Test
@@ -249,7 +249,7 @@ class LocalMappingExtensionsTest {
         assertEquals(originalDomain.name, domainAgain.name)
         assertEquals(originalDomain.url, domainAgain.url)
         assertEquals(originalDomain.image.imageUrl, domainAgain.image.imageUrl)
-        assertEquals(originalDomain.launchStatus, domainAgain.launchStatus)
+        assertEquals(originalDomain.status, domainAgain.status)
     }
 
     @Test

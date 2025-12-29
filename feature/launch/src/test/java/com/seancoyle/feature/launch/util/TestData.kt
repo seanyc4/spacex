@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.util
 
 import com.seancoyle.database.entities.AgencyEntity
 import com.seancoyle.database.entities.ImageEntity
-import com.seancoyle.database.entities.LaunchDateStatusEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.MissionEntity
@@ -12,7 +11,6 @@ import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
-import com.seancoyle.feature.launch.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
@@ -173,12 +171,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        launchDate: String? = "2025-12-13T05:34:00Z",
-        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
-        launchYear: String? = "2025",
-        launchDateStatus: LaunchDateStatusEntity = LaunchDateStatusEntity.PAST,
-        launchStatus: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
-        launchDays: String? = "0 days"
+        status: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
     ) = LaunchEntity(
         id = id,
         count = count,
@@ -209,14 +202,8 @@ internal object TestData {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        launchDateStatus = launchDateStatus,
-        launchStatus = launchStatus,
-        launchDays = launchDays
+        status = status,
     )
-
 
     // Domain Model Factory Functions
 
@@ -265,12 +252,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        launchDate: String? = "2025-12-13T05:34:00Z",
-        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
-        launchYear: String? = null,
-        launchDateStatus: LaunchDateStatus? = null,
-        launchStatus: LaunchStatus = LaunchStatus.UNKNOWN,
-        launchDays: String? = null
+        status: LaunchStatus = LaunchStatus.UNKNOWN,
     ) = Launch(
         id = id,
         count = count,
@@ -301,12 +283,7 @@ internal object TestData {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        launchDateStatus = launchDateStatus,
-        launchStatus = launchStatus,
-        launchDays = launchDays
+        status = status,
     )
 
     // Launch after all the business logic is applied from the use case
@@ -340,12 +317,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        launchDate: String? = "2025-12-13T05:34:00Z",
-        launchDateLocalDateTime: LocalDateTime? = LocalDateTime.of(2025, 12, 13, 5, 34),
-        launchYear: String? = "2025",
-        launchDateStatus: LaunchDateStatus? = LaunchDateStatus.PAST,
-        launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
-        launchDays: String? = "0 days"
+        status: LaunchStatus = LaunchStatus.SUCCESS,
     ) = Launch(
         id = id,
         count = count,
@@ -376,12 +348,7 @@ internal object TestData {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        launchDateStatus = launchDateStatus,
-        launchStatus = launchStatus,
-        launchDays = launchDays
+        status = status,
     )
 
 }

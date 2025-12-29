@@ -1,7 +1,5 @@
 package com.seancoyle.feature.launch.domain.model
 
-import java.time.LocalDateTime
-
 data class Launch(
     val id: String,
     val count: Int,
@@ -11,6 +9,7 @@ data class Launch(
     val lastUpdated: String?,
     val net: String?,
     val netPrecision: NetPrecision?,
+    val status: LaunchStatus,
     val windowEnd: String?,
     val windowStart: String?,
     val image: Image,
@@ -32,12 +31,6 @@ data class Launch(
     val locationLaunchAttemptCountYear: Int?,
     val padLaunchAttemptCountYear: Int?,
     val agencyLaunchAttemptCountYear: Int?,
-    val launchDate: String?,
-    val launchDateLocalDateTime: LocalDateTime?,
-    val launchYear: String?,
-    val launchDateStatus: LaunchDateStatus?,
-    val launchStatus: LaunchStatus,
-    val launchDays: String?,
 )
 
 data class NetPrecision(

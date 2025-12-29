@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.designsystem.pill.Pill
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
@@ -70,16 +71,13 @@ internal fun LaunchCard(
                 AppText.bodyMedium(
                     text = launchItem.launchDate,
                     color = AppTheme.colors.secondary,
-                    modifier = modifier.padding(bottom = Dimens.dp4),
+                    modifier = modifier.padding(bottom = Dimens.dp6),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
-                AppText.bodyMedium(
-                    text = launchItem.launchDays,
-                    color = AppTheme.colors.secondary,
-                    modifier = modifier.padding(bottom = Dimens.dp4),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                Pill(
+                    text = launchItem.status.text,
+                    color = launchItem.status.color
                 )
             }
         }
@@ -110,8 +108,7 @@ private fun LaunchCardPreview() {
                 id = "1",
                 missionName = "Starlink Mission",
                 launchDate = "2024-01-15",
-                launchStatus = LaunchStatus.SUCCESS,
-                launchDays = "5 days from now",
+                status = LaunchStatus.SUCCESS,
                 image = ""
             ),
             onEvent = {}

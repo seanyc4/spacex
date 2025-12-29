@@ -187,13 +187,7 @@ class RemoteMappingExtensionsKtTest {
         assertEquals(1, launch.locationLaunchAttemptCountYear)
         assertEquals(1, launch.padLaunchAttemptCountYear)
         assertEquals(4, launch.agencyLaunchAttemptCountYear)
-
-        // Verify calculated fields are null (to be populated by use case)
-        assertNull(launch.launchDateLocalDateTime)
-        assertNull(launch.launchYear)
-        assertNull(launch.launchDateStatus)
-        assertEquals(LaunchStatus.SUCCESS, launch.launchStatus)
-        assertNull(launch.launchDays)
+        assertEquals(LaunchStatus.SUCCESS, launch.status)
     }
 
     @Test
@@ -209,16 +203,6 @@ class RemoteMappingExtensionsKtTest {
     @Test
     fun `LaunchDto toDomain should return null when name is missing`() {
         val launchDto = createLaunchDto(name = null)
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
-
-        val result = launchesDto.toDomain()
-
-        assertTrue(result.isEmpty())
-    }
-
-    @Test
-    fun `LaunchDto toDomain should return null when net is missing`() {
-        val launchDto = createLaunchDto(net = null)
         val launchesDto = createLaunchesDto(results = listOf(launchDto))
 
         val result = launchesDto.toDomain()

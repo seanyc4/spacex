@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.database.entities.AgencyEntity
 import com.seancoyle.database.entities.CountryEntity
 import com.seancoyle.database.entities.ImageEntity
-import com.seancoyle.database.entities.LaunchDateStatusEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.MissionEntity
@@ -20,7 +19,6 @@ import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.LaunchDateStatus
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
@@ -77,12 +75,7 @@ internal fun LaunchEntity.toDomain(): Launch =
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        launchDateStatus = launchDateStatus?.toDomain(),
-        launchStatus = launchStatus.toDomain(),
-        launchDays = launchDays
+        status = status.toDomain(),
     )
 
 private fun NetPrecisionEntity.toDomain(): NetPrecision =
@@ -215,18 +208,15 @@ private fun ProgramEntity.toDomain(): Program =
         agencies = agencies?.map { it.toDomain() }
     )
 
-private fun LaunchDateStatusEntity.toDomain(): LaunchDateStatus =
-    when (this) {
-        LaunchDateStatusEntity.PAST -> LaunchDateStatus.PAST
-        LaunchDateStatusEntity.FUTURE -> LaunchDateStatus.FUTURE
-    }
-
 private fun LaunchStatusEntity.toDomain(): LaunchStatus =
     when (this) {
         LaunchStatusEntity.SUCCESS -> LaunchStatus.SUCCESS
         LaunchStatusEntity.FAILED -> LaunchStatus.FAILED
         LaunchStatusEntity.UNKNOWN -> LaunchStatus.UNKNOWN
         LaunchStatusEntity.ALL -> LaunchStatus.ALL
+        LaunchStatusEntity.GO -> LaunchStatus.GO
+        LaunchStatusEntity.TBC -> LaunchStatus.TBC
+        LaunchStatusEntity.TBD -> LaunchStatus.TBD
     }
 
 // Domain to Entity mappings
@@ -264,12 +254,7 @@ internal fun Launch.toEntity(): LaunchEntity =
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        launchDate = launchDate,
-        launchDateLocalDateTime = launchDateLocalDateTime,
-        launchYear = launchYear,
-        launchDateStatus = launchDateStatus?.toEntity(),
-        launchStatus = launchStatus.toEntity(),
-        launchDays = launchDays
+        status = status.toEntity(),
     )
 
 private fun NetPrecision.toEntity(): NetPrecisionEntity =
@@ -389,16 +374,14 @@ private fun Program.toEntity(): ProgramEntity =
         agencies = agencies?.mapNotNull { it?.toEntity() }
     )
 
-private fun LaunchDateStatus.toEntity(): LaunchDateStatusEntity =
-    when (this) {
-        LaunchDateStatus.PAST -> LaunchDateStatusEntity.PAST
-        LaunchDateStatus.FUTURE -> LaunchDateStatusEntity.FUTURE
-    }
 
 internal fun LaunchStatus.toEntity(): LaunchStatusEntity =
     when (this) {
         LaunchStatus.SUCCESS -> LaunchStatusEntity.SUCCESS
         LaunchStatus.FAILED -> LaunchStatusEntity.FAILED
+        LaunchStatus.GO -> LaunchStatusEntity.GO
+        LaunchStatus.TBC -> LaunchStatusEntity.TBC
+        LaunchStatus.TBD -> LaunchStatusEntity.TBD
         LaunchStatus.UNKNOWN -> LaunchStatusEntity.UNKNOWN
         LaunchStatus.ALL -> LaunchStatusEntity.ALL
     }

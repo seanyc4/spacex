@@ -62,7 +62,7 @@ class LaunchRemoteDataSourceImplTest {
         )
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.name)
         assertEquals("list", actualLaunch.responseMode)
-        assertEquals(LaunchStatus.SUCCESS.name, actualLaunch.launchStatus.name)
+        assertEquals(LaunchStatus.SUCCESS.text, actualLaunch.status.text)
         assertEquals("2025-12-05T18:39:36Z", actualLaunch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)
         assertEquals("Minute", actualLaunch.netPrecision?.name)
@@ -70,13 +70,6 @@ class LaunchRemoteDataSourceImplTest {
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.windowStart)
         assertEquals("Starlink night fairing", actualLaunch.image.name)
         assertEquals(false, actualLaunch.webcastLive)
-
-        // Verify mapped fields that are set by RemoteMappingExtensions
-        assertEquals("2025-12-13T05:34:00Z", actualLaunch.launchDate)
-        assertEquals(null, actualLaunch.launchYear)
-        assertEquals(null, actualLaunch.launchDateStatus)
-        assertEquals(null, actualLaunch.launchDays)
-        assertEquals(null, actualLaunch.launchDateLocalDateTime)
     }
 
     @Test

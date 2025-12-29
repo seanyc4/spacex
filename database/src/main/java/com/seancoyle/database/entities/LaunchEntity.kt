@@ -7,9 +7,7 @@ import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
-import com.seancoyle.database.util.LocalDateTimeConverter
 import com.seancoyle.database.util.ProgramListConverter
-import java.time.LocalDateTime
 
 @Keep
 @Entity(tableName = "launch", primaryKeys = ["id"])
@@ -103,24 +101,8 @@ data class LaunchEntity(
     @ColumnInfo("agency_launch_attempt_count_year")
     val agencyLaunchAttemptCountYear: Int?,
 
-    @ColumnInfo(name="launch_date")
-    val launchDate: String?,
-
-    @field:TypeConverters(LocalDateTimeConverter::class)
-    @ColumnInfo(name="launch_date_local")
-    val launchDateLocalDateTime: LocalDateTime?,
-
-    @ColumnInfo(name="launch_year")
-    val launchYear: String?,
-
-    @ColumnInfo(name="launch_date_status")
-    val launchDateStatus: LaunchDateStatusEntity?,
-
     @ColumnInfo(name="launch_status")
-    val launchStatus: LaunchStatusEntity,
-
-    @ColumnInfo(name="launch_days_difference")
-    val launchDays: String?,
+    val status: LaunchStatusEntity,
 )
 
 @Keep
@@ -397,11 +379,6 @@ data class ProgramEntity(
 )
 
 @Keep
-enum class LaunchDateStatusEntity {
-    PAST, FUTURE
-}
-
-@Keep
 enum class LaunchStatusEntity {
-    SUCCESS, FAILED, UNKNOWN, ALL
+    SUCCESS, GO, FAILED, UNKNOWN, TBC, TBD, ALL
 }

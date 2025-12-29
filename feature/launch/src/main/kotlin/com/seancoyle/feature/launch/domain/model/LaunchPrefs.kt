@@ -1,7 +1,9 @@
 package com.seancoyle.feature.launch.domain.model
 
 import androidx.annotation.Keep
+import androidx.compose.ui.graphics.Color
 import com.seancoyle.core.domain.Order
+import com.seancoyle.core.ui.designsystem.theme.AppColors
 
 /**
  * If these classes are amended in any way then [com.seancoyle.core.datastore.proto] launch_prefs.proto
@@ -16,11 +18,12 @@ data class LaunchPrefs(
 )
 
 @Keep
-enum class LaunchStatus {
-    SUCCESS, FAILED, UNKNOWN, ALL
-}
-
-@Keep
-enum class LaunchDateStatus {
-    PAST, FUTURE
+enum class LaunchStatus(val text: String, val color: Color) {
+    SUCCESS("Success", AppColors.Green),
+    GO("Go", AppColors.Green),
+    FAILED("Failed", AppColors.Red),
+    UNKNOWN("Unknown", AppColors.Red),
+    TBC("TBC", AppColors.Amber),
+    TBD("TBD", AppColors.Amber),
+    ALL("All", AppColors.Black)
 }
