@@ -29,6 +29,7 @@ enum class AppText {
     titleLarge,
     titleMedium,
     titleSmall,
+    titleXSmall,
     bodyLarge,
     bodyMedium,
     bodySmall,
@@ -140,6 +141,7 @@ enum class AppText {
             titleLarge -> AppTextStyles.titleLarge
             titleMedium -> AppTextStyles.titleMedium
             titleSmall -> AppTextStyles.titleSmall
+            titleXSmall -> AppTextStyles.titleXSmall
             bodyLarge -> AppTextStyles.bodyLarge
             bodyMedium -> AppTextStyles.bodyMedium
             bodySmall -> AppTextStyles.bodySmall

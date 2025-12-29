@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,7 +57,8 @@ internal fun LaunchCard(
         ) {
             Column(
                 modifier = modifier
-                    .fillMaxWidth(0.30f)
+                    .fillMaxWidth(0.33f)
+                    .fillMaxHeight()
             ) {
                 LaunchCardImage(imageUrl = launchItem.image)
             }
@@ -64,11 +66,10 @@ internal fun LaunchCard(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .padding(Dimens.dp8)
             ) {
 
-                AppText.titleSmall(
+                AppText.titleXSmall(
                     text = launchItem.missionName,
                     modifier = modifier.padding(bottom = Dimens.dp4),
                     overflow = TextOverflow.Ellipsis,
@@ -107,7 +108,8 @@ internal fun LaunchCardImage(
         contentDescription = stringResource(id = R.string.launch_image),
         failure = placeholder(R.drawable.default_launch_image),
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentScale = androidx.compose.ui.layout.ContentScale.Crop
     )
 }
 

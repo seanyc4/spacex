@@ -104,7 +104,7 @@ object AppTextStyles {
             fontFamily = orbitronFontFamily,
             fontSize = 22.sp,
             lineHeight = 28.sp,
-            letterSpacing = 0.sp,
+            letterSpacing = 0.2.sp,
             color = AppTheme.colors.primary,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Bottom,
@@ -120,7 +120,7 @@ object AppTextStyles {
             fontFamily = orbitronFontFamily,
             fontSize = 18.sp,
             lineHeight = 24.sp,
-            letterSpacing = 0.1.sp,
+            letterSpacing = 0.2.sp,
             color = AppTheme.colors.primary
         )
 
@@ -130,9 +130,21 @@ object AppTextStyles {
         get() = TextStyle(
             fontWeight = FontWeight.ExtraBold,
             fontFamily = orbitronFontFamily,
+            fontSize = 16.sp,
+            lineHeight = 22.sp,
+            letterSpacing = 0.2.sp,
+            color = AppTheme.colors.primary
+        )
+
+    val titleXSmall: TextStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = TextStyle(
+            fontWeight = FontWeight.ExtraBold,
+            fontFamily = orbitronFontFamily,
             fontSize = 14.sp,
             lineHeight = 20.sp,
-            letterSpacing = 0.1.sp,
+            letterSpacing = 0.2.sp,
             color = AppTheme.colors.primary
         )
 
