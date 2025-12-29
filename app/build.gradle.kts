@@ -66,7 +66,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
         buildConfig = true
     }
@@ -102,24 +101,20 @@ dependencies {
     implementation(projects.core.datastore.implementation)
     implementation(projects.core.datastoreProto)
     implementation(projects.core.domain)
+    implementation(projects.core.navigation)
     implementation(projects.core.test)
     implementation(projects.core.ui)
     implementation(projects.database)
-    implementation(projects.feature.launch.api)
-    implementation(projects.feature.launch.implementation)
-    implementation(projects.feature.launch.test)
+    implementation(projects.feature.launch)
 
-    implementation(libs.appCompat)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.compose.runtime)
     implementation(libs.coreKtx)
-    implementation(libs.fragmentKtx)
     implementation(libs.lifecycle.viewmodelKtx)
-    implementation(libs.lifecycle.livedataktx)
     implementation(libs.lifecycle.savedstate)
     ksp(libs.lifecycle.compiler)
-    implementation(libs.navigation.dynamic)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     implementation(libs.profileInstaller)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)
