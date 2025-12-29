@@ -16,6 +16,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.components.error.ErrorScreen
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
@@ -116,7 +117,7 @@ private fun LaunchScreen(
         }
 
         is LoadState.Error -> {
-            LaunchErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+            ErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
         }
 
         else -> {

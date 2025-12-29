@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation
+package com.seancoyle.core.ui.components.error
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
-fun LaunchErrorScreen(
+fun ErrorScreen(
     message: StringResource? = null,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
@@ -67,9 +67,9 @@ fun LaunchErrorScreen(
 
 @PreviewDarkLightMode
 @Composable
-private fun LaunchErrorScreenPreview() {
+private fun ErrorScreenPreview() {
     AppTheme {
-        LaunchErrorScreen(
+        ErrorScreen(
             message = null,
             onRetry = {}
         )
