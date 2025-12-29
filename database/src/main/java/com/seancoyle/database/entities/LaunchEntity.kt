@@ -7,9 +7,7 @@ import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
-import com.seancoyle.database.util.LocalDateTimeConverter
 import com.seancoyle.database.util.ProgramListConverter
-import java.time.LocalDateTime
 
 @Keep
 @Entity(tableName = "launch", primaryKeys = ["id"])
@@ -17,6 +15,9 @@ data class LaunchEntity(
 
     @ColumnInfo(name="id")
     val id: String,
+
+    @ColumnInfo(name="count")
+    val count: Int,
 
     @ColumnInfo(name="url")
     val url: String?,
@@ -43,7 +44,7 @@ data class LaunchEntity(
     val windowStart: String?,
 
     @Embedded(prefix = "image")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="infographic")
     val infographic: String?,
@@ -100,24 +101,8 @@ data class LaunchEntity(
     @ColumnInfo("agency_launch_attempt_count_year")
     val agencyLaunchAttemptCountYear: Int?,
 
-    @ColumnInfo(name="launch_date")
-    val launchDate: String?,
-
-    @field:TypeConverters(LocalDateTimeConverter::class)
-    @ColumnInfo(name="launch_date_local")
-    val launchDateLocalDateTime: LocalDateTime?,
-
-    @ColumnInfo(name="launch_year")
-    val launchYear: String?,
-
-    @ColumnInfo(name="launch_date_status")
-    val launchDateStatus: LaunchDateStatusEntity?,
-
     @ColumnInfo(name="launch_status")
-    val launchStatus: LaunchStatusEntity,
-
-    @ColumnInfo(name="launch_days_difference")
-    val launchDays: String?,
+    val status: LaunchStatusEntity,
 )
 
 @Keep
@@ -144,10 +129,10 @@ data class ImageEntity(
     val name: String?,
 
     @ColumnInfo(name="image_url")
-    val imageUrl: String?,
+    val imageUrl: String,
 
     @ColumnInfo(name="thumbnail_url")
-    val thumbnailUrl: String?,
+    val thumbnailUrl: String,
 
     @ColumnInfo(name="credit")
     val credit: String?
@@ -196,7 +181,7 @@ data class AgencyEntity(
     val parent: String?,
 
     @Embedded(prefix = "agency_image")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="total_launch_count")
     val totalLaunchCount: Int?,
@@ -380,7 +365,7 @@ data class ProgramEntity(
     val description: String?,
 
     @Embedded(prefix = "image_")
-    val image: ImageEntity?,
+    val image: ImageEntity,
 
     @ColumnInfo(name="start_date")
     val startDate: String?,
@@ -394,11 +379,6 @@ data class ProgramEntity(
 )
 
 @Keep
-enum class LaunchDateStatusEntity {
-    PAST, FUTURE
-}
-
-@Keep
 enum class LaunchStatusEntity {
-    SUCCESS, FAILED, UNKNOWN, ALL
+    SUCCESS, GO, FAILED, TBC, TBD, ALL
 }

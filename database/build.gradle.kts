@@ -25,6 +25,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.room.paging)
     implementation(libs.kotlin.serialization)
     ksp(libs.room.compiler)
 }

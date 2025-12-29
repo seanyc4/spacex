@@ -1,17 +1,13 @@
 [versions]
 agp = "8.13.0"
-androidHilt = "1.3.0"
-appCompat = "1.7.1"
 composeBom = "2025.07.00"
 composeConstraintLayout = "1.1.1"
 composeLifecycle = "2.9.4"
-composeNavigation = "2.9.2"
 composeWindowSize = "1.3.2"
 coreKtx = "1.16.0"
 datastore = "1.1.4"
 espressoCore = "3.7.0"
 firebaseBoM = "34.0.0"
-fragment = "1.8.9"
 glideCompose = "1.0.0-beta08"
 hiltNavigationCompose = "1.2.0"
 hilt = "2.57.2"
@@ -19,24 +15,26 @@ junit = "1.3.0"
 junit4 = "4.13.2"
 kotlin = "2.2.21"
 kotlinCoroutines = "1.10.2"
-kotlinImmutable = "0.3.8"
 ksp = "2.3.1"
 kotlinSerialization = "1.9.0"
+kotlinxSerializationCore = "1.9.0"
 kotlinxDateTime = "0.6.2"
 leakCanary = "2.14"
 lifecycle = "2.9.4"
 mockk = "1.14.6"  # .15 & .16 are bugged
-navigation = "2.9.5"
+nav3Core = "1.0.0"
+nav3LifecycleViewmodel = "2.10.0"
+nav3Material3Adaptive = "1.3.0-alpha05"
 macroBenchmark = "1.4.1"
 profileInstaller = "1.4.1"
 okHttp = "5.3.0"
 okhttpIdling = "1.0.0"
+paging = "3.4.0-beta01"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.4"
 retrofit2 = "3.0.0"
 robolectricVersion = "4.14.1"
-room = "2.7.2"
-scalingPixels = "1.1.1"
+room = "2.8.4"
 splash = "1.0.1"
 testArchCore = "2.2.0"
 testCore = "1.6.1"
@@ -44,32 +42,28 @@ testRules = "1.6.1"
 testRunner = "1.6.2"
 timber = "5.0.1"
 uiautomator = "2.4.0-alpha06"
-
+runtimeSaveable = "1.10.0"
 
 [libraries]
-# AppCompat
-appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 
 # Compose
 compose-activity = { module = "androidx.activity:activity-compose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "composeConstraintLayout" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-fragment = { module = "androidx.fragment:fragment-compose", version.ref = "fragment" }
 compose-iconsCore = { module = "androidx.compose.material:material-icons-core" }
 compose-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
 compose-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycle" }
-compose-material = { module = "androidx.compose.material:material" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ripple = { module = "androidx.compose.material:material-ripple" }
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
+compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable-android", version.ref = "runtimeSaveable" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
-compose-windowSize = { module = "androidx.compose.material3:material3-window-size-class-android", version.ref = "composeWindowSize"}
+compose-windowSize = { module = "androidx.compose.material3:material3-window-size-class-android", version.ref = "composeWindowSize" }
 
 # Compose Test Libraries
 compose-uiTest = { module = "androidx.compose.ui:ui-test" }
@@ -88,9 +82,6 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBoM" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
-# Fragment
-fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
-
 # Glide Compose
 glideCompose = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
 
@@ -103,14 +94,12 @@ hilt-androidTesting = { module = "com.google.dagger:hilt-android-testing", versi
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-navigationCompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "androidHilt" }
 
 # Kotlin
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinImmutable" }
 kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
@@ -120,14 +109,19 @@ kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref 
 
 # Lifecycle
 lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
-lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
 lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
-# Navigation
-navigation-dynamic = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigation" }
-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+# Navigation 3 libraries
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3LifecycleViewmodel" }
+androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material3Adaptive" }
+
+# Paging
+paging3-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
+paging3-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging3-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
 
 # Performance
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "macroBenchmark" }
@@ -150,9 +144,10 @@ square-retrofit-serialization = { module = "com.squareup.retrofit2:converter-kot
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 
-# ScalingPixels
-scalingPixels = { module = "com.intuit.sdp:sdp-android", version.ref = "scalingPixels" }
+# Serialization
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 
 # Splash Screen
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
@@ -216,21 +211,19 @@ unitTestBundle = [
     "test-mockk",
     "test-robolectric",
     "kotlin-coroutinesTest",
-    "kotlin-junit"
+    "kotlin-junit",
+    "paging3-testing"
 ]
 
 composeBundle = [
     "compose-activity",
     "compose-constraintLayout",
     "compose-foundation",
-    "compose-fragment",
     "compose-iconsCore",
     "compose-iconsExtended",
     "compose-layout",
     "compose-lifecycle",
-    "compose-material",
     "compose-material3",
-    "compose-navigation",
     "compose-preview",
     "compose-ripple",
     "compose-runtime",

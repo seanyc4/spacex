@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Filter Dialog -->
+    <string name="search">Search</string>
+    <string name="mission_name">Mission Name</string>
+    <string name="filter_options">Filter Options</string>
+    <string name="launch_status">Filter by Launch Status</string>
+
+    <!-- Launch Items -->
+    <string name="launch_image">Launch image</string>
+    <string name="mission" formatted="false">Mission</string>
+    <string name="date_time">Date/time</string>
+    <string name="rocket">Rocket</string>
+    <string name="days_since_now">Days since now</string>
+    <string name="days_from_now">Days from now</string>
+
+</resources>

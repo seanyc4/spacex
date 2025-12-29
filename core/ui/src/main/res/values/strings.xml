@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Bar -->
+    <string name="app_name">Space Launches</string>
+    <string name="filter_btn_content_desc">Filter List Button</string>
+
+    <!-- Error Messages-->
+    <string name="no_links">This launch event has no media links</string>
+    <string name="error_links">Unable to load link</string>
+    <string name="no_internet">Please check your internet connection and try again</string>
+
     <!-- Database Error Messages -->
     <string name="cache_error">Database error</string>
     <string name="cache_error_timeout">Database operation timed out. Please try again.</string>
     <string name="cache_error_no_results">No matching results. Please try again.</string>
+    <string name="cache_error_end_reached">End of results.</string>
     <string name="cache_data_null">Cache data is null</string>
     <string name="constraint_violation">A database constraint was violated.</string>
     <string name="unknown_database_error">Unknown database error occurred.</string>
@@ -27,4 +37,7 @@
     <string name="text_info">Info</string>
     <string name="text_search">Search</string>
     <string name="asc_desc">Ascending/Descending</string>
+
+    <!-- Actions -->
+    <string name="retry">Retry</string>
 </resources>
