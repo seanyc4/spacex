@@ -1,12 +1,6 @@
 package com.seancoyle.spacex.acceptance.launch
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import com.seancoyle.core.ui.composables.TAG_LOADING
-import org.junit.Rule
-import org.junit.Test
 
 @ExperimentalMaterialApi
 class LaunchScreenTest {

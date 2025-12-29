@@ -1,13 +1,10 @@
 syntax = "proto3";
 
 import "com/seancoyle/core/datastore_proto/order.proto";
-import "com/seancoyle/core/datastore_proto/launch_status.proto";
 
 option java_package = "com.seancoyle.core.datastore_proto";
 option java_multiple_files = true;
 
 message LaunchPreferencesProto {
     OrderProto order = 1;
-    LaunchStatusProto launch_status = 2;
-    string launch_date = 3;
 }
