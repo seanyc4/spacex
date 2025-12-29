@@ -2,15 +2,19 @@ package com.seancoyle.feature.launch.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -40,7 +44,8 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {},
+            .clickable {}
+            .height(Dimens.launchCardHeight),
         shape = RoundedCornerShape(Dimens.dp10),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
@@ -51,7 +56,7 @@ internal fun LaunchCard(
         ) {
             Column(
                 modifier = modifier
-                    .fillMaxWidth(0.20f)
+                    .fillMaxWidth(0.30f)
             ) {
                 LaunchCardImage(imageUrl = launchItem.image)
             }
@@ -59,6 +64,7 @@ internal fun LaunchCard(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(Dimens.dp8)
             ) {
 
@@ -66,7 +72,7 @@ internal fun LaunchCard(
                     text = launchItem.missionName,
                     modifier = modifier.padding(bottom = Dimens.dp4),
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 2
                 )
                 AppText.bodyMedium(
                     text = launchItem.launchDate,
@@ -75,10 +81,16 @@ internal fun LaunchCard(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
-                Pill(
-                    text = launchItem.status.text,
-                    color = launchItem.status.color
-                )
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    Pill(
+                        text = launchItem.status.text,
+                        color = launchItem.status.color
+                    )
+                }
             }
         }
     }
