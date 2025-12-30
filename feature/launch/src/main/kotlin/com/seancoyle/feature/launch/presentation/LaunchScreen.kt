@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -31,7 +30,6 @@ import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
-import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.feature.launch.presentation.components.LaunchFilterDialog
 import com.seancoyle.feature.launch.presentation.components.Launches
 import com.seancoyle.feature.launch.presentation.model.LaunchTab

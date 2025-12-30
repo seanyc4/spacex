@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.LaunchConstants.PAGINATION_LIMIT
@@ -14,6 +13,7 @@ import com.seancoyle.feature.launch.LaunchConstants.PREFETCH_DISTANCE
 import com.seancoyle.feature.launch.data.repository.LaunchLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -41,7 +41,7 @@ class LaunchRemoteMediatorTest {
 
     private val pagingConfig = PagingConfig(
         pageSize = PAGINATION_LIMIT,
-        enablePlaceholders = false,
+        enablePlaceholders = true,
         initialLoadSize = PAGINATION_LIMIT * 2,
         prefetchDistance = PREFETCH_DISTANCE
     )
@@ -49,7 +49,7 @@ class LaunchRemoteMediatorTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        launchQuery = LaunchQuery(query = "", order = Order.ASC)
+        launchQuery = LaunchQuery(query = "")
         underTest = LaunchRemoteMediator(
             launchRemoteDataSource = launchRemoteDataSource,
             launchLocalDataSource = launchLocalDataSource,
@@ -59,7 +59,7 @@ class LaunchRemoteMediatorTest {
 
     @Test
     fun `initialize returns LAUNCH_INITIAL_REFRESH when search query has changed from cached`() = runTest {
-        launchQuery = LaunchQuery(query = "Falcon", order = Order.ASC)
+        launchQuery = LaunchQuery(query = "Falcon", launchType = LaunchType.UPCOMING)
         underTest = LaunchRemoteMediator(
             launchRemoteDataSource = launchRemoteDataSource,
             launchLocalDataSource = launchLocalDataSource,
@@ -73,32 +73,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
-        )
-        coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-
-        val result = underTest.initialize()
-
-        assertEquals(RemoteMediator.InitializeAction.LAUNCH_INITIAL_REFRESH, result)
-    }
-
-    @Test
-    fun `initialize returns LAUNCH_INITIAL_REFRESH when order has changed from cached`() = runTest {
-        launchQuery = LaunchQuery(query = "", order = Order.DESC)
-        underTest = LaunchRemoteMediator(
-            launchRemoteDataSource = launchRemoteDataSource,
-            launchLocalDataSource = launchLocalDataSource,
-            launchQuery = launchQuery
-        )
-
-        val remoteKey = LaunchRemoteKeyEntity(
-            id = "1",
-            prevKey = null,
-            nextKey = 1,
-            currentPage = 0,
-            createdAt = System.currentTimeMillis(),
-            cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -111,14 +86,20 @@ class LaunchRemoteMediatorTest {
     fun `initialize returns SKIP_INITIAL_REFRESH when cache is valid and query hasn't changed`() = runTest {
         val currentTime = System.currentTimeMillis()
         val recentTimestamp = currentTime - TimeUnit.MINUTES.toMillis(30) // 30 minutes ago
+        launchQuery = LaunchQuery(query = "Falcon", launchType = LaunchType.UPCOMING)
+        underTest = LaunchRemoteMediator(
+            launchRemoteDataSource = launchRemoteDataSource,
+            launchLocalDataSource = launchLocalDataSource,
+            launchQuery = launchQuery
+        )
         val remoteKey = LaunchRemoteKeyEntity(
             id = "1",
             prevKey = null,
             nextKey = 1,
             currentPage = 0,
             createdAt = recentTimestamp,
-            cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedQuery = "Falcon",
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -131,14 +112,20 @@ class LaunchRemoteMediatorTest {
     fun `initialize returns LAUNCH_INITIAL_REFRESH when cache is stale but query hasn't changed`() = runTest {
         val currentTime = System.currentTimeMillis()
         val staleTimestamp = currentTime - TimeUnit.HOURS.toMillis(2) // 2 hours ago
+        launchQuery = LaunchQuery(query = "Falcon", launchType = LaunchType.UPCOMING)
+        underTest = LaunchRemoteMediator(
+            launchRemoteDataSource = launchRemoteDataSource,
+            launchLocalDataSource = launchLocalDataSource,
+            launchQuery = launchQuery
+        )
         val remoteKey = LaunchRemoteKeyEntity(
             id = "1",
             prevKey = null,
             nextKey = 1,
             currentPage = 0,
             createdAt = staleTimestamp,
-            cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedQuery = "Falcon",
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -170,7 +157,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = null,
                 currentPage = 0,
                 cachedQuery = any(),
-                cachedOrder = any()
+                cachedLaunchType = any()
             )
         }
 
@@ -185,7 +172,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = null,
                 currentPage = 0,
                 cachedQuery = "",
-                cachedOrder = "ASC"
+                cachedLaunchType = LaunchType.UPCOMING.name
             )
         }
     }
@@ -195,6 +182,7 @@ class LaunchRemoteMediatorTest {
         val launches = List(5) { TestData.createLaunch(id = "id-$it") }
         val pagingState = createPagingState()
         coEvery { launchLocalDataSource.getRemoteKeys() } returns emptyList()
+        coEvery { launchLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
         coEvery { launchRemoteDataSource.getLaunches(0, launchQuery) } returns LaunchResult.Success(launches)
         coJustRun {
             launchLocalDataSource.refreshLaunchesWithKeys(
@@ -203,7 +191,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = null,
                 currentPage = 0,
                 cachedQuery = any(),
-                cachedOrder = any()
+                cachedLaunchType = any()
             )
         }
 
@@ -262,7 +250,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Success(launches)
@@ -274,7 +262,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = 0,
                 currentPage = 1,
                 cachedQuery = any(),
-                cachedOrder = any()
+                cachedLaunchType = any()
             )
         }
 
@@ -286,7 +274,7 @@ class LaunchRemoteMediatorTest {
 
     @Test
     fun `load append succeeds with end of pagination reached`() = runTest {
-        val launches = List(5) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(PAGINATION_LIMIT - 1) { TestData.createLaunch(id = "id-$it") }
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -295,7 +283,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Success(launches)
@@ -306,7 +294,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = 0,
                 currentPage = 1,
                 cachedQuery = any(),
-                cachedOrder = any()
+                cachedLaunchType = any()
             )
         }
 
@@ -326,7 +314,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -357,7 +345,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Error(Throwable("Network error"))
@@ -378,7 +366,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } throws RuntimeException("Unexpected error")
@@ -400,7 +388,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Success(launches)
@@ -412,7 +400,7 @@ class LaunchRemoteMediatorTest {
                 prevPage = 0,
                 currentPage = 1,
                 cachedQuery = any(),
-                cachedOrder = any()
+                cachedLaunchType = any()
             )
         }
 
@@ -432,7 +420,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -463,7 +451,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
@@ -484,7 +472,7 @@ class LaunchRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { launchLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchRemoteDataSource.getLaunches(1, launchQuery) } throws RuntimeException("Unexpected error")
