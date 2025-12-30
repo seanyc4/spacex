@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
-import com.seancoyle.core.domain.Order
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
 import com.seancoyle.feature.launch.domain.repository.LaunchRepository
@@ -36,7 +35,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `pager returns flow of paging data with query`() = runTest {
-        val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Falcon")
         val launchEntity = TestData.createLaunchEntity()
         val mockPager = mockk<Pager<Int, LaunchEntity>>()
         val pagingData = PagingData.from(listOf(launchEntity))
@@ -54,7 +53,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `pager returns empty flow when no data available`() = runTest {
-        val launchQuery = LaunchQuery(query = "", order = Order.ASC)
+        val launchQuery = LaunchQuery(query = "")
         val mockPager = mockk<Pager<Int, LaunchEntity>>()
         val pagingData = PagingData.empty<LaunchEntity>()
 
@@ -71,7 +70,7 @@ class LaunchRepositoryImplTest {
 
     @Test
     fun `pager creates pager with correct launch query`() = runTest {
-        val launchQuery = LaunchQuery(query = "SpaceX", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "SpaceX")
         val mockPager = mockk<Pager<Int, LaunchEntity>>()
         val pagingData = PagingData.empty<LaunchEntity>()
 

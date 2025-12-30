@@ -6,6 +6,7 @@ import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchLocalDataSource
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -52,13 +53,17 @@ class LaunchLocalDataSourceImplTest {
             id = "1",
             nextKey = 1,
             prevKey = null,
-            currentPage = 0
+            currentPage = 0,
+            cachedQuery = "",
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         val remoteKey2 = LaunchRemoteKeyEntity(
             id = "2",
             nextKey = 2,
             prevKey = 0,
-            currentPage = 1
+            currentPage = 1,
+            cachedQuery = "",
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { remoteKeyDao.getRemoteKeys() } returns listOf(remoteKey1, remoteKey2)
 
@@ -86,7 +91,9 @@ class LaunchLocalDataSourceImplTest {
             id = ID,
             nextKey = 1,
             prevKey = null,
-            currentPage = 0
+            currentPage = 0,
+            cachedQuery = "",
+            cachedLaunchType = LaunchType.UPCOMING.name
         )
         coEvery { remoteKeyDao.getRemoteKey(ID) } returns remoteKey
 

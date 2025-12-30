@@ -202,11 +202,11 @@ val darkPalette = AppPalette(
     outlineVariant = Color(0xFF41474D),
     scrim = Color(0xFF000000),
     surfaceBright = Color(0xFF424242),
-    surfaceContainer = Color(0xFF424242),
-    surfaceContainerHigh = Color(0xFF424242),
-    surfaceContainerHighest = Color(0xFF424242),
-    surfaceContainerLow = Color(0xFF424242),
-    surfaceContainerLowest = Color(0xFF424242),
+    surfaceContainer = Color(0xFF353535),
+    surfaceContainerHigh = Color(0xFF353535),
+    surfaceContainerHighest = Color(0xFF353535),
+    surfaceContainerLow = Color(0xFF353535),
+    surfaceContainerLowest = Color(0xFF353535),
     surfaceDim = Color(0xFF424242),
     isLight = false
 )

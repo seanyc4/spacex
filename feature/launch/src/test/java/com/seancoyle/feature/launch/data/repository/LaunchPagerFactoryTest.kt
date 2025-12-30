@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.data.repository
 
 import androidx.paging.ExperimentalPagingApi
-import com.seancoyle.core.domain.Order
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
 import io.mockk.MockKAnnotations
@@ -36,7 +35,7 @@ class LaunchPagerFactoryTest {
 
     @Test
     fun `create returns Pager with valid flow`() {
-        val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Falcon")
 
         val result = underTest.create(launchQuery)
 
@@ -46,7 +45,7 @@ class LaunchPagerFactoryTest {
 
     @Test
     fun `create returns new Pager instance on each invocation`() {
-        val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Falcon")
 
         val pager1 = underTest.create(launchQuery)
         val pager2 = underTest.create(launchQuery)
@@ -57,7 +56,7 @@ class LaunchPagerFactoryTest {
 
     @Test
     fun `created Pager flow can be accessed multiple times`() {
-        val launchQuery = LaunchQuery(query = "Dragon", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Dragon")
 
         val pager = underTest.create(launchQuery)
 
@@ -73,7 +72,7 @@ class LaunchPagerFactoryTest {
 
     @Test
     fun `create handles empty query string`() {
-        val launchQuery = LaunchQuery(query = "", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "")
 
         val result = underTest.create(launchQuery)
 
@@ -84,7 +83,7 @@ class LaunchPagerFactoryTest {
     @Test
     fun `create handles very long query string`() {
         val longQuery = "A".repeat(1000)
-        val launchQuery = LaunchQuery(query = longQuery, order = Order.ASC)
+        val launchQuery = LaunchQuery(query = longQuery)
 
         val result = underTest.create(launchQuery)
 
@@ -94,7 +93,7 @@ class LaunchPagerFactoryTest {
 
     @Test
     fun `create handles special characters in query`() {
-        val launchQuery = LaunchQuery(query = "Test @#$% & * ()", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Test @#\$% & * ()")
 
         val result = underTest.create(launchQuery)
 

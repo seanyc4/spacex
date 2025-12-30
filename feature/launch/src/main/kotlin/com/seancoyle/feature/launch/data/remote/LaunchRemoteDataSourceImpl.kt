@@ -7,6 +7,7 @@ import com.seancoyle.feature.launch.LaunchConstants
 import com.seancoyle.feature.launch.data.repository.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,11 +21,16 @@ internal class LaunchRemoteDataSourceImpl @Inject constructor(
         launchQuery: LaunchQuery
     ): LaunchResult<List<Launch>, Throwable> {
         return runSuspendCatching {
-            val result = api.getUpcomingLaunches(
-                offset = page * LaunchConstants.PAGINATION_LIMIT,
-                search = launchQuery.query,
-                ordering = launchQuery.order.value
-            )
+            val result = when (launchQuery.launchType) {
+                LaunchType.UPCOMING -> api.getUpcomingLaunches(
+                    offset = page * LaunchConstants.PAGINATION_LIMIT,
+                    search = launchQuery.query
+                )
+                LaunchType.PAST -> api.getPreviousLaunches(
+                    offset = page * LaunchConstants.PAGINATION_LIMIT,
+                    search = launchQuery.query
+                )
+            }
             result.toDomain()
         }.fold(
             onSuccess = { mappedResult ->

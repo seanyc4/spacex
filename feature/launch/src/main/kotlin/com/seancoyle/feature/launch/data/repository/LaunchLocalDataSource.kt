@@ -18,7 +18,7 @@ internal interface LaunchLocalDataSource {
         prevPage: Int?,
         currentPage: Int,
         cachedQuery: String? = null,
-        cachedOrder: String? = null
+        cachedLaunchType: String? = null
     )
 
     suspend fun appendLaunchesWithKeys(
@@ -27,7 +27,7 @@ internal interface LaunchLocalDataSource {
         prevPage: Int?,
         currentPage: Int,
         cachedQuery: String? = null,
-        cachedOrder: String? = null
+        cachedLaunchType: String? = null
     )
 
     suspend fun upsert(launch: Launch): LaunchResult<Unit, Throwable>
