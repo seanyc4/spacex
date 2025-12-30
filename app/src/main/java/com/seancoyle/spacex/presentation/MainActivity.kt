@@ -11,6 +11,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
@@ -42,33 +43,37 @@ class MainActivity : ComponentActivity() {
         //crashlytics.init(true)
 
         setContent {
-            val windowSizeClass = calculateWindowSizeClass(this)
-            val snackbarHostState = remember { SnackbarHostState() }
-
-            AppTheme {
-                Scaffold(
-                    topBar = {
-                        HomeAppBar(
-                            onClick = {
-                                viewModel.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
-                            }
-                        )
-                    },
-                    snackbarHost = { SnackbarHost(snackbarHostState) },
-                    modifier = Modifier.semantics {
-                        testTagsAsResourceId = true
-                    },
-                    containerColor = MaterialTheme.colorScheme.background
-                ) { innerPadding ->
-                    NavigationRoot(
-                        viewModel = viewModel,
-                        snackbarHostState = snackbarHostState,
-                        windowSizeClass = windowSizeClass,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            App()
         }
     }
 
+    @Composable
+    fun App() {
+        val windowSizeClass = calculateWindowSizeClass(this)
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        AppTheme {
+            Scaffold(
+                topBar = {
+                    HomeAppBar(
+                        onClick = {
+                            viewModel.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
+                        }
+                    )
+                },
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+                modifier = Modifier.semantics {
+                    testTagsAsResourceId = true
+                },
+                containerColor = MaterialTheme.colorScheme.background
+            ) { innerPadding ->
+                NavigationRoot(
+                    viewModel = viewModel,
+                    snackbarHostState = snackbarHostState,
+                    windowSizeClass = windowSizeClass,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+        }
+    }
 }

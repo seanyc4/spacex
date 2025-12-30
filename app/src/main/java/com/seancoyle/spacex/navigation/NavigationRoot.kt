@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.seancoyle.feature.launch.presentation.launch.LaunchScreen
 import com.seancoyle.feature.launch.presentation.launches.LaunchesScreen
 import com.seancoyle.feature.launch.presentation.launches.LaunchesViewModel
 import com.seancoyle.navigation.Route
@@ -21,7 +22,7 @@ fun NavigationRoot(
     modifier: Modifier = Modifier
 ) {
     val backStack = rememberNavBackStack(
-        Route.LaunchList
+        Route.Launches
     )
     NavDisplay(
         modifier = modifier,
@@ -32,10 +33,24 @@ fun NavigationRoot(
         ),
         entryProvider = { key ->
             when (key) {
-                is Route.LaunchList -> {
+                is Route.Launches -> {
                     NavEntry(key) {
                         LaunchesScreen(
                             viewModel = viewModel,
+                            snackbarHostState = snackbarHostState,
+                            windowSizeClass = windowSizeClass,
+                            onClick = { launchId, launchesType ->
+                                backStack.add(Route.Launch(launchId, launchesType))
+                            }
+                        )
+                    }
+                }
+
+                is Route.Launch -> {
+                    NavEntry(key) {
+                        LaunchScreen(
+                            launchId = key.launchId,
+                            launchesType = key.launchesType,
                             snackbarHostState = snackbarHostState,
                             windowSizeClass = windowSizeClass
                         )
