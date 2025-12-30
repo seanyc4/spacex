@@ -20,15 +20,15 @@ import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.util.ObserveScrollPosition
-import com.seancoyle.feature.launch.LaunchTestTags
+import com.seancoyle.feature.launch.LaunchesTestTags
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.model.LaunchUi
+import com.seancoyle.feature.launch.presentation.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
 
 @Composable
 internal fun Launches(
-    launches: LazyPagingItems<LaunchUi>,
+    launches: LazyPagingItems<LaunchesUi>,
     screenState: LaunchesScreenState,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
@@ -45,7 +45,7 @@ internal fun Launches(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = Dimens.dp8)
-            .semantics { testTag = LaunchTestTags.LAUNCH_LAZY_COLUMN }
+            .semantics { testTag = LaunchesTestTags.LAUNCH_LAZY_COLUMN }
     ) {
         item {
             if (launches.loadState.prepend is LoadState.Error) {

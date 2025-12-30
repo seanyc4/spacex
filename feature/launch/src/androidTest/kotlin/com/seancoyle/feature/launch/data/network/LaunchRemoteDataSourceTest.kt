@@ -2,9 +2,9 @@ package com.seancoyle.feature.launch.data.network
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.domain.model.LaunchQuery
+import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.data.repository.LaunchRemoteDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -32,7 +32,7 @@ internal class LaunchRemoteDataSourceTest {
     lateinit var mockWebServer: MockWebServer
 
     @Inject
-    lateinit var underTest: LaunchRemoteDataSource
+    lateinit var underTest: LaunchesRemoteDataSource
 
     @Before
     fun init() {
@@ -52,7 +52,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(2, result.data.size)
@@ -82,7 +82,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -94,7 +94,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -106,7 +106,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -118,7 +118,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -130,7 +130,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -142,7 +142,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -154,7 +154,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -166,7 +166,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }
@@ -178,7 +178,7 @@ internal class LaunchRemoteDataSourceTest {
                 .setResponseCode(HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
         )
 
-        val result = underTest.getLaunches(page = 0, launchQuery = LaunchQuery())
+        val result = underTest.getLaunches(page = 0, launchesQuery = LaunchesQuery())
 
         assertTrue(result is LaunchResult.Error)
     }

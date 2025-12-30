@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.presentation.state
 
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchType
+import com.seancoyle.feature.launch.domain.model.LaunchesType
 
 sealed interface LaunchesEvents {
     data object DismissFilterDialogEvent : LaunchesEvents
@@ -13,5 +13,5 @@ sealed interface LaunchesEvents {
         val query: String,
         val launchStatus: LaunchStatus,
     ) : LaunchesEvents
-    data class TabSelectedEvent(val launchType: LaunchType) : LaunchesEvents
+    data class TabSelectedEvent(val launchesType: LaunchesType) : LaunchesEvents
 }

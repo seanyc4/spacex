@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.data.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.data.repository.LaunchLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -27,7 +27,7 @@ internal class LaunchLocalDataSourceTest {
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var underTest: LaunchLocalDataSource
+    lateinit var underTest: LaunchesLocalDataSource
 
     @Before
     fun setup() {

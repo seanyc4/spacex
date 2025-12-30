@@ -1,9 +1,9 @@
 package com.seancoyle.feature.launch.di
 
-import com.seancoyle.feature.launch.data.repository.LaunchPreferencesRepositoryImpl
-import com.seancoyle.feature.launch.data.repository.LaunchRepositoryImpl
-import com.seancoyle.feature.launch.domain.repository.LaunchPreferencesRepository
-import com.seancoyle.feature.launch.domain.repository.LaunchRepository
+import com.seancoyle.feature.launch.data.repository.LaunchesPreferencesRepositoryImpl
+import com.seancoyle.feature.launch.data.repository.LaunchesRepositoryImpl
+import com.seancoyle.feature.launch.domain.repository.LaunchesPreferencesRepository
+import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,12 +15,12 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindLaunchPreferencesRepository(
-        impl: LaunchPreferencesRepositoryImpl
-    ): LaunchPreferencesRepository
+        impl: LaunchesPreferencesRepositoryImpl
+    ): LaunchesPreferencesRepository
 
     @Binds
     abstract fun bindLaunchRepository(
-        impl: LaunchRepositoryImpl
-    ): LaunchRepository
+        impl: LaunchesRepositoryImpl
+    ): LaunchesRepository
 
 }
