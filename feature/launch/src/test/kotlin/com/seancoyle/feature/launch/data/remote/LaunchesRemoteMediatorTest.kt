@@ -13,7 +13,7 @@ import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants.PREF
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

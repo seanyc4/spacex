@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.util.TestData
 import com.seancoyle.core.common.result.LaunchResult
@@ -96,14 +96,13 @@ class LaunchesRepositoryImplTest {
     fun `getLaunch returns success when remote data source returns launches`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
-        val launches = listOf(TestData.createLaunch())
+        val launches = TestData.createLaunch()
         val expectedResult = LaunchResult.Success(launches)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns expectedResult
 
         val result = underTest.getLaunch(id, launchType)
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(1, result.data.size)
         assertEquals(launches, result.data)
     }
 

@@ -6,7 +6,7 @@ import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

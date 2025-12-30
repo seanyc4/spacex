@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.domain.usecase.launch
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.util.TestData
@@ -32,13 +32,13 @@ class GetLaunchUseCaseTest {
         val id = "123"
         val launchType = LaunchesType.UPCOMING
         val launch = TestData.createLaunch()
-        val expected = LaunchResult.Success(listOf(launch))
+        val expected = LaunchResult.Success(launch)
         coEvery { launchesRepository.getLaunch(id, launchType) } returns expected
 
         val result = underTest(id, launchType)
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(listOf(launch), (result as LaunchResult.Success).data)
+        assertEquals(launch, (result as LaunchResult.Success).data)
     }
 
     @Test

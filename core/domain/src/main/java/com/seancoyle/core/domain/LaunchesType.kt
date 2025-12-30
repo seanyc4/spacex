@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.domain.model
+package com.seancoyle.core.domain
 
 import androidx.annotation.Keep
 

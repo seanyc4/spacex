@@ -7,7 +7,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
@@ -20,5 +20,5 @@ interface LaunchesComponent {
     suspend fun getLaunchUseCase(
         launchId: String,
         launchType: LaunchesType
-    ): LaunchResult<List<Launch>, RemoteError>
+    ): LaunchResult<Launch, RemoteError>
 }

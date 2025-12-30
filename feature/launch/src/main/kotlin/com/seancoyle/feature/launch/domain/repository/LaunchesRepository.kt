@@ -5,7 +5,7 @@ import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import kotlinx.coroutines.flow.Flow
 
 internal interface LaunchesRepository {
@@ -14,5 +14,5 @@ internal interface LaunchesRepository {
     suspend fun getLaunch(
         id: String,
         launchType: LaunchesType
-    ): LaunchResult<List<Launch>, RemoteError>
+    ): LaunchResult<Launch, RemoteError>
 }

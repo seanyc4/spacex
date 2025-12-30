@@ -4,7 +4,7 @@ import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 
 internal interface LaunchesRemoteDataSource {
 
@@ -16,5 +16,5 @@ internal interface LaunchesRemoteDataSource {
     suspend fun getLaunch(
         id: String,
         launchType: LaunchesType
-    ): LaunchResult<List<Launch>, RemoteError>
+    ): LaunchResult<Launch, RemoteError>
 }

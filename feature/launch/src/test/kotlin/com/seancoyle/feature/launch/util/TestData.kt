@@ -174,7 +174,6 @@ internal object TestData {
         status: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
     ) = LaunchEntity(
         id = id,
-        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
@@ -255,7 +254,6 @@ internal object TestData {
         status: LaunchStatus = LaunchStatus.TBD,
     ) = Launch(
         id = id,
-        count = count,
         url = url,
         name = name,
         responseMode = responseMode,
@@ -320,7 +318,6 @@ internal object TestData {
         status: LaunchStatus = LaunchStatus.SUCCESS,
     ) = Launch(
         id = id,
-        count = count,
         url = url,
         name = name,
         responseMode = responseMode,

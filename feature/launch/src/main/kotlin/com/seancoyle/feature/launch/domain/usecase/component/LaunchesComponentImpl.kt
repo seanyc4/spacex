@@ -7,7 +7,7 @@ import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
@@ -38,7 +38,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     override suspend fun getLaunchUseCase(
         launchId: String,
         launchType: LaunchesType
-    ): LaunchResult<List<Launch>, DataError.RemoteError> {
+    ): LaunchResult<Launch, DataError.RemoteError> {
         return getLaunchUseCase.invoke(
             id = launchId,
             launchType = launchType

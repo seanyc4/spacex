@@ -44,17 +44,16 @@ internal fun map(throwable: Throwable): RemoteError {
 
 internal fun LaunchesDto.toDomain(): List<Launch> {
     return results?.mapNotNull { launchDto ->
-        launchDto.toDomain(this.count ?: 0)
+        launchDto.toDomain()
     } ?: emptyList()
 }
 
-private fun LaunchDto.toDomain(count: Int): Launch? {
+internal fun LaunchDto.toDomain(): Launch? {
     val launchId = id ?: return null
     val launchName = name ?: return null
 
     return Launch(
         id = launchId,
-        count = count,
         url = url,
         name = launchName,
         responseMode = responseMode,

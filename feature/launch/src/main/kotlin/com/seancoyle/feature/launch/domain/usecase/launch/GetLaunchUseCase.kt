@@ -1,6 +1,9 @@
 package com.seancoyle.feature.launch.domain.usecase.launch
 
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import javax.inject.Inject
 
@@ -10,5 +13,7 @@ internal class GetLaunchUseCase @Inject constructor(
     suspend operator fun invoke(
         id: String,
         launchType: LaunchesType
-    ) = launchesRepository.getLaunch(id, launchType)
+    ): LaunchResult<Launch, DataError.RemoteError> {
+        return launchesRepository.getLaunch(id, launchType)
+    }
 }

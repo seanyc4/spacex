@@ -7,7 +7,7 @@ import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -206,28 +206,26 @@ class LaunchesRemoteDataSourceImplTest {
     fun `getLaunch returns upcoming launch when API call is successful`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
-        coEvery { api.getUpcomingLaunch(id) } returns TestData.createLaunchesDto()
+        coEvery { api.getUpcomingLaunch(id) } returns TestData.createLaunchDto()
 
         val result = underTest.getLaunch(id, launchType)
 
         assertTrue(result is LaunchResult.Success)
-        val actualLaunch = result.data[0]
+        val actualLaunch = result.data
         assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
-        assertEquals(1, result.data.size)
     }
 
     @Test
     fun `getLaunch returns past launch when API call is successful`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
-        coEvery { api.getPreviousLaunch(id) } returns TestData.createLaunchesDto()
+        coEvery { api.getPreviousLaunch(id) } returns TestData.createLaunchDto()
 
         val result = underTest.getLaunch(id, launchType)
 
         assertTrue(result is LaunchResult.Success)
-        val actualLaunch = result.data[0]
+        val actualLaunch = result.data
         assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
-        assertEquals(1, result.data.size)
     }
 
     @Test

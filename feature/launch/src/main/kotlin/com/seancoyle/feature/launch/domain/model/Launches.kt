@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.domain.model
 
 data class Launch(
     val id: String,
-    val count: Int,
     val url: String?,
     val name: String?,
     val responseMode: String?,

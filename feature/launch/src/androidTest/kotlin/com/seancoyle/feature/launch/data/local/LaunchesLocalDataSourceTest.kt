@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.data.local
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.*
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -41,12 +42,10 @@ internal class LaunchesLocalDataSourceTest {
     private fun createTestLaunch(
         id: String,
         name: String = "Test Launch $id",
-        launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
-        count: Int = 1
+        launchStatus: LaunchStatus = LaunchStatus.SUCCESS
     ): Launch {
         return Launch(
             id = id,
-            count = count,
             url = "https://test.com/launch/$id",
             name = name,
             responseMode = "list",
@@ -211,7 +210,6 @@ internal class LaunchesLocalDataSourceTest {
                     5 -> LaunchStatus.TBC
                     else -> LaunchStatus.TBD
                 },
-                count = index
             )
         }
     }
@@ -436,7 +434,7 @@ internal class LaunchesLocalDataSourceTest {
         )
 
         val additionalLaunches = (6..10).map { index ->
-            createTestLaunch(id = "test-$index", name = "Test Launch $index", count = index)
+            createTestLaunch(id = "test-$index", name = "Test Launch $index")
         }
         underTest.appendLaunchesWithKeys(
             launches = additionalLaunches,
