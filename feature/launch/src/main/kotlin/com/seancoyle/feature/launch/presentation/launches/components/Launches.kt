@@ -24,17 +24,17 @@ import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 
 @Composable
 internal fun Launches(
     launches: LazyPagingItems<LaunchesUi>,
-    screenState: LaunchesScreenState,
+    state: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = screenState.scrollPosition)
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = state.scrollPosition)
     ObserveScrollPosition(listState, onUpdateScrollPosition)
 
     LazyColumn(

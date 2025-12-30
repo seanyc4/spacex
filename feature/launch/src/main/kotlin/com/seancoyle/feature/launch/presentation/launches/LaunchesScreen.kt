@@ -30,13 +30,13 @@ import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
-import com.seancoyle.feature.launch.presentation.launches.components.LaunchFilterDialog
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.domain.model.LaunchesType
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import timber.log.Timber
 
@@ -44,14 +44,14 @@ private const val TAG = "LaunchScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LaunchScreen(
-    viewModel: LaunchViewModel,
+fun LaunchesScreen(
+    viewModel: LaunchesViewModel,
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    val screenState = viewModel.screenState
-    val isRefreshing = screenState.isRefreshing
+    val state = viewModel.screenState
+    val isRefreshing = state.isRefreshing
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
 
@@ -63,9 +63,9 @@ fun LaunchScreen(
     // Ensure refresh indicator is hidden after paging source recreation
     LaunchedEffect(
         feedState.loadState.refresh,
-        screenState.query,
-        screenState.launchStatus,
-        screenState.launchesType
+        state.query,
+        state.launchStatus,
+        state.launchesType
     ) {
         val refresh = feedState.loadState.refresh
         if ((refresh is LoadState.NotLoading || refresh is LoadState.Error) && isRefreshing) {
@@ -100,9 +100,9 @@ fun LaunchScreen(
         isRefreshing = viewModel.screenState.isRefreshing,
         onRefresh = { viewModel.onEvent(LaunchesEvents.PullToRefreshEvent) },
         content = {
-            LaunchScreen(
+            LaunchesScreen(
                 feedState = feedState,
-                screenState = viewModel.screenState,
+                state = viewModel.screenState,
                 windowSizeClass = windowSizeClass,
                 onEvent = viewModel::onEvent,
                 onUpdateScrollPosition = viewModel::updateScrollPosition,
@@ -121,16 +121,16 @@ fun LaunchScreen(
 }
 
 @Composable
-private fun LaunchScreen(
+private fun LaunchesScreen(
     feedState: LazyPagingItems<LaunchesUi>,
-    screenState: LaunchesScreenState,
+    state: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
     windowSizeClass: WindowSizeClass,
     onUpdateScrollPosition: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val tabs = LaunchesTab.provideTabs()
-    val selectedTabIndex = when (screenState.launchesType) {
+    val selectedTabIndex = when (state.launchesType) {
         LaunchesType.UPCOMING -> 0
         LaunchesType.PAST -> 1
     }
@@ -173,7 +173,7 @@ private fun LaunchScreen(
                 else -> {
                     Launches(
                         launches = feedState,
-                        screenState = screenState,
+                        state = state,
                         onEvent = onEvent,
                         onUpdateScrollPosition = onUpdateScrollPosition,
                         modifier = Modifier.fillMaxSize()
@@ -181,9 +181,9 @@ private fun LaunchScreen(
                 }
             }
         }
-        if (screenState.isFilterDialogVisible) {
-            LaunchFilterDialog(
-                currentFilterState = screenState,
+        if (state.isFilterDialogVisible) {
+            LaunchesFilterDialog(
+                currentFilterState = state,
                 onEvent = onEvent,
                 windowSizeClass = windowSizeClass
             )

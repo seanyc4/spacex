@@ -35,12 +35,12 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.DismissFilterDialogEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.NewSearchEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
-internal fun LaunchFilterDialog(
-    currentFilterState: LaunchesScreenState,
+internal fun LaunchesFilterDialog(
+    currentFilterState: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier

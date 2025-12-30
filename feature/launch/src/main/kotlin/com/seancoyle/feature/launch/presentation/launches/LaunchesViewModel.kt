@@ -14,7 +14,7 @@ import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.LaunchesType
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -41,13 +41,13 @@ private const val TAG = "LaunchViewModel"
 
 @OptIn(SavedStateHandleSaveableApi::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
-class LaunchViewModel @Inject constructor(
+class LaunchesViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val uiMapper: LaunchesUiMapper,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesScreenState()) }
+    var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesState()) }
         private set
 
     private val _notificationEvents = Channel<NotificationState>(Channel.BUFFERED)

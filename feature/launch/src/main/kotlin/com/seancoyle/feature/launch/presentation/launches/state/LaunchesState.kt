@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Stable
-data class LaunchesScreenState(
+data class LaunchesState(
     val query: String = "",
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchesType: LaunchesType = LaunchesType.UPCOMING,

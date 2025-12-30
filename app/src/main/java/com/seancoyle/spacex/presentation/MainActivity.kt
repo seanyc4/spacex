@@ -19,7 +19,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.feature.launch.presentation.launches.LaunchViewModel
+import com.seancoyle.feature.launch.presentation.launches.LaunchesViewModel
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.spacex.navigation.NavigationRoot
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var crashlytics: Crashlytics
 
-    private val viewModel by viewModels<LaunchViewModel>()
+    private val viewModel by viewModels<LaunchesViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
