@@ -2,11 +2,15 @@ package com.seancoyle.feature.launch.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.feature.launch.domain.model.LaunchesType
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.util.TestData
+import com.seancoyle.core.common.result.LaunchResult
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -16,12 +20,17 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class LaunchesRepositoryImplTest {
 
     @MockK
     private lateinit var pagerFactory: LaunchesPagerFactory
+
+    @MockK
+    private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     private lateinit var underTest: LaunchesRepository
 
@@ -29,7 +38,8 @@ class LaunchesRepositoryImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchesRepositoryImpl(
-            pagerFactory = pagerFactory
+            pagerFactory = pagerFactory,
+            launchesRemoteDataSource = launchesRemoteDataSource
         )
     }
 
@@ -82,4 +92,32 @@ class LaunchesRepositoryImplTest {
         verify(exactly = 1) { pagerFactory.create(launchesQuery) }
     }
 
+    @Test
+    fun `getLaunch returns success when remote data source returns launches`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.UPCOMING
+        val launches = listOf(TestData.createLaunch())
+        val expectedResult = LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns expectedResult
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(1, result.data.size)
+        assertEquals(launches, result.data)
+    }
+
+    @Test
+    fun `getLaunch returns error when remote data source returns error`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.PAST
+        val error = RemoteError.NETWORK_UNKNOWN_ERROR
+        val expectedResult = LaunchResult.Error(error)
+        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns expectedResult
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(error, result.error)
+    }
 }
