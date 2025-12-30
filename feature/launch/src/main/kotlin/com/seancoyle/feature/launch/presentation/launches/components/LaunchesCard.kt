@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.components
+package com.seancoyle.feature.launch.presentation.launches.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -35,11 +36,11 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.LaunchesTestTags
+import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
-import com.seancoyle.feature.launch.presentation.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 
 @Composable
 internal fun LaunchCard(
@@ -122,7 +123,7 @@ internal fun LaunchCardImage(
         failure = placeholder(R.drawable.default_launch_image),
         modifier = modifier
             .fillMaxSize(),
-        contentScale = androidx.compose.ui.layout.ContentScale.Crop
+        contentScale = ContentScale.Crop
     )
 }
 

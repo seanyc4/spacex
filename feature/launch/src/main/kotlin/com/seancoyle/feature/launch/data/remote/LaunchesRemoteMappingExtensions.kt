@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.LaunchesConstants
+import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country

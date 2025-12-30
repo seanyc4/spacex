@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.model
+package com.seancoyle.feature.launch.presentation.launches.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

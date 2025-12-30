@@ -19,8 +19,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.feature.launch.presentation.LaunchViewModel
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.LaunchViewModel
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.spacex.navigation.NavigationRoot
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

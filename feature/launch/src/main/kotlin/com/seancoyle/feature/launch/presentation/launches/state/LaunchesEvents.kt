@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.state
+package com.seancoyle.feature.launch.presentation.launches.state
 
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.LaunchesType

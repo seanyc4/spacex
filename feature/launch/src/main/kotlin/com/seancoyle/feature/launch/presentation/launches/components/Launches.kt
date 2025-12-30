@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.components
+package com.seancoyle.feature.launch.presentation.launches.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,11 +20,11 @@ import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.util.ObserveScrollPosition
-import com.seancoyle.feature.launch.LaunchesTestTags
+import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
 
 @Composable
 internal fun Launches(

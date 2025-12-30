@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.model
+package com.seancoyle.feature.launch.presentation.launches.model
 
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.domain.model.Launch

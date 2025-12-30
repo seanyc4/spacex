@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.components
+package com.seancoyle.feature.launch.presentation.launches.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,11 +31,11 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents.DismissFilterDialogEvent
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents.NewSearchEvent
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents.UpdateFilterStateEvent
-import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.DismissFilterDialogEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.NewSearchEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
@@ -196,7 +196,7 @@ fun RadioGroup(
 
 @Composable
 private fun DismissButton(onEvent: (LaunchesEvents) -> Unit) {
-    Button(onClick = { onEvent(LaunchesEvents.DismissFilterDialogEvent) }) {
+    Button(onClick = { onEvent(DismissFilterDialogEvent) }) {
         Text(stringResource(R.string.text_cancel))
     }
 }

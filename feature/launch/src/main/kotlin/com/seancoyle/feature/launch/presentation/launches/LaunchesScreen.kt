@@ -1,6 +1,6 @@
 @file:JvmName("LaunchScreenKt")
 
-package com.seancoyle.feature.launch.presentation
+package com.seancoyle.feature.launch.presentation.launches
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,14 +30,14 @@ import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
-import com.seancoyle.feature.launch.presentation.components.LaunchFilterDialog
-import com.seancoyle.feature.launch.presentation.components.Launches
-import com.seancoyle.feature.launch.presentation.model.LaunchesTab
-import com.seancoyle.feature.launch.presentation.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchFilterDialog
+import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.domain.model.LaunchesType
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
-import com.seancoyle.feature.launch.presentation.state.PagingEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import timber.log.Timber
 
 private const val TAG = "LaunchScreen"

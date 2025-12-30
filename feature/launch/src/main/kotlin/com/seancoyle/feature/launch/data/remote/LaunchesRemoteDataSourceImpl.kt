@@ -5,7 +5,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.LaunchesConstants
+import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery

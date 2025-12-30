@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.state
+package com.seancoyle.feature.launch.presentation.launches.state
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable

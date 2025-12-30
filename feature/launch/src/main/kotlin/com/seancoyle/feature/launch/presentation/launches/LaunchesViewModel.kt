@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation
+package com.seancoyle.feature.launch.presentation.launches
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
@@ -13,17 +13,17 @@ import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.LaunchesType
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import timber.log.Timber
 import androidx.paging.map
-import com.seancoyle.feature.launch.presentation.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.model.LaunchesUiMapper
-import com.seancoyle.feature.launch.presentation.state.PagingEvents
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUiMapper
+import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
