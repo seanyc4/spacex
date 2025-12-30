@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.data.cache
+package com.seancoyle.feature.launch.data.local
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
@@ -12,7 +12,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -21,7 +20,7 @@ import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class LaunchLocalDataSourceTest {
+internal class LaunchesLocalDataSourceTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -195,12 +194,7 @@ internal class LaunchLocalDataSourceTest {
             locationLaunchAttemptCountYear = 25,
             padLaunchAttemptCountYear = 10,
             agencyLaunchAttemptCountYear = 5,
-            launchDate = "2025-12-28",
-            launchDateLocalDateTime = LocalDateTime.of(2025, 12, 28, 15, 0),
-            launchYear = "2025",
-            launchDateStatus = LaunchDateStatus.FUTURE,
-            launchStatus = launchStatus,
-            launchDays = "0"
+            status = launchStatus,
         )
     }
 
@@ -209,10 +203,13 @@ internal class LaunchLocalDataSourceTest {
             createTestLaunch(
                 id = "test-$index",
                 name = "Test Launch $index",
-                launchStatus = when (index % 3) {
+                launchStatus = when (index % 6) {
                     0 -> LaunchStatus.SUCCESS
                     1 -> LaunchStatus.FAILED
-                    else -> LaunchStatus.UNKNOWN
+                    3 -> LaunchStatus.TBD
+                    4 -> LaunchStatus.GO
+                    5 -> LaunchStatus.TBC
+                    else -> LaunchStatus.TBD
                 },
                 count = index
             )
@@ -232,7 +229,7 @@ internal class LaunchLocalDataSourceTest {
         assertNotNull(retrievedLaunch)
         assertEquals(testLaunch.id, retrievedLaunch.id)
         assertEquals(testLaunch.name, retrievedLaunch.name)
-        assertEquals(testLaunch.launchStatus, retrievedLaunch.launchStatus)
+        assertEquals(testLaunch.status, retrievedLaunch.status)
     }
 
     @Test
@@ -391,7 +388,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = null,
             currentPage = 1,
             cachedQuery = "test",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val countResult = underTest.getTotalEntries()
@@ -414,7 +411,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = 1,
             currentPage = 2,
             cachedQuery = "starlink",
-            cachedOrder = "DESC"
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val remoteKey = underTest.getRemoteKey("test-1")
@@ -423,7 +420,7 @@ internal class LaunchLocalDataSourceTest {
         assertEquals(1, remoteKey.prevKey)
         assertEquals(2, remoteKey.currentPage)
         assertEquals("starlink", remoteKey.cachedQuery)
-        assertEquals("DESC", remoteKey.cachedOrder)
+        assertEquals("UPCOMING", remoteKey.cachedLaunchType)
     }
 
     @Test
@@ -435,7 +432,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = null,
             currentPage = 1,
             cachedQuery = null,
-            cachedOrder = null
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val additionalLaunches = (6..10).map { index ->
@@ -447,7 +444,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = 1,
             currentPage = 2,
             cachedQuery = null,
-            cachedOrder = null
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val countResult = underTest.getTotalEntries()
@@ -468,7 +465,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = null,
             currentPage = 1,
             cachedQuery = null,
-            cachedOrder = null
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val remoteKey = underTest.getRemoteKey("test-1")
@@ -501,7 +498,7 @@ internal class LaunchLocalDataSourceTest {
             prevPage = null,
             currentPage = 1,
             cachedQuery = "test-query",
-            cachedOrder = "ASC"
+            cachedLaunchType = LaunchesType.UPCOMING.name
         )
 
         val remoteKeys = underTest.getRemoteKeys()

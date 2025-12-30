@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.data.network
+package com.seancoyle.feature.launch.data.remote
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
-internal class LaunchRemoteDataSourceTest {
+internal class LaunchesRemoteDataSourceTest {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -63,7 +63,7 @@ internal class LaunchRemoteDataSourceTest {
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", firstLaunch.name)
         assertEquals("https://lldev.thespacedevs.com/2.3.0/launches/test-launch-1/", firstLaunch.url)
         assertEquals("list", firstLaunch.responseMode)
-        assertEquals(LaunchStatus.SUCCESS.name, firstLaunch.launchStatus.name)
+        assertEquals(LaunchStatus.GO.name, firstLaunch.status.name)
         assertEquals("2025-12-13T05:34:00Z", firstLaunch.net)
         assertEquals("Starlink night fairing", firstLaunch.image.name)
         assertEquals(false, firstLaunch.webcastLive)
