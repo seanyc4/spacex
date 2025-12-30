@@ -2,14 +2,24 @@
 
 package com.seancoyle.feature.launch.presentation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -20,9 +30,13 @@ import com.seancoyle.core.ui.components.error.ErrorScreen
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
+import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.feature.launch.presentation.components.LaunchFilterDialog
 import com.seancoyle.feature.launch.presentation.components.Launches
+import com.seancoyle.feature.launch.presentation.model.LaunchTab
 import com.seancoyle.feature.launch.presentation.model.LaunchUi
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
 import com.seancoyle.feature.launch.presentation.state.PagingEvents
@@ -49,7 +63,12 @@ fun LaunchScreen(
     }
 
     // Ensure refresh indicator is hidden after paging source recreation
-    LaunchedEffect(feedState.loadState.refresh, screenState.query, screenState.order, screenState.launchStatus) {
+    LaunchedEffect(
+        feedState.loadState.refresh,
+        screenState.query,
+        screenState.launchStatus,
+        screenState.launchType
+    ) {
         val refresh = feedState.loadState.refresh
         if ((refresh is LoadState.NotLoading || refresh is LoadState.Error) && isRefreshing) {
             viewModel.setRefreshing(false)
@@ -112,33 +131,64 @@ private fun LaunchScreen(
     onUpdateScrollPosition: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    when (feedState.loadState.mediator?.refresh) {
-        is LoadState.Loading -> {
-            CircularProgressBar()
+    val tabs = LaunchTab.provideTabs()
+    val selectedTabIndex = when (screenState.launchType) {
+        LaunchType.UPCOMING -> 0
+        LaunchType.PAST -> 1
+    }
+    Column(modifier = modifier.fillMaxSize()) {
+        TabRow(selectedTabIndex = selectedTabIndex) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                    selected = selectedTabIndex == index,
+                    onClick = {
+                        val launchType = if (index == 0) {
+                            LaunchType.UPCOMING
+                        } else {
+                            LaunchType.PAST
+                        }
+                        onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+                    },
+                    text = { AppText.titleSmall(text = stringResource(tab.title)) },
+                    icon = { Icon(imageVector = if (index == selectedTabIndex) {
+                        tab.selectedIcon
+                    } else {
+                        tab.unselectedIcon
+                    },
+                        contentDescription = stringResource(tab.title)
+                    )
+                    }
+                )
+            }
         }
+        Box(modifier = Modifier.weight(1f)) {
+            when (feedState.loadState.mediator?.refresh) {
+                is LoadState.Loading -> {
+                    CircularProgressBar()
+                }
 
-        is LoadState.Error -> {
-            ErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+                is LoadState.Error -> {
+                    ErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+                }
+
+                else -> {
+                    Launches(
+                        launches = feedState,
+                        screenState = screenState,
+                        onEvent = onEvent,
+                        onUpdateScrollPosition = onUpdateScrollPosition,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
         }
-
-        else -> {
-            Launches(
-                launches = feedState,
-                screenState = screenState,
+        if (screenState.isFilterDialogVisible) {
+            LaunchFilterDialog(
+                currentFilterState = screenState,
                 onEvent = onEvent,
-                onUpdateScrollPosition = onUpdateScrollPosition,
-                modifier = modifier
+                windowSizeClass = windowSizeClass
             )
         }
     }
-
-    if (screenState.isFilterDialogVisible) {
-        LaunchFilterDialog(
-            currentFilterState = screenState,
-            onEvent = onEvent,
-            windowSizeClass = windowSizeClass
-        )
-    }
-
 }

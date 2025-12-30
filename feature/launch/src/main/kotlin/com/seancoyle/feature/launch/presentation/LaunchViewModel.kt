@@ -10,8 +10,8 @@ import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
-import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
@@ -56,21 +56,14 @@ class LaunchViewModel @Inject constructor(
     private val _pagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
     val pagingEvents = _pagingEvents.receiveAsFlow()
 
-    init {
-        viewModelScope.launch {
-            Timber.tag(TAG).d("screenState before init: $screenState")
-            restoreFilterAndOrderState()
-            Timber.tag(TAG).d("screenState after init: $screenState")
-        }
-    }
-
     val launchQueryState: StateFlow<LaunchQuery> = snapshotFlow {
-        Triple(screenState.query, screenState.order, screenState.launchStatus)
-    }.map { (query, order, launchStatus) ->
+        val query = screenState.query
+        val status = screenState.launchStatus
+        val type = screenState.launchType
         LaunchQuery(
             query = query,
-            order = order,
-            status = if (launchStatus == LaunchStatus.ALL) null else launchStatus
+            status = if (status == LaunchStatus.ALL) null else status,
+            launchType = type
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, LaunchQuery())
 
@@ -86,17 +79,6 @@ class LaunchViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    private fun restoreFilterAndOrderState() {
-        viewModelScope.launch {
-            val result = launchesComponent.getLaunchPreferencesUseCase()
-            setLaunchFilterState(
-                order = result.order,
-                launchStatus = result.launchStatus,
-                query = result.query
-            )
-        }
-    }
-
     fun onEvent(event: LaunchesEvents) = viewModelScope.launch {
         when (event) {
             is LaunchesEvents.DismissFilterDialogEvent -> displayFilterDialog(false)
@@ -105,24 +87,20 @@ class LaunchViewModel @Inject constructor(
             is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
             is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
             is LaunchesEvents.UpdateFilterStateEvent -> setLaunchFilterState(
-                order = event.order,
                 launchStatus = event.launchStatus,
                 query = event.query
             )
+            is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchType)
         }
     }
 
-    private suspend fun newSearch() {
-        saveLaunchPreferences(order = getOrderState())
+    private fun newSearch() {
         displayFilterDialog(false)
     }
-
-    private fun getOrderState() = screenState.order
 
     private fun clearQueryParameters() {
         setLaunchFilterState(
             query = "",
-            order = Order.ASC,
             launchStatus = LaunchStatus.ALL
         )
     }
@@ -144,15 +122,20 @@ class LaunchViewModel @Inject constructor(
 
     private fun setLaunchFilterState(
         query: String,
-        order: Order,
-        launchStatus: LaunchStatus
+        launchStatus: LaunchStatus,
+        launchType: LaunchType = screenState.launchType
     ) {
         screenState = screenState.copy(
             query = query,
-            order = order,
-            launchStatus = launchStatus
+            launchStatus = launchStatus,
+            launchType = launchType
         )
-        Timber.tag(TAG).d("Updated filterState: order=$order, status=$launchStatus, year=$query")
+        Timber.tag(TAG).d("Updated filterState: status=$launchStatus, query=$query, launchType=$launchType")
+    }
+
+    private fun onTabSelected(launchType: LaunchType) {
+        screenState = screenState.copy(launchType = launchType)
+        Timber.tag(TAG).d("Updated launchType: $launchType")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
@@ -163,10 +146,6 @@ class LaunchViewModel @Inject constructor(
     fun updateScrollPosition(position: Int) {
         screenState = screenState.copy(scrollPosition = position)
         Timber.tag(TAG).d("Updated scrollState.scrollPosition: $position")
-    }
-
-    private suspend fun saveLaunchPreferences(order: Order) {
-        launchesComponent.saveLaunchPreferencesUseCase(order)
     }
 
     fun emitErrorNotification(errorMessage: StringResource) = viewModelScope.launch {

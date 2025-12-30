@@ -35,20 +35,20 @@ internal class LaunchRemoteMediator(
 
         // Check if the query parameters have changed from what was cached
         val cachedQuery = firstKey?.cachedQuery
-        val cachedOrder = firstKey?.cachedOrder
+        val cachedLaunchType = firstKey?.cachedLaunchType
         val currentQuery = launchQuery.query
-        val currentOrder = launchQuery.order.name
+        val currentLaunchType = launchQuery.launchType.name
 
-        val queryHasChanged = cachedQuery != currentQuery || cachedOrder != currentOrder
+        val queryHasChanged = cachedQuery != currentQuery || cachedLaunchType != currentLaunchType
 
         Timber.tag(TAG).d(
-            "Initialize - Current: query='$currentQuery', order=$currentOrder | " +
-            "Cached: query='$cachedQuery', order=$cachedOrder | Changed: $queryHasChanged"
+            "Initialize - Current: query='$currentQuery', launchType=$currentLaunchType | " +
+            "Cached: query='$cachedQuery', launchType=$cachedLaunchType | Changed: $queryHasChanged"
         )
 
         // If query parameters have changed, refresh to get relevant results
         if (queryHasChanged) {
-            Timber.tag(TAG).d("Query/order changed - refreshing data.")
+            Timber.tag(TAG).d("Query/order/launchType changed - refreshing data.")
             return InitializeAction.LAUNCH_INITIAL_REFRESH
         }
 
@@ -118,7 +118,7 @@ internal class LaunchRemoteMediator(
                             prevPage = null, // Always null on refresh since we're starting fresh
                             currentPage = STARTING_PAGE,
                             cachedQuery = launchQuery.query,
-                            cachedOrder = launchQuery.order.name
+                            cachedLaunchType = launchQuery.launchType.name
                         )
                     } else {
                         // Append or prepend data to existing cache
@@ -129,7 +129,7 @@ internal class LaunchRemoteMediator(
                             prevPage = prevPage,
                             currentPage = page,
                             cachedQuery = launchQuery.query,
-                            cachedOrder = launchQuery.order.name
+                            cachedLaunchType = launchQuery.launchType.name
                         )
                     }
 

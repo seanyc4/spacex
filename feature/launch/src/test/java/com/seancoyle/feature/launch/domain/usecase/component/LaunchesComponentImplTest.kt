@@ -47,7 +47,7 @@ class LaunchesComponentImplTest {
 
     @Test
     fun `observeLaunchesUseCase delegates to use case with query`() = runTest {
-        val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Falcon")
         val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
         every { observeLaunchesUseCase.invoke(launchQuery) } returns flow
@@ -158,7 +158,7 @@ class LaunchesComponentImplTest {
 
     @Test
     fun `component can handle multiple sequential calls`() = runTest {
-        val launchQuery = LaunchQuery(query = "Test", order = Order.DESC)
+        val launchQuery = LaunchQuery(query = "Test")
         val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
         val preferences = LaunchPrefs(order = Order.ASC)
@@ -177,8 +177,8 @@ class LaunchesComponentImplTest {
 
     @Test
     fun `component can observe launches multiple times with different queries`() = runTest {
-        val query1 = LaunchQuery(query = "Falcon", order = Order.DESC)
-        val query2 = LaunchQuery(query = "Dragon", order = Order.ASC)
+        val query1 = LaunchQuery(query = "Falcon")
+        val query2 = LaunchQuery(query = "Dragon")
         val pagingData = PagingData.empty<Launch>()
         val flow = flowOf(pagingData)
 

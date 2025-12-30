@@ -6,12 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,14 +20,12 @@ import androidx.paging.compose.itemKey
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.LaunchTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.model.LaunchUi
 import com.seancoyle.feature.launch.presentation.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.state.LaunchesScreenState
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 
 @Composable
 internal fun Launches(
@@ -96,22 +91,5 @@ internal fun Launches(
                 }
             }
         }
-    }
-}
-
-@OptIn(FlowPreview::class)
-@Composable
-private fun ObserveScrollPosition(
-    listState: LazyListState,
-    onUpdateScrollPosition: (Int) -> Unit,
-) {
-    // Observe and save scroll position to ViewModel
-    LaunchedEffect(listState) {
-        snapshotFlow {
-            listState.firstVisibleItemIndex
-        }.debounce(750L)
-            .collectLatest { position ->
-                onUpdateScrollPosition(position)
-            }
     }
 }

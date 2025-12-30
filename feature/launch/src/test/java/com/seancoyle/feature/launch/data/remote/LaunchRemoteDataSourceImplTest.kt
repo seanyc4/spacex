@@ -2,11 +2,11 @@ package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.LaunchConstants
 import com.seancoyle.feature.launch.data.repository.LaunchRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.domain.model.LaunchType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -38,15 +38,17 @@ class LaunchRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunches returns launches when API call is successful`() = runTest {
+    fun `getLaunches returns upcoming launches when API call is successful`() = runTest {
         val page = 0
-        val launchQuery = LaunchQuery(query = "Falcon", order = Order.DESC)
+        val launchQuery = LaunchQuery(
+            query = "Falcon",
+            launchType = LaunchType.UPCOMING
+        )
         val offset = 0
         coEvery {
             api.getUpcomingLaunches(
                 offset = offset,
-                search = launchQuery.query,
-                ordering = launchQuery.order.value
+                search = launchQuery.query
             )
         } returns TestData.createLaunchesDto()
 
@@ -73,16 +75,63 @@ class LaunchRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunches returns error when API call fails`() = runTest {
+    fun `getLaunches returns past launches when API call is successful`() = runTest {
         val page = 0
-        val launchQuery = LaunchQuery(query = "", order = Order.ASC)
+        val launchQuery = LaunchQuery(
+            query = "Falcon",
+            launchType = LaunchType.PAST
+        )
+        val offset = 0
+        coEvery {
+            api.getPreviousLaunches(
+                offset = offset,
+                search = launchQuery.query
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getLaunches(page, launchQuery)
+
+        assertTrue(result is LaunchResult.Success)
+
+        val actualLaunch = result.data[0]
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
+    }
+
+    @Test
+    fun `getLaunches returns error when API call fails for upcoming launches`() = runTest {
+        val page = 0
+        val launchQuery = LaunchQuery(
+            query = "",
+            launchType = LaunchType.UPCOMING
+        )
         val offset = 0
         val exception = RuntimeException("Network Failure")
         coEvery {
             api.getUpcomingLaunches(
                 offset = offset,
-                search = launchQuery.query,
-                ordering = launchQuery.order.value
+                search = launchQuery.query
+            )
+        } throws exception
+
+        val result = underTest.getLaunches(page, launchQuery)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(exception, result.error)
+    }
+
+    @Test
+    fun `getLaunches returns error when API call fails for past launches`() = runTest {
+        val page = 0
+        val launchQuery = LaunchQuery(
+            query = "",
+            launchType = LaunchType.PAST
+        )
+        val offset = 0
+        val exception = RuntimeException("Network Failure")
+        coEvery {
+            api.getPreviousLaunches(
+                offset = offset,
+                search = launchQuery.query
             )
         } throws exception
 
@@ -95,13 +144,15 @@ class LaunchRemoteDataSourceImplTest {
     @Test
     fun `getLaunches calculates correct offset for pagination`() = runTest {
         val page = 2
-        val launchQuery = LaunchQuery(query = "SpaceX", order = Order.DESC)
+        val launchQuery = LaunchQuery(
+            query = "SpaceX",
+            launchType = LaunchType.UPCOMING
+        )
         val expectedOffset = LaunchConstants.PAGINATION_LIMIT * 2 // page 2 * PAGINATION_LIMIT (20)
         coEvery {
             api.getUpcomingLaunches(
                 offset = expectedOffset,
-                search = launchQuery.query,
-                ordering = launchQuery.order.value
+                search = launchQuery.query
             )
         } returns TestData.createLaunchesDto()
 
@@ -111,15 +162,37 @@ class LaunchRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunches passes query parameters correctly`() = runTest {
+    fun `getLaunches passes query parameters correctly for upcoming launches`() = runTest {
         val page = 1
-        val launchQuery = LaunchQuery(query = "Dragon", order = Order.ASC)
+        val launchQuery = LaunchQuery(
+            query = "Dragon",
+            launchType = LaunchType.UPCOMING
+        )
         val expectedOffset = LaunchConstants.PAGINATION_LIMIT // page 1 * PAGINATION_LIMIT (20)
         coEvery {
             api.getUpcomingLaunches(
                 offset = expectedOffset,
-                search = "Dragon",
-                ordering = Order.ASC.value
+                search = "Dragon"
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getLaunches(page, launchQuery)
+
+        assertTrue(result is LaunchResult.Success)
+    }
+
+    @Test
+    fun `getLaunches passes query parameters correctly for past launches`() = runTest {
+        val page = 1
+        val launchQuery = LaunchQuery(
+            query = "Dragon",
+            launchType = LaunchType.PAST
+        )
+        val expectedOffset = LaunchConstants.PAGINATION_LIMIT // page 1 * PAGINATION_LIMIT (20)
+        coEvery {
+            api.getPreviousLaunches(
+                offset = expectedOffset,
+                search = "Dragon"
             )
         } returns TestData.createLaunchesDto()
 

@@ -26,8 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.ui.designsystem.switch.Switch
-import com.seancoyle.core.domain.Order
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
@@ -48,7 +46,6 @@ internal fun LaunchFilterDialog(
     modifier: Modifier = Modifier
 ) {
     var localQuery by remember { mutableStateOf(currentFilterState.query) }
-    var localOrder by remember { mutableStateOf(currentFilterState.order) }
     var localLaunchStatus by remember { mutableStateOf(currentFilterState.launchStatus) }
 
     AlertDialog(
@@ -60,8 +57,6 @@ internal fun LaunchFilterDialog(
                     PortraitDialogContent(
                         query = localQuery,
                         onQueryChange = { localQuery = it },
-                        order = localOrder,
-                        onOrderChange = { localOrder = it },
                         launchStatus = localLaunchStatus,
                         onLaunchStatusChange = { localLaunchStatus = it },
                         modifier = modifier
@@ -71,8 +66,6 @@ internal fun LaunchFilterDialog(
                     LandscapeDialogContent(
                         query = localQuery,
                         onQueryChange = { localQuery = it },
-                        order = localOrder,
-                        onOrderChange = { localOrder = it },
                         launchStatus = localLaunchStatus,
                         onLaunchStatusChange = { localLaunchStatus = it },
                         modifier = modifier
@@ -84,7 +77,6 @@ internal fun LaunchFilterDialog(
             ConfirmButton {
                 onEvent(
                     UpdateFilterStateEvent(
-                        order = localOrder,
                         launchStatus = localLaunchStatus,
                         query = localQuery
                     )
@@ -102,8 +94,6 @@ internal fun LaunchFilterDialog(
 private fun PortraitDialogContent(
     query: String,
     onQueryChange: (String) -> Unit,
-    order: Order,
-    onOrderChange: (Order) -> Unit,
     launchStatus: LaunchStatus,
     onLaunchStatusChange: (LaunchStatus) -> Unit,
     modifier: Modifier
@@ -120,7 +110,6 @@ private fun PortraitDialogContent(
             onLaunchStatusSelected = onLaunchStatusChange
         )
         Spacer(modifier = Modifier.height(Dimens.dp16))
-        OrderSwitch(order = order, onOrderChange = onOrderChange)
     }
 }
 
@@ -128,8 +117,6 @@ private fun PortraitDialogContent(
 private fun LandscapeDialogContent(
     query: String,
     onQueryChange: (String) -> Unit,
-    order: Order,
-    onOrderChange: (Order) -> Unit,
     launchStatus: LaunchStatus,
     onLaunchStatusChange: (LaunchStatus) -> Unit,
     modifier: Modifier
@@ -143,7 +130,6 @@ private fun LandscapeDialogContent(
             AppText.bodyLarge(stringResource(R.string.search))
             QueryInputField(query = query, onQueryChange = onQueryChange)
             Spacer(modifier = Modifier.height(16.dp))
-            OrderSwitch(order = order, onOrderChange = onOrderChange)
         }
         Column(
             modifier = Modifier
@@ -174,18 +160,6 @@ fun QueryInputField(
         ) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-    )
-}
-
-@Composable
-fun OrderSwitch(
-    order: Order,
-    onOrderChange: (Order) -> Unit
-) {
-    AppText.bodyLarge(text = stringResource(R.string.asc_desc))
-    Switch(
-        checked = order == Order.ASC,
-        onCheckedChange = { newValue -> onOrderChange(if (newValue) Order.ASC else Order.DESC) }
     )
 }
 
@@ -247,19 +221,6 @@ private fun QueryInputFieldPreview() {
 
 @PreviewDarkLightMode
 @Composable
-private fun OrderSwitchPreview() {
-    AppTheme {
-        Column {
-            OrderSwitch(
-                order = Order.ASC,
-                onOrderChange = {}
-            )
-        }
-    }
-}
-
-@PreviewDarkLightMode
-@Composable
 private fun RadioGroupPreview() {
     AppTheme {
         RadioGroup(
@@ -280,8 +241,6 @@ private fun PortraitDialogContentPreview() {
                 PortraitDialogContent(
                     query = "Mission Name",
                     onQueryChange = {},
-                    order = Order.DESC,
-                    onOrderChange = {},
                     launchStatus = LaunchStatus.ALL,
                     onLaunchStatusChange = {},
                     modifier = Modifier
@@ -312,8 +271,6 @@ private fun LandscapeDialogContentPreview() {
                 LandscapeDialogContent(
                     query = "Mission Name",
                     onQueryChange = {},
-                    order = Order.ASC,
-                    onOrderChange = {},
                     launchStatus = LaunchStatus.FAILED,
                     onLaunchStatusChange = {},
                     modifier = Modifier
