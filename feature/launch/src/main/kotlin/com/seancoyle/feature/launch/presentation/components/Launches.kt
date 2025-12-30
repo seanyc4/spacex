@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,57 +37,48 @@ internal fun Launches(
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = screenState.scrollPosition)
     ObserveScrollPosition(listState, onUpdateScrollPosition)
 
-    Box(
+    LazyColumn(
+        state = listState,
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp8),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = Dimens.dp8)
+            .semantics { testTag = LaunchTestTags.LAUNCH_LAZY_COLUMN }
     ) {
-        LazyColumn(
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp8),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier =
-                modifier
-                    .semantics { testTag = LaunchTestTags.LAUNCH_LAZY_COLUMN }
-                    .fillMaxSize()
-                    .padding(start = Dimens.dp8, end = Dimens.dp8)
-        ) {
-            item {
-                if (launches.loadState.prepend is LoadState.Error) {
-                    ButtonPrimary(
-                        text = stringResource(R.string.retry),
-                        onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
-                        modifier = Modifier.padding(vertical = Dimens.dp8)
-                    )
-                }
+        item {
+            if (launches.loadState.prepend is LoadState.Error) {
+                ButtonPrimary(
+                    text = stringResource(R.string.retry),
+                    onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
+                    modifier = Modifier.padding(vertical = Dimens.dp8)
+                )
             }
-            items(
-                count = launches.itemCount,
-                key = launches.itemKey { item ->
-                    when (item) {
-                        is LaunchUi -> item.id
-                    }
-                },
-            ) { index ->
-                val launchItem = launches[index]
-                if (launchItem != null) {
-                    LaunchCard(
-                        launchItem = launchItem,
-                        onEvent = {}
-                    )
-                }
+        }
+        items(
+            count = launches.itemCount,
+            key = launches.itemKey { it.id }
+        ) { index ->
+            val launchItem = launches[index]
+            if (launchItem != null) {
+                LaunchCard(
+                    launchItem = launchItem,
+                    onEvent = {}
+                )
             }
-            item {
-                val appendLoadState = launches.loadState.mediator?.append ?: launches.loadState.append
-                if (appendLoadState is LoadState.Loading) {
-                    CircularProgressBar()
-                }
-                if (appendLoadState is LoadState.Error) {
-                    ButtonPrimary(
-                        text = stringResource(R.string.retry),
-                        onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
-                        modifier = Modifier.padding(Dimens.dp4)
-                    )
-                }
+        }
+        item {
+            val appendLoadState = launches.loadState.mediator?.append ?: launches.loadState.append
+            if (appendLoadState is LoadState.Loading) {
+                CircularProgressBar()
+            }
+            if (appendLoadState is LoadState.Error) {
+                ButtonPrimary(
+                    text = stringResource(R.string.retry),
+                    onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
+                    modifier = Modifier.padding(Dimens.dp4)
+                )
             }
         }
     }
