@@ -1,14 +1,18 @@
 package com.seancoyle.feature.launch.domain.usecase.component
 
 import androidx.paging.PagingData
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchesPreferencesUseCase
+import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -33,6 +37,9 @@ class LaunchesComponentImplTest {
     @MockK
     private lateinit var observeLaunchesUseCase: ObserveLaunchesUseCase
 
+    @MockK
+    private lateinit var getLaunchUseCase: GetLaunchUseCase
+
     private lateinit var underTest: LaunchesComponent
 
     @Before
@@ -41,7 +48,8 @@ class LaunchesComponentImplTest {
         underTest = LaunchesComponentImpl(
             saveLaunchesPreferencesUseCase = { saveLaunchesPreferencesUseCase },
             getLaunchesPreferencesUseCase = getLaunchesPreferencesUseCase,
-            observeLaunchesUseCase = observeLaunchesUseCase
+            observeLaunchesUseCase = observeLaunchesUseCase,
+            getLaunchUseCase = getLaunchUseCase
         )
     }
 
@@ -199,5 +207,19 @@ class LaunchesComponentImplTest {
 
         coVerify { saveLaunchesPreferencesUseCase.invoke(Order.ASC) }
         coVerify { saveLaunchesPreferencesUseCase.invoke(Order.DESC) }
+    }
+
+    @Test
+    fun `getLaunchUseCase delegates to use case and returns result`() = runTest {
+        val launchId = "id123"
+        val launchType = LaunchesType.UPCOMING
+        val launches = TestData.createRandomLaunchList(1)
+        val expectedResult = LaunchResult.Success(launches)
+        coEvery { getLaunchUseCase.invoke(launchId, launchType) } returns expectedResult
+
+        val result = underTest.getLaunchUseCase(launchId, launchType)
+
+        assertEquals(expectedResult, result)
+        coVerify { getLaunchUseCase.invoke(launchId, launchType) }
     }
 }
