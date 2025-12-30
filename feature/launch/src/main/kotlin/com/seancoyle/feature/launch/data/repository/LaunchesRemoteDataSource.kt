@@ -1,8 +1,10 @@
 package com.seancoyle.feature.launch.data.repository
 
+import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.feature.launch.domain.model.LaunchesType
 
 internal interface LaunchesRemoteDataSource {
 
@@ -10,4 +12,9 @@ internal interface LaunchesRemoteDataSource {
         page: Int,
         launchesQuery: LaunchesQuery
     ): LaunchResult<List<Launch>, Throwable>
+
+    suspend fun getLaunch(
+        id: String,
+        launchType: LaunchesType
+    ): LaunchResult<List<Launch>, RemoteError>
 }

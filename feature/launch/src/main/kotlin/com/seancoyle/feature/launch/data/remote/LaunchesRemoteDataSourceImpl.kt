@@ -2,6 +2,8 @@ package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.result.DataError
+import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.LaunchesConstants
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
@@ -40,6 +42,29 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
                 Timber.e(exception)
                 crashlytics.logException(exception)
                 LaunchResult.Error(exception)
+            }
+        )
+    }
+
+    override suspend fun getLaunch(
+        id: String,
+        launchType: LaunchesType
+    ): LaunchResult<List<Launch>, RemoteError>{
+        return runSuspendCatching {
+            val result = when (launchType) {
+                LaunchesType.UPCOMING -> api.getUpcomingLaunch(id)
+                LaunchesType.PAST -> api.getPreviousLaunch(id)
+            }
+            result.toDomain()
+        }.fold(
+            onSuccess = { mappedResult ->
+                LaunchResult.Success(mappedResult)
+            },
+            onFailure = { exception ->
+                Timber.e(exception)
+                crashlytics.logException(exception)
+                val mappedError = map(exception)
+                LaunchResult.Error(mappedError)
             }
         )
     }

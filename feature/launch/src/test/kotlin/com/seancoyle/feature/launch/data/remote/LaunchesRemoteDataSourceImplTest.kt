@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.LaunchesConstants
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
@@ -200,4 +201,61 @@ class LaunchesRemoteDataSourceImplTest {
 
         assertTrue(result is LaunchResult.Success)
     }
+
+    @Test
+    fun `getLaunch returns upcoming launch when API call is successful`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.UPCOMING
+        coEvery { api.getUpcomingLaunch(id) } returns TestData.createLaunchesDto()
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        val actualLaunch = result.data[0]
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
+        assertEquals(1, result.data.size)
+    }
+
+    @Test
+    fun `getLaunch returns past launch when API call is successful`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.PAST
+        coEvery { api.getPreviousLaunch(id) } returns TestData.createLaunchesDto()
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        val actualLaunch = result.data[0]
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
+        assertEquals(1, result.data.size)
+    }
+
+    @Test
+    fun `getLaunch returns error when API call fails for upcoming launch`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.UPCOMING
+        val givenException = RuntimeException("Network Failure")
+        val expectedException = DataError.RemoteError.NETWORK_UNKNOWN_ERROR
+        coEvery { api.getUpcomingLaunch(id) } throws givenException
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(expectedException, result.error)
+    }
+
+    @Test
+    fun `getLaunch returns error when API call fails for past launch`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.PAST
+        val givenException = RuntimeException("Network Failure")
+        val expectedException = DataError.RemoteError.NETWORK_UNKNOWN_ERROR
+        coEvery { api.getPreviousLaunch(id) } throws givenException
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(expectedException, result.error)
+    }
+
 }
