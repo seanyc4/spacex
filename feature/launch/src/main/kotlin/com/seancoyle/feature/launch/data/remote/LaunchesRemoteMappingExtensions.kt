@@ -16,6 +16,9 @@ import com.seancoyle.feature.launch.domain.model.Orbit
 import com.seancoyle.feature.launch.domain.model.Pad
 import com.seancoyle.feature.launch.domain.model.Program
 import com.seancoyle.feature.launch.domain.model.Rocket
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
+import com.seancoyle.feature.launch.domain.model.VidUrl
+import com.seancoyle.feature.launch.domain.model.MissionPatch
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -55,8 +58,7 @@ internal fun LaunchDto.toDomain(): Launch? {
     return Launch(
         id = launchId,
         url = url,
-        name = launchName,
-        responseMode = responseMode,
+        missionName = launchName,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision?.toDomain(),
@@ -81,6 +83,11 @@ internal fun LaunchDto.toDomain(): Launch? {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates?.map { it.toDomain() },
+        infoUrls = infoUrls,
+        vidUrls = vidUrls?.map { it.toDomain() },
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches?.map { it.toDomain() },
         status = status.toDomain(),
     )
 }
@@ -237,4 +244,37 @@ private fun defaultImage() =
         imageUrl = LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
         thumbnailUrl = LaunchesConstants.DEFAULT_LAUNCH_THUMBNAIL,
         credit = null
+    )
+
+private fun LaunchUpdateDto.toDomain() =
+    LaunchUpdate(
+        id = id,
+        profileImage = profileImage,
+        comment = comment,
+        infoUrl = infoUrl,
+        createdBy = createdBy,
+        createdOn = createdOn
+    )
+
+private fun VidUrlDto.toDomain() =
+    VidUrl(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+private fun MissionPatchDto.toDomain() =
+    MissionPatch(
+        id = id,
+        name = name,
+        priority = priority,
+        imageUrl = imageUrl,
+        agency = agency?.toDomain()
     )

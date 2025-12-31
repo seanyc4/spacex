@@ -29,9 +29,6 @@ internal data class LaunchDto(
     @SerialName("name")
     val name: String?,
 
-    @SerialName("response_mode")
-    val responseMode: String?,
-
     @SerialName("status")
     val status: StatusDto?,
 
@@ -106,6 +103,21 @@ internal data class LaunchDto(
 
     @SerialName("agency_launch_attempt_count_year")
     val agencyLaunchAttemptCountYear: Int?,
+
+    @SerialName("updates")
+    val updates: List<LaunchUpdateDto>?,
+
+    @SerialName("info_urls")
+    val infoUrls: List<String>?,
+
+    @SerialName("vid_urls")
+    val vidUrls: List<VidUrlDto>?,
+
+    @SerialName("pad_turnaround")
+    val padTurnaround: String?,
+
+    @SerialName("mission_patches")
+    val missionPatches: List<MissionPatchDto>?,
 )
 
 @Serializable
@@ -529,7 +541,58 @@ internal data class MissionPatchDto(
 
     @SerialName("agency")
     val agency: AgencyDto?,
+)
 
-    @SerialName("response_mode")
-    val responseMode: String?,
+@Serializable
+internal data class LaunchUpdateDto(
+    @SerialName("id")
+    val id: Int?,
+
+    @SerialName("profile_image")
+    val profileImage: String?,
+
+    @SerialName("comment")
+    val comment: String?,
+
+    @SerialName("info_url")
+    val infoUrl: String?,
+
+    @SerialName("created_by")
+    val createdBy: String?,
+
+    @SerialName("created_on")
+    val createdOn: String?,
+)
+
+@Serializable
+internal data class VidUrlDto(
+    @SerialName("priority")
+    val priority: Int?,
+
+    @SerialName("source")
+    val source: String?,
+
+    @SerialName("publisher")
+    val publisher: String?,
+
+    @SerialName("title")
+    val title: String?,
+
+    @SerialName("description")
+    val description: String?,
+
+    @SerialName("feature_image")
+    val featureImage: String?,
+
+    @SerialName("url")
+    val url: String?,
+
+    @SerialName("start_time")
+    val startTime: String?,
+
+    @SerialName("end_time")
+    val endTime: String?,
+
+    @SerialName("live")
+    val live: Boolean?,
 )

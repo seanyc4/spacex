@@ -8,6 +8,11 @@ import androidx.room.TypeConverters
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.ProgramListConverter
+import com.seancoyle.database.util.LaunchUpdateListConverter
+import com.seancoyle.database.util.StringListConverter
+import com.seancoyle.database.util.VidUrlListConverter
+import com.seancoyle.database.util.MissionPatchListConverter
+import kotlinx.serialization.Serializable
 
 @Keep
 @Entity(tableName = "launch", primaryKeys = ["id"])
@@ -21,9 +26,6 @@ data class LaunchEntity(
 
     @ColumnInfo(name="name")
     val name: String?,
-
-    @ColumnInfo(name="response_mode")
-    val responseMode: String?,
 
     @ColumnInfo(name="last_updated")
     val lastUpdated: String?,
@@ -98,11 +100,31 @@ data class LaunchEntity(
     @ColumnInfo("agency_launch_attempt_count_year")
     val agencyLaunchAttemptCountYear: Int?,
 
+    @field:TypeConverters(LaunchUpdateListConverter::class)
+    @ColumnInfo(name="updates")
+    val updates: List<LaunchUpdateEntity>?,
+
+    @field:TypeConverters(StringListConverter::class)
+    @ColumnInfo(name="info_urls")
+    val infoUrls: List<String>?,
+
+    @field:TypeConverters(VidUrlListConverter::class)
+    @ColumnInfo(name="vid_urls")
+    val vidUrls: List<VidUrlEntity>?,
+
+    @ColumnInfo(name="pad_turnaround")
+    val padTurnaround: String?,
+
+    @field:TypeConverters(MissionPatchListConverter::class)
+    @ColumnInfo(name="mission_patches")
+    val missionPatches: List<MissionPatchEntity>?,
+
     @ColumnInfo(name="launch_status")
     val status: LaunchStatusEntity,
 )
 
 @Keep
+@Serializable
 data class NetPrecisionEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -118,6 +140,7 @@ data class NetPrecisionEntity(
 )
 
 @Keep
+@Serializable
 data class ImageEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -136,6 +159,7 @@ data class ImageEntity(
 )
 
 @Keep
+@Serializable
 data class AgencyEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -233,6 +257,7 @@ data class AgencyEntity(
 )
 
 @Keep
+@Serializable
 data class CountryEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -251,6 +276,7 @@ data class CountryEntity(
 )
 
 @Keep
+@Serializable
 data class RocketEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -272,6 +298,7 @@ data class RocketEntity(
 )
 
 @Keep
+@Serializable
 data class PadEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -314,6 +341,7 @@ data class PadEntity(
 )
 
 @Keep
+@Serializable
 data class MissionEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -336,6 +364,7 @@ data class MissionEntity(
 )
 
 @Keep
+@Serializable
 data class OrbitEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -348,6 +377,7 @@ data class OrbitEntity(
 )
 
 @Keep
+@Serializable
 data class ProgramEntity(
     @ColumnInfo(name="id")
     val id: Int?,
@@ -379,3 +409,78 @@ data class ProgramEntity(
 enum class LaunchStatusEntity {
     SUCCESS, GO, FAILED, TBC, TBD, ALL
 }
+
+@Keep
+@Serializable
+data class LaunchUpdateEntity(
+    @ColumnInfo(name="id")
+    val id: Int?,
+
+    @ColumnInfo(name="profile_image")
+    val profileImage: String?,
+
+    @ColumnInfo(name="comment")
+    val comment: String?,
+
+    @ColumnInfo(name="info_url")
+    val infoUrl: String?,
+
+    @ColumnInfo(name="created_by")
+    val createdBy: String?,
+
+    @ColumnInfo(name="created_on")
+    val createdOn: String?
+)
+
+@Keep
+@Serializable
+data class VidUrlEntity(
+    @ColumnInfo(name="priority")
+    val priority: Int?,
+
+    @ColumnInfo(name="source")
+    val source: String?,
+
+    @ColumnInfo(name="publisher")
+    val publisher: String?,
+
+    @ColumnInfo(name="title")
+    val title: String?,
+
+    @ColumnInfo(name="description")
+    val description: String?,
+
+    @ColumnInfo(name="feature_image")
+    val featureImage: String?,
+
+    @ColumnInfo(name="url")
+    val url: String?,
+
+    @ColumnInfo(name="start_time")
+    val startTime: String?,
+
+    @ColumnInfo(name="end_time")
+    val endTime: String?,
+
+    @ColumnInfo(name="live")
+    val live: Boolean?
+)
+
+@Keep
+@Serializable
+data class MissionPatchEntity(
+    @ColumnInfo(name="id")
+    val id: Int?,
+
+    @ColumnInfo(name="name")
+    val name: String?,
+
+    @ColumnInfo(name="priority")
+    val priority: Int?,
+
+    @ColumnInfo(name="image_url")
+    val imageUrl: String?,
+
+    @Embedded(prefix = "agency")
+    val agency: AgencyEntity?
+)

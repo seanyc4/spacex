@@ -80,16 +80,25 @@ class LaunchesLocalMappingExtensionsTest {
 
     @Test
     fun `LaunchEntity toDomain converts to Launch correctly`() {
-        val launchEntity = TestData.createLaunchEntity()
+        val updates = listOf(TestData.createLaunchUpdateEntity())
+        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val vidUrls = listOf(TestData.createVidUrlEntity())
+        val padTurnaround = "P1DT2H"
+        val missionPatches = listOf(TestData.createMissionPatchEntity())
+        val launchEntity = TestData.createLaunchEntity(
+            updates = updates,
+            infoUrls = infoUrls,
+            vidUrls = vidUrls,
+            padTurnaround = padTurnaround,
+            missionPatches = missionPatches
+        )
 
         val result = launchEntity.toDomain()
 
         assertNotNull(result)
         assertEquals(launchEntity.id, result.id)
-        assertEquals(launchEntity.count, result.count)
         assertEquals(launchEntity.url, result.url)
-        assertEquals(launchEntity.name, result.name)
-        assertEquals(launchEntity.responseMode, result.responseMode)
+        assertEquals(launchEntity.name, result.missionName)
         assertEquals(launchEntity.lastUpdated, result.lastUpdated)
         assertEquals(launchEntity.net, result.net)
         assertEquals(launchEntity.windowEnd, result.windowEnd)
@@ -99,6 +108,11 @@ class LaunchesLocalMappingExtensionsTest {
         assertEquals(launchEntity.weatherConcerns, result.weatherConcerns)
         assertEquals(launchEntity.failReason, result.failReason)
         assertEquals(launchEntity.webcastLive, result.webcastLive)
+        assertEquals(updates[0].comment, result.updates?.get(0)?.comment)
+        assertEquals(infoUrls, result.infoUrls)
+        assertEquals(vidUrls[0].title, result.vidUrls?.get(0)?.title)
+        assertEquals(padTurnaround, result.padTurnaround)
+        assertEquals(missionPatches[0].name, result.missionPatches?.get(0)?.name)
     }
 
     @Test
@@ -152,16 +166,25 @@ class LaunchesLocalMappingExtensionsTest {
 
     @Test
     fun `Launch toEntity converts to LaunchEntity correctly`() {
-        val launch = TestData.createLaunch()
+        val updates = listOf(TestData.createLaunchUpdate())
+        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val vidUrls = listOf(TestData.createVidUrl())
+        val padTurnaround = "P1DT2H"
+        val missionPatches = listOf(TestData.createMissionPatch())
+        val launch = TestData.createLaunch().copy(
+            updates = updates,
+            infoUrls = infoUrls,
+            vidUrls = vidUrls,
+            padTurnaround = padTurnaround,
+            missionPatches = missionPatches
+        )
 
         val result = launch.toEntity()
 
         assertNotNull(result)
         assertEquals(launch.id, result.id)
-        assertEquals(launch.count, result.count)
         assertEquals(launch.url, result.url)
-        assertEquals(launch.name, result.name)
-        assertEquals(launch.responseMode, result.responseMode)
+        assertEquals(launch.missionName, result.name)
         assertEquals(launch.lastUpdated, result.lastUpdated)
         assertEquals(launch.net, result.net)
         assertEquals(launch.windowEnd, result.windowEnd)
@@ -171,6 +194,11 @@ class LaunchesLocalMappingExtensionsTest {
         assertEquals(launch.weatherConcerns, result.weatherConcerns)
         assertEquals(launch.failReason, result.failReason)
         assertEquals(launch.webcastLive, result.webcastLive)
+        assertEquals(updates[0].comment, result.updates?.get(0)?.comment)
+        assertEquals(infoUrls, result.infoUrls)
+        assertEquals(vidUrls[0].title, result.vidUrls?.get(0)?.title)
+        assertEquals(padTurnaround, result.padTurnaround)
+        assertEquals(missionPatches[0].name, result.missionPatches?.get(0)?.name)
     }
 
     @Test
@@ -230,7 +258,6 @@ class LaunchesLocalMappingExtensionsTest {
         val entityAgain = domain.toEntity()
 
         assertEquals(originalEntity.id, entityAgain.id)
-        assertEquals(originalEntity.count, entityAgain.count)
         assertEquals(originalEntity.name, entityAgain.name)
         assertEquals(originalEntity.url, entityAgain.url)
         assertEquals(originalEntity.image.imageUrl, entityAgain.image.imageUrl)
@@ -245,8 +272,7 @@ class LaunchesLocalMappingExtensionsTest {
         val domainAgain = entity.toDomain()
 
         assertEquals(originalDomain.id, domainAgain.id)
-        assertEquals(originalDomain.count, domainAgain.count)
-        assertEquals(originalDomain.name, domainAgain.name)
+        assertEquals(originalDomain.missionName, domainAgain.missionName)
         assertEquals(originalDomain.url, domainAgain.url)
         assertEquals(originalDomain.image.imageUrl, domainAgain.image.imageUrl)
         assertEquals(originalDomain.status, domainAgain.status)

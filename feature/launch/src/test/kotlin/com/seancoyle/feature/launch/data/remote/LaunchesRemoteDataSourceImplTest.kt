@@ -63,8 +63,7 @@ class LaunchesRemoteDataSourceImplTest {
             "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
             actualLaunch.url
         )
-        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.name)
-        assertEquals("list", actualLaunch.responseMode)
+        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.missionName)
         assertEquals(LaunchStatus.SUCCESS.text, actualLaunch.status.text)
         assertEquals("2025-12-05T18:39:36Z", actualLaunch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)

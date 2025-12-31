@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.util.TestData
 import com.seancoyle.feature.launch.util.TestData.createImageDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchesDto
@@ -140,6 +141,12 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `LaunchDto toDomain should map all fields correctly`() {
+        val updates = listOf(TestData.createLaunchUpdateDto())
+        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val vidUrls = listOf(TestData.createVidUrlDto())
+        val padTurnaround = "P1DT2H"
+        val missionPatches = listOf(TestData.createMissionPatchDto())
+
         val launchDto = createLaunchDto(
             id = "test-id",
             url = "https://example.com/launch",
@@ -155,7 +162,12 @@ class LaunchesRemoteMappingExtensionsKtTest {
             orbitalLaunchAttemptCountYear = 2,
             locationLaunchAttemptCountYear = 1,
             padLaunchAttemptCountYear = 1,
-            agencyLaunchAttemptCountYear = 4
+            agencyLaunchAttemptCountYear = 4,
+            updates = updates,
+            infoUrls = infoUrls,
+            vidUrls = vidUrls,
+            padTurnaround = padTurnaround,
+            missionPatches = missionPatches
         )
 
         val launchesDto = createLaunchesDto(results = listOf(launchDto))
@@ -166,8 +178,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
         assertEquals("test-id", launch.id)
         assertEquals("https://example.com/launch", launch.url)
-        assertEquals("Test Launch", launch.name)
-        assertEquals("list", launch.responseMode)
+        assertEquals("Test Launch", launch.missionName)
         assertEquals("2025-12-05T18:39:36Z", launch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", launch.net)
         assertEquals("Minute", launch.netPrecision?.name)
@@ -188,6 +199,11 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals(1, launch.padLaunchAttemptCountYear)
         assertEquals(4, launch.agencyLaunchAttemptCountYear)
         assertEquals(LaunchStatus.SUCCESS, launch.status)
+        assertEquals(updates[0].comment, launch.updates?.get(0)?.comment)
+        assertEquals(infoUrls, launch.infoUrls)
+        assertEquals(vidUrls[0].title, launch.vidUrls?.get(0)?.title)
+        assertEquals(padTurnaround, launch.padTurnaround)
+        assertEquals(missionPatches[0].name, launch.missionPatches?.get(0)?.name)
     }
 
     @Test
@@ -245,10 +261,10 @@ class LaunchesRemoteMappingExtensionsKtTest {
         val result = launchesDto.toDomain()
 
         assertNotNull(result[0].image)
-        assertEquals(1296, result[0].image?.id)
-        assertEquals("Starlink night fairing", result[0].image?.name)
-        assertEquals("https://example.com/image.png", result[0].image?.imageUrl)
-        assertEquals("https://example.com/thumb.png", result[0].image?.thumbnailUrl)
-        assertEquals("SpaceX", result[0].image?.credit)
+        assertEquals(1296, result[0].image.id)
+        assertEquals("Starlink night fairing", result[0].image.name)
+        assertEquals("https://example.com/image.png", result[0].image.imageUrl)
+        assertEquals("https://example.com/thumb.png", result[0].image.thumbnailUrl)
+        assertEquals("SpaceX", result[0].image.credit)
     }
 }

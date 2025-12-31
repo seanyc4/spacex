@@ -14,6 +14,9 @@ import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
+import com.seancoyle.database.entities.LaunchUpdateEntity
+import com.seancoyle.database.entities.VidUrlEntity
+import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
@@ -27,6 +30,9 @@ import com.seancoyle.feature.launch.domain.model.Orbit
 import com.seancoyle.feature.launch.domain.model.Pad
 import com.seancoyle.feature.launch.domain.model.Program
 import com.seancoyle.feature.launch.domain.model.Rocket
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
+import com.seancoyle.feature.launch.domain.model.VidUrl
+import com.seancoyle.feature.launch.domain.model.MissionPatch
 import kotlinx.coroutines.TimeoutCancellationException
 
 internal fun map(throwable: Throwable): LocalError {
@@ -48,8 +54,7 @@ internal fun LaunchEntity.toDomain(): Launch =
     Launch(
         id = id,
         url = url,
-        name = name,
-        responseMode = responseMode,
+        missionName = name,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision?.toDomain(),
@@ -74,6 +79,11 @@ internal fun LaunchEntity.toDomain(): Launch =
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates?.map { it.toDomain() },
+        infoUrls = infoUrls,
+        vidUrls = vidUrls?.map { it.toDomain() },
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches?.map { it.toDomain() },
         status = status.toDomain(),
     )
 
@@ -225,8 +235,7 @@ internal fun Launch.toEntity(): LaunchEntity =
     LaunchEntity(
         id = id,
         url = url,
-        name = name,
-        responseMode = responseMode,
+        name = missionName,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision?.toEntity(),
@@ -251,6 +260,11 @@ internal fun Launch.toEntity(): LaunchEntity =
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates?.map { it.toEntity() },
+        infoUrls = infoUrls,
+        vidUrls = vidUrls?.map { it.toEntity() },
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches?.map { it.toEntity() },
         status = status.toEntity(),
     )
 
@@ -381,3 +395,71 @@ internal fun LaunchStatus.toEntity(): LaunchStatusEntity =
         LaunchStatus.TBD -> LaunchStatusEntity.TBD
         LaunchStatus.ALL -> LaunchStatusEntity.ALL
     }
+
+// Entity to Domain for new fields
+private fun LaunchUpdateEntity.toDomain(): LaunchUpdate =
+    LaunchUpdate(
+        id = id,
+        profileImage = profileImage,
+        comment = comment,
+        infoUrl = infoUrl,
+        createdBy = createdBy,
+        createdOn = createdOn
+    )
+
+private fun VidUrlEntity.toDomain(): VidUrl =
+    VidUrl(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+private fun MissionPatchEntity.toDomain(): MissionPatch =
+    MissionPatch(
+        id = id,
+        name = name,
+        priority = priority,
+        imageUrl = imageUrl,
+        agency = agency?.toDomain()
+    )
+
+// Domain to Entity for new fields
+private fun LaunchUpdate.toEntity(): LaunchUpdateEntity =
+    LaunchUpdateEntity(
+        id = id,
+        profileImage = profileImage,
+        comment = comment,
+        infoUrl = infoUrl,
+        createdBy = createdBy,
+        createdOn = createdOn
+    )
+
+private fun VidUrl.toEntity(): VidUrlEntity =
+    VidUrlEntity(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+private fun MissionPatch.toEntity(): MissionPatchEntity =
+    MissionPatchEntity(
+        id = id,
+        name = name,
+        priority = priority,
+        imageUrl = imageUrl,
+        agency = agency?.toEntity()
+    )

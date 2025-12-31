@@ -60,9 +60,8 @@ internal class LaunchesRemoteDataSourceTest {
         // Verify first launch
         val firstLaunch = result.data[0]
         assertEquals("test-launch-1", firstLaunch.id)
-        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", firstLaunch.name)
+        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", firstLaunch.missionName)
         assertEquals("https://lldev.thespacedevs.com/2.3.0/launches/test-launch-1/", firstLaunch.url)
-        assertEquals("list", firstLaunch.responseMode)
         assertEquals(LaunchStatus.GO.name, firstLaunch.status.name)
         assertEquals("2025-12-13T05:34:00Z", firstLaunch.net)
         assertEquals("Starlink night fairing", firstLaunch.image.name)
@@ -71,7 +70,7 @@ internal class LaunchesRemoteDataSourceTest {
         // Verify second launch
         val secondLaunch = result.data[1]
         assertEquals("test-launch-2", secondLaunch.id)
-        assertEquals("Falcon Heavy | Mission 2", secondLaunch.name)
+        assertEquals("Falcon Heavy | Mission 2", secondLaunch.missionName)
         assertEquals(true, secondLaunch.webcastLive)
     }
 

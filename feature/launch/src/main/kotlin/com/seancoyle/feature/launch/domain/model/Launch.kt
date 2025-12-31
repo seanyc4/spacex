@@ -3,8 +3,7 @@ package com.seancoyle.feature.launch.domain.model
 data class Launch(
     val id: String,
     val url: String?,
-    val name: String?,
-    val responseMode: String?,
+    val missionName: String?,
     val lastUpdated: String?,
     val net: String?,
     val netPrecision: NetPrecision?,
@@ -30,6 +29,11 @@ data class Launch(
     val locationLaunchAttemptCountYear: Int?,
     val padLaunchAttemptCountYear: Int?,
     val agencyLaunchAttemptCountYear: Int?,
+    val updates: List<LaunchUpdate>?,
+    val infoUrls: List<String>?,
+    val vidUrls: List<VidUrl>?,
+    val padTurnaround: String?,
+    val missionPatches: List<MissionPatch>?,
 )
 
 data class NetPrecision(
@@ -153,4 +157,34 @@ data class Program(
     val startDate: String?,
     val endDate: String?,
     val agencies: List<Agency?>?
+)
+
+data class LaunchUpdate(
+    val id: Int?,
+    val profileImage: String?,
+    val comment: String?,
+    val infoUrl: String?,
+    val createdBy: String?,
+    val createdOn: String?
+)
+
+data class VidUrl(
+    val priority: Int?,
+    val source: String?,
+    val publisher: String?,
+    val title: String?,
+    val description: String?,
+    val featureImage: String?,
+    val url: String?,
+    val startTime: String?,
+    val endTime: String?,
+    val live: Boolean?
+)
+
+data class MissionPatch(
+    val id: Int?,
+    val name: String?,
+    val priority: Int?,
+    val imageUrl: String?,
+    val agency: Agency?
 )

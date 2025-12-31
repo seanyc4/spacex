@@ -254,7 +254,7 @@ class LaunchLocalDataSourceImplTest {
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(launchId, result.data?.id)
-        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", result.data?.name)
+        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", result.data?.missionName)
         coVerify { launchDao.getById(launchId) }
     }
 

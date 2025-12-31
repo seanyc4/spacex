@@ -42,13 +42,47 @@ internal class LaunchesLocalDataSourceTest {
     private fun createTestLaunch(
         id: String,
         name: String = "Test Launch $id",
-        launchStatus: LaunchStatus = LaunchStatus.SUCCESS
+        launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
+        updates: List<LaunchUpdate>? = listOf(
+            LaunchUpdate(
+                id = 1,
+                profileImage = "https://test.com/profile.png",
+                comment = "Test update",
+                infoUrl = "https://test.com/info",
+                createdBy = "Tester",
+                createdOn = "2025-12-28T10:00:00Z"
+            )
+        ),
+        infoUrls: List<String>? = listOf("https://test.com/info1", "https://test.com/info2"),
+        vidUrls: List<VidUrl>? = listOf(
+            VidUrl(
+                priority = 1,
+                source = "youtube.com",
+                publisher = "TestPublisher",
+                title = "Test Video",
+                description = "Test video description",
+                featureImage = "https://test.com/feature.jpg",
+                url = "https://youtube.com/watch?v=123",
+                startTime = "2025-12-28T12:00:00Z",
+                endTime = "2025-12-28T13:00:00Z",
+                live = false
+            )
+        ),
+        padTurnaround: String? = "P1DT2H",
+        missionPatches: List<MissionPatch>? = listOf(
+            MissionPatch(
+                id = 1,
+                name = "PatchName",
+                priority = 10,
+                imageUrl = "https://test.com/patch.png",
+                agency = null
+            )
+        )
     ): Launch {
         return Launch(
             id = id,
             url = "https://test.com/launch/$id",
-            name = name,
-            responseMode = "list",
+            missionName = name,
             lastUpdated = "2025-12-28T12:00:00Z",
             net = "2025-12-28T15:00:00Z",
             netPrecision = NetPrecision(
@@ -194,6 +228,11 @@ internal class LaunchesLocalDataSourceTest {
             padLaunchAttemptCountYear = 10,
             agencyLaunchAttemptCountYear = 5,
             status = launchStatus,
+            updates = updates,
+            infoUrls = infoUrls,
+            vidUrls = vidUrls,
+            padTurnaround = padTurnaround,
+            missionPatches = missionPatches
         )
     }
 
@@ -226,8 +265,13 @@ internal class LaunchesLocalDataSourceTest {
         val retrievedLaunch = getResult.data
         assertNotNull(retrievedLaunch)
         assertEquals(testLaunch.id, retrievedLaunch.id)
-        assertEquals(testLaunch.name, retrievedLaunch.name)
+        assertEquals(testLaunch.missionName, retrievedLaunch.missionName)
         assertEquals(testLaunch.status, retrievedLaunch.status)
+        assertEquals(testLaunch.updates?.get(0)?.comment, retrievedLaunch.updates?.get(0)?.comment)
+        assertEquals(testLaunch.infoUrls, retrievedLaunch.infoUrls)
+        assertEquals(testLaunch.vidUrls?.get(0)?.title, retrievedLaunch.vidUrls?.get(0)?.title)
+        assertEquals(testLaunch.padTurnaround, retrievedLaunch.padTurnaround)
+        assertEquals(testLaunch.missionPatches?.get(0)?.name, retrievedLaunch.missionPatches?.get(0)?.name)
     }
 
     @Test
@@ -235,13 +279,13 @@ internal class LaunchesLocalDataSourceTest {
         val originalLaunch = createTestLaunch(id = "launch-1", name = "Original Name")
         underTest.upsert(originalLaunch)
 
-        val updatedLaunch = originalLaunch.copy(name = "Updated Name")
+        val updatedLaunch = originalLaunch.copy(missionName = "Updated Name")
         val upsertResult = underTest.upsert(updatedLaunch)
         assertTrue(upsertResult is LaunchResult.Success)
 
         val getResult = underTest.getById(id = "launch-1")
         assertTrue(getResult is LaunchResult.Success)
-        assertEquals("Updated Name", getResult.data?.name)
+        assertEquals("Updated Name", getResult.data?.missionName)
     }
 
     @Test
@@ -262,7 +306,7 @@ internal class LaunchesLocalDataSourceTest {
         val initialLaunches = createTestLaunchList(5)
         underTest.upsertAll(initialLaunches)
 
-        val updatedLaunches = initialLaunches.map { it.copy(name = "Updated ${it.name}") }
+        val updatedLaunches = initialLaunches.map { it.copy(missionName = "Updated ${it.missionName}") }
         val result = underTest.upsertAll(updatedLaunches)
 
         assertTrue(result is LaunchResult.Success)
@@ -273,7 +317,7 @@ internal class LaunchesLocalDataSourceTest {
 
         val firstLaunch = underTest.getById("test-1")
         assertTrue(firstLaunch is LaunchResult.Success)
-        assertTrue(firstLaunch.data?.name?.startsWith("Updated") ?: false)
+        assertTrue(firstLaunch.data?.missionName?.startsWith("Updated") ?: false)
     }
 
     @Test

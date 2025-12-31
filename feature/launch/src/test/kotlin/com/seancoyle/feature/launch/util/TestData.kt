@@ -27,7 +27,16 @@ import com.seancoyle.feature.launch.data.remote.PadDto
 import com.seancoyle.feature.launch.data.remote.ProgramDto
 import com.seancoyle.feature.launch.data.remote.RocketDto
 import com.seancoyle.feature.launch.data.remote.StatusDto
+import com.seancoyle.database.entities.LaunchUpdateEntity
+import com.seancoyle.database.entities.VidUrlEntity
+import com.seancoyle.database.entities.MissionPatchEntity
+import com.seancoyle.feature.launch.data.remote.LaunchUpdateDto
+import com.seancoyle.feature.launch.data.remote.MissionPatchDto
+import com.seancoyle.feature.launch.data.remote.VidUrlDto
 import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
+import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.domain.model.VidUrl
 import kotlin.random.Random
 
 internal object TestData {
@@ -58,7 +67,6 @@ internal object TestData {
         id: String? = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
-        responseMode: String? = "list",
         status: StatusDto? = createStatusDto(),
         lastUpdated: String? = "2025-12-05T18:39:36Z",
         net: String? = "2025-12-13T05:34:00Z",
@@ -83,12 +91,16 @@ internal object TestData {
         orbitalLaunchAttemptCountYear: Int? = null,
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
-        agencyLaunchAttemptCountYear: Int? = null
+        agencyLaunchAttemptCountYear: Int? = null,
+        updates: List<LaunchUpdateDto>? = null,
+        infoUrls: List<String>? = null,
+        vidUrls: List<VidUrlDto>? = null,
+        padTurnaround: String? = null,
+        missionPatches: List<MissionPatchDto>? = null
     ) = LaunchDto(
         id = id,
         url = url,
         name = name,
-        responseMode = responseMode,
         status = status,
         lastUpdated = lastUpdated,
         net = net,
@@ -113,7 +125,12 @@ internal object TestData {
         orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
-        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates,
+        infoUrls = infoUrls,
+        vidUrls = vidUrls,
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches
     )
 
     fun createLaunchesDto(
@@ -143,10 +160,8 @@ internal object TestData {
 
     fun createLaunchEntity(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
-        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
-        responseMode: String? = "list",
         lastUpdated: String? = "2025-12-05T18:39:36Z",
         net: String? = "2025-12-13T05:34:00Z",
         netPrecision: NetPrecisionEntity? = createNetPrecisionEntity(),
@@ -172,11 +187,15 @@ internal object TestData {
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
+        updates: List<LaunchUpdateEntity>? = null,
+        infoUrls: List<String>? = null,
+        vidUrls: List<VidUrlEntity>? = null,
+        padTurnaround: String? = null,
+        missionPatches: List<MissionPatchEntity>? = null
     ) = LaunchEntity(
         id = id,
         url = url,
         name = name,
-        responseMode = responseMode,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision,
@@ -202,6 +221,11 @@ internal object TestData {
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         status = status,
+        updates = updates,
+        infoUrls = infoUrls,
+        vidUrls = vidUrls,
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches
     )
 
     // Domain Model Factory Functions
@@ -223,10 +247,8 @@ internal object TestData {
 
     fun createLaunch(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
-        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
-        responseMode: String? = "list",
         lastUpdated: String? = "2025-12-05T18:39:36Z",
         net: String? = "2025-12-13T05:34:00Z",
         netPrecision: NetPrecision? = createNetPrecision(),
@@ -252,11 +274,15 @@ internal object TestData {
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatus = LaunchStatus.TBD,
+        updates: List<LaunchUpdate>? = null,
+        infoUrls: List<String>? = null,
+        vidUrls: List<VidUrl>? = null,
+        padTurnaround: String? = null,
+        missionPatches: List<MissionPatch>? = null
     ) = Launch(
         id = id,
         url = url,
-        name = name,
-        responseMode = responseMode,
+        missionName = name,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision,
@@ -282,15 +308,18 @@ internal object TestData {
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         status = status,
+        updates = updates,
+        infoUrls = infoUrls,
+        vidUrls = vidUrls,
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches
     )
 
     // Launch after all the business logic is applied from the use case
     fun createLaunchTransformed(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
-        count: Int = 100,
         url: String? = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
         name: String? = "Falcon 9 Block 5 | Starlink Group 15-12",
-        responseMode: String? = "list",
         lastUpdated: String? = "2025-12-05T18:39:36Z",
         net: String? = "2025-12-13T05:34:00Z",
         netPrecision: NetPrecision? = createNetPrecision(),
@@ -316,11 +345,15 @@ internal object TestData {
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatus = LaunchStatus.SUCCESS,
+        updates: List<LaunchUpdate>? = null,
+        infoUrls: List<String>? = null,
+        vidUrls: List<VidUrl>? = null,
+        padTurnaround: String? = null,
+        missionPatches: List<MissionPatch>? = null
     ) = Launch(
         id = id,
         url = url,
-        name = name,
-        responseMode = responseMode,
+        missionName = name,
         lastUpdated = lastUpdated,
         net = net,
         netPrecision = netPrecision,
@@ -346,7 +379,13 @@ internal object TestData {
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         status = status,
+        updates = updates,
+        infoUrls = infoUrls,
+        vidUrls = vidUrls,
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches
     )
+
 
     fun createRandomLaunchList(num: Int): List<Launch> {
         val statuses = LaunchStatus.entries.filter { it != LaunchStatus.ALL }
@@ -359,5 +398,154 @@ internal object TestData {
             )
         }
     }
+
+    fun createLaunchUpdateEntity(
+        id: Int = 1,
+        profileImage: String = "https://example.com/profile.png",
+        comment: String = "Test update comment",
+        infoUrl: String = "https://example.com/info",
+        createdBy: String = "TestUser",
+        createdOn: String = "2025-12-31T12:00:00Z"
+    ) = LaunchUpdateEntity(id, profileImage, comment, infoUrl, createdBy, createdOn)
+
+    fun createVidUrlEntity(
+        priority: Int = 10,
+        source: String = "youtube.com",
+        publisher: String = "TestPublisher",
+        title: String = "Test Video",
+        description: String = "Test video description",
+        featureImage: String = "https://example.com/feature.jpg",
+        url: String = "https://youtube.com/watch?v=123",
+        startTime: String = "2025-12-31T12:00:00Z",
+        endTime: String = "2025-12-31T13:00:00Z",
+        live: Boolean = false
+    ) = VidUrlEntity(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+    fun createMissionPatchEntity(
+        id: Int = 1,
+        name: String = "PatchName",
+        priority: Int = 10,
+        imageUrl: String = "https://example.com/patch.png",
+        agency: AgencyEntity? = null
+    ) = MissionPatchEntity(id, name, priority, imageUrl, agency)
+
+    fun createLaunchUpdate(
+        id: Int = 1,
+        profileImage: String = "https://example.com/profile.png",
+        comment: String = "Test update comment",
+        infoUrl: String = "https://example.com/info",
+        createdBy: String = "TestUser",
+        createdOn: String = "2025-12-31T12:00:00Z"
+    ) = LaunchUpdate(
+        id = id,
+        profileImage = profileImage,
+        comment = comment,
+        infoUrl = infoUrl,
+        createdBy = createdBy,
+        createdOn = createdOn
+    )
+
+    fun createVidUrl(
+        priority: Int = 10,
+        source: String = "youtube.com",
+        publisher: String = "TestPublisher",
+        title: String = "Test Video",
+        description: String = "Test video description",
+        featureImage: String = "https://example.com/feature.jpg",
+        url: String = "https://youtube.com/watch?v=123",
+        startTime: String = "2025-12-31T12:00:00Z",
+        endTime: String = "2025-12-31T13:00:00Z",
+        live: Boolean = false
+    ) = VidUrl(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+    fun createMissionPatch(
+        id: Int = 1,
+        name: String = "PatchName",
+        priority: Int = 10,
+        imageUrl: String = "https://example.com/patch.png",
+        agency: Agency? = null
+    ) = MissionPatch(
+        id = id,
+        name = name,
+        priority = priority,
+        imageUrl = imageUrl,
+        agency = agency
+    )
+
+    fun createMissionPatchDto(
+        id: Int = 1,
+        name: String = "PatchName",
+        priority: Int = 10,
+        imageUrl: String = "https://example.com/patch.png",
+        agency: AgencyDto? = null
+    ) = MissionPatchDto(
+        id = id,
+        name = name,
+        priority = priority,
+        imageUrl = imageUrl,
+        agency = agency
+    )
+
+    fun createVidUrlDto(
+        priority: Int = 10,
+        source: String = "youtube.com",
+        publisher: String = "TestPublisher",
+        title: String = "Test Video",
+        description: String = "Test video description",
+        featureImage: String = "https://example.com/feature.jpg",
+        url: String = "https://youtube.com/watch?v=123",
+        startTime: String = "2025-12-31T12:00:00Z",
+        endTime: String = "2025-12-31T13:00:00Z",
+        live: Boolean = false
+    ) = VidUrlDto(
+        priority = priority,
+        source = source,
+        publisher = publisher,
+        title = title,
+        description = description,
+        featureImage = featureImage,
+        url = url,
+        startTime = startTime,
+        endTime = endTime,
+        live = live
+    )
+
+    fun createLaunchUpdateDto(
+        id: Int = 1,
+        profileImage: String = "https://example.com/profile.png",
+        comment: String = "Test update comment",
+        infoUrl: String = "https://example.com/info",
+        createdBy: String = "TestUser",
+        createdOn: String = "2025-12-31T12:00:00Z"
+    ) = LaunchUpdateDto(
+        id = id,
+        profileImage = profileImage,
+        comment = comment,
+        infoUrl = infoUrl,
+        createdBy = createdBy,
+        createdOn = createdOn
+    )
 
 }
