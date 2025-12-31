@@ -22,6 +22,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
 import com.seancoyle.feature.launch.R
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
@@ -32,6 +33,7 @@ internal fun Launches(
     state: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
+    onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = state.scrollPosition)
@@ -64,7 +66,9 @@ internal fun Launches(
             if (launchItem != null) {
                 LaunchCard(
                     launchItem = launchItem,
-                    onEvent = {}
+                    onEvent = {},
+                    onClick = onClick,
+                    launchesType = state.launchesType,
                 )
             }
         }

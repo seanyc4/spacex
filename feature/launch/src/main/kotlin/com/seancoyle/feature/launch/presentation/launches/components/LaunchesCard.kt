@@ -39,6 +39,7 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 
@@ -46,13 +47,16 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 internal fun LaunchCard(
     launchItem: LaunchesUi,
     onEvent: (LaunchesEvents) -> Unit,
+    onClick: (String, LaunchesType) -> Unit,
+    launchesType: LaunchesType,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable {}
-            .height(Dimens.launchCardHeight),
+            .height(Dimens.launchCardHeight)
+            .clickable { onClick(launchItem.id, launchesType) },
         shape = RoundedCornerShape(Dimens.dp10),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
@@ -139,7 +143,9 @@ private fun LaunchCardPreview() {
                 status = LaunchStatus.SUCCESS,
                 image = ""
             ),
-            onEvent = {}
+            onEvent = {},
+            onClick = { _, _ -> },
+            launchesType = LaunchesType.UPCOMING
         )
     }
 }
