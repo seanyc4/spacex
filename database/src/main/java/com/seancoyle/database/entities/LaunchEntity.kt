@@ -18,43 +18,43 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "launch", primaryKeys = ["id"])
 data class LaunchEntity(
 
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: String,
 
-    @ColumnInfo(name="url")
+    @ColumnInfo(name = "url")
     val url: String?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="last_updated")
+    @ColumnInfo(name = "last_updated")
     val lastUpdated: String?,
 
-    @ColumnInfo(name="net")
+    @ColumnInfo(name = "net")
     val net: String?,
 
     @Embedded(prefix = "net_precision")
     val netPrecision: NetPrecisionEntity?,
 
-    @ColumnInfo(name="window_end")
+    @ColumnInfo(name = "window_end")
     val windowEnd: String?,
 
-    @ColumnInfo(name="window_start")
+    @ColumnInfo(name = "window_start")
     val windowStart: String?,
 
     @Embedded(prefix = "image")
     val image: ImageEntity,
 
-    @ColumnInfo(name="infographic")
+    @ColumnInfo(name = "infographic")
     val infographic: String?,
 
-    @ColumnInfo(name="probability")
+    @ColumnInfo(name = "probability")
     val probability: Int?,
 
-    @ColumnInfo(name="weather_concerns")
+    @ColumnInfo(name = "weather_concerns")
     val weatherConcerns: String?,
 
-    @ColumnInfo(name="fail_reason")
+    @ColumnInfo(name = "fail_reason")
     val failReason: String?,
 
     @Embedded(prefix = "agency")
@@ -69,11 +69,11 @@ data class LaunchEntity(
     @Embedded(prefix = "pad")
     val pad: PadEntity?,
 
-    @ColumnInfo(name="webcast_live")
+    @ColumnInfo(name = "webcast_live")
     val webcastLive: Boolean?,
 
     @field:TypeConverters(ProgramListConverter::class)
-    @ColumnInfo(name="program")
+    @ColumnInfo(name = "program")
     val program: List<ProgramEntity>?,
 
     @ColumnInfo("orbital_launch_attempt_count")
@@ -101,384 +101,391 @@ data class LaunchEntity(
     val agencyLaunchAttemptCountYear: Int?,
 
     @field:TypeConverters(LaunchUpdateListConverter::class)
-    @ColumnInfo(name="updates")
+    @ColumnInfo(name = "updates")
     val updates: List<LaunchUpdateEntity>?,
 
     @field:TypeConverters(InfoUrlListConverter::class)
-    @ColumnInfo(name="info_urls")
+    @ColumnInfo(name = "info_urls")
     val infoUrls: List<InfoUrlEntity>?,
 
     @field:TypeConverters(VidUrlListConverter::class)
-    @ColumnInfo(name="vid_urls")
+    @ColumnInfo(name = "vid_urls")
     val vidUrls: List<VidUrlEntity>?,
 
-    @ColumnInfo(name="pad_turnaround")
+    @ColumnInfo(name = "pad_turnaround")
     val padTurnaround: String?,
 
     @field:TypeConverters(MissionPatchListConverter::class)
-    @ColumnInfo(name="mission_patches")
+    @ColumnInfo(name = "mission_patches")
     val missionPatches: List<MissionPatchEntity>?,
 
-    @ColumnInfo(name="launch_status")
-    val status: LaunchStatusEntity,
+    @Embedded(prefix = "status")
+    val status: LaunchStatusEntity?,
 )
 
 @Keep
 @Serializable
 data class NetPrecisionEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="abbrev")
+    @ColumnInfo(name = "abbrev")
     val abbrev: String?,
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     val description: String?
 )
 
 @Keep
 @Serializable
 data class ImageEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="image_url")
+    @ColumnInfo(name = "image_url")
     val imageUrl: String,
 
-    @ColumnInfo(name="thumbnail_url")
+    @ColumnInfo(name = "thumbnail_url")
     val thumbnailUrl: String,
 
-    @ColumnInfo(name="credit")
+    @ColumnInfo(name = "credit")
     val credit: String?
 )
 
 @Keep
 @Serializable
 data class AgencyEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="url")
+    @ColumnInfo(name = "url")
     val url: String?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="abbrev")
+    @ColumnInfo(name = "abbrev")
     val abbrev: String?,
 
-    @ColumnInfo(name="type")
+    @ColumnInfo(name = "type")
     val type: String?,
 
-    @ColumnInfo(name="featured")
+    @ColumnInfo(name = "featured")
     val featured: Boolean?,
 
     @field:TypeConverters(CountryListConverter::class)
-    @ColumnInfo(name="country")
+    @ColumnInfo(name = "country")
     val country: List<CountryEntity>?,
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     val description: String?,
 
-    @ColumnInfo(name="administrator")
+    @ColumnInfo(name = "administrator")
     val administrator: String?,
 
-    @ColumnInfo(name="founding_year")
+    @ColumnInfo(name = "founding_year")
     val foundingYear: Int?,
 
-    @ColumnInfo(name="launchers")
+    @ColumnInfo(name = "launchers")
     val launchers: String?,
 
-    @ColumnInfo(name="spacecraft")
+    @ColumnInfo(name = "spacecraft")
     val spacecraft: String?,
 
-    @ColumnInfo(name="parent")
+    @ColumnInfo(name = "parent")
     val parent: String?,
 
     @Embedded(prefix = "agency_image")
     val image: ImageEntity,
 
-    @ColumnInfo(name="total_launch_count")
+    @ColumnInfo(name = "total_launch_count")
     val totalLaunchCount: Int?,
 
-    @ColumnInfo(name="consecutive_successful_launches")
+    @ColumnInfo(name = "consecutive_successful_launches")
     val consecutiveSuccessfulLaunches: Int?,
 
-    @ColumnInfo(name="successful_launches")
+    @ColumnInfo(name = "successful_launches")
     val successfulLaunches: Int?,
 
-    @ColumnInfo(name="failed_launches")
+    @ColumnInfo(name = "failed_launches")
     val failedLaunches: Int?,
 
-    @ColumnInfo(name="pending_launches")
+    @ColumnInfo(name = "pending_launches")
     val pendingLaunches: Int?,
 
-    @ColumnInfo(name="consecutive_successful_landings")
+    @ColumnInfo(name = "consecutive_successful_landings")
     val consecutiveSuccessfulLandings: Int?,
 
-    @ColumnInfo(name="successful_landings")
+    @ColumnInfo(name = "successful_landings")
     val successfulLandings: Int?,
 
-    @ColumnInfo(name="failed_landings")
+    @ColumnInfo(name = "failed_landings")
     val failedLandings: Int?,
 
-    @ColumnInfo(name="attempted_landings")
+    @ColumnInfo(name = "attempted_landings")
     val attemptedLandings: Int?,
 
-    @ColumnInfo(name="successful_landings_spacecraft")
+    @ColumnInfo(name = "successful_landings_spacecraft")
     val successfulLandingsSpacecraft: Int?,
 
-    @ColumnInfo(name="failed_landings_spacecraft")
+    @ColumnInfo(name = "failed_landings_spacecraft")
     val failedLandingsSpacecraft: Int?,
 
-    @ColumnInfo(name="attempted_landings_spacecraft")
+    @ColumnInfo(name = "attempted_landings_spacecraft")
     val attemptedLandingsSpacecraft: Int?,
 
-    @ColumnInfo(name="successful_landings_payload")
+    @ColumnInfo(name = "successful_landings_payload")
     val successfulLandingsPayload: Int?,
 
-    @ColumnInfo(name="failed_landings_payload")
+    @ColumnInfo(name = "failed_landings_payload")
     val failedLandingsPayload: Int?,
 
-    @ColumnInfo(name="attempted_landings_payload")
+    @ColumnInfo(name = "attempted_landings_payload")
     val attemptedLandingsPayload: Int?,
 
-    @ColumnInfo(name="info_url")
+    @ColumnInfo(name = "info_url")
     val infoUrl: String?,
 
-    @ColumnInfo(name="wiki_url")
+    @ColumnInfo(name = "wiki_url")
     val wikiUrl: String?,
 )
 
 @Keep
 @Serializable
 data class CountryEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="alpha_2_code")
+    @ColumnInfo(name = "alpha_2_code")
     val alpha2Code: String?,
 
-    @ColumnInfo(name="alpha_3_code")
+    @ColumnInfo(name = "alpha_3_code")
     val alpha3Code: String?,
 
-    @ColumnInfo(name="nationality_name")
+    @ColumnInfo(name = "nationality_name")
     val nationalityName: String?
 )
 
 @Keep
 @Serializable
 data class RocketEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="configuration_id")
+    @ColumnInfo(name = "configuration_id")
     val configurationId: Int?,
 
-    @ColumnInfo(name="configuration_url")
+    @ColumnInfo(name = "configuration_url")
     val configurationUrl: String?,
 
-    @ColumnInfo(name="configuration_name")
+    @ColumnInfo(name = "configuration_name")
     val configurationName: String?,
 
-    @ColumnInfo(name="configuration_full_name")
+    @ColumnInfo(name = "configuration_full_name")
     val configurationFullName: String?,
 
-    @ColumnInfo(name="variant")
+    @ColumnInfo(name = "variant")
     val variant: String?
 )
 
 @Keep
 @Serializable
 data class PadEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="url")
+    @ColumnInfo(name = "url")
     val url: String?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="location_id")
+    @ColumnInfo(name = "location_id")
     val locationId: Int?,
 
-    @ColumnInfo(name="location_url")
+    @ColumnInfo(name = "location_url")
     val locationUrl: String?,
 
-    @ColumnInfo(name="location_name")
+    @ColumnInfo(name = "location_name")
     val locationName: String?,
 
-    @ColumnInfo(name="location_description")
+    @ColumnInfo(name = "location_description")
     val locationDescription: String?,
 
-    @ColumnInfo(name="location_timezone")
+    @ColumnInfo(name = "location_timezone")
     val locationTimezone: String?,
 
-    @ColumnInfo(name="location_total_launch_count")
+    @ColumnInfo(name = "location_total_launch_count")
     val locationTotalLaunchCount: Int?,
 
-    @ColumnInfo(name="latitude")
+    @ColumnInfo(name = "latitude")
     val latitude: Double?,
 
-    @ColumnInfo(name="longitude")
+    @ColumnInfo(name = "longitude")
     val longitude: Double?,
 
-    @ColumnInfo(name="map_url")
+    @ColumnInfo(name = "map_url")
     val mapUrl: String?,
 
-    @ColumnInfo(name="total_launch_count")
+    @ColumnInfo(name = "total_launch_count")
     val totalLaunchCount: Int?
 )
 
 @Keep
 @Serializable
 data class MissionEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="type")
+    @ColumnInfo(name = "type")
     val type: String?,
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     val description: String?,
 
     @Embedded(prefix = "orbit")
     val orbit: OrbitEntity?,
 
     @field:TypeConverters(AgencyListConverter::class)
-    @ColumnInfo(name="agencies")
+    @ColumnInfo(name = "agencies")
     val agencies: List<AgencyEntity>?
 )
 
 @Keep
 @Serializable
 data class OrbitEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="abbrev")
+    @ColumnInfo(name = "abbrev")
     val abbrev: String?
 )
 
 @Keep
 @Serializable
 data class ProgramEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="url")
+    @ColumnInfo(name = "url")
     val url: String?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     val description: String?,
 
-    @Embedded(prefix = "image_")
+    @Embedded(prefix = "image")
     val image: ImageEntity,
 
-    @ColumnInfo(name="start_date")
+    @ColumnInfo(name = "start_date")
     val startDate: String?,
 
-    @ColumnInfo(name="end_date")
+    @ColumnInfo(name = "end_date")
     val endDate: String?,
 
     @field:TypeConverters(AgencyListConverter::class)
-    @ColumnInfo(name="agencies")
+    @ColumnInfo(name = "agencies")
     val agencies: List<AgencyEntity>?
 )
 
 @Keep
-enum class LaunchStatusEntity {
-    SUCCESS, GO, FAILED, TBC, TBD, ALL
-}
+data class LaunchStatusEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "name")
+    val name: String?,
+    @ColumnInfo(name = "abbrev")
+    val abbrev: String?,
+    @ColumnInfo(name = "description")
+    val description: String?,
+)
 
 @Keep
 @Serializable
 data class LaunchUpdateEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="profile_image")
+    @ColumnInfo(name = "profile_image")
     val profileImage: String?,
 
-    @ColumnInfo(name="comment")
+    @ColumnInfo(name = "comment")
     val comment: String?,
 
-    @ColumnInfo(name="info_url")
+    @ColumnInfo(name = "info_url")
     val infoUrl: String?,
 
-    @ColumnInfo(name="created_by")
+    @ColumnInfo(name = "created_by")
     val createdBy: String?,
 
-    @ColumnInfo(name="created_on")
+    @ColumnInfo(name = "created_on")
     val createdOn: String?
 )
 
 @Keep
 @Serializable
 data class VidUrlEntity(
-    @ColumnInfo(name="priority")
+    @ColumnInfo(name = "priority")
     val priority: Int?,
 
-    @ColumnInfo(name="source")
+    @ColumnInfo(name = "source")
     val source: String?,
 
-    @ColumnInfo(name="publisher")
+    @ColumnInfo(name = "publisher")
     val publisher: String?,
 
-    @ColumnInfo(name="title")
+    @ColumnInfo(name = "title")
     val title: String?,
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     val description: String?,
 
-    @ColumnInfo(name="feature_image")
+    @ColumnInfo(name = "feature_image")
     val featureImage: String?,
 
-    @ColumnInfo(name="url")
+    @ColumnInfo(name = "url")
     val url: String?,
 
-    @ColumnInfo(name="start_time")
+    @ColumnInfo(name = "start_time")
     val startTime: String?,
 
-    @ColumnInfo(name="end_time")
+    @ColumnInfo(name = "end_time")
     val endTime: String?,
 
-    @ColumnInfo(name="live")
+    @ColumnInfo(name = "live")
     val live: Boolean?
 )
 
 @Keep
 @Serializable
 data class MissionPatchEntity(
-    @ColumnInfo(name="id")
+    @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     val name: String?,
 
-    @ColumnInfo(name="priority")
+    @ColumnInfo(name = "priority")
     val priority: Int?,
 
-    @ColumnInfo(name="image_url")
+    @ColumnInfo(name = "image_url")
     val imageUrl: String?,
 
     @Embedded(prefix = "agency")

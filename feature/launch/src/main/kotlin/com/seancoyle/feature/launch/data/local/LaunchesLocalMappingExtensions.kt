@@ -24,7 +24,6 @@ import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.InfoUrl
 import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
@@ -35,6 +34,7 @@ import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.VidUrl
 import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.domain.model.Status
 import kotlinx.coroutines.TimeoutCancellationException
 
 internal fun map(throwable: Throwable): LocalError {
@@ -86,7 +86,15 @@ internal fun LaunchEntity.toDomain(): Launch =
         vidUrls = vidUrls?.map { it.toDomain() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toDomain() },
-        status = status.toDomain(),
+        status = status?.toDomain(),
+    )
+
+fun LaunchStatusEntity.toDomain(): Status =
+    Status(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
     )
 
 private fun NetPrecisionEntity.toDomain(): NetPrecision =
@@ -219,16 +227,6 @@ private fun ProgramEntity.toDomain(): Program =
         agencies = agencies?.map { it.toDomain() }
     )
 
-private fun LaunchStatusEntity.toDomain(): LaunchStatus =
-    when (this) {
-        LaunchStatusEntity.SUCCESS -> LaunchStatus.SUCCESS
-        LaunchStatusEntity.FAILED -> LaunchStatus.FAILED
-        LaunchStatusEntity.ALL -> LaunchStatus.ALL
-        LaunchStatusEntity.GO -> LaunchStatus.GO
-        LaunchStatusEntity.TBC -> LaunchStatus.TBC
-        LaunchStatusEntity.TBD -> LaunchStatus.TBD
-    }
-
 // Domain to Entity mappings
 internal fun List<Launch>.toEntity(): List<LaunchEntity> =
     map { it.toEntity() }
@@ -267,7 +265,15 @@ internal fun Launch.toEntity(): LaunchEntity =
         vidUrls = vidUrls?.map { it.toEntity() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toEntity() },
-        status = status.toEntity(),
+        status = status?.toEntity(),
+    )
+
+private fun Status.toEntity(): LaunchStatusEntity =
+    LaunchStatusEntity(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
     )
 
 private fun NetPrecision.toEntity(): NetPrecisionEntity =
@@ -386,17 +392,6 @@ private fun Program.toEntity(): ProgramEntity =
         endDate = endDate,
         agencies = agencies?.mapNotNull { it?.toEntity() }
     )
-
-
-internal fun LaunchStatus.toEntity(): LaunchStatusEntity =
-    when (this) {
-        LaunchStatus.SUCCESS -> LaunchStatusEntity.SUCCESS
-        LaunchStatus.FAILED -> LaunchStatusEntity.FAILED
-        LaunchStatus.GO -> LaunchStatusEntity.GO
-        LaunchStatus.TBC -> LaunchStatusEntity.TBC
-        LaunchStatus.TBD -> LaunchStatusEntity.TBD
-        LaunchStatus.ALL -> LaunchStatusEntity.ALL
-    }
 
 // Entity to Domain for new fields
 private fun LaunchUpdateEntity.toDomain(): LaunchUpdate =

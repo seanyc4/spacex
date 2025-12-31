@@ -7,7 +7,7 @@ data class Launch(
     val lastUpdated: String?,
     val net: String?,
     val netPrecision: NetPrecision?,
-    val status: LaunchStatus,
+    val status: Status?,
     val windowEnd: String?,
     val windowStart: String?,
     val image: Image,
@@ -49,6 +49,13 @@ data class Image(
     val imageUrl: String,
     val thumbnailUrl: String,
     val credit: String?
+)
+
+data class Status(
+    val id: Int?,
+    val name: String?,
+    val abbrev: String?,
+    val description: String?,
 )
 
 data class Agency(

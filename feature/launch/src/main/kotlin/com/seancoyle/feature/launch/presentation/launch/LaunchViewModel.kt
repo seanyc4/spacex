@@ -27,7 +27,7 @@ class LaunchViewModel @AssistedInject constructor(
         when (val result = launchesComponent.getLaunchUseCase(launchId, launchType)) {
             is LaunchResult.Success -> {
                 val launch = result.data
-                val launchUi = uiMapper(launch)
+                val launchUi = uiMapper.mapToLaunchUi(launch)
                 emit(LaunchUiState.Success(launchUi))
             }
             is LaunchResult.Error -> {

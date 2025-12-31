@@ -8,7 +8,6 @@ import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
@@ -20,6 +19,7 @@ import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.VidUrl
 import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.domain.model.InfoUrl
+import com.seancoyle.feature.launch.domain.model.Status
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -89,19 +89,16 @@ internal fun LaunchDto.toDomain(): Launch? {
         vidUrls = vidUrls?.map { it.toDomain() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toDomain() },
-        status = status.toDomain(),
+        status = status?.toDomain(),
     )
 }
 
-private fun StatusDto?.toDomain(): LaunchStatus =
-    when {
-        this?.abbrev?.contains("Success", ignoreCase = true) == true -> LaunchStatus.SUCCESS
-        this?.abbrev?.contains("Go", ignoreCase = true) == true -> LaunchStatus.GO
-        this?.abbrev?.contains("Fail", ignoreCase = true) == true -> LaunchStatus.FAILED
-        this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.TBC
-        this?.abbrev?.contains("To Be Determined", ignoreCase = true) == true -> LaunchStatus.TBD
-        else -> LaunchStatus.TBD
-    }
+private fun StatusDto?.toDomain() = Status(
+    id = this?.id,
+    name = this?.name,
+    abbrev = this?.abbrev,
+    description = this?.description
+)
 
 private fun NetPrecisionDto.toDomain() =
     NetPrecision(

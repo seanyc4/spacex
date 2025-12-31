@@ -10,7 +10,6 @@ import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
@@ -22,7 +21,6 @@ import javax.inject.Inject
 import timber.log.Timber
 import androidx.paging.map
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUiMapper
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -36,6 +34,8 @@ import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.UiComponentType
+import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.LaunchUiMapper
 
 private const val TAG = "LaunchViewModel"
 
@@ -43,7 +43,7 @@ private const val TAG = "LaunchViewModel"
 @HiltViewModel
 class LaunchesViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
-    private val uiMapper: LaunchesUiMapper,
+    private val uiMapper: LaunchUiMapper,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -73,7 +73,7 @@ class LaunchesViewModel @Inject constructor(
             launchesComponent.observeLaunchesUseCase(launchQuery)
                 .map { pagingData ->
                     pagingData.map { launch ->
-                        uiMapper(launch)
+                        uiMapper.mapToLaunchesUi(launch)
                     }
                 }
         }

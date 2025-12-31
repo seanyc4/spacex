@@ -12,7 +12,7 @@ import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
+import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.NetPrecision
 import com.seancoyle.feature.launch.domain.model.Pad
@@ -153,6 +153,13 @@ internal object TestData {
         description: String? = "The T-0 is accurate to the minute."
     ) = NetPrecisionEntity(id, name, abbrev, description)
 
+    fun createLaunchStatusEntity() = LaunchStatusEntity(
+        id = 1,
+        name = "Success",
+        abbrev = "Success",
+        description = "Current T-0 confirmed by official or reliable sources."
+    )
+
     fun createImageEntity(
         id: Int? = 1296,
         name: String? = "Starlink night fairing",
@@ -189,7 +196,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        status: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
+        status: LaunchStatusEntity? = null,
         updates: List<LaunchUpdateEntity>? = null,
         infoUrls: List<InfoUrlEntity>? = null,
         vidUrls: List<VidUrlEntity>? = null,
@@ -240,6 +247,13 @@ internal object TestData {
         description: String? = "The T-0 is accurate to the minute."
     ) = NetPrecision(id, name, abbrev, description)
 
+    fun createStatus(
+        id: Int? = 1,
+        name: String? = "Success",
+        abbrev: String? = "Success",
+        description: String? = "Current T-0 confirmed by official or reliable sources."
+    ) = Status(id, name, abbrev, description)
+
     fun createImage(
         id: Int? = 1296,
         name: String? = "Starlink night fairing",
@@ -276,7 +290,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        status: LaunchStatus = LaunchStatus.TBD,
+        status: Status? = createStatus(),
         updates: List<LaunchUpdate>? = null,
         infoUrls: List<InfoUrl>? = null,
         vidUrls: List<VidUrl>? = null,
@@ -347,7 +361,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int? = null,
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
-        status: LaunchStatus = LaunchStatus.SUCCESS,
+        status: Status? = createStatus(),
         updates: List<LaunchUpdate>? = null,
         infoUrls: List<InfoUrl>? = null,
         vidUrls: List<VidUrl>? = null,
@@ -389,11 +403,15 @@ internal object TestData {
         missionPatches = missionPatches
     )
 
-
     fun createRandomLaunchList(num: Int): List<Launch> {
-        val statuses = LaunchStatus.entries.filter { it != LaunchStatus.ALL }
+        val statusOptions = listOf(
+            createStatus(id = 1, name = "Success", abbrev = "Success", description = "The launch was successful"),
+            createStatus(id = 2, name = "Failed", abbrev = "Failed", description = "The launch failed"),
+            createStatus(id = 3, name = "TBD", abbrev = "TBD", description = "To be determined"),
+            createStatus(id = 4, name = "Go", abbrev = "Go", description = "Launch is go"),
+        )
         return List(num) { i ->
-            val status = statuses[Random.nextInt(statuses.size)]
+            val status = statusOptions[Random.nextInt(statusOptions.size)]
             createLaunchTransformed(
                 id = "launch_$i",
                 name = "Launch $i",

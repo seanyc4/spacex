@@ -6,7 +6,6 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
@@ -64,7 +63,7 @@ class LaunchesRemoteDataSourceImplTest {
             actualLaunch.url
         )
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.missionName)
-        assertEquals(LaunchStatus.SUCCESS.text, actualLaunch.status.text)
+        assertEquals("Success", actualLaunch.status?.name)
         assertEquals("2025-12-05T18:39:36Z", actualLaunch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)
         assertEquals("Minute", actualLaunch.netPrecision?.name)

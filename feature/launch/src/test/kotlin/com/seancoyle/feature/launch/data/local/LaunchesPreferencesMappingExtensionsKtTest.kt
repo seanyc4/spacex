@@ -5,7 +5,6 @@ import com.seancoyle.core.datastore_proto.OrderProto
 import com.seancoyle.core.domain.Order
 
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -22,8 +21,6 @@ class LaunchesPreferencesMappingExtensionsKtTest {
 
         assertNotNull(result)
         assertEquals(Order.ASC, result.order)
-        assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.query)
     }
 
     @Test
@@ -36,21 +33,6 @@ class LaunchesPreferencesMappingExtensionsKtTest {
 
         assertNotNull(result)
         assertEquals(Order.DESC, result.order)
-        assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.query)
-    }
-
-    @Test
-    fun `toModel creates LaunchPrefs with default values for launchStatus and launchYear`() {
-        val proto = LaunchPreferencesProto.newBuilder()
-            .setOrder(OrderProto.ASC)
-            .build()
-
-        val result = proto.toModel()
-
-        // Verify that the domain model has the expected default values
-        assertEquals(LaunchStatus.ALL, result.launchStatus)
-        assertEquals("", result.query)
     }
 
     @Test

@@ -3,9 +3,7 @@ package com.seancoyle.feature.launch.data.local
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
 import com.seancoyle.core.common.result.DataError.LocalError
-import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.mockk
 import kotlinx.coroutines.TimeoutCancellationException
@@ -144,11 +142,14 @@ class LaunchesLocalMappingExtensionsKtTest {
 
     @Test
     fun `LaunchEntity toDomain converts status correctly`() {
-        val launchEntity = TestData.createLaunchEntity()
+        val launchEntity = TestData.createLaunchStatusEntity()
 
         val result = launchEntity.toDomain()
 
-        assertEquals(LaunchStatus.SUCCESS, result.status)
+        assertEquals(launchEntity.id, result.id)
+        assertEquals(launchEntity.name, result.name)
+        assertEquals(launchEntity.abbrev, result.abbrev)
+        assertEquals(launchEntity.description, result.description)
     }
 
     @Test
@@ -234,7 +235,11 @@ class LaunchesLocalMappingExtensionsKtTest {
 
         val result = launch.toEntity()
 
-        assertEquals(LaunchStatusEntity.TBD, result.status)
+        assertNotNull(result.status)
+        assertEquals(launch.status?.id, result.status?.id)
+        assertEquals(launch.status?.name, result.status?.name)
+        assertEquals(launch.status?.abbrev, result.status?.abbrev)
+        assertEquals(launch.status?.description, result.status?.description)
     }
 
     @Test
@@ -278,32 +283,6 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertEquals(originalDomain.status, domainAgain.status)
     }
 
-    @Test
-    fun `LaunchStatus SUCCESS maps to LaunchStatusEntity SUCCESS`() {
-        val status = LaunchStatus.SUCCESS
-
-        val result = status.toEntity()
-
-        assertEquals(LaunchStatusEntity.SUCCESS, result)
-    }
-
-    @Test
-    fun `LaunchStatus FAILED maps to LaunchStatusEntity FAILED`() {
-        val status = LaunchStatus.FAILED
-
-        val result = status.toEntity()
-
-        assertEquals(LaunchStatusEntity.FAILED, result)
-    }
-
-    @Test
-    fun `LaunchStatus ALL maps to LaunchStatusEntity ALL`() {
-        val status = LaunchStatus.ALL
-
-        val result = status.toEntity()
-
-        assertEquals(LaunchStatusEntity.ALL, result)
-    }
 
     @Test
     fun `empty list of LaunchEntity toDomain returns empty list`() {

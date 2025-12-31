@@ -19,7 +19,7 @@ internal class ObserveLaunchesUseCase @Inject constructor(
         return if (launchesQuery.status != null) {
             result.map { pagingData ->
                 pagingData.filter { launch ->
-                    launch.status == launchesQuery.status
+                    launch.status?.abbrev == launchesQuery.status.abbrev
                 }
             }
         } else {

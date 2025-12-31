@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.domain.usecase.launch
 
 import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.repository.LaunchesPreferencesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -28,11 +27,7 @@ class GetLaunchesPreferencesUseCaseImplTest {
 
     @Test
     fun `invoke should return launch preferences when data source succeeds`() = runTest {
-        val launchPrefs = LaunchPrefs(
-            order = Order.DESC,
-            launchStatus = LaunchStatus.SUCCESS,
-            query = "2024"
-        )
+        val launchPrefs = LaunchPrefs(order = Order.DESC)
         coEvery { launchesPreferencesRepository.getLaunchPreferences() } returns launchPrefs
 
         val result = underTest.invoke()

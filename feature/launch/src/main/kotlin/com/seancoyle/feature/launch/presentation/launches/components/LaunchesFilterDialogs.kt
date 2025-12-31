@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.DismissFilterDialogEvent
@@ -37,6 +36,7 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.N
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
 
 @Composable
 internal fun LaunchesFilterDialog(

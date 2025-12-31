@@ -3,7 +3,6 @@ package com.seancoyle.feature.launch.presentation.launch
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.InfoUrl
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.MissionPatch

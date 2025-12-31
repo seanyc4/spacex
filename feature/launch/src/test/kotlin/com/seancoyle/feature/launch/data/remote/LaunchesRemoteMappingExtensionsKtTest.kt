@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.util.TestData
 import com.seancoyle.feature.launch.util.TestData.createImageDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchDto
@@ -198,7 +197,8 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals(1, launch.locationLaunchAttemptCountYear)
         assertEquals(1, launch.padLaunchAttemptCountYear)
         assertEquals(4, launch.agencyLaunchAttemptCountYear)
-        assertEquals(LaunchStatus.SUCCESS, launch.status)
+        assertNotNull(launch.status)
+        assertEquals("Success", launch.status?.name)
         assertEquals(updates[0].comment, launch.updates?.get(0)?.comment)
         assertEquals(infoUrls[0].title, launch.infoUrls?.get(0)?.title)
         assertEquals(vidUrls[0].title, launch.vidUrls?.get(0)?.title)

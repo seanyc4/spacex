@@ -3,8 +3,8 @@ package com.seancoyle.feature.launch.domain.usecase.launch
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
+import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
 import com.seancoyle.feature.launch.util.TestData.createRandomLaunchList
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -49,9 +49,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.GO }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.GO.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.all { it.status == LaunchStatus.GO })
+        assertTrue(result.all { it.status?.abbrev == LaunchStatus.GO.abbrev })
         assertEquals(expectedLaunches, result)
     }
 
@@ -63,9 +63,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.SUCCESS }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.SUCCESS.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.all { it.status == LaunchStatus.SUCCESS })
+        assertTrue(result.all { it.status?.abbrev == LaunchStatus.SUCCESS.abbrev })
         assertEquals(expectedLaunches, result)
     }
 
@@ -77,9 +77,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.FAILED }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.FAILED.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.isEmpty() || result.all { it.status == LaunchStatus.FAILED })
+        assertTrue(result.isEmpty() || result.all { it.status?.abbrev == LaunchStatus.FAILED.abbrev })
         assertEquals(expectedLaunches, result)
     }
 
@@ -91,9 +91,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.TBD }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.TBD.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.isEmpty() || result.all { it.status == LaunchStatus.TBD })
+        assertTrue(result.isEmpty() || result.all { it.status?.abbrev == LaunchStatus.TBD.abbrev })
         assertEquals(expectedLaunches, result)
     }
 
@@ -105,9 +105,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.TBC }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.TBC.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.isEmpty() || result.all { it.status == LaunchStatus.TBC })
+        assertTrue(result.isEmpty() || result.all { it.status?.abbrev == LaunchStatus.TBC.abbrev })
         assertEquals(expectedLaunches, result)
     }
 
@@ -129,9 +129,9 @@ class ObserveLaunchesUseCaseTest {
 
         val result = underTest.invoke(query).asSnapshot()
 
-        val expectedLaunches = launches.filter { it.status == LaunchStatus.GO }
+        val expectedLaunches = launches.filter { it.status?.abbrev == LaunchStatus.GO.abbrev }
         assertEquals(expectedLaunches.size, result.size)
-        assertTrue(result.isEmpty() || result.all { it.status == LaunchStatus.GO })
+        assertTrue(result.isEmpty() || result.all { it.status?.abbrev == LaunchStatus.GO.abbrev })
         assertEquals(expectedLaunches, result)
     }
 }
