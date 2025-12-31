@@ -18,11 +18,53 @@ data class LaunchPrefs(
 )
 
 @Keep
-enum class LaunchStatus(val text: String, val color: Color) {
-    SUCCESS("Success", AppColors.Green),
-    GO("Go", AppColors.Green),
-    FAILED("Failed", AppColors.Red),
-    TBC("TBC", AppColors.Amber),
-    TBD("TBD", AppColors.Amber),
-    ALL("All", AppColors.Black)
+enum class LaunchStatus(
+    val label: String,
+    val abbrev: String,
+    val containerColor: Color,
+    val contentColor: Color,
+    val pillColor: Color
+) {
+    SUCCESS(
+        label = "Success",
+        abbrev = "Success",
+        containerColor = Color(0xFF1B5E20),
+        contentColor = Color(0xFF4CAF50),
+        pillColor = AppColors.Green
+    ),
+    FAILED(
+        label = "Failed",
+        abbrev = "Failed",
+        containerColor = Color(0xFFB71C1C),
+        contentColor = Color(0xFFEF5350),
+        pillColor = AppColors.Red
+    ),
+    TBD(
+        label = "To be Determined",
+        abbrev = "TBD",
+        containerColor = Color(0xFFF57F17),
+        contentColor = Color(0xFFFFEB3B),
+        pillColor = AppColors.Amber
+    ),
+    GO(
+        label = "Go for Launch",
+        abbrev = "Go",
+        containerColor = Color(0xFF1B5E20),
+        contentColor = Color(0xFF4CAF50),
+        pillColor = AppColors.Green
+    ),
+    TBC(
+        label = "To Be Confirmed",
+        abbrev = "TBC",
+        containerColor = Color(0xFFF57F17),
+        contentColor = Color(0xFFFFEB3B),
+        pillColor = AppColors.Amber
+    ),
+    ALL(
+        label = "Unknown",
+        abbrev = "All",
+        containerColor = Color(0xFF616161),
+        contentColor = Color(0xFF9E9E9E),
+        pillColor = AppColors.Black
+    )
 }

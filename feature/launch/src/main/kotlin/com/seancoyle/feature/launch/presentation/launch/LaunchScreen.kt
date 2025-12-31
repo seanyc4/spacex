@@ -28,6 +28,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
@@ -233,7 +234,11 @@ private fun LaunchHeroSection(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LaunchStatusChip(status = launch.status)
+                Chip(
+                    text = launch.status.label,
+                    containerColor = launch.status.containerColor,
+                    contentColor = launch.status.contentColor
+                )
 
                 AppText.bodyLarge(
                     text = launch.launchDate,
@@ -666,45 +671,4 @@ private fun DetailRow(
             )
         }
     }
-}
-
-@Composable
-private fun LaunchStatusChip(
-    status: LaunchStatus,
-    modifier: Modifier = Modifier
-) {
-    val (label, containerColor, contentColor) = when (status) {
-        LaunchStatus.SUCCESS -> Triple("Success", Color(0xFF1B5E20), Color(0xFF4CAF50))
-        LaunchStatus.FAILED -> Triple("Failed", Color(0xFFB71C1C), Color(0xFFEF5350))
-        LaunchStatus.TBD -> Triple("TBD", Color(0xFF424242), Color(0xFFBDBDBD))
-        LaunchStatus.GO -> Triple("Go for Launch", Color(0xFF0D47A1), Color(0xFF42A5F5))
-        LaunchStatus.TBC -> Triple("To Be Confirmed", Color(0xFFF57F17), Color(0xFFFFEB3B))
-        LaunchStatus.ALL -> Triple("Unknown", Color(0xFF616161), Color(0xFF9E9E9E))
-    }
-
-    AssistChip(
-        onClick = {},
-        label = {
-            AppText.labelMedium(
-                text = label,
-                fontWeight = FontWeight.SemiBold,
-                color = contentColor
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-        },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = containerColor.copy(alpha = 0.2f),
-            labelColor = contentColor,
-            leadingIconContentColor = contentColor
-        ),
-        modifier = modifier.semantics {
-            contentDescription = "Launch status: $label"
-        }
-    )
 }

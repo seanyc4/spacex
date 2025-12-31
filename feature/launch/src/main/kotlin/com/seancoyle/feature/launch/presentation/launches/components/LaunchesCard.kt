@@ -106,8 +106,8 @@ internal fun LaunchCard(
                     contentAlignment = Alignment.BottomStart
                 ) {
                     Pill(
-                        text = launchItem.status.text,
-                        color = launchItem.status.color
+                        text = launchItem.status.abbrev,
+                        color = launchItem.status.pillColor
                     )
                 }
             }
