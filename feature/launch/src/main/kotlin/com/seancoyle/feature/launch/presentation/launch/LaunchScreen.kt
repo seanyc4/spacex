@@ -237,7 +237,8 @@ private fun LaunchHeroSection(
                 Chip(
                     text = launch.status.label,
                     containerColor = launch.status.containerColor,
-                    contentColor = launch.status.contentColor
+                    contentColor = launch.status.contentColor,
+                    icon = launch.status.icon
                 )
 
                 AppText.bodyLarge(

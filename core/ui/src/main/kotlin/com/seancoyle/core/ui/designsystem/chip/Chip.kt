@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
@@ -22,6 +23,7 @@ fun Chip(
     text: String,
     contentColor: Color,
     containerColor: Color,
+    icon: ImageVector?,
     modifier: Modifier = Modifier
 ) {
     AssistChip(
@@ -34,11 +36,13 @@ fun Chip(
             )
         },
         leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         },
         colors = AssistChipDefaults.assistChipColors(
             containerColor = containerColor.copy(alpha = 0.2f),
@@ -57,6 +61,7 @@ fun ChipPreview() {
     AppTheme {
         Chip(
             text = "Successful",
+            icon = Icons.Filled.CheckCircle,
             contentColor = Color(0xFF4CAF50),
             containerColor = Color(0xFF4CAF50)
         )
