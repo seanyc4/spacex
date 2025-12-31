@@ -6,9 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -19,6 +21,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -34,7 +37,8 @@ import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFil
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.domain.model.LaunchesType
+import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.core.ui.components.toolbar.HomeAppBar
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
@@ -45,9 +49,10 @@ private const val TAG = "LaunchScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchesScreen(
-    viewModel: LaunchesViewModel,
+    viewModel: LaunchesViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
+    onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = viewModel.screenState
@@ -96,27 +101,38 @@ fun LaunchesScreen(
         }
     }
 
-    RefreshableContent(
-        isRefreshing = viewModel.screenState.isRefreshing,
-        onRefresh = { viewModel.onEvent(LaunchesEvents.PullToRefreshEvent) },
-        content = {
-            LaunchesScreen(
-                feedState = feedState,
-                state = viewModel.screenState,
-                windowSizeClass = windowSizeClass,
-                onEvent = viewModel::onEvent,
-                onUpdateScrollPosition = viewModel::updateScrollPosition,
-                modifier = modifier
+    Scaffold(
+        topBar = {
+            HomeAppBar(
+                onClick = {
+                    viewModel.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
+                }
+            )
+        },
+    ) { innerPadding ->
+        RefreshableContent(
+            isRefreshing = viewModel.screenState.isRefreshing,
+            onRefresh = { viewModel.onEvent(LaunchesEvents.PullToRefreshEvent) },
+            content = {
+                LaunchesScreen(
+                    feedState = feedState,
+                    state = viewModel.screenState,
+                    windowSizeClass = windowSizeClass,
+                    onEvent = viewModel::onEvent,
+                    onUpdateScrollPosition = viewModel::updateScrollPosition,
+                    onClick = onClick,
+                    modifier = modifier.padding(innerPadding)
+                )
+            }
+        )
+
+        notificationState?.let {
+            NotificationHandler(
+                notification = it,
+                onDismissNotification = { viewModel.clearNotification() },
+                snackbarHostState = snackbarHostState
             )
         }
-    )
-
-    notificationState?.let {
-        NotificationHandler(
-            notification = it,
-            onDismissNotification = { viewModel.clearNotification() },
-            snackbarHostState = snackbarHostState
-        )
     }
 }
 
@@ -127,6 +143,7 @@ private fun LaunchesScreen(
     onEvent: (LaunchesEvents) -> Unit,
     windowSizeClass: WindowSizeClass,
     onUpdateScrollPosition: (Int) -> Unit,
+    onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val tabs = LaunchesTab.provideTabs()
@@ -176,6 +193,7 @@ private fun LaunchesScreen(
                         state = state,
                         onEvent = onEvent,
                         onUpdateScrollPosition = onUpdateScrollPosition,
+                        onClick = onClick,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

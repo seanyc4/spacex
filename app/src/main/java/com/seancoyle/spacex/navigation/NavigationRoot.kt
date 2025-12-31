@@ -11,12 +11,10 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.seancoyle.feature.launch.presentation.launch.LaunchScreen
 import com.seancoyle.feature.launch.presentation.launches.LaunchesScreen
-import com.seancoyle.feature.launch.presentation.launches.LaunchesViewModel
 import com.seancoyle.navigation.Route
 
 @Composable
 fun NavigationRoot(
-    viewModel: LaunchesViewModel,
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier
@@ -36,7 +34,6 @@ fun NavigationRoot(
                 is Route.Launches -> {
                     NavEntry(key) {
                         LaunchesScreen(
-                            viewModel = viewModel,
                             snackbarHostState = snackbarHostState,
                             windowSizeClass = windowSizeClass,
                             onClick = { launchId, launchesType ->
