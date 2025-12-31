@@ -1,9 +1,10 @@
 package com.seancoyle.database.util
 
 import androidx.room.TypeConverter
+import com.seancoyle.database.entities.InfoUrlEntity
 import kotlinx.serialization.json.Json
 
-class StringListConverter {
+class InfoUrlListConverter {
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -14,7 +15,7 @@ class StringListConverter {
     }
 
     @TypeConverter
-    fun fromStringList(value: List<String>?): String? {
+    fun fromInfoUrlList(value: List<InfoUrlEntity>?): String? {
         return value?.let {
             try {
                 json.encodeToString(it)
@@ -25,10 +26,10 @@ class StringListConverter {
     }
 
     @TypeConverter
-    fun toStringList(value: String?): List<String>? {
+    fun toInfoUrlList(value: String?): List<InfoUrlEntity>? {
         return value?.let {
             try {
-                json.decodeFromString<List<String>>(it)
+                json.decodeFromString<List<InfoUrlEntity>>(it)
             } catch (_: Exception) {
                 null
             }

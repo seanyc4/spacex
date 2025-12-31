@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.util
 
 import com.seancoyle.database.entities.AgencyEntity
 import com.seancoyle.database.entities.ImageEntity
+import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.MissionEntity
@@ -30,9 +31,11 @@ import com.seancoyle.feature.launch.data.remote.StatusDto
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.database.entities.MissionPatchEntity
+import com.seancoyle.feature.launch.data.remote.InfoUrlDto
 import com.seancoyle.feature.launch.data.remote.LaunchUpdateDto
 import com.seancoyle.feature.launch.data.remote.MissionPatchDto
 import com.seancoyle.feature.launch.data.remote.VidUrlDto
+import com.seancoyle.feature.launch.domain.model.InfoUrl
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.MissionPatch
@@ -93,7 +96,7 @@ internal object TestData {
         padLaunchAttemptCountYear: Int? = null,
         agencyLaunchAttemptCountYear: Int? = null,
         updates: List<LaunchUpdateDto>? = null,
-        infoUrls: List<String>? = null,
+        infoUrls: List<InfoUrlDto>? = null,
         vidUrls: List<VidUrlDto>? = null,
         padTurnaround: String? = null,
         missionPatches: List<MissionPatchDto>? = null
@@ -188,7 +191,7 @@ internal object TestData {
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatusEntity = LaunchStatusEntity.SUCCESS,
         updates: List<LaunchUpdateEntity>? = null,
-        infoUrls: List<String>? = null,
+        infoUrls: List<InfoUrlEntity>? = null,
         vidUrls: List<VidUrlEntity>? = null,
         padTurnaround: String? = null,
         missionPatches: List<MissionPatchEntity>? = null
@@ -275,7 +278,7 @@ internal object TestData {
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatus = LaunchStatus.TBD,
         updates: List<LaunchUpdate>? = null,
-        infoUrls: List<String>? = null,
+        infoUrls: List<InfoUrl>? = null,
         vidUrls: List<VidUrl>? = null,
         padTurnaround: String? = null,
         missionPatches: List<MissionPatch>? = null
@@ -346,7 +349,7 @@ internal object TestData {
         agencyLaunchAttemptCountYear: Int? = null,
         status: LaunchStatus = LaunchStatus.SUCCESS,
         updates: List<LaunchUpdate>? = null,
-        infoUrls: List<String>? = null,
+        infoUrls: List<InfoUrl>? = null,
         vidUrls: List<VidUrl>? = null,
         padTurnaround: String? = null,
         missionPatches: List<MissionPatch>? = null
@@ -547,5 +550,38 @@ internal object TestData {
         createdBy = createdBy,
         createdOn = createdOn
     )
+
+    fun createInfoUrl(): InfoUrl {
+        return InfoUrl(
+            priority = 10,
+            source = "spacex.com",
+            title = "SpaceX",
+            description = "SpaceX designs, manufactures and launches advanced rockets and spacecraft.",
+            featureImage = null,
+            url = "https://www.spacex.com/launches/cosmo-skymedfm3"
+        )
+    }
+
+    fun createInfoUrlEntity(): InfoUrlEntity {
+        return InfoUrlEntity(
+            priority = 10,
+            source = "spacex.com",
+            title = "SpaceX",
+            description = "SpaceX designs, manufactures and launches advanced rockets and spacecraft.",
+            featureImage = null,
+            url = "https://www.spacex.com/launches/cosmo-skymedfm3"
+        )
+    }
+
+    fun createInfoUrlDto(): InfoUrlDto {
+        return InfoUrlDto(
+            priority = 10,
+            source = "spacex.com",
+            title = "SpaceX",
+            description = "SpaceX designs, manufactures and launches advanced rockets and spacecraft.",
+            featureImage = null,
+            url = "https://www.spacex.com/launches/cosmo-skymedfm3"
+        )
+    }
 
 }

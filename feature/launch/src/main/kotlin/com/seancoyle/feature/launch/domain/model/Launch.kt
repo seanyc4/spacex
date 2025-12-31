@@ -30,7 +30,7 @@ data class Launch(
     val padLaunchAttemptCountYear: Int?,
     val agencyLaunchAttemptCountYear: Int?,
     val updates: List<LaunchUpdate>?,
-    val infoUrls: List<String>?,
+    val infoUrls: List<InfoUrl>?,
     val vidUrls: List<VidUrl>?,
     val padTurnaround: String?,
     val missionPatches: List<MissionPatch>?,
@@ -187,4 +187,13 @@ data class MissionPatch(
     val priority: Int?,
     val imageUrl: String?,
     val agency: Agency?
+)
+
+data class InfoUrl(
+    val priority: Int?,
+    val source: String?,
+    val title: String?,
+    val description: String?,
+    val featureImage: String?,
+    val url: String?
 )

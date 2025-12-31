@@ -19,6 +19,7 @@ import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.VidUrl
 import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.domain.model.InfoUrl
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -84,7 +85,7 @@ internal fun LaunchDto.toDomain(): Launch? {
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         updates = updates?.map { it.toDomain() },
-        infoUrls = infoUrls,
+        infoUrls = infoUrls?.map { it.toDomain() },
         vidUrls = vidUrls?.map { it.toDomain() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toDomain() },
@@ -278,3 +279,12 @@ private fun MissionPatchDto.toDomain() =
         imageUrl = imageUrl,
         agency = agency?.toDomain()
     )
+
+private fun InfoUrlDto.toDomain() = InfoUrl(
+    priority = priority,
+    source = source,
+    title = title,
+    description = description,
+    featureImage = featureImage,
+    url = url,
+)

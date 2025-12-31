@@ -9,9 +9,9 @@ import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.ProgramListConverter
 import com.seancoyle.database.util.LaunchUpdateListConverter
-import com.seancoyle.database.util.StringListConverter
 import com.seancoyle.database.util.VidUrlListConverter
 import com.seancoyle.database.util.MissionPatchListConverter
+import com.seancoyle.database.util.InfoUrlListConverter
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -104,9 +104,9 @@ data class LaunchEntity(
     @ColumnInfo(name="updates")
     val updates: List<LaunchUpdateEntity>?,
 
-    @field:TypeConverters(StringListConverter::class)
+    @field:TypeConverters(InfoUrlListConverter::class)
     @ColumnInfo(name="info_urls")
-    val infoUrls: List<String>?,
+    val infoUrls: List<InfoUrlEntity>?,
 
     @field:TypeConverters(VidUrlListConverter::class)
     @ColumnInfo(name="vid_urls")
@@ -483,4 +483,21 @@ data class MissionPatchEntity(
 
     @Embedded(prefix = "agency")
     val agency: AgencyEntity?
+)
+
+@Keep
+@Serializable
+data class InfoUrlEntity(
+    @ColumnInfo(name = "priority")
+    val priority: Int?,
+    @ColumnInfo(name = "source")
+    val source: String?,
+    @ColumnInfo(name = "title")
+    val title: String?,
+    @ColumnInfo(name = "description")
+    val description: String?,
+    @ColumnInfo(name = "feature_image")
+    val featureImage: String?,
+    @ColumnInfo(name = "url")
+    val url: String?
 )

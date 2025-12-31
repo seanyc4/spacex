@@ -108,7 +108,7 @@ internal data class LaunchDto(
     val updates: List<LaunchUpdateDto>?,
 
     @SerialName("info_urls")
-    val infoUrls: List<String>?,
+    val infoUrls: List<InfoUrlDto>?,
 
     @SerialName("vid_urls")
     val vidUrls: List<VidUrlDto>?,
@@ -595,4 +595,20 @@ internal data class VidUrlDto(
 
     @SerialName("live")
     val live: Boolean?,
+)
+
+@Serializable
+internal data class InfoUrlDto(
+    @SerialName("priority")
+    val priority: Int?,
+    @SerialName("source")
+    val source: String?,
+    @SerialName("title")
+    val title: String?,
+    @SerialName("description")
+    val description: String?,
+    @SerialName("feature_image")
+    val featureImage: String?,
+    @SerialName("url")
+    val url: String?,
 )

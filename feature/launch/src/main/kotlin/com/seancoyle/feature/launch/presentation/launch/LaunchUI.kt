@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.presentation.launch
 
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.InfoUrl
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Mission
@@ -24,7 +25,7 @@ data class LaunchUI(
     val mission: Mission?,
     val pad: Pad?,
     val updates: List<LaunchUpdate>,
-    val infoUrls: List<String>,
+    val infoUrls: List<InfoUrl>,
     val vidUrls: List<VidUrl>,
     val missionPatches: List<MissionPatch>
 )

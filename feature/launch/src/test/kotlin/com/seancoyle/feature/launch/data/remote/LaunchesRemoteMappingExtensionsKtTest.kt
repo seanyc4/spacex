@@ -142,7 +142,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
     @Test
     fun `LaunchDto toDomain should map all fields correctly`() {
         val updates = listOf(TestData.createLaunchUpdateDto())
-        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val infoUrls = listOf(TestData.createInfoUrlDto())
         val vidUrls = listOf(TestData.createVidUrlDto())
         val padTurnaround = "P1DT2H"
         val missionPatches = listOf(TestData.createMissionPatchDto())
@@ -200,7 +200,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals(4, launch.agencyLaunchAttemptCountYear)
         assertEquals(LaunchStatus.SUCCESS, launch.status)
         assertEquals(updates[0].comment, launch.updates?.get(0)?.comment)
-        assertEquals(infoUrls, launch.infoUrls)
+        assertEquals(infoUrls[0].title, launch.infoUrls?.get(0)?.title)
         assertEquals(vidUrls[0].title, launch.vidUrls?.get(0)?.title)
         assertEquals(padTurnaround, launch.padTurnaround)
         assertEquals(missionPatches[0].name, launch.missionPatches?.get(0)?.name)

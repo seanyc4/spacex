@@ -10,7 +10,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class LaunchesPreferencesMappingExtensionsTest {
+class LaunchesPreferencesMappingExtensionsKtTest {
 
     @Test
     fun `toModel converts proto with ASC order to domain model`() {

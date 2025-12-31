@@ -28,6 +28,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.feature.launch.domain.model.*
 
@@ -64,7 +66,7 @@ private fun LaunchScreenContent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(AppTheme.colors.background)
             .testTag("launch_screen")
     ) {
         when (launchState) {
@@ -107,17 +109,15 @@ private fun ErrorState(
                 imageVector = Icons.Default.Warning,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
-                tint = MaterialTheme.colorScheme.error
+                tint = AppTheme.colors.error
             )
-            Text(
+            AppText.titleLarge(
                 text = "Unable to load launch",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = AppTheme.colors.onBackground
             )
-            Text(
+            AppText.bodyMedium(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = AppTheme.colors.onSurfaceVariant
             )
         }
     }
@@ -203,7 +203,7 @@ private fun LaunchHeroSection(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                MaterialTheme.colorScheme.background.copy(alpha = 0.9f)
+                                AppTheme.colors.background.copy(alpha = 0.9f)
                             ),
                             startY = 100f
                         )
@@ -218,11 +218,10 @@ private fun LaunchHeroSection(
                 .padding(Dimens.dp24)
                 .fillMaxWidth()
         ) {
-            Text(
+            AppText.headlineLarge(
                 text = launch.missionName,
-                style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = AppTheme.colors.onBackground,
                 modifier = Modifier.semantics {
                     contentDescription = "Mission name: ${launch.missionName}"
                 }
@@ -236,10 +235,9 @@ private fun LaunchHeroSection(
             ) {
                 LaunchStatusChip(status = launch.status)
 
-                Text(
+                AppText.bodyLarge(
                     text = launch.launchDate,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = AppTheme.colors.onSurfaceVariant,
                     modifier = Modifier.semantics {
                         contentDescription = "Launch date: ${launch.launchDate}"
                     }
@@ -260,12 +258,6 @@ private fun LaunchDetailsSection(
         Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
             SectionTitle(text = "Launch Details")
 
-            DetailRow(
-                label = "Launch ID",
-                value = launch.id,
-                icon = Icons.Default.Info
-            )
-
             launch.windowStart?.let {
                 DetailRow(
                     label = "Window Start",
@@ -282,16 +274,50 @@ private fun LaunchDetailsSection(
                 )
             }
 
-            launch.failReason?.let {
+            launch.pad?.let { pad ->
+                pad.location?.let { location ->
+                    val siteName = pad.name ?: "Unknown"
+                    val countryName = location.country?.name ?: ""
+                    val countryFlag = location.country?.alpha2Code?.toCountryFlag() ?: ""
+
+                    val siteValue = buildString {
+                        append(siteName)
+                        if (countryName.isNotEmpty()) {
+                            append(" • ")
+                            if (countryFlag.isNotEmpty()) {
+                                append(countryFlag)
+                                append(" ")
+                            }
+                            append(countryName)
+                        }
+                    }
+
+                    DetailRow(
+                        label = "Launch Site",
+                        value = siteValue,
+                        icon = Icons.Default.Place
+                    )
+                }
+            }
+
+            if (!launch.failReason.isNullOrEmpty()) {
                 DetailRow(
                     label = "Fail Reason",
-                    value = it,
+                    value = launch.failReason,
                     icon = Icons.Default.Warning,
-                    valueColor = MaterialTheme.colorScheme.error
+                    valueColor = AppTheme.colors.error
                 )
             }
         }
     }
+}
+
+// Convert ISO 3166-1 alpha-2 country code to flag emoji
+private fun String.toCountryFlag(): String {
+    if (this.length != 2) return ""
+    val firstChar = Character.codePointAt(this, 0) - 0x41 + 0x1F1E6
+    val secondChar = Character.codePointAt(this, 1) - 0x41 + 0x1F1E6
+    return String(Character.toChars(firstChar)) + String(Character.toChars(secondChar))
 }
 
 // ==================== Agency Section ====================
@@ -309,10 +335,9 @@ private fun AgencySection(
             agency.abbrev?.let { DetailRow(label = "Abbreviation", value = it, icon = Icons.Default.Star) }
             agency.type?.let { DetailRow(label = "Type", value = it, icon = Icons.Default.Build) }
             agency.description?.let {
-                Text(
+                AppText.bodyMedium(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = AppTheme.colors.onSurfaceVariant,
                     modifier = Modifier.padding(top = Dimens.dp8)
                 )
             }
@@ -355,10 +380,9 @@ private fun MissionSection(
             mission.type?.let { DetailRow(label = "Type", value = it, icon = Icons.Default.Build) }
             mission.orbit?.name?.let { DetailRow(label = "Orbit", value = it, icon = Icons.Default.Star) }
             mission.description?.let {
-                Text(
+                AppText.bodyMedium(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = AppTheme.colors.onSurfaceVariant,
                     modifier = Modifier.padding(top = Dimens.dp8)
                 )
             }
@@ -418,7 +442,7 @@ private fun UpdateItem(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(Dimens.dp12)
     ) {
@@ -431,23 +455,20 @@ private fun UpdateItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                AppText.labelMedium(
                     text = update.createdBy ?: "Unknown",
-                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = AppTheme.colors.primary
                 )
-                Text(
+                AppText.labelSmall(
                     text = update.createdOn ?: "",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = AppTheme.colors.onSurfaceVariant
                 )
             }
 
-            Text(
+            AppText.bodyMedium(
                 text = update.comment ?: "",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = AppTheme.colors.onSurface
             )
         }
     }
@@ -479,7 +500,7 @@ private fun VideoItem(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(Dimens.dp12)
     ) {
@@ -493,33 +514,31 @@ private fun VideoItem(
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = AppTheme.colors.primary,
                 modifier = Modifier.size(32.dp)
             )
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
+                AppText.titleSmall(
                     text = video.title ?: "Video",
-                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = AppTheme.colors.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Text(
+                AppText.bodySmall(
                     text = video.publisher ?: "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = AppTheme.colors.onSurfaceVariant
                 )
             }
 
             if (video.live == true) {
                 AssistChip(
                     onClick = {},
-                    label = { Text("LIVE") },
+                    label = { AppText.labelSmall(text = "LIVE", color = AppTheme.colors.error) },
                     colors = AssistChipDefaults.assistChipColors(
-                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
-                        labelColor = MaterialTheme.colorScheme.error
+                        containerColor = AppTheme.colors.error.copy(alpha = 0.2f),
+                        labelColor = AppTheme.colors.error
                     )
                 )
             }
@@ -569,10 +588,9 @@ private fun MissionPatchItem(
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
-        Text(
+        AppText.labelSmall(
             text = patch.name ?: "Patch",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = AppTheme.colors.onSurfaceVariant,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
@@ -591,7 +609,7 @@ private fun SectionCard(
             .fillMaxWidth()
             .padding(horizontal = Dimens.dp16),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = AppTheme.colors.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = RoundedCornerShape(Dimens.dp16)
@@ -608,11 +626,10 @@ private fun SectionTitle(
     text: String,
     modifier: Modifier = Modifier
 ) {
-    Text(
+    AppText.titleLarge(
         text = text,
-        style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = AppTheme.colors.onSurface,
         modifier = modifier.semantics { contentDescription = "Section: $text" }
     )
 }
@@ -623,7 +640,7 @@ private fun DetailRow(
     value: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     modifier: Modifier = Modifier,
-    valueColor: Color = MaterialTheme.colorScheme.onSurface
+    valueColor: Color = AppTheme.colors.onSurface
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -633,19 +650,17 @@ private fun DetailRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = AppTheme.colors.primary,
             modifier = Modifier.size(20.dp)
         )
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(
+            AppText.labelMedium(
                 text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = AppTheme.colors.onSurfaceVariant
             )
-            Text(
+            AppText.bodyLarge(
                 text = value,
-                style = MaterialTheme.typography.bodyLarge,
                 color = valueColor,
                 modifier = Modifier.semantics { contentDescription = "$label: $value" }
             )
@@ -670,9 +685,10 @@ private fun LaunchStatusChip(
     AssistChip(
         onClick = {},
         label = {
-            Text(
+            AppText.labelMedium(
                 text = label,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                color = contentColor
             )
         },
         leadingIcon = {

@@ -6,6 +6,7 @@ import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.database.entities.AgencyEntity
 import com.seancoyle.database.entities.CountryEntity
 import com.seancoyle.database.entities.ImageEntity
+import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.MissionEntity
@@ -21,6 +22,7 @@ import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.InfoUrl
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.model.Location
@@ -80,7 +82,7 @@ internal fun LaunchEntity.toDomain(): Launch =
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         updates = updates?.map { it.toDomain() },
-        infoUrls = infoUrls,
+        infoUrls = infoUrls?.map { it.toDomain() },
         vidUrls = vidUrls?.map { it.toDomain() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toDomain() },
@@ -261,7 +263,7 @@ internal fun Launch.toEntity(): LaunchEntity =
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
         updates = updates?.map { it.toEntity() },
-        infoUrls = infoUrls,
+        infoUrls = infoUrls?.map { it.toEntity() },
         vidUrls = vidUrls?.map { it.toEntity() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toEntity() },
@@ -430,6 +432,15 @@ private fun MissionPatchEntity.toDomain(): MissionPatch =
         agency = agency?.toDomain()
     )
 
+private fun InfoUrlEntity.toDomain() = InfoUrl(
+    priority = priority,
+    source = source,
+    title = title,
+    description = description,
+    featureImage = featureImage,
+    url = url
+)
+
 // Domain to Entity for new fields
 private fun LaunchUpdate.toEntity(): LaunchUpdateEntity =
     LaunchUpdateEntity(
@@ -463,3 +474,12 @@ private fun MissionPatch.toEntity(): MissionPatchEntity =
         imageUrl = imageUrl,
         agency = agency?.toEntity()
     )
+
+private fun InfoUrl.toEntity() = InfoUrlEntity(
+    priority = priority,
+    source = source,
+    title = title,
+    description = description,
+    featureImage = featureImage,
+    url = url
+)

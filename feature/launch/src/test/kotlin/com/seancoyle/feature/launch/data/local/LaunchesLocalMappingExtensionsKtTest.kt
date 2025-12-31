@@ -13,7 +13,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class LaunchesLocalMappingExtensionsTest {
+class LaunchesLocalMappingExtensionsKtTest {
 
     @Test
     fun `map returns CACHE_ERROR_TIMEOUT for TimeoutCancellationException`() {
@@ -81,7 +81,7 @@ class LaunchesLocalMappingExtensionsTest {
     @Test
     fun `LaunchEntity toDomain converts to Launch correctly`() {
         val updates = listOf(TestData.createLaunchUpdateEntity())
-        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val infoUrls = listOf(TestData.createInfoUrlEntity())
         val vidUrls = listOf(TestData.createVidUrlEntity())
         val padTurnaround = "P1DT2H"
         val missionPatches = listOf(TestData.createMissionPatchEntity())
@@ -109,7 +109,7 @@ class LaunchesLocalMappingExtensionsTest {
         assertEquals(launchEntity.failReason, result.failReason)
         assertEquals(launchEntity.webcastLive, result.webcastLive)
         assertEquals(updates[0].comment, result.updates?.get(0)?.comment)
-        assertEquals(infoUrls, result.infoUrls)
+        assertEquals(infoUrls[0].url, result.infoUrls?.get(0)?.url)
         assertEquals(vidUrls[0].title, result.vidUrls?.get(0)?.title)
         assertEquals(padTurnaround, result.padTurnaround)
         assertEquals(missionPatches[0].name, result.missionPatches?.get(0)?.name)
@@ -167,7 +167,7 @@ class LaunchesLocalMappingExtensionsTest {
     @Test
     fun `Launch toEntity converts to LaunchEntity correctly`() {
         val updates = listOf(TestData.createLaunchUpdate())
-        val infoUrls = listOf("https://example.com/info1", "https://example.com/info2")
+        val infoUrls = listOf(TestData.createInfoUrl())
         val vidUrls = listOf(TestData.createVidUrl())
         val padTurnaround = "P1DT2H"
         val missionPatches = listOf(TestData.createMissionPatch())
@@ -195,7 +195,7 @@ class LaunchesLocalMappingExtensionsTest {
         assertEquals(launch.failReason, result.failReason)
         assertEquals(launch.webcastLive, result.webcastLive)
         assertEquals(updates[0].comment, result.updates?.get(0)?.comment)
-        assertEquals(infoUrls, result.infoUrls)
+        assertEquals(infoUrls[0].url, result.infoUrls?.get(0)?.url)
         assertEquals(vidUrls[0].title, result.vidUrls?.get(0)?.title)
         assertEquals(padTurnaround, result.padTurnaround)
         assertEquals(missionPatches[0].name, result.missionPatches?.get(0)?.name)

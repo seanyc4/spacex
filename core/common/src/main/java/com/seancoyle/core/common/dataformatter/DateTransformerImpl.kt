@@ -1,6 +1,5 @@
 package com.seancoyle.core.common.dataformatter
 
-import com.seancoyle.core.common.dataformatter.DateFormatConstants.DD_MMMM_YYYY
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -30,8 +29,9 @@ internal class DateTransformerImpl @Inject constructor() : DateTransformer {
         return launchDate.isBefore(LocalDateTime.now())
     }
 
-    override fun formatDateTimeToString(dateTime: LocalDateTime): String {
-        val formatter = DateTimeFormatter.ofPattern(DD_MMMM_YYYY, java.util.Locale.ENGLISH)
+    override fun formatDateTimeToString(dateTime: LocalDateTime?, format: String?): String {
+        if (dateTime == null) return ""
+        val formatter = DateTimeFormatter.ofPattern(format, java.util.Locale.ENGLISH)
         return dateTime.format(formatter)
     }
 

@@ -9,11 +9,11 @@ import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
+import com.seancoyle.database.util.InfoUrlListConverter
 import com.seancoyle.database.util.LaunchUpdateListConverter
 import com.seancoyle.database.util.LocalDateTimeConverter
 import com.seancoyle.database.util.MissionPatchListConverter
 import com.seancoyle.database.util.ProgramListConverter
-import com.seancoyle.database.util.StringListConverter
 import com.seancoyle.database.util.VidUrlListConverter
 
 @Database(
@@ -26,13 +26,13 @@ import com.seancoyle.database.util.VidUrlListConverter
     exportSchema = true
 )
 @TypeConverters(
-    LocalDateTimeConverter::class,
     AgencyListConverter::class,
-    ProgramListConverter::class,
     CountryListConverter::class,
+    InfoUrlListConverter::class,
     LaunchUpdateListConverter::class,
+    LocalDateTimeConverter::class,
     MissionPatchListConverter::class,
-    StringListConverter::class,
+    ProgramListConverter::class,
     VidUrlListConverter::class
 )
 abstract class Database : RoomDatabase() {
