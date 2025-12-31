@@ -15,7 +15,7 @@ class LaunchesUiMapper @Inject constructor(
             return LaunchesUi(
                 id = id,
                 launchDate = formatDate(locateDateTime),
-                missionName = name.orEmpty(),
+                missionName = missionName.orEmpty(),
                 status = status,
                 image = image.thumbnailUrl
             )

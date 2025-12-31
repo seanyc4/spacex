@@ -166,13 +166,15 @@ private fun LaunchesScreen(
                         onEvent(LaunchesEvents.TabSelectedEvent(launchesType))
                     },
                     text = { AppText.titleSmall(text = stringResource(tab.title)) },
-                    icon = { Icon(imageVector = if (index == selectedTabIndex) {
-                        tab.selectedIcon
-                    } else {
-                        tab.unselectedIcon
-                    },
-                        contentDescription = stringResource(tab.title)
-                    )
+                    icon = {
+                        Icon(
+                            imageVector = if (index == selectedTabIndex) {
+                                tab.selectedIcon
+                            } else {
+                                tab.unselectedIcon
+                            },
+                            contentDescription = stringResource(tab.title)
+                        )
                     }
                 )
             }
