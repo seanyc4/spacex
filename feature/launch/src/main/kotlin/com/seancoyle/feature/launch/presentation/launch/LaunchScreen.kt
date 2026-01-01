@@ -35,6 +35,7 @@ fun LaunchScreen(
 
     LaunchScreenContent(
         launchState = launchState,
+        onEvent = viewModel::onEvent,
         modifier = modifier
     )
 }
@@ -42,6 +43,7 @@ fun LaunchScreen(
 @Composable
 private fun LaunchScreenContent(
     launchState: LaunchUiState,
+    onEvent: (LaunchEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -53,7 +55,10 @@ private fun LaunchScreenContent(
         when (launchState) {
             is LaunchUiState.Loading -> LoadingState()
             is LaunchUiState.Success -> SuccessState(launch = launchState.launch)
-            is LaunchUiState.Error -> ErrorState(message = launchState.message)
+            is LaunchUiState.Error -> ErrorState(
+                message = launchState.message,
+                onRetry = { onEvent(LaunchEvent.RetryFetch) }
+            )
         }
     }
 }
@@ -143,7 +148,10 @@ private fun LaunchScreenErrorPreview() {
                 .fillMaxSize()
                 .background(AppTheme.colors.background)
         ) {
-            ErrorState(message = "Unable to connect to server. Please check your internet connection.")
+            ErrorState(
+                message = "Unable to connect to server. Please check your internet connection.",
+                onRetry = {}
+            )
         }
     }
 }

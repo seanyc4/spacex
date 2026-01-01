@@ -7,17 +7,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.R
 
 @Composable
 internal fun ErrorState(
     message: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRetry: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -44,6 +49,16 @@ internal fun ErrorState(
                 text = message,
                 color = AppTheme.colors.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(Dimens.dp8))
+            ButtonPrimary(
+                text = stringResource(R.string.retry),
+                onClick = onRetry,
+                modifier = Modifier.semantics {
+                    contentDescription = "Retry loading launch"
+                }
+            )
+
         }
     }
 }
@@ -52,7 +67,9 @@ internal fun ErrorState(
 @Composable
 private fun ErrorStatePreview() {
     AppTheme {
-        ErrorState(message = "Network connection error. Please try again.")
+        ErrorState(
+            message = "Network connection error. Please try again.",
+            onRetry = {}
+        )
     }
 }
-

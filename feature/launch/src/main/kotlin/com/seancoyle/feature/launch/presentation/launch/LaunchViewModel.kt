@@ -10,9 +10,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel(assistedFactory = LaunchViewModel.Factory::class)
 class LaunchViewModel @AssistedInject constructor(
     private val launchesComponent: LaunchesComponent,
@@ -21,23 +26,39 @@ class LaunchViewModel @AssistedInject constructor(
     @Assisted private val launchType: LaunchesType
 ) : ViewModel() {
 
-    val launchState: StateFlow<LaunchUiState> = flow {
-        emit(LaunchUiState.Loading)
+    private val retryEvent = MutableSharedFlow<Unit>(replay = 1)
 
-        when (val result = launchesComponent.getLaunchUseCase(launchId, launchType)) {
-            is LaunchResult.Success -> {
-                val launch = result.data
-                val launchUi = uiMapper.mapToLaunchUi(launch)
-                emit(LaunchUiState.Success(launchUi))
-            }
-            is LaunchResult.Error -> {
-                emit(LaunchUiState.Error(result.error.toString()))
+    val launchState: StateFlow<LaunchUiState> =
+        retryEvent
+            .onStart { emit(Unit) }
+            .flatMapLatest {
+                flow {
+                    emit(LaunchUiState.Loading)
+
+                    when (val result = launchesComponent.getLaunchUseCase(launchId, launchType)) {
+                        is LaunchResult.Success -> {
+                            val launch = result.data
+                            val launchUi = uiMapper.mapToLaunchUi(launch)
+                            emit(LaunchUiState.Success(launchUi))
+                        }
+
+                        is LaunchResult.Error -> {
+                            emit(LaunchUiState.Error(result.error.toString()))
+                        }
+                    }
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                initialValue = LaunchUiState.Loading
+            )
+
+    fun onEvent(event: LaunchEvent) {
+        when (event) {
+            is LaunchEvent.RetryFetch -> {
+                retryEvent.tryEmit(Unit)
             }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        initialValue = LaunchUiState.Loading
-    )
+    }
 
     @AssistedFactory
     internal interface Factory {
