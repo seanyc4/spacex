@@ -42,7 +42,6 @@ internal class LaunchesLocalDataSourceTest {
     private fun createTestLaunch(
         id: String,
         name: String = "Test Launch $id",
-        launchStatus: LaunchStatus = LaunchStatus.SUCCESS,
         updates: List<LaunchUpdate>? = listOf(
             LaunchUpdate(
                 id = 1,
@@ -53,7 +52,16 @@ internal class LaunchesLocalDataSourceTest {
                 createdOn = "2025-12-28T10:00:00Z"
             )
         ),
-        infoUrls: List<String>? = listOf("https://test.com/info1", "https://test.com/info2"),
+        infoUrls: List<InfoUrl>? = listOf(
+            InfoUrl(
+                priority = 1,
+                title = "Official Info",
+                url = "https://test.com/official-info",
+                source = "official",
+                description = "Official launch information",
+                featureImage = "https://test.com/info.jpg"
+            )
+        ),
         vidUrls: List<VidUrl>? = listOf(
             VidUrl(
                 priority = 1,
@@ -77,6 +85,12 @@ internal class LaunchesLocalDataSourceTest {
                 imageUrl = "https://test.com/patch.png",
                 agency = null
             )
+        ),
+        status: Status = Status(
+            id = 1,
+            name = "Go for Launch",
+            abbrev = "GO",
+            description = "The launch is go for launch"
         )
     ): Launch {
         return Launch(
@@ -227,7 +241,7 @@ internal class LaunchesLocalDataSourceTest {
             locationLaunchAttemptCountYear = 25,
             padLaunchAttemptCountYear = 10,
             agencyLaunchAttemptCountYear = 5,
-            status = launchStatus,
+            status = status,
             updates = updates,
             infoUrls = infoUrls,
             vidUrls = vidUrls,
@@ -241,14 +255,12 @@ internal class LaunchesLocalDataSourceTest {
             createTestLaunch(
                 id = "test-$index",
                 name = "Test Launch $index",
-                launchStatus = when (index % 6) {
-                    0 -> LaunchStatus.SUCCESS
-                    1 -> LaunchStatus.FAILED
-                    3 -> LaunchStatus.TBD
-                    4 -> LaunchStatus.GO
-                    5 -> LaunchStatus.TBC
-                    else -> LaunchStatus.TBD
-                },
+                status = Status(
+                    id = index,
+                    name = "Status $index",
+                    abbrev = "S$index",
+                    description = "Description for status $index"
+                )
             )
         }
     }
