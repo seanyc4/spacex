@@ -42,15 +42,16 @@ fun extractYouTubeVideoId(url: String): String? {
 fun EmbeddedYouTubePlayer(
     videoId: String,
     videoTitle: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showTitle: Boolean = true
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
     ) {
-        if (!videoTitle.isNullOrEmpty()) {
+        if (showTitle && !videoTitle.isNullOrEmpty()) {
             AppText.titleMedium(
                 text = videoTitle,
                 fontWeight = FontWeight.SemiBold,

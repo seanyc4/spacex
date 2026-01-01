@@ -23,7 +23,7 @@ fun Chip(
     text: String,
     contentColor: Color,
     containerColor: Color,
-    icon: ImageVector?,
+    icon: ImageVector? = null,
     modifier: Modifier = Modifier
 ) {
     AssistChip(
