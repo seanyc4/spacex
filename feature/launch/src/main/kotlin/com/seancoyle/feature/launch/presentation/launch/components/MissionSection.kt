@@ -1,0 +1,67 @@
+package com.seancoyle.feature.launch.presentation.launch.components
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.seancoyle.core.ui.designsystem.text.AppText
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.domain.model.Mission
+import com.seancoyle.feature.launch.presentation.launch.previewData
+
+@Composable
+internal fun MissionSection(
+    mission: Mission,
+    modifier: Modifier = Modifier
+) {
+    SectionCard(modifier = modifier) {
+        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+            SectionTitle(text = "Mission Information")
+
+            mission.name?.let {
+                DetailRow(
+                    label = "Name",
+                    value = it,
+                    icon = Icons.Default.Star
+                )
+            }
+
+            mission.type?.let {
+                DetailRow(
+                    label = "Type",
+                    value = it,
+                    icon = Icons.Default.Build
+                )
+            }
+
+            mission.orbit?.name?.let {
+                DetailRow(
+                    label = "Orbit",
+                    value = it,
+                    icon = Icons.Default.Star
+                )
+            }
+
+            mission.description?.let {
+                AppText.bodyMedium(
+                    text = it,
+                    color = AppTheme.colors.onSurfaceVariant,
+                    modifier = Modifier.padding(top = Dimens.dp8)
+                )
+            }
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun MissionSectionPreview() {
+    AppTheme {
+        MissionSection(
+            mission = previewData().mission!!
+        )
+    }
+}
