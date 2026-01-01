@@ -11,12 +11,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.presentation.launch.previewData
+import com.seancoyle.feature.launch.R
 
 @Composable
 internal fun MissionPatchesSection(
@@ -53,8 +55,9 @@ private fun MissionPatchItem(
         GlideImage(
             model = patch.imageUrl,
             contentDescription = "Mission patch: ${patch.name}",
+            failure = placeholder(R.drawable.default_mission_patch),
             modifier = Modifier
-                .size(80.dp)
+                .size(160.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
