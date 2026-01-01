@@ -28,6 +28,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.components.videoplayer.EmbeddedYouTubePlayer
+import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -139,6 +141,11 @@ private fun SuccessState(
         item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
         item { LaunchDetailsSection(launch = launch) }
 
+        if (launch.vidUrls.isNotEmpty()) {
+            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { VideoSection(videos = launch.vidUrls) }
+        }
+
         if (launch.launchServiceProvider != null) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { AgencySection(agency = launch.launchServiceProvider) }
@@ -162,11 +169,6 @@ private fun SuccessState(
         if (launch.updates.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { UpdatesSection(updates = launch.updates) }
-        }
-
-        if (launch.vidUrls.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { VideoSection(videos = launch.vidUrls) }
         }
 
         if (launch.missionPatches.isNotEmpty()) {
@@ -492,61 +494,16 @@ private fun VideoSection(
             SectionTitle(text = "Videos & Webcasts")
 
             videos.forEach { video ->
-                VideoItem(video = video)
-            }
-        }
-    }
-}
+                video.url?.let { url ->
+                    val videoId = extractYouTubeVideoId(url)
 
-@Composable
-private fun VideoItem(
-    video: VidUrl,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
-        ),
-        shape = RoundedCornerShape(Dimens.dp12)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.dp16),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp16),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = null,
-                tint = AppTheme.colors.primary,
-                modifier = Modifier.size(32.dp)
-            )
-
-            Column(modifier = Modifier.weight(1f)) {
-                AppText.titleSmall(
-                    text = video.title ?: "Video",
-                    fontWeight = FontWeight.SemiBold,
-                    color = AppTheme.colors.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                AppText.bodySmall(
-                    text = video.publisher ?: "",
-                    color = AppTheme.colors.onSurfaceVariant
-                )
-            }
-
-            if (video.live == true) {
-                AssistChip(
-                    onClick = {},
-                    label = { AppText.labelSmall(text = "LIVE", color = AppTheme.colors.error) },
-                    colors = AssistChipDefaults.assistChipColors(
-                        containerColor = AppTheme.colors.error.copy(alpha = 0.2f),
-                        labelColor = AppTheme.colors.error
-                    )
-                )
+                    if (videoId != null) {
+                        EmbeddedYouTubePlayer(
+                            videoId = videoId,
+                            videoTitle = video.title
+                        )
+                    }
+                }
             }
         }
     }
