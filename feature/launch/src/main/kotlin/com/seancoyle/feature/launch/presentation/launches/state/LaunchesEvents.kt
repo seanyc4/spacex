@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.presentation.launches.state
 
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 
 sealed interface LaunchesEvents {
     data object DismissFilterDialogEvent : LaunchesEvents

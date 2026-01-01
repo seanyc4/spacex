@@ -36,10 +36,10 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 

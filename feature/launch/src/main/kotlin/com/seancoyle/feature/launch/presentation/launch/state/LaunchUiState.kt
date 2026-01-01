@@ -1,4 +1,6 @@
-package com.seancoyle.feature.launch.presentation.launch
+package com.seancoyle.feature.launch.presentation.launch.state
+
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 
 sealed interface LaunchUiState {
     data object Loading : LaunchUiState

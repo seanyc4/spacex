@@ -20,7 +20,7 @@ import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.util.ObserveScrollPosition
-import com.seancoyle.feature.launch.presentation.launches.LaunchesTestTags
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.R
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi

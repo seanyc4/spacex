@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launches
+package com.seancoyle.feature.launch.presentation
 
 object LaunchesTestTags {
     // Grid and List Tags

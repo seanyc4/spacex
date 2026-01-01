@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.util.TestData.createRandomLaunchList
 import io.mockk.MockKAnnotations
 import io.mockk.every

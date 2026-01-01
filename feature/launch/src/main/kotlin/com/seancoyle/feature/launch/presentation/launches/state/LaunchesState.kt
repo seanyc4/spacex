@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.presentation.launches.state
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

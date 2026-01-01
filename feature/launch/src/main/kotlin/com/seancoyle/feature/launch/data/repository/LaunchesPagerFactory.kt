@@ -6,7 +6,7 @@ import androidx.paging.PagingConfig
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants
+import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import com.seancoyle.feature.launch.data.remote.LaunchRemoteMediator
 import javax.inject.Inject
 

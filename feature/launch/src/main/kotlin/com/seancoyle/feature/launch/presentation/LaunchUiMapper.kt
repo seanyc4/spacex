@@ -1,10 +1,11 @@
-package com.seancoyle.feature.launch.presentation.launch
+package com.seancoyle.feature.launch.presentation
 
-import com.seancoyle.core.common.dataformatter.DateFormatConstants.DD_MMMM_YYYY
-import com.seancoyle.core.common.dataformatter.DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM
+import com.seancoyle.core.common.dataformatter.DateFormatConstants
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.Status
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -23,8 +24,8 @@ class LaunchUiMapper @Inject constructor(
                 missionName = missionName.orEmpty(),
                 launchDate = formatDate(locateDateTime),
                 status = status.toDomain(),
-                windowEnd = formatDate(windowEnd, DD_MMMM_YYYY_AT_HH_MM),
-                windowStart = formatDate(windowStart, DD_MMMM_YYYY_AT_HH_MM),
+                windowEnd = formatDate(windowEnd, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
+                windowStart = formatDate(windowStart, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
                 image = image,
                 failReason = failReason,
                 launchServiceProvider = launchServiceProvider,
@@ -52,7 +53,7 @@ class LaunchUiMapper @Inject constructor(
         }
     }
 
-    private fun formatDate(date: LocalDateTime?, format: String = DD_MMMM_YYYY): String {
+    private fun formatDate(date: LocalDateTime?, format: String = DateFormatConstants.DD_MMMM_YYYY): String {
         return dateFormatter.formatDateTimeToString(date, format)
     }
 

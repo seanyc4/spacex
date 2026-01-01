@@ -1,6 +1,8 @@
-package com.seancoyle.feature.launch.presentation.launch
+package com.seancoyle.feature.launch.presentation.launch.components
 
 import com.seancoyle.feature.launch.domain.model.*
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 
 /**
  * Preview data for LaunchUI to be used in Composable previews

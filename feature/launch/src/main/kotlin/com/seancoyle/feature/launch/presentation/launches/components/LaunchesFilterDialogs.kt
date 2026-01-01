@@ -36,7 +36,7 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.N
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 
 @Composable
 internal fun LaunchesFilterDialog(

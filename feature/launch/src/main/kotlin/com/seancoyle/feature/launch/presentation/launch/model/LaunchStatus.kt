@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launch
+package com.seancoyle.feature.launch.presentation.launch.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BuildCircle

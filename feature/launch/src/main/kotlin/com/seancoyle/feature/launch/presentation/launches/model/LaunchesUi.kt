@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.presentation.launches.model
 
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 
 data class LaunchesUi(
     val id: String,

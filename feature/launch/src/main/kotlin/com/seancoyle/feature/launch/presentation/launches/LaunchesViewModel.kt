@@ -34,8 +34,8 @@ import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.UiComponentType
-import com.seancoyle.feature.launch.presentation.launch.LaunchStatus
-import com.seancoyle.feature.launch.presentation.launch.LaunchUiMapper
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.LaunchUiMapper
 
 private const val TAG = "LaunchViewModel"
 

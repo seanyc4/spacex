@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launches
+package com.seancoyle.feature.launch.presentation
 
 object LaunchesConstants {
     const val DEFAULT_LAUNCH_THUMBNAIL = "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305193746.jpeg"

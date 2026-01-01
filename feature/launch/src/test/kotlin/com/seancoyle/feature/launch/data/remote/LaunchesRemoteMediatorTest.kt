@@ -8,8 +8,8 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants.PAGINATION_LIMIT
-import com.seancoyle.feature.launch.presentation.launches.LaunchesConstants.PREFETCH_DISTANCE
+import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
+import com.seancoyle.feature.launch.presentation.LaunchesConstants.PREFETCH_DISTANCE
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
