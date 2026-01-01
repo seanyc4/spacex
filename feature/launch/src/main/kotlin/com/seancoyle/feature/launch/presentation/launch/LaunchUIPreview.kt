@@ -114,8 +114,58 @@ internal fun previewData() = LaunchUI(
         mapUrl = null,
         totalLaunchCount = null
     ),
-    updates = emptyList(),
-    infoUrls = emptyList(),
+    updates = listOf(
+        LaunchUpdate(
+            id = 1,
+            profileImage = null,
+            comment = "Launch scrubbed due to weather conditions. New T-0 is in 24 hours.",
+            infoUrl = "https://spacex.com/updates/1",
+            createdBy = "SpaceX",
+            createdOn = "Jan 14, 2026 6:00 PM"
+        ),
+        LaunchUpdate(
+            id = 2,
+            profileImage = null,
+            comment = "All systems are go for launch tomorrow.",
+            infoUrl = "https://spacex.com/updates/2",
+            createdBy = "Launch Director",
+            createdOn = "Jan 15, 2026 8:00 AM"
+        )
+    ),
+    infoUrls = listOf(
+        InfoUrl(
+            priority = 1,
+            title = "SpaceX Official Site",
+            description = "Learn more about SpaceX launches.",
+            url = "https://www.spacex.com/launches/",
+            source = "SpaceX",
+            featureImage = null
+        ),
+        InfoUrl(
+            priority = 2,
+            title = "Wikipedia",
+            description = "Falcon 9 Wikipedia page.",
+            url = "https://en.wikipedia.org/wiki/Falcon_9",
+            source = "Wikipedia",
+            featureImage = null
+        )
+    ),
+    missionPatches = listOf(
+        MissionPatch(
+            id = 1,
+            name = "Mission Patch 1",
+            priority = 1,
+            imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
+            agency = null
+        ),
+        MissionPatch(
+            id = 2,
+            name = "Mission Patch 2",
+            priority = 2,
+            imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
+            agency = null
+        )
+    ),
     vidUrls = listOf(
         VidUrl(
             priority = 1,
@@ -129,7 +179,5 @@ internal fun previewData() = LaunchUI(
             endTime = null,
             live = false
         )
-    ),
-    missionPatches = emptyList()
+    )
 )
-
