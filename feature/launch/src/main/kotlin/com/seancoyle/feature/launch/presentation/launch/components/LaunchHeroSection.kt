@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -21,6 +22,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.presentation.launch.LaunchUI
 import com.seancoyle.feature.launch.presentation.launch.previewData
+import com.seancoyle.feature.launch.R
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -33,6 +35,7 @@ internal fun LaunchHeroSection(
             GlideImage(
                 model = launch.image.imageUrl,
                 contentDescription = "Mission image for ${launch.missionName}",
+                failure = placeholder(R.drawable.default_launch_hero_image),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(320.dp),

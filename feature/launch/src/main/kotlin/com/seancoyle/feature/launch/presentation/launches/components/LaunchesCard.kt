@@ -124,7 +124,7 @@ internal fun LaunchCardImage(
     GlideImage(
         model = imageUrl,
         contentDescription = stringResource(id = R.string.launch_image),
-        failure = placeholder(R.drawable.default_launch_image),
+        failure = placeholder(R.drawable.default_mission_thumbnail),
         modifier = modifier
             .fillMaxSize(),
         contentScale = ContentScale.Crop
