@@ -215,9 +215,6 @@ internal data class AgencyDto(
     @SerialName("spacecraft")
     val spacecraft: String?,
 
-    @SerialName("parent")
-    val parent: String?,
-
     @SerialName("image")
     val image: ImageDto?,
 
@@ -376,9 +373,6 @@ internal data class FamilyDto(
 
     @SerialName("manufacturer")
     val manufacturer: List<AgencyDto>?,
-
-    @SerialName("parent")
-    val parent: String?,
 
     @SerialName("description")
     val description: String?,

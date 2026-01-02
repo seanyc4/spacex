@@ -208,9 +208,6 @@ data class AgencyEntity(
     @ColumnInfo(name = "spacecraft")
     val spacecraft: String?,
 
-    @ColumnInfo(name = "parent")
-    val parent: String?,
-
     @Embedded(prefix = "agency_image")
     val image: ImageEntity,
 
@@ -827,9 +824,6 @@ data class FamilyEntity(
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "manufacturer")
     val manufacturer: List<AgencyEntity>?,
-
-    @ColumnInfo(name = "parent")
-    val parent: String?,
 
     @ColumnInfo(name = "description")
     val description: String?,
