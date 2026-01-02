@@ -11,9 +11,11 @@ import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.InfoUrlListConverter
 import com.seancoyle.database.util.LaunchUpdateListConverter
+import com.seancoyle.database.util.LauncherStageListConverter
 import com.seancoyle.database.util.LocalDateTimeConverter
 import com.seancoyle.database.util.MissionPatchListConverter
 import com.seancoyle.database.util.ProgramListConverter
+import com.seancoyle.database.util.SpacecraftStageListConverter
 import com.seancoyle.database.util.VidUrlListConverter
 
 @Database(
@@ -30,9 +32,11 @@ import com.seancoyle.database.util.VidUrlListConverter
     CountryListConverter::class,
     InfoUrlListConverter::class,
     LaunchUpdateListConverter::class,
+    LauncherStageListConverter::class,
     LocalDateTimeConverter::class,
     MissionPatchListConverter::class,
     ProgramListConverter::class,
+    SpacecraftStageListConverter::class,
     VidUrlListConverter::class
 )
 abstract class Database : RoomDatabase() {

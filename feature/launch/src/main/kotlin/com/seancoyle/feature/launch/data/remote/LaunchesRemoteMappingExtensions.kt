@@ -7,19 +7,30 @@ import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.InfoUrl
+import com.seancoyle.feature.launch.domain.model.Landing
+import com.seancoyle.feature.launch.domain.model.LandingLocation
+import com.seancoyle.feature.launch.domain.model.LandingType
 import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.Launcher
+import com.seancoyle.feature.launch.domain.model.LauncherStage
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
+import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.domain.model.NetPrecision
 import com.seancoyle.feature.launch.domain.model.Orbit
 import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.domain.model.PreviousFlight
 import com.seancoyle.feature.launch.domain.model.Program
 import com.seancoyle.feature.launch.domain.model.Rocket
-import com.seancoyle.feature.launch.domain.model.LaunchUpdate
-import com.seancoyle.feature.launch.domain.model.VidUrl
-import com.seancoyle.feature.launch.domain.model.MissionPatch
-import com.seancoyle.feature.launch.domain.model.InfoUrl
+import com.seancoyle.feature.launch.domain.model.Spacecraft
+import com.seancoyle.feature.launch.domain.model.SpacecraftConfig
+import com.seancoyle.feature.launch.domain.model.SpacecraftStage
+import com.seancoyle.feature.launch.domain.model.SpacecraftStatus
+import com.seancoyle.feature.launch.domain.model.SpacecraftType
 import com.seancoyle.feature.launch.domain.model.Status
+import com.seancoyle.feature.launch.domain.model.VidUrl
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -155,7 +166,9 @@ private fun AgencyDto.toDomain() =
 private fun RocketDto.toDomain() =
     Rocket(
         id = id,
-        configuration = configuration?.toDomain()
+        configuration = configuration?.toDomain(),
+        launcherStage = launcherStage?.map { it.toDomain() },
+        spacecraftStage = spacecraftStage?.map { it.toDomain() }
     )
 
 private fun ConfigurationDto.toDomain() =
@@ -181,7 +194,9 @@ private fun MissionDto.toDomain() =
         type = type,
         description = description,
         orbit = orbit?.toDomain(),
-        agencies = agencies?.map { it.toDomain() }
+        agencies = agencies?.map { it.toDomain() },
+        infoUrls = infoUrls?.map { it.toDomain() },
+        vidUrls = vidUrls?.map { it.toDomain() }
     )
 
 private fun OrbitDto.toDomain() =
@@ -284,4 +299,112 @@ private fun InfoUrlDto.toDomain() = InfoUrl(
     description = description,
     featureImage = featureImage,
     url = url,
+)
+
+private fun LauncherStageDto.toDomain() = LauncherStage(
+    id = id,
+    type = type,
+    reused = reused,
+    launcherFlightNumber = launcherFlightNumber,
+    launcher = launcher?.toDomain(),
+    landing = landing?.toDomain(),
+    previousFlightDate = previousFlightDate,
+    turnAroundTime = turnAroundTime,
+    previousFlight = previousFlight?.toDomain()
+)
+
+private fun LauncherDto.toDomain() = Launcher(
+    id = id,
+    url = url,
+    flightProven = flightProven,
+    serialNumber = serialNumber,
+    status = status?.toDomainStatus(),
+    details = details,
+    image = image?.toDomain(),
+    successfulLandings = successfulLandings,
+    attemptedLandings = attemptedLandings,
+    flights = flights,
+    lastLaunchDate = lastLaunchDate,
+    firstLaunchDate = firstLaunchDate
+)
+
+private fun LandingDto.toDomain() = Landing(
+    id = id,
+    attempt = attempt,
+    success = success,
+    description = description,
+    location = location?.toDomain(),
+    type = type?.toDomain()
+)
+
+private fun LandingLocationDto.toDomain() = LandingLocation(
+    id = id,
+    name = name,
+    abbrev = abbrev,
+    description = description
+)
+
+private fun LandingTypeDto.toDomain() = LandingType(
+    id = id,
+    name = name,
+    abbrev = abbrev,
+    description = description
+)
+
+private fun PreviousFlightDto.toDomain() = PreviousFlight(
+    id = id,
+    name = name
+)
+
+private fun SpacecraftStageDto.toDomain() = SpacecraftStage(
+    id = id,
+    url = url,
+    destination = destination,
+    missionEnd = missionEnd,
+    spacecraft = spacecraft?.toDomain(),
+    landing = landing?.toDomain()
+)
+
+private fun SpacecraftDto.toDomain() = Spacecraft(
+    id = id,
+    url = url,
+    name = name,
+    serialNumber = serialNumber,
+    status = status?.toDomain(),
+    description = description,
+    spacecraftConfig = spacecraftConfig?.toDomain()
+)
+
+private fun SpacecraftStatusDto.toDomain() = SpacecraftStatus(
+    id = id,
+    name = name
+)
+
+private fun SpacecraftConfigDto.toDomain() = SpacecraftConfig(
+    id = id,
+    url = url,
+    name = name,
+    type = type?.toDomain(),
+    agency = agency?.toDomain(),
+    inUse = inUse,
+    capability = capability,
+    history = history,
+    details = details,
+    maidenFlight = maidenFlight,
+    height = height,
+    diameter = diameter,
+    humanRated = humanRated,
+    crewCapacity = crewCapacity
+)
+
+private fun SpacecraftTypeDto.toDomain() = SpacecraftType(
+    id = id,
+    name = name
+)
+
+private fun StatusDto.toDomainStatus() = Status(
+    id = id,
+    name = name,
+    abbrev = abbrev,
+    description = description
 )

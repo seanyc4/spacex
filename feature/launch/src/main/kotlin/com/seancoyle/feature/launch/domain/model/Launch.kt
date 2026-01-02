@@ -102,7 +102,9 @@ data class Country(
 
 data class Rocket(
     val id: Int?,
-    val configuration: Configuration?
+    val configuration: Configuration?,
+    val launcherStage: List<LauncherStage>?,
+    val spacecraftStage: List<SpacecraftStage>?
 )
 
 data class Configuration(
@@ -125,7 +127,9 @@ data class Mission(
     val type: String?,
     val description: String?,
     val orbit: Orbit?,
-    val agencies: List<Agency?>?
+    val agencies: List<Agency?>?,
+    val infoUrls: List<InfoUrl>?,
+    val vidUrls: List<VidUrl>?
 )
 
 data class Orbit(
@@ -203,4 +207,105 @@ data class InfoUrl(
     val description: String?,
     val featureImage: String?,
     val url: String?
+)
+
+data class LauncherStage(
+    val id: Int?,
+    val type: String?,
+    val reused: Boolean?,
+    val launcherFlightNumber: Int?,
+    val launcher: Launcher?,
+    val landing: Landing?,
+    val previousFlightDate: String?,
+    val turnAroundTime: String?,
+    val previousFlight: PreviousFlight?
+)
+
+data class Launcher(
+    val id: Int?,
+    val url: String?,
+    val flightProven: Boolean?,
+    val serialNumber: String?,
+    val status: Status?,
+    val details: String?,
+    val image: Image?,
+    val successfulLandings: Int?,
+    val attemptedLandings: Int?,
+    val flights: Int?,
+    val lastLaunchDate: String?,
+    val firstLaunchDate: String?
+)
+
+data class Landing(
+    val id: Int?,
+    val attempt: Boolean?,
+    val success: Boolean?,
+    val description: String?,
+    val location: LandingLocation?,
+    val type: LandingType?
+)
+
+data class LandingLocation(
+    val id: Int?,
+    val name: String?,
+    val abbrev: String?,
+    val description: String?
+)
+
+data class LandingType(
+    val id: Int?,
+    val name: String?,
+    val abbrev: String?,
+    val description: String?
+)
+
+data class PreviousFlight(
+    val id: String?,
+    val name: String?
+)
+
+data class SpacecraftStage(
+    val id: Int?,
+    val url: String?,
+    val destination: String?,
+    val missionEnd: String?,
+    val spacecraft: Spacecraft?,
+    val landing: Landing?
+)
+
+data class Spacecraft(
+    val id: Int?,
+    val url: String?,
+    val name: String?,
+    val serialNumber: String?,
+    val status: SpacecraftStatus?,
+    val description: String?,
+    val spacecraftConfig: SpacecraftConfig?
+)
+
+data class SpacecraftStatus(
+    val id: Int?,
+    val name: String?
+)
+
+data class SpacecraftConfig(
+    val id: Int?,
+    val url: String?,
+    val name: String?,
+    val type: SpacecraftType?,
+    val agency: Agency?,
+    val inUse: Boolean?,
+    val capability: String?,
+    val history: String?,
+    val details: String?,
+    val maidenFlight: String?,
+    val height: Double?,
+    val diameter: Double?,
+    val humanRated: Boolean?,
+    val crewCapacity: Int?
+)
+
+data class SpacecraftType(
+    val id: Int?,
+    val name: String?
 )

@@ -176,6 +176,29 @@ internal class LaunchesLocalDataSourceTest {
                     families = listOf(
                         Family(id = 1, name = "Falcon")
                     )
+                ),
+                launcherStage = listOf(
+                    LauncherStage(
+                        id = 1,
+                        type = "Core",
+                        reused = true,
+                        launcherFlightNumber = 10,
+                        launcher = null,
+                        landing = null,
+                        previousFlightDate = "2025-11-01T00:00:00Z",
+                        turnAroundTime = "P30D",
+                        previousFlight = null
+                    )
+                ),
+                spacecraftStage = listOf(
+                    SpacecraftStage(
+                        id = 1,
+                        url = "https://test.com/spacecraft",
+                        destination = "Low Earth Orbit",
+                        missionEnd = "2025-12-28T18:00:00Z",
+                        spacecraft = null,
+                        landing = null
+                    )
                 )
             ),
             mission = Mission(
@@ -188,7 +211,9 @@ internal class LaunchesLocalDataSourceTest {
                     name = "Low Earth Orbit",
                     abbrev = "LEO"
                 ),
-                agencies = listOf()
+                agencies = listOf(),
+                infoUrls = listOf(),
+                vidUrls =listOf()
             ),
             pad = Pad(
                 id = 1,

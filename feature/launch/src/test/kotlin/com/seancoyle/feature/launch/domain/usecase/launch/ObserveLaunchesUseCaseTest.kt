@@ -5,7 +5,7 @@ import androidx.paging.testing.asSnapshot
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
-import com.seancoyle.feature.launch.util.TestData.createRandomLaunchList
+import com.seancoyle.feature.launch.util.TestData.createLaunchList
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -31,7 +31,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with null status returns all launches without filtering`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = null)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -43,7 +43,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with status GO filters and returns only GO launches`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = LaunchStatus.GO)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -57,7 +57,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with status SUCCESS filters and returns only SUCCESS launches`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = LaunchStatus.SUCCESS)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -71,7 +71,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with status FAILED filters and returns only FAILED launches`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = LaunchStatus.FAILED)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -85,7 +85,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with status TBD filters and returns only TBD launches`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = LaunchStatus.TBD)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -99,7 +99,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with status TBC filters and returns only TBC launches`() = runTest {
-        val launches = createRandomLaunchList(100)
+        val launches = createLaunchList(100)
         val query = LaunchesQuery(status = LaunchStatus.TBC)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
@@ -123,7 +123,7 @@ class ObserveLaunchesUseCaseTest {
 
     @Test
     fun `invoke with specific query parameters delegates to repository and applies filter`() = runTest {
-        val launches = createRandomLaunchList(50)
+        val launches = createLaunchList(50)
         val query = LaunchesQuery(query = "Falcon", status = LaunchStatus.GO)
         every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
 

@@ -12,6 +12,8 @@ import com.seancoyle.database.util.LaunchUpdateListConverter
 import com.seancoyle.database.util.VidUrlListConverter
 import com.seancoyle.database.util.MissionPatchListConverter
 import com.seancoyle.database.util.InfoUrlListConverter
+import com.seancoyle.database.util.LauncherStageListConverter
+import com.seancoyle.database.util.SpacecraftStageListConverter
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -294,7 +296,15 @@ data class RocketEntity(
     val configurationFullName: String?,
 
     @ColumnInfo(name = "variant")
-    val variant: String?
+    val variant: String?,
+
+    @field:TypeConverters(LauncherStageListConverter::class)
+    @ColumnInfo(name = "launcher_stage")
+    val launcherStage: List<LauncherStageEntity>?,
+
+    @field:TypeConverters(SpacecraftStageListConverter::class)
+    @ColumnInfo(name = "spacecraft_stage")
+    val spacecraftStage: List<SpacecraftStageEntity>?
 )
 
 @Keep
@@ -360,7 +370,15 @@ data class MissionEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "agencies")
-    val agencies: List<AgencyEntity>?
+    val agencies: List<AgencyEntity>?,
+
+    @field:TypeConverters(InfoUrlListConverter::class)
+    @ColumnInfo(name = "info_urls")
+    val infoUrls: List<InfoUrlEntity>?,
+
+    @field:TypeConverters(VidUrlListConverter::class)
+    @ColumnInfo(name = "vid_urls")
+    val vidUrls: List<VidUrlEntity>?,
 )
 
 @Keep
@@ -406,6 +424,7 @@ data class ProgramEntity(
 )
 
 @Keep
+@Serializable
 data class LaunchStatusEntity(
     @ColumnInfo(name = "id")
     val id: Int?,
@@ -507,4 +526,195 @@ data class InfoUrlEntity(
     val featureImage: String?,
     @ColumnInfo(name = "url")
     val url: String?
+)
+
+@Keep
+@Serializable
+data class LauncherStageEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "type")
+    val type: String?,
+    @ColumnInfo(name = "reused")
+    val reused: Boolean?,
+    @ColumnInfo(name = "launcher_flight_number")
+    val launcherFlightNumber: Int?,
+    @ColumnInfo(name = "launcher")
+    val launcher: LauncherEntity?,
+    @ColumnInfo(name = "landing")
+    val landing: LandingEntity?,
+    @ColumnInfo(name = "previous_flight_date")
+    val previousFlightDate: String?,
+    @ColumnInfo(name = "turn_around_time")
+    val turnAroundTime: String?,
+    @ColumnInfo(name = "previous_flight")
+    val previousFlight: PreviousFlightEntity?
+)
+
+@Keep
+@Serializable
+data class LauncherEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "url")
+    val url: String?,
+    @ColumnInfo(name = "flight_proven")
+    val flightProven: Boolean?,
+    @ColumnInfo(name = "serial_number")
+    val serialNumber: String?,
+    @ColumnInfo(name = "status")
+    val status: LaunchStatusEntity?,
+    @ColumnInfo(name = "details")
+    val details: String?,
+    @ColumnInfo(name = "image")
+    val image: ImageEntity?,
+    @ColumnInfo(name = "successful_landings")
+    val successfulLandings: Int?,
+    @ColumnInfo(name = "attempted_landings")
+    val attemptedLandings: Int?,
+    @ColumnInfo(name = "flights")
+    val flights: Int?,
+    @ColumnInfo(name = "last_launch_date")
+    val lastLaunchDate: String?,
+    @ColumnInfo(name = "first_launch_date")
+    val firstLaunchDate: String?
+)
+
+@Keep
+@Serializable
+data class LandingEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "attempt")
+    val attempt: Boolean?,
+    @ColumnInfo(name = "success")
+    val success: Boolean?,
+    @ColumnInfo(name = "description")
+    val description: String?,
+    @ColumnInfo(name = "location")
+    val location: LandingLocationEntity?,
+    @ColumnInfo(name = "type")
+    val type: LandingTypeEntity?
+)
+
+@Keep
+@Serializable
+data class LandingLocationEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "name")
+    val name: String?,
+    @ColumnInfo(name = "abbrev")
+    val abbrev: String?,
+    @ColumnInfo(name = "description")
+    val description: String?
+)
+
+@Keep
+@Serializable
+data class LandingTypeEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "name")
+    val name: String?,
+    @ColumnInfo(name = "abbrev")
+    val abbrev: String?,
+    @ColumnInfo(name = "description")
+    val description: String?
+)
+
+@Keep
+@Serializable
+data class PreviousFlightEntity(
+    @ColumnInfo(name = "id")
+    val id: String?,
+    @ColumnInfo(name = "name")
+    val name: String?
+)
+
+@Keep
+@Serializable
+data class SpacecraftStageEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "url")
+    val url: String?,
+    @ColumnInfo(name = "destination")
+    val destination: String?,
+    @ColumnInfo(name = "mission_end")
+    val missionEnd: String?,
+    @ColumnInfo(name = "spacecraft")
+    val spacecraft: SpacecraftEntity?,
+    @ColumnInfo(name = "landing")
+    val landing: LandingEntity?
+)
+
+@Keep
+@Serializable
+data class SpacecraftEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "url")
+    val url: String?,
+    @ColumnInfo(name = "name")
+    val name: String?,
+    @ColumnInfo(name = "serial_number")
+    val serialNumber: String?,
+    @ColumnInfo(name = "status")
+    val status: SpacecraftStatusEntity?,
+    @ColumnInfo(name = "description")
+    val description: String?,
+    @ColumnInfo(name = "spacecraft_config")
+    val spacecraftConfig: SpacecraftConfigEntity?
+)
+
+@Keep
+@Serializable
+data class SpacecraftStatusEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "name")
+    val name: String?
+)
+
+@Keep
+@Serializable
+data class SpacecraftConfigEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "url")
+    val url: String?,
+    @ColumnInfo(name = "name")
+    val name: String?,
+    @ColumnInfo(name = "type")
+    val type: SpacecraftTypeEntity?,
+    @ColumnInfo(name = "agency")
+    val agency: AgencyEntity?,
+    @ColumnInfo(name = "in_use")
+    val inUse: Boolean?,
+    @ColumnInfo(name = "capability")
+    val capability: String?,
+    @ColumnInfo(name = "history")
+    val history: String?,
+    @ColumnInfo(name = "details")
+    val details: String?,
+    @ColumnInfo(name = "maiden_flight")
+    val maidenFlight: String?,
+    @ColumnInfo(name = "height")
+    val height: Double?,
+    @ColumnInfo(name = "diameter")
+    val diameter: Double?,
+    @ColumnInfo(name = "human_rated")
+    val humanRated: Boolean?,
+    @ColumnInfo(name = "crew_capacity")
+    val crewCapacity: Int?
+)
+
+@Keep
+@Serializable
+data class SpacecraftTypeEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+    @ColumnInfo(name = "name")
+    val name: String?
 )

@@ -7,34 +7,56 @@ import com.seancoyle.database.entities.AgencyEntity
 import com.seancoyle.database.entities.CountryEntity
 import com.seancoyle.database.entities.ImageEntity
 import com.seancoyle.database.entities.InfoUrlEntity
+import com.seancoyle.database.entities.LandingEntity
+import com.seancoyle.database.entities.LandingLocationEntity
+import com.seancoyle.database.entities.LandingTypeEntity
 import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LauncherEntity
+import com.seancoyle.database.entities.LauncherStageEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
+import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.MissionEntity
+import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.database.entities.NetPrecisionEntity
 import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.PreviousFlightEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
-import com.seancoyle.database.entities.LaunchUpdateEntity
+import com.seancoyle.database.entities.SpacecraftConfigEntity
+import com.seancoyle.database.entities.SpacecraftEntity
+import com.seancoyle.database.entities.SpacecraftStageEntity
+import com.seancoyle.database.entities.SpacecraftStatusEntity
+import com.seancoyle.database.entities.SpacecraftTypeEntity
 import com.seancoyle.database.entities.VidUrlEntity
-import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.InfoUrl
+import com.seancoyle.feature.launch.domain.model.Landing
+import com.seancoyle.feature.launch.domain.model.LandingLocation
+import com.seancoyle.feature.launch.domain.model.LandingType
 import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.Launcher
+import com.seancoyle.feature.launch.domain.model.LauncherStage
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
+import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.domain.model.NetPrecision
 import com.seancoyle.feature.launch.domain.model.Orbit
 import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.domain.model.PreviousFlight
 import com.seancoyle.feature.launch.domain.model.Program
 import com.seancoyle.feature.launch.domain.model.Rocket
-import com.seancoyle.feature.launch.domain.model.LaunchUpdate
-import com.seancoyle.feature.launch.domain.model.VidUrl
-import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.domain.model.Spacecraft
+import com.seancoyle.feature.launch.domain.model.SpacecraftConfig
+import com.seancoyle.feature.launch.domain.model.SpacecraftStage
+import com.seancoyle.feature.launch.domain.model.SpacecraftStatus
+import com.seancoyle.feature.launch.domain.model.SpacecraftType
 import com.seancoyle.feature.launch.domain.model.Status
+import com.seancoyle.feature.launch.domain.model.VidUrl
 import kotlinx.coroutines.TimeoutCancellationException
 
 internal fun map(throwable: Throwable): LocalError {
@@ -48,7 +70,6 @@ internal fun map(throwable: Throwable): LocalError {
     }
 }
 
-// Entity to Domain mappings
 internal fun List<LaunchEntity>.toDomain(): List<Launch> =
     map { it.toDomain() }
 
@@ -168,7 +189,9 @@ private fun RocketEntity.toDomain(): Rocket =
             fullName = configurationFullName,
             variant = variant,
             families = null
-        )
+        ),
+        launcherStage = launcherStage?.map { it.toDomain() },
+        spacecraftStage = spacecraftStage?.map { it.toDomain() }
     )
 
 private fun MissionEntity.toDomain(): Mission =
@@ -178,7 +201,9 @@ private fun MissionEntity.toDomain(): Mission =
         type = type,
         description = description,
         orbit = orbit?.toDomain(),
-        agencies = agencies?.map { it.toDomain() }
+        agencies = agencies?.map { it.toDomain() },
+        infoUrls = infoUrls?.map { it.toDomain() },
+        vidUrls = vidUrls?.map { it.toDomain() }
     )
 
 private fun OrbitEntity.toDomain(): Orbit =
@@ -227,7 +252,6 @@ private fun ProgramEntity.toDomain(): Program =
         agencies = agencies?.map { it.toDomain() }
     )
 
-// Domain to Entity mappings
 internal fun List<Launch>.toEntity(): List<LaunchEntity> =
     map { it.toEntity() }
 
@@ -344,7 +368,9 @@ private fun Rocket.toEntity(): RocketEntity =
         configurationUrl = configuration?.url,
         configurationName = configuration?.name,
         configurationFullName = configuration?.fullName,
-        variant = configuration?.variant
+        variant = configuration?.variant,
+        launcherStage = launcherStage?.map { it.toEntity() },
+        spacecraftStage = spacecraftStage?.map { it.toEntity() }
     )
 
 private fun Mission.toEntity(): MissionEntity =
@@ -354,7 +380,9 @@ private fun Mission.toEntity(): MissionEntity =
         type = type,
         description = description,
         orbit = orbit?.toEntity(),
-        agencies = agencies?.mapNotNull { it?.toEntity() }
+        agencies = agencies?.mapNotNull { it?.toEntity() },
+        infoUrls = infoUrls?.map { it.toEntity() },
+        vidUrls = vidUrls?.map { it.toEntity() }
     )
 
 private fun Orbit.toEntity(): OrbitEntity =
@@ -393,7 +421,6 @@ private fun Program.toEntity(): ProgramEntity =
         agencies = agencies?.mapNotNull { it?.toEntity() }
     )
 
-// Entity to Domain for new fields
 private fun LaunchUpdateEntity.toDomain(): LaunchUpdate =
     LaunchUpdate(
         id = id,
@@ -478,3 +505,244 @@ private fun InfoUrl.toEntity() = InfoUrlEntity(
     featureImage = featureImage,
     url = url
 )
+
+private fun LauncherStageEntity.toDomain(): LauncherStage =
+    LauncherStage(
+        id = id,
+        type = type,
+        reused = reused,
+        launcherFlightNumber = launcherFlightNumber,
+        launcher = launcher?.toDomain(),
+        landing = landing?.toDomain(),
+        previousFlightDate = previousFlightDate,
+        turnAroundTime = turnAroundTime,
+        previousFlight = previousFlight?.toDomain()
+    )
+
+private fun LauncherStage.toEntity(): LauncherStageEntity =
+    LauncherStageEntity(
+        id = id,
+        type = type,
+        reused = reused,
+        launcherFlightNumber = launcherFlightNumber,
+        launcher = launcher?.toEntity(),
+        landing = landing?.toEntity(),
+        previousFlightDate = previousFlightDate,
+        turnAroundTime = turnAroundTime,
+        previousFlight = previousFlight?.toEntity()
+    )
+
+private fun LauncherEntity.toDomain(): Launcher =
+    Launcher(
+        id = id,
+        url = url,
+        flightProven = flightProven,
+        serialNumber = serialNumber,
+        status = status?.toDomainStatus(),
+        details = details,
+        image = image?.toDomain(),
+        successfulLandings = successfulLandings,
+        attemptedLandings = attemptedLandings,
+        flights = flights,
+        lastLaunchDate = lastLaunchDate,
+        firstLaunchDate = firstLaunchDate
+    )
+
+private fun Launcher.toEntity(): LauncherEntity =
+    LauncherEntity(
+        id = id,
+        url = url,
+        flightProven = flightProven,
+        serialNumber = serialNumber,
+        status = status?.toEntityStatus(),
+        details = details,
+        image = image?.toEntity(),
+        successfulLandings = successfulLandings,
+        attemptedLandings = attemptedLandings,
+        flights = flights,
+        lastLaunchDate = lastLaunchDate,
+        firstLaunchDate = firstLaunchDate
+    )
+
+private fun LandingEntity.toDomain(): Landing =
+    Landing(
+        id = id,
+        attempt = attempt,
+        success = success,
+        description = description,
+        location = location?.toDomain(),
+        type = type?.toDomain()
+    )
+
+private fun Landing.toEntity(): LandingEntity =
+    LandingEntity(
+        id = id,
+        attempt = attempt,
+        success = success,
+        description = description,
+        location = location?.toEntity(),
+        type = type?.toEntity()
+    )
+
+// LandingLocation mappings
+private fun LandingLocationEntity.toDomain(): LandingLocation =
+    LandingLocation(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )
+
+private fun LandingLocation.toEntity(): LandingLocationEntity =
+    LandingLocationEntity(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )
+
+private fun LandingTypeEntity.toDomain(): LandingType =
+    LandingType(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )
+
+private fun LandingType.toEntity(): LandingTypeEntity =
+    LandingTypeEntity(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )
+
+private fun PreviousFlightEntity.toDomain(): PreviousFlight =
+    PreviousFlight(
+        id = id,
+        name = name
+    )
+
+private fun PreviousFlight.toEntity(): PreviousFlightEntity =
+    PreviousFlightEntity(
+        id = id,
+        name = name
+    )
+
+private fun SpacecraftStageEntity.toDomain(): SpacecraftStage =
+    SpacecraftStage(
+        id = id,
+        url = url,
+        destination = destination,
+        missionEnd = missionEnd,
+        spacecraft = spacecraft?.toDomain(),
+        landing = landing?.toDomain()
+    )
+
+private fun SpacecraftStage.toEntity(): SpacecraftStageEntity =
+    SpacecraftStageEntity(
+        id = id,
+        url = url,
+        destination = destination,
+        missionEnd = missionEnd,
+        spacecraft = spacecraft?.toEntity(),
+        landing = landing?.toEntity()
+    )
+
+private fun SpacecraftEntity.toDomain(): Spacecraft =
+    Spacecraft(
+        id = id,
+        url = url,
+        name = name,
+        serialNumber = serialNumber,
+        status = status?.toDomain(),
+        description = description,
+        spacecraftConfig = spacecraftConfig?.toDomain()
+    )
+
+private fun Spacecraft.toEntity(): SpacecraftEntity =
+    SpacecraftEntity(
+        id = id,
+        url = url,
+        name = name,
+        serialNumber = serialNumber,
+        status = status?.toEntity(),
+        description = description,
+        spacecraftConfig = spacecraftConfig?.toEntity()
+    )
+
+private fun SpacecraftStatusEntity.toDomain(): SpacecraftStatus =
+    SpacecraftStatus(
+        id = id,
+        name = name
+    )
+
+private fun SpacecraftStatus.toEntity(): SpacecraftStatusEntity =
+    SpacecraftStatusEntity(
+        id = id,
+        name = name
+    )
+
+private fun SpacecraftConfigEntity.toDomain(): SpacecraftConfig =
+    SpacecraftConfig(
+        id = id,
+        url = url,
+        name = name,
+        type = type?.toDomain(),
+        agency = agency?.toDomain(),
+        inUse = inUse,
+        capability = capability,
+        history = history,
+        details = details,
+        maidenFlight = maidenFlight,
+        height = height,
+        diameter = diameter,
+        humanRated = humanRated,
+        crewCapacity = crewCapacity
+    )
+
+private fun SpacecraftConfig.toEntity(): SpacecraftConfigEntity =
+    SpacecraftConfigEntity(
+        id = id,
+        url = url,
+        name = name,
+        type = type?.toEntity(),
+        agency = agency?.toEntity(),
+        inUse = inUse,
+        capability = capability,
+        history = history,
+        details = details,
+        maidenFlight = maidenFlight,
+        height = height,
+        diameter = diameter,
+        humanRated = humanRated,
+        crewCapacity = crewCapacity
+    )
+
+private fun SpacecraftTypeEntity.toDomain(): SpacecraftType =
+    SpacecraftType(
+        id = id,
+        name = name
+    )
+
+private fun SpacecraftType.toEntity(): SpacecraftTypeEntity =
+    SpacecraftTypeEntity(
+        id = id,
+        name = name
+    )
+
+private fun LaunchStatusEntity.toDomainStatus(): Status =
+    Status(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )
+
+private fun Status.toEntityStatus(): LaunchStatusEntity =
+    LaunchStatusEntity(
+        id = id,
+        name = name,
+        abbrev = abbrev,
+        description = description
+    )

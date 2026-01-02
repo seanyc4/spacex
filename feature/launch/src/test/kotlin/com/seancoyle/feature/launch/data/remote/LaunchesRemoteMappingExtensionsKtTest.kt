@@ -2,10 +2,9 @@ package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.feature.launch.util.TestData
-import com.seancoyle.feature.launch.util.TestData.createImageDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchesDto
-import com.seancoyle.feature.launch.util.TestData.createNetPrecisionDto
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
@@ -13,7 +12,6 @@ import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class LaunchesRemoteMappingExtensionsKtTest {
@@ -27,7 +25,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_UNAUTHORIZED for 401 HttpException`() {
-        val response = Response.error<Any>(401, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(401, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_UNAUTHORIZED, result)
@@ -35,7 +33,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_FORBIDDEN for 403 HttpException`() {
-        val response = Response.error<Any>(403, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(403, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_FORBIDDEN, result)
@@ -43,7 +41,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_NOT_FOUND for 404 HttpException`() {
-        val response = Response.error<Any>(404, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(404, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_NOT_FOUND, result)
@@ -51,7 +49,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_TIMEOUT for 408 HttpException`() {
-        val response = Response.error<Any>(408, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(408, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_TIMEOUT, result)
@@ -59,7 +57,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_PAYLOAD_TOO_LARGE for 413 HttpException`() {
-        val response = Response.error<Any>(413, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(413, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_PAYLOAD_TOO_LARGE, result)
@@ -67,7 +65,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_INTERNAL_SERVER_ERROR for 500 HttpException`() {
-        val response = Response.error<Any>(500, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(500, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_INTERNAL_SERVER_ERROR, result)
@@ -75,7 +73,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `map should return NETWORK_UNKNOWN_ERROR for other HttpException codes`() {
-        val response = Response.error<Any>(503, okhttp3.ResponseBody.create(null, ""))
+        val response = Response.error<Any>(503, "".toResponseBody(null))
         val exception = HttpException(response)
         val result = map(exception)
         assertEquals(RemoteError.NETWORK_UNKNOWN_ERROR, result)
@@ -139,12 +137,20 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchDto toDomain should map all fields correctly`() {
+    fun `LaunchDto toDomain should map all fields correctly including rocket stages and nested objects`() {
         val updates = listOf(TestData.createLaunchUpdateDto())
         val infoUrls = listOf(TestData.createInfoUrlDto())
         val vidUrls = listOf(TestData.createVidUrlDto())
         val padTurnaround = "P1DT2H"
         val missionPatches = listOf(TestData.createMissionPatchDto())
+        val launcherStage = listOf(TestData.createLauncherStageDto())
+        val spacecraftStage = listOf(TestData.createSpacecraftStageDto())
+        val customNetPrecision = TestData.createNetPrecisionDto()
+        val customImage = TestData.createImageDto()
+        val rocketDto = TestData.createRocketDto(
+            launcherStage = launcherStage,
+            spacecraftStage = spacecraftStage
+        )
 
         val launchDto = createLaunchDto(
             id = "test-id",
@@ -166,7 +172,10 @@ class LaunchesRemoteMappingExtensionsKtTest {
             infoUrls = infoUrls,
             vidUrls = vidUrls,
             padTurnaround = padTurnaround,
-            missionPatches = missionPatches
+            missionPatches = missionPatches,
+            netPrecision = customNetPrecision,
+            image = customImage,
+            rocket = rocketDto
         )
 
         val launchesDto = createLaunchesDto(results = listOf(launchDto))
@@ -175,20 +184,19 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals(1, result.size)
         val launch = result[0]
 
+        // Assert basic fields
         assertEquals("test-id", launch.id)
         assertEquals("https://example.com/launch", launch.url)
         assertEquals("Test Launch", launch.missionName)
         assertEquals("2025-12-05T18:39:36Z", launch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", launch.net)
-        assertEquals("Minute", launch.netPrecision?.name)
         assertEquals("2025-12-13T09:34:00Z", launch.windowEnd)
         assertEquals("2025-12-13T05:34:00Z", launch.windowStart)
-        assertEquals("Starlink night fairing", launch.image?.name)
         assertEquals("https://example.com/info.png", launch.infographic)
         assertEquals(80, launch.probability)
         assertEquals("None", launch.weatherConcerns)
-        assertNull(launch.failReason)
-        assertEquals(launch.webcastLive, true)
+        assertEquals("Failed", launch.failReason)
+        assertEquals(true, launch.webcastLive)
         assertEquals(10, launch.orbitalLaunchAttemptCount)
         assertEquals(5, launch.locationLaunchAttemptCount)
         assertEquals(3, launch.padLaunchAttemptCount)
@@ -197,13 +205,47 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals(1, launch.locationLaunchAttemptCountYear)
         assertEquals(1, launch.padLaunchAttemptCountYear)
         assertEquals(4, launch.agencyLaunchAttemptCountYear)
+
+        // Assert status
         assertNotNull(launch.status)
-        assertEquals("Success", launch.status?.name)
+        assertEquals("Go for Launch", launch.status.name)
+
+        // Assert netPrecision
+        assertEquals("Minute", launch.netPrecision?.name)
+        assertEquals(1, launch.netPrecision?.id)
+        assertEquals("MIN", launch.netPrecision?.abbrev)
+        assertEquals("The T-0 is accurate to the minute.", launch.netPrecision?.description)
+
+        // Assert image
+        assertEquals("Starlink night fairing", launch.image.name)
+        assertEquals(1296, launch.image.id)
+        assertEquals(
+            "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+            launch.image.imageUrl
+        )
+        assertEquals(
+            "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192320.png",
+            launch.image.thumbnailUrl
+        )
+        assertEquals("SpaceX", launch.image.credit)
+
+        // Assert updates, infoUrls, vidUrls
         assertEquals(updates[0].comment, launch.updates?.get(0)?.comment)
         assertEquals(infoUrls[0].title, launch.infoUrls?.get(0)?.title)
         assertEquals(vidUrls[0].title, launch.vidUrls?.get(0)?.title)
+
+        // Assert padTurnaround and missionPatches
         assertEquals(padTurnaround, launch.padTurnaround)
         assertEquals(missionPatches[0].name, launch.missionPatches?.get(0)?.name)
+
+        // Assert rocket and stages
+        assertNotNull(launch.rocket)
+        assertNotNull(launch.rocket.launcherStage)
+        assertEquals(1, launch.rocket.launcherStage.size)
+        assertEquals(launcherStage[0].type, launch.rocket.launcherStage[0].type)
+        assertNotNull(launch.rocket.spacecraftStage)
+        assertEquals(1, launch.rocket.spacecraftStage.size)
+        assertEquals(spacecraftStage[0].destination, launch.rocket.spacecraftStage[0].destination)
     }
 
     @Test
@@ -224,47 +266,5 @@ class LaunchesRemoteMappingExtensionsKtTest {
         val result = launchesDto.toDomain()
 
         assertTrue(result.isEmpty())
-    }
-
-    @Test
-    fun `NetPrecisionDto toDomain should map all fields correctly`() {
-        val customNetPrecision = createNetPrecisionDto(
-            id = 1,
-            name = "Minute",
-            abbrev = "MIN",
-            description = "The T-0 is accurate to the minute."
-        )
-
-        val launchDto = createLaunchDto(netPrecision = customNetPrecision)
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
-        val result = launchesDto.toDomain()
-
-        assertNotNull(result[0].netPrecision)
-        assertEquals(1, result[0].netPrecision?.id)
-        assertEquals("Minute", result[0].netPrecision?.name)
-        assertEquals("MIN", result[0].netPrecision?.abbrev)
-        assertEquals("The T-0 is accurate to the minute.", result[0].netPrecision?.description)
-    }
-
-    @Test
-    fun `ImageDto toDomain should map all fields correctly`() {
-        val customImage = createImageDto(
-            id = 1296,
-            name = "Starlink night fairing",
-            imageUrl = "https://example.com/image.png",
-            thumbnailUrl = "https://example.com/thumb.png",
-            credit = "SpaceX"
-        )
-
-        val launchDto = createLaunchDto(image = customImage)
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
-        val result = launchesDto.toDomain()
-
-        assertNotNull(result[0].image)
-        assertEquals(1296, result[0].image.id)
-        assertEquals("Starlink night fairing", result[0].image.name)
-        assertEquals("https://example.com/image.png", result[0].image.imageUrl)
-        assertEquals("https://example.com/thumb.png", result[0].image.thumbnailUrl)
-        assertEquals("SpaceX", result[0].image.credit)
     }
 }

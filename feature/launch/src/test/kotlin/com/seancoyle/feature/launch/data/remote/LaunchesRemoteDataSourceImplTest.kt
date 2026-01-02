@@ -63,7 +63,7 @@ class LaunchesRemoteDataSourceImplTest {
             actualLaunch.url
         )
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.missionName)
-        assertEquals("Success", actualLaunch.status?.name)
+        assertEquals("Go for Launch", actualLaunch.status?.name)
         assertEquals("2025-12-05T18:39:36Z", actualLaunch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)
         assertEquals("Minute", actualLaunch.netPrecision?.name)

@@ -118,6 +118,12 @@ internal data class LaunchDto(
 
     @SerialName("mission_patches")
     val missionPatches: List<MissionPatchDto>?,
+
+    @SerialName("launcher_stage")
+    val launcherStage: List<LauncherStageDto>?,
+
+    @SerialName("spacecraft_stage")
+    val spacecraftStage: List<SpacecraftStageDto>?,
 )
 
 @Serializable
@@ -304,6 +310,12 @@ internal data class RocketDto(
 
     @SerialName("configuration")
     val configuration: ConfigurationDto?,
+
+    @SerialName("launcher_stage")
+    val launcherStage: List<LauncherStageDto>?,
+
+    @SerialName("spacecraft_stage")
+    val spacecraftStage: List<SpacecraftStageDto>?,
 )
 
 @Serializable
@@ -363,10 +375,10 @@ internal data class MissionDto(
     val agencies: List<AgencyDto>?,
 
     @SerialName("info_urls")
-    val infoUrls: List<String>?,
+    val infoUrls: List<InfoUrlDto>?,
 
     @SerialName("vid_urls")
-    val vidUrls: List<String>?,
+    val vidUrls: List<VidUrlDto>?,
 )
 
 @Serializable
@@ -611,4 +623,186 @@ internal data class InfoUrlDto(
     val featureImage: String?,
     @SerialName("url")
     val url: String?,
+)
+
+@Serializable
+internal data class LauncherStageDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("type")
+    val type: String?,
+    @SerialName("reused")
+    val reused: Boolean?,
+    @SerialName("launcher_flight_number")
+    val launcherFlightNumber: Int?,
+    @SerialName("launcher")
+    val launcher: LauncherDto?,
+    @SerialName("landing")
+    val landing: LandingDto?,
+    @SerialName("previous_flight_date")
+    val previousFlightDate: String?,
+    @SerialName("turn_around_time")
+    val turnAroundTime: String?,
+    @SerialName("previous_flight")
+    val previousFlight: PreviousFlightDto?,
+)
+
+@Serializable
+internal data class LauncherDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("url")
+    val url: String?,
+    @SerialName("flight_proven")
+    val flightProven: Boolean?,
+    @SerialName("serial_number")
+    val serialNumber: String?,
+    @SerialName("status")
+    val status: StatusDto?,
+    @SerialName("details")
+    val details: String?,
+    @SerialName("image")
+    val image: ImageDto?,
+    @SerialName("successful_landings")
+    val successfulLandings: Int?,
+    @SerialName("attempted_landings")
+    val attemptedLandings: Int?,
+    @SerialName("flights")
+    val flights: Int?,
+    @SerialName("last_launch_date")
+    val lastLaunchDate: String?,
+    @SerialName("first_launch_date")
+    val firstLaunchDate: String?,
+)
+
+@Serializable
+internal data class LandingDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("attempt")
+    val attempt: Boolean?,
+    @SerialName("success")
+    val success: Boolean?,
+    @SerialName("description")
+    val description: String?,
+    @SerialName("location")
+    val location: LandingLocationDto?,
+    @SerialName("type")
+    val type: LandingTypeDto?,
+)
+
+@Serializable
+internal data class LandingLocationDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("name")
+    val name: String?,
+    @SerialName("abbrev")
+    val abbrev: String?,
+    @SerialName("description")
+    val description: String?,
+)
+
+@Serializable
+internal data class LandingTypeDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("name")
+    val name: String?,
+    @SerialName("abbrev")
+    val abbrev: String?,
+    @SerialName("description")
+    val description: String?,
+)
+
+@Serializable
+internal data class PreviousFlightDto(
+    @SerialName("id")
+    val id: String?,
+    @SerialName("name")
+    val name: String?,
+)
+
+@Serializable
+internal data class SpacecraftStageDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("url")
+    val url: String?,
+    @SerialName("destination")
+    val destination: String?,
+    @SerialName("mission_end")
+    val missionEnd: String?,
+    @SerialName("spacecraft")
+    val spacecraft: SpacecraftDto?,
+    @SerialName("landing")
+    val landing: LandingDto?,
+)
+
+@Serializable
+internal data class SpacecraftDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("url")
+    val url: String?,
+    @SerialName("name")
+    val name: String?,
+    @SerialName("serial_number")
+    val serialNumber: String?,
+    @SerialName("status")
+    val status: SpacecraftStatusDto?,
+    @SerialName("description")
+    val description: String?,
+    @SerialName("spacecraft_config")
+    val spacecraftConfig: SpacecraftConfigDto?,
+)
+
+@Serializable
+internal data class SpacecraftStatusDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("name")
+    val name: String?,
+)
+
+@Serializable
+internal data class SpacecraftConfigDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("url")
+    val url: String?,
+    @SerialName("name")
+    val name: String?,
+    @SerialName("type")
+    val type: SpacecraftTypeDto?,
+    @SerialName("agency")
+    val agency: AgencyDto?,
+    @SerialName("in_use")
+    val inUse: Boolean?,
+    @SerialName("capability")
+    val capability: String?,
+    @SerialName("history")
+    val history: String?,
+    @SerialName("details")
+    val details: String?,
+    @SerialName("maiden_flight")
+    val maidenFlight: String?,
+    @SerialName("height")
+    val height: Double?,
+
+    @SerialName("diameter")
+    val diameter: Double?,
+
+    @SerialName("human_rated")
+    val humanRated: Boolean?,
+    @SerialName("crew_capacity")
+    val crewCapacity: Int?,
+)
+
+@Serializable
+internal data class SpacecraftTypeDto(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("name")
+    val name: String?,
 )

@@ -73,12 +73,65 @@ internal fun previewData() = LaunchUI(
         id = 123,
         configuration = Configuration(
             id = 164,
-            url = "https://ll.thespacedevs.com/2.2.0/config/launcher/164/",
+            url = "https://ll.thespacedevs.com/2.3.0/config/launcher/164/",
             name = "Falcon 9",
             fullName = "Falcon 9 Block 5",
             variant = "Block 5",
             families = null
-        )
+        ),
+        launcherStage = listOf(
+            LauncherStage(
+                id = 826,
+                type = "Core",
+                reused = true,
+                launcherFlightNumber = 6,
+                launcher = Launcher(
+                    id = 187,
+                    url = "https://lldev.thespacedevs.com/2.3.0/launchers/187/",
+                    flightProven = true,
+                    serialNumber = "B1062",
+                    status = Status(id = 3, name = "active", abbrev = "ACT", description = "Active booster"),
+                    details = "Falcon 9 Block 5 booster",
+                    image = Image(
+                        id = 1,
+                        name = "Falcon 9",
+                        imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launcher_images/falcon25209_image_20230807133459.jpeg",
+                        thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launcher_images/falcon25209_image_20230807133459.jpeg",
+                        credit = "SpaceX"
+                    ),
+                    successfulLandings = 6,
+                    attemptedLandings = 6,
+                    flights = 6,
+                    lastLaunchDate = "2025-12-20T14:15:00Z",
+                    firstLaunchDate = "2024-10-23T15:27:00Z"
+                ),
+                landing = Landing(
+                    id = 1719,
+                    attempt = true,
+                    success = true,
+                    description = "The Falcon 9 booster B1062 has landed on the droneship.",
+                    location = LandingLocation(
+                        id = 11,
+                        name = "ASDS - Just Read the Instructions",
+                        abbrev = "JRTI",
+                        description = "Autonomous spaceport drone ship"
+                    ),
+                    type = LandingType(
+                        id = 1,
+                        name = "Autonomous Spaceport Drone Ship",
+                        abbrev = "ASDS",
+                        description = "Landing on a floating platform"
+                    )
+                ),
+                previousFlightDate = "2025-09-18T13:00:00Z",
+                turnAroundTime = "P93DT1H15M",
+                previousFlight = PreviousFlight(
+                    id = "92ec4610-4576-4077-b538-65272a5d6491",
+                    name = "Falcon 9 Block 5 | Starlink Group 15-11"
+                )
+            )
+        ),
+        spacecraftStage = null
     ),
     mission = Mission(
         id = 456,
@@ -90,7 +143,9 @@ internal fun previewData() = LaunchUI(
             name = "Low Earth Orbit",
             abbrev = "LEO"
         ),
-        agencies = emptyList()
+        agencies = emptyList(),
+        infoUrls = emptyList(),
+        vidUrls = emptyList()
     ),
     pad = Pad(
         id = 87,
