@@ -809,7 +809,19 @@ data class ConfigurationEntity(
     val successfulLaunches: Int?,
 
     @ColumnInfo(name = "failed_launches")
-    val failedLaunches: Int?
+    val failedLaunches: Int?,
+
+    @ColumnInfo(name = "length")
+    val length: Double?,
+
+    @ColumnInfo(name = "diameter")
+    val diameter: Double?,
+
+    @ColumnInfo(name = "launch_mass")
+    val launchMass: Double?,
+
+    @ColumnInfo(name = "maiden_flight")
+    val maidenFlight: String?,
 )
 
 @Keep

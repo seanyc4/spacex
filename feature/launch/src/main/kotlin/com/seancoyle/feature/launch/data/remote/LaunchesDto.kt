@@ -358,6 +358,18 @@ internal data class ConfigurationDto(
 
     @SerialName("failed_launches")
     val failedLaunches: Int?,
+
+    @SerialName("length")
+    val length: Double?,
+
+    @SerialName("diameter")
+    val diameter: Double?,
+
+    @SerialName("launch_mass")
+    val launchMass: Double?,
+
+    @SerialName("maiden_flight")
+    val maidenFlight: String?,
 )
 
 @Serializable

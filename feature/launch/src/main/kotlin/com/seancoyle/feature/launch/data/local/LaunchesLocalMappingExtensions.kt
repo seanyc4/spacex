@@ -196,7 +196,11 @@ private fun ConfigurationEntity.toDomain(): Configuration =
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
 private fun FamilyEntity.toDomain(): Family =
@@ -423,7 +427,11 @@ private fun Configuration.toEntity(): ConfigurationEntity =
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
 private fun Family.toEntity(): FamilyEntity =

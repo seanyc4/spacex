@@ -102,7 +102,11 @@ internal fun previewData() = LaunchUI(
             alias = "F9",
             totalLaunchCount = 300,
             successfulLaunches = 290,
-            failedLaunches = 10
+            failedLaunches = 10,
+            length = 56.3,
+            diameter = 3.35,
+            maidenFlight = "2007-05-13",
+            launchMass = 456.0
         ),
         launcherStage = listOf(
             LauncherStage(

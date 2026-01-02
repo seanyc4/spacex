@@ -185,7 +185,11 @@ private fun ConfigurationDto.toDomain() =
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
 private fun FamilyDto.toDomain() =

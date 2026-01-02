@@ -185,7 +185,11 @@ internal object TestData {
         alias: String? = "F9",
         totalLaunchCount: Int? = 300,
         successfulLaunches: Int? = 290,
-        failedLaunches: Int? = 10
+        failedLaunches: Int? = 10,
+        length: Double? = 56.3,
+        diameter: Double? = 3.75,
+        maidenFlight: String? = "2010-06-04",
+        launchMass: Double? = 456.0
     ) = ConfigurationDto(
         id = id,
         url = url,
@@ -200,7 +204,11 @@ internal object TestData {
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
     fun createOrbitDto(
@@ -1202,7 +1210,11 @@ internal object TestData {
         alias: String? = "F9",
         totalLaunchCount: Int? = 300,
         successfulLaunches: Int? = 290,
-        failedLaunches: Int? = 10
+        failedLaunches: Int? = 10,
+        length: Double? = 56.3,
+        diameter: Double? = 3.75,
+        maidenFlight: String? = "2010-06-04",
+        launchMass: Double? = 456.0
     ) = ConfigurationEntity(
         id = id,
         url = url,
@@ -1217,7 +1229,11 @@ internal object TestData {
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
     fun createRocketEntity(
@@ -1470,7 +1486,11 @@ internal object TestData {
         alias: String? = "F9",
         totalLaunchCount: Int? = 300,
         successfulLaunches: Int? = 290,
-        failedLaunches: Int? = 10
+        failedLaunches: Int? = 10,
+        length: Double? = 56.3,
+        diameter: Double? = 3.75,
+        maidenFlight: String? = "2010-06-04",
+        launchMass: Double? = 456.0
     ) = Configuration(
         id = id,
         url = url,
@@ -1485,7 +1505,11 @@ internal object TestData {
         alias = alias,
         totalLaunchCount = totalLaunchCount,
         successfulLaunches = successfulLaunches,
-        failedLaunches = failedLaunches
+        failedLaunches = failedLaunches,
+        length = length,
+        diameter = diameter,
+        maidenFlight = maidenFlight,
+        launchMass = launchMass
     )
 
     fun createOrbit(

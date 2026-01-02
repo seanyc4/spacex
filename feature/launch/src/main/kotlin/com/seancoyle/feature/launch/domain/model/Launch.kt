@@ -120,7 +120,11 @@ data class Configuration(
     val alias: String?,
     val totalLaunchCount: Int?,
     val successfulLaunches: Int?,
-    val failedLaunches: Int?
+    val failedLaunches: Int?,
+    val length: Double?,
+    val diameter: Double?,
+    val launchMass: Double?,
+    val maidenFlight: String?,
 )
 
 data class Family(
