@@ -77,7 +77,7 @@ internal fun previewData() = LaunchUI(
             name = "Falcon 9",
             fullName = "Falcon 9 Block 5",
             variant = "Block 5",
-            families = null
+            families = listOf(Family(id = 1, name = "Falcon"))
         ),
         launcherStage = listOf(
             LauncherStage(
@@ -131,7 +131,39 @@ internal fun previewData() = LaunchUI(
                 )
             )
         ),
-        spacecraftStage = null
+        spacecraftStage = listOf(
+            SpacecraftStage(
+                id = 1,
+                url = "https://ll.thespacedevs.com/2.3.0/spacecraft_stage/1/",
+                destination = "International Space Station",
+                missionEnd = "2026-01-16T12:00:00Z",
+                spacecraft = Spacecraft(
+                    id = 1,
+                    url = "https://ll.thespacedevs.com/2.3.0/spacecraft/1/",
+                    name = "Dragon C208",
+                    serialNumber = "C208",
+                    status = SpacecraftStatus(id = 1, name = "Active"),
+                    description = "Dragon spacecraft for cargo missions",
+                    spacecraftConfig = SpacecraftConfig(
+                        id = 1,
+                        url = "https://ll.thespacedevs.com/2.3.0/config/spacecraft/1/",
+                        name = "Dragon 2",
+                        type = SpacecraftType(id = 1, name = "Cargo"),
+                        agency = null,
+                        inUse = true,
+                        capability = "Cargo and Crew Transport",
+                        history = "Dragon 2 is a class of reusable spacecraft developed and manufactured by SpaceX.",
+                        details = "Dragon 2 can carry up to 7 passengers to and from Earth orbit, and beyond.",
+                        maidenFlight = "2019-03-02T07:49:00Z",
+                        height = 8.1,
+                        diameter = 4.0,
+                        humanRated = true,
+                        crewCapacity = 7
+                    )
+                ),
+                landing = null
+            )
+        )
     ),
     mission = Mission(
         id = 456,
@@ -150,26 +182,52 @@ internal fun previewData() = LaunchUI(
     pad = Pad(
         id = 87,
         url = "https://ll.thespacedevs.com/2.2.0/pad/87/",
+        agencies = emptyList(),
         name = "Space Launch Complex 40",
+        image = Image(
+            id = 3,
+            name = "Pad Image",
+            imageUrl = "https://example.com/pad_image.png",
+            thumbnailUrl = "https://example.com/pad_image_thumb.png",
+            credit = "SpaceX"
+        ),
+        description = "Cape Canaveral SLC-40",
+        country = Country(
+            id = 1,
+            name = "United States",
+            alpha2Code = "US",
+            alpha3Code = "USA",
+            nationalityName = "American"
+        ),
+        latitude = 28.56194122,
+        longitude = -80.57735736,
+        mapUrl = null,
+        mapImage = null,
+        wikiUrl = null,
+        infoUrl = null,
+        totalLaunchCount = null,
+        orbitalLaunchAttemptCount = null,
+        fastestTurnaround = null,
         location = Location(
             id = 12,
             url = "https://ll.thespacedevs.com/2.2.0/location/12/",
             name = "Cape Canaveral, FL, USA",
-            description = "Cape Canaveral Space Force Station",
-            timezoneName = "America/New_York",
-            totalLaunchCount = null,
             country = Country(
                 id = 1,
                 name = "United States",
                 alpha2Code = "US",
                 alpha3Code = "USA",
                 nationalityName = "American"
-            )
-        ),
-        latitude = 28.56194122,
-        longitude = -80.57735736,
-        mapUrl = null,
-        totalLaunchCount = null
+            ),
+            description = "Cape Canaveral Space Force Station",
+            image = null,
+            mapImage = null,
+            longitude = -80.57735736,
+            latitude = 28.56194122,
+            timezoneName = "America/New_York",
+            totalLaunchCount = null,
+            totalLandingCount = null
+        )
     ),
     updates = listOf(
         LaunchUpdate(
@@ -205,6 +263,20 @@ internal fun previewData() = LaunchUI(
             url = "https://en.wikipedia.org/wiki/Falcon_9",
             source = "Wikipedia",
             featureImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/F9_maiden_launch_cropped.jpg/800px-F9_maiden_launch_cropped.jpg"
+        )
+    ),
+    vidUrls = listOf(
+        VidUrl(
+            priority = 1,
+            source = "YouTube",
+            publisher = "SpaceX",
+            title = "Starlink Mission",
+            description = "Live coverage of Falcon 9 launch",
+            featureImage = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+            url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
+            startTime = "2026-01-15T10:00:00Z",
+            endTime = "2026-01-15T12:00:00Z",
+            live = false
         )
     ),
     missionPatches = listOf(
@@ -313,20 +385,6 @@ internal fun previewData() = LaunchUI(
                 infoUrl = "https://www.spacex.com",
                 wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
             )
-        )
-    ),
-    vidUrls = listOf(
-        VidUrl(
-            priority = 1,
-            source = "YouTube",
-            publisher = "SpaceX",
-            title = "Starlink Mission",
-            description = "Live coverage of Falcon 9 launch",
-            featureImage = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-            url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-            startTime = "2026-01-15T10:00:00Z",
-            endTime = "2026-01-15T12:00:00Z",
-            live = false
         )
     )
 )

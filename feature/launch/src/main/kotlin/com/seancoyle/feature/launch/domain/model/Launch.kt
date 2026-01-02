@@ -141,12 +141,21 @@ data class Orbit(
 data class Pad(
     val id: Int?,
     val url: String?,
+    val agencies: List<Agency>?,
     val name: String?,
-    val location: Location?,
+    val image: Image,
+    val description: String?,
+    val country: Country?,
     val latitude: Double?,
     val longitude: Double?,
     val mapUrl: String?,
-    val totalLaunchCount: Int?
+    val mapImage: String?,
+    val wikiUrl: String?,
+    val infoUrl: String?,
+    val totalLaunchCount: Int?,
+    val orbitalLaunchAttemptCount: Int?,
+    val fastestTurnaround: String?,
+    val location: Location?,
 )
 
 data class Location(
@@ -155,8 +164,13 @@ data class Location(
     val name: String?,
     val country: Country?,
     val description: String?,
+    val image: Image?,
+    val mapImage: String?,
+    val longitude: Double?,
+    val latitude: Double?,
     val timezoneName: String?,
-    val totalLaunchCount: Int?
+    val totalLaunchCount: Int?,
+    val totalLandingCount: Int?,
 )
 
 data class Program(
@@ -228,7 +242,7 @@ data class Launcher(
     val serialNumber: String?,
     val status: Status?,
     val details: String?,
-    val image: Image?,
+    val image: Image,
     val successfulLandings: Int?,
     val attemptedLandings: Int?,
     val flights: Int?,

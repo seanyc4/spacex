@@ -452,9 +452,6 @@ internal data class PadDto(
 
 @Serializable
 internal data class LocationDto(
-    @SerialName("response_mode")
-    val responseMode: String?,
-
     @SerialName("id")
     val id: Int?,
 
@@ -497,9 +494,6 @@ internal data class LocationDto(
 
 @Serializable
 internal data class ProgramDto(
-    @SerialName("response_mode")
-    val responseMode: String?,
-
     @SerialName("id")
     val id: Int?,
 

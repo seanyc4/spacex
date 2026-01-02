@@ -210,12 +210,21 @@ private fun PadDto.toDomain() =
     Pad(
         id = id,
         url = url,
+        agencies = agencies?.map { it.toDomain() },
         name = name,
-        location = location?.toDomain(),
+        image = image?.toDomain() ?: defaultImage(),
+        description = description,
+        country = country?.toDomain(),
         latitude = latitude,
         longitude = longitude,
         mapUrl = mapUrl,
-        totalLaunchCount = totalLaunchCount
+        mapImage = mapImage,
+        wikiUrl = wikiUrl,
+        infoUrl = infoUrl,
+        totalLaunchCount = totalLaunchCount,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        fastestTurnaround = fastestTurnaround,
+        location = location?.toDomain()
     )
 
 private fun LocationDto.toDomain() =
@@ -225,8 +234,13 @@ private fun LocationDto.toDomain() =
         name = name,
         country = country?.toDomain(),
         description = description,
+        image = image?.toDomain(),
+        mapImage = mapImage,
+        longitude = longitude,
+        latitude = latitude,
         timezoneName = timezoneName,
-        totalLaunchCount = totalLaunchCount
+        totalLaunchCount = totalLaunchCount,
+        totalLandingCount = totalLandingCount
     )
 
 private fun CountryDto.toDomain() =
@@ -320,7 +334,7 @@ private fun LauncherDto.toDomain() = Launcher(
     serialNumber = serialNumber,
     status = status?.toDomainStatus(),
     details = details,
-    image = image?.toDomain(),
+    image = image?.toDomain() ?: defaultImage(),
     successfulLandings = successfulLandings,
     attemptedLandings = attemptedLandings,
     flights = flights,

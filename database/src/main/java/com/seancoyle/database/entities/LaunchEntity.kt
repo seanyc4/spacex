@@ -319,6 +319,46 @@ data class PadEntity(
     @ColumnInfo(name = "name")
     val name: String?,
 
+    @ColumnInfo(name = "agency")
+    @field:TypeConverters(AgencyListConverter::class)
+    val agencies: List<AgencyEntity>?,
+
+    @Embedded(prefix = "pad_image")
+    val image: ImageEntity,
+
+    @Embedded(prefix = "country")
+    val country: CountryEntity?,
+
+    @ColumnInfo(name = "description")
+    val description: String?,
+
+    @ColumnInfo(name = "info_url")
+    val infoUrl: String?,
+
+    @ColumnInfo(name = "wiki_url")
+    val wikiUrl: String?,
+
+    @ColumnInfo(name = "map_url")
+    val mapUrl: String?,
+
+    @ColumnInfo(name = "map_image")
+    val mapImage: String?,
+
+    @ColumnInfo(name = "latitude")
+    val latitude: Double?,
+
+    @ColumnInfo(name = "longitude")
+    val longitude: Double?,
+
+    @ColumnInfo(name = "total_launch_count")
+    val totalLaunchCount: Int?,
+
+    @ColumnInfo(name = "orbital_launch_attempt_count")
+    val orbitalLaunchAttemptCount: Int?,
+
+    @ColumnInfo(name = "fastest_turnaround")
+    val fastestTurnaround: String?,
+
     @ColumnInfo(name = "location_id")
     val locationId: Int?,
 
@@ -337,17 +377,17 @@ data class PadEntity(
     @ColumnInfo(name = "location_total_launch_count")
     val locationTotalLaunchCount: Int?,
 
-    @ColumnInfo(name = "latitude")
-    val latitude: Double?,
+    @ColumnInfo(name = "location_total_landing_count")
+    val locationTotalLandingCount: Int?,
 
-    @ColumnInfo(name = "longitude")
-    val longitude: Double?,
+    @ColumnInfo(name = "location_longitude")
+    val locationLongitude: Double?,
 
-    @ColumnInfo(name = "map_url")
-    val mapUrl: String?,
+    @ColumnInfo(name = "location_latitude")
+    val locationLatitude: Double?,
 
-    @ColumnInfo(name = "total_launch_count")
-    val totalLaunchCount: Int?
+    @ColumnInfo(name = "location_map_image")
+    val locationMapImage: String?
 )
 
 @Keep
@@ -567,7 +607,7 @@ data class LauncherEntity(
     @ColumnInfo(name = "details")
     val details: String?,
     @ColumnInfo(name = "image")
-    val image: ImageEntity?,
+    val image: ImageEntity,
     @ColumnInfo(name = "successful_landings")
     val successfulLandings: Int?,
     @ColumnInfo(name = "attempted_landings")

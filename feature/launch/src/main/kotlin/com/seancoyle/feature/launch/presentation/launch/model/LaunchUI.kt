@@ -9,7 +9,6 @@ import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.domain.model.Pad
 import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.VidUrl
-import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 
 data class LaunchUI(
     val id: String,
