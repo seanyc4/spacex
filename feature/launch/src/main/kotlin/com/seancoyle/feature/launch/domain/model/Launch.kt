@@ -3,7 +3,7 @@ package com.seancoyle.feature.launch.domain.model
 data class Launch(
     val id: String,
     val url: String?,
-    val missionName: String?,
+    val missionName: String,
     val lastUpdated: String?,
     val net: String?,
     val netPrecision: NetPrecision?,

@@ -40,8 +40,7 @@ internal fun LaunchSiteSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = Dimens.dp8),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
         // Launch Site Information Card

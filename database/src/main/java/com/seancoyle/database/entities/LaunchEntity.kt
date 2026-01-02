@@ -28,7 +28,7 @@ data class LaunchEntity(
     val url: String?,
 
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "last_updated")
     val lastUpdated: String?,

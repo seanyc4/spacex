@@ -32,7 +32,8 @@ fun Chip(
             AppText.labelMedium(
                 text = text,
                 fontWeight = FontWeight.SemiBold,
-                color = contentColor
+                color = contentColor,
+                maxLines = 1
             )
         },
         leadingIcon = {

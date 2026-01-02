@@ -21,7 +21,7 @@ class LaunchUiMapper @Inject constructor(
             val windowEnd = windowEnd?.let { dateFormatter.formatDate(it) }
             return LaunchUI(
                 id = id,
-                missionName = missionName.orEmpty(),
+                missionName = missionName.substringBefore("|").trim(),
                 launchDate = formatDate(locateDateTime),
                 status = status.toDomain(),
                 windowEnd = formatDate(windowEnd, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
@@ -46,7 +46,7 @@ class LaunchUiMapper @Inject constructor(
             return LaunchesUi(
                 id = id,
                 launchDate = formatDate(locateDateTime),
-                missionName = missionName.orEmpty(),
+                missionName = missionName,
                 status = status.toDomain(),
                 image = image.thumbnailUrl
             )
