@@ -97,11 +97,6 @@ private fun SuccessState(
             item { RocketSection(rocket = launch.rocket) }
         }
 
-        if (launch.mission != null) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { MissionSection(mission = launch.mission) }
-        }
-
         if (launch.pad != null) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { PadSection(pad = launch.pad) }
