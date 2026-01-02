@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -18,13 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -40,6 +38,8 @@ import com.seancoyle.feature.launch.domain.model.Launcher
 import com.seancoyle.feature.launch.domain.model.LauncherStage
 import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.domain.model.Family
+import com.seancoyle.feature.launch.domain.model.SpacecraftStage
 
 @Composable
 internal fun RocketSection(
@@ -48,18 +48,12 @@ internal fun RocketSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = Dimens.dp8),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
-        // Header with image
+        // Main Configuration Card with integrated image
         rocket.configuration?.let { config ->
-            RocketHeader(config = config)
-        }
-
-        // Configuration Details Card
-        rocket.configuration?.let { config ->
-            ConfigurationCard(config = config)
+            RocketConfigurationCard(config = config)
         }
 
         // Launcher Stages
@@ -76,111 +70,83 @@ internal fun RocketSection(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-private fun RocketHeader(
-    config: Configuration,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.dp16),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(Dimens.dp16)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(240.dp)
-        ) {
-            // Rocket Image
-            GlideImage(
-                model = config.image?.imageUrl ?: "",
-                contentDescription = "Rocket ${config.name}",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-                failure = placeholder(R.drawable.default_launch_hero_image)
-            )
-
-            // Gradient overlay
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Black.copy(alpha = 0.7f)
-                            )
-                        )
-                    )
-            )
-
-            // Title overlay
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(Dimens.dp24)
-            ) {
-                AppText.headlineMedium(
-                    text = config.fullName ?: config.name ?: "Unknown Rocket",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                config.variant?.let {
-                    Spacer(modifier = Modifier.height(Dimens.dp8))
-                    AppText.bodyLarge(
-                        text = it,
-                        color = Color.White.copy(alpha = 0.9f)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ConfigurationCard(
+private fun RocketConfigurationCard(
     config: Configuration,
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+            // Section Title
             SectionTitle(text = "Rocket Configuration")
+
+            // Rocket Image
+            config.image?.imageUrl?.let { imageUrl ->
+                GlideImage(
+                    model = imageUrl,
+                    contentDescription = "Rocket ${config.name}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(Dimens.dp12)),
+                    failure = placeholder(R.drawable.default_launch_hero_image)
+                )
+            }
+
+            // Rocket Name & Variant
+            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp4)) {
+                AppText.titleLarge(
+                    text = config.fullName ?: config.name ?: "Unknown Rocket",
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface
+                )
+
+                if (!config.variant.isNullOrEmpty()) {
+                    AppText.bodyLarge(
+                        text = config.variant,
+                        color = AppTheme.colors.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                if (!config.alias.isNullOrEmpty()) {
+                    AppText.bodyMedium(
+                        text = "Also known as: ${config.alias}",
+                        color = AppTheme.colors.onSurfaceVariant
+                    )
+                }
+            }
 
             // Description
             config.description?.let { desc ->
                 AppText.bodyMedium(
                     text = desc,
                     color = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = Dimens.dp8)
+                    modifier = Modifier.padding(vertical = Dimens.dp8)
                 )
             }
 
-            // Stats Grid
+            HorizontalDivider(
+                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+            )
+
+            // Launch Statistics
+            AppText.titleMedium(
+                text = "Launch Statistics",
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.onSurface
+            )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.spacedBy(Dimens.dp12)
             ) {
                 config.totalLaunchCount?.let {
                     StatItem(
                         value = it.toString(),
                         label = "Total Launches",
-                        icon = Icons.Default.Star
-                    )
-                }
-
-                config.successfulLaunches?.let {
-                    StatItem(
-                        value = it.toString(),
-                        label = "Successful",
-                        icon = Icons.Default.CheckCircle,
-                        valueColor = Color(0xFF4CAF50)
+                        icon = Icons.Default.Star,
+                        modifier = Modifier.weight(1f)
                     )
                 }
 
@@ -190,78 +156,306 @@ private fun ConfigurationCard(
                             value = it.toString(),
                             label = "Failed",
                             icon = Icons.Default.Warning,
-                            valueColor = Color(0xFFF44336)
+                            valueColor = Color(0xFFF44336),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                config.successfulLaunches?.let {
+                    StatItem(
+                        value = it.toString(),
+                        label = "Successful",
+                        icon = Icons.Default.CheckCircle,
+                        valueColor = Color(0xFF4CAF50),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            HorizontalDivider(
+                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+            )
+
+            // Physical Specifications
+            AppText.titleMedium(
+                text = "Physical Specifications",
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.onSurface
+            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                ) {
+                    config.length?.let { length ->
+                        PhysicalSpecItem(
+                            label = "Length",
+                            value = String.format("%.1f m", length),
+                            icon = Icons.Default.ArrowUpward,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    config.diameter?.let { diameter ->
+                        PhysicalSpecItem(
+                            label = "Diameter",
+                            value = String.format("%.1f m", diameter),
+                            icon = Icons.Default.Info,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                config.launchMass?.let { mass ->
+                    PhysicalSpecItem(
+                        label = "Launch Mass",
+                        value = String.format("%.0f kg", mass),
+                        icon = Icons.Default.Build
+                    )
+                }
+            }
+
+            HorizontalDivider(
+                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+            )
+
+            // Manufacturer & History
+            AppText.titleMedium(
+                text = "Manufacturer & History",
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.onSurface
+            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
+                config.manufacturer?.let { manufacturer ->
+                    DetailRow(
+                        label = "Manufacturer",
+                        value = manufacturer.name ?: "Unknown",
+                        icon = Icons.Default.Build
+                    )
+
+                    manufacturer.country?.firstOrNull()?.name?.let { country ->
+                        DetailRow(
+                            label = "Built In",
+                            value = country,
+                            icon = Icons.Default.Place
+                        )
+                    }
+
+                    manufacturer.foundingYear?.let { year ->
+                        DetailRow(
+                            label = "Company Founded",
+                            value = year.toString(),
+                            icon = Icons.Default.DateRange
+                        )
+                    }
+                }
+
+                config.maidenFlight?.let { maidenFlight ->
+                    DetailRow(
+                        label = "Maiden Flight",
+                        value = maidenFlight,
+                        icon = Icons.Default.Star
+                    )
+                }
+            }
+
+            // Rocket Families
+            if (!config.families.isNullOrEmpty()) {
+                HorizontalDivider(
+                    color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+                )
+
+                AppText.titleMedium(
+                    text = "Rocket Family",
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface
+                )
+
+                config.families.forEach { family ->
+                    RocketFamilyCard(family = family)
+                }
+            }
+
+            // External Links
+            val context = LocalContext.current
+            val hasLinks = config.wikiUrl != null || config.manufacturer?.wikiUrl != null
+
+            if (hasLinks) {
+                HorizontalDivider(
+                    color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+                )
+
+                AppText.titleMedium(
+                    text = "Learn More",
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp8)) {
+                    config.wikiUrl?.let { wikiUrl ->
+                        LinkButton(
+                            text = "Rocket on Wikipedia",
+                            icon = Icons.Default.Info,
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+
+                    config.manufacturer?.wikiUrl?.let { wikiUrl ->
+                        LinkButton(
+                            text = "Manufacturer on Wikipedia",
+                            icon = Icons.Default.Build,
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+
+                    config.manufacturer?.infoUrl?.let { infoUrl ->
+                        LinkButton(
+                            text = "Manufacturer Website",
+                            icon = Icons.Default.AccountCircle,
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(infoUrl))
+                                context.startActivity(intent)
+                            }
                         )
                     }
                 }
             }
+        }
+    }
+}
 
-            // Rocket Details
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = Dimens.dp8),
-                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
-            )
-
-            config.name?.let {
-                DetailRow(
-                    label = "Rocket Name",
-                    value = it,
-                    icon = Icons.Default.Star
+@Composable
+private fun RocketFamilyCard(
+    family: Family,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        shape = RoundedCornerShape(Dimens.dp12)
+    ) {
+        Column(
+            modifier = Modifier.padding(Dimens.dp16),
+            verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+        ) {
+            family.name?.let { name ->
+                AppText.titleSmall(
+                    text = name,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface
                 )
             }
 
-            config.alias?.let {
-                DetailRow(
-                    label = "Alias",
-                    value = it,
-                    icon = Icons.Default.Info
-                )
-            }
-
-            config.manufacturer?.name?.let {
-                DetailRow(
-                    label = "Manufacturer",
-                    value = it,
-                    icon = Icons.Default.Build
-                )
-            }
-
-            // Families
-            if (!config.families.isNullOrEmpty()) {
-                Spacer(modifier = Modifier.height(Dimens.dp8))
-                AppText.labelLarge(
-                    text = "Rocket Families",
-                    fontWeight = FontWeight.SemiBold,
+            family.description?.let { desc ->
+                AppText.bodySmall(
+                    text = desc,
                     color = AppTheme.colors.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(Dimens.dp8))
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            }
+
+            family.maidenFlight?.let { maidenFlight ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    items(config.families.size) { index ->
-                        val family = config.families[index]
-                        family.name?.let { familyName ->
-                            Chip(
-                                text = familyName,
-                                contentColor = AppTheme.colors.primary,
-                                containerColor = AppTheme.colors.primary
-                            )
-                        }
-                    }
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = AppTheme.colors.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    AppText.bodySmall(
+                        text = "Maiden Flight: $maidenFlight",
+                        color = AppTheme.colors.onSurfaceVariant
+                    )
                 }
             }
 
-            // Links
-            val context = LocalContext.current
-            config.wikiUrl?.let { wikiUrl ->
-                Spacer(modifier = Modifier.height(Dimens.dp8))
-                LinkButton(
-                    text = "View on Wikipedia",
-                    icon = Icons.Default.Info,
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
-                        context.startActivity(intent)
-                    }
+            // Family Stats
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.dp8),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                family.totalLaunchCount?.let {
+                    MiniStatItem(
+                        value = it.toString(),
+                        label = "Launches",
+                        icon = Icons.Default.Star
+                    )
+                }
+
+                family.successfulLaunches?.let {
+                    MiniStatItem(
+                        value = it.toString(),
+                        label = "Successful",
+                        icon = Icons.Default.CheckCircle,
+                        iconTint = Color(0xFF4CAF50)
+                    )
+                }
+
+                family.active?.let { isActive ->
+                    MiniStatItem(
+                        value = if (isActive) "YES" else "NO",
+                        label = "Active",
+                        icon = Icons.Default.CheckCircle,
+                        iconTint = if (isActive) Color(0xFF4CAF50) else AppTheme.colors.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PhysicalSpecItem(
+    label: String,
+    value: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        shape = RoundedCornerShape(Dimens.dp8)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.dp12),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = AppTheme.colors.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                AppText.bodySmall(
+                    text = label,
+                    color = AppTheme.colors.onSurfaceVariant,
+                    fontSize = AppTextStyles.labelSmall.fontSize
+                )
+                AppText.titleSmall(
+                    text = value,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface
                 )
             }
         }
@@ -310,7 +504,7 @@ private fun LauncherStageItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
         // Stage header with image
         Row(
@@ -545,7 +739,7 @@ private fun LandingInfo(
 
 @Composable
 private fun SpacecraftStagesSection(
-    stages: List<com.seancoyle.feature.launch.domain.model.SpacecraftStage>,
+    stages: List<SpacecraftStage>,
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
@@ -566,7 +760,7 @@ private fun SpacecraftStagesSection(
             stages.forEachIndexed { index, stage ->
                 if (index > 0) {
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = Dimens.dp12),
+                        modifier = Modifier.padding(vertical = Dimens.dp16),
                         color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
                     )
                 }
@@ -578,12 +772,12 @@ private fun SpacecraftStagesSection(
 
 @Composable
 private fun SpacecraftStageItem(
-    stage: com.seancoyle.feature.launch.domain.model.SpacecraftStage,
+    stage: SpacecraftStage,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
         stage.spacecraft?.let { spacecraft ->
             AppText.titleMedium(
@@ -660,7 +854,7 @@ private fun SpacecraftStageItem(
 private fun StatItem(
     value: String,
     label: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     valueColor: Color = AppTheme.colors.onSurface
 ) {
@@ -693,7 +887,7 @@ private fun StatItem(
 private fun MiniStatItem(
     value: String,
     label: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     iconTint: Color = AppTheme.colors.primary
 ) {
@@ -727,7 +921,7 @@ private fun MiniStatItem(
 private fun InfoChip(
     label: String,
     value: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -756,7 +950,7 @@ private fun InfoChip(
 @Composable
 private fun LinkButton(
     text: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -810,9 +1004,9 @@ private fun RocketSectionPreview() {
 
 @PreviewDarkLightMode
 @Composable
-private fun RocketHeaderPreview() {
+private fun RocketConfigurationCardPreview() {
     AppTheme {
-        RocketHeader(
+        RocketConfigurationCard(
             config = previewData().rocket!!.configuration!!
         )
     }
@@ -830,4 +1024,3 @@ private fun LauncherStageItemPreview() {
         }
     }
 }
-
