@@ -16,4 +16,16 @@
     <string name="upcoming_launches">Upcoming</string>
     <string name="past_launches">Past</string>
 
+    <string name="mission_details">Mission Details</string>
+    <string name="window_opens">Window Opens</string>
+    <string name="window_closes">Window Closes</string>
+    <string name="launch_site">Launch Site</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="launch_statistics">Launch Statistics</string>
+    <string name="pad_launches">Pad Launches</string>
+    <string name="orbital_attempts">Orbital Attempts</string>
+    <string name="location_launches">Location Launches</string>
+    <string name="location_landings">Location Landings</string>
+    <string name="failure_reason">Failure Reason</string>
+
 </resources>

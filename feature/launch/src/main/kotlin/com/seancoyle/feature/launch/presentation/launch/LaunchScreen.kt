@@ -87,29 +87,24 @@ private fun SuccessState(
             item { VideoSection(videos = launch.vidUrls) }
         }
 
-        if (launch.launchServiceProvider != null) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { AgencySection(agency = launch.launchServiceProvider) }
-        }
-
         if (launch.rocket != null) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { RocketSection(rocket = launch.rocket) }
         }
 
-        if (launch.pad != null) {
+        if (launch.missionPatches.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { PadSection(pad = launch.pad) }
+            item { MissionPatchesSection(patches = launch.missionPatches) }
+        }
+
+        if (launch.launchServiceProvider != null) {
+            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { AgencySection(agency = launch.launchServiceProvider) }
         }
 
         if (launch.updates.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { UpdatesSection(updates = launch.updates) }
-        }
-
-        if (launch.missionPatches.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { MissionPatchesSection(patches = launch.missionPatches) }
         }
     }
 }
