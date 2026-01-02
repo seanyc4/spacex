@@ -21,7 +21,7 @@ internal fun previewData() = LaunchUI(
         thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
         credit = "SpaceX"
     ),
-    failReason = null,
+    failReason = "Failed to reach orbit",
     launchServiceProvider = Agency(
         id = 121,
         url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
@@ -196,7 +196,7 @@ internal fun previewData() = LaunchUI(
             description = "Learn more about SpaceX launches.",
             url = "https://www.spacex.com/launches/",
             source = "SpaceX",
-            featureImage = null
+            featureImage = "https://www.spacex.com/static/images/share.jpg"
         ),
         InfoUrl(
             priority = 2,
@@ -204,23 +204,115 @@ internal fun previewData() = LaunchUI(
             description = "Falcon 9 Wikipedia page.",
             url = "https://en.wikipedia.org/wiki/Falcon_9",
             source = "Wikipedia",
-            featureImage = null
+            featureImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/F9_maiden_launch_cropped.jpg/800px-F9_maiden_launch_cropped.jpg"
         )
     ),
     missionPatches = listOf(
         MissionPatch(
             id = 1,
-            name = "Mission Patch 1",
+            name = "Starlink Mission Patch",
             priority = 1,
             imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-            agency = null
+            agency = Agency(
+                id = 121,
+                url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
+                name = "SpaceX",
+                abbrev = "SpX",
+                type = "Commercial",
+                featured = true,
+                country = listOf(
+                    Country(
+                        id = 1,
+                        name = "United States",
+                        alpha2Code = "US",
+                        alpha3Code = "USA",
+                        nationalityName = "American"
+                    )
+                ),
+                description = "Space Exploration Technologies Corp.",
+                administrator = "Elon Musk",
+                foundingYear = 2002,
+                launchers = "Falcon 9, Falcon Heavy, Starship",
+                spacecraft = "Dragon, Crew Dragon, Starship",
+                parent = "SpaceX Corporation",
+                image = Image(
+                    id = 2,
+                    name = "SpaceX Logo",
+                    imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
+                    thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
+                    credit = "SpaceX"
+                ),
+                totalLaunchCount = 200,
+                consecutiveSuccessfulLaunches = 150,
+                successfulLaunches = 190,
+                failedLaunches = 10,
+                pendingLaunches = 50,
+                consecutiveSuccessfulLandings = 100,
+                successfulLandings = 180,
+                failedLandings = 20,
+                attemptedLandings = 200,
+                successfulLandingsSpacecraft = 50,
+                failedLandingsSpacecraft = 5,
+                attemptedLandingsSpacecraft = 55,
+                successfulLandingsPayload = 30,
+                failedLandingsPayload = 3,
+                attemptedLandingsPayload = 33,
+                infoUrl = "https://www.spacex.com",
+                wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
+            )
         ),
         MissionPatch(
             id = 2,
-            name = "Mission Patch 2",
+            name = "Falcon 9 Mission Patch",
             priority = 2,
             imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-            agency = null
+            agency = Agency(
+                id = 121,
+                url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
+                name = "SpaceX",
+                abbrev = "SpX",
+                type = "Commercial",
+                featured = true,
+                country = listOf(
+                    Country(
+                        id = 1,
+                        name = "United States",
+                        alpha2Code = "US",
+                        alpha3Code = "USA",
+                        nationalityName = "American"
+                    )
+                ),
+                description = "Space Exploration Technologies Corp.",
+                administrator = "Elon Musk",
+                foundingYear = 2002,
+                launchers = "Falcon 9, Falcon Heavy, Starship",
+                spacecraft = "Dragon, Crew Dragon, Starship",
+                parent = "SpaceX Corporation",
+                image = Image(
+                    id = 2,
+                    name = "SpaceX Logo",
+                    imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
+                    thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
+                    credit = "SpaceX"
+                ),
+                totalLaunchCount = 200,
+                consecutiveSuccessfulLaunches = 150,
+                successfulLaunches = 190,
+                failedLaunches = 10,
+                pendingLaunches = 50,
+                consecutiveSuccessfulLandings = 100,
+                successfulLandings = 180,
+                failedLandings = 20,
+                attemptedLandings = 200,
+                successfulLandingsSpacecraft = 50,
+                failedLandingsSpacecraft = 5,
+                attemptedLandingsSpacecraft = 55,
+                successfulLandingsPayload = 30,
+                failedLandingsPayload = 3,
+                attemptedLandingsPayload = 33,
+                infoUrl = "https://www.spacex.com",
+                wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
+            )
         )
     ),
     vidUrls = listOf(
@@ -230,10 +322,10 @@ internal fun previewData() = LaunchUI(
             publisher = "SpaceX",
             title = "Starlink Mission",
             description = "Live coverage of Falcon 9 launch",
-            featureImage = null,
+            featureImage = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
             url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-            startTime = null,
-            endTime = null,
+            startTime = "2026-01-15T10:00:00Z",
+            endTime = "2026-01-15T12:00:00Z",
             live = false
         )
     )
