@@ -7,6 +7,7 @@ import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
+import com.seancoyle.database.util.FamilyListConverter
 import com.seancoyle.database.util.ProgramListConverter
 import com.seancoyle.database.util.LaunchUpdateListConverter
 import com.seancoyle.database.util.VidUrlListConverter
@@ -123,6 +124,13 @@ data class LaunchEntity(
 
     @Embedded(prefix = "status")
     val status: LaunchStatusEntity?,
+
+    @Embedded(prefix = "configuration")
+    val configuration: ConfigurationEntity?,
+
+    @ColumnInfo(name = "family")
+    @field:TypeConverters(FamilyListConverter::class)
+    val families: List<FamilyEntity>?,
 )
 
 @Keep
@@ -283,20 +291,8 @@ data class RocketEntity(
     @ColumnInfo(name = "id")
     val id: Int?,
 
-    @ColumnInfo(name = "configuration_id")
-    val configurationId: Int?,
-
-    @ColumnInfo(name = "configuration_url")
-    val configurationUrl: String?,
-
-    @ColumnInfo(name = "configuration_name")
-    val configurationName: String?,
-
-    @ColumnInfo(name = "configuration_full_name")
-    val configurationFullName: String?,
-
-    @ColumnInfo(name = "variant")
-    val variant: String?,
+    @Embedded(prefix = "configuration")
+    val configuration: ConfigurationEntity?,
 
     @field:TypeConverters(LauncherStageListConverter::class)
     @ColumnInfo(name = "launcher_stage")
@@ -722,30 +718,43 @@ data class SpacecraftStatusEntity(
 data class SpacecraftConfigEntity(
     @ColumnInfo(name = "id")
     val id: Int?,
+
     @ColumnInfo(name = "url")
     val url: String?,
+
     @ColumnInfo(name = "name")
     val name: String?,
+
     @ColumnInfo(name = "type")
     val type: SpacecraftTypeEntity?,
+
     @ColumnInfo(name = "agency")
     val agency: AgencyEntity?,
+
     @ColumnInfo(name = "in_use")
     val inUse: Boolean?,
+
     @ColumnInfo(name = "capability")
     val capability: String?,
+
     @ColumnInfo(name = "history")
     val history: String?,
+
     @ColumnInfo(name = "details")
     val details: String?,
+
     @ColumnInfo(name = "maiden_flight")
     val maidenFlight: String?,
+
     @ColumnInfo(name = "height")
     val height: Double?,
+
     @ColumnInfo(name = "diameter")
     val diameter: Double?,
+
     @ColumnInfo(name = "human_rated")
     val humanRated: Boolean?,
+
     @ColumnInfo(name = "crew_capacity")
     val crewCapacity: Int?
 )
@@ -757,4 +766,104 @@ data class SpacecraftTypeEntity(
     val id: Int?,
     @ColumnInfo(name = "name")
     val name: String?
+)
+
+@Keep
+@Serializable
+data class ConfigurationEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+
+    @ColumnInfo(name = "url")
+    val url: String?,
+
+    @ColumnInfo(name = "name")
+    val name: String?,
+
+    @ColumnInfo(name = "full_name")
+    val fullName: String?,
+
+    @ColumnInfo(name = "variant")
+    val variant: String?,
+
+    @field:TypeConverters(FamilyListConverter::class)
+    @ColumnInfo(name = "families")
+    val families: List<FamilyEntity>?,
+
+    @Embedded(prefix = "manufacturer_")
+    val manufacturer: AgencyEntity?,
+
+    @Embedded(prefix = "configuration_image_")
+    val image: ImageEntity?,
+
+    @ColumnInfo(name = "wiki_url")
+    val wikiUrl: String?,
+
+    @ColumnInfo(name = "description")
+    val description: String?,
+
+    @ColumnInfo(name = "alias")
+    val alias: String?,
+
+    @ColumnInfo(name = "total_launch_count")
+    val totalLaunchCount: Int?,
+
+    @ColumnInfo(name = "successful_launches")
+    val successfulLaunches: Int?,
+
+    @ColumnInfo(name = "failed_launches")
+    val failedLaunches: Int?
+)
+
+@Keep
+@Serializable
+data class FamilyEntity(
+    @ColumnInfo(name = "id")
+    val id: Int?,
+
+    @ColumnInfo(name = "name")
+    val name: String?,
+
+    @field:TypeConverters(AgencyListConverter::class)
+    @ColumnInfo(name = "manufacturer")
+    val manufacturer: List<AgencyEntity>?,
+
+    @ColumnInfo(name = "parent")
+    val parent: String?,
+
+    @ColumnInfo(name = "description")
+    val description: String?,
+
+    @ColumnInfo(name = "active")
+    val active: Boolean?,
+
+    @ColumnInfo(name = "maiden_flight")
+    val maidenFlight: String?,
+
+    @ColumnInfo(name = "total_launch_count")
+    val totalLaunchCount: Int?,
+
+    @ColumnInfo(name = "consecutive_successful_launches")
+    val consecutiveSuccessfulLaunches: Int?,
+
+    @ColumnInfo(name = "successful_launches")
+    val successfulLaunches: Int?,
+
+    @ColumnInfo(name = "failed_launches")
+    val failedLaunches: Int?,
+
+    @ColumnInfo(name = "pending_launches")
+    val pendingLaunches: Int?,
+
+    @ColumnInfo(name = "attempted_landings")
+    val attemptedLandings: Int?,
+
+    @ColumnInfo(name = "successful_landings")
+    val successfulLandings: Int?,
+
+    @ColumnInfo(name = "failed_landings")
+    val failedLandings: Int?,
+
+    @ColumnInfo(name = "consecutive_successful_landings")
+    val consecutiveSuccessfulLandings: Int?
 )

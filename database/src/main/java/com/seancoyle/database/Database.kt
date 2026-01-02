@@ -9,6 +9,7 @@ import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
+import com.seancoyle.database.util.FamilyListConverter
 import com.seancoyle.database.util.InfoUrlListConverter
 import com.seancoyle.database.util.LaunchUpdateListConverter
 import com.seancoyle.database.util.LauncherStageListConverter
@@ -30,6 +31,7 @@ import com.seancoyle.database.util.VidUrlListConverter
 @TypeConverters(
     AgencyListConverter::class,
     CountryListConverter::class,
+    FamilyListConverter::class,
     InfoUrlListConverter::class,
     LaunchUpdateListConverter::class,
     LauncherStageListConverter::class,

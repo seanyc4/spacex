@@ -320,9 +320,6 @@ internal data class RocketDto(
 
 @Serializable
 internal data class ConfigurationDto(
-    @SerialName("response_mode")
-    val responseMode: String?,
-
     @SerialName("id")
     val id: Int?,
 
@@ -340,6 +337,30 @@ internal data class ConfigurationDto(
 
     @SerialName("variant")
     val variant: String?,
+
+    @SerialName("manufacturer")
+    val manufacturer: AgencyDto?,
+
+    @SerialName("image")
+    val image: ImageDto?,
+
+    @SerialName("wiki_url")
+    val wikiUrl: String?,
+
+    @SerialName("description")
+    val description: String?,
+
+    @SerialName("alias")
+    val alias: String?,
+
+    @SerialName("total_launch_count")
+    val totalLaunchCount: Int?,
+
+    @SerialName("successful_launches")
+    val successfulLaunches: Int?,
+
+    @SerialName("failed_launches")
+    val failedLaunches: Int?,
 )
 
 @Serializable
@@ -352,6 +373,48 @@ internal data class FamilyDto(
 
     @SerialName("name")
     val name: String?,
+
+    @SerialName("manufacturer")
+    val manufacturer: List<AgencyDto>?,
+
+    @SerialName("parent")
+    val parent: String?,
+
+    @SerialName("description")
+    val description: String?,
+
+    @SerialName("active")
+    val active: Boolean?,
+
+    @SerialName("maiden_flight")
+    val maidenFlight: String?,
+
+    @SerialName("total_launch_count")
+    val totalLaunchCount: Int?,
+
+    @SerialName("consecutive_successful_launches")
+    val consecutiveSuccessfulLaunches: Int?,
+
+    @SerialName("successful_launches")
+    val successfulLaunches: Int?,
+
+    @SerialName("failed_launches")
+    val failedLaunches: Int?,
+
+    @SerialName("pending_launches")
+    val pendingLaunches: Int?,
+
+    @SerialName("attempted_landings")
+    val attemptedLandings: Int?,
+
+    @SerialName("successful_landings")
+    val successfulLandings: Int?,
+
+    @SerialName("failed_landings")
+    val failedLandings: Int?,
+
+    @SerialName("consecutive_successful_landings")
+    val consecutiveSuccessfulLandings: Int?,
 )
 
 @Serializable

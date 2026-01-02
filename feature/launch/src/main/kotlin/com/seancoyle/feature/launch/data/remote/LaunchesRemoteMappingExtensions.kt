@@ -178,13 +178,35 @@ private fun ConfigurationDto.toDomain() =
         name = name,
         fullName = fullName,
         variant = variant,
-        families = families?.map { it.toDomain() }
+        families = families?.map { it.toDomain() },
+        manufacturer = manufacturer?.toDomain(),
+        image = image?.toDomain(),
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
     )
 
 private fun FamilyDto.toDomain() =
     Family(
         id = id,
-        name = name
+        name = name,
+        manufacturer = manufacturer?.map { it.toDomain() },
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
     )
 
 private fun MissionDto.toDomain() =

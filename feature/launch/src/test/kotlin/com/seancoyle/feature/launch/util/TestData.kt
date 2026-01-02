@@ -140,29 +140,71 @@ internal object TestData {
     fun createFamilyDto(
         responseMode: String = "normal",
         id: Int = 1,
-        name: String = "Falcon"
+        name: String = "Falcon",
+        manufacturer: List<AgencyDto> = listOf(createAgencyDto()),
+        parent: String? = null,
+        description: String? = "Falcon rocket family",
+        active: Boolean = true,
+        maidenFlight: String = "2010-06-04T18:45:00Z",
+        totalLaunchCount: Int = 300,
+        consecutiveSuccessfulLaunches: Int = 250,
+        successfulLaunches: Int = 290,
+        failedLaunches: Int = 10,
+        pendingLaunches: Int = 50,
+        attemptedLandings: Int = 200,
+        successfulLandings: Int = 190,
+        failedLandings: Int = 10,
+        consecutiveSuccessfulLandings: Int = 150
     ) = FamilyDto(
         responseMode = responseMode,
         id = id,
-        name = name
+        name = name,
+        manufacturer = manufacturer,
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
     )
 
     fun createConfigurationDto(
-        responseMode: String = "normal",
         id: Int = 164,
         url: String = "https://lldev.thespacedevs.com/2.3.0/config/launcher/164/",
         name: String = "Falcon 9",
         families: List<FamilyDto> = listOf(createFamilyDto()),
         fullName: String = "Falcon 9 Block 5",
-        variant: String = "Block 5"
+        variant: String = "Block 5",
+        manufacturer: AgencyDto? = createAgencyDto(),
+        image: ImageDto? = createImageDto(),
+        wikiUrl: String? = "https://en.wikipedia.org/wiki/Falcon_9",
+        description: String? = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX.",
+        alias: String? = "F9",
+        totalLaunchCount: Int? = 300,
+        successfulLaunches: Int? = 290,
+        failedLaunches: Int? = 10
     ) = ConfigurationDto(
-        responseMode = responseMode,
         id = id,
         url = url,
         name = name,
         families = families,
         fullName = fullName,
-        variant = variant
+        variant = variant,
+        manufacturer = manufacturer,
+        image = image,
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
     )
 
     fun createOrbitDto(
@@ -1118,22 +1160,82 @@ internal object TestData {
         landing = landing
     )
 
+    fun createFamilyEntity(
+        id: Int = 1,
+        name: String = "Falcon",
+        manufacturer: List<AgencyEntity> = listOf(createAgencyEntity()),
+        parent: String? = null,
+        description: String? = "Falcon rocket family",
+        active: Boolean = true,
+        maidenFlight: String = "2010-06-04T18:45:00Z",
+        totalLaunchCount: Int = 300,
+        consecutiveSuccessfulLaunches: Int = 250,
+        successfulLaunches: Int = 290,
+        failedLaunches: Int = 10,
+        pendingLaunches: Int = 50,
+        attemptedLandings: Int = 200,
+        successfulLandings: Int = 190,
+        failedLandings: Int = 10,
+        consecutiveSuccessfulLandings: Int = 150
+    ) = FamilyEntity(
+        id = id,
+        name = name,
+        manufacturer = manufacturer,
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
+    )
+
+    fun createConfigurationEntity(
+        id: Int = 164,
+        url: String = "https://lldev.thespacedevs.com/2.3.0/config/launcher/164/",
+        name: String = "Falcon 9",
+        fullName: String = "Falcon 9 Block 5",
+        variant: String = "Block 5",
+        families: List<FamilyEntity> = listOf(createFamilyEntity()),
+        manufacturer: AgencyEntity? = createAgencyEntity(),
+        image: ImageEntity? = createImageEntity(),
+        wikiUrl: String? = "https://en.wikipedia.org/wiki/Falcon_9",
+        description: String? = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX.",
+        alias: String? = "F9",
+        totalLaunchCount: Int? = 300,
+        successfulLaunches: Int? = 290,
+        failedLaunches: Int? = 10
+    ) = ConfigurationEntity(
+        id = id,
+        url = url,
+        name = name,
+        fullName = fullName,
+        variant = variant,
+        families = families,
+        manufacturer = manufacturer,
+        image = image,
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
+    )
+
     fun createRocketEntity(
         id: Int = 7815,
-        configurationId: Int = 164,
-        configurationUrl: String = "https://lldev.thespacedevs.com/2.3.0/config/launcher/164/",
-        configurationName: String = "Falcon 9",
-        configurationFullName: String = "Falcon 9 Block 5",
-        variant: String = "Block 5",
+        configuration: ConfigurationEntity = createConfigurationEntity(),
         launcherStage: List<LauncherStageEntity> = listOf(createLauncherStageEntity()),
         spacecraftStage: List<SpacecraftStageEntity> = listOf(createSpacecraftStageEntity())
     ) = RocketEntity(
         id = id,
-        configurationId = configurationId,
-        configurationUrl = configurationUrl,
-        configurationName = configurationName,
-        configurationFullName = configurationFullName,
-        variant = variant,
+        configuration = configuration,
         launcherStage = launcherStage,
         spacecraftStage = spacecraftStage
     )
@@ -1171,7 +1273,9 @@ internal object TestData {
         infoUrls: List<InfoUrlEntity>? = listOf(createInfoUrlEntity()),
         vidUrls: List<VidUrlEntity>? = listOf(createVidUrlEntity()),
         padTurnaround: String = "PT240H",
-        missionPatches: List<MissionPatchEntity>? = listOf(createMissionPatchEntity())
+        missionPatches: List<MissionPatchEntity>? = listOf(createMissionPatchEntity()),
+        configuration: ConfigurationEntity? = createConfigurationEntity(),
+        families: List<FamilyEntity>? = listOf(createFamilyEntity())
     ) = LaunchEntity(
         id = id,
         url = url,
@@ -1204,7 +1308,10 @@ internal object TestData {
         infoUrls = infoUrls,
         vidUrls = vidUrls,
         padTurnaround = padTurnaround,
-        missionPatches = missionPatches, status = status
+        missionPatches = missionPatches,
+        status = status,
+        configuration = configuration,
+        families = families
     )
 
     fun createNetPrecision(
@@ -1327,10 +1434,38 @@ internal object TestData {
 
     fun createFamily(
         id: Int = 1,
-        name: String = "Falcon"
+        name: String = "Falcon",
+        manufacturer: List<Agency> = listOf(createAgency()),
+        parent: String? = null,
+        description: String? = "Falcon rocket family",
+        active: Boolean = true,
+        maidenFlight: String = "2010-06-04T18:45:00Z",
+        totalLaunchCount: Int = 300,
+        consecutiveSuccessfulLaunches: Int = 250,
+        successfulLaunches: Int = 290,
+        failedLaunches: Int = 10,
+        pendingLaunches: Int = 50,
+        attemptedLandings: Int = 200,
+        successfulLandings: Int = 190,
+        failedLandings: Int = 10,
+        consecutiveSuccessfulLandings: Int = 150
     ) = Family(
         id = id,
-        name = name
+        name = name,
+        manufacturer = manufacturer,
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
     )
 
     fun createConfiguration(
@@ -1339,14 +1474,30 @@ internal object TestData {
         name: String = "Falcon 9",
         fullName: String = "Falcon 9 Block 5",
         variant: String = "Block 5",
-        families: List<Family> = listOf(createFamily())
+        families: List<Family> = listOf(createFamily()),
+        manufacturer: Agency? = createAgency(),
+        image: Image? = createImage(),
+        wikiUrl: String? = "https://en.wikipedia.org/wiki/Falcon_9",
+        description: String? = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX.",
+        alias: String? = "F9",
+        totalLaunchCount: Int? = 300,
+        successfulLaunches: Int? = 290,
+        failedLaunches: Int? = 10
     ) = Configuration(
         id = id,
         url = url,
         name = name,
         fullName = fullName,
         variant = variant,
-        families = families
+        families = families,
+        manufacturer = manufacturer,
+        image = image,
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
     )
 
     fun createOrbit(

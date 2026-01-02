@@ -4,7 +4,9 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
 import com.seancoyle.core.common.result.DataError.LocalError
 import com.seancoyle.database.entities.AgencyEntity
+import com.seancoyle.database.entities.ConfigurationEntity
 import com.seancoyle.database.entities.CountryEntity
+import com.seancoyle.database.entities.FamilyEntity
 import com.seancoyle.database.entities.ImageEntity
 import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LandingEntity
@@ -32,6 +34,7 @@ import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
+import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.InfoUrl
 import com.seancoyle.feature.launch.domain.model.Landing
@@ -179,17 +182,48 @@ private fun CountryEntity.toDomain(): Country =
         nationalityName = nationalityName
     )
 
+private fun ConfigurationEntity.toDomain(): Configuration =
+    Configuration(
+        id = id,
+        url = url,
+        name = name,
+        fullName = fullName,
+        variant = variant,
+        families = families?.map { it.toDomain() },
+        manufacturer = manufacturer?.toDomain(),
+        image = image?.toDomain(),
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
+    )
+
+private fun FamilyEntity.toDomain(): Family =
+    Family(
+        id = id,
+        name = name,
+        manufacturer = manufacturer?.map { it.toDomain() },
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
+    )
+
 private fun RocketEntity.toDomain(): Rocket =
     Rocket(
         id = id,
-        configuration = Configuration(
-            id = configurationId,
-            url = configurationUrl,
-            name = configurationName,
-            fullName = configurationFullName,
-            variant = variant,
-            families = null
-        ),
+        configuration = configuration?.toDomain(),
         launcherStage = launcherStage?.map { it.toDomain() },
         spacecraftStage = spacecraftStage?.map { it.toDomain() }
     )
@@ -304,6 +338,8 @@ internal fun Launch.toEntity(): LaunchEntity =
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toEntity() },
         status = status?.toEntity(),
+        configuration = rocket?.configuration?.toEntity(),
+        families = rocket?.configuration?.families?.map { it.toEntity() }
     )
 
 private fun Status.toEntity(): LaunchStatusEntity =
@@ -375,14 +411,48 @@ private fun Country.toEntity(): CountryEntity =
         nationalityName = nationalityName
     )
 
+private fun Configuration.toEntity(): ConfigurationEntity =
+    ConfigurationEntity(
+        id = id,
+        url = url,
+        name = name,
+        fullName = fullName,
+        variant = variant,
+        families = families?.map { it.toEntity() },
+        manufacturer = manufacturer?.toEntity(),
+        image = image?.toEntity(),
+        wikiUrl = wikiUrl,
+        description = description,
+        alias = alias,
+        totalLaunchCount = totalLaunchCount,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches
+    )
+
+private fun Family.toEntity(): FamilyEntity =
+    FamilyEntity(
+        id = id,
+        name = name,
+        manufacturer = manufacturer?.map { it.toEntity() },
+        parent = parent,
+        description = description,
+        active = active,
+        maidenFlight = maidenFlight,
+        totalLaunchCount = totalLaunchCount,
+        consecutiveSuccessfulLaunches = consecutiveSuccessfulLaunches,
+        successfulLaunches = successfulLaunches,
+        failedLaunches = failedLaunches,
+        pendingLaunches = pendingLaunches,
+        attemptedLandings = attemptedLandings,
+        successfulLandings = successfulLandings,
+        failedLandings = failedLandings,
+        consecutiveSuccessfulLandings = consecutiveSuccessfulLandings
+    )
+
 private fun Rocket.toEntity(): RocketEntity =
     RocketEntity(
         id = id,
-        configurationId = configuration?.id,
-        configurationUrl = configuration?.url,
-        configurationName = configuration?.name,
-        configurationFullName = configuration?.fullName,
-        variant = configuration?.variant,
+        configuration = configuration?.toEntity(),
         launcherStage = launcherStage?.map { it.toEntity() },
         spacecraftStage = spacecraftStage?.map { it.toEntity() }
     )

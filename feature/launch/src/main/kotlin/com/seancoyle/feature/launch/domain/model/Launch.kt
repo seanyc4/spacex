@@ -113,12 +113,34 @@ data class Configuration(
     val name: String?,
     val fullName: String?,
     val variant: String?,
-    val families: List<Family>?
+    val families: List<Family>?,
+    val manufacturer: Agency?,
+    val image: Image?,
+    val wikiUrl: String?,
+    val description: String?,
+    val alias: String?,
+    val totalLaunchCount: Int?,
+    val successfulLaunches: Int?,
+    val failedLaunches: Int?
 )
 
 data class Family(
     val id: Int?,
-    val name: String?
+    val name: String?,
+    val manufacturer: List<Agency>?,
+    val parent: String?,
+    val description: String?,
+    val active: Boolean?,
+    val maidenFlight: String?,
+    val totalLaunchCount: Int?,
+    val consecutiveSuccessfulLaunches: Int?,
+    val successfulLaunches: Int?,
+    val failedLaunches: Int?,
+    val pendingLaunches: Int?,
+    val attemptedLandings: Int?,
+    val successfulLandings: Int?,
+    val failedLandings: Int?,
+    val consecutiveSuccessfulLandings: Int?
 )
 
 data class Mission(

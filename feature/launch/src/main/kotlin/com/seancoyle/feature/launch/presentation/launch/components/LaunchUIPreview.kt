@@ -77,7 +77,34 @@ internal fun previewData() = LaunchUI(
             name = "Falcon 9",
             fullName = "Falcon 9 Block 5",
             variant = "Block 5",
-            families = listOf(Family(id = 1, name = "Falcon"))
+            families = listOf(
+                Family(
+                    id = 1,
+                    name = "Falcon",
+                    manufacturer = emptyList(),
+                    parent = null,
+                    description = "Falcon rocket family developed by SpaceX",
+                    active = true,
+                    maidenFlight = "2010-06-04T18:45:00Z",
+                    totalLaunchCount = 300,
+                    consecutiveSuccessfulLaunches = 250,
+                    successfulLaunches = 290,
+                    failedLaunches = 10,
+                    pendingLaunches = 50,
+                    attemptedLandings = 200,
+                    successfulLandings = 190,
+                    failedLandings = 10,
+                    consecutiveSuccessfulLandings = 150
+                )
+            ),
+            manufacturer = null,
+            image = null,
+            wikiUrl = "https://en.wikipedia.org/wiki/Falcon_9",
+            description = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX",
+            alias = "F9",
+            totalLaunchCount = 300,
+            successfulLaunches = 290,
+            failedLaunches = 10
         ),
         launcherStage = listOf(
             LauncherStage(
