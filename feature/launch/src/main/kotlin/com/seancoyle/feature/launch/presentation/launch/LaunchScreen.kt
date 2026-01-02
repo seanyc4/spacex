@@ -82,6 +82,11 @@ private fun SuccessState(
 
         item { LaunchDetailsSection(launch = launch) }
 
+        if (launch.pad != null) {
+            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { LaunchSiteSection(pad = launch.pad) }
+        }
+
         if (launch.vidUrls.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { VideoSection(videos = launch.vidUrls) }
