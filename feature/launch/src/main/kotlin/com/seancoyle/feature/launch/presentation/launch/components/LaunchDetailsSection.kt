@@ -47,7 +47,8 @@ internal fun LaunchDetailsSection(
             }
 
             // Launch Windows Section
-            val hasWindowInfo = launch.windowStart != null || launch.windowEnd != null
+            // Show timeline only if we have window information (not future launches without windows)
+            val hasWindowInfo = launch.windowStart != null && launch.windowEnd != null
             if (hasWindowInfo) {
                 HorizontalDivider(
                     color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
@@ -202,6 +203,9 @@ private fun LaunchWindowTimeline(
     val launchProgress =
         calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
 
+    // Check if this is an instantaneous launch (same start and end time)
+    val isInstantaneous = windowDuration == "Instantaneous"
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -239,103 +243,122 @@ private fun LaunchWindowTimeline(
                 }
             }
 
-            // Timeline
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = Dimens.dp2)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+            // Timeline - only show if NOT instantaneous
+            if (!isInstantaneous) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimens.dp2)
                 ) {
-                    // Timeline track with shadows
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(24.dp)
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        // Background track (darker/shadow effect) - full width
+                        // Timeline track with shadows
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(8.dp)
-                                .align(Alignment.Center)
-                                .background(
-                                    color = AppTheme.colors.scrim.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                        )
-
-                        // Active portion (gradient) - inset horizontally
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(8.dp)
-                                .align(Alignment.Center)
-                                .padding(horizontal = 48.dp)
+                                .height(24.dp)
                         ) {
+                            // Background track (darker/shadow effect) - full width
                             Box(
                                 modifier = Modifier
-                                    .fillMaxSize()
+                                    .fillMaxWidth()
+                                    .height(8.dp)
+                                    .align(Alignment.Center)
                                     .background(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(
-                                                AppTheme.colors.primary.copy(alpha = 0.7f),
-                                                AppTheme.colors.primary
-                                            )
-                                        ),
+                                        color = AppTheme.colors.scrim.copy(alpha = 0.15f),
                                         shape = RoundedCornerShape(4.dp)
                                     )
                             )
 
-                            // Launch time indicator circle - positioned within active track
+                            // Active portion (gradient) - inset horizontally
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(launchProgress)
-                                    .fillMaxHeight()
-                                    .wrapContentWidth(Alignment.End)
+                                    .fillMaxWidth()
+                                    .height(8.dp)
+                                    .align(Alignment.Center)
+                                    .padding(horizontal = 48.dp)
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .size(24.dp)
-                                        .align(Alignment.CenterEnd)
+                                        .fillMaxSize()
                                         .background(
-                                            color = AppTheme.colors.tertiary,
-                                            shape = androidx.compose.foundation.shape.CircleShape
+                                            brush = Brush.horizontalGradient(
+                                                colors = listOf(
+                                                    AppTheme.colors.primary.copy(alpha = 0.7f),
+                                                    AppTheme.colors.primary
+                                                )
+                                            ),
+                                            shape = RoundedCornerShape(4.dp)
                                         )
-                                        .padding(2.dp)
-                                        .background(
-                                            color = AppTheme.colors.surface,
-                                            shape = androidx.compose.foundation.shape.CircleShape
-                                        )
+                                )
+
+                                // Launch time indicator circle - positioned within active track
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(launchProgress)
+                                        .fillMaxHeight()
+                                        .wrapContentWidth(Alignment.End)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .align(Alignment.CenterEnd)
+                                            .background(
+                                                color = AppTheme.colors.tertiary,
+                                                shape = androidx.compose.foundation.shape.CircleShape
+                                            )
+                                            .padding(2.dp)
+                                            .background(
+                                                color = AppTheme.colors.surface,
+                                                shape = androidx.compose.foundation.shape.CircleShape
+                                            )
+                                    )
+                                }
+                            }
+                        }
+
+                        // Time labels - just the times, no labels (only show if NOT instantaneous)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            // Window Start Time (left)
+                            windowStartTime?.let { start ->
+                                AppText.bodyLarge(
+                                    text = start,
+                                    color = AppTheme.colors.onSurfaceVariant,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+
+                            // Window End Time (right)
+                            windowEndTime?.let { end ->
+                                AppText.bodyLarge(
+                                    text = end,
+                                    color = AppTheme.colors.onSurfaceVariant,
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
                     }
-
-                    // Time labels - just the times, no labels
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        // Window Start Time (left)
-                        windowStartTime?.let { start ->
-                            AppText.bodyLarge(
-                                text = start,
-                                color = AppTheme.colors.onSurfaceVariant,
-                                fontWeight = FontWeight.Medium
+                }
+            } else {
+                // For instantaneous launches, show only background track (no active portion, no times)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimens.dp16)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .background(
+                                color = AppTheme.colors.scrim.copy(alpha = 0.15f),
+                                shape = RoundedCornerShape(4.dp)
                             )
-                        }
-
-                        // Window End Time (right)
-                        windowEndTime?.let { end ->
-                            AppText.bodyLarge(
-                                text = end,
-                                color = AppTheme.colors.onSurfaceVariant,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    }
+                    )
                 }
             }
 
