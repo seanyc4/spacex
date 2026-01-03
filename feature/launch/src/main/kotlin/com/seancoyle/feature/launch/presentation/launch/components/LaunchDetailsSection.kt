@@ -204,7 +204,7 @@ private fun LaunchWindowTimeline(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_window),
@@ -214,13 +214,12 @@ private fun LaunchWindowTimeline(
 
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
         ) {
             // Launch Date with Time - Centered at top
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+                verticalArrangement = Arrangement.spacedBy(Dimens.dp6)
             ) {
                 launchDate?.let { date ->
                     AppText.bodyLarge(
@@ -244,11 +243,10 @@ private fun LaunchWindowTimeline(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = Dimens.dp16)
+                    .padding(vertical = Dimens.dp2)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     // Timeline track with shadows
                     Box(
@@ -263,7 +261,7 @@ private fun LaunchWindowTimeline(
                                 .height(8.dp)
                                 .align(Alignment.Center)
                                 .background(
-                                    color = AppTheme.colors.surfaceVariant.copy(alpha = 0.9f),
+                                    color = AppTheme.colors.scrim.copy(alpha = 0.15f),
                                     shape = RoundedCornerShape(4.dp)
                                 )
                         )
@@ -344,7 +342,9 @@ private fun LaunchWindowTimeline(
             // Duration card
             windowDuration?.let { duration ->
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.dp8),
                     colors = CardDefaults.cardColors(
                         containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
                     ),
@@ -358,12 +358,12 @@ private fun LaunchWindowTimeline(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Default.DateRange,
+                            imageVector = Icons.Default.AccessTime,
                             contentDescription = null,
                             tint = AppTheme.colors.primary,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(13.dp)
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(5.dp))
                         AppText.bodyMedium(
                             text = stringResource(R.string.duration),
                             color = AppTheme.colors.onSurfaceVariant,
