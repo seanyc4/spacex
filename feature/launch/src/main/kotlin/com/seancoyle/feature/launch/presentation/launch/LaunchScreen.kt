@@ -75,20 +75,16 @@ private fun SuccessState(
 
         item { LaunchDetailsSection(launch = launch) }
 
-        if (launch.pad != null) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { LaunchSiteSection(pad = launch.pad) }
-        }
+        item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+        item { LaunchSiteSection(pad = launch.pad) }
 
         if (launch.vidUrls.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { VideoSection(videos = launch.vidUrls) }
         }
 
-        if (launch.rocket != null) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { RocketSection(rocket = launch.rocket) }
-        }
+        item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+        item { RocketSection(rocket = launch.rocket) }
 
         if (launch.missionPatches.isNotEmpty()) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }

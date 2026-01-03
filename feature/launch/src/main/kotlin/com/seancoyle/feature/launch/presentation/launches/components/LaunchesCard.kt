@@ -70,7 +70,7 @@ internal fun LaunchCard(
                     .fillMaxWidth(0.33f)
                     .fillMaxHeight()
             ) {
-                LaunchCardImage(imageUrl = launchItem.image)
+                LaunchCardImage(imageUrl = launchItem.thumbnail)
             }
 
             Column(
@@ -141,7 +141,7 @@ private fun LaunchCardPreview() {
                 missionName = "Starlink Mission",
                 launchDate = "2024-01-15",
                 status = LaunchStatus.SUCCESS,
-                image = ""
+                thumbnail = ""
             ),
             onEvent = {},
             onClick = { _, _ -> },

@@ -49,11 +49,11 @@ private const val TAG = "LaunchScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchesScreen(
+    modifier: Modifier = Modifier,
     viewModel: LaunchesViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     onClick: (String, LaunchesType) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val state = viewModel.screenState
     val isRefreshing = state.isRefreshing

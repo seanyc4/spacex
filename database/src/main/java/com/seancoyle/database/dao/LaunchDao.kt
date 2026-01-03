@@ -5,21 +5,21 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
+import com.seancoyle.database.entities.LaunchSummaryEntity
 
 @Dao
 interface LaunchDao {
 
     @Transaction
-    suspend fun refreshLaunches(launches: List<LaunchEntity>) {
+    suspend fun refreshLaunches(launches: List<LaunchSummaryEntity>) {
         deleteAll()
         upsertAll(launches)
     }
 
     @Transaction
     suspend fun refreshLaunchesWithKeys(
-        launches: List<LaunchEntity>,
+        launches: List<LaunchSummaryEntity>,
         remoteKeyDao: LaunchRemoteKeyDao,
         remoteKeys: List<LaunchRemoteKeyEntity>,
         nextPage: Int?,
@@ -32,22 +32,21 @@ interface LaunchDao {
         remoteKeyDao.upsertAll(remoteKeys)
     }
 
-    @Query("SELECT * FROM launch")
-    fun pagingSource(): PagingSource<Int, LaunchEntity>
+    @Query("SELECT * FROM launch_summary")
+    fun pagingSource(): PagingSource<Int, LaunchSummaryEntity>
 
     @Upsert
-    suspend fun upsert(launch: LaunchEntity): Long
+    suspend fun upsert(launch: LaunchSummaryEntity): Long
 
     @Upsert
-    suspend fun upsertAll(launches: List<LaunchEntity>): LongArray
+    suspend fun upsertAll(launches: List<LaunchSummaryEntity>): LongArray
 
-    @Query("DELETE FROM launch")
+    @Query("DELETE FROM launch_summary")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM launch WHERE id = :id")
-    suspend fun getById(id: String): LaunchEntity?
+    @Query("SELECT * FROM launch_summary WHERE id = :id")
+    suspend fun getById(id: String): LaunchSummaryEntity?
 
-    @Query("SELECT COUNT(*) FROM launch")
+    @Query("SELECT COUNT(*) FROM launch_summary")
     suspend fun getTotalEntries(): Int
-
 }

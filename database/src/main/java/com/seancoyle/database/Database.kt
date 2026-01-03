@@ -7,6 +7,7 @@ import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
+import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.FamilyListConverter
@@ -22,6 +23,7 @@ import com.seancoyle.database.util.VidUrlListConverter
 @Database(
     entities =
     [
+        LaunchSummaryEntity::class,
         LaunchEntity::class,
         LaunchRemoteKeyEntity::class
     ],

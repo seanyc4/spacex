@@ -22,33 +22,27 @@ internal fun AgencySection(
 
             DetailRow(
                 label = "Name",
-                value = agency.name ?: "Unknown",
+                value = agency.name,
                 icon = Icons.Default.AccountCircle
             )
 
-            agency.abbrev?.let {
-                DetailRow(
-                    label = "Abbreviation",
-                    value = it,
-                    icon = Icons.Default.Star
-                )
-            }
+            DetailRow(
+                label = "Abbreviation",
+                value = agency.abbrev,
+                icon = Icons.Default.Star
+            )
 
-            agency.type?.let {
-                DetailRow(
-                    label = "Type",
-                    value = it,
-                    icon = Icons.Default.Build
-                )
-            }
+            DetailRow(
+                label = "Type",
+                value = agency.type,
+                icon = Icons.Default.Build
+            )
 
-            agency.description?.let {
-                AppText.bodyMedium(
-                    text = it,
-                    color = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier.padding(top = Dimens.dp8)
-                )
-            }
+            AppText.bodyMedium(
+                text = agency.description,
+                color = AppTheme.colors.onSurfaceVariant,
+                modifier = Modifier.padding(top = Dimens.dp8)
+            )
         }
     }
 }

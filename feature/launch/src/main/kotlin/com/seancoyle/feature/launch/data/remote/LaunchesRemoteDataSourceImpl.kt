@@ -9,6 +9,7 @@ import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
     override suspend fun getLaunches(
         page: Int,
         launchesQuery: LaunchesQuery
-    ): LaunchResult<List<Launch>, Throwable> {
+    ): LaunchResult<List<LaunchSummary>, Throwable> {
         return runSuspendCatching {
             val result = when (launchesQuery.launchesType) {
                 LaunchesType.UPCOMING -> api.getUpcomingLaunches(

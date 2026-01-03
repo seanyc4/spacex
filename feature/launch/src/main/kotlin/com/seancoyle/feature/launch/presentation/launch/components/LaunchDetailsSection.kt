@@ -37,15 +37,12 @@ internal fun LaunchDetailsSection(
         Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
             SectionTitle(text = stringResource(R.string.mission_details))
 
-            // Mission Information - Prominent Card
-            launch.mission?.let { mission ->
-                MissionHighlightCard(
-                    missionName = mission.name,
-                    missionType = mission.type,
-                    orbitName = mission.orbit?.name,
-                    description = mission.description
-                )
-            }
+            MissionHighlightCard(
+                missionName = launch.mission.name,
+                missionType = launch.mission.type,
+                orbitName = launch.mission.orbit?.name,
+                description = launch.mission.description
+            )
 
             // Launch Windows Section
             // Show timeline only if we have window information (not future launches without windows)

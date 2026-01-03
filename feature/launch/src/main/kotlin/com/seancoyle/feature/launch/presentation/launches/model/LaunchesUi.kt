@@ -7,5 +7,5 @@ data class LaunchesUi(
     val missionName: String,
     val launchDate: String,
     val status: LaunchStatus,
-    val image: String
+    val thumbnail: String
 )

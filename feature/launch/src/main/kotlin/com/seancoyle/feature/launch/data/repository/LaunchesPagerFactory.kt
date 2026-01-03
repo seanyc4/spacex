@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.database.dao.LaunchDao
-import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import com.seancoyle.feature.launch.data.remote.LaunchRemoteMediator
 import javax.inject.Inject
@@ -16,7 +16,7 @@ internal class LaunchesPagerFactory @Inject constructor(
     private val launchesLocalDataSource: LaunchesLocalDataSource
 ) {
     @OptIn(ExperimentalPagingApi::class)
-    fun create(launchesQuery: LaunchesQuery): Pager<Int, LaunchEntity> {
+    fun create(launchesQuery: LaunchesQuery): Pager<Int, LaunchSummaryEntity> {
         return Pager(
             config = PagingConfig(
                 pageSize = LaunchesConstants.PAGINATION_LIMIT,

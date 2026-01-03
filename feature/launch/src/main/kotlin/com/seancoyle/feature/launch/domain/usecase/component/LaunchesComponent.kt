@@ -8,10 +8,11 @@ import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import kotlinx.coroutines.flow.Flow
 
 interface LaunchesComponent {
-    fun observeLaunchesUseCase(query: LaunchesQuery): Flow<PagingData<Launch>>
+    fun observeLaunchesUseCase(query: LaunchesQuery): Flow<PagingData<LaunchSummary>>
 
     suspend fun getLaunchPreferencesUseCase(): LaunchPrefs
 

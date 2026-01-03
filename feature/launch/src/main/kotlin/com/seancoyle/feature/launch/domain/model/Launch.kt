@@ -5,9 +5,9 @@ data class Launch(
     val url: String?,
     val missionName: String,
     val lastUpdated: String?,
-    val net: String?,
+    val net: String,
     val netPrecision: NetPrecision?,
-    val status: Status?,
+    val status: Status,
     val windowEnd: String?,
     val windowStart: String?,
     val image: Image,
@@ -16,9 +16,9 @@ data class Launch(
     val weatherConcerns: String?,
     val failReason: String?,
     val launchServiceProvider: Agency?,
-    val rocket: Rocket?,
-    val mission: Mission?,
-    val pad: Pad?,
+    val rocket: Rocket,
+    val mission: Mission,
+    val pad: Pad,
     val webcastLive: Boolean?,
     val program: List<Program>?,
     val orbitalLaunchAttemptCount: Int?,
@@ -44,29 +44,29 @@ data class NetPrecision(
 )
 
 data class Image(
-    val id: Int?,
-    val name: String?,
+    val id: Int,
+    val name: String,
     val imageUrl: String,
     val thumbnailUrl: String,
-    val credit: String?
+    val credit: String
 )
 
 data class Status(
     val id: Int?,
-    val name: String?,
-    val abbrev: String?,
+    val name: String,
+    val abbrev: String,
     val description: String?,
 )
 
 data class Agency(
     val id: Int?,
     val url: String?,
-    val name: String?,
-    val abbrev: String?,
-    val type: String?,
+    val name: String,
+    val abbrev: String,
+    val type: String,
     val featured: Boolean?,
     val country: List<Country>?,
-    val description: String?,
+    val description: String,
     val administrator: String?,
     val foundingYear: Int?,
     val launchers: String?,
@@ -101,7 +101,7 @@ data class Country(
 
 data class Rocket(
     val id: Int?,
-    val configuration: Configuration?,
+    val configuration: Configuration,
     val launcherStage: List<LauncherStage>?,
     val spacecraftStage: List<SpacecraftStage>?
 )
@@ -130,7 +130,7 @@ data class Configuration(
 data class Family(
     val id: Int?,
     val name: String?,
-    val manufacturer: List<Agency>?,
+    val manufacturer: List<Agency?>?,
     val description: String?,
     val active: Boolean?,
     val maidenFlight: String?,
@@ -165,7 +165,7 @@ data class Orbit(
 data class Pad(
     val id: Int?,
     val url: String?,
-    val agencies: List<Agency>?,
+    val agencies: List<Agency?>?,
     val name: String?,
     val image: Image,
     val description: String?,

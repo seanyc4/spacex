@@ -8,6 +8,7 @@ import com.seancoyle.feature.launch.data.local.toDomain
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,7 +19,7 @@ internal class LaunchesRepositoryImpl @Inject constructor(
     private val launchesRemoteDataSource: LaunchesRemoteDataSource
 ) : LaunchesRepository {
 
-    override fun pager(launchesQuery: LaunchesQuery): Flow<PagingData<Launch>> {
+    override fun pager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
         return pagerFactory.create(launchesQuery).flow.map {
             it.map { entity -> entity.toDomain() }
         }

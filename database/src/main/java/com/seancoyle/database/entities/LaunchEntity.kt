@@ -34,7 +34,7 @@ data class LaunchEntity(
     val lastUpdated: String?,
 
     @ColumnInfo(name = "net")
-    val net: String?,
+    val net: String,
 
     @Embedded(prefix = "net_precision")
     val netPrecision: NetPrecisionEntity?,
@@ -64,13 +64,13 @@ data class LaunchEntity(
     val launchServiceProvider: AgencyEntity?,
 
     @Embedded(prefix = "rocket")
-    val rocket: RocketEntity?,
+    val rocket: RocketEntity,
 
     @Embedded(prefix = "mission")
-    val mission: MissionEntity?,
+    val mission: MissionEntity,
 
     @Embedded(prefix = "pad")
-    val pad: PadEntity?,
+    val pad: PadEntity,
 
     @ColumnInfo(name = "webcast_live")
     val webcastLive: Boolean?,
@@ -123,7 +123,7 @@ data class LaunchEntity(
     val missionPatches: List<MissionPatchEntity>?,
 
     @Embedded(prefix = "status")
-    val status: LaunchStatusEntity?,
+    val status: LaunchStatusEntity,
 
     @Embedded(prefix = "configuration")
     val configuration: ConfigurationEntity?,
@@ -153,10 +153,10 @@ data class NetPrecisionEntity(
 @Serializable
 data class ImageEntity(
     @ColumnInfo(name = "id")
-    val id: Int?,
+    val id: Int,
 
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "image_url")
     val imageUrl: String,
@@ -165,7 +165,7 @@ data class ImageEntity(
     val thumbnailUrl: String,
 
     @ColumnInfo(name = "credit")
-    val credit: String?
+    val credit: String
 )
 
 @Keep
@@ -178,13 +178,13 @@ data class AgencyEntity(
     val url: String?,
 
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "abbrev")
-    val abbrev: String?,
+    val abbrev: String,
 
     @ColumnInfo(name = "type")
-    val type: String?,
+    val type: String,
 
     @ColumnInfo(name = "featured")
     val featured: Boolean?,
@@ -194,7 +194,7 @@ data class AgencyEntity(
     val country: List<CountryEntity>?,
 
     @ColumnInfo(name = "description")
-    val description: String?,
+    val description: String,
 
     @ColumnInfo(name = "administrator")
     val administrator: String?,
@@ -289,7 +289,7 @@ data class RocketEntity(
     val id: Int?,
 
     @Embedded(prefix = "configuration")
-    val configuration: ConfigurationEntity?,
+    val configuration: ConfigurationEntity,
 
     @field:TypeConverters(LauncherStageListConverter::class)
     @ColumnInfo(name = "launcher_stage")
@@ -314,7 +314,7 @@ data class PadEntity(
 
     @ColumnInfo(name = "agency")
     @field:TypeConverters(AgencyListConverter::class)
-    val agencies: List<AgencyEntity>?,
+    val agencies: List<AgencyEntity?>?,
 
     @Embedded(prefix = "pad_image")
     val image: ImageEntity,
@@ -403,7 +403,7 @@ data class MissionEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "agencies")
-    val agencies: List<AgencyEntity>?,
+    val agencies: List<AgencyEntity?>?,
 
     @field:TypeConverters(InfoUrlListConverter::class)
     @ColumnInfo(name = "info_urls")
@@ -462,9 +462,9 @@ data class LaunchStatusEntity(
     @ColumnInfo(name = "id")
     val id: Int?,
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
     @ColumnInfo(name = "abbrev")
-    val abbrev: String?,
+    val abbrev: String,
     @ColumnInfo(name = "description")
     val description: String?,
 )
@@ -835,7 +835,7 @@ data class FamilyEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "manufacturer")
-    val manufacturer: List<AgencyEntity>?,
+    val manufacturer: List<AgencyEntity?>?,
 
     @ColumnInfo(name = "description")
     val description: String?,

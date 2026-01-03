@@ -8,6 +8,7 @@ import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchPrefs
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
@@ -23,7 +24,7 @@ internal class LaunchesComponentImpl @Inject constructor(
     private val getLaunchUseCase: GetLaunchUseCase
 ) : LaunchesComponent {
 
-    override fun observeLaunchesUseCase(query: LaunchesQuery): Flow<PagingData<Launch>> {
+    override fun observeLaunchesUseCase(query: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
         return observeLaunchesUseCase.invoke(query)
     }
 

@@ -12,6 +12,7 @@ import com.seancoyle.feature.launch.domain.model.Landing
 import com.seancoyle.feature.launch.domain.model.LandingLocation
 import com.seancoyle.feature.launch.domain.model.LandingType
 import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.Launcher
 import com.seancoyle.feature.launch.domain.model.LauncherStage
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
@@ -57,22 +58,29 @@ internal fun map(throwable: Throwable): RemoteError {
     }
 }
 
-internal fun LaunchesDto.toDomain(): List<Launch> {
+internal fun LaunchesDto.toDomain(): List<LaunchSummary> {
     return results?.mapNotNull { launchDto ->
         launchDto.toDomain()
     } ?: emptyList()
 }
 
-internal fun LaunchDto.toDomain(): Launch? {
-    val launchId = id ?: return null
-    val launchName = name ?: return null
+internal fun LaunchSummaryDto.toDomain(): LaunchSummary? {
+    return LaunchSummary(
+        id = id ?: return null,
+        missionName = name ?: return null,
+        net = net ?: return null,
+        thumbnailUrl = image?.toDomain()?.thumbnailUrl ?: LaunchesConstants.DEFAULT_LAUNCH_THUMBNAIL,
+        status = status?.toDomain() ?: return null
+    )
+}
 
+internal fun LaunchDto.toDomain(): Launch? {
     return Launch(
-        id = launchId,
+        id = id ?: return null,
         url = url,
-        missionName = launchName,
+        missionName = name ?: return null,
         lastUpdated = lastUpdated,
-        net = net,
+        net = net ?: return null,
         netPrecision = netPrecision?.toDomain(),
         windowEnd = windowEnd,
         windowStart = windowStart,
@@ -81,10 +89,10 @@ internal fun LaunchDto.toDomain(): Launch? {
         probability = probability,
         weatherConcerns = weatherConcerns,
         failReason = failReason,
-        launchServiceProvider = launchServiceProvider?.toDomain(),
-        rocket = rocket?.toDomain(),
-        mission = mission?.toDomain(),
-        pad = pad?.toDomain(),
+        launchServiceProvider = launchServiceProvider?.toDomain() ?: return null,
+        rocket = rocket?.toDomain() ?: return null,
+        mission = mission?.toDomain() ?: return null,
+        pad = pad?.toDomain() ?: return null,
         webcastLive = webcastLive,
         program = program?.map { it.toDomain() },
         orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
@@ -100,16 +108,18 @@ internal fun LaunchDto.toDomain(): Launch? {
         vidUrls = vidUrls?.map { it.toDomain() },
         padTurnaround = padTurnaround,
         missionPatches = missionPatches?.map { it.toDomain() },
-        status = status?.toDomain(),
+        status = status?.toDomain() ?: return null,
     )
 }
 
-private fun StatusDto?.toDomain() = Status(
-    id = this?.id,
-    name = this?.name,
-    abbrev = this?.abbrev,
-    description = this?.description
-)
+private fun StatusDto.toDomain(): Status? {
+    return Status(
+        id = id,
+        name = name ?: return null,
+        abbrev = abbrev ?: return null,
+        description = description
+    )
+}
 
 private fun NetPrecisionDto.toDomain() =
     NetPrecision(
@@ -121,23 +131,23 @@ private fun NetPrecisionDto.toDomain() =
 
 private fun ImageDto.toDomain() =
     Image(
-        id = id,
-        name = name,
+        id = id ?: 0,
+        name = name ?: "default",
         imageUrl = imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
         thumbnailUrl = thumbnailUrl ?: LaunchesConstants.DEFAULT_LAUNCH_THUMBNAIL,
-        credit = credit
+        credit = credit ?: "default"
     )
 
-private fun AgencyDto.toDomain() =
-    Agency(
+private fun AgencyDto.toDomain(): Agency? {
+    return Agency(
         id = id,
         url = url,
-        name = name,
-        abbrev = abbrev,
-        type = type?.name,
+        name = name?: return null,
+        abbrev = abbrev ?: return null,
+        type = type?.name ?: return null,
         featured = featured,
         country = country?.map { it.toDomain() },
-        description = description,
+        description = description ?: return null,
         administrator = administrator,
         foundingYear = foundingYear,
         launchers = launchers,
@@ -161,14 +171,16 @@ private fun AgencyDto.toDomain() =
         infoUrl = infoUrl,
         wikiUrl = wikiUrl,
     )
+}
 
-private fun RocketDto.toDomain() =
-    Rocket(
+private fun RocketDto.toDomain(): Rocket? {
+    return Rocket(
         id = id,
-        configuration = configuration?.toDomain(),
+        configuration = configuration?.toDomain() ?: return null,
         launcherStage = launcherStage?.map { it.toDomain() },
         spacecraftStage = spacecraftStage?.map { it.toDomain() }
     )
+}
 
 private fun ConfigurationDto.toDomain() =
     Configuration(
@@ -196,7 +208,7 @@ private fun FamilyDto.toDomain() =
     Family(
         id = id,
         name = name,
-        manufacturer = manufacturer?.map { it.toDomain() },
+        manufacturer = manufacturer?.map { it.toDomain() } ?: emptyList(),
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -290,11 +302,11 @@ private fun ProgramDto.toDomain() =
 
 private fun defaultImage() =
     Image(
-        id = null,
-        name = null,
+        id = 0,
+        name = "default",
         imageUrl = LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
         thumbnailUrl = LaunchesConstants.DEFAULT_LAUNCH_THUMBNAIL,
-        credit = null
+        credit = "default"
     )
 
 private fun LaunchUpdateDto.toDomain() =
@@ -351,20 +363,22 @@ private fun LauncherStageDto.toDomain() = LauncherStage(
     previousFlight = previousFlight?.toDomain()
 )
 
-private fun LauncherDto.toDomain() = Launcher(
-    id = id,
-    url = url,
-    flightProven = flightProven,
-    serialNumber = serialNumber,
-    status = status?.toDomainStatus(),
-    details = details,
-    image = image?.toDomain() ?: defaultImage(),
-    successfulLandings = successfulLandings,
-    attemptedLandings = attemptedLandings,
-    flights = flights,
-    lastLaunchDate = lastLaunchDate,
-    firstLaunchDate = firstLaunchDate
-)
+private fun LauncherDto.toDomain(): Launcher {
+    return Launcher(
+        id = id,
+        url = url,
+        flightProven = flightProven,
+        serialNumber = serialNumber,
+        status = status?.toDomain(),
+        details = details,
+        image = image?.toDomain() ?: defaultImage(),
+        successfulLandings = successfulLandings,
+        attemptedLandings = attemptedLandings,
+        flights = flights,
+        lastLaunchDate = lastLaunchDate,
+        firstLaunchDate = firstLaunchDate
+    )
+}
 
 private fun LandingDto.toDomain() = Landing(
     id = id,
@@ -438,11 +452,4 @@ private fun SpacecraftConfigDto.toDomain() = SpacecraftConfig(
 private fun SpacecraftTypeDto.toDomain() = SpacecraftType(
     id = id,
     name = name
-)
-
-private fun StatusDto.toDomainStatus() = Status(
-    id = id,
-    name = name,
-    abbrev = abbrev,
-    description = description
 )

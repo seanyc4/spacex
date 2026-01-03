@@ -3,6 +3,7 @@ package com.seancoyle.feature.launch.presentation
 import com.seancoyle.core.common.dataformatter.DateFormatConstants
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
@@ -75,7 +76,7 @@ class LaunchUiMapper @Inject constructor(
         }.trim()
     }
 
-    fun mapToLaunchesUi(launch: Launch): LaunchesUi {
+    fun mapToLaunchesUi(launch: LaunchSummary): LaunchesUi {
         with(launch) {
             val locateDateTime = dateFormatter.formatDate(net)
             return LaunchesUi(
@@ -83,7 +84,7 @@ class LaunchUiMapper @Inject constructor(
                 launchDate = formatDate(locateDateTime),
                 missionName = missionName,
                 status = status.toDomain(),
-                image = image.thumbnailUrl
+                thumbnail = thumbnailUrl
             )
         }
     }
