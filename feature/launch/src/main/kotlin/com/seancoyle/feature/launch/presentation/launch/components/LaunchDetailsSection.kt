@@ -53,16 +53,38 @@ internal fun LaunchDetailsSection(
                     color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
                 )
 
-                LaunchWindowTimeline(
-                    windowStartTime = launch.windowStartTime,
-                    windowEndTime = launch.windowEndTime,
-                    windowDuration = launch.windowDuration,
-                    windowStartDateTime = launch.windowStartDateTime,
-                    windowEndDateTime = launch.windowEndDateTime,
-                    launchTime = launch.launchTime,
-                    launchDateTime = launch.launchDateTime,
-                    launchDate = launch.launchDate
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(Dimens.dp12)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AppTheme.colors.primary.copy(alpha = 0.15f),
+                                        AppTheme.colors.secondary.copy(alpha = 0.15f)
+                                    )
+                                )
+                            )
+                    ) {
+                        LaunchWindowTimeline(
+                            windowStartTime = launch.windowStartTime,
+                            windowEndTime = launch.windowEndTime,
+                            windowDuration = launch.windowDuration,
+                            windowStartDateTime = launch.windowStartDateTime,
+                            windowEndDateTime = launch.windowEndDateTime,
+                            launchTime = launch.launchTime,
+                            launchDateTime = launch.launchDateTime,
+                            launchDate = launch.launchDate,
+                            modifier = Modifier.padding(Dimens.dp16)
+                        )
+                    }
+                }
             }
 
             // Fail Reason (if applicable)
@@ -326,23 +348,40 @@ private fun LaunchWindowTimeline(
 
             // Duration card
             windowDuration?.let { duration ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Dimens.dp8),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(Dimens.dp12)
                 ) {
-                    AppText.labelLarge(
-                        text = stringResource(R.string.duration),
-                        color = AppTheme.colors.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.width(Dimens.dp8))
-                    AppText.titleMedium(
-                        text = duration,
-                        fontWeight = FontWeight.Bold,
-                        color = AppTheme.colors.onSurface
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Dimens.dp12),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = null,
+                            tint = AppTheme.colors.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(Dimens.dp8))
+                        AppText.labelLarge(
+                            text = stringResource(R.string.duration),
+                            color = AppTheme.colors.onSurfaceVariant,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(Dimens.dp8))
+                        AppText.titleMedium(
+                            text = duration,
+                            fontWeight = FontWeight.Bold,
+                            color = AppTheme.colors.primary,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
                 }
             }
         }
