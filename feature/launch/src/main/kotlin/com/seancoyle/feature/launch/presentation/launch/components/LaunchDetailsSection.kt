@@ -254,57 +254,64 @@ private fun LaunchWindowTimeline(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(8.dp)
+                            .height(24.dp)
                     ) {
-                        // Background track (darker/shadow effect)
+                        // Background track (darker/shadow effect) - full width
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight()
+                                .height(8.dp)
+                                .align(Alignment.Center)
                                 .background(
                                     color = AppTheme.colors.surfaceVariant.copy(alpha = 0.9f),
                                     shape = RoundedCornerShape(4.dp)
                                 )
                         )
 
-                        // Active portion (centered gradient)
+                        // Active portion (gradient) - inset horizontally
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight()
+                                .height(8.dp)
+                                .align(Alignment.Center)
                                 .padding(horizontal = 48.dp)
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            AppTheme.colors.primary.copy(alpha = 0.7f),
-                                            AppTheme.colors.primary
-                                        )
-                                    ),
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                        )
-
-                        // Launch time indicator circle
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(launchProgress)
-                                .fillMaxHeight()
-                                .wrapContentWidth(Alignment.End)
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(24.dp)
-                                    .offset(y = (-8).dp)
+                                    .fillMaxSize()
                                     .background(
-                                        color = AppTheme.colors.primary,
-                                        shape = androidx.compose.foundation.shape.CircleShape
-                                    )
-                                    .padding(2.dp)
-                                    .background(
-                                        color = AppTheme.colors.surface,
-                                        shape = androidx.compose.foundation.shape.CircleShape
+                                        brush = Brush.horizontalGradient(
+                                            colors = listOf(
+                                                AppTheme.colors.primary.copy(alpha = 0.7f),
+                                                AppTheme.colors.primary
+                                            )
+                                        ),
+                                        shape = RoundedCornerShape(4.dp)
                                     )
                             )
+
+                            // Launch time indicator circle - positioned within active track
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(launchProgress)
+                                    .fillMaxHeight()
+                                    .wrapContentWidth(Alignment.End)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .align(Alignment.CenterEnd)
+                                        .background(
+                                            color = AppTheme.colors.tertiary,
+                                            shape = androidx.compose.foundation.shape.CircleShape
+                                        )
+                                        .padding(2.dp)
+                                        .background(
+                                            color = AppTheme.colors.surface,
+                                            shape = androidx.compose.foundation.shape.CircleShape
+                                        )
+                                )
+                            }
                         }
                     }
 
