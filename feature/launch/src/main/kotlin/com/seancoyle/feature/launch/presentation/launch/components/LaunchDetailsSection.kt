@@ -56,34 +56,21 @@ internal fun LaunchDetailsSection(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.Transparent
+                        containerColor = AppTheme.colors.primary.copy(alpha = 0.07f)
                     ),
                     shape = RoundedCornerShape(Dimens.dp12)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        AppTheme.colors.primary.copy(alpha = 0.15f),
-                                        AppTheme.colors.secondary.copy(alpha = 0.15f)
-                                    )
-                                )
-                            )
-                    ) {
-                        LaunchWindowTimeline(
-                            windowStartTime = launch.windowStartTime,
-                            windowEndTime = launch.windowEndTime,
-                            windowDuration = launch.windowDuration,
-                            windowStartDateTime = launch.windowStartDateTime,
-                            windowEndDateTime = launch.windowEndDateTime,
-                            launchTime = launch.launchTime,
-                            launchDateTime = launch.launchDateTime,
-                            launchDate = launch.launchDate,
-                            modifier = Modifier.padding(Dimens.dp16)
-                        )
-                    }
+                    LaunchWindowTimeline(
+                        windowStartTime = launch.windowStartTime,
+                        windowEndTime = launch.windowEndTime,
+                        windowDuration = launch.windowDuration,
+                        windowStartDateTime = launch.windowStartDateTime,
+                        windowEndDateTime = launch.windowEndDateTime,
+                        launchTime = launch.launchTime,
+                        launchDateTime = launch.launchDateTime,
+                        launchDate = launch.launchDate,
+                        modifier = Modifier.padding(Dimens.dp16)
+                    )
                 }
             }
 
@@ -212,7 +199,8 @@ private fun LaunchWindowTimeline(
     modifier: Modifier = Modifier
 ) {
     // Calculate timeline progress based on actual launch time position
-    val launchProgress = calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
+    val launchProgress =
+        calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -243,7 +231,7 @@ private fun LaunchWindowTimeline(
                     )
                 }
                 launchTime?.let { time ->
-                    AppText.displaySmall(
+                    AppText.titleLarge(
                         text = time,
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.primary,
@@ -353,7 +341,7 @@ private fun LaunchWindowTimeline(
                     colors = CardDefaults.cardColors(
                         containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
                     ),
-                    shape = RoundedCornerShape(Dimens.dp12)
+                    shape = RoundedCornerShape(Dimens.dp10)
                 ) {
                     Row(
                         modifier = Modifier
@@ -366,16 +354,16 @@ private fun LaunchWindowTimeline(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = null,
                             tint = AppTheme.colors.primary,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(16.dp)
                         )
-                        Spacer(modifier = Modifier.width(Dimens.dp8))
-                        AppText.labelLarge(
+                        Spacer(modifier = Modifier.width(6.dp))
+                        AppText.bodyMedium(
                             text = stringResource(R.string.duration),
                             color = AppTheme.colors.onSurfaceVariant,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
-                        Spacer(modifier = Modifier.width(Dimens.dp8))
-                        AppText.titleMedium(
+                        Spacer(modifier = Modifier.width(4.dp))
+                        AppText.titleXSmall(
                             text = duration,
                             fontWeight = FontWeight.Bold,
                             color = AppTheme.colors.primary,
