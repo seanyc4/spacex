@@ -4,15 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -23,17 +22,11 @@ import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 
 @Composable
 fun LaunchScreen(
-    launchId: String,
-    launchesType: LaunchesType,
+    viewModel: LaunchViewModel,
     @Suppress("UNUSED_PARAMETER") snackbarHostState: SnackbarHostState,
-    @Suppress("UNUSED_PARAMETER") windowSizeClass: androidx.compose.material3.windowsizeclass.WindowSizeClass,
+    @Suppress("UNUSED_PARAMETER") windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: LaunchViewModel =
-        hiltViewModel<LaunchViewModel, LaunchViewModel.Factory> { factory ->
-            factory.create(launchId = launchId, launchType = launchesType)
-        }
-
     val launchState by viewModel.launchState.collectAsStateWithLifecycle()
 
     LaunchScreenContent(

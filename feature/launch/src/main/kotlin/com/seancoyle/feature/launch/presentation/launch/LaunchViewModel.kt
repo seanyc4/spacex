@@ -64,7 +64,7 @@ class LaunchViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    internal interface Factory {
+    interface Factory {
         fun create(
             launchId: String,
             launchType: LaunchesType
