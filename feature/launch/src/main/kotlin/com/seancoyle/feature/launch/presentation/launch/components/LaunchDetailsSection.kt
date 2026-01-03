@@ -25,6 +25,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import java.time.LocalDateTime
 
 @Composable
@@ -70,6 +71,7 @@ internal fun LaunchDetailsSection(
                         launchTime = launch.launchTime,
                         launchDateTime = launch.launchDateTime,
                         launchDate = launch.launchDate,
+                        status = launch.status,
                         modifier = Modifier.padding(Dimens.dp16)
                     )
                 }
@@ -197,13 +199,14 @@ private fun LaunchWindowTimeline(
     launchTime: String?,
     launchDateTime: LocalDateTime?,
     launchDate: String?,
+    status: LaunchStatus,
     modifier: Modifier = Modifier
 ) {
     // Calculate timeline progress based on actual launch time position
     val launchProgress =
         calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
 
-    // Check if this is an instantaneous launch (same start and end time)
+    // Check if this is an instantaneous launch (same start and end time) OR status is TBD
     val isInstantaneous = windowDuration == "Instantaneous"
 
     Column(
@@ -362,43 +365,44 @@ private fun LaunchWindowTimeline(
                 }
             }
 
-            // Duration card
-            windowDuration?.let { duration ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.dp8),
-                    colors = CardDefaults.cardColors(
-                        containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-                    ),
-                    shape = RoundedCornerShape(Dimens.dp10)
-                ) {
-                    Row(
+            if (status != LaunchStatus.TBD) {
+                windowDuration?.let { duration ->
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(Dimens.dp12),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(top = Dimens.dp8),
+                        colors = CardDefaults.cardColors(
+                            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
+                        ),
+                        shape = RoundedCornerShape(Dimens.dp10)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.AccessTime,
-                            contentDescription = null,
-                            tint = AppTheme.colors.primary,
-                            modifier = Modifier.size(13.dp)
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
-                        AppText.bodyMedium(
-                            text = stringResource(R.string.duration),
-                            color = AppTheme.colors.onSurfaceVariant,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        AppText.titleXSmall(
-                            text = duration,
-                            fontWeight = FontWeight.Bold,
-                            color = AppTheme.colors.primary,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Dimens.dp12),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccessTime,
+                                contentDescription = null,
+                                tint = AppTheme.colors.primary,
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            AppText.bodyMedium(
+                                text = stringResource(R.string.duration),
+                                color = AppTheme.colors.onSurfaceVariant,
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            AppText.titleXSmall(
+                                text = duration,
+                                fontWeight = FontWeight.Bold,
+                                color = AppTheme.colors.primary,
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
                     }
                 }
             }
