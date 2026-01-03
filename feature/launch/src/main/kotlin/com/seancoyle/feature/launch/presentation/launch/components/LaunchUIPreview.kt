@@ -238,12 +238,12 @@ internal fun previewData() = LaunchUI(
         ),
         latitude = 28.56194122,
         longitude = -80.57735736,
-        mapUrl = null,
-        mapImage = null,
+        mapUrl = "https://example.com/pad_image.png",
+        mapImage = "https://example.com/pad_image.png",
         wikiUrl = null,
         infoUrl = null,
-        totalLaunchCount = null,
-        orbitalLaunchAttemptCount = null,
+        totalLaunchCount = 957,
+        orbitalLaunchAttemptCount = 457,
         fastestTurnaround = null,
         location = Location(
             id = 12,
@@ -258,12 +258,12 @@ internal fun previewData() = LaunchUI(
             ),
             description = "Cape Canaveral Space Force Station",
             image = null,
-            mapImage = null,
+            mapImage = "https://example.com/pad_image.png",
             longitude = -80.57735736,
             latitude = 28.56194122,
             timezoneName = "America/New_York",
-            totalLaunchCount = null,
-            totalLandingCount = null
+            totalLaunchCount = 778,
+            totalLandingCount = 56
         )
     ),
     updates = listOf(

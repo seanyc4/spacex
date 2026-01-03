@@ -199,7 +199,7 @@ private fun LaunchWindowTimeline(
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.primary.copy(alpha = 0.07f)
+            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
         shape = RoundedCornerShape(Dimens.dp12)
     ) {

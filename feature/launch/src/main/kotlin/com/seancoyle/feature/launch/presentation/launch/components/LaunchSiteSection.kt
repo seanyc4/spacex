@@ -67,7 +67,7 @@ private fun LaunchSiteContent(
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.primary.copy(alpha = 0.07f)
+            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
         shape = RoundedCornerShape(Dimens.dp12)
     ) {
@@ -252,7 +252,7 @@ private fun LaunchStatisticsContent(
                 tint = AppTheme.colors.primary,
                 modifier = Modifier.size(20.dp)
             )
-            AppText.titleSmall(
+            AppText.titleMedium(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.onSurface
