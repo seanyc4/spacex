@@ -25,6 +25,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.R
+import java.time.LocalDateTime
 
 @Composable
 internal fun LaunchDetailsSection(
@@ -56,6 +57,10 @@ internal fun LaunchDetailsSection(
                     windowStartTime = launch.windowStartTime,
                     windowEndTime = launch.windowEndTime,
                     windowDuration = launch.windowDuration,
+                    windowStartDateTime = launch.windowStartDateTime,
+                    windowEndDateTime = launch.windowEndDateTime,
+                    launchTime = launch.launchTime,
+                    launchDateTime = launch.launchDateTime,
                     launchDate = launch.launchDate
                 )
             }
@@ -177,9 +182,16 @@ private fun LaunchWindowTimeline(
     windowStartTime: String?,
     windowEndTime: String?,
     windowDuration: String?,
+    windowStartDateTime: LocalDateTime?,
+    windowEndDateTime: LocalDateTime?,
+    launchTime: String?,
+    launchDateTime: LocalDateTime?,
     launchDate: String?,
     modifier: Modifier = Modifier
 ) {
+    // Calculate timeline progress based on actual launch time position
+    val launchProgress = calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
@@ -194,14 +206,23 @@ private fun LaunchWindowTimeline(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
         ) {
-            launchDate?.let { date ->
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
-                ) {
-                    AppText.titleSmall(
+            // Launch Date with Time - Centered at top
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+            ) {
+                launchDate?.let { date ->
+                    AppText.bodyLarge(
                         text = date,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppTheme.colors.onSurface,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                launchTime?.let { time ->
+                    AppText.displaySmall(
+                        text = time,
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.primary,
                         textAlign = TextAlign.Center
@@ -209,32 +230,43 @@ private fun LaunchWindowTimeline(
                 }
             }
 
+            // Timeline
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = Dimens.dp8)
+                    .padding(vertical = Dimens.dp16)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+                    verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
                 ) {
+                    // Timeline track with shadows
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(8.dp)
-                            .background(
-                                color = AppTheme.colors.surfaceVariant.copy(alpha = 0.3f),
-                                shape = RoundedCornerShape(4.dp)
-                            )
                     ) {
+                        // Background track (darker/shadow effect)
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(0.5f) // TODO: Calculate actual progress
+                                .fillMaxWidth()
                                 .fillMaxHeight()
+                                .background(
+                                    color = AppTheme.colors.surfaceVariant.copy(alpha = 0.9f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                        )
+
+                        // Active portion (centered gradient)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(horizontal = 48.dp)
                                 .background(
                                     brush = Brush.horizontalGradient(
                                         colors = listOf(
-                                            AppTheme.colors.primary.copy(alpha = 0.6f),
+                                            AppTheme.colors.primary.copy(alpha = 0.7f),
                                             AppTheme.colors.primary
                                         )
                                     ),
@@ -242,9 +274,10 @@ private fun LaunchWindowTimeline(
                                 )
                         )
 
+                        // Launch time indicator circle
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(0.5f) // TODO: Calculate actual position
+                                .fillMaxWidth(launchProgress)
                                 .fillMaxHeight()
                                 .wrapContentWidth(Alignment.End)
                         ) {
@@ -265,80 +298,80 @@ private fun LaunchWindowTimeline(
                         }
                     }
 
-                    // Time labels
+                    // Time labels - just the times, no labels
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        // Window Start Time (left)
                         windowStartTime?.let { start ->
-                            Column(horizontalAlignment = Alignment.Start) {
-                                AppText.labelSmall(
-                                    text = stringResource(R.string.window_opens),
-                                    color = AppTheme.colors.onSurfaceVariant
-                                )
-                                AppText.bodyLarge(
-                                    text = start,
-                                    color = AppTheme.colors.onSurface,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            AppText.bodyLarge(
+                                text = start,
+                                color = AppTheme.colors.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
 
+                        // Window End Time (right)
                         windowEndTime?.let { end ->
-                            Column(horizontalAlignment = Alignment.End) {
-                                AppText.labelSmall(
-                                    text = stringResource(R.string.window_closes),
-                                    color = AppTheme.colors.onSurfaceVariant
-                                )
-                                AppText.bodyLarge(
-                                    text = end,
-                                    color = AppTheme.colors.onSurface,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            AppText.bodyLarge(
+                                text = end,
+                                color = AppTheme.colors.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
                     }
                 }
             }
 
-            // Duration card (if duration is available)
+            // Duration card
             windowDuration?.let { duration ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-                    ),
-                    shape = RoundedCornerShape(Dimens.dp12)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.dp8),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(Dimens.dp12),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = null,
-                            tint = AppTheme.colors.primary,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(Dimens.dp8))
-                        AppText.labelLarge(
-                            text = stringResource(R.string.duration),
-                            color = AppTheme.colors.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.width(Dimens.dp4))
-                        AppText.titleXSmall(
-                            text = duration,
-                            fontWeight = FontWeight.Bold,
-                            color = AppTheme.colors.primary
-                        )
-                    }
+                    AppText.labelLarge(
+                        text = stringResource(R.string.duration),
+                        color = AppTheme.colors.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.dp8))
+                    AppText.titleMedium(
+                        text = duration,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onSurface
+                    )
                 }
             }
         }
     }
+}
+
+/**
+ * Calculates the position of the launch time within the launch window.
+ * Returns a value between 0.0 and 1.0 representing the position in the window.
+ */
+private fun calculateLaunchPosition(
+    windowStart: LocalDateTime?,
+    windowEnd: LocalDateTime?,
+    launchTime: LocalDateTime?
+): Float {
+    if (windowStart == null || windowEnd == null || launchTime == null) return 0.5f
+
+    // If launch time is before window, show at start
+    if (launchTime.isBefore(windowStart)) return 0f
+
+    // If launch time is after window, show at end
+    if (launchTime.isAfter(windowEnd)) return 1f
+
+    // Calculate position of launch time within the window
+    val totalDuration = java.time.Duration.between(windowStart, windowEnd).toMillis().toFloat()
+    val launchOffset = java.time.Duration.between(windowStart, launchTime).toMillis().toFloat()
+
+    // Return position between 0 and 1
+    return (launchOffset / totalDuration).coerceIn(0f, 1f)
 }
 
 @Composable

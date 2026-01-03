@@ -16,7 +16,7 @@ class LaunchUiMapper @Inject constructor(
 
     fun mapToLaunchUi(launch: Launch): LaunchUI {
         with(launch) {
-            val locateDateTime = dateFormatter.formatDate(net)
+            val launchDateTime = dateFormatter.formatDate(net)
             val windowStartDateTime = windowStart?.let { dateFormatter.formatDate(it) }
             val windowEndDateTime = windowEnd?.let { dateFormatter.formatDate(it) }
             val duration = calculateDuration(windowStartDateTime, windowEndDateTime)
@@ -24,13 +24,17 @@ class LaunchUiMapper @Inject constructor(
             return LaunchUI(
                 id = id,
                 missionName = missionName.substringBefore("|").trim(),
-                launchDate = formatDate(locateDateTime),
+                launchDate = formatDate(launchDateTime),
+                launchTime = formatDate(launchDateTime, DateFormatConstants.HH_MM),
+                launchDateTime = launchDateTime,
                 status = status.toDomain(),
                 windowEnd = formatDate(windowEndDateTime, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
                 windowStart = formatDate(windowStartDateTime, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
                 windowStartTime = formatDate(windowStartDateTime, DateFormatConstants.HH_MM),
                 windowEndTime = formatDate(windowEndDateTime, DateFormatConstants.HH_MM),
                 windowDuration = duration,
+                windowStartDateTime = windowStartDateTime,
+                windowEndDateTime = windowEndDateTime,
                 image = image,
                 failReason = failReason,
                 launchServiceProvider = launchServiceProvider,

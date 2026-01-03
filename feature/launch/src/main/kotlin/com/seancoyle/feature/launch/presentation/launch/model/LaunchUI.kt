@@ -9,17 +9,22 @@ import com.seancoyle.feature.launch.domain.model.MissionPatch
 import com.seancoyle.feature.launch.domain.model.Pad
 import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.VidUrl
+import java.time.LocalDateTime
 
 data class LaunchUI(
     val id: String,
     val missionName: String,
     val launchDate: String,
+    val launchTime: String?,
+    val launchDateTime: LocalDateTime?,
     val status: LaunchStatus,
     val windowEnd: String?,
     val windowStart: String?,
     val windowStartTime: String?,
     val windowEndTime: String?,
     val windowDuration: String?,
+    val windowStartDateTime: LocalDateTime?,
+    val windowEndDateTime: LocalDateTime?,
     val image: Image,
     val failReason: String?,
     val launchServiceProvider: Agency?,

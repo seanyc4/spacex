@@ -3,6 +3,7 @@ package com.seancoyle.feature.launch.presentation.launch.components
 import com.seancoyle.feature.launch.domain.model.*
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import java.time.LocalDateTime
 
 /**
  * Preview data for LaunchUI to be used in Composable previews
@@ -11,12 +12,16 @@ internal fun previewData() = LaunchUI(
     id = "preview-id-123",
     missionName = "Starlink Group 7-12",
     launchDate = "Jan 15, 2026, 10:30 AM EST",
+    launchTime = "10:30",
+    launchDateTime = LocalDateTime.of(2026, 1, 15, 10, 30),
     status = LaunchStatus.SUCCESS,
     windowEnd = "Jan 15, 2026, 11:00 AM EST",
     windowStart = "Jan 15, 2026, 10:00 AM EST",
     windowStartTime = "10:00",
     windowEndTime = "11:00",
     windowDuration = "1h",
+    windowStartDateTime = LocalDateTime.of(2026, 1, 15, 10, 0),
+    windowEndDateTime = LocalDateTime.of(2026, 1, 15, 11, 0),
     image = Image(
         id = 1,
         name = "Falcon 9",
