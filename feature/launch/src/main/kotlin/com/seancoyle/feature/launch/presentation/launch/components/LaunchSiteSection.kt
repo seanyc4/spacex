@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,195 +39,200 @@ internal fun LaunchSiteSection(
     pad: Pad,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
-    ) {
-        // Launch Site Information Card
-        LaunchSiteCard(pad = pad)
+    SectionCard(modifier = modifier) {
+        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+            // Launch Site Information
+            LaunchSiteContent(pad = pad)
 
-        // Launch Statistics Card
-        val hasStats = pad.totalLaunchCount != null ||
-                      pad.orbitalLaunchAttemptCount != null ||
-                      pad.location?.totalLaunchCount != null
+            // Launch Statistics (if available)
+            val hasStats = pad.totalLaunchCount != null ||
+                    pad.orbitalLaunchAttemptCount != null ||
+                    pad.location?.totalLaunchCount != null
 
-        if (hasStats) {
-            LaunchStatisticsCard(pad = pad)
+            if (hasStats) {
+                HorizontalDivider(
+                    color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+                )
+                LaunchStatisticsContent(pad = pad)
+            }
         }
     }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-private fun LaunchSiteCard(
+private fun LaunchSiteContent(
     pad: Pad,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
 
-    SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
-            SectionTitle(text = stringResource(R.string.launch_site))
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
+    ) {
+        SectionTitle(text = stringResource(R.string.launch_site))
 
-            // Header with Icon
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp12),
-                verticalAlignment = Alignment.Top
+        // Header with Icon
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.dp12),
+            verticalAlignment = Alignment.Top
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(Dimens.dp12)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                // Icon
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(Dimens.dp12)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Place,
-                        contentDescription = null,
-                        tint = AppTheme.colors.primary,
-                        modifier = Modifier.size(28.dp)
+                Icon(
+                    imageVector = Icons.Default.Place,
+                    contentDescription = null,
+                    tint = AppTheme.colors.primary,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
+
+            // Pad & Location Info
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+            ) {
+                pad.name?.let { name ->
+                    AppText.titleMedium(
+                        text = name,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onSurface
                     )
                 }
 
-                // Pad & Location Info
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
-                ) {
-                    pad.name?.let { name ->
-                        AppText.titleMedium(
-                            text = name,
-                            fontWeight = FontWeight.Bold,
-                            color = AppTheme.colors.onSurface
-                        )
+                pad.location?.name?.let { location ->
+                    AppText.bodyMedium(
+                        text = location,
+                        color = AppTheme.colors.onSurfaceVariant
+                    )
+                }
+
+                pad.location?.country?.let { country ->
+                    val countryFlag = country.alpha2Code?.toCountryFlag() ?: ""
+                    val countryText = if (countryFlag.isNotEmpty()) {
+                        "$countryFlag ${country.name ?: ""}"
+                    } else {
+                        country.name ?: ""
                     }
 
-                    pad.location?.name?.let { location ->
-                        AppText.bodyMedium(
-                            text = location,
+                    if (countryText.isNotBlank()) {
+                        AppText.bodySmall(
+                            text = countryText,
                             color = AppTheme.colors.onSurfaceVariant
                         )
                     }
+                }
+            }
+        }
 
-                    pad.location?.country?.let { country ->
-                        val countryFlag = country.alpha2Code?.toCountryFlag() ?: ""
-                        val countryText = if (countryFlag.isNotEmpty()) {
-                            "$countryFlag ${country.name ?: ""}"
+        pad.description?.let { desc ->
+            AppText.bodySmall(
+                text = desc,
+                color = AppTheme.colors.onSurfaceVariant
+            )
+        }
+
+        // Map Image (clickable to open Google Maps)
+        val mapImageUrl = pad.mapImage ?: pad.location?.mapImage
+        val mapUrl = pad.mapUrl
+
+        if (mapImageUrl != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(Dimens.dp12))
+                    .then(
+                        if (mapUrl != null) {
+                            Modifier.clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+                                context.startActivity(intent)
+                            }
                         } else {
-                            country.name ?: ""
+                            Modifier
                         }
+                    )
+            ) {
+                GlideImage(
+                    model = mapImageUrl,
+                    contentDescription = "Map of ${pad.name}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                    failure = placeholder(R.drawable.default_launch_hero_image)
+                )
 
-                        if (countryText.isNotBlank()) {
-                            AppText.bodySmall(
-                                text = countryText,
-                                color = AppTheme.colors.onSurfaceVariant
+                // Map overlay indicator
+                if (mapUrl != null) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(Dimens.dp8)
+                            .background(
+                                color = AppTheme.colors.primary,
+                                shape = RoundedCornerShape(Dimens.dp8)
+                            )
+                            .padding(horizontal = Dimens.dp12, vertical = Dimens.dp8)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Place,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            AppText.labelSmall(
+                                text = stringResource(R.string.open_in_maps),
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
                 }
             }
+        }
 
-            // Description
-            pad.description?.let { desc ->
-                AppText.bodySmall(
-                    text = desc,
-                    color = AppTheme.colors.onSurfaceVariant
+        // Coordinates
+        val latitude = pad.latitude
+        val longitude = pad.longitude
+        if (latitude != null && longitude != null) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = AppTheme.colors.primary,
+                    modifier = Modifier.size(20.dp)
                 )
-            }
-
-            // Map Image (clickable to open Google Maps)
-            val mapImageUrl = pad.mapImage ?: pad.location?.mapImage
-            val mapUrl = pad.mapUrl
-
-            if (mapImageUrl != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(Dimens.dp12))
-                        .then(
-                            if (mapUrl != null) {
-                                Modifier.clickable {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
-                                    context.startActivity(intent)
-                                }
-                            } else {
-                                Modifier
-                            }
-                        )
-                ) {
-                    GlideImage(
-                        model = mapImageUrl,
-                        contentDescription = "Map of ${pad.name}",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize(),
-                        failure = placeholder(R.drawable.default_launch_hero_image)
+                Column(modifier = Modifier.weight(1f)) {
+                    AppText.labelMedium(
+                        text = stringResource(R.string.coordinates),
+                        color = AppTheme.colors.onSurfaceVariant
                     )
-
-                    // Map overlay indicator
-                    if (mapUrl != null) {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(Dimens.dp8)
-                                .background(
-                                    color = AppTheme.colors.primary,
-                                    shape = RoundedCornerShape(Dimens.dp8)
-                                )
-                                .padding(horizontal = Dimens.dp12, vertical = Dimens.dp8)
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Place,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                AppText.labelSmall(
-                                    text = stringResource(R.string.open_in_maps),
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Coordinates
-            val latitude = pad.latitude
-            val longitude = pad.longitude
-            if (latitude != null && longitude != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = AppTheme.colors.primary,
-                        modifier = Modifier.size(20.dp)
+                    AppText.bodyMedium(
+                        text = "${String.format("%.6f", latitude)}, ${
+                            String.format(
+                                "%.6f",
+                                longitude
+                            )
+                        }",
+                        color = AppTheme.colors.onSurface,
+                        fontWeight = FontWeight.Medium
                     )
-                    Column(modifier = Modifier.weight(1f)) {
-                        AppText.labelMedium(
-                            text = stringResource(R.string.coordinates),
-                            color = AppTheme.colors.onSurfaceVariant
-                        )
-                        AppText.bodyMedium(
-                            text = "${String.format("%.6f", latitude)}, ${String.format("%.6f", longitude)}",
-                            color = AppTheme.colors.onSurface,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
                 }
             }
         }
@@ -234,69 +240,67 @@ private fun LaunchSiteCard(
 }
 
 @Composable
-private fun LaunchStatisticsCard(
+private fun LaunchStatisticsContent(
     pad: Pad,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null,
-                    tint = AppTheme.colors.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                SectionTitle(text = stringResource(R.string.launch_statistics))
-            }
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = AppTheme.colors.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            AppText.titleSmall(
+                text = stringResource(R.string.site_statistics),
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.onSurface
+            )
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
-            ) {
-                pad.totalLaunchCount?.let { count ->
-                    PadStatChip(
-                        label = stringResource(R.string.pad_launches),
-                        value = count.toString(),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
+        ) {
+            PadStatChip(
+                label = stringResource(R.string.pad_launches),
+                value = pad.totalLaunchCount?.toString() ?: stringResource(R.string.not_available),
+                modifier = Modifier.weight(1f)
+            )
 
-                pad.orbitalLaunchAttemptCount?.let { count ->
-                    PadStatChip(
-                        label = stringResource(R.string.orbital_attempts),
-                        value = count.toString(),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
+            PadStatChip(
+                label = stringResource(R.string.orbital_attempts),
+                value = pad.orbitalLaunchAttemptCount?.toString()
+                    ?: stringResource(R.string.not_available),
+                modifier = Modifier.weight(1f)
+            )
+        }
 
-            pad.location?.let { location ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
-                ) {
-                    location.totalLaunchCount?.let { count ->
-                        PadStatChip(
-                            label = stringResource(R.string.location_launches),
-                            value = count.toString(),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
+        ) {
+            PadStatChip(
+                label = stringResource(R.string.location_launches),
+                value = pad.location?.totalLaunchCount?.toString()
+                    ?: stringResource(R.string.not_available),
+                modifier = Modifier.weight(1f)
+            )
 
-                    location.totalLandingCount?.let { count ->
-                        PadStatChip(
-                            label = stringResource(R.string.location_landings),
-                            value = count.toString(),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-            }
+            PadStatChip(
+                label = stringResource(R.string.location_landings),
+                value = pad.location?.totalLandingCount?.toString()
+                    ?: stringResource(R.string.not_available),
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
