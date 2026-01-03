@@ -185,7 +185,7 @@ private fun LaunchSiteContent(
                             .align(Alignment.BottomEnd)
                             .padding(Dimens.dp8)
                             .background(
-                                color = AppTheme.colors.primary,
+                                color = AppTheme.colors.inversePrimary,
                                 shape = RoundedCornerShape(Dimens.dp8)
                             )
                             .padding(horizontal = Dimens.dp12, vertical = Dimens.dp8)

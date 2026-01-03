@@ -46,7 +46,7 @@ fun Chip(
             }
         },
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = containerColor.copy(alpha = 0.2f),
+            containerColor = containerColor.copy(alpha = 0.3f),
             labelColor = contentColor,
             leadingIconContentColor = contentColor
         ),
