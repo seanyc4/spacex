@@ -83,10 +83,16 @@ private fun LaunchSiteContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
+                    AppText.labelMedium(
+                        text = stringResource(R.string.launch_site).uppercase(),
+                        color = AppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    )
                     AppText.titleMedium(
                         text = pad.name.orEmpty(),
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onSurface,
+                        modifier = Modifier.padding(top = Dimens.dp4)
                     )
                 }
                 Box(

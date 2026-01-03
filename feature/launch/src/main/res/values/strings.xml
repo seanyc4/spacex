@@ -31,5 +31,6 @@
     <string name="failure_reason">Failure Reason</string>
     <string name="open_in_maps">Open in Maps</string>
     <string name="not_available">N/A</string>
+    <string name="launch_site">Launch Site</string>
 </resources>
 
