@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,34 +52,12 @@ internal fun LaunchDetailsSection(
                     color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
                 )
 
-                AppText.titleMedium(
-                    text = "Launch Window",
-                    fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                LaunchWindowTimeline(
+                    windowStartTime = launch.windowStartTime,
+                    windowEndTime = launch.windowEndTime,
+                    windowDuration = launch.windowDuration,
+                    launchDate = launch.launchDate
                 )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp12)
-                ) {
-                    launch.windowStart?.let { windowStart ->
-                        TimeCard(
-                            label = stringResource(R.string.window_opens),
-                            time = windowStart,
-                            icon = Icons.Default.DateRange,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
-                    launch.windowEnd?.let { windowEnd ->
-                        TimeCard(
-                            label = stringResource(R.string.window_closes),
-                            time = windowEnd,
-                            icon = Icons.Default.DateRange,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
             }
 
             // Fail Reason (if applicable)
@@ -196,48 +173,173 @@ private fun MissionHighlightCard(
 }
 
 @Composable
-private fun TimeCard(
-    label: String,
-    time: String,
-    icon: ImageVector,
+private fun LaunchWindowTimeline(
+    windowStartTime: String?,
+    windowEndTime: String?,
+    windowDuration: String?,
+    launchDate: String?,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.4f)
-        ),
-        shape = RoundedCornerShape(Dimens.dp12)
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
+        AppText.titleMedium(
+            text = stringResource(R.string.launch_window),
+            fontWeight = FontWeight.Bold,
+            color = AppTheme.colors.onSurface
+        )
+
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.dp16),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = AppTheme.colors.primary,
-                modifier = Modifier.size(24.dp)
-            )
-            AppText.labelSmall(
-                text = label,
-                color = AppTheme.colors.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Medium
-            )
-            AppText.bodyMedium(
-                text = time,
-                color = AppTheme.colors.onSurface,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
-            )
+            launchDate?.let { date ->
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+                ) {
+                    AppText.titleSmall(
+                        text = date,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.primary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Dimens.dp8)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .background(
+                                color = AppTheme.colors.surfaceVariant.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f) // TODO: Calculate actual progress
+                                .fillMaxHeight()
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            AppTheme.colors.primary.copy(alpha = 0.6f),
+                                            AppTheme.colors.primary
+                                        )
+                                    ),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f) // TODO: Calculate actual position
+                                .fillMaxHeight()
+                                .wrapContentWidth(Alignment.End)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .offset(y = (-8).dp)
+                                    .background(
+                                        color = AppTheme.colors.primary,
+                                        shape = androidx.compose.foundation.shape.CircleShape
+                                    )
+                                    .padding(2.dp)
+                                    .background(
+                                        color = AppTheme.colors.surface,
+                                        shape = androidx.compose.foundation.shape.CircleShape
+                                    )
+                            )
+                        }
+                    }
+
+                    // Time labels
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        windowStartTime?.let { start ->
+                            Column(horizontalAlignment = Alignment.Start) {
+                                AppText.labelSmall(
+                                    text = stringResource(R.string.window_opens),
+                                    color = AppTheme.colors.onSurfaceVariant
+                                )
+                                AppText.bodyLarge(
+                                    text = start,
+                                    color = AppTheme.colors.onSurface,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        windowEndTime?.let { end ->
+                            Column(horizontalAlignment = Alignment.End) {
+                                AppText.labelSmall(
+                                    text = stringResource(R.string.window_closes),
+                                    color = AppTheme.colors.onSurfaceVariant
+                                )
+                                AppText.bodyLarge(
+                                    text = end,
+                                    color = AppTheme.colors.onSurface,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Duration card (if duration is available)
+            windowDuration?.let { duration ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(Dimens.dp12)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Dimens.dp12),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = null,
+                            tint = AppTheme.colors.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(Dimens.dp8))
+                        AppText.labelLarge(
+                            text = stringResource(R.string.duration),
+                            color = AppTheme.colors.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.width(Dimens.dp4))
+                        AppText.titleXSmall(
+                            text = duration,
+                            fontWeight = FontWeight.Bold,
+                            color = AppTheme.colors.primary
+                        )
+                    }
+                }
+            }
         }
     }
 }
-
 
 @Composable
 private fun FailReasonCard(

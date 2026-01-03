@@ -16,6 +16,8 @@
     <string name="past_launches">Past</string>
 
     <string name="mission_details">Mission Details</string>
+    <string name="launch_window">Launch Window</string>
+    <string name="duration">Duration</string>
     <string name="window_opens">Window Opens</string>
     <string name="window_closes">Window Closes</string>
     <string name="launch_site">Launch Site</string>

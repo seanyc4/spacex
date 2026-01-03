@@ -17,15 +17,20 @@ class LaunchUiMapper @Inject constructor(
     fun mapToLaunchUi(launch: Launch): LaunchUI {
         with(launch) {
             val locateDateTime = dateFormatter.formatDate(net)
-            val windowStart = windowStart?.let { dateFormatter.formatDate(it) }
-            val windowEnd = windowEnd?.let { dateFormatter.formatDate(it) }
+            val windowStartDateTime = windowStart?.let { dateFormatter.formatDate(it) }
+            val windowEndDateTime = windowEnd?.let { dateFormatter.formatDate(it) }
+            val duration = calculateDuration(windowStartDateTime, windowEndDateTime)
+
             return LaunchUI(
                 id = id,
                 missionName = missionName.substringBefore("|").trim(),
                 launchDate = formatDate(locateDateTime),
                 status = status.toDomain(),
-                windowEnd = formatDate(windowEnd, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
-                windowStart = formatDate(windowStart, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
+                windowEnd = formatDate(windowEndDateTime, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
+                windowStart = formatDate(windowStartDateTime, DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM),
+                windowStartTime = formatDate(windowStartDateTime, DateFormatConstants.HH_MM),
+                windowEndTime = formatDate(windowEndDateTime, DateFormatConstants.HH_MM),
+                windowDuration = duration,
                 image = image,
                 failReason = failReason,
                 launchServiceProvider = launchServiceProvider,
@@ -38,6 +43,32 @@ class LaunchUiMapper @Inject constructor(
                 missionPatches = missionPatches ?: emptyList()
             )
         }
+    }
+
+    private fun calculateDuration(startTime: LocalDateTime?, endTime: LocalDateTime?): String? {
+        if (startTime == null || endTime == null) return null
+
+        // If times are the same, it's an instantaneous launch
+        if (startTime == endTime) return "Instantaneous"
+
+        val duration = java.time.Duration.between(startTime, endTime)
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+        val seconds = duration.seconds % 60
+
+        return buildString {
+            if (hours > 0) {
+                append("${hours}h")
+                if (minutes > 0 || seconds > 0) append(" ")
+            }
+            if (minutes > 0) {
+                append("${minutes}m")
+                if (seconds > 0) append(" ")
+            }
+            if (seconds > 0 || (hours == 0L && minutes == 0L)) {
+                append("${seconds}s")
+            }
+        }.trim()
     }
 
     fun mapToLaunchesUi(launch: Launch): LaunchesUi {
