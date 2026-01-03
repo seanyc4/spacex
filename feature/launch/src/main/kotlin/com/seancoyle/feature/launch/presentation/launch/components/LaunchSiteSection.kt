@@ -89,12 +89,22 @@ private fun LaunchSiteContent(
                         color = AppTheme.colors.onSurface,
                     )
                 }
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null,
-                    tint = AppTheme.colors.primary.copy(alpha = 0.5f),
-                    modifier = Modifier.size(48.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(
+                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        tint = AppTheme.colors.primary,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
             }
         }
 

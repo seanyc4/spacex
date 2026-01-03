@@ -132,13 +132,22 @@ private fun MissionHighlightCard(
                             )
                         }
                     }
-
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = AppTheme.colors.primary.copy(alpha = 0.5f),
-                        modifier = Modifier.size(48.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(
+                                color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = AppTheme.colors.primary,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
                 }
 
                 // Mission Type & Orbit Chips
@@ -221,12 +230,22 @@ private fun LaunchWindowTimeline(
                         color = AppTheme.colors.onSurface,
                     )
                 }
-                Icon(
-                    imageVector = Icons.Default.Rocket,
-                    contentDescription = null,
-                    tint = AppTheme.colors.primary.copy(alpha = 0.5f),
-                    modifier = Modifier.size(48.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(
+                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Rocket,
+                        contentDescription = null,
+                        tint = AppTheme.colors.primary,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
             }
         }
 
