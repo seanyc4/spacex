@@ -20,7 +20,7 @@
     <string name="duration">Duration</string>
     <string name="window_opens">Window Opens</string>
     <string name="window_closes">Window Closes</string>
-    <string name="launch_site">Launch Site</string>
+    <string name="location">Location</string>
     <string name="coordinates">Coordinates</string>
     <string name="launch_statistics">Launch Statistics</string>
     <string name="site_statistics">Site Statistics</string>

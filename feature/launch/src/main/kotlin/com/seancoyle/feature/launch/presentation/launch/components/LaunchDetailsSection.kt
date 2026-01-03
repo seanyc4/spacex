@@ -224,10 +224,16 @@ private fun LaunchWindowTimeline(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
+                    AppText.labelMedium(
+                        text = stringResource(R.string.launch_window).uppercase(),
+                        color = AppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    )
                     AppText.titleMedium(
-                        text = stringResource(R.string.launch_window),
+                        text = launchDate.orEmpty(),
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onSurface,
+                        modifier = Modifier.padding(top = Dimens.dp4)
                     )
                 }
                 Box(
@@ -257,16 +263,8 @@ private fun LaunchWindowTimeline(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(Dimens.dp6)
             ) {
-                launchDate?.let { date ->
-                    AppText.bodyLarge(
-                        text = date,
-                        fontWeight = FontWeight.SemiBold,
-                        color = AppTheme.colors.onSurface,
-                        textAlign = TextAlign.Center
-                    )
-                }
                 launchTime?.let { time ->
-                    AppText.titleLarge(
+                    AppText.headlineLarge(
                         text = time,
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.primary,
@@ -280,7 +278,7 @@ private fun LaunchWindowTimeline(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Dimens.dp2)
+                        .padding(vertical = Dimens.dp8)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()

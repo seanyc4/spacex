@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 internal fun previewData() = LaunchUI(
     id = "preview-id-123",
     missionName = "Starlink Group 7-12",
-    launchDate = "Jan 15, 2026, 10:30 AM EST",
+    launchDate = "26 November 2026",
     launchTime = "10:30",
     launchDateTime = LocalDateTime.of(2026, 1, 15, 10, 30),
     status = LaunchStatus.SUCCESS,

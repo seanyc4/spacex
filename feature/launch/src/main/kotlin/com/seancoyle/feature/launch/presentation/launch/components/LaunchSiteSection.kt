@@ -41,7 +41,7 @@ internal fun LaunchSiteSection(
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
-            SectionTitle(text = stringResource(R.string.launch_site))
+            SectionTitle(text = stringResource(R.string.location))
             LaunchSiteContent(pad = pad)
 
             val hasStats = pad.totalLaunchCount != null ||
