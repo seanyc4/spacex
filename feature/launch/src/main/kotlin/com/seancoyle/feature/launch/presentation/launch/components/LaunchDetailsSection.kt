@@ -210,199 +210,219 @@ private fun LaunchWindowTimeline(
     val isInstantaneous = windowDuration == "Instantaneous"
 
     Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(Dimens.dp20),
+        verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
     ) {
-        AppText.titleMedium(
-            text = stringResource(R.string.launch_window),
-            fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.onSurface
-        )
+        // Mission Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                AppText.titleLarge(
+                    text = stringResource(R.string.launch_window),
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface,
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.Rocket,
+                contentDescription = null,
+                tint = AppTheme.colors.primary.copy(alpha = 0.5f),
+                modifier = Modifier.size(48.dp)
+            )
+        }
+    }
 
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        // Launch Date with Time - Centered at top
         Column(
             modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Dimens.dp6)
         ) {
-            // Launch Date with Time - Centered at top
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp6)
-            ) {
-                launchDate?.let { date ->
-                    AppText.bodyLarge(
-                        text = date,
-                        fontWeight = FontWeight.SemiBold,
-                        color = AppTheme.colors.onSurface,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                launchTime?.let { time ->
-                    AppText.titleLarge(
-                        text = time,
-                        fontWeight = FontWeight.Bold,
-                        color = AppTheme.colors.primary,
-                        textAlign = TextAlign.Center
-                    )
-                }
+            launchDate?.let { date ->
+                AppText.bodyLarge(
+                    text = date,
+                    fontWeight = FontWeight.SemiBold,
+                    color = AppTheme.colors.onSurface,
+                    textAlign = TextAlign.Center
+                )
             }
+            launchTime?.let { time ->
+                AppText.titleLarge(
+                    text = time,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.primary,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
 
-            // Timeline - only show if NOT instantaneous
-            if (!isInstantaneous) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = Dimens.dp2)
+        // Timeline - only show if NOT instantaneous
+        if (!isInstantaneous) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Dimens.dp2)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
+                    // Timeline track with shadows
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                            .padding(horizontal = 20.dp)
                     ) {
-                        // Timeline track with shadows
+                        // Background track (darker/shadow effect) - full width
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(24.dp)
+                                .height(8.dp)
+                                .align(Alignment.Center)
+                                .background(
+                                    color = AppTheme.colors.scrim.copy(alpha = 0.15f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                        )
+
+                        // Active portion (gradient) - inset horizontally
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .align(Alignment.Center)
+                                .padding(horizontal = 48.dp)
                         ) {
-                            // Background track (darker/shadow effect) - full width
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(8.dp)
-                                    .align(Alignment.Center)
+                                    .fillMaxSize()
                                     .background(
-                                        color = AppTheme.colors.scrim.copy(alpha = 0.15f),
+                                        brush = Brush.horizontalGradient(
+                                            colors = listOf(
+                                                AppTheme.colors.primary.copy(alpha = 0.7f),
+                                                AppTheme.colors.primary
+                                            )
+                                        ),
                                         shape = RoundedCornerShape(4.dp)
                                     )
                             )
 
-                            // Active portion (gradient) - inset horizontally
+                            // Launch time indicator circle - positioned within active track
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(8.dp)
-                                    .align(Alignment.Center)
-                                    .padding(horizontal = 48.dp)
+                                    .fillMaxWidth(launchProgress)
+                                    .fillMaxHeight()
+                                    .wrapContentWidth(Alignment.End)
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxSize()
+                                        .size(24.dp)
+                                        .align(Alignment.CenterEnd)
                                         .background(
-                                            brush = Brush.horizontalGradient(
-                                                colors = listOf(
-                                                    AppTheme.colors.primary.copy(alpha = 0.7f),
-                                                    AppTheme.colors.primary
-                                                )
-                                            ),
-                                            shape = RoundedCornerShape(4.dp)
+                                            color = AppTheme.colors.tertiary,
+                                            shape = androidx.compose.foundation.shape.CircleShape
                                         )
-                                )
-
-                                // Launch time indicator circle - positioned within active track
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth(launchProgress)
-                                        .fillMaxHeight()
-                                        .wrapContentWidth(Alignment.End)
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                            .align(Alignment.CenterEnd)
-                                            .background(
-                                                color = AppTheme.colors.tertiary,
-                                                shape = androidx.compose.foundation.shape.CircleShape
-                                            )
-                                            .padding(2.dp)
-                                            .background(
-                                                color = AppTheme.colors.surface,
-                                                shape = androidx.compose.foundation.shape.CircleShape
-                                            )
-                                    )
-                                }
-                            }
-                        }
-
-                        // Time labels - just the times, no labels (only show if NOT instantaneous)
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            // Window Start Time (left)
-                            windowStartTime?.let { start ->
-                                AppText.bodyLarge(
-                                    text = start,
-                                    color = AppTheme.colors.onSurfaceVariant,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-
-                            // Window End Time (right)
-                            windowEndTime?.let { end ->
-                                AppText.bodyLarge(
-                                    text = end,
-                                    color = AppTheme.colors.onSurfaceVariant,
-                                    fontWeight = FontWeight.Medium
+                                        .padding(2.dp)
+                                        .background(
+                                            color = AppTheme.colors.surface,
+                                            shape = androidx.compose.foundation.shape.CircleShape
+                                        )
                                 )
                             }
                         }
                     }
+
+                    // Time labels - just the times, no labels (only show if NOT instantaneous)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        // Window Start Time (left)
+                        windowStartTime?.let { start ->
+                            AppText.bodyLarge(
+                                text = start,
+                                color = AppTheme.colors.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+
+                        // Window End Time (right)
+                        windowEndTime?.let { end ->
+                            AppText.bodyLarge(
+                                text = end,
+                                color = AppTheme.colors.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
                 }
-            } else {
-                // For instantaneous launches, show only background track (no active portion, no times)
+            }
+        } else {
+            // For instantaneous launches, show only background track (no active portion, no times)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Dimens.dp16, horizontal = 20.dp)
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Dimens.dp16)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(
-                                color = AppTheme.colors.scrim.copy(alpha = 0.15f),
-                                shape = RoundedCornerShape(4.dp)
-                            )
-                    )
-                }
+                        .height(8.dp)
+                        .background(
+                            color = AppTheme.colors.scrim.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                )
             }
+        }
 
-            if (status != LaunchStatus.TBD) {
-                windowDuration?.let { duration ->
-                    Card(
+        if (status != LaunchStatus.TBD) {
+            windowDuration?.let { duration ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.dp8),
+                    colors = CardDefaults.cardColors(
+                        containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(Dimens.dp10)
+                ) {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = Dimens.dp8),
-                        colors = CardDefaults.cardColors(
-                            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-                        ),
-                        shape = RoundedCornerShape(Dimens.dp10)
+                            .padding(Dimens.dp12),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(Dimens.dp12),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AccessTime,
-                                contentDescription = null,
-                                tint = AppTheme.colors.primary,
-                                modifier = Modifier.size(13.dp)
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
-                            AppText.bodyMedium(
-                                text = stringResource(R.string.duration),
-                                color = AppTheme.colors.onSurfaceVariant,
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            AppText.titleXSmall(
-                                text = duration,
-                                fontWeight = FontWeight.Bold,
-                                color = AppTheme.colors.primary,
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.AccessTime,
+                            contentDescription = null,
+                            tint = AppTheme.colors.primary,
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        AppText.bodyMedium(
+                            text = stringResource(R.string.duration),
+                            color = AppTheme.colors.onSurfaceVariant,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        AppText.titleXSmall(
+                            text = duration,
+                            fontWeight = FontWeight.Bold,
+                            color = AppTheme.colors.primary,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                     }
                 }
             }
