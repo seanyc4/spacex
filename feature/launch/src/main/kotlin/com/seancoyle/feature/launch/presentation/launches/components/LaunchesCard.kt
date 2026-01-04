@@ -20,10 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -31,10 +29,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -80,9 +76,10 @@ internal fun LaunchCard(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            LaunchCardImage(
+            RemoteImage(
+                modifier = Modifier.fillMaxSize(),
                 imageUrl = launchItem.imageUrl,
-                modifier = Modifier.fillMaxSize()
+                contentDescription = R.string.launch_image,
             )
 
             Box(
@@ -160,23 +157,6 @@ internal fun LaunchCard(
             }
         }
     }
-}
-
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-internal fun LaunchCardImage(
-    imageUrl: String,
-    modifier: Modifier = Modifier
-) {
-    GlideImage(
-        model = imageUrl,
-        contentDescription = stringResource(R.string.launch_image),
-        failure = placeholder(R.drawable.default_mission_thumbnail),
-        modifier = modifier
-            .clip(RoundedCornerShape(cornerRadiusLarge))
-            .semantics { testTag = LaunchesTestTags.LAUNCH_IMAGE },
-        contentScale = ContentScale.Crop
-    )
 }
 
 @PreviewDarkLightMode
