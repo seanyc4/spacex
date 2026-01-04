@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -39,6 +38,7 @@ import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.toolbar.TopAppBar
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
@@ -165,17 +165,12 @@ private fun LaunchesScreen(
                         }
                         onEvent(LaunchesEvents.TabSelectedEvent(launchesType))
                     },
-                    text = { AppText.titleSmall(text = stringResource(tab.title)) },
-                    icon = {
-                        Icon(
-                            imageVector = if (index == selectedTabIndex) {
-                                tab.selectedIcon
-                            } else {
-                                tab.unselectedIcon
-                            },
-                            contentDescription = stringResource(tab.title)
+                    text = {
+                        AppText.titleSmall(
+                            text = stringResource(tab.title),
+                            color = AppTheme.colors.onSurface
                         )
-                    }
+                    },
                 )
             }
         }
