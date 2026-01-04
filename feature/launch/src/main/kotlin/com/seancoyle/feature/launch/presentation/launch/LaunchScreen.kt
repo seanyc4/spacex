@@ -86,11 +86,6 @@ private fun SuccessState(
         item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
         item { RocketSection(rocket = launch.rocket) }
 
-        if (launch.missionPatches.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { MissionPatchesSection(patches = launch.missionPatches) }
-        }
-
         if (launch.launchServiceProvider != null) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
             item { AgencySection(agency = launch.launchServiceProvider) }
