@@ -1,6 +1,13 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -14,7 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 
@@ -33,7 +41,7 @@ internal fun ErrorState(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
             Icon(
                 imageVector = Icons.Default.Warning,
@@ -50,7 +58,7 @@ internal fun ErrorState(
                 color = AppTheme.colors.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(Dimens.dp8))
+            Spacer(modifier = Modifier.height(paddingMedium))
             ButtonPrimary(
                 text = stringResource(R.string.retry),
                 onClick = onRetry,

@@ -1,10 +1,16 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Business
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -17,6 +23,11 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Agency
@@ -27,7 +38,7 @@ internal fun LaunchProviderSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             SectionTitle(text = "Launch Provider")
 
             Card(
@@ -35,13 +46,13 @@ internal fun LaunchProviderSection(
                 colors = CardDefaults.cardColors(
                     containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
                 ),
-                shape = RoundedCornerShape(Dimens.dp12)
+                shape = RoundedCornerShape(cornerRadiusMedium)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Dimens.dp20),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                    verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -90,7 +101,7 @@ internal fun LaunchProviderSection(
                                 .size(48.dp)
                                 .background(
                                     color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(10.dp)
+                                    shape = RoundedCornerShape(cornerRadiusSmall)
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -106,7 +117,7 @@ internal fun LaunchProviderSection(
                     AppText.bodyMedium(
                         text = agency.description,
                         color = AppTheme.colors.secondary,
-                        modifier = Modifier.padding(top = Dimens.dp8)
+                        modifier = Modifier.padding(top = paddingMedium)
                     )
                 }
             }

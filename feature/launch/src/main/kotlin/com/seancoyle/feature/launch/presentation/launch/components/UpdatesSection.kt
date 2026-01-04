@@ -1,6 +1,10 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -10,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 
@@ -20,7 +27,7 @@ internal fun UpdatesSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             SectionTitle(text = "Launch Updates")
 
             updates.forEach { update ->
@@ -40,11 +47,11 @@ private fun UpdateItem(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.dp16),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            modifier = Modifier.padding(paddingXLarge),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

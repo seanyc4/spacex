@@ -1,9 +1,18 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +26,12 @@ import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.domain.model.VidUrl
 
@@ -29,23 +43,23 @@ internal fun VideoSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Dimens.dp8)
+            .padding(vertical = paddingMedium)
     ) {
         AppText.titleLarge(
             text = "Videos & Webcasts",
             fontWeight = FontWeight.Bold,
             color = AppTheme.colors.primary,
             modifier = Modifier
-                .padding(horizontal = Dimens.dp16)
+                .padding(horizontal = paddingXLarge)
                 .semantics { contentDescription = "Section: Videos & Webcasts" }
         )
 
-        Spacer(modifier = Modifier.height(Dimens.dp16))
+        Spacer(modifier = Modifier.height(paddingXLarge))
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = Dimens.dp16),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp16)
+            contentPadding = PaddingValues(horizontal = paddingXLarge),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
         ) {
             items(videos.size) { index ->
                 val video = videos[index]
@@ -79,11 +93,11 @@ private fun VideoCard(
             containerColor = AppTheme.colors.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(Dimens.dp16)
+        shape = RoundedCornerShape(cornerRadiusLarge)
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.dp16),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+            modifier = Modifier.padding(paddingXLarge),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
         ) {
             EmbeddedYouTubePlayer(
                 videoId = videoId,
@@ -104,7 +118,7 @@ private fun VideoMetadata(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         if (!video.title.isNullOrEmpty()) {
             AppText.titleSmall(
@@ -117,7 +131,7 @@ private fun VideoMetadata(
         }
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (!video.publisher.isNullOrEmpty()) {

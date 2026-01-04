@@ -16,13 +16,15 @@ import androidx.compose.ui.semantics.testTag
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.util.ObserveScrollPosition
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.R
-import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
@@ -41,12 +43,12 @@ internal fun Launches(
 
     LazyColumn(
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp8),
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = Dimens.dp8)
+            .padding(horizontal = paddingMedium)
             .semantics { testTag = LaunchesTestTags.LAUNCH_LAZY_COLUMN }
     ) {
         item {
@@ -54,7 +56,7 @@ internal fun Launches(
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
                     onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
-                    modifier = Modifier.padding(vertical = Dimens.dp8)
+                    modifier = Modifier.padding(vertical = paddingMedium)
                 )
             }
         }
@@ -81,7 +83,7 @@ internal fun Launches(
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
                     onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
-                    modifier = Modifier.padding(Dimens.dp4)
+                    modifier = Modifier.padding(paddingSmall)
                 )
             }
         }

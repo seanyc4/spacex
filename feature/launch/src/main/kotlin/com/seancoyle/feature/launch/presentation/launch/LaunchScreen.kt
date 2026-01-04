@@ -1,7 +1,11 @@
 package com.seancoyle.feature.launch.presentation.launch
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -11,11 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.components.*
+import com.seancoyle.feature.launch.presentation.launch.components.ErrorState
+import com.seancoyle.feature.launch.presentation.launch.components.LaunchDetailsSection
+import com.seancoyle.feature.launch.presentation.launch.components.LaunchHeroSection
+import com.seancoyle.feature.launch.presentation.launch.components.LaunchProviderSection
+import com.seancoyle.feature.launch.presentation.launch.components.LaunchSiteSection
+import com.seancoyle.feature.launch.presentation.launch.components.LoadingState
+import com.seancoyle.feature.launch.presentation.launch.components.RocketSection
+import com.seancoyle.feature.launch.presentation.launch.components.UpdatesSection
+import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
+import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
@@ -68,31 +82,31 @@ private fun SuccessState(
         modifier = modifier
             .fillMaxSize()
             .semantics { contentDescription = "Launch details for ${launch.missionName}" },
-        contentPadding = PaddingValues(bottom = Dimens.dp24)
+        contentPadding = PaddingValues(bottom = 24.dp)
     ) {
         item { LaunchHeroSection(launch = launch) }
-        item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
 
         item { LaunchDetailsSection(launch = launch) }
 
-        item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
         item { LaunchSiteSection(pad = launch.pad) }
 
         if (launch.vidUrls.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
             item { VideoSection(videos = launch.vidUrls) }
         }
 
-        item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
         item { RocketSection(rocket = launch.rocket) }
 
         if (launch.launchServiceProvider != null) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
             item { LaunchProviderSection(agency = launch.launchServiceProvider) }
         }
 
         if (launch.updates.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
+            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
             item { UpdatesSection(updates = launch.updates) }
         }
     }

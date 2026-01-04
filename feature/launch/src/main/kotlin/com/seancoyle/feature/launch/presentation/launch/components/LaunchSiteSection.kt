@@ -1,13 +1,22 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -23,12 +32,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
@@ -40,7 +57,7 @@ internal fun LaunchSiteSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             SectionTitle(text = stringResource(R.string.location))
             LaunchSiteContent(pad = pad)
 
@@ -69,13 +86,13 @@ private fun LaunchSiteContent(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimens.dp20),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -92,7 +109,7 @@ private fun LaunchSiteContent(
                         text = pad.name.orEmpty(),
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onSurface,
-                        modifier = Modifier.padding(top = Dimens.dp4)
+                        modifier = Modifier.padding(top = paddingSmall)
                     )
                 }
                 Box(
@@ -100,7 +117,7 @@ private fun LaunchSiteContent(
                         .size(48.dp)
                         .background(
                             color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(cornerRadiusSmall)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -118,7 +135,7 @@ private fun LaunchSiteContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             pad.location?.name?.let { location ->
                 AppText.bodyMedium(
@@ -159,11 +176,11 @@ private fun LaunchSiteContent(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(180.dp)
-                    .clip(RoundedCornerShape(Dimens.dp12))
+                    .clip(RoundedCornerShape(cornerRadiusMedium))
                     .then(
                         if (mapUrl != null) {
                             Modifier.clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+                                val intent = Intent(Intent.ACTION_VIEW, mapUrl.toUri())
                                 context.startActivity(intent)
                             }
                         } else {
@@ -186,12 +203,12 @@ private fun LaunchSiteContent(
                             .padding(Dimens.dp8)
                             .background(
                                 color = AppTheme.colors.inversePrimary,
-                                shape = RoundedCornerShape(Dimens.dp8)
+                                shape = RoundedCornerShape(cornerRadiusXSmall)
                             )
-                            .padding(horizontal = Dimens.dp12, vertical = Dimens.dp8)
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
                     ) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -218,7 +235,7 @@ private fun LaunchSiteContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -255,11 +272,11 @@ private fun LaunchStatisticsContent(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -277,7 +294,7 @@ private fun LaunchStatisticsContent(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall)
         ) {
             PadStatChip(
                 label = stringResource(R.string.pad_launches),
@@ -295,7 +312,7 @@ private fun LaunchStatisticsContent(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall)
         ) {
             PadStatChip(
                 label = stringResource(R.string.location_launches),
@@ -332,7 +349,7 @@ private fun PadStatChip(
                 .fillMaxWidth()
                 .padding(Dimens.dp12),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AppText.titleMedium(
                 text = value,
@@ -354,7 +371,7 @@ private fun PadStatChip(
 private fun LaunchSiteSectionPreview() {
     AppTheme {
         LaunchSiteSection(
-            pad = previewData().pad!!
+            pad = previewData().pad
         )
     }
 }

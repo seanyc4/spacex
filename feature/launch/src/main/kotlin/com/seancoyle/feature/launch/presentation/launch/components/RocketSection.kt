@@ -1,14 +1,31 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -25,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -33,13 +51,25 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTextStyles
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Configuration
+import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.Launcher
 import com.seancoyle.feature.launch.domain.model.LauncherStage
 import com.seancoyle.feature.launch.domain.model.Rocket
-import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.domain.model.SpacecraftStage
 
 @Composable
@@ -50,7 +80,7 @@ internal fun RocketSection(
     Column(
         modifier = modifier
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
     ) {
         RocketConfigurationCard(config = rocket.configuration)
 
@@ -71,7 +101,7 @@ private fun RocketConfigurationCard(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             SectionTitle(text = stringResource(R.string.rocket_config))
 
             Card(
@@ -79,13 +109,13 @@ private fun RocketConfigurationCard(
                 colors = CardDefaults.cardColors(
                     containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
                 ),
-                shape = RoundedCornerShape(Dimens.dp12)
+                shape = RoundedCornerShape(cornerRadiusMedium)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Dimens.dp20),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                    verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -102,14 +132,14 @@ private fun RocketConfigurationCard(
                                 text = config.fullName ?: config.name ?: "Unknown Rocket",
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = Dimens.dp4)
+                                modifier = Modifier.padding(top = paddingSmall)
                             )
                             if (!config.variant.isNullOrEmpty()) {
                                 AppText.bodyLarge(
                                     text = config.variant,
                                     color = AppTheme.colors.secondary,
                                     fontWeight = FontWeight.Medium,
-                                    modifier = Modifier.padding(top = Dimens.dp4)
+                                    modifier = Modifier.padding(top = paddingSmall)
                                 )
                             }
 
@@ -125,7 +155,7 @@ private fun RocketConfigurationCard(
                                 .size(48.dp)
                                 .background(
                                     color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(10.dp)
+                                    shape = RoundedCornerShape(cornerRadiusSmall)
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -146,7 +176,7 @@ private fun RocketConfigurationCard(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .clip(RoundedCornerShape(Dimens.dp12)),
+                                .clip(RoundedCornerShape(cornerRadiusMedium)),
                             failure = placeholder(R.drawable.default_launch_hero_image)
                         )
                     }
@@ -155,7 +185,7 @@ private fun RocketConfigurationCard(
                         AppText.bodyMedium(
                             text = desc,
                             color = AppTheme.colors.secondary,
-                            modifier = Modifier.padding(vertical = Dimens.dp8)
+                            modifier = Modifier.padding(vertical = paddingMedium)
                         )
                     }
                 }
@@ -173,7 +203,7 @@ private fun RocketConfigurationCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium)
             ) {
                 config.totalLaunchCount?.let {
                     StatItem(
@@ -217,10 +247,10 @@ private fun RocketConfigurationCard(
                 color = AppTheme.colors.primary
             )
 
-            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
+            Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                    horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium)
                 ) {
                     config.length?.let { length ->
                         PhysicalSpecItem(
@@ -260,7 +290,7 @@ private fun RocketConfigurationCard(
                 color = AppTheme.colors.primary
             )
 
-            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
+            Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)) {
                 config.manufacturer?.let { manufacturer ->
                     DetailRow(
                         label = "Manufacturer",
@@ -325,13 +355,13 @@ private fun RocketConfigurationCard(
                     color = AppTheme.colors.primary
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp8)) {
+                Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)) {
                     config.wikiUrl?.let { wikiUrl ->
                         LinkButton(
                             text = "Rocket on Wikipedia",
                             icon = Icons.Default.Info,
                             onClick = {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
+                                val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
                                 context.startActivity(intent)
                             }
                         )
@@ -342,7 +372,7 @@ private fun RocketConfigurationCard(
                             text = "Manufacturer on Wikipedia",
                             icon = Icons.Default.Build,
                             onClick = {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
+                                val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
                                 context.startActivity(intent)
                             }
                         )
@@ -353,7 +383,7 @@ private fun RocketConfigurationCard(
                             text = "Manufacturer Website",
                             icon = Icons.Default.AccountCircle,
                             onClick = {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(infoUrl))
+                                val intent = Intent(Intent.ACTION_VIEW, infoUrl.toUri())
                                 context.startActivity(intent)
                             }
                         )
@@ -374,11 +404,11 @@ private fun RocketFamilyCard(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.dp16),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            modifier = Modifier.padding(paddingXLarge),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
         ) {
             family.name?.let { name ->
                 AppText.titleSmall(
@@ -397,7 +427,7 @@ private fun RocketFamilyCard(
 
             family.maidenFlight?.let { maidenFlight ->
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -416,7 +446,7 @@ private fun RocketFamilyCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = Dimens.dp8),
+                    .padding(top = paddingMedium),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 family.totalLaunchCount?.let {
@@ -466,8 +496,8 @@ private fun PhysicalSpecItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp12),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -498,7 +528,7 @@ private fun LauncherStagesSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -515,7 +545,7 @@ private fun LauncherStagesSection(
             stages.forEachIndexed { index, stage ->
                 if (index > 0) {
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = Dimens.dp12),
+                        modifier = Modifier.padding(vertical = paddingLarge),
                         color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
                     )
                 }
@@ -534,11 +564,11 @@ private fun LauncherStageItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp16),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge),
             verticalAlignment = Alignment.Top
         ) {
             stage.launcher?.image?.thumbnailUrl?.let { imageUrl ->
@@ -548,7 +578,7 @@ private fun LauncherStageItem(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(80.dp)
-                        .clip(RoundedCornerShape(Dimens.dp12))
+                        .clip(RoundedCornerShape(cornerRadiusMedium))
                         .background(AppTheme.colors.surfaceVariant),
                     failure = placeholder(R.drawable.default_launch_hero_image)
                 )
@@ -556,7 +586,7 @@ private fun LauncherStageItem(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.titleMedium(
                     text = "Stage $index - ${stage.type ?: "Core"}",
@@ -573,7 +603,7 @@ private fun LauncherStageItem(
                 }
 
                 stage.reused?.let { isReused ->
-                    Spacer(modifier = Modifier.height(Dimens.dp4))
+                    Spacer(modifier = Modifier.height(paddingSmall))
                     Chip(
                         text = if (isReused) "♻️ Reused" else "🆕 New",
                         contentColor = if (isReused) Color(0xFF4CAF50) else AppTheme.colors.primary,
@@ -630,11 +660,11 @@ private fun LauncherStats(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.dp12),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+            modifier = Modifier.padding(paddingLarge),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
         ) {
             AppText.labelMedium(
                 text = "Launcher Performance",
@@ -696,13 +726,13 @@ private fun LandingInfo(
                 else -> AppTheme.colors.surfaceVariant.copy(alpha = 0.3f)
             }
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp12),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp12),
+                .padding(paddingLarge),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -722,7 +752,7 @@ private fun LandingInfo(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.labelLarge(
                     text = when {
@@ -753,7 +783,7 @@ private fun LandingInfo(
                     AppText.bodySmall(
                         text = it,
                         color = AppTheme.colors.secondary,
-                        modifier = Modifier.padding(top = Dimens.dp4)
+                        modifier = Modifier.padding(top = paddingSmall)
                     )
                 }
             }
@@ -767,7 +797,7 @@ private fun SpacecraftStagesSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -784,7 +814,7 @@ private fun SpacecraftStagesSection(
             stages.forEachIndexed { index, stage ->
                 if (index > 0) {
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = Dimens.dp16),
+                        modifier = Modifier.padding(vertical = paddingXLarge),
                         color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
                     )
                 }
@@ -801,7 +831,7 @@ private fun SpacecraftStageItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
     ) {
         stage.spacecraft?.let { spacecraft ->
             AppText.titleMedium(
@@ -818,7 +848,7 @@ private fun SpacecraftStageItem(
             }
 
             spacecraft.spacecraftConfig?.let { config ->
-                Spacer(modifier = Modifier.height(Dimens.dp8))
+                Spacer(modifier = Modifier.height(paddingMedium))
 
                 config.type?.name?.let { type ->
                     DetailRow(
@@ -829,7 +859,7 @@ private fun SpacecraftStageItem(
                 }
 
                 config.capability?.let { capability ->
-                    Spacer(modifier = Modifier.height(Dimens.dp8))
+                    Spacer(modifier = Modifier.height(paddingMedium))
                     AppText.bodyMedium(
                         text = capability,
                         color = AppTheme.colors.secondary
@@ -840,7 +870,7 @@ private fun SpacecraftStageItem(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = Dimens.dp12),
+                        .padding(top = paddingLarge),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     config.crewCapacity?.let {
@@ -864,7 +894,7 @@ private fun SpacecraftStageItem(
         }
 
         stage.destination?.let {
-            Spacer(modifier = Modifier.height(Dimens.dp8))
+            Spacer(modifier = Modifier.height(paddingMedium))
             DetailRow(
                 label = "Destination",
                 value = it,
@@ -885,7 +915,7 @@ private fun StatItem(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
             imageVector = icon,
@@ -918,7 +948,7 @@ private fun MiniStatItem(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
             imageVector = icon,
@@ -950,7 +980,7 @@ private fun InfoChip(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.dp4),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -985,13 +1015,13 @@ private fun LinkButton(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimens.dp16),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp12),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(

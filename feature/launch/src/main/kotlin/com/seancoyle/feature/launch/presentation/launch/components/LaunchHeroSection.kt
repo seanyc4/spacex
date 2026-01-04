@@ -1,7 +1,14 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +25,11 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -60,7 +68,7 @@ internal fun LaunchHeroSection(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(Dimens.dp24)
+                .padding(24.dp)
                 .fillMaxWidth()
         ) {
             AppText.headlineLarge(
@@ -72,10 +80,10 @@ internal fun LaunchHeroSection(
                 }
             )
 
-            Spacer(modifier = Modifier.height(Dimens.dp8))
+            Spacer(modifier = Modifier.height(paddingMedium))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+                horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Chip(

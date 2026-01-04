@@ -1,10 +1,26 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Rocket
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -22,10 +38,17 @@ import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import java.time.LocalDateTime
 
 @Composable
@@ -34,7 +57,7 @@ internal fun LaunchDetailsSection(
     modifier: Modifier = Modifier
 ) {
     SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
+        Column(verticalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)) {
             SectionTitle(text = stringResource(R.string.mission_details))
 
             MissionHighlightCard(
@@ -88,7 +111,7 @@ private fun MissionHighlightCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(Dimens.dp16)
+        shape = RoundedCornerShape(cornerRadiusLarge)
     ) {
         Box(
             modifier = Modifier
@@ -106,7 +129,7 @@ private fun MissionHighlightCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.dp20),
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
             ) {
                 // Mission Header
                 Row(
@@ -125,7 +148,7 @@ private fun MissionHighlightCard(
                                 text = name,
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = Dimens.dp4)
+                                modifier = Modifier.padding(top = paddingSmall)
                             )
                         }
                     }
@@ -134,7 +157,7 @@ private fun MissionHighlightCard(
                             .size(48.dp)
                             .background(
                                 color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                                shape = RoundedCornerShape(10.dp)
+                                shape = RoundedCornerShape(cornerRadiusSmall)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -149,7 +172,7 @@ private fun MissionHighlightCard(
 
                 // Mission Type & Orbit Chips
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp8),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     missionType?.let { type ->
@@ -175,7 +198,7 @@ private fun MissionHighlightCard(
                     AppText.bodyMedium(
                         text = desc,
                         color = AppTheme.colors.secondary,
-                        modifier = Modifier.padding(top = Dimens.dp4)
+                        modifier = Modifier.padding(top = paddingSmall)
                     )
                 }
             }
@@ -207,7 +230,7 @@ private fun LaunchWindowTimeline(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Column(
             modifier = Modifier
@@ -469,13 +492,13 @@ private fun FailReasonCard(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.error.copy(alpha = 0.1f)
         ),
-        shape = RoundedCornerShape(Dimens.dp12)
+        shape = RoundedCornerShape(cornerRadiusMedium)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimens.dp16),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp12),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium),
             verticalAlignment = Alignment.Top
         ) {
             Icon(
@@ -487,7 +510,7 @@ private fun FailReasonCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp4)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.titleSmall(
                     text = stringResource(R.string.failure_reason),

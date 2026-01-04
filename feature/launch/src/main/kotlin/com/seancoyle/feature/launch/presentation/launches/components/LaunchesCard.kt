@@ -31,14 +31,16 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.designsystem.pill.Pill
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.R
-import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
@@ -57,7 +59,7 @@ internal fun LaunchCard(
             .clickable {}
             .height(Dimens.launchCardHeight)
             .clickable { onClick(launchItem.id, launchesType) },
-        shape = RoundedCornerShape(Dimens.dp10),
+        shape = RoundedCornerShape(Dimens.cornerRadiusSmall),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
@@ -76,12 +78,12 @@ internal fun LaunchCard(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(Dimens.dp8)
+                    .padding(paddingMedium)
             ) {
 
                 AppText.titleXSmall(
                     text = launchItem.missionName,
-                    modifier = modifier.padding(bottom = Dimens.dp4),
+                    modifier = modifier.padding(bottom = paddingSmall),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2
                 )
@@ -92,7 +94,7 @@ internal fun LaunchCard(
                         tint = AppTheme.colors.secondary,
                         modifier = Modifier.size(15.dp)
                     )
-                    Spacer(modifier = Modifier.width(Dimens.dp4))
+                    Spacer(modifier = Modifier.width(paddingSmall))
                     AppText.bodyMedium(
                         text = launchItem.launchDate,
                         color = AppTheme.colors.secondary,

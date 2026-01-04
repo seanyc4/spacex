@@ -28,15 +28,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.DismissFilterDialogEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.NewSearchEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
-import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 
 @Composable
 internal fun LaunchesFilterDialog(
@@ -103,13 +103,13 @@ private fun PortraitDialogContent(
         QueryInputField(query = query, onQueryChange = onQueryChange)
         AppText.bodyLarge(
             text = stringResource(R.string.launch_status),
-            modifier = modifier.padding(top = Dimens.dp16)
+            modifier = modifier.padding(top = paddingXLarge)
         )
         RadioGroup(
             selectedLaunchStatus = launchStatus,
             onLaunchStatusSelected = onLaunchStatusChange
         )
-        Spacer(modifier = Modifier.height(Dimens.dp16))
+        Spacer(modifier = Modifier.height(paddingXLarge))
     }
 }
 
@@ -129,7 +129,7 @@ private fun LandscapeDialogContent(
         ) {
             AppText.bodyLarge(stringResource(R.string.search))
             QueryInputField(query = query, onQueryChange = onQueryChange)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(paddingXLarge))
         }
         Column(
             modifier = Modifier
