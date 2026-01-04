@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
@@ -51,7 +50,7 @@ internal fun LaunchProviderSection(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(Dimens.dp20),
+                        .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
                 ) {
                     Row(
@@ -69,31 +68,31 @@ internal fun LaunchProviderSection(
                                 text = agency.name,
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = Dimens.dp2)
+                                modifier = Modifier.padding(top = 2.dp)
                             )
                             AppText.labelMedium(
                                 text = stringResource(R.string.abbreviation).uppercase(),
                                 color = AppTheme.colors.primary,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = Dimens.dp14)
+                                modifier = Modifier.padding(top = 14.dp)
                             )
                             AppText.titleMedium(
                                 text = agency.abbrev,
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = Dimens.dp2)
+                                modifier = Modifier.padding(top = 2.dp)
                             )
                             AppText.labelMedium(
                                 text = stringResource(R.string.type).uppercase(),
                                 color = AppTheme.colors.primary,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = Dimens.dp14)
+                                modifier = Modifier.padding(top = 14.dp)
                             )
                             AppText.titleMedium(
                                 text = agency.type,
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = Dimens.dp2)
+                                modifier = Modifier.padding(top = 2.dp)
                             )
                         }
                         Box(

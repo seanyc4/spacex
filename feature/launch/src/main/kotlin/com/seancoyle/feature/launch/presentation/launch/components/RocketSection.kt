@@ -50,9 +50,9 @@ import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTextStyles
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
@@ -114,7 +114,7 @@ private fun RocketConfigurationCard(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(Dimens.dp20),
+                        .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
                 ) {
                     Row(
@@ -491,7 +491,7 @@ private fun PhysicalSpecItem(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.3f)
         ),
-        shape = RoundedCornerShape(Dimens.dp8)
+        shape = RoundedCornerShape(cornerRadiusXSmall)
     ) {
         Row(
             modifier = Modifier
@@ -1020,7 +1020,7 @@ private fun LinkButton(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp16),
+                .padding(paddingXLarge),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium),
             verticalAlignment = Alignment.CenterVertically
         ) {

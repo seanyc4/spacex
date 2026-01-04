@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +37,7 @@ fun TopAppBar(
                     text = stringResource(id = R.string.app_name),
                     color = AppTheme.colors.primary,
                     modifier = Modifier
-                        .padding(start = Dimens.dp8)
+                        .padding(start = paddingMedium)
                 )
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -49,7 +49,7 @@ fun TopAppBar(
                 IconButton(
                     onClick = { onClick() },
                     modifier = Modifier
-                        .padding(end = Dimens.dp8)
+                        .padding(end = paddingMedium)
                 ) {
                     Icon(
                         imageVector = Icons.Default.RocketLaunch,

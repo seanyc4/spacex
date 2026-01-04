@@ -23,8 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
@@ -35,15 +36,15 @@ internal fun SectionCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimens.dp16),
+            .padding(horizontal = paddingXLarge),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(Dimens.dp16)
+        shape = RoundedCornerShape(cornerRadiusLarge)
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.dp24),
+            modifier = Modifier.padding(24.dp),
             content = content
         )
     }

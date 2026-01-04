@@ -3,20 +3,8 @@ package com.seancoyle.core.ui.designsystem.theme
 import androidx.compose.ui.unit.dp
 
 object Dimens {
-    val dpHalf = 0.5.dp
-    val dp2 = 2.dp
-    val dp4 = 4.dp
-    val dp6 = 6.dp
-    val dp8 = 8.dp
-    val dp10 = 10.dp
-    val dp12 = 12.dp
-    val dp14 = 14.dp
-    val dp16 = 16.dp
-    val dp20 = 20.dp
-    val dp24 = 24.dp
 
-
-    val cardPadding = 20.dp
+    val cornerRadiusXXSmall = 4.dp
     val cornerRadiusXSmall = 8.dp
     val cornerRadiusSmall = 10.dp
     val cornerRadiusMedium = 12.dp

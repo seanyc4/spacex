@@ -8,18 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
 fun Pill(
+    modifier: Modifier = Modifier,
     text: String,
     color: Color,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     AssistChip(
         label = {
@@ -34,12 +34,12 @@ fun Pill(
         border = AssistChipDefaults.assistChipBorder(
             enabled = true,
             borderColor = AppColors.Black,
-            borderWidth = Dimens.dpHalf
+            borderWidth = 0.5.dp
         ),
         onClick = onClick,
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .height(Dimens.dp24)
+            .height(24.dp)
     )
 }
 

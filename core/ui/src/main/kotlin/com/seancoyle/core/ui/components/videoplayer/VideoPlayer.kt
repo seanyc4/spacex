@@ -1,8 +1,12 @@
 package com.seancoyle.core.ui.components.videoplayer
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -14,7 +18,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 
 fun extractYouTubeVideoId(url: String): String? {
     return try {
@@ -49,7 +55,7 @@ fun EmbeddedYouTubePlayer(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Dimens.dp8)
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
     ) {
         if (showTitle && !videoTitle.isNullOrEmpty()) {
             AppText.titleMedium(
@@ -58,7 +64,7 @@ fun EmbeddedYouTubePlayer(
                 color = AppTheme.colors.onSurface,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = Dimens.dp4)
+                modifier = Modifier.padding(horizontal = paddingSmall)
             )
         }
 
@@ -77,7 +83,7 @@ fun EmbeddedYouTubePlayer(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
-                .clip(RoundedCornerShape(Dimens.dp12))
+                .clip(RoundedCornerShape(cornerRadiusMedium))
         )
     }
 }

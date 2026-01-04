@@ -37,14 +37,17 @@ import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
@@ -82,7 +85,7 @@ internal fun LaunchDetailsSection(
                     launchDateTime = launch.launchDateTime,
                     launchDate = launch.launchDate,
                     status = launch.status,
-                    modifier = Modifier.padding(Dimens.dp16)
+                    modifier = Modifier.padding(paddingXLarge)
                 )
             }
 
@@ -128,7 +131,7 @@ private fun MissionHighlightCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.dp20),
+                    .padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
             ) {
                 // Mission Header
@@ -235,8 +238,8 @@ private fun LaunchWindowTimeline(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp20),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -253,7 +256,7 @@ private fun LaunchWindowTimeline(
                         text = launchDate.orEmpty(),
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onSurface,
-                        modifier = Modifier.padding(top = Dimens.dp4)
+                        modifier = Modifier.padding(top = paddingSmall)
                     )
                 }
                 Box(
@@ -281,7 +284,7 @@ private fun LaunchWindowTimeline(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp6)
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
             ) {
                 launchTime?.let { time ->
                     AppText.headlineLarge(
@@ -298,7 +301,7 @@ private fun LaunchWindowTimeline(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Dimens.dp8)
+                        .padding(vertical = paddingMedium)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()
@@ -398,7 +401,7 @@ private fun LaunchWindowTimeline(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Dimens.dp16, horizontal = 20.dp)
+                        .padding(vertical = paddingXLarge, horizontal = 20.dp)
                 ) {
                     Box(
                         modifier = Modifier
@@ -417,16 +420,16 @@ private fun LaunchWindowTimeline(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = Dimens.dp8),
+                            .padding(top = paddingMedium),
                         colors = CardDefaults.cardColors(
                             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
                         ),
-                        shape = RoundedCornerShape(Dimens.dp10)
+                        shape = RoundedCornerShape(cornerRadiusSmall)
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(Dimens.dp12),
+                                .padding(paddingLarge),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -497,7 +500,7 @@ private fun FailReasonCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp16),
+                .padding(paddingXLarge),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium),
             verticalAlignment = Alignment.Top
         ) {

@@ -38,11 +38,12 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
@@ -91,7 +92,7 @@ private fun LaunchSiteContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp20),
+                .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
         ) {
             Row(
@@ -200,7 +201,7 @@ private fun LaunchSiteContent(
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(Dimens.dp8)
+                            .padding(paddingMedium)
                             .background(
                                 color = AppTheme.colors.inversePrimary,
                                 shape = RoundedCornerShape(cornerRadiusXSmall)
@@ -342,12 +343,12 @@ private fun PadStatChip(
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
-        shape = RoundedCornerShape(Dimens.dp8)
+        shape = RoundedCornerShape(cornerRadiusXSmall)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp12),
+                .padding(paddingLarge),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {

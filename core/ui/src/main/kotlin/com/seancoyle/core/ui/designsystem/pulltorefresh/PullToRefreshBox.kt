@@ -14,18 +14,18 @@ import androidx.compose.ui.Modifier
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RefreshableContent(
+    modifier: Modifier = Modifier,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     state: PullToRefreshState = rememberPullToRefreshState(),
-    content: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -69,7 +69,7 @@ private fun RefreshableContentPreview() {
                             text = "Item #$it",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(Dimens.dp16)
+                                .padding(paddingXLarge)
                         )
                     }
                 }
