@@ -38,7 +38,7 @@ import com.seancoyle.feature.launch.presentation.launches.components.Launches
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.core.ui.components.toolbar.HomeAppBar
+import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
@@ -103,7 +103,7 @@ fun LaunchesScreen(
 
     Scaffold(
         topBar = {
-            HomeAppBar(
+            TopAppBar(
                 onClick = {
                     viewModel.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
                 }

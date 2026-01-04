@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- Main theme colors -->
-    <color name="colorAccent">#03A9F4</color>
-    <color name="colorError">#E4342D</color>
-    <color name="transparent">#00000000</color>
-
-</resources>
