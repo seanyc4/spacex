@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -32,7 +33,7 @@ internal fun MissionPatchesSection(
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = "Mission Patches")
+            SectionTitle(text = stringResource(R.string.mission_patches))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -59,7 +60,7 @@ private fun MissionPatchItem(
     ) {
         GlideImage(
             model = patch.imageUrl,
-            contentDescription = "Mission patch: ${patch.name}",
+            contentDescription = stringResource(R.string.mission_patch, patch.name.orEmpty()),
             failure = placeholder(R.drawable.default_mission_patch),
             modifier = Modifier
                 .size(160.dp)

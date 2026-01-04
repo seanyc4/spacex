@@ -16,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +34,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.VidUrl
 
 @Composable
@@ -40,18 +42,20 @@ internal fun VideoSection(
     videos: List<VidUrl>,
     modifier: Modifier = Modifier
 ) {
+    val titleDescription = stringResource(R.string.section_desc, stringResource(R.string.videos_webcasts))
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = paddingMedium)
     ) {
         AppText.titleLarge(
-            text = "Videos & Webcasts",
+            text = stringResource(R.string.videos_webcasts),
             fontWeight = FontWeight.Bold,
             color = AppTheme.colors.primary,
             modifier = Modifier
                 .padding(horizontal = paddingXLarge)
-                .semantics { contentDescription = "Section: Videos & Webcasts" }
+                .semantics { contentDescription = titleDescription }
         )
 
         Spacer(modifier = Modifier.height(paddingXLarge))
@@ -87,8 +91,7 @@ private fun VideoCard(
     Card(
         modifier = modifier
             .width(380.dp)
-            .height(300.dp)
-        ,
+            .height(300.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surface
         ),
@@ -144,7 +147,7 @@ private fun VideoMetadata(
 
             if (video.live == true) {
                 Chip(
-                    text = "LIVE",
+                    text = stringResource(R.string.live),
                     contentColor = AppTheme.colors.error,
                     containerColor = AppTheme.colors.error
                 )

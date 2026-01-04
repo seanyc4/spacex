@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -27,6 +29,8 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 
 @Composable
 internal fun SectionCard(
@@ -36,7 +40,8 @@ internal fun SectionCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = paddingXLarge),
+            .padding(horizontal = paddingXLarge)
+            .semantics { testTag = LaunchesTestTags.SECTION_CARD },
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surface
         ),
@@ -55,11 +60,16 @@ internal fun SectionTitle(
     text: String,
     modifier: Modifier = Modifier
 ) {
+    val sectionDescription = stringResource(R.string.section_desc, text)
+
     AppText.titleLarge(
         text = text,
         fontWeight = FontWeight.Bold,
         color = AppTheme.colors.primary,
-        modifier = modifier.semantics { contentDescription = "Section: $text" }
+        modifier = modifier.semantics {
+            contentDescription = sectionDescription
+            testTag = LaunchesTestTags.SECTION_TITLE
+        }
     )
 }
 
@@ -71,8 +81,12 @@ internal fun DetailRow(
     modifier: Modifier = Modifier,
     valueColor: Color = AppTheme.colors.onSurface
 ) {
+    val detailDescription = stringResource(R.string.detail_row_desc, label, value)
+
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics { testTag = LaunchesTestTags.DETAIL_ROW },
         horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
     ) {
         Icon(
@@ -90,7 +104,7 @@ internal fun DetailRow(
             AppText.bodyLarge(
                 text = value,
                 color = valueColor,
-                modifier = Modifier.semantics { contentDescription = "$label: $value" }
+                modifier = Modifier.semantics { contentDescription = detailDescription }
             )
         }
     }
@@ -101,11 +115,11 @@ internal fun DetailRow(
 private fun SectionCardPreview() {
     AppTheme {
         SectionCard {
-            SectionTitle(text = "Example Section")
+            SectionTitle(text = stringResource(R.string.example_section))
             Spacer(modifier = Modifier.height(16.dp))
             AppText.bodyMedium(
-                text = "This is example content inside a section card",
-                color = AppTheme.colors.secondary
+                text = stringResource(R.string.example_content),
+                color = AppTheme.colors.onSurface
             )
         }
     }

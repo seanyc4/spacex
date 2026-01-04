@@ -38,7 +38,7 @@ internal fun LaunchProviderSection(
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = "Launch Provider")
+            SectionTitle(text = stringResource(R.string.launch_provider))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),

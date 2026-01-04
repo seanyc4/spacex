@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -25,6 +26,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 
 @Composable
 internal fun ErrorState(
@@ -32,11 +34,16 @@ internal fun ErrorState(
     modifier: Modifier = Modifier,
     onRetry: () -> Unit
 ) {
+    val errorDescription = stringResource(R.string.error_loading_launch, message)
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
-            .semantics { contentDescription = "Error loading launch: $message" },
+            .semantics {
+                contentDescription = errorDescription
+                testTag = LaunchesTestTags.ERROR_STATE
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -50,7 +57,7 @@ internal fun ErrorState(
                 tint = AppTheme.colors.error
             )
             AppText.titleLarge(
-                text = "Unable to load launch",
+                text = stringResource(R.string.unable_to_load_launch),
                 color = AppTheme.colors.onBackground
             )
             AppText.bodyMedium(
@@ -63,7 +70,7 @@ internal fun ErrorState(
                 text = stringResource(R.string.retry),
                 onClick = onRetry,
                 modifier = Modifier.semantics {
-                    contentDescription = "Retry loading launch"
+                    testTag = LaunchesTestTags.RETRY_BUTTON
                 }
             )
 

@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,13 +53,14 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 
 @Composable
 internal fun LaunchSiteSection(
     pad: Pad,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier) {
+    SectionCard(modifier = modifier.semantics { testTag = LaunchesTestTags.LAUNCH_SITE_SECTION }) {
         Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
             SectionTitle(text = stringResource(R.string.location))
             LaunchSiteContent(pad = pad)
@@ -191,9 +194,11 @@ private fun LaunchSiteContent(
             ) {
                 GlideImage(
                     model = mapImageUrl,
-                    contentDescription = "Map of ${pad.name}",
+                    contentDescription = stringResource(R.string.map_of_desc, pad.name.orEmpty()),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics { testTag = LaunchesTestTags.LAUNCH_SITE_MAP },
                     failure = placeholder(R.drawable.default_launch_hero_image)
                 )
 

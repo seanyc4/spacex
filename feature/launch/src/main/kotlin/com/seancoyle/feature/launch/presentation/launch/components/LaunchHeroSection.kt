@@ -15,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -29,6 +31,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -37,11 +40,18 @@ internal fun LaunchHeroSection(
     launch: LaunchUI,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxWidth()) {
+    val missionImageDesc = stringResource(R.string.mission_image, launch.missionName)
+    val missionNameDesc = stringResource(R.string.mission_name_desc, launch.missionName)
+    val launchDateDesc = stringResource(R.string.launch_date_desc, launch.launchDate)
+
+    Box(modifier = modifier
+        .fillMaxWidth()
+        .semantics { testTag = LaunchesTestTags.LAUNCH_HERO_SECTION }
+    ) {
         Box {
             GlideImage(
                 model = launch.image.imageUrl,
-                contentDescription = "Mission image for ${launch.missionName}",
+                contentDescription = missionImageDesc,
                 failure = placeholder(R.drawable.default_launch_hero_image),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,7 +86,7 @@ internal fun LaunchHeroSection(
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary,
                 modifier = Modifier.semantics {
-                    contentDescription = "Mission name: ${launch.missionName}"
+                    contentDescription = missionNameDesc
                 }
             )
 
@@ -97,7 +107,7 @@ internal fun LaunchHeroSection(
                     text = launch.launchDate,
                     color = AppTheme.colors.secondary,
                     modifier = Modifier.semantics {
-                        contentDescription = "Launch date: ${launch.launchDate}"
+                        contentDescription = launchDateDesc
                     }
                 )
             }

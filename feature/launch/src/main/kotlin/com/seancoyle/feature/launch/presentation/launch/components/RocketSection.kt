@@ -145,7 +145,7 @@ private fun RocketConfigurationCard(
 
                             if (!config.alias.isNullOrEmpty()) {
                                 AppText.bodyMedium(
-                                    text = "Also known as: ${config.alias}",
+                                    text = stringResource(R.string.also_known_as, config.alias),
                                     color = AppTheme.colors.secondary
                                 )
                             }
@@ -171,7 +171,7 @@ private fun RocketConfigurationCard(
                     config.image?.imageUrl?.let { imageUrl ->
                         GlideImage(
                             model = imageUrl,
-                            contentDescription = "Rocket ${config.name}",
+                            contentDescription = stringResource(R.string.rocket_desc, config.name.orEmpty()),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -196,7 +196,7 @@ private fun RocketConfigurationCard(
             )
 
             AppText.titleMedium(
-                text = "Launch Statistics",
+                text = stringResource(R.string.launch_statistics),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary
             )
@@ -208,7 +208,7 @@ private fun RocketConfigurationCard(
                 config.totalLaunchCount?.let {
                     StatItem(
                         value = it.toString(),
-                        label = "Total Launches",
+                        label = stringResource(R.string.total_launches),
                         icon = Icons.Default.Star,
                         modifier = Modifier.weight(1f)
                     )
@@ -218,7 +218,7 @@ private fun RocketConfigurationCard(
                     if (it > 0) {
                         StatItem(
                             value = it.toString(),
-                            label = "Failed",
+                            label = stringResource(R.string.failed),
                             icon = Icons.Default.Warning,
                             valueColor = Color(0xFFF44336),
                             modifier = Modifier.weight(1f)
@@ -229,7 +229,7 @@ private fun RocketConfigurationCard(
                 config.successfulLaunches?.let {
                     StatItem(
                         value = it.toString(),
-                        label = "Successful",
+                        label = stringResource(R.string.successful),
                         icon = Icons.Default.CheckCircle,
                         valueColor = Color(0xFF4CAF50),
                         modifier = Modifier.weight(1f)
@@ -242,7 +242,7 @@ private fun RocketConfigurationCard(
             )
 
             AppText.titleMedium(
-                text = "Physical Specifications",
+                text = stringResource(R.string.physical_specifications),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary
             )
@@ -254,7 +254,7 @@ private fun RocketConfigurationCard(
                 ) {
                     config.length?.let { length ->
                         PhysicalSpecItem(
-                            label = "Length",
+                            label = stringResource(R.string.length),
                             value = String.format("%.1f m", length),
                             icon = Icons.Default.ArrowUpward,
                             modifier = Modifier.weight(1f)
@@ -263,7 +263,7 @@ private fun RocketConfigurationCard(
 
                     config.diameter?.let { diameter ->
                         PhysicalSpecItem(
-                            label = "Diameter",
+                            label = stringResource(R.string.diameter),
                             value = String.format("%.1f m", diameter),
                             icon = Icons.Default.Info,
                             modifier = Modifier.weight(1f)
@@ -273,7 +273,7 @@ private fun RocketConfigurationCard(
 
                 config.launchMass?.let { mass ->
                     PhysicalSpecItem(
-                        label = "Launch Mass",
+                        label = stringResource(R.string.launch_mass),
                         value = String.format("%.0f kg", mass),
                         icon = Icons.Default.Build
                     )
@@ -285,7 +285,7 @@ private fun RocketConfigurationCard(
             )
 
             AppText.titleMedium(
-                text = "Manufacturer & History",
+                text = stringResource(R.string.manufacturer_and_history),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary
             )
@@ -293,14 +293,14 @@ private fun RocketConfigurationCard(
             Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)) {
                 config.manufacturer?.let { manufacturer ->
                     DetailRow(
-                        label = "Manufacturer",
+                        label = stringResource(R.string.manufacturer),
                         value = manufacturer.name,
                         icon = Icons.Default.Build
                     )
 
                     manufacturer.country?.firstOrNull()?.name?.let { country ->
                         DetailRow(
-                            label = "Built In",
+                            label = stringResource(R.string.built_in),
                             value = country,
                             icon = Icons.Default.Place
                         )
@@ -308,7 +308,7 @@ private fun RocketConfigurationCard(
 
                     manufacturer.foundingYear?.let { year ->
                         DetailRow(
-                            label = "Company Founded",
+                            label = stringResource(R.string.company_founded),
                             value = year.toString(),
                             icon = Icons.Default.DateRange
                         )
@@ -317,7 +317,7 @@ private fun RocketConfigurationCard(
 
                 config.maidenFlight?.let { maidenFlight ->
                     DetailRow(
-                        label = "Maiden Flight",
+                        label = stringResource(R.string.maiden_flight),
                         value = maidenFlight,
                         icon = Icons.Default.Star
                     )
@@ -330,7 +330,7 @@ private fun RocketConfigurationCard(
                 )
 
                 AppText.titleMedium(
-                    text = "Rocket Family",
+                    text = stringResource(R.string.rocket_family),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary
                 )
@@ -350,7 +350,7 @@ private fun RocketConfigurationCard(
                 )
 
                 AppText.titleMedium(
-                    text = "Learn More",
+                    text = stringResource(R.string.learn_more),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary
                 )
@@ -358,7 +358,7 @@ private fun RocketConfigurationCard(
                 Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)) {
                     config.wikiUrl?.let { wikiUrl ->
                         LinkButton(
-                            text = "Rocket on Wikipedia",
+                            text = stringResource(R.string.rocket_on_wikipedia),
                             icon = Icons.Default.Info,
                             onClick = {
                                 val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
@@ -369,7 +369,7 @@ private fun RocketConfigurationCard(
 
                     config.manufacturer?.wikiUrl?.let { wikiUrl ->
                         LinkButton(
-                            text = "Manufacturer on Wikipedia",
+                            text = stringResource(R.string.manufacturer_on_wikipedia),
                             icon = Icons.Default.Build,
                             onClick = {
                                 val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
@@ -380,7 +380,7 @@ private fun RocketConfigurationCard(
 
                     config.manufacturer?.infoUrl?.let { infoUrl ->
                         LinkButton(
-                            text = "Manufacturer Website",
+                            text = stringResource(R.string.manufacturer_website),
                             icon = Icons.Default.AccountCircle,
                             onClick = {
                                 val intent = Intent(Intent.ACTION_VIEW, infoUrl.toUri())
@@ -437,7 +437,7 @@ private fun RocketFamilyCard(
                         modifier = Modifier.size(16.dp)
                     )
                     AppText.bodySmall(
-                        text = "Maiden Flight: $maidenFlight",
+                        text = stringResource(R.string.maiden_flight_date, maidenFlight),
                         color = AppTheme.colors.secondary
                     )
                 }
@@ -452,7 +452,7 @@ private fun RocketFamilyCard(
                 family.totalLaunchCount?.let {
                     MiniStatItem(
                         value = it.toString(),
-                        label = "Launches",
+                        label = stringResource(R.string.launches),
                         icon = Icons.Default.Star
                     )
                 }
@@ -460,7 +460,7 @@ private fun RocketFamilyCard(
                 family.successfulLaunches?.let {
                     MiniStatItem(
                         value = it.toString(),
-                        label = "Successful",
+                        label = stringResource(R.string.successful),
                         icon = Icons.Default.CheckCircle,
                         iconTint = Color(0xFF4CAF50)
                     )
@@ -468,8 +468,8 @@ private fun RocketFamilyCard(
 
                 family.active?.let { isActive ->
                     MiniStatItem(
-                        value = if (isActive) "YES" else "NO",
-                        label = "Active",
+                        value = if (isActive) stringResource(R.string.yes) else stringResource(R.string.no),
+                        label = stringResource(R.string.active),
                         icon = Icons.Default.CheckCircle,
                         iconTint = if (isActive) Color(0xFF4CAF50) else AppTheme.colors.secondary
                     )
@@ -534,9 +534,9 @@ private fun LauncherStagesSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SectionTitle(text = "Booster Stages")
+                SectionTitle(text = stringResource(R.string.booster_stages))
                 AppText.labelMedium(
-                    text = "${stages.size} ${if (stages.size == 1) "Stage" else "Stages"}",
+                    text = "${stages.size} ${if (stages.size == 1) stringResource(R.string.stage) else stringResource(R.string.stages)}",
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -574,7 +574,7 @@ private fun LauncherStageItem(
             stage.launcher?.image?.thumbnailUrl?.let { imageUrl ->
                 GlideImage(
                     model = imageUrl,
-                    contentDescription = "Launcher ${stage.launcher.serialNumber}",
+                    contentDescription = stringResource(R.string.launcher_desc, stage.launcher.serialNumber.orEmpty()),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(80.dp)
@@ -589,14 +589,14 @@ private fun LauncherStageItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.titleMedium(
-                    text = "Stage $index - ${stage.type ?: "Core"}",
+                    text = stringResource(R.string.stage_number, index, stage.type ?: stringResource(R.string.core)),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary
                 )
 
                 stage.launcher?.serialNumber?.let { serial ->
                     AppText.bodyMedium(
-                        text = "Serial: $serial",
+                        text = stringResource(R.string.serial, serial),
                         color = AppTheme.colors.secondary,
                         fontWeight = FontWeight.Medium
                     )
@@ -605,7 +605,7 @@ private fun LauncherStageItem(
                 stage.reused?.let { isReused ->
                     Spacer(modifier = Modifier.height(paddingSmall))
                     Chip(
-                        text = if (isReused) "♻️ Reused" else "🆕 New",
+                        text = if (isReused) stringResource(R.string.reused) else stringResource(R.string.new_booster),
                         contentColor = if (isReused) Color(0xFF4CAF50) else AppTheme.colors.primary,
                         containerColor = if (isReused) Color(0xFF4CAF50) else AppTheme.colors.primary
                     )
@@ -633,7 +633,7 @@ private fun LauncherStageItem(
         ) {
             stage.launcherFlightNumber?.let {
                 InfoChip(
-                    label = "Flight #",
+                    label = stringResource(R.string.flight_number),
                     value = it.toString(),
                     icon = Icons.Default.Info
                 )
@@ -641,7 +641,7 @@ private fun LauncherStageItem(
 
             stage.launcher?.flights?.let {
                 InfoChip(
-                    label = "Total Flights",
+                    label = stringResource(R.string.total_flights),
                     value = it.toString(),
                     icon = Icons.Default.Star
                 )
@@ -667,7 +667,7 @@ private fun LauncherStats(
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
         ) {
             AppText.labelMedium(
-                text = "Launcher Performance",
+                text = stringResource(R.string.launcher_performance),
                 fontWeight = FontWeight.SemiBold,
                 color = AppTheme.colors.secondary
             )
@@ -680,7 +680,7 @@ private fun LauncherStats(
                     launcher.attemptedLandings?.let { attempted ->
                         MiniStatItem(
                             value = "$successful/$attempted",
-                            label = "Landings",
+                            label = stringResource(R.string.landings),
                             icon = Icons.Default.CheckCircle,
                             iconTint = Color(0xFF4CAF50)
                         )
@@ -689,8 +689,8 @@ private fun LauncherStats(
 
                 launcher.flightProven?.let { proven ->
                     MiniStatItem(
-                        value = if (proven) "YES" else "NO",
-                        label = "Flight Proven",
+                        value = if (proven) stringResource(R.string.yes) else stringResource(R.string.no),
+                        label = stringResource(R.string.flight_proven),
                         icon = Icons.Default.Star,
                         iconTint = if (proven) Color(0xFFFFC107) else AppTheme.colors.secondary
                     )
@@ -767,14 +767,14 @@ private fun LandingInfo(
 
                 locationName?.let {
                     AppText.bodySmall(
-                        text = "Location: $it",
+                        text = stringResource(R.string.location_label, it),
                         color = AppTheme.colors.secondary
                     )
                 }
 
                 typeName?.let {
                     AppText.bodySmall(
-                        text = "Type: $it",
+                        text = stringResource(R.string.type_label, it),
                         color = AppTheme.colors.secondary
                     )
                 }
@@ -803,9 +803,9 @@ private fun SpacecraftStagesSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SectionTitle(text = "Spacecraft Stages")
+                SectionTitle(text = stringResource(R.string.spacecraft_stages))
                 AppText.labelMedium(
-                    text = "${stages.size} ${if (stages.size == 1) "Stage" else "Stages"}",
+                    text = "${stages.size} ${if (stages.size == 1) stringResource(R.string.stage) else stringResource(R.string.stages)}",
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.SemiBold
                 )

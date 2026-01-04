@@ -11,6 +11,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -19,6 +20,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 
 @Composable
@@ -28,7 +30,7 @@ internal fun UpdatesSection(
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = "Launch Updates")
+            SectionTitle(text = stringResource(R.string.launch_updates))
 
             updates.forEach { update ->
                 UpdateItem(update = update)
