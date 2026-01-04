@@ -25,7 +25,7 @@ fun RemoteImage(
     alpha: Float = 1f,
     colorFilter: ColorFilter? = null,
     failureImage: Int = R.drawable.default_launch_image,
-    loadingImage: Int = R.drawable.default_launch_image
+    loadingImage: Int = R.drawable.rocket_loading_icon
 ) {
     GlideImage(
         model = imageUrl,
