@@ -82,7 +82,7 @@ class LaunchUiMapper @Inject constructor(
             return LaunchesUi(
                 id = id,
                 launchDate = formatDate(locateDateTime),
-                missionName = missionName,
+                missionName = missionName.substringBefore("|").trim(),
                 status = status.toDomain(),
                 imageUrl = imageUrl
             )

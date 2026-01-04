@@ -64,7 +64,7 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(210.dp)
             .clickable { onClick(launchItem.id, launchesType) }
             .semantics {
                 testTag = LaunchesTestTags.LAUNCH_CARD
@@ -96,7 +96,7 @@ internal fun LaunchCard(
                                 AppTheme.colors.surface.copy(alpha = 1f)
                             ),
                             startY = 0f,
-                            endY = 800f
+                            endY = 1100f
                         )
                     )
             )
@@ -130,7 +130,7 @@ internal fun LaunchCard(
                         fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.primary,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 2,
+                        maxLines = 1,
                         modifier = Modifier.semantics {
                             contentDescription = missionNameDesc
                         }
