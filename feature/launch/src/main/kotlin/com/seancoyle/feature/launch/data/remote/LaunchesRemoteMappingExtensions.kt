@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Country
@@ -13,9 +12,9 @@ import com.seancoyle.feature.launch.domain.model.LandingLocation
 import com.seancoyle.feature.launch.domain.model.LandingType
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Launcher
 import com.seancoyle.feature.launch.domain.model.LauncherStage
-import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.MissionPatch
@@ -32,6 +31,7 @@ import com.seancoyle.feature.launch.domain.model.SpacecraftStatus
 import com.seancoyle.feature.launch.domain.model.SpacecraftType
 import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.domain.model.VidUrl
+import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
@@ -69,7 +69,7 @@ internal fun LaunchSummaryDto.toDomain(): LaunchSummary? {
         id = id ?: return null,
         missionName = name ?: return null,
         net = net ?: return null,
-        thumbnailUrl = image?.toDomain()?.thumbnailUrl ?: LaunchesConstants.DEFAULT_LAUNCH_THUMBNAIL,
+        imageUrl = image?.toDomain()?.imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
         status = status?.toDomain() ?: return null
     )
 }

@@ -64,7 +64,7 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(160.dp)
+            .height(200.dp)
             .clickable { onClick(launchItem.id, launchesType) }
             .semantics {
                 testTag = LaunchesTestTags.LAUNCH_CARD
@@ -80,13 +80,11 @@ internal fun LaunchCard(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Background Image with Gradient Overlay
             LaunchCardImage(
-                imageUrl = launchItem.thumbnail,
+                imageUrl = launchItem.imageUrl,
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Gradient Overlay
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -94,23 +92,21 @@ internal fun LaunchCard(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                AppTheme.colors.surface.copy(alpha = 0.7f),
-                                AppTheme.colors.surface.copy(alpha = 0.95f)
+                                AppTheme.colors.surface.copy(alpha = 0.9f),
+                                AppTheme.colors.surface.copy(alpha = 1f)
                             ),
                             startY = 0f,
-                            endY = 400f
+                            endY = 800f
                         )
                     )
             )
 
-            // Content Layer
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingLarge),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                // Top Section - Status Chip
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -126,11 +122,9 @@ internal fun LaunchCard(
                     )
                 }
 
-                // Bottom Section - Mission Details
                 Column(
                     verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
                 ) {
-                    // Mission Name
                     AppText.titleMedium(
                         text = launchItem.missionName,
                         fontWeight = FontWeight.Bold,
@@ -142,7 +136,6 @@ internal fun LaunchCard(
                         }
                     )
 
-                    // Date/Time Row
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall)
@@ -196,7 +189,7 @@ private fun LaunchCardPreview() {
                 missionName = "Starlink Mission",
                 launchDate = "2024-01-15",
                 status = LaunchStatus.SUCCESS,
-                thumbnail = ""
+                imageUrl = ""
             ),
             onEvent = {},
             onClick = { _, _ -> },
