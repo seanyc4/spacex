@@ -33,5 +33,8 @@
     <string name="not_available">N/A</string>
     <string name="launch_site">Launch Site</string>
     <string name="rocket_config">Rocket Configuration</string>
+    <string name="name">Name</string>
+    <string name="abbreviation">Abbreviation</string>
+    <string name="type">Type</string>
 </resources>
 

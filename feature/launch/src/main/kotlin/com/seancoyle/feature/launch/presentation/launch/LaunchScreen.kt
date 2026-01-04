@@ -88,7 +88,7 @@ private fun SuccessState(
 
         if (launch.launchServiceProvider != null) {
             item { Spacer(modifier = Modifier.height(Dimens.dp16)) }
-            item { AgencySection(agency = launch.launchServiceProvider) }
+            item { LaunchProviderSection(agency = launch.launchServiceProvider) }
         }
 
         if (launch.updates.isNotEmpty()) {
