@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,17 +52,12 @@ internal fun RocketSection(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
-        // Main Configuration Card with integrated image
-        rocket.configuration?.let { config ->
-            RocketConfigurationCard(config = config)
-        }
+        RocketConfigurationCard(config = rocket.configuration)
 
-        // Launcher Stages
         if (!rocket.launcherStage.isNullOrEmpty()) {
             LauncherStagesSection(stages = rocket.launcherStage)
         }
 
-        // Spacecraft Stages
         if (!rocket.spacecraftStage.isNullOrEmpty()) {
             SpacecraftStagesSection(stages = rocket.spacecraftStage)
         }
@@ -76,65 +72,103 @@ private fun RocketConfigurationCard(
 ) {
     SectionCard(modifier = modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp16)) {
-            // Section Title
-            SectionTitle(text = "Rocket Configuration")
+            SectionTitle(text = stringResource(R.string.rocket_config))
 
-            // Rocket Image
-            config.image?.imageUrl?.let { imageUrl ->
-                GlideImage(
-                    model = imageUrl,
-                    contentDescription = "Rocket ${config.name}",
-                    contentScale = ContentScale.Crop,
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
+                ),
+                shape = RoundedCornerShape(Dimens.dp12)
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(Dimens.dp12)),
-                    failure = placeholder(R.drawable.default_launch_hero_image)
-                )
-            }
+                        .padding(Dimens.dp20),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.dp12)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            AppText.labelMedium(
+                                text = stringResource(R.string.rocket).uppercase(),
+                                color = AppTheme.colors.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            AppText.titleMedium(
+                                text = config.fullName ?: config.name ?: "Unknown Rocket",
+                                fontWeight = FontWeight.Bold,
+                                color = AppTheme.colors.onSurface,
+                                modifier = Modifier.padding(top = Dimens.dp4)
+                            )
+                            if (!config.variant.isNullOrEmpty()) {
+                                AppText.bodyLarge(
+                                    text = config.variant,
+                                    color = AppTheme.colors.secondary,
+                                    fontWeight = FontWeight.Medium,
+                                    modifier = Modifier.padding(top = Dimens.dp4)
+                                )
+                            }
 
-            // Rocket Name & Variant
-            Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp4)) {
-                AppText.titleLarge(
-                    text = config.fullName ?: config.name ?: "Unknown Rocket",
-                    fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
-                )
+                            if (!config.alias.isNullOrEmpty()) {
+                                AppText.bodyMedium(
+                                    text = "Also known as: ${config.alias}",
+                                    color = AppTheme.colors.secondary
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(
+                                    color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                                    shape = RoundedCornerShape(10.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.RocketLaunch,
+                                contentDescription = null,
+                                tint = AppTheme.colors.primary,
+                                modifier = Modifier.size(36.dp)
+                            )
+                        }
+                    }
 
-                if (!config.variant.isNullOrEmpty()) {
-                    AppText.bodyLarge(
-                        text = config.variant,
-                        color = AppTheme.colors.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium
-                    )
+                    config.image?.imageUrl?.let { imageUrl ->
+                        GlideImage(
+                            model = imageUrl,
+                            contentDescription = "Rocket ${config.name}",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(Dimens.dp12)),
+                            failure = placeholder(R.drawable.default_launch_hero_image)
+                        )
+                    }
+
+                    config.description?.let { desc ->
+                        AppText.bodyMedium(
+                            text = desc,
+                            color = AppTheme.colors.secondary,
+                            modifier = Modifier.padding(vertical = Dimens.dp8)
+                        )
+                    }
                 }
-
-                if (!config.alias.isNullOrEmpty()) {
-                    AppText.bodyMedium(
-                        text = "Also known as: ${config.alias}",
-                        color = AppTheme.colors.onSurfaceVariant
-                    )
-                }
-            }
-
-            // Description
-            config.description?.let { desc ->
-                AppText.bodyMedium(
-                    text = desc,
-                    color = AppTheme.colors.onSurfaceVariant,
-                    modifier = Modifier.padding(vertical = Dimens.dp8)
-                )
             }
 
             HorizontalDivider(
                 color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
             )
 
-            // Launch Statistics
             AppText.titleMedium(
                 text = "Launch Statistics",
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.primary
             )
 
             Row(
@@ -177,11 +211,10 @@ private fun RocketConfigurationCard(
                 color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
             )
 
-            // Physical Specifications
             AppText.titleMedium(
                 text = "Physical Specifications",
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.primary
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
@@ -221,18 +254,17 @@ private fun RocketConfigurationCard(
                 color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
             )
 
-            // Manufacturer & History
             AppText.titleMedium(
                 text = "Manufacturer & History",
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.primary
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp12)) {
                 config.manufacturer?.let { manufacturer ->
                     DetailRow(
                         label = "Manufacturer",
-                        value = manufacturer.name ?: "Unknown",
+                        value = manufacturer.name,
                         icon = Icons.Default.Build
                     )
 
@@ -262,16 +294,15 @@ private fun RocketConfigurationCard(
                 }
             }
 
-            // Rocket Families
             if (!config.families.isNullOrEmpty()) {
                 HorizontalDivider(
-                    color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+                    color = AppTheme.colors.primary.copy(alpha = 0.1f)
                 )
 
                 AppText.titleMedium(
                     text = "Rocket Family",
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.primary
                 )
 
                 config.families.forEach { family ->
@@ -291,7 +322,7 @@ private fun RocketConfigurationCard(
                 AppText.titleMedium(
                     text = "Learn More",
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.primary
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(Dimens.dp8)) {
@@ -353,14 +384,14 @@ private fun RocketFamilyCard(
                 AppText.titleSmall(
                     text = name,
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.primary
                 )
             }
 
             family.description?.let { desc ->
                 AppText.bodySmall(
                     text = desc,
-                    color = AppTheme.colors.onSurfaceVariant
+                    color = AppTheme.colors.secondary
                 )
             }
 
@@ -372,17 +403,16 @@ private fun RocketFamilyCard(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = AppTheme.colors.primary,
+                        tint = AppTheme.colors.onSurface,
                         modifier = Modifier.size(16.dp)
                     )
                     AppText.bodySmall(
                         text = "Maiden Flight: $maidenFlight",
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.secondary
                     )
                 }
             }
 
-            // Family Stats
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -411,7 +441,7 @@ private fun RocketFamilyCard(
                         value = if (isActive) "YES" else "NO",
                         label = "Active",
                         icon = Icons.Default.CheckCircle,
-                        iconTint = if (isActive) Color(0xFF4CAF50) else AppTheme.colors.onSurfaceVariant
+                        iconTint = if (isActive) Color(0xFF4CAF50) else AppTheme.colors.secondary
                     )
                 }
             }
@@ -423,7 +453,7 @@ private fun RocketFamilyCard(
 private fun PhysicalSpecItem(
     label: String,
     value: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -443,13 +473,13 @@ private fun PhysicalSpecItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = AppTheme.colors.primary,
+                tint = AppTheme.colors.onSurface,
                 modifier = Modifier.size(20.dp)
             )
             Column(modifier = Modifier.weight(1f)) {
                 AppText.bodySmall(
                     text = label,
-                    color = AppTheme.colors.onSurfaceVariant,
+                    color = AppTheme.colors.secondary,
                     fontSize = AppTextStyles.labelSmall.fontSize
                 )
                 AppText.titleSmall(
@@ -506,13 +536,11 @@ private fun LauncherStageItem(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp16)
     ) {
-        // Stage header with image
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Dimens.dp16),
             verticalAlignment = Alignment.Top
         ) {
-            // Launcher image
             stage.launcher?.image?.thumbnailUrl?.let { imageUrl ->
                 GlideImage(
                     model = imageUrl,
@@ -533,18 +561,17 @@ private fun LauncherStageItem(
                 AppText.titleMedium(
                     text = "Stage $index - ${stage.type ?: "Core"}",
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.primary
                 )
 
                 stage.launcher?.serialNumber?.let { serial ->
                     AppText.bodyMedium(
                         text = "Serial: $serial",
-                        color = AppTheme.colors.onSurfaceVariant,
+                        color = AppTheme.colors.secondary,
                         fontWeight = FontWeight.Medium
                     )
                 }
 
-                // Reused status chip
                 stage.reused?.let { isReused ->
                     Spacer(modifier = Modifier.height(Dimens.dp4))
                     Chip(
@@ -556,12 +583,10 @@ private fun LauncherStageItem(
             }
         }
 
-        // Launcher stats
         stage.launcher?.let { launcher ->
             LauncherStats(launcher = launcher)
         }
 
-        // Landing info
         stage.landing?.let { landing ->
             LandingInfo(
                 attempt = landing.attempt,
@@ -572,7 +597,6 @@ private fun LauncherStageItem(
             )
         }
 
-        // Flight info
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -615,7 +639,7 @@ private fun LauncherStats(
             AppText.labelMedium(
                 text = "Launcher Performance",
                 fontWeight = FontWeight.SemiBold,
-                color = AppTheme.colors.onSurfaceVariant
+                color = AppTheme.colors.secondary
             )
 
             Row(
@@ -638,7 +662,7 @@ private fun LauncherStats(
                         value = if (proven) "YES" else "NO",
                         label = "Flight Proven",
                         icon = Icons.Default.Star,
-                        iconTint = if (proven) Color(0xFFFFC107) else AppTheme.colors.onSurfaceVariant
+                        iconTint = if (proven) Color(0xFFFFC107) else AppTheme.colors.secondary
                     )
                 }
             }
@@ -646,7 +670,7 @@ private fun LauncherStats(
             launcher.status?.name?.let { status ->
                 AppText.bodySmall(
                     text = "Status: $status",
-                    color = AppTheme.colors.onSurfaceVariant,
+                    color = AppTheme.colors.secondary,
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -691,7 +715,7 @@ private fun LandingInfo(
                 tint = when {
                     success == true -> Color(0xFF4CAF50)
                     attempt == true && success == false -> Color(0xFFF44336)
-                    else -> AppTheme.colors.onSurfaceVariant
+                    else -> AppTheme.colors.secondary
                 },
                 modifier = Modifier.size(24.dp)
             )
@@ -708,27 +732,27 @@ private fun LandingInfo(
                         else -> "No Landing Attempt"
                     },
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.primary
                 )
 
                 locationName?.let {
                     AppText.bodySmall(
                         text = "Location: $it",
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.secondary
                     )
                 }
 
                 typeName?.let {
                     AppText.bodySmall(
                         text = "Type: $it",
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.secondary
                     )
                 }
 
                 description?.let {
                     AppText.bodySmall(
                         text = it,
-                        color = AppTheme.colors.onSurfaceVariant,
+                        color = AppTheme.colors.secondary,
                         modifier = Modifier.padding(top = Dimens.dp4)
                     )
                 }
@@ -783,13 +807,13 @@ private fun SpacecraftStageItem(
             AppText.titleMedium(
                 text = spacecraft.name ?: "Spacecraft",
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.primary
             )
 
             spacecraft.serialNumber?.let {
                 AppText.bodyMedium(
                     text = "Serial: $it",
-                    color = AppTheme.colors.onSurfaceVariant
+                    color = AppTheme.colors.secondary
                 )
             }
 
@@ -808,7 +832,7 @@ private fun SpacecraftStageItem(
                     Spacer(modifier = Modifier.height(Dimens.dp8))
                     AppText.bodyMedium(
                         text = capability,
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.secondary
                     )
                 }
 
@@ -832,7 +856,7 @@ private fun SpacecraftStageItem(
                             value = if (rated) "YES" else "NO",
                             label = "Human Rated",
                             icon = Icons.Default.CheckCircle,
-                            iconTint = if (rated) Color(0xFF4CAF50) else AppTheme.colors.onSurfaceVariant
+                            iconTint = if (rated) Color(0xFF4CAF50) else AppTheme.colors.secondary
                         )
                     }
                 }
@@ -877,7 +901,7 @@ private fun StatItem(
         )
         AppText.bodySmall(
             text = label,
-            color = AppTheme.colors.onSurfaceVariant,
+            color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center
         )
     }
@@ -889,7 +913,7 @@ private fun MiniStatItem(
     label: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,
-    iconTint: Color = AppTheme.colors.primary
+    iconTint: Color = AppTheme.colors.onSurface
 ) {
     Column(
         modifier = modifier,
@@ -910,7 +934,7 @@ private fun MiniStatItem(
         )
         AppText.bodySmall(
             text = label,
-            color = AppTheme.colors.onSurfaceVariant,
+            color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
             fontSize = AppTextStyles.labelSmall.fontSize
         )
@@ -937,12 +961,12 @@ private fun InfoChip(
         )
         AppText.bodySmall(
             text = "$label: ",
-            color = AppTheme.colors.onSurfaceVariant
+            color = AppTheme.colors.secondary
         )
         AppText.bodySmall(
             text = value,
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.onSurface
+            color = AppTheme.colors.primary
         )
     }
 }
@@ -973,19 +997,19 @@ private fun LinkButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = AppTheme.colors.primary,
+                tint = AppTheme.colors.onSurface,
                 modifier = Modifier.size(24.dp)
             )
             AppText.bodyLarge(
                 text = text,
-                color = AppTheme.colors.primary,
+                color = AppTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f)
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = AppTheme.colors.primary,
+                tint = AppTheme.colors.onSurface,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -997,7 +1021,7 @@ private fun LinkButton(
 private fun RocketSectionPreview() {
     AppTheme {
         RocketSection(
-            rocket = previewData().rocket!!
+            rocket = previewData().rocket
         )
     }
 }
@@ -1007,7 +1031,7 @@ private fun RocketSectionPreview() {
 private fun RocketConfigurationCardPreview() {
     AppTheme {
         RocketConfigurationCard(
-            config = previewData().rocket!!.configuration!!
+            config = previewData().rocket.configuration
         )
     }
 }
@@ -1018,7 +1042,7 @@ private fun LauncherStageItemPreview() {
     AppTheme {
         SectionCard {
             LauncherStageItem(
-                stage = previewData().rocket!!.launcherStage!![0],
+                stage = previewData().rocket.launcherStage!![0],
                 index = 1
             )
         }
