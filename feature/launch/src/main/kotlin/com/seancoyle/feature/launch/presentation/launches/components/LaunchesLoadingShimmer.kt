@@ -19,8 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.progress.ShimmerAnimation
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 
 @Composable
 fun getShimmerColors() = listOf(
@@ -81,13 +82,13 @@ fun LoadingLaunchCard(modifier: Modifier = Modifier) {
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(paddingMedium),
-            shape = RoundedCornerShape(cornerRadiusXSmall)
+                .height(160.dp)
+                .padding(horizontal = paddingMedium, vertical = paddingSmall),
+            shape = RoundedCornerShape(cornerRadiusLarge)
         ) {
             Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(95.dp)
+                modifier = Modifier
+                    .fillMaxSize()
                     .background(brush = brush)
             )
         }

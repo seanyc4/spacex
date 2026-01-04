@@ -2,13 +2,11 @@
 
 package com.seancoyle.feature.launch.presentation.launches
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
@@ -25,20 +23,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.components.error.ErrorScreen
 import com.seancoyle.core.ui.components.notification.NotificationHandler
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
+import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
-import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.core.ui.components.toolbar.TopAppBar
-import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
@@ -152,10 +150,12 @@ private fun LaunchesScreen(
         LaunchesType.PAST -> 1
     }
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = AppTheme.colors.background
+        ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
                     selected = selectedTabIndex == index,
                     onClick = {
                         val launchesType = if (index == 0) {
@@ -168,7 +168,11 @@ private fun LaunchesScreen(
                     text = {
                         AppText.titleSmall(
                             text = stringResource(tab.title),
-                            color = AppTheme.colors.onSurface
+                            color = if (selectedTabIndex == index) {
+                                AppTheme.colors.primary
+                            } else {
+                                AppTheme.colors.onSurface.copy(alpha = 0.6f)
+                            }
                         )
                     },
                 )

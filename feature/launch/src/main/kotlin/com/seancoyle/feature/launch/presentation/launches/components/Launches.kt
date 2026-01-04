@@ -2,26 +2,28 @@ package com.seancoyle.feature.launch.presentation.launches.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.LaunchesTestTags
@@ -43,12 +45,17 @@ internal fun Launches(
 
     LazyColumn(
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall),
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
         horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(
+            start = paddingMedium,
+            end = paddingMedium,
+            top = paddingSmall,
+            bottom = 24.dp
+        ),
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = paddingMedium)
+            .background(AppTheme.colors.background)
             .semantics { testTag = LaunchesTestTags.LAUNCH_LAZY_COLUMN }
     ) {
         item {

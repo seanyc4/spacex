@@ -110,6 +110,7 @@
     <!-- Content Descriptions -->
     <string name="mission_image">Mission image for %1$s</string>
     <string name="mission_name_desc">Mission name: %1$s</string>
+    <string name="mission_card_desc">Mission card for %1$s</string>
     <string name="launch_date_desc">Launch date: %1$s</string>
     <string name="section_desc">Section: %1$s</string>
     <string name="detail_row_desc">%1$s: %2$s</string>
