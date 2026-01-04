@@ -174,7 +174,7 @@ private fun MissionHighlightCard(
                 description?.let { desc ->
                     AppText.bodyMedium(
                         text = desc,
-                        color = AppTheme.colors.onSurfaceVariant,
+                        color = AppTheme.colors.secondary,
                         modifier = Modifier.padding(top = Dimens.dp4)
                     )
                 }
@@ -355,7 +355,7 @@ private fun LaunchWindowTimeline(
                             windowStartTime?.let { start ->
                                 AppText.bodyLarge(
                                     text = start,
-                                    color = AppTheme.colors.onSurfaceVariant,
+                                    color = AppTheme.colors.secondary,
                                     fontWeight = FontWeight.Medium
                                 )
                             }
@@ -363,7 +363,7 @@ private fun LaunchWindowTimeline(
                             windowEndTime?.let { end ->
                                 AppText.bodyLarge(
                                     text = end,
-                                    color = AppTheme.colors.onSurfaceVariant,
+                                    color = AppTheme.colors.secondary,
                                     fontWeight = FontWeight.Medium
                                 )
                             }
@@ -416,7 +416,7 @@ private fun LaunchWindowTimeline(
                             Spacer(modifier = Modifier.width(5.dp))
                             AppText.bodyMedium(
                                 text = stringResource(R.string.duration),
-                                color = AppTheme.colors.onSurfaceVariant,
+                                color = AppTheme.colors.secondary,
                                 modifier = Modifier.align(Alignment.CenterVertically)
                             )
                             Spacer(modifier = Modifier.width(4.dp))

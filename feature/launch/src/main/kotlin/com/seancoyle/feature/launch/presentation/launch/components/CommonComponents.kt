@@ -48,7 +48,7 @@ internal fun SectionTitle(
     AppText.titleLarge(
         text = text,
         fontWeight = FontWeight.Bold,
-        color = AppTheme.colors.onSurface,
+        color = AppTheme.colors.primary,
         modifier = modifier.semantics { contentDescription = "Section: $text" }
     )
 }
@@ -68,14 +68,14 @@ internal fun DetailRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = AppTheme.colors.primary,
+            tint = AppTheme.colors.onSurface,
             modifier = Modifier.size(20.dp)
         )
 
         Column(modifier = Modifier.weight(1f)) {
             AppText.labelMedium(
                 text = label,
-                color = AppTheme.colors.onSurfaceVariant
+                color = AppTheme.colors.secondary
             )
             AppText.bodyLarge(
                 text = value,
@@ -95,9 +95,8 @@ private fun SectionCardPreview() {
             Spacer(modifier = Modifier.height(16.dp))
             AppText.bodyMedium(
                 text = "This is example content inside a section card",
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.secondary
             )
         }
     }
 }
-

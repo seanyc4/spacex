@@ -123,7 +123,7 @@ private fun LaunchSiteContent(
             pad.location?.name?.let { location ->
                 AppText.bodyMedium(
                     text = location,
-                    color = AppTheme.colors.onSurfaceVariant
+                    color = AppTheme.colors.secondary
                 )
             }
 
@@ -138,7 +138,7 @@ private fun LaunchSiteContent(
                 if (countryText.isNotBlank()) {
                     AppText.bodySmall(
                         text = countryText,
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.secondary
                     )
                 }
             }
@@ -146,7 +146,7 @@ private fun LaunchSiteContent(
             pad.description?.let { desc ->
                 AppText.bodySmall(
                     text = desc,
-                    color = AppTheme.colors.onSurfaceVariant
+                    color = AppTheme.colors.secondary
                 )
             }
         }
@@ -224,7 +224,7 @@ private fun LaunchSiteContent(
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
-                    tint = AppTheme.colors.primary,
+                    tint = AppTheme.colors.onSurface,
                     modifier = Modifier.size(20.dp)
                 )
                 Column(modifier = Modifier.weight(1f)) {
@@ -271,7 +271,7 @@ private fun LaunchStatisticsContent(
             AppText.titleMedium(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onSurface
+                color = AppTheme.colors.primary
             )
         }
 
@@ -337,12 +337,12 @@ private fun PadStatChip(
             AppText.titleMedium(
                 text = value,
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.primary,
+                color = AppTheme.colors.onSurface,
                 textAlign = TextAlign.Center
             )
             AppText.bodySmall(
                 text = label,
-                color = AppTheme.colors.onSurfaceVariant,
+                color = AppTheme.colors.secondary,
                 textAlign = TextAlign.Center
             )
         }

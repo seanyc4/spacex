@@ -66,7 +66,7 @@ internal fun LaunchHeroSection(
             AppText.headlineLarge(
                 text = launch.missionName,
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onBackground,
+                color = AppTheme.colors.primary,
                 modifier = Modifier.semantics {
                     contentDescription = "Mission name: ${launch.missionName}"
                 }
@@ -87,7 +87,7 @@ internal fun LaunchHeroSection(
 
                 AppText.bodyLarge(
                     text = launch.launchDate,
-                    color = AppTheme.colors.onSurfaceVariant,
+                    color = AppTheme.colors.secondary,
                     modifier = Modifier.semantics {
                         contentDescription = "Launch date: ${launch.launchDate}"
                     }
@@ -106,4 +106,3 @@ private fun LaunchHeroSectionPreview() {
         )
     }
 }
-

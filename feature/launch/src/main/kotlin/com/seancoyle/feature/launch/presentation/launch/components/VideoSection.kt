@@ -34,7 +34,7 @@ internal fun VideoSection(
         AppText.titleLarge(
             text = "Videos & Webcasts",
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.onSurface,
+            color = AppTheme.colors.primary,
             modifier = Modifier
                 .padding(horizontal = Dimens.dp16)
                 .semantics { contentDescription = "Section: Videos & Webcasts" }
@@ -123,7 +123,7 @@ private fun VideoMetadata(
             if (!video.publisher.isNullOrEmpty()) {
                 AppText.bodySmall(
                     text = video.publisher,
-                    color = AppTheme.colors.onSurfaceVariant,
+                    color = AppTheme.colors.secondary,
                     modifier = Modifier.weight(1f, fill = false)
                 )
             }

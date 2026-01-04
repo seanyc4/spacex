@@ -32,5 +32,6 @@
     <string name="open_in_maps">Open in Maps</string>
     <string name="not_available">N/A</string>
     <string name="launch_site">Launch Site</string>
+    <string name="rocket_config">Rocket Configuration</string>
 </resources>
 
