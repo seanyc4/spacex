@@ -30,7 +30,6 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
-import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -73,19 +72,37 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 private fun LoadingHeroSection(modifier: Modifier = Modifier) {
     ShimmerAnimation(
         colors = listOf(
-            AppTheme.colors.surface.copy(alpha = 0.3f),
-            AppTheme.colors.primary.copy(alpha = 0.1f),
-            AppTheme.colors.surface.copy(alpha = 0.3f)
+            AppTheme.colors.surface.copy(alpha = 0.25f),
+            AppTheme.colors.primary.copy(alpha = 0.15f),
+            AppTheme.colors.surface.copy(alpha = 0.25f)
         )
     ) { brush ->
         Box(modifier = modifier.fillMaxWidth()) {
-            // Image placeholder
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(320.dp)
-                    .background(brush)
-            )
+            // Background image placeholder with gradient overlay
+            Box {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(320.dp)
+                        .background(brush)
+                )
+
+                // Gradient overlay to match real screen
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(320.dp)
+                        .background(
+                            androidx.compose.ui.graphics.Brush.verticalGradient(
+                                colors = listOf(
+                                    androidx.compose.ui.graphics.Color.Transparent,
+                                    AppTheme.colors.background.copy(alpha = 0.7f)
+                                ),
+                                startY = 100f
+                            )
+                        )
+                )
+            }
 
             // Content overlay
             Column(
@@ -94,11 +111,11 @@ private fun LoadingHeroSection(modifier: Modifier = Modifier) {
                     .padding(24.dp)
                     .fillMaxWidth()
             ) {
-                // Mission name skeleton
+                // Mission name skeleton (headlineLarge style)
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(36.dp)
+                        .fillMaxWidth(0.75f)
+                        .height(32.dp)
                         .clip(RoundedCornerShape(cornerRadiusSmall))
                         .background(brush)
                 )
@@ -110,17 +127,19 @@ private fun LoadingHeroSection(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Status chip placeholder
                     Box(
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(90.dp)
                             .height(32.dp)
                             .clip(RoundedCornerShape(16.dp))
                             .background(brush)
                     )
+                    // Date text placeholder (bodyLarge style)
                     Box(
                         modifier = Modifier
-                            .width(120.dp)
-                            .height(20.dp)
+                            .width(140.dp)
+                            .height(22.dp)
                             .clip(RoundedCornerShape(cornerRadiusSmall))
                             .background(brush)
                     )
@@ -134,11 +153,12 @@ private fun LoadingHeroSection(modifier: Modifier = Modifier) {
 private fun LoadingDetailsSection(modifier: Modifier = Modifier) {
     ShimmerAnimation(
         colors = listOf(
-            AppTheme.colors.surface.copy(alpha = 0.3f),
-            AppTheme.colors.primary.copy(alpha = 0.1f),
-            AppTheme.colors.surface.copy(alpha = 0.3f)
+            AppTheme.colors.surface.copy(alpha = 0.25f),
+            AppTheme.colors.primary.copy(alpha = 0.15f),
+            AppTheme.colors.surface.copy(alpha = 0.25f)
         )
     ) { brush ->
+        // Mimic SectionCard wrapper
         Box(
             modifier = modifier
                 .fillMaxWidth()
@@ -147,50 +167,109 @@ private fun LoadingDetailsSection(modifier: Modifier = Modifier) {
                 .background(AppTheme.colors.surface)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                // Section Title
+                // Section Title (titleLarge style)
                 Box(
                     modifier = Modifier
-                        .width(150.dp)
+                        .width(140.dp)
                         .height(28.dp)
                         .clip(RoundedCornerShape(cornerRadiusSmall))
                         .background(brush)
                 )
 
-                Spacer(modifier = Modifier.height(paddingLarge))
-
-                // Mission highlight card
+                // Mission highlight card - inner card with primary background
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(180.dp)
                         .clip(RoundedCornerShape(cornerRadiusMedium))
-                        .background(brush)
+                        .background(AppTheme.colors.primary.copy(alpha = 0.05f))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        // Label
+                        Box(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(16.dp)
+                                .clip(RoundedCornerShape(cornerRadiusSmall))
+                                .background(brush)
+                        )
+                        // Title
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .height(24.dp)
+                                .clip(RoundedCornerShape(cornerRadiusSmall))
+                                .background(brush)
+                        )
+                        // Subtitle/type
+                        Box(
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(20.dp)
+                                .clip(RoundedCornerShape(cornerRadiusSmall))
+                                .background(brush)
+                        )
+                        // Description lines
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            repeat(3) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(if (it == 2) 0.6f else 1f)
+                                        .height(16.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Divider placeholder
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(AppTheme.colors.onSurface.copy(alpha = 0.12f))
                 )
 
-                Spacer(modifier = Modifier.height(paddingLarge))
-
                 // Timeline section
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     repeat(3) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(20.dp)
+                                    .size(24.dp)
                                     .clip(CircleShape)
                                     .background(brush)
                             )
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(20.dp)
-                                    .clip(RoundedCornerShape(cornerRadiusSmall))
-                                    .background(brush)
-                            )
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(80.dp)
+                                        .height(14.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .height(18.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                            }
                         }
                     }
                 }
@@ -203,9 +282,9 @@ private fun LoadingDetailsSection(modifier: Modifier = Modifier) {
 private fun LoadingSiteSection(modifier: Modifier = Modifier) {
     ShimmerAnimation(
         colors = listOf(
-            AppTheme.colors.surface.copy(alpha = 0.3f),
-            AppTheme.colors.primary.copy(alpha = 0.1f),
-            AppTheme.colors.surface.copy(alpha = 0.3f)
+            AppTheme.colors.surface.copy(alpha = 0.25f),
+            AppTheme.colors.primary.copy(alpha = 0.15f),
+            AppTheme.colors.surface.copy(alpha = 0.25f)
         )
     ) { brush ->
         Box(
@@ -216,29 +295,97 @@ private fun LoadingSiteSection(modifier: Modifier = Modifier) {
                 .background(AppTheme.colors.surface)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // Section Title
                 Box(
                     modifier = Modifier
-                        .width(120.dp)
+                        .width(100.dp)
                         .height(28.dp)
                         .clip(RoundedCornerShape(cornerRadiusSmall))
                         .background(brush)
                 )
 
-                Spacer(modifier = Modifier.height(paddingLarge))
-
-                // Location card
+                // Location card with inner styling
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
                         .clip(RoundedCornerShape(cornerRadiusMedium))
-                        .background(brush)
-                )
+                        .background(AppTheme.colors.primary.copy(alpha = 0.05f))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Label
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(14.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                                // Site name
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.8f)
+                                        .height(22.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                            }
+                            // Icon placeholder
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(cornerRadiusSmall))
+                                    .background(brush)
+                            )
+                        }
 
-                Spacer(modifier = Modifier.height(paddingLarge))
+                        // Additional location details
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            repeat(2) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .clip(CircleShape)
+                                            .background(brush)
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .width(150.dp)
+                                            .height(18.dp)
+                                            .clip(RoundedCornerShape(cornerRadiusSmall))
+                                            .background(brush)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Divider
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(AppTheme.colors.onSurface.copy(alpha = 0.12f))
+                )
 
                 // Stats grid
                 Row(
@@ -246,13 +393,36 @@ private fun LoadingSiteSection(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     repeat(2) {
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .weight(1f)
-                                .height(100.dp)
                                 .clip(RoundedCornerShape(cornerRadiusMedium))
-                                .background(brush)
-                        )
+                                .background(AppTheme.colors.primary.copy(alpha = 0.05f))
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(brush)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .width(60.dp)
+                                    .height(24.dp)
+                                    .clip(RoundedCornerShape(cornerRadiusSmall))
+                                    .background(brush)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .width(80.dp)
+                                    .height(14.dp)
+                                    .clip(RoundedCornerShape(cornerRadiusSmall))
+                                    .background(brush)
+                            )
+                        }
                     }
                 }
             }
@@ -264,9 +434,9 @@ private fun LoadingSiteSection(modifier: Modifier = Modifier) {
 private fun LoadingRocketSection(modifier: Modifier = Modifier) {
     ShimmerAnimation(
         colors = listOf(
-            AppTheme.colors.surface.copy(alpha = 0.3f),
-            AppTheme.colors.primary.copy(alpha = 0.1f),
-            AppTheme.colors.surface.copy(alpha = 0.3f)
+            AppTheme.colors.surface.copy(alpha = 0.25f),
+            AppTheme.colors.primary.copy(alpha = 0.15f),
+            AppTheme.colors.surface.copy(alpha = 0.25f)
         )
     ) { brush ->
         Box(
@@ -277,36 +447,119 @@ private fun LoadingRocketSection(modifier: Modifier = Modifier) {
                 .background(AppTheme.colors.surface)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // Section Title
                 Box(
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(130.dp)
                         .height(28.dp)
                         .clip(RoundedCornerShape(cornerRadiusSmall))
                         .background(brush)
                 )
 
-                Spacer(modifier = Modifier.height(paddingLarge))
-
-                // Rocket image
+                // Rocket configuration card
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
                         .clip(RoundedCornerShape(cornerRadiusMedium))
-                        .background(brush)
-                )
+                        .background(AppTheme.colors.primary.copy(alpha = 0.05f))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Label
+                                Box(
+                                    modifier = Modifier
+                                        .width(60.dp)
+                                        .height(14.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                                // Rocket name
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.7f)
+                                        .height(22.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                                // Variant
+                                Box(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(20.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                                // Alias
+                                Box(
+                                    modifier = Modifier
+                                        .width(120.dp)
+                                        .height(16.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                            }
+                            // Icon placeholder
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(cornerRadiusSmall))
+                                    .background(brush)
+                            )
+                        }
 
-                Spacer(modifier = Modifier.height(paddingLarge))
+                        // Image placeholder
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(cornerRadiusMedium))
+                                .background(brush)
+                        )
+
+                        // Description lines
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            repeat(3) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(if (it == 2) 0.7f else 1f)
+                                        .height(16.dp)
+                                        .clip(RoundedCornerShape(cornerRadiusSmall))
+                                        .background(brush)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Divider
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(AppTheme.colors.onSurface.copy(alpha = 0.12f))
+                )
 
                 // Rocket details rows
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     repeat(4) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
                                 modifier = Modifier
@@ -316,18 +569,18 @@ private fun LoadingRocketSection(modifier: Modifier = Modifier) {
                             )
                             Column(
                                 modifier = Modifier.weight(1f),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxWidth(0.4f)
-                                        .height(16.dp)
+                                        .width(80.dp)
+                                        .height(14.dp)
                                         .clip(RoundedCornerShape(cornerRadiusSmall))
                                         .background(brush)
                                 )
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxWidth(0.7f)
+                                        .fillMaxWidth(0.6f)
                                         .height(20.dp)
                                         .clip(RoundedCornerShape(cornerRadiusSmall))
                                         .background(brush)

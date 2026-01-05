@@ -15,16 +15,17 @@ fun ShimmerAnimation(
     colors: List<Color>,
     content: @Composable (brush: Brush) -> Unit
 ) {
-    val transition = rememberInfiniteTransition()
+    val transition = rememberInfiniteTransition(label = "shimmer")
     val animatedValue = transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1300, easing = LinearEasing)
-        )
+            animation = tween(durationMillis = 4000, easing = LinearEasing)
+        ),
+        label = "shimmer_offset"
     )
 
-    val gradientWidth = 800
+    val gradientWidth = 1400
     val shimmerColor = colors[1].copy(alpha = 0.2f)
     val shimmer = Brush.linearGradient(
         colors = colors + shimmerColor,
