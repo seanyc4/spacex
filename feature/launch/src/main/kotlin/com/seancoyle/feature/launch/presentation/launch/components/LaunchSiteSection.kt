@@ -82,7 +82,7 @@ private fun LaunchSiteContent(
     val context = LocalContext.current
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),

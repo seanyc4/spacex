@@ -37,8 +37,8 @@ import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 @Composable
 fun LaunchScreen(
     viewModel: LaunchViewModel,
-    @Suppress("UNUSED_PARAMETER") snackbarHostState: SnackbarHostState,
-    @Suppress("UNUSED_PARAMETER") windowSizeClass: WindowSizeClass,
+    snackbarHostState: SnackbarHostState,
+    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
     val launchState by viewModel.launchState.collectAsStateWithLifecycle()
