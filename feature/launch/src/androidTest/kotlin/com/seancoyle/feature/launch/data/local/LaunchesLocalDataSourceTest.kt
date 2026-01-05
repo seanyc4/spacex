@@ -4,7 +4,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
-import com.seancoyle.feature.launch.domain.model.*
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
+import com.seancoyle.feature.launch.domain.model.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -39,245 +40,28 @@ internal class LaunchesLocalDataSourceTest {
         underTest.deleteAll()
     }
 
-    private fun createTestLaunch(
+    private fun createTestLaunchSummary(
         id: String,
         name: String = "Test Launch $id",
-        updates: List<LaunchUpdate>? = listOf(
-            LaunchUpdate(
-                id = 1,
-                profileImage = "https://test.com/profile.png",
-                comment = "Test update",
-                infoUrl = "https://test.com/info",
-                createdBy = "Tester",
-                createdOn = "2025-12-28T10:00:00Z"
-            )
-        ),
-        infoUrls: List<InfoUrl>? = listOf(
-            InfoUrl(
-                priority = 1,
-                title = "Official Info",
-                url = "https://test.com/official-info",
-                source = "official",
-                description = "Official launch information",
-                featureImage = "https://test.com/info.jpg"
-            )
-        ),
-        vidUrls: List<VidUrl>? = listOf(
-            VidUrl(
-                priority = 1,
-                source = "youtube.com",
-                publisher = "TestPublisher",
-                title = "Test Video",
-                description = "Test video description",
-                featureImage = "https://test.com/feature.jpg",
-                url = "https://youtube.com/watch?v=123",
-                startTime = "2025-12-28T12:00:00Z",
-                endTime = "2025-12-28T13:00:00Z",
-                live = false
-            )
-        ),
-        padTurnaround: String? = "P1DT2H",
-        missionPatches: List<MissionPatch>? = listOf(
-            MissionPatch(
-                id = 1,
-                name = "PatchName",
-                priority = 10,
-                imageUrl = "https://test.com/patch.png",
-                agency = null
-            )
-        ),
         status: Status = Status(
             id = 1,
             name = "Go for Launch",
             abbrev = "GO",
             description = "The launch is go for launch"
         )
-    ): Launch {
-        return Launch(
+    ): LaunchSummary {
+        return LaunchSummary(
             id = id,
-            url = "https://test.com/launch/$id",
             missionName = name,
-            lastUpdated = "2025-12-28T12:00:00Z",
             net = "2025-12-28T15:00:00Z",
-            netPrecision = NetPrecision(
-                id = 1,
-                name = "Day",
-                abbrev = "DAY",
-                description = "Launch time is known to the day"
-            ),
-            windowEnd = "2025-12-28T16:00:00Z",
-            windowStart = "2025-12-28T14:00:00Z",
-            image = Image(
-                id = 1,
-                name = "Test Image",
-                imageUrl = "https://test.com/image.jpg",
-                thumbnailUrl = "https://test.com/thumb.jpg",
-                credit = "Test Credit"
-            ),
-            infographic = "https://test.com/infographic.jpg",
-            probability = 90,
-            weatherConcerns = "None",
-            failReason = null,
-            launchServiceProvider = Agency(
-                id = 1,
-                url = "https://test.com/agency",
-                name = "SpaceX",
-                abbrev = "SPX",
-                type = "Commercial",
-                featured = true,
-                country = listOf(
-                    Country(
-                        id = 1,
-                        name = "United States",
-                        alpha2Code = "US",
-                        alpha3Code = "USA",
-                        nationalityName = "American"
-                    )
-                ),
-                description = "Space Exploration Technologies Corp.",
-                administrator = "Elon Musk",
-                foundingYear = 2002,
-                launchers = "Falcon 9, Falcon Heavy",
-                spacecraft = "Dragon",
-                parent = null,
-                image = Image(
-                    id = 2,
-                    name = "Agency Image",
-                    imageUrl = "https://test.com/agency.jpg",
-                    thumbnailUrl = "https://test.com/agency_thumb.jpg",
-                    credit = "Agency Credit"
-                ),
-                totalLaunchCount = 100,
-                consecutiveSuccessfulLaunches = 50,
-                successfulLaunches = 95,
-                failedLaunches = 5,
-                pendingLaunches = 10,
-                consecutiveSuccessfulLandings = 40,
-                successfulLandings = 80,
-                failedLandings = 5,
-                attemptedLandings = 85,
-                successfulLandingsSpacecraft = 30,
-                failedLandingsSpacecraft = 2,
-                attemptedLandingsSpacecraft = 32,
-                successfulLandingsPayload = 25,
-                failedLandingsPayload = 1,
-                attemptedLandingsPayload = 26,
-                infoUrl = "https://test.com/info",
-                wikiUrl = "https://test.com/wiki"
-            ),
-            rocket = Rocket(
-                id = 1,
-                configuration = Configuration(
-                    id = 1,
-                    url = "https://test.com/rocket",
-                    name = "Falcon 9",
-                    fullName = "Falcon 9 Block 5",
-                    variant = "Block 5",
-                    families = listOf(
-                        Family(id = 1, name = "Falcon")
-                    )
-                ),
-                launcherStage = listOf(
-                    LauncherStage(
-                        id = 1,
-                        type = "Core",
-                        reused = true,
-                        launcherFlightNumber = 10,
-                        launcher = null,
-                        landing = null,
-                        previousFlightDate = "2025-11-01T00:00:00Z",
-                        turnAroundTime = "P30D",
-                        previousFlight = null
-                    )
-                ),
-                spacecraftStage = listOf(
-                    SpacecraftStage(
-                        id = 1,
-                        url = "https://test.com/spacecraft",
-                        destination = "Low Earth Orbit",
-                        missionEnd = "2025-12-28T18:00:00Z",
-                        spacecraft = null,
-                        landing = null
-                    )
-                )
-            ),
-            mission = Mission(
-                id = 1,
-                name = "Starlink Mission",
-                type = "Communications",
-                description = "Deploy Starlink satellites",
-                orbit = Orbit(
-                    id = 1,
-                    name = "Low Earth Orbit",
-                    abbrev = "LEO"
-                ),
-                agencies = listOf(),
-                infoUrls = listOf(),
-                vidUrls =listOf()
-            ),
-            pad = Pad(
-                id = 1,
-                url = "https://test.com/pad",
-                name = "LC-39A",
-                location = Location(
-                    id = 1,
-                    url = "https://test.com/location",
-                    name = "Kennedy Space Center",
-                    country = Country(
-                        id = 1,
-                        name = "United States",
-                        alpha2Code = "US",
-                        alpha3Code = "USA",
-                        nationalityName = "American"
-                    ),
-                    description = "Florida spaceport",
-                    timezoneName = "America/New_York",
-                    totalLaunchCount = 500
-                ),
-                latitude = 28.573255,
-                longitude = -80.646895,
-                mapUrl = "https://test.com/map",
-                totalLaunchCount = 200
-            ),
-            webcastLive = false,
-            program = listOf(
-                Program(
-                    id = 1,
-                    url = "https://test.com/program",
-                    name = "Commercial Crew Program",
-                    description = "NASA's program",
-                    image = Image(
-                        id = 3,
-                        name = "Program Image",
-                        imageUrl = "https://test.com/program.jpg",
-                        thumbnailUrl = "https://test.com/program_thumb.jpg",
-                        credit = "NASA"
-                    ),
-                    startDate = "2010-01-01",
-                    endDate = null,
-                    agencies = listOf()
-                )
-            ),
-            orbitalLaunchAttemptCount = 1000,
-            locationLaunchAttemptCount = 500,
-            padLaunchAttemptCount = 200,
-            agencyLaunchAttemptCount = 100,
-            orbitalLaunchAttemptCountYear = 50,
-            locationLaunchAttemptCountYear = 25,
-            padLaunchAttemptCountYear = 10,
-            agencyLaunchAttemptCountYear = 5,
-            status = status,
-            updates = updates,
-            infoUrls = infoUrls,
-            vidUrls = vidUrls,
-            padTurnaround = padTurnaround,
-            missionPatches = missionPatches
+            imageUrl = "https://test.com/image.jpg",
+            status = status
         )
     }
 
-    private fun createTestLaunchList(count: Int): List<Launch> {
+    private fun createTestLaunchSummaryList(count: Int): List<LaunchSummary> {
         return (1..count).map { index ->
-            createTestLaunch(
+            createTestLaunchSummary(
                 id = "test-$index",
                 name = "Test Launch $index",
                 status = Status(
@@ -292,7 +76,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun upsertSingleLaunch_thenGetById_returnsSuccess() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-1")
+        val testLaunch = createTestLaunchSummary(id = "launch-1")
 
         val upsertResult = underTest.upsert(testLaunch)
         assertTrue(upsertResult is LaunchResult.Success)
@@ -303,17 +87,15 @@ internal class LaunchesLocalDataSourceTest {
         assertNotNull(retrievedLaunch)
         assertEquals(testLaunch.id, retrievedLaunch.id)
         assertEquals(testLaunch.missionName, retrievedLaunch.missionName)
-        assertEquals(testLaunch.status, retrievedLaunch.status)
-        assertEquals(testLaunch.updates?.get(0)?.comment, retrievedLaunch.updates?.get(0)?.comment)
-        assertEquals(testLaunch.infoUrls, retrievedLaunch.infoUrls)
-        assertEquals(testLaunch.vidUrls?.get(0)?.title, retrievedLaunch.vidUrls?.get(0)?.title)
-        assertEquals(testLaunch.padTurnaround, retrievedLaunch.padTurnaround)
-        assertEquals(testLaunch.missionPatches?.get(0)?.name, retrievedLaunch.missionPatches?.get(0)?.name)
+        assertEquals(testLaunch.net, retrievedLaunch.net)
+        assertEquals(testLaunch.imageUrl, retrievedLaunch.imageUrl)
+        assertEquals(testLaunch.status.name, retrievedLaunch.status.name)
+        assertEquals(testLaunch.status.abbrev, retrievedLaunch.status.abbrev)
     }
 
     @Test
     fun upsertSameLaunchTwice_updatesExistingRecord() = runTest {
-        val originalLaunch = createTestLaunch(id = "launch-1", name = "Original Name")
+        val originalLaunch = createTestLaunchSummary(id = "launch-1", name = "Original Name")
         underTest.upsert(originalLaunch)
 
         val updatedLaunch = originalLaunch.copy(missionName = "Updated Name")
@@ -327,7 +109,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun upsertAllMultipleLaunches_insertsSuccessfully() = runTest {
-        val testLaunches = createTestLaunchList(10)
+        val testLaunches = createTestLaunchSummaryList(10)
 
         val result = underTest.upsertAll(testLaunches)
 
@@ -340,7 +122,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun upsertAll_withDuplicates_updatesExisting() = runTest {
-        val initialLaunches = createTestLaunchList(5)
+        val initialLaunches = createTestLaunchSummaryList(5)
         underTest.upsertAll(initialLaunches)
 
         val updatedLaunches = initialLaunches.map { it.copy(missionName = "Updated ${it.missionName}") }
@@ -381,7 +163,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun getTotalEntries_afterInsertingMultiple_returnsCorrectCount() = runTest {
-        val testLaunches = createTestLaunchList(25)
+        val testLaunches = createTestLaunchSummaryList(25)
         underTest.upsertAll(testLaunches)
 
         val result = underTest.getTotalEntries()
@@ -392,7 +174,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun getTotalEntries_afterUpsertingDuplicates_doesNotDoubleCount() = runTest {
-        val testLaunches = createTestLaunchList(5)
+        val testLaunches = createTestLaunchSummaryList(5)
         underTest.upsertAll(testLaunches)
         underTest.upsertAll(testLaunches)
 
@@ -404,7 +186,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun deleteAll_removesAllEntries() = runTest {
-        val testLaunches = createTestLaunchList(20)
+        val testLaunches = createTestLaunchSummaryList(20)
         underTest.upsertAll(testLaunches)
 
         val preDeleteCount = underTest.getTotalEntries()
@@ -428,7 +210,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun deleteAll_thenGetById_returnsError() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-1")
+        val testLaunch = createTestLaunchSummary(id = "launch-1")
         underTest.upsert(testLaunch)
 
         underTest.deleteAll()
@@ -439,10 +221,10 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun refreshLaunches_replacesAllData() = runTest {
-        val initialLaunches = createTestLaunchList(10)
+        val initialLaunches = createTestLaunchSummaryList(10)
         underTest.upsertAll(initialLaunches)
 
-        val newLaunches = createTestLaunchList(5).map {
+        val newLaunches = createTestLaunchSummaryList(5).map {
             it.copy(id = "new-${it.id}")
         }
         underTest.refreshLaunches(newLaunches)
@@ -460,7 +242,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun refreshLaunchesWithKeys_clearsAndInsertsData() = runTest {
-        val initialLaunches = createTestLaunchList(5)
+        val initialLaunches = createTestLaunchSummaryList(5)
         underTest.refreshLaunchesWithKeys(
             launches = initialLaunches,
             nextPage = 2,
@@ -482,7 +264,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun refreshLaunchesWithKeys_withDifferentPages_updatesKeys() = runTest {
-        val launches = createTestLaunchList(3)
+        val launches = createTestLaunchSummaryList(3)
 
         underTest.refreshLaunchesWithKeys(
             launches = launches,
@@ -504,7 +286,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun appendLaunchesWithKeys_addsToExistingData() = runTest {
-        val initialLaunches = createTestLaunchList(5)
+        val initialLaunches = createTestLaunchSummaryList(5)
         underTest.refreshLaunchesWithKeys(
             launches = initialLaunches,
             nextPage = 2,
@@ -515,7 +297,7 @@ internal class LaunchesLocalDataSourceTest {
         )
 
         val additionalLaunches = (6..10).map { index ->
-            createTestLaunch(id = "test-$index", name = "Test Launch $index")
+            createTestLaunchSummary(id = "test-$index", name = "Test Launch $index")
         }
         underTest.appendLaunchesWithKeys(
             launches = additionalLaunches,
@@ -536,7 +318,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun appendLaunchesWithKeys_withNullPages_handlesCorrectly() = runTest {
-        val launches = createTestLaunchList(3)
+        val launches = createTestLaunchSummaryList(3)
 
         underTest.appendLaunchesWithKeys(
             launches = launches,
@@ -570,7 +352,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun getRemoteKeys_afterAppend_returnsAllKeys() = runTest {
-        val launches = createTestLaunchList(5)
+        val launches = createTestLaunchSummaryList(5)
         underTest.appendLaunchesWithKeys(
             launches = launches,
             nextPage = 2,
@@ -593,7 +375,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun upsertAll_largeDataSet_handlesCorrectly() = runTest {
-        val largeLaunchList = createTestLaunchList(1000)
+        val largeLaunchList = createTestLaunchSummaryList(1000)
 
         val upsertResult = underTest.upsertAll(largeLaunchList)
         assertTrue(upsertResult is LaunchResult.Success)
@@ -605,10 +387,10 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun refreshLaunches_largeDataSet_replacesCorrectly() = runTest {
-        val initialData = createTestLaunchList(500)
+        val initialData = createTestLaunchSummaryList(500)
         underTest.upsertAll(initialData)
 
-        val newData = createTestLaunchList(1000).map { it.copy(id = "new-${it.id}") }
+        val newData = createTestLaunchSummaryList(1000).map { it.copy(id = "new-${it.id}") }
         underTest.refreshLaunches(newData)
 
         val countResult = underTest.getTotalEntries()
@@ -618,7 +400,7 @@ internal class LaunchesLocalDataSourceTest {
 
     @Test
     fun upsert_withSpecialCharactersInId_handlesCorrectly() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-@#$%^&*()")
+        val testLaunch = createTestLaunchSummary(id = "launch-@#$%^&*()")
 
         val result = underTest.upsert(testLaunch)
         assertTrue(result is LaunchResult.Success)
@@ -630,7 +412,7 @@ internal class LaunchesLocalDataSourceTest {
     @Test
     fun multipleRefreshes_maintainsDataIntegrity() = runTest {
         repeat(5) { iteration ->
-            val launches = createTestLaunchList(10).map {
+            val launches = createTestLaunchSummaryList(10).map {
                 it.copy(id = "iteration-$iteration-${it.id}")
             }
             underTest.refreshLaunches(launches)
@@ -639,5 +421,118 @@ internal class LaunchesLocalDataSourceTest {
             assertTrue(count is LaunchResult.Success)
             assertEquals(10, count.data)
         }
+    }
+
+    @Test
+    fun upsertLaunchesWithDifferentStatuses_handlesCorrectly() = runTest {
+        val launches = listOf(
+            createTestLaunchSummary(
+                id = "launch-1",
+                status = Status(1, "Go for Launch", "Go", "Launch is confirmed")
+            ),
+            createTestLaunchSummary(
+                id = "launch-2",
+                status = Status(2, "TBD", "TBD", "To be determined")
+            ),
+            createTestLaunchSummary(
+                id = "launch-3",
+                status = Status(3, "Success", "Success", "Launch was successful")
+            ),
+            createTestLaunchSummary(
+                id = "launch-4",
+                status = Status(4, "Failure", "Failed", "Launch failed")
+            )
+        )
+
+        val result = underTest.upsertAll(launches)
+        assertTrue(result is LaunchResult.Success)
+
+        val count = underTest.getTotalEntries()
+        assertTrue(count is LaunchResult.Success)
+        assertEquals(4, count.data)
+
+        // Verify each status was preserved
+        val launch1 = underTest.getById("launch-1")
+        assertTrue(launch1 is LaunchResult.Success)
+        assertEquals("Go for Launch", launch1.data?.status?.name)
+
+        val launch3 = underTest.getById("launch-3")
+        assertTrue(launch3 is LaunchResult.Success)
+        assertEquals("Success", launch3.data?.status?.name)
+    }
+
+    @Test
+    fun refreshLaunchesWithKeys_withEmptyQuery_handlesCorrectly() = runTest {
+        val launches = createTestLaunchSummaryList(3)
+
+        underTest.refreshLaunchesWithKeys(
+            launches = launches,
+            nextPage = 2,
+            prevPage = null,
+            currentPage = 1,
+            cachedQuery = "",
+            cachedLaunchType = LaunchesType.UPCOMING.name
+        )
+
+        val remoteKey = underTest.getRemoteKey("test-1")
+        assertNotNull(remoteKey)
+        assertEquals("", remoteKey.cachedQuery)
+    }
+
+    @Test
+    fun appendAndRefresh_maintainsSeparateOperations() = runTest {
+        // First append some data
+        val initialLaunches = createTestLaunchSummaryList(5)
+        underTest.appendLaunchesWithKeys(
+            launches = initialLaunches,
+            nextPage = 2,
+            prevPage = null,
+            currentPage = 1,
+            cachedQuery = null,
+            cachedLaunchType = LaunchesType.UPCOMING.name
+        )
+
+        val countAfterAppend = underTest.getTotalEntries()
+        assertTrue(countAfterAppend is LaunchResult.Success)
+        assertEquals(5, countAfterAppend.data)
+
+        // Then refresh with different data
+        val refreshLaunches = createTestLaunchSummaryList(3).map {
+            it.copy(id = "refresh-${it.id}")
+        }
+        underTest.refreshLaunchesWithKeys(
+            launches = refreshLaunches,
+            nextPage = 2,
+            prevPage = null,
+            currentPage = 1,
+            cachedQuery = null,
+            cachedLaunchType = LaunchesType.UPCOMING.name
+        )
+
+        // Should only have the refreshed data
+        val countAfterRefresh = underTest.getTotalEntries()
+        assertTrue(countAfterRefresh is LaunchResult.Success)
+        assertEquals(3, countAfterRefresh.data)
+
+        // Old data should be gone
+        val oldLaunch = underTest.getById("test-1")
+        assertTrue(oldLaunch is LaunchResult.Error)
+
+        // New data should exist
+        val newLaunch = underTest.getById("refresh-test-1")
+        assertTrue(newLaunch is LaunchResult.Success)
+    }
+
+    @Test
+    fun upsertLaunchWithVeryLongMissionName_handlesCorrectly() = runTest {
+        val longName = "A".repeat(500)
+        val testLaunch = createTestLaunchSummary(id = "long-name", name = longName)
+
+        val result = underTest.upsert(testLaunch)
+        assertTrue(result is LaunchResult.Success)
+
+        val retrieved = underTest.getById("long-name")
+        assertTrue(retrieved is LaunchResult.Success)
+        assertEquals(longName, retrieved.data?.missionName)
     }
 }
