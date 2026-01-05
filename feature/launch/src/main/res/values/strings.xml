@@ -89,6 +89,7 @@
     <string name="videos_webcasts">Videos &amp; Webcasts</string>
     <string name="live">LIVE</string>
     <string name="video_thumbnail">Video thumbnail</string>
+    <string name="play_video">Play video</string>
 
     <!-- Mission Patches Section -->
     <string name="mission_patches">Mission Patches</string>

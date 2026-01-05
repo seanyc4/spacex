@@ -34,14 +34,13 @@ fun RemoteImage(
         model = ImageRequest.Builder(context)
             .data(imageUrl)
             .crossfade(true)
-            .crossfade(500)
+            .crossfade(150)
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
             .networkCachePolicy(CachePolicy.ENABLED)
             .diskCacheKey(imageUrl)
             .build(),
         contentDescription = contentDescription,
-       // placeholder = painterResource(loadingImage),
         error = painterResource(failureImage),
         fallback = painterResource(failureImage),
         modifier = modifier

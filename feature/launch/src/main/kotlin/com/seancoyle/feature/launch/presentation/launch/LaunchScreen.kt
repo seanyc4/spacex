@@ -2,11 +2,13 @@ package com.seancoyle.feature.launch.presentation.launch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
@@ -78,36 +80,39 @@ private fun SuccessState(
     launch: LaunchUI,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    val scrollState = rememberScrollState()
+
+    Column(
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = "Launch details for ${launch.missionName}" },
-        contentPadding = PaddingValues(bottom = 24.dp)
+            .verticalScroll(scrollState)
+            .semantics { contentDescription = "Launch details for ${launch.missionName}" }
+            .padding(bottom = 24.dp)
     ) {
-        item { LaunchHeroSection(launch = launch) }
-        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
+        LaunchHeroSection(launch = launch)
+        Spacer(modifier = Modifier.height(paddingXLarge))
 
-        item { LaunchDetailsSection(launch = launch) }
+        LaunchDetailsSection(launch = launch)
 
-        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
-        item { LaunchSiteSection(pad = launch.pad) }
+        Spacer(modifier = Modifier.height(paddingXLarge))
+        LaunchSiteSection(pad = launch.pad)
 
         if (launch.vidUrls.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
-            item { VideoSection(videos = launch.vidUrls) }
+            Spacer(modifier = Modifier.height(paddingXLarge))
+            VideoSection(videos = launch.vidUrls)
         }
 
-        item { Spacer(modifier = Modifier.height(paddingXLarge)) }
-        item { RocketSection(rocket = launch.rocket) }
+        Spacer(modifier = Modifier.height(paddingXLarge))
+        RocketSection(rocket = launch.rocket)
 
         if (launch.launchServiceProvider != null) {
-            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
-            item { LaunchProviderSection(agency = launch.launchServiceProvider) }
+            Spacer(modifier = Modifier.height(paddingXLarge))
+            LaunchProviderSection(agency = launch.launchServiceProvider)
         }
 
         if (launch.updates.isNotEmpty()) {
-            item { Spacer(modifier = Modifier.height(paddingXLarge)) }
-            item { UpdatesSection(updates = launch.updates) }
+            Spacer(modifier = Modifier.height(paddingXLarge))
+            UpdatesSection(updates = launch.updates)
         }
     }
 }

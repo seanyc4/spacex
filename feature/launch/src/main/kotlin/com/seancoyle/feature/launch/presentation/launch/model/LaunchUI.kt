@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.presentation.launch.model
 
+import androidx.compose.runtime.Immutable
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.InfoUrl
@@ -11,6 +12,7 @@ import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.VidUrl
 import java.time.LocalDateTime
 
+@Immutable
 data class LaunchUI(
     val id: String,
     val missionName: String,
