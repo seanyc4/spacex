@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -576,12 +575,10 @@ private fun LauncherStageItem(
                     R.string.launcher_desc,
                     stage.launcher.serialNumber.orEmpty()
                 ),
-                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
-                    .background(AppTheme.colors.surfaceVariant),
-                failureImage = R.drawable.default_launch_hero_image
+                    .background(AppTheme.colors.surfaceVariant)
             )
 
             Column(
