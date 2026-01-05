@@ -25,17 +25,24 @@ fun ShimmerAnimation(
         label = "shimmer_offset"
     )
 
-    val gradientWidth = 1400
+    val gradientWidth = 1200f
     val shimmerColor = colors[1].copy(alpha = 0.2f)
+
+    // Create a repeating gradient pattern for seamless animation
+    val repeatPattern = colors + shimmerColor + colors
+
+    // Calculate offset that creates a continuous loop
+    val offset = animatedValue.value * gradientWidth * 2
+
     val shimmer = Brush.linearGradient(
-        colors = colors + shimmerColor,
+        colors = repeatPattern,
         start = Offset(
-            x = -gradientWidth.toFloat(),
-            y = 0f
+            x = offset - gradientWidth,
+            y = offset - gradientWidth
         ),
         end = Offset(
-            x = animatedValue.value * gradientWidth,
-            y = animatedValue.value * gradientWidth
+            x = offset + gradientWidth,
+            y = offset + gradientWidth
         )
     )
 
