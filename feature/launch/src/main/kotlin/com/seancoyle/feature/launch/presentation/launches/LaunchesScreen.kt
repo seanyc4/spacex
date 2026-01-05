@@ -169,12 +169,12 @@ private fun LaunchesScreen(
                         AppText.titleSmall(
                             text = stringResource(tab.title),
                             color = if (selectedTabIndex == index) {
-                                AppTheme.colors.primary
+                                AppTheme.colors.onSurface
                             } else {
                                 AppTheme.colors.onSurface.copy(alpha = 0.6f)
                             }
                         )
-                    },
+                    }
                 )
             }
         }
