@@ -42,13 +42,14 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.containerColor
+import com.seancoyle.feature.launch.presentation.launch.model.contentColor
+import com.seancoyle.feature.launch.presentation.launch.model.icon
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 
 @Composable
 internal fun LaunchCard(
     launchItem: LaunchesUi,
-    @Suppress("UNUSED_PARAMETER") onEvent: (LaunchesEvents) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     launchesType: LaunchesType,
     modifier: Modifier = Modifier,
@@ -110,11 +111,11 @@ internal fun LaunchCard(
                 ) {
                     Chip(
                         text = launchItem.status.abbrev,
-                        containerColor = launchItem.status.containerColor,
-                        contentColor = launchItem.status.contentColor,
-                        icon = launchItem.status.icon,
+                        containerColor = launchItem.status.containerColor(),
+                        contentColor = launchItem.status.contentColor(),
+                        icon = launchItem.status.icon(),
                         modifier = Modifier.semantics {
-                            testTag = LaunchesTestTags.FILTER_STATUS_CHIP
+                            testTag = LaunchesTestTags.CARD_STATUS_CHIP
                         }
                     )
                 }
@@ -171,7 +172,6 @@ private fun LaunchCardPreview() {
                 status = LaunchStatus.SUCCESS,
                 imageUrl = ""
             ),
-            onEvent = {},
             onClick = { _, _ -> },
             launchesType = LaunchesType.UPCOMING
         )

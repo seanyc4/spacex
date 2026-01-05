@@ -75,7 +75,6 @@ internal fun Launches(
             if (launchItem != null) {
                 LaunchCard(
                     launchItem = launchItem,
-                    onEvent = {},
                     onClick = onClick,
                     launchesType = state.launchesType,
                 )

@@ -61,4 +61,5 @@ object LaunchesTestTags {
     const val FILTER_DIALOG = "filter_dialog"
     const val FILTER_SEARCH = "filter_search"
     const val FILTER_STATUS_CHIP = "filter_status_chip"
+    const val CARD_STATUS_CHIP = "card_status_chip"
 }

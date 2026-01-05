@@ -55,11 +55,7 @@ fun NavigationRoot(
                                 )
                             }
                         )
-                        LaunchScreen(
-                            viewModel = viewModel,
-                            snackbarHostState = snackbarHostState,
-                            windowSizeClass = windowSizeClass
-                        )
+                        LaunchScreen(viewModel = viewModel)
                     }
                 }
 

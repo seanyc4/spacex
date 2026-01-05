@@ -30,6 +30,9 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.model.containerColor
+import com.seancoyle.feature.launch.presentation.launch.model.contentColor
+import com.seancoyle.feature.launch.presentation.launch.model.icon
 
 @Composable
 internal fun LaunchHeroSection(
@@ -92,9 +95,9 @@ internal fun LaunchHeroSection(
             ) {
                 Chip(
                     text = launch.status.label,
-                    containerColor = launch.status.containerColor,
-                    contentColor = launch.status.contentColor,
-                    icon = launch.status.icon
+                    containerColor = launch.status.containerColor(),
+                    contentColor = launch.status.contentColor(),
+                    icon = launch.status.icon()
                 )
 
                 AppText.bodyLarge(

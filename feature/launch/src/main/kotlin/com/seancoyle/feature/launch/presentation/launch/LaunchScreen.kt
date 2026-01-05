@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -39,8 +37,6 @@ import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 @Composable
 fun LaunchScreen(
     viewModel: LaunchViewModel,
-    snackbarHostState: SnackbarHostState,
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
     val launchState by viewModel.launchState.collectAsStateWithLifecycle()
@@ -116,7 +112,6 @@ private fun SuccessState(
         }
     }
 }
-
 
 @PreviewDarkLightMode
 @Composable
