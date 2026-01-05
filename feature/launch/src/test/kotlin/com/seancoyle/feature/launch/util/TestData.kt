@@ -1,11 +1,141 @@
 package com.seancoyle.feature.launch.util
 
-import com.seancoyle.database.entities.*
-import com.seancoyle.feature.launch.domain.model.*
-import com.seancoyle.feature.launch.data.remote.*
+import com.seancoyle.database.entities.AgencyEntity
+import com.seancoyle.database.entities.ConfigurationEntity
+import com.seancoyle.database.entities.CountryEntity
+import com.seancoyle.database.entities.FamilyEntity
+import com.seancoyle.database.entities.ImageEntity
+import com.seancoyle.database.entities.InfoUrlEntity
+import com.seancoyle.database.entities.LandingEntity
+import com.seancoyle.database.entities.LandingLocationEntity
+import com.seancoyle.database.entities.LandingTypeEntity
+import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.LaunchStatusEntity
+import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.database.entities.LaunchUpdateEntity
+import com.seancoyle.database.entities.LauncherEntity
+import com.seancoyle.database.entities.LauncherStageEntity
+import com.seancoyle.database.entities.MissionEntity
+import com.seancoyle.database.entities.MissionPatchEntity
+import com.seancoyle.database.entities.NetPrecisionEntity
+import com.seancoyle.database.entities.OrbitEntity
+import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.PreviousFlightEntity
+import com.seancoyle.database.entities.ProgramEntity
+import com.seancoyle.database.entities.RocketEntity
+import com.seancoyle.database.entities.SpacecraftConfigEntity
+import com.seancoyle.database.entities.SpacecraftEntity
+import com.seancoyle.database.entities.SpacecraftStageEntity
+import com.seancoyle.database.entities.SpacecraftStatusEntity
+import com.seancoyle.database.entities.SpacecraftTypeEntity
+import com.seancoyle.database.entities.VidUrlEntity
+import com.seancoyle.feature.launch.data.remote.AgencyDto
+import com.seancoyle.feature.launch.data.remote.ConfigurationDto
+import com.seancoyle.feature.launch.data.remote.CountryDto
+import com.seancoyle.feature.launch.data.remote.FamilyDto
+import com.seancoyle.feature.launch.data.remote.ImageDto
+import com.seancoyle.feature.launch.data.remote.InfoUrlDto
+import com.seancoyle.feature.launch.data.remote.LandingDto
+import com.seancoyle.feature.launch.data.remote.LandingLocationDto
+import com.seancoyle.feature.launch.data.remote.LandingTypeDto
+import com.seancoyle.feature.launch.data.remote.LaunchDto
+import com.seancoyle.feature.launch.data.remote.LaunchSummaryDto
+import com.seancoyle.feature.launch.data.remote.LaunchUpdateDto
+import com.seancoyle.feature.launch.data.remote.LauncherDto
+import com.seancoyle.feature.launch.data.remote.LauncherStageDto
+import com.seancoyle.feature.launch.data.remote.LaunchesDto
+import com.seancoyle.feature.launch.data.remote.LocationDto
+import com.seancoyle.feature.launch.data.remote.MissionDto
+import com.seancoyle.feature.launch.data.remote.MissionPatchDto
+import com.seancoyle.feature.launch.data.remote.NetPrecisionDto
+import com.seancoyle.feature.launch.data.remote.OrbitDto
+import com.seancoyle.feature.launch.data.remote.PadDto
+import com.seancoyle.feature.launch.data.remote.PreviousFlightDto
+import com.seancoyle.feature.launch.data.remote.ProgramDto
+import com.seancoyle.feature.launch.data.remote.RocketDto
+import com.seancoyle.feature.launch.data.remote.SpacecraftConfigDto
+import com.seancoyle.feature.launch.data.remote.SpacecraftDto
+import com.seancoyle.feature.launch.data.remote.SpacecraftStageDto
+import com.seancoyle.feature.launch.data.remote.SpacecraftStatusDto
+import com.seancoyle.feature.launch.data.remote.SpacecraftTypeDto
+import com.seancoyle.feature.launch.data.remote.StatusDto
+import com.seancoyle.feature.launch.data.remote.TypeDto
+import com.seancoyle.feature.launch.data.remote.VidUrlDto
+import com.seancoyle.feature.launch.domain.model.Agency
+import com.seancoyle.feature.launch.domain.model.Configuration
+import com.seancoyle.feature.launch.domain.model.Country
+import com.seancoyle.feature.launch.domain.model.Family
+import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.InfoUrl
+import com.seancoyle.feature.launch.domain.model.Landing
+import com.seancoyle.feature.launch.domain.model.LandingLocation
+import com.seancoyle.feature.launch.domain.model.LandingType
+import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
+import com.seancoyle.feature.launch.domain.model.Launcher
+import com.seancoyle.feature.launch.domain.model.LauncherStage
+import com.seancoyle.feature.launch.domain.model.Location
+import com.seancoyle.feature.launch.domain.model.Mission
+import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.domain.model.NetPrecision
+import com.seancoyle.feature.launch.domain.model.Orbit
+import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.domain.model.PreviousFlight
+import com.seancoyle.feature.launch.domain.model.Program
+import com.seancoyle.feature.launch.domain.model.Rocket
+import com.seancoyle.feature.launch.domain.model.Spacecraft
+import com.seancoyle.feature.launch.domain.model.SpacecraftConfig
+import com.seancoyle.feature.launch.domain.model.SpacecraftStage
+import com.seancoyle.feature.launch.domain.model.SpacecraftStatus
+import com.seancoyle.feature.launch.domain.model.SpacecraftType
+import com.seancoyle.feature.launch.domain.model.Status
+import com.seancoyle.feature.launch.domain.model.VidUrl
 import kotlin.random.Random
 
 internal object TestData {
+
+    fun createLaunchSummaryDto(
+        id: String? = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        net: String = "2025-12-13T05:34:00Z",
+        image: ImageDto = createImageDto(),
+        status: StatusDto = createStatusDto()
+    ) = LaunchSummaryDto(
+        id = id,
+        name = name,
+        net = net,
+        image = image,
+        status = status
+    )
+
+    fun createLaunchSummary(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        net: String = "2025-12-13T05:34:00Z",
+        image: Image = createImage(),
+        status: Status = createStatus()
+    ) = LaunchSummary(
+        id = id,
+        missionName = name,
+        net = net,
+        imageUrl = image.imageUrl,
+        status = status
+    )
+
+    fun createLaunchSummaryEntity(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        net: String = "2025-12-13T05:34:00Z",
+        image: ImageEntity = createImageEntity(),
+        status: LaunchStatusEntity = createLaunchStatusEntity()
+    ) = LaunchSummaryEntity(
+        id = id,
+        missionName = name,
+        net = net,
+        imageUrl = image.imageUrl,
+        status = status
+    )
 
     fun createStatusDto(
         id: Int = 1,
@@ -679,7 +809,7 @@ internal object TestData {
         count: Int = 109,
         next: String = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list&offset=10&ordering=net",
         previous: String = "",
-        results: List<LaunchDto> = listOf(createLaunchDto())
+        results: List<LaunchSummaryDto> = listOf(createLaunchSummaryDto())
     ) = LaunchesDto(
         count = count,
         next = next,
@@ -1263,9 +1393,9 @@ internal object TestData {
         weatherConcerns: String = "10% chance of unfavorable winds",
         failReason: String = "Failed",
         launchServiceProvider: AgencyEntity? = createAgencyEntity(),
-        rocket: RocketEntity? = createRocketEntity(),
-        mission: MissionEntity? = createMissionEntity(),
-        pad: PadEntity? = createPadEntity(),
+        rocket: RocketEntity = createRocketEntity(),
+        mission: MissionEntity = createMissionEntity(),
+        pad: PadEntity = createPadEntity(),
         webcastLive: Boolean = false,
         program: List<ProgramEntity>? = listOf(createProgramEntity()),
         orbitalLaunchAttemptCount: Int = 6789,
@@ -1276,7 +1406,7 @@ internal object TestData {
         locationLaunchAttemptCountYear: Int = 45,
         padLaunchAttemptCountYear: Int = 23,
         agencyLaunchAttemptCountYear: Int = 67,
-        status: LaunchStatusEntity? = createLaunchStatusEntity(),
+        status: LaunchStatusEntity = createLaunchStatusEntity(),
         updates: List<LaunchUpdateEntity>? = listOf(createLaunchUpdateEntity()),
         infoUrls: List<InfoUrlEntity>? = listOf(createInfoUrlEntity()),
         vidUrls: List<VidUrlEntity>? = listOf(createVidUrlEntity()),
@@ -1981,6 +2111,15 @@ internal object TestData {
     fun createLaunchList(count: Int = 10): List<Launch> {
         return (1..count).map { index ->
             createLaunch(
+                id = "launch-id-$index",
+                name = "Falcon 9 Block 5 | Mission $index"
+            )
+        }
+    }
+
+    fun createLaunchSummaryList(count: Int = 10): List<LaunchSummary> {
+        return (1..count).map { index ->
+            createLaunchSummary(
                 id = "launch-id-$index",
                 name = "Falcon 9 Block 5 | Mission $index"
             )

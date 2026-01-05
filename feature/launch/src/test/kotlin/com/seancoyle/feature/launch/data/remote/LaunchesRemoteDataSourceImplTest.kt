@@ -3,10 +3,10 @@ package com.seancoyle.feature.launch.data.remote
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.presentation.LaunchesConstants
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -58,19 +58,10 @@ class LaunchesRemoteDataSourceImplTest {
 
         val actualLaunch = result.data[0]
         assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
-        assertEquals(
-            "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
-            actualLaunch.url
-        )
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.missionName)
-        assertEquals("Go for Launch", actualLaunch.status?.name)
-        assertEquals("2025-12-05T18:39:36Z", actualLaunch.lastUpdated)
+        assertEquals("Go for Launch", actualLaunch.status.name)
         assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)
-        assertEquals("Minute", actualLaunch.netPrecision?.name)
-        assertEquals("2025-12-13T09:34:00Z", actualLaunch.windowEnd)
-        assertEquals("2025-12-13T05:34:00Z", actualLaunch.windowStart)
-        assertEquals("Starlink night fairing", actualLaunch.image.name)
-        assertEquals(false, actualLaunch.webcastLive)
+        assertEquals("https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png", actualLaunch.imageUrl)
     }
 
     @Test

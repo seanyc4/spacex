@@ -6,14 +6,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
-import com.seancoyle.feature.launch.presentation.LaunchesConstants.PREFETCH_DISTANCE
+import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
+import com.seancoyle.feature.launch.presentation.LaunchesConstants.PREFETCH_DISTANCE
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -145,7 +145,7 @@ class LaunchesRemoteMediatorTest {
 
     @Test
     fun `load refresh succeeds and clears old data`() = runTest {
-        val launches = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } returns LaunchResult.Success(launches)
@@ -179,7 +179,7 @@ class LaunchesRemoteMediatorTest {
 
     @Test
     fun `load refresh succeeds with end of pagination reached`() = runTest {
-        val launches = List(5) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(5) { TestData.createLaunchSummary(id = "id-$it") }
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
@@ -241,7 +241,7 @@ class LaunchesRemoteMediatorTest {
 
     @Test
     fun `load append succeeds with more data`() = runTest {
-        val launches = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -274,7 +274,7 @@ class LaunchesRemoteMediatorTest {
 
     @Test
     fun `load append succeeds with end of pagination reached`() = runTest {
-        val launches = List(PAGINATION_LIMIT - 1) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(PAGINATION_LIMIT - 1) { TestData.createLaunchSummary(id = "id-$it") }
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -379,7 +379,7 @@ class LaunchesRemoteMediatorTest {
 
     @Test
     fun `load prepend succeeds with more data`() = runTest {
-        val launches = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "first-id",
@@ -483,7 +483,7 @@ class LaunchesRemoteMediatorTest {
         assertTrue(result is RemoteMediator.MediatorResult.Error)
     }
 
-    private fun createPagingState(): PagingState<Int, LaunchEntity> {
+    private fun createPagingState(): PagingState<Int, LaunchSummaryEntity> {
         return PagingState(
             pages = emptyList(),
             anchorPosition = null,

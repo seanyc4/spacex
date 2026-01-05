@@ -319,9 +319,6 @@ class LaunchesLocalMappingExtensionsKtTest {
         val launchEntity = TestData.createLaunchEntity(
             netPrecision = null,
             launchServiceProvider = null,
-            rocket = null,
-            mission = null,
-            pad = null,
             program = null
         )
 
@@ -330,9 +327,6 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertNotNull(result)
         assertEquals(null, result.netPrecision)
         assertEquals(null, result.launchServiceProvider)
-        assertEquals(null, result.rocket)
-        assertEquals(null, result.mission)
-        assertEquals(null, result.pad)
         assertEquals(null, result.program)
     }
 }
