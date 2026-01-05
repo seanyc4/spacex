@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -35,9 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
@@ -77,7 +74,6 @@ internal fun LaunchSiteSection(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun LaunchSiteContent(
     pad: Pad,
@@ -192,14 +188,12 @@ private fun LaunchSiteContent(
                         }
                     )
             ) {
-                GlideImage(
-                    model = mapImageUrl,
+                RemoteImage(
+                    imageUrl = mapImageUrl,
                     contentDescription = stringResource(R.string.map_of_desc, pad.name.orEmpty()),
-                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
                         .semantics { testTag = LaunchesTestTags.LAUNCH_SITE_MAP },
-                    failure = placeholder(R.drawable.default_launch_hero_image)
                 )
 
                 if (mapUrl != null) {

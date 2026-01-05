@@ -43,9 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTextStyles
@@ -94,7 +92,6 @@ internal fun RocketSection(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun RocketConfigurationCard(
     config: Configuration,
@@ -168,18 +165,17 @@ private fun RocketConfigurationCard(
                         }
                     }
 
-                    config.image?.imageUrl?.let { imageUrl ->
-                        GlideImage(
-                            model = imageUrl,
-                            contentDescription = stringResource(R.string.rocket_desc, config.name.orEmpty()),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .clip(RoundedCornerShape(cornerRadiusMedium)),
-                            failure = placeholder(R.drawable.default_launch_hero_image)
-                        )
-                    }
+                    RemoteImage(
+                        imageUrl = config.image?.imageUrl!!,
+                        contentDescription = stringResource(
+                            R.string.rocket_desc,
+                            config.name.orEmpty()
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(cornerRadiusMedium)),
+                    )
 
                     config.description?.let { desc ->
                         AppText.bodyMedium(
@@ -536,7 +532,11 @@ private fun LauncherStagesSection(
             ) {
                 SectionTitle(text = stringResource(R.string.booster_stages))
                 AppText.labelMedium(
-                    text = "${stages.size} ${if (stages.size == 1) stringResource(R.string.stage) else stringResource(R.string.stages)}",
+                    text = "${stages.size} ${
+                        if (stages.size == 1) stringResource(R.string.stage) else stringResource(
+                            R.string.stages
+                        )
+                    }",
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -555,7 +555,6 @@ private fun LauncherStagesSection(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun LauncherStageItem(
     stage: LauncherStage,
@@ -571,30 +570,35 @@ private fun LauncherStageItem(
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge),
             verticalAlignment = Alignment.Top
         ) {
-            stage.launcher?.image?.thumbnailUrl?.let { imageUrl ->
-                GlideImage(
-                    model = imageUrl,
-                    contentDescription = stringResource(R.string.launcher_desc, stage.launcher.serialNumber.orEmpty()),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(cornerRadiusMedium))
-                        .background(AppTheme.colors.surfaceVariant),
-                    failure = placeholder(R.drawable.default_launch_hero_image)
-                )
-            }
+            RemoteImage(
+                imageUrl = stage.launcher?.image?.thumbnailUrl!!,
+                contentDescription = stringResource(
+                    R.string.launcher_desc,
+                    stage.launcher.serialNumber.orEmpty()
+                ),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(cornerRadiusMedium))
+                    .background(AppTheme.colors.surfaceVariant),
+                failureImage = R.drawable.default_launch_hero_image
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.titleMedium(
-                    text = stringResource(R.string.stage_number, index, stage.type ?: stringResource(R.string.core)),
+                    text = stringResource(
+                        R.string.stage_number,
+                        index,
+                        stage.type ?: stringResource(R.string.core)
+                    ),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary
                 )
 
-                stage.launcher?.serialNumber?.let { serial ->
+                stage.launcher.serialNumber?.let { serial ->
                     AppText.bodyMedium(
                         text = stringResource(R.string.serial, serial),
                         color = AppTheme.colors.secondary,
@@ -805,7 +809,11 @@ private fun SpacecraftStagesSection(
             ) {
                 SectionTitle(text = stringResource(R.string.spacecraft_stages))
                 AppText.labelMedium(
-                    text = "${stages.size} ${if (stages.size == 1) stringResource(R.string.stage) else stringResource(R.string.stages)}",
+                    text = "${stages.size} ${
+                        if (stages.size == 1) stringResource(R.string.stage) else stringResource(
+                            R.string.stages
+                        )
+                    }",
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.SemiBold
                 )

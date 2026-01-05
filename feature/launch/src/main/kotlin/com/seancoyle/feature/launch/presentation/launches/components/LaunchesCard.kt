@@ -79,7 +79,7 @@ internal fun LaunchCard(
             RemoteImage(
                 modifier = Modifier.fillMaxSize(),
                 imageUrl = launchItem.imageUrl,
-                contentDescription = R.string.launch_image,
+                contentDescription = stringResource(R.string.launch_image),
             )
 
             Box(
