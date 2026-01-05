@@ -13,23 +13,23 @@ import com.seancoyle.core.ui.designsystem.theme.AppColors
 @Stable
 @Composable
 fun LaunchStatus.containerColor(): Color = when (this) {
-    LaunchStatus.SUCCESS -> Color(0xFF1B5E20)
-    LaunchStatus.FAILED -> Color(0xFFB71C1C)
-    LaunchStatus.TBD -> Color(0xFFF57F17)
-    LaunchStatus.GO -> Color(0xFF1B5E20)
-    LaunchStatus.TBC -> Color(0xFFF57F17)
-    LaunchStatus.ALL -> Color(0xFF616161)
+    LaunchStatus.SUCCESS -> AppColors.successDark
+    LaunchStatus.FAILED -> AppColors.errorDark
+    LaunchStatus.TBD -> AppColors.warningDark
+    LaunchStatus.GO -> AppColors.successDark
+    LaunchStatus.TBC -> AppColors.warningDark
+    LaunchStatus.ALL -> AppColors.neutralDark
 }
 
 @Stable
 @Composable
 fun LaunchStatus.contentColor(): Color = when (this) {
-    LaunchStatus.SUCCESS -> Color(0xFF4CAF50)
-    LaunchStatus.FAILED -> Color(0xFFEF5350)
-    LaunchStatus.TBD -> Color(0xFFFFEB3B)
-    LaunchStatus.GO -> Color(0xFF4CAF50)
-    LaunchStatus.TBC -> Color(0xFFFFEB3B)
-    LaunchStatus.ALL -> Color(0xFF9E9E9E)
+    LaunchStatus.SUCCESS -> AppColors.success
+    LaunchStatus.FAILED -> AppColors.errorContainer
+    LaunchStatus.TBD -> AppColors.warningContainer
+    LaunchStatus.GO -> AppColors.success
+    LaunchStatus.TBC -> AppColors.warningContainer
+    LaunchStatus.ALL -> AppColors.neutral
 }
 
 @Stable

@@ -54,9 +54,14 @@ internal fun LaunchCard(
     launchesType: LaunchesType,
     modifier: Modifier = Modifier,
 ) {
+    val launchCardDesc = stringResource(
+        R.string.mission_card_desc_full,
+        launchItem.missionName,
+        launchItem.status.label,
+        launchItem.launchDate
+    )
     val missionNameDesc = stringResource(R.string.mission_name_desc, launchItem.missionName)
     val dateTimeDescription = stringResource(R.string.launch_date_desc, launchItem.launchDate)
-    val launchCardDesc = stringResource(R.string.mission_card_desc, launchItem.missionName)
 
     Card(
         modifier = modifier

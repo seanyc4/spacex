@@ -2,16 +2,9 @@ package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,35 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
-import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.LaunchesTestTags
-
-@Composable
-internal fun SectionCard(
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = paddingXLarge)
-            .semantics { testTag = LaunchesTestTags.SECTION_CARD },
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(cornerRadiusLarge)
-    ) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            content = content
-        )
-    }
-}
 
 @Composable
 internal fun SectionTitle(
@@ -105,21 +72,6 @@ internal fun DetailRow(
                 text = value,
                 color = valueColor,
                 modifier = Modifier.semantics { contentDescription = detailDescription }
-            )
-        }
-    }
-}
-
-@PreviewDarkLightMode
-@Composable
-private fun SectionCardPreview() {
-    AppTheme {
-        SectionCard {
-            SectionTitle(text = stringResource(R.string.example_section))
-            Spacer(modifier = Modifier.height(16.dp))
-            AppText.bodyMedium(
-                text = stringResource(R.string.example_content),
-                color = AppTheme.colors.onSurface
             )
         }
     }

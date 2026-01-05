@@ -1,5 +1,6 @@
 package com.seancoyle.core.ui.designsystem.card
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,11 @@ import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 object AppCard {
@@ -37,6 +43,7 @@ object AppCard {
         Card(
             modifier = modifier
                 .fillMaxWidth()
+                .padding(horizontal = paddingXLarge)
                 .then(
                     if (testTag != null) {
                         Modifier.semantics { this.testTag = testTag }
@@ -48,9 +55,14 @@ object AppCard {
                 containerColor = AppTheme.colors.surface
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-            shape = RoundedCornerShape(cornerRadiusLarge),
-            content = content
-        )
+            shape = RoundedCornerShape(cornerRadiusLarge)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge),
+                modifier = Modifier.padding(24.dp),
+                content = content
+            )
+        }
     }
 
     /**
@@ -82,8 +94,15 @@ object AppCard {
                 containerColor = tintColor.copy(alpha = tintAlpha)
             ),
             shape = RoundedCornerShape(cornerRadiusMedium),
-            content = content
-        )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
+                content = content
+            )
+        }
     }
 
     /**
@@ -110,9 +129,14 @@ object AppCard {
             colors = CardDefaults.cardColors(
                 containerColor = AppTheme.colors.surfaceVariant.copy(alpha = alpha)
             ),
-            shape = RoundedCornerShape(cornerRadiusMedium),
-            content = content
-        )
+            shape = RoundedCornerShape(cornerRadiusMedium)
+        ) {
+            Column(
+                modifier = Modifier.padding(paddingLarge),
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall),
+                content = content
+            )
+        }
     }
 
     @Composable
@@ -137,7 +161,7 @@ object AppCard {
     ) {
         Tinted(
             modifier = modifier,
-            tintColor = AppColors.error,
+            tintColor = AppTheme.colors.error,
             testTag = testTag,
             content = content
         )

@@ -26,10 +26,10 @@ import com.seancoyle.feature.launch.presentation.launch.components.LaunchHeroSec
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchProviderSection
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchSiteSection
 import com.seancoyle.feature.launch.presentation.launch.components.LoadingState
-import com.seancoyle.feature.launch.presentation.launch.components.RocketSection
 import com.seancoyle.feature.launch.presentation.launch.components.UpdatesSection
 import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
+import com.seancoyle.feature.launch.presentation.launch.components.rocket.RocketSection
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState

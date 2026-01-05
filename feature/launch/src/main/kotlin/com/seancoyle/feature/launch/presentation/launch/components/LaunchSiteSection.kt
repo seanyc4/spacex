@@ -22,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.seancoyle.core.ui.components.image.RemoteImage
+import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
@@ -44,8 +46,6 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
@@ -57,19 +57,20 @@ internal fun LaunchSiteSection(
     pad: Pad,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier.semantics { testTag = LaunchesTestTags.LAUNCH_SITE_SECTION }) {
-        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = stringResource(R.string.location))
-            LaunchSiteContent(pad = pad)
+    AppCard.Primary(modifier = modifier) {
+        SectionTitle(text = stringResource(R.string.location))
+        LaunchSiteContent(pad = pad)
 
-            val hasStats = pad.totalLaunchCount != null ||
-                    pad.orbitalLaunchAttemptCount != null ||
-                    pad.location?.totalLaunchCount != null
+        val hasStats = pad.totalLaunchCount != null ||
+                pad.orbitalLaunchAttemptCount != null ||
+                pad.location?.totalLaunchCount != null
 
-            if (hasStats) {
-                HorizontalDivider(color = AppTheme.colors.onSurface.copy(alpha = 0.12f))
-                LaunchStatisticsContent(pad = pad)
-            }
+        if (hasStats) {
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = paddingMedium),
+                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+            )
+            LaunchStatisticsContent(pad = pad)
         }
     }
 }
@@ -81,60 +82,46 @@ private fun LaunchSiteContent(
 ) {
     val context = LocalContext.current
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-        ),
-        shape = RoundedCornerShape(cornerRadiusMedium)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
+    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(modifier = Modifier.weight(1f)) {
+                AppText.labelMedium(
+                    text = stringResource(R.string.launch_site).uppercase(),
+                    color = AppTheme.colors.primary,
+                    fontWeight = FontWeight.Bold
+                )
+                AppText.titleMedium(
+                    text = pad.name.orEmpty(),
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface,
+                    modifier = Modifier.padding(top = paddingSmall, end = paddingMedium)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(cornerRadiusSmall)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    AppText.labelMedium(
-                        text = stringResource(R.string.launch_site).uppercase(),
-                        color = AppTheme.colors.primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                    AppText.titleMedium(
-                        text = pad.name.orEmpty(),
-                        fontWeight = FontWeight.Bold,
-                        color = AppTheme.colors.onSurface,
-                        modifier = Modifier.padding(top = paddingSmall)
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(cornerRadiusSmall)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = AppTheme.colors.primary,
-                        modifier = Modifier.size(36.dp)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = AppTheme.colors.primary,
+                    modifier = Modifier.size(36.dp)
+                )
             }
         }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(bottom = paddingMedium),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             pad.location?.name?.let { location ->
@@ -168,13 +155,12 @@ private fun LaunchSiteContent(
             }
         }
 
-        val mapImageUrl = pad.mapImage ?: pad.location?.mapImage
-        val mapUrl = pad.mapUrl
+        val mapImageUrl = remember(pad) { pad.mapImage ?: pad.location?.mapImage }
+        val mapUrl = remember(pad) { pad.mapUrl }
         if (mapImageUrl != null) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
                     .height(180.dp)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
                     .then(
@@ -234,7 +220,7 @@ private fun LaunchSiteContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(top = paddingSmall),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -275,7 +261,7 @@ private fun LaunchStatisticsContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = paddingSmall),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -283,12 +269,13 @@ private fun LaunchStatisticsContent(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
                 tint = AppTheme.colors.primary,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier
+                    .size(20.dp)
             )
             AppText.titleMedium(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.primary
+                color = AppTheme.colors.primary,
             )
         }
 

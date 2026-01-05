@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.image.RemoteImage
+import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
@@ -28,17 +28,15 @@ internal fun MissionPatchesSection(
     patches: List<MissionPatch>,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = stringResource(R.string.mission_patches))
+    AppCard.Primary(modifier = modifier) {
+        SectionTitle(text = stringResource(R.string.mission_patches))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
-            ) {
-                patches.forEach { patch ->
-                    MissionPatchItem(patch = patch, modifier = Modifier.weight(1f))
-                }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
+        ) {
+            patches.forEach { patch ->
+                MissionPatchItem(patch = patch, modifier = Modifier.weight(1f))
             }
         }
     }

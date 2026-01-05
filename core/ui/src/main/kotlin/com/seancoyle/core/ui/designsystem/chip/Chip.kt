@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,10 +26,11 @@ fun Chip(
     text: String,
     contentColor: Color,
     containerColor: Color,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    onClick: (() -> Unit)? = null
 ) {
     AssistChip(
-        onClick = {},
+        onClick = onClick ?: {},
         label = {
             AppText.labelMedium(
                 text = text,
@@ -52,6 +55,10 @@ fun Chip(
         ),
         modifier = modifier.semantics {
             contentDescription = "Launch status: $text"
+            // Only set button role if the chip is clickable
+            if (onClick != null) {
+                role = Role.Button
+            }
         }
     )
 }
