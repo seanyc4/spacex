@@ -2,11 +2,11 @@ package com.seancoyle.feature.launch.data.local
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
-import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -117,7 +117,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `refreshLaunchesWithKeys clears and inserts launches with remote keys`() = runTest {
-        val launches = listOf(TestData.createLaunch(), TestData.createLaunch(id = "2"))
+        val launches = listOf(TestData.createLaunchSummary(), TestData.createLaunchSummary(id = "2"))
         val nextPage = 1
         val prevPage = null
         val currentPage = 0
@@ -149,7 +149,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `appendLaunchesWithKeys upserts launches and remote keys`() = runTest {
-        val launches = listOf(TestData.createLaunch())
+        val launches = listOf(TestData.createLaunchSummary())
         val nextPage = 2
         val prevPage = 0
         val currentPage = 1
@@ -165,7 +165,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `refreshLaunches clears and inserts launches without remote keys`() = runTest {
-        val launches = listOf(TestData.createLaunch())
+        val launches = listOf(TestData.createLaunchSummary())
 
         coJustRun { launchDao.refreshLaunches(any()) }
 
@@ -176,7 +176,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `upsert inserts launch and returns success`() = runTest {
-        val launch = TestData.createLaunch()
+        val launch = TestData.createLaunchSummary()
         coEvery { launchDao.upsert(any()) } returns 1L
 
         val result = underTest.upsert(launch)
@@ -187,7 +187,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `upsert returns error on exception`() = runTest {
-        val launch = TestData.createLaunch()
+        val launch = TestData.createLaunchSummary()
         val exception = RuntimeException("Database error")
         coEvery { launchDao.upsert(any()) } throws exception
 
@@ -200,7 +200,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `upsertAll inserts multiple launches and returns success`() = runTest {
-        val launches = listOf(TestData.createLaunch(), TestData.createLaunch(id = "2"))
+        val launches = listOf(TestData.createLaunchSummary(), TestData.createLaunchSummary(id = "2"))
         coEvery { launchDao.upsertAll(any()) } returns longArrayOf(1L, 2L)
 
         val result = underTest.upsertAll(launches)
@@ -211,7 +211,7 @@ class LaunchLocalDataSourceImplTest {
 
     @Test
     fun `upsertAll returns error on exception`() = runTest {
-        val launches = listOf(TestData.createLaunch())
+        val launches = listOf(TestData.createLaunchSummary())
         val exception = RuntimeException("Database error")
         coEvery { launchDao.upsertAll(any()) } throws exception
 
@@ -247,7 +247,7 @@ class LaunchLocalDataSourceImplTest {
     @Test
     fun `getById returns launch when entity exists`() = runTest {
         val launchId = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc"
-        val launchEntity = TestData.createLaunchEntity()
+        val launchEntity = TestData.createLaunchSummaryEntity()
         coEvery { launchDao.getById(launchId) } returns launchEntity
 
         val result = underTest.getById(launchId)

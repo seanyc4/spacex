@@ -18,8 +18,8 @@ data class LaunchSummaryEntity(
     @ColumnInfo(name = "net")
     val net: String,
 
-    @ColumnInfo(name = "thumbnail_url")
-    val thumbnailUrl: String,
+    @ColumnInfo(name = "image_url")
+    val imageUrl: String,
 
     @Embedded(prefix = "status")
     val status: LaunchStatusEntity

@@ -82,9 +82,9 @@ class LaunchUiMapper @Inject constructor(
             return LaunchesUi(
                 id = id,
                 launchDate = formatDate(locateDateTime),
-                missionName = missionName,
+                missionName = missionName.substringBefore("|").trim(),
                 status = status.toDomain(),
-                thumbnail = thumbnailUrl
+                imageUrl = imageUrl
             )
         }
     }
@@ -93,13 +93,13 @@ class LaunchUiMapper @Inject constructor(
         return dateFormatter.formatDateTimeToString(date, format)
     }
 
-    fun Status?.toDomain(): LaunchStatus =
+    fun Status.toDomain(): LaunchStatus =
         when {
-            this?.abbrev?.contains("Success", ignoreCase = true) == true -> LaunchStatus.SUCCESS
-            this?.abbrev?.contains("Go", ignoreCase = true) == true -> LaunchStatus.GO
-            this?.abbrev?.contains("Fail", ignoreCase = true) == true -> LaunchStatus.FAILED
-            this?.abbrev?.contains("To Be Confirmed", ignoreCase = true) == true -> LaunchStatus.TBC
-            this?.abbrev?.contains("To Be Determined", ignoreCase = true) == true -> LaunchStatus.TBD
+            this.abbrev.contains("Success", ignoreCase = true)  -> LaunchStatus.SUCCESS
+            this.abbrev.contains("Go", ignoreCase = true) -> LaunchStatus.GO
+            this.abbrev.contains("Fail", ignoreCase = true) -> LaunchStatus.FAILED
+            this.abbrev.contains("To Be Confirmed", ignoreCase = true) -> LaunchStatus.TBC
+            this.abbrev.contains("To Be Determined", ignoreCase = true) -> LaunchStatus.TBD
             else -> LaunchStatus.TBD
         }
 }

@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -37,12 +39,31 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.VidUrl
 
+/**
+ * Data class to hold pre-computed video data to avoid repeated computation during recomposition.
+ */
+private data class VideoData(
+    val videoId: String,
+    val video: VidUrl
+)
+
 @Composable
 internal fun VideoSection(
     videos: List<VidUrl>,
     modifier: Modifier = Modifier
 ) {
     val titleDescription = stringResource(R.string.section_desc, stringResource(R.string.videos_webcasts))
+
+    // Pre-compute video IDs once to avoid repeated extraction during recomposition
+    val videoDataList = remember(videos) {
+        videos.mapNotNull { video ->
+            video.url?.let { url ->
+                extractYouTubeVideoId(url)?.let { videoId ->
+                    VideoData(videoId = videoId, video = video)
+                }
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -65,18 +86,14 @@ internal fun VideoSection(
             contentPadding = PaddingValues(horizontal = paddingXLarge),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
         ) {
-            items(videos.size) { index ->
-                val video = videos[index]
-                video.url?.let { url ->
-                    val videoId = extractYouTubeVideoId(url)
-
-                    if (videoId != null) {
-                        VideoCard(
-                            videoId = videoId,
-                            video = video
-                        )
-                    }
-                }
+            items(
+                items = videoDataList,
+                key = { it.videoId }
+            ) { videoData ->
+                VideoCard(
+                    videoId = videoData.videoId,
+                    video = videoData.video
+                )
             }
         }
     }

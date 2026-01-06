@@ -3,12 +3,12 @@ package com.seancoyle.feature.launch.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.seancoyle.core.common.result.DataError.RemoteError
-import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.util.TestData
-import com.seancoyle.core.common.result.LaunchResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -46,8 +46,8 @@ class LaunchesRepositoryImplTest {
     @Test
     fun `pager returns flow of paging data with query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "Falcon")
-        val launchEntity = TestData.createLaunchEntity()
-        val mockPager = mockk<Pager<Int, LaunchEntity>>()
+        val launchEntity = TestData.createLaunchSummaryEntity()
+        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
         val pagingData = PagingData.from(listOf(launchEntity))
 
         every { pagerFactory.create(launchesQuery) } returns mockPager
@@ -64,8 +64,8 @@ class LaunchesRepositoryImplTest {
     @Test
     fun `pager returns empty flow when no data available`() = runTest {
         val launchesQuery = LaunchesQuery(query = "")
-        val mockPager = mockk<Pager<Int, LaunchEntity>>()
-        val pagingData = PagingData.empty<LaunchEntity>()
+        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
+        val pagingData = PagingData.empty<LaunchSummaryEntity>()
 
         every { pagerFactory.create(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
@@ -81,8 +81,8 @@ class LaunchesRepositoryImplTest {
     @Test
     fun `pager creates pager with correct launch query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "SpaceX")
-        val mockPager = mockk<Pager<Int, LaunchEntity>>()
-        val pagingData = PagingData.empty<LaunchEntity>()
+        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
+        val pagingData = PagingData.empty<LaunchSummaryEntity>()
 
         every { pagerFactory.create(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)

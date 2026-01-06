@@ -1,42 +1,47 @@
 package com.seancoyle.core.ui.components.progress
 
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.IntSize
+import com.seancoyle.core.ui.designsystem.theme.AppTheme
 
-@Composable
-fun ShimmerAnimation(
-    colors: List<Color>,
-    content: @Composable (brush: Brush) -> Unit
-) {
+fun Modifier.shimmerEffect(): Modifier = composed {
+    var size by remember {
+        mutableStateOf(IntSize.Zero)
+    }
     val transition = rememberInfiniteTransition()
-    val animatedValue = transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
+    val startOffsetX by transition.animateFloat(
+        initialValue = -2 * size.width.toFloat(),
+        targetValue = 2 * size.width.toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1300, easing = LinearEasing)
+            animation = tween(3000)
         )
     )
 
-    val gradientWidth = 800
-    val shimmerColor = colors[1].copy(alpha = 0.2f)
-    val shimmer = Brush.linearGradient(
-        colors = colors + shimmerColor,
-        start = Offset(
-            x = -gradientWidth.toFloat(),
-            y = 0f
-        ),
-        end = Offset(
-            x = animatedValue.value * gradientWidth,
-            y = animatedValue.value * gradientWidth
+    background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                AppTheme.colors.onSurface.copy(alpha = 0.25f),
+                AppTheme.colors.primary.copy(alpha = 0.15f),
+                AppTheme.colors.onSurface.copy(alpha = 0.25f)
+            ),
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
         )
     )
-
-    content(shimmer)
+        .onGloballyPositioned {
+            size = it.size
+        }
 }

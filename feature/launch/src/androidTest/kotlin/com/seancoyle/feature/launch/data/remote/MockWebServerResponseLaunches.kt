@@ -1,6 +1,8 @@
 package com.seancoyle.feature.launch.data.remote
 
 object MockWebServerResponseLaunches {
+
+    // Standard successful response with 2 launches
     val launchesResponse = """{
       "count": 2,
       "next": null,
@@ -69,6 +71,106 @@ object MockWebServerResponseLaunches {
           "webcast_live": true
         }
       ]
-    }"""
-        .trimIndent()
+    }""".trimIndent()
+
+    // Empty results list
+    val emptyLaunchesResponse = """{
+      "count": 0,
+      "next": null,
+      "previous": null,
+      "results": []
+    }""".trimIndent()
+
+    // Null results
+    val nullResultsResponse = """{
+      "count": 0,
+      "next": null,
+      "previous": null,
+      "results": null
+    }""".trimIndent()
+
+    // Response with partial/invalid data (missing required fields)
+    val partialDataResponse = """{
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": "test-launch-1",
+          "name": "Valid Launch",
+          "net": "2025-12-13T05:34:00Z",
+          "image": {
+            "id": 1,
+            "name": "Test Image",
+            "image_url": "https://example.com/image.jpg",
+            "thumbnail_url": "https://example.com/thumb.jpg",
+            "credit": "SpaceX"
+          },
+          "status": {
+            "id": 1,
+            "name": "Go for Launch",
+            "abbrev": "Go",
+            "description": "Ready"
+          }
+        },
+        {
+          "id": null,
+          "name": "Invalid Launch - Missing ID",
+          "net": "2025-12-14T10:00:00Z",
+          "image": null,
+          "status": null
+        }
+      ]
+    }""".trimIndent()
+
+    // Malformed JSON
+    val malformedJsonResponse = "{invalid json"
+
+    // Response with missing image (should use default)
+    val responseWithoutImage = """{
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": "test-launch-1",
+          "name": "Test Launch",
+          "net": "2025-12-13T05:34:00Z",
+          "image": null,
+          "status": {
+            "id": 1,
+            "name": "Go for Launch",
+            "abbrev": "Go",
+            "description": "Ready"
+          }
+        }
+      ]
+    }""".trimIndent()
+
+    // Response with pagination (next page available)
+    val responseWithNextPage = """{
+      "count": 100,
+      "next": "https://api.example.com/launches?page=2",
+      "previous": null,
+      "results": [
+        {
+          "id": "launch-1",
+          "name": "Launch 1",
+          "net": "2025-12-13T05:34:00Z",
+          "image": {
+            "id": 1,
+            "name": "Image",
+            "image_url": "https://example.com/image.jpg",
+            "thumbnail_url": "https://example.com/thumb.jpg",
+            "credit": "Credit"
+          },
+          "status": {
+            "id": 1,
+            "name": "Go for Launch",
+            "abbrev": "Go",
+            "description": "Ready"
+          }
+        }
+      ]
+    }""".trimIndent()
 }

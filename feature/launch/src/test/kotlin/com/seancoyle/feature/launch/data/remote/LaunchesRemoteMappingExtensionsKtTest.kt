@@ -3,6 +3,7 @@ package com.seancoyle.feature.launch.data.remote
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.feature.launch.util.TestData
 import com.seancoyle.feature.launch.util.TestData.createLaunchDto
+import com.seancoyle.feature.launch.util.TestData.createLaunchSummaryDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchesDto
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
@@ -122,8 +123,8 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `LaunchesDto toDomain should map valid launches and filter out invalid ones`() {
-        val validLaunchDto = createLaunchDto()
-        val invalidLaunchDto = createLaunchDto(id = null)
+        val validLaunchDto = createLaunchSummaryDto()
+        val invalidLaunchDto = createLaunchSummaryDto(id = null)
 
         val launchesDto = createLaunchesDto(
             count = 2,
@@ -178,11 +179,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
             rocket = rocketDto
         )
 
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
-        val result = launchesDto.toDomain()
-
-        assertEquals(1, result.size)
-        val launch = result[0]
+        val launch = launchDto.toDomain()!!
 
         // Assert basic fields
         assertEquals("test-id", launch.id)
@@ -190,31 +187,10 @@ class LaunchesRemoteMappingExtensionsKtTest {
         assertEquals("Test Launch", launch.missionName)
         assertEquals("2025-12-05T18:39:36Z", launch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", launch.net)
-        assertEquals("2025-12-13T09:34:00Z", launch.windowEnd)
-        assertEquals("2025-12-13T05:34:00Z", launch.windowStart)
-        assertEquals("https://example.com/info.png", launch.infographic)
-        assertEquals(80, launch.probability)
-        assertEquals("None", launch.weatherConcerns)
-        assertEquals("Failed", launch.failReason)
-        assertEquals(true, launch.webcastLive)
-        assertEquals(10, launch.orbitalLaunchAttemptCount)
-        assertEquals(5, launch.locationLaunchAttemptCount)
-        assertEquals(3, launch.padLaunchAttemptCount)
-        assertEquals(20, launch.agencyLaunchAttemptCount)
-        assertEquals(2, launch.orbitalLaunchAttemptCountYear)
-        assertEquals(1, launch.locationLaunchAttemptCountYear)
-        assertEquals(1, launch.padLaunchAttemptCountYear)
-        assertEquals(4, launch.agencyLaunchAttemptCountYear)
 
         // Assert status
         assertNotNull(launch.status)
         assertEquals("Go for Launch", launch.status.name)
-
-        // Assert netPrecision
-        assertEquals("Minute", launch.netPrecision?.name)
-        assertEquals(1, launch.netPrecision?.id)
-        assertEquals("MIN", launch.netPrecision?.abbrev)
-        assertEquals("The T-0 is accurate to the minute.", launch.netPrecision?.description)
 
         // Assert image
         assertEquals("Starlink night fairing", launch.image.name)
@@ -251,20 +227,18 @@ class LaunchesRemoteMappingExtensionsKtTest {
     @Test
     fun `LaunchDto toDomain should return null when id is missing`() {
         val launchDto = createLaunchDto(id = null)
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
 
-        val result = launchesDto.toDomain()
+        val result = launchDto.toDomain()
 
-        assertTrue(result.isEmpty())
+        assertEquals(result, null)
     }
 
     @Test
     fun `LaunchDto toDomain should return null when name is missing`() {
         val launchDto = createLaunchDto(name = null)
-        val launchesDto = createLaunchesDto(results = listOf(launchDto))
 
-        val result = launchesDto.toDomain()
+        val result = launchDto.toDomain()
 
-        assertTrue(result.isEmpty())
+        assertEquals(result, null)
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,13 +51,13 @@ internal fun ErrorState(
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
             Icon(
-                imageVector = Icons.Default.Warning,
+                imageVector = Icons.Default.RocketLaunch,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 tint = AppTheme.colors.error
             )
             AppText.titleLarge(
-                text = stringResource(R.string.unable_to_load_launch),
+                text = stringResource(R.string.unable_to_load),
                 color = AppTheme.colors.onBackground
             )
             AppText.bodyMedium(

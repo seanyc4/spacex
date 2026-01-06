@@ -12,7 +12,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.seancoyle.feature.launch.presentation.launch.LaunchScreen
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
-import com.seancoyle.feature.launch.presentation.launches.LaunchesScreen
+import com.seancoyle.feature.launch.presentation.launches.LaunchesRoute
 import com.seancoyle.navigation.Route
 
 @Composable
@@ -35,16 +35,15 @@ fun NavigationRoot(
             when (key) {
                 is Route.Launches -> {
                     NavEntry(key) {
-                        LaunchesScreen(
+                        LaunchesRoute(
                             snackbarHostState = snackbarHostState,
                             windowSizeClass = windowSizeClass,
-                            onClick = { launchId, launchesType ->
+                            onNavigateToLaunch = { launchId, launchesType ->
                                 backStack.add(Route.Launch(launchId, launchesType))
                             }
                         )
                     }
                 }
-
                 is Route.Launch -> {
                     NavEntry(key) {
                         val viewModel = hiltViewModel<LaunchViewModel, LaunchViewModel.Factory>(
@@ -55,11 +54,7 @@ fun NavigationRoot(
                                 )
                             }
                         )
-                        LaunchScreen(
-                            viewModel = viewModel,
-                            snackbarHostState = snackbarHostState,
-                            windowSizeClass = windowSizeClass
-                        )
+                        LaunchScreen(viewModel = viewModel)
                     }
                 }
 

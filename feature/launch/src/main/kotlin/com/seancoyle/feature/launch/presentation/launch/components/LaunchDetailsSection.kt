@@ -26,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -34,13 +35,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
-import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
@@ -52,6 +52,7 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.util.LaunchTimelineCalculator
 import java.time.LocalDateTime
 
 @Composable
@@ -59,44 +60,42 @@ internal fun LaunchDetailsSection(
     launch: LaunchUI,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)) {
-            SectionTitle(text = stringResource(R.string.mission_details))
+    AppCard.Primary(modifier = modifier) {
+        SectionTitle(text = stringResource(R.string.mission_details))
 
-            MissionHighlightCard(
-                missionName = launch.mission.name,
-                missionType = launch.mission.type,
-                orbitName = launch.mission.orbit?.name,
-                description = launch.mission.description
+        MissionHighlightCard(
+            missionName = launch.mission.name,
+            missionType = launch.mission.type,
+            orbitName = launch.mission.orbit?.name,
+            description = launch.mission.description
+        )
+
+        // Launch Windows Section
+        // Show timeline only if we have window information (not future launches without windows)
+        val hasWindowInfo = launch.windowStart != null && launch.windowEnd != null
+        if (hasWindowInfo) {
+            HorizontalDivider(color = AppTheme.colors.onSurface.copy(alpha = 0.12f))
+            LaunchWindowTimeline(
+                windowStartTime = launch.windowStartTime,
+                windowEndTime = launch.windowEndTime,
+                windowDuration = launch.windowDuration,
+                windowStartDateTime = launch.windowStartDateTime,
+                windowEndDateTime = launch.windowEndDateTime,
+                launchTime = launch.launchTime,
+                launchDateTime = launch.launchDateTime,
+                launchDate = launch.launchDate,
+                status = launch.status,
+                modifier = Modifier.padding(paddingXLarge)
+            )
+        }
+
+        // Fail Reason (if applicable)
+        if (!launch.failReason.isNullOrEmpty()) {
+            HorizontalDivider(
+                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
             )
 
-            // Launch Windows Section
-            // Show timeline only if we have window information (not future launches without windows)
-            val hasWindowInfo = launch.windowStart != null && launch.windowEnd != null
-            if (hasWindowInfo) {
-                HorizontalDivider(color = AppTheme.colors.onSurface.copy(alpha = 0.12f))
-                LaunchWindowTimeline(
-                    windowStartTime = launch.windowStartTime,
-                    windowEndTime = launch.windowEndTime,
-                    windowDuration = launch.windowDuration,
-                    windowStartDateTime = launch.windowStartDateTime,
-                    windowEndDateTime = launch.windowEndDateTime,
-                    launchTime = launch.launchTime,
-                    launchDateTime = launch.launchDateTime,
-                    launchDate = launch.launchDate,
-                    status = launch.status,
-                    modifier = Modifier.padding(paddingXLarge)
-                )
-            }
-
-            // Fail Reason (if applicable)
-            if (!launch.failReason.isNullOrEmpty()) {
-                HorizontalDivider(
-                    color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
-                )
-
-                FailReasonCard(reason = launch.failReason)
-            }
+            FailReasonCard(reason = launch.failReason)
         }
     }
 }
@@ -173,9 +172,8 @@ private fun MissionHighlightCard(
                     }
                 }
 
-                // Mission Type & Orbit Chips
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(paddingMedium),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     missionType?.let { type ->
@@ -223,58 +221,50 @@ private fun LaunchWindowTimeline(
     modifier: Modifier = Modifier
 ) {
     // Calculate timeline progress based on actual launch time position
-    val launchProgress =
-        calculateLaunchPosition(windowStartDateTime, windowEndDateTime, launchDateTime)
+    val launchProgress = remember(windowStartDateTime, windowEndDateTime, launchDateTime) {
+        LaunchTimelineCalculator.calculateLaunchPosition(
+            windowStartDateTime,
+            windowEndDateTime,
+            launchDateTime
+        )
+    }
 
     // Check if this is an instantaneous launch (same start and end time) OR status is TBD
     val isInstantaneous = windowDuration == "Instantaneous"
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-        ),
-        shape = RoundedCornerShape(cornerRadiusMedium)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
+    AppCard.Tinted(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(modifier = Modifier.weight(1f)) {
+                AppText.labelMedium(
+                    text = stringResource(R.string.launch_window).uppercase(),
+                    color = AppTheme.colors.primary,
+                    fontWeight = FontWeight.Bold
+                )
+                AppText.titleMedium(
+                    text = launchDate.orEmpty(),
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface,
+                    modifier = Modifier.padding(top = paddingSmall)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    AppText.labelMedium(
-                        text = stringResource(R.string.launch_window).uppercase(),
-                        color = AppTheme.colors.primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                    AppText.titleMedium(
-                        text = launchDate.orEmpty(),
-                        fontWeight = FontWeight.Bold,
-                        color = AppTheme.colors.onSurface,
-                        modifier = Modifier.padding(top = paddingSmall)
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(10.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Rocket,
-                        contentDescription = null,
-                        tint = AppTheme.colors.primary,
-                        modifier = Modifier.size(36.dp)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Rocket,
+                    contentDescription = null,
+                    tint = AppTheme.colors.primary,
+                    modifier = Modifier.size(36.dp)
+                )
             }
         }
 
@@ -460,43 +450,13 @@ private fun LaunchWindowTimeline(
     }
 }
 
-/**
- * Calculates the position of the launch time within the launch window.
- * Returns a value between 0.0 and 1.0 representing the position in the window.
- */
-private fun calculateLaunchPosition(
-    windowStart: LocalDateTime?,
-    windowEnd: LocalDateTime?,
-    launchTime: LocalDateTime?
-): Float {
-    if (windowStart == null || windowEnd == null || launchTime == null) return 0.5f
-
-    // If launch time is before window, show at start
-    if (launchTime.isBefore(windowStart)) return 0f
-
-    // If launch time is after window, show at end
-    if (launchTime.isAfter(windowEnd)) return 1f
-
-    // Calculate position of launch time within the window
-    val totalDuration = java.time.Duration.between(windowStart, windowEnd).toMillis().toFloat()
-    val launchOffset = java.time.Duration.between(windowStart, launchTime).toMillis().toFloat()
-
-    // Return position between 0 and 1
-    return (launchOffset / totalDuration).coerceIn(0f, 1f)
-}
 
 @Composable
 private fun FailReasonCard(
     reason: String,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.error.copy(alpha = 0.1f)
-        ),
-        shape = RoundedCornerShape(cornerRadiusMedium)
-    ) {
+    AppCard.Error(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

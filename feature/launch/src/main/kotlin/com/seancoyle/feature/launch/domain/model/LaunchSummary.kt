@@ -4,6 +4,6 @@ data class LaunchSummary(
     val id: String,
     val missionName: String,
     val net: String,
-    val thumbnailUrl: String,
+    val imageUrl: String,
     val status: Status,
 )

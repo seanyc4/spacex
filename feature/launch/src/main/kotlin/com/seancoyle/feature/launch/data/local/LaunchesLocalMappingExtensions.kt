@@ -13,11 +13,11 @@ import com.seancoyle.database.entities.LandingEntity
 import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.database.entities.LauncherEntity
-import com.seancoyle.database.entities.LauncherStageEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
+import com.seancoyle.database.entities.LauncherEntity
+import com.seancoyle.database.entities.LauncherStageEntity
 import com.seancoyle.database.entities.MissionEntity
 import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.database.entities.NetPrecisionEntity
@@ -43,9 +43,9 @@ import com.seancoyle.feature.launch.domain.model.LandingLocation
 import com.seancoyle.feature.launch.domain.model.LandingType
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
+import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Launcher
 import com.seancoyle.feature.launch.domain.model.LauncherStage
-import com.seancoyle.feature.launch.domain.model.LaunchUpdate
 import com.seancoyle.feature.launch.domain.model.Location
 import com.seancoyle.feature.launch.domain.model.Mission
 import com.seancoyle.feature.launch.domain.model.MissionPatch
@@ -80,7 +80,7 @@ internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
         id = id,
         missionName = missionName,
         net = net,
-        thumbnailUrl = thumbnailUrl,
+        imageUrl = imageUrl,
         status = status.toDomain()
     )
 
@@ -92,7 +92,7 @@ internal fun LaunchSummary.toEntity(): LaunchSummaryEntity =
         id = id,
         missionName = missionName,
         net = net,
-        thumbnailUrl = thumbnailUrl,
+        imageUrl = imageUrl,
         status = status.toEntity()
     )
 

@@ -21,4 +21,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.youtubePlayer)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
 }

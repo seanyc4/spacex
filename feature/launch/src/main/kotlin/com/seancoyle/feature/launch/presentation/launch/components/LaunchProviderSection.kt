@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Business
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,13 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Agency
@@ -36,90 +32,74 @@ internal fun LaunchProviderSection(
     agency: Agency,
     modifier: Modifier = Modifier
 ) {
-    SectionCard(modifier = modifier) {
-        Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
-            SectionTitle(text = stringResource(R.string.launch_provider))
-
-            Card(
+    AppCard.Primary(modifier = modifier) {
+        SectionTitle(text = stringResource(R.string.launch_provider))
+        AppCard.Tinted(modifier = Modifier.fillMaxWidth()) {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
-                ),
-                shape = RoundedCornerShape(cornerRadiusMedium)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
-                Column(
+                Column(modifier = Modifier.weight(1f)) {
+                    AppText.labelMedium(
+                        text = stringResource(R.string.name).uppercase(),
+                        color = AppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    AppText.titleMedium(
+                        text = agency.name,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onSurface,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                    AppText.labelMedium(
+                        text = stringResource(R.string.abbreviation).uppercase(),
+                        color = AppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 14.dp)
+                    )
+                    AppText.titleMedium(
+                        text = agency.abbrev,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onSurface,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                    AppText.labelMedium(
+                        text = stringResource(R.string.type).uppercase(),
+                        color = AppTheme.colors.primary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 14.dp)
+                    )
+                    AppText.titleMedium(
+                        text = agency.type,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onSurface,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                }
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
+                        .size(48.dp)
+                        .background(
+                            color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(cornerRadiusSmall)
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            AppText.labelMedium(
-                                text = stringResource(R.string.name).uppercase(),
-                                color = AppTheme.colors.primary,
-                                fontWeight = FontWeight.Bold
-                            )
-                            AppText.titleMedium(
-                                text = agency.name,
-                                fontWeight = FontWeight.Bold,
-                                color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = 2.dp)
-                            )
-                            AppText.labelMedium(
-                                text = stringResource(R.string.abbreviation).uppercase(),
-                                color = AppTheme.colors.primary,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 14.dp)
-                            )
-                            AppText.titleMedium(
-                                text = agency.abbrev,
-                                fontWeight = FontWeight.Bold,
-                                color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = 2.dp)
-                            )
-                            AppText.labelMedium(
-                                text = stringResource(R.string.type).uppercase(),
-                                color = AppTheme.colors.primary,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 14.dp)
-                            )
-                            AppText.titleMedium(
-                                text = agency.type,
-                                fontWeight = FontWeight.Bold,
-                                color = AppTheme.colors.onSurface,
-                                modifier = Modifier.padding(top = 2.dp)
-                            )
-                        }
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(cornerRadiusSmall)
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Business,
-                                contentDescription = null,
-                                tint = AppTheme.colors.primary,
-                                modifier = Modifier.size(36.dp)
-                            )
-                        }
-                    }
-
-                    AppText.bodyMedium(
-                        text = agency.description,
-                        color = AppTheme.colors.secondary,
-                        modifier = Modifier.padding(top = paddingMedium)
+                    Icon(
+                        imageVector = Icons.Default.Business,
+                        contentDescription = null,
+                        tint = AppTheme.colors.primary,
+                        modifier = Modifier.size(36.dp)
                     )
                 }
             }
+
+            AppText.bodyMedium(
+                text = agency.description,
+                color = AppTheme.colors.secondary,
+                modifier = Modifier.padding(top = paddingMedium)
+            )
         }
     }
 }

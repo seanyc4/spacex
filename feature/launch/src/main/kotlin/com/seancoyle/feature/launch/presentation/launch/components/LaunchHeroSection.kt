@@ -14,16 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
+import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -33,8 +30,10 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.model.containerColor
+import com.seancoyle.feature.launch.presentation.launch.model.contentColor
+import com.seancoyle.feature.launch.presentation.launch.model.icon
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 internal fun LaunchHeroSection(
     launch: LaunchUI,
@@ -49,14 +48,12 @@ internal fun LaunchHeroSection(
         .semantics { testTag = LaunchesTestTags.LAUNCH_HERO_SECTION }
     ) {
         Box {
-            GlideImage(
-                model = launch.image.imageUrl,
+            RemoteImage(
+                imageUrl = launch.image.imageUrl,
                 contentDescription = missionImageDesc,
-                failure = placeholder(R.drawable.default_launch_hero_image),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(320.dp),
-                contentScale = ContentScale.Crop
             )
 
             Box(
@@ -98,9 +95,9 @@ internal fun LaunchHeroSection(
             ) {
                 Chip(
                     text = launch.status.label,
-                    containerColor = launch.status.containerColor,
-                    contentColor = launch.status.contentColor,
-                    icon = launch.status.icon
+                    containerColor = launch.status.containerColor(),
+                    contentColor = launch.status.contentColor(),
+                    icon = launch.status.icon()
                 )
 
                 AppText.bodyLarge(

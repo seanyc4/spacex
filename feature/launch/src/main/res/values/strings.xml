@@ -85,10 +85,24 @@
     <string name="flight_number">Flight #</string>
     <string name="total_flights">Total Flights</string>
 
+    <!-- Landing States -->
+    <string name="landing_successful">Landing Successful</string>
+    <string name="landing_failed">Landing Failed</string>
+    <string name="landing_attempted">Landing Attempted</string>
+    <string name="no_landing_attempt">No Landing Attempt</string>
+    <string name="status_label">Status: %1$s</string>
+
+    <!-- Spacecraft -->
+    <string name="spacecraft">Spacecraft</string>
+    <string name="crew_capacity">Crew Capacity</string>
+    <string name="human_rated">Human Rated</string>
+    <string name="destination">Destination</string>
+
     <!-- Video Section -->
     <string name="videos_webcasts">Videos &amp; Webcasts</string>
     <string name="live">LIVE</string>
     <string name="video_thumbnail">Video thumbnail</string>
+    <string name="play_video">Play video</string>
 
     <!-- Mission Patches Section -->
     <string name="mission_patches">Mission Patches</string>
@@ -101,7 +115,7 @@
     <string name="launch_updates">Launch Updates</string>
 
     <!-- Error State -->
-    <string name="unable_to_load_launch">Unable to load launch</string>
+    <string name="unable_to_load">Unable to load</string>
     <string name="error_loading_launch">Error loading launch: %1$s</string>
 
     <!-- Loading State -->
@@ -110,6 +124,8 @@
     <!-- Content Descriptions -->
     <string name="mission_image">Mission image for %1$s</string>
     <string name="mission_name_desc">Mission name: %1$s</string>
+    <string name="mission_card_desc">Mission card for %1$s</string>
+    <string name="mission_card_desc_full">%1$s, %2$s, launching %3$s</string>
     <string name="launch_date_desc">Launch date: %1$s</string>
     <string name="section_desc">Section: %1$s</string>
     <string name="detail_row_desc">%1$s: %2$s</string>

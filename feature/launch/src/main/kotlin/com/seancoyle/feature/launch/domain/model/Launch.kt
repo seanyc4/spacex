@@ -1,5 +1,8 @@
 package com.seancoyle.feature.launch.domain.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Launch(
     val id: String,
     val url: String?,
@@ -36,6 +39,7 @@ data class Launch(
     val missionPatches: List<MissionPatch>?,
 )
 
+@Immutable
 data class NetPrecision(
     val id: Int?,
     val name: String?,
@@ -43,6 +47,7 @@ data class NetPrecision(
     val description: String?
 )
 
+@Immutable
 data class Image(
     val id: Int,
     val name: String,
@@ -51,6 +56,7 @@ data class Image(
     val credit: String
 )
 
+@Immutable
 data class Status(
     val id: Int?,
     val name: String,
@@ -58,6 +64,7 @@ data class Status(
     val description: String?,
 )
 
+@Immutable
 data class Agency(
     val id: Int?,
     val url: String?,
@@ -91,6 +98,7 @@ data class Agency(
     val wikiUrl: String?,
 )
 
+@Immutable
 data class Country(
     val id: Int?,
     val name: String?,
@@ -99,6 +107,7 @@ data class Country(
     val nationalityName: String?
 )
 
+@Immutable
 data class Rocket(
     val id: Int?,
     val configuration: Configuration,
@@ -106,6 +115,7 @@ data class Rocket(
     val spacecraftStage: List<SpacecraftStage>?
 )
 
+@Immutable
 data class Configuration(
     val id: Int?,
     val url: String?,
@@ -127,6 +137,7 @@ data class Configuration(
     val maidenFlight: String?,
 )
 
+@Immutable
 data class Family(
     val id: Int?,
     val name: String?,
@@ -145,6 +156,7 @@ data class Family(
     val consecutiveSuccessfulLandings: Int?
 )
 
+@Immutable
 data class Mission(
     val id: Int?,
     val name: String?,
@@ -156,12 +168,14 @@ data class Mission(
     val vidUrls: List<VidUrl>?
 )
 
+@Immutable
 data class Orbit(
     val id: Int?,
     val name: String?,
     val abbrev: String?
 )
 
+@Immutable
 data class Pad(
     val id: Int?,
     val url: String?,
@@ -182,6 +196,7 @@ data class Pad(
     val location: Location?,
 )
 
+@Immutable
 data class Location(
     val id: Int?,
     val url: String?,
@@ -197,6 +212,7 @@ data class Location(
     val totalLandingCount: Int?,
 )
 
+@Immutable
 data class Program(
     val id: Int?,
     val url: String?,
@@ -208,6 +224,7 @@ data class Program(
     val agencies: List<Agency?>?
 )
 
+@Immutable
 data class LaunchUpdate(
     val id: Int?,
     val profileImage: String?,
@@ -217,6 +234,7 @@ data class LaunchUpdate(
     val createdOn: String?
 )
 
+@Immutable
 data class VidUrl(
     val priority: Int?,
     val source: String?,
@@ -230,6 +248,7 @@ data class VidUrl(
     val live: Boolean?
 )
 
+@Immutable
 data class MissionPatch(
     val id: Int?,
     val name: String?,
@@ -238,6 +257,7 @@ data class MissionPatch(
     val agency: Agency?
 )
 
+@Immutable
 data class InfoUrl(
     val priority: Int?,
     val source: String?,
@@ -247,6 +267,7 @@ data class InfoUrl(
     val url: String?
 )
 
+@Immutable
 data class LauncherStage(
     val id: Int?,
     val type: String?,
@@ -259,6 +280,7 @@ data class LauncherStage(
     val previousFlight: PreviousFlight?
 )
 
+@Immutable
 data class Launcher(
     val id: Int?,
     val url: String?,
@@ -274,6 +296,7 @@ data class Launcher(
     val firstLaunchDate: String?
 )
 
+@Immutable
 data class Landing(
     val id: Int?,
     val attempt: Boolean?,
@@ -283,6 +306,7 @@ data class Landing(
     val type: LandingType?
 )
 
+@Immutable
 data class LandingLocation(
     val id: Int?,
     val name: String?,
@@ -290,6 +314,7 @@ data class LandingLocation(
     val description: String?
 )
 
+@Immutable
 data class LandingType(
     val id: Int?,
     val name: String?,
@@ -297,11 +322,13 @@ data class LandingType(
     val description: String?
 )
 
+@Immutable
 data class PreviousFlight(
     val id: String?,
     val name: String?
 )
 
+@Immutable
 data class SpacecraftStage(
     val id: Int?,
     val url: String?,
@@ -311,6 +338,7 @@ data class SpacecraftStage(
     val landing: Landing?
 )
 
+@Immutable
 data class Spacecraft(
     val id: Int?,
     val url: String?,
@@ -321,11 +349,13 @@ data class Spacecraft(
     val spacecraftConfig: SpacecraftConfig?
 )
 
+@Immutable
 data class SpacecraftStatus(
     val id: Int?,
     val name: String?
 )
 
+@Immutable
 data class SpacecraftConfig(
     val id: Int?,
     val url: String?,
@@ -343,6 +373,7 @@ data class SpacecraftConfig(
     val crewCapacity: Int?
 )
 
+@Immutable
 data class SpacecraftType(
     val id: Int?,
     val name: String?
