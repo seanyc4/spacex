@@ -23,6 +23,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Family
+import com.seancoyle.feature.launch.presentation.launch.components.previewData
 
 @Composable
 internal fun RocketFamilyCard(
@@ -106,7 +107,7 @@ private fun RocketFamilyCardPreview() {
             family = Family(
                 id = 1,
                 name = "Falcon 9",
-                manufacturer = null,
+                manufacturer = listOf(previewData().launchServiceProvider!!),
                 description = "A two-stage rocket designed and manufactured by SpaceX",
                 active = true,
                 maidenFlight = "June 4, 2010",

@@ -1397,7 +1397,7 @@ internal object TestData {
         mission: MissionEntity = createMissionEntity(),
         pad: PadEntity = createPadEntity(),
         webcastLive: Boolean = false,
-        program: List<ProgramEntity>? = listOf(createProgramEntity()),
+        program: List<ProgramEntity> = listOf(createProgramEntity()),
         orbitalLaunchAttemptCount: Int = 6789,
         locationLaunchAttemptCount: Int = 456,
         padLaunchAttemptCount: Int = 234,
@@ -1407,13 +1407,13 @@ internal object TestData {
         padLaunchAttemptCountYear: Int = 23,
         agencyLaunchAttemptCountYear: Int = 67,
         status: LaunchStatusEntity = createLaunchStatusEntity(),
-        updates: List<LaunchUpdateEntity>? = listOf(createLaunchUpdateEntity()),
-        infoUrls: List<InfoUrlEntity>? = listOf(createInfoUrlEntity()),
-        vidUrls: List<VidUrlEntity>? = listOf(createVidUrlEntity()),
+        updates: List<LaunchUpdateEntity> = listOf(createLaunchUpdateEntity()),
+        infoUrls: List<InfoUrlEntity> = listOf(createInfoUrlEntity()),
+        vidUrls: List<VidUrlEntity> = listOf(createVidUrlEntity()),
         padTurnaround: String = "PT240H",
-        missionPatches: List<MissionPatchEntity>? = listOf(createMissionPatchEntity()),
+        missionPatches: List<MissionPatchEntity> = listOf(createMissionPatchEntity()),
         configuration: ConfigurationEntity? = createConfigurationEntity(),
-        families: List<FamilyEntity>? = listOf(createFamilyEntity())
+        families: List<FamilyEntity> = listOf(createFamilyEntity())
     ) = LaunchEntity(
         id = id,
         url = url,
@@ -1703,7 +1703,7 @@ internal object TestData {
     fun createPad(
         id: Int = 87,
         url: String = "https://lldev.thespacedevs.com/2.3.0/pad/87/",
-        agencies: List<Agency>? = listOf(createAgency()),
+        agencies: List<Agency> = listOf(createAgency()),
         name: String = "Launch Complex 39A",
         image: Image = createImage(),
         description: String? = "Historic launch pad at Kennedy Space Center",

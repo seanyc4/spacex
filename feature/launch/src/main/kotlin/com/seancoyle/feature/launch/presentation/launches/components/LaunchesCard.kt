@@ -46,6 +46,7 @@ import com.seancoyle.feature.launch.presentation.launch.model.containerColor
 import com.seancoyle.feature.launch.presentation.launch.model.contentColor
 import com.seancoyle.feature.launch.presentation.launch.model.icon
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.util.Dimens.launchesCardHeight
 
 @Composable
 internal fun LaunchCard(
@@ -66,7 +67,7 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(210.dp)
+            .height(launchesCardHeight)
             .clickable { onClick(launchItem.id, launchesType) }
             .semantics {
                 testTag = LaunchesTestTags.LAUNCH_CARD

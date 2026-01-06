@@ -23,7 +23,7 @@ data class Launch(
     val mission: Mission,
     val pad: Pad,
     val webcastLive: Boolean?,
-    val program: List<Program>?,
+    val program: List<Program>,
     val orbitalLaunchAttemptCount: Int?,
     val locationLaunchAttemptCount: Int?,
     val padLaunchAttemptCount: Int?,
@@ -32,11 +32,11 @@ data class Launch(
     val locationLaunchAttemptCountYear: Int?,
     val padLaunchAttemptCountYear: Int?,
     val agencyLaunchAttemptCountYear: Int?,
-    val updates: List<LaunchUpdate>?,
-    val infoUrls: List<InfoUrl>?,
-    val vidUrls: List<VidUrl>?,
+    val updates: List<LaunchUpdate>,
+    val infoUrls: List<InfoUrl>,
+    val vidUrls: List<VidUrl>,
     val padTurnaround: String?,
-    val missionPatches: List<MissionPatch>?,
+    val missionPatches: List<MissionPatch>,
 )
 
 @Immutable
@@ -72,7 +72,7 @@ data class Agency(
     val abbrev: String,
     val type: String,
     val featured: Boolean?,
-    val country: List<Country>?,
+    val country: List<Country>,
     val description: String,
     val administrator: String?,
     val foundingYear: Int?,
@@ -111,8 +111,8 @@ data class Country(
 data class Rocket(
     val id: Int?,
     val configuration: Configuration,
-    val launcherStage: List<LauncherStage>?,
-    val spacecraftStage: List<SpacecraftStage>?
+    val launcherStage: List<LauncherStage>,
+    val spacecraftStage: List<SpacecraftStage>
 )
 
 @Immutable
@@ -122,7 +122,7 @@ data class Configuration(
     val name: String?,
     val fullName: String?,
     val variant: String?,
-    val families: List<Family>?,
+    val families: List<Family>,
     val manufacturer: Agency?,
     val image: Image?,
     val wikiUrl: String?,
@@ -141,7 +141,7 @@ data class Configuration(
 data class Family(
     val id: Int?,
     val name: String?,
-    val manufacturer: List<Agency?>?,
+    val manufacturer: List<Agency?>,
     val description: String?,
     val active: Boolean?,
     val maidenFlight: String?,
@@ -163,9 +163,9 @@ data class Mission(
     val type: String?,
     val description: String?,
     val orbit: Orbit?,
-    val agencies: List<Agency?>?,
-    val infoUrls: List<InfoUrl>?,
-    val vidUrls: List<VidUrl>?
+    val agencies: List<Agency?>,
+    val infoUrls: List<InfoUrl>,
+    val vidUrls: List<VidUrl>
 )
 
 @Immutable
@@ -179,7 +179,7 @@ data class Orbit(
 data class Pad(
     val id: Int?,
     val url: String?,
-    val agencies: List<Agency?>?,
+    val agencies: List<Agency?>,
     val name: String?,
     val image: Image,
     val description: String?,
@@ -221,7 +221,7 @@ data class Program(
     val image: Image,
     val startDate: String?,
     val endDate: String?,
-    val agencies: List<Agency?>?
+    val agencies: List<Agency?>
 )
 
 @Immutable

@@ -371,16 +371,6 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps null updates to empty list`() = runTest {
-        val launch = createTestLaunch(updates = null)
-        setupDateFormatterDefaults()
-
-        val result = mapper.mapToLaunchUi(launch)
-
-        assertEquals(0, result.updates.size)
-    }
-
-    @Test
     fun `mapToLaunchUi maps empty vidUrls list`() = runTest {
         val launch = createTestLaunch(vidUrls = emptyList())
         setupDateFormatterDefaults()
@@ -474,10 +464,10 @@ class LaunchUiMapperTest {
         pad: Pad = createPad(),
         windowStart: String? = "2026-01-15T10:00:00Z",
         windowEnd: String? = "2026-01-15T11:00:00Z",
-        updates: List<LaunchUpdate>? = emptyList(),
-        vidUrls: List<VidUrl>? = emptyList(),
-        infoUrls: List<InfoUrl>? = emptyList(),
-        missionPatches: List<MissionPatch>? = emptyList()
+        updates: List<LaunchUpdate> = emptyList(),
+        vidUrls: List<VidUrl> = emptyList(),
+        infoUrls: List<InfoUrl> = emptyList(),
+        missionPatches: List<MissionPatch> = emptyList()
     ): Launch = Launch(
         id = id,
         url = null,
