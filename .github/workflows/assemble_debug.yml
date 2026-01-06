@@ -38,7 +38,7 @@ jobs:
 
       # Upload debug APK
       - name: Upload Debug APK
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.APK_NAME }}
           path: app/build/outputs/apk/debug/${{ env.APK_NAME }}
@@ -53,7 +53,7 @@ jobs:
 
       # Upload main APK
       - name: Upload Main Branch Debug APK
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: spacex-debug-main
           path: app/build/outputs/apk/debug/spacex-debug-main.apk
