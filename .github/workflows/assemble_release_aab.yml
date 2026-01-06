@@ -19,7 +19,7 @@ jobs:
       assemble-script: .github/scripts/assemble_release_aab.sh
       output-dir:      app/build/outputs/bundle/release
       unsigned-name:   app-release.aab
-      artifact-name:   spacex-release_${{ inputs.version }}.aab
+      artifact-name:   orbital-release_${{ inputs.version }}.aab
     secrets:
       signing-key:       ${{ secrets.SIGNING_KEY }}
       alias:             ${{ secrets.ALIAS }}

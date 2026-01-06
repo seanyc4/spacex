@@ -16,11 +16,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingLarge
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 
 @Composable
 internal fun SectionTitle(

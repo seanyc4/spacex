@@ -29,7 +29,7 @@ jobs:
       - name: Download main APK
         uses: actions/download-artifact@v6
         with:
-          name: spacex-debug-main
+          name: orbital-debug-main
 
       # Generates APK size message for PR comment
       - name: Render comment body

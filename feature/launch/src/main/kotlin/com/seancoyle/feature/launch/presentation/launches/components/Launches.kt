@@ -18,6 +18,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -26,7 +27,6 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState

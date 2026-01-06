@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/seanyc4/spacex/pulls" }
+git_source(:github) {|repo_name| "https://github.com/seanyc4/orbital/pulls" }
 
 gem 'danger'
 gem "danger-checkstyle_format"

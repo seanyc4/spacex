@@ -19,7 +19,7 @@ jobs:
       assemble-script: .github/scripts/assemble_release_apk.sh
       output-dir:      app/build/outputs/apk/release
       unsigned-name:   app-release-unsigned-signed.apk
-      artifact-name:   spacexDev-release_${{ inputs.version }}.apk
+      artifact-name:   orbitalDev-release_${{ inputs.version }}.apk
     secrets:
       signing-key:       ${{ secrets.TEST_SIGNING_KEY }}
       alias:             ${{ secrets.TEST_ALIAS }}

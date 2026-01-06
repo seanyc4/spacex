@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -28,7 +29,6 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 import com.seancoyle.feature.launch.presentation.launch.model.containerColor
 import com.seancoyle.feature.launch.presentation.launch.model.contentColor

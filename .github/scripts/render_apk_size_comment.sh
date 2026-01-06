@@ -8,7 +8,7 @@ RENDERED_FILE=".github/templates/apk_size_rendered_comment.md"
 APK_NAME="$(echo "$1" | tr -d '\n\r' | xargs)"
 BRANCH="$(echo "$2" | tr -d '\n\r' | xargs)"
 
-main_apk="spacex-debug-main.apk"
+main_apk="orbital-debug-main.apk"
 branch_apk="$APK_NAME"
 
 main_kb=$(du -k "$main_apk" | cut -f1)

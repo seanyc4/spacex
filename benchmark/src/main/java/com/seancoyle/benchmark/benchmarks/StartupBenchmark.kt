@@ -11,8 +11,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.uiAutomator
-import com.seancoyle.benchmark.BenchmarkConstants.SPACEX
 import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
+import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,7 +35,7 @@ class StartupBenchmark {
 
     private fun startupBenchmark(compilationMode: CompilationMode) {
         rule.measureRepeated(
-            packageName = SPACEX,
+            packageName = ORBITAL,
             metrics = listOf(
                 StartupTimingMetric(),
                 FrameTimingMetric(),
@@ -48,7 +48,7 @@ class StartupBenchmark {
             setupBlock = { killProcess() },
             measureBlock = {
                 uiAutomator {
-                    startApp(SPACEX)
+                    startApp(ORBITAL)
                     onElement { textAsString() == "HEADER" && isVisibleToUser }
                 }
             }
