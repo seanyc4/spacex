@@ -14,6 +14,21 @@ internal class GetLaunchUseCase @Inject constructor(
         id: String,
         launchType: LaunchesType
     ): LaunchResult<Launch, DataError.RemoteError> {
-        return launchesRepository.getLaunch(id, launchType)
+        return when (val result = launchesRepository.getLaunch(id, launchType)) {
+            is LaunchResult.Success -> {
+                val filteredResult = filterYouTubeVideos(result.data)
+                LaunchResult.Success(filteredResult)
+            }
+
+            is LaunchResult.Error -> result
+        }
+    }
+
+    private fun filterYouTubeVideos(launch: Launch): Launch {
+        val filteredVidUrls = launch.vidUrls.filter {
+            it.source?.contains("youtube", ignoreCase = true) == true
+        }
+        val filteredLaunch = launch.copy(vidUrls = filteredVidUrls)
+        return filteredLaunch
     }
 }
