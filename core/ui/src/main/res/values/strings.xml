@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Bar -->
-    <string name="app_name">Space Launches</string>
+    <string name="app_name">Orbital</string>
     <string name="filter_btn_content_desc">Filter List Button</string>
 
     <!-- Error Messages-->

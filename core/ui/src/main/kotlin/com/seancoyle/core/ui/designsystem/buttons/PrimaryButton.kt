@@ -10,14 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXXSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
 fun ButtonPrimary(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true,
-    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     return Button(
         modifier = modifier
@@ -29,7 +32,7 @@ fun ButtonPrimary(
             contentColor = AppTheme.colors.onPrimary
         ),
         enabled = enabled,
-        shape = RoundedCornerShape(AppTheme.dimens.dp4),
+        shape = RoundedCornerShape(cornerRadiusXXSmall),
         onClick = onClick
     ) {
         AppText.bodyMedium(
@@ -37,8 +40,8 @@ fun ButtonPrimary(
             color = AppTheme.colors.onPrimary.copy(alpha = if (enabled) 1f else disabledAlpha.toFloat()),
             modifier = Modifier
                 .padding(
-                    horizontal = AppTheme.dimens.dp8,
-                    vertical = AppTheme.dimens.dp4
+                    horizontal = paddingMedium,
+                    vertical = paddingSmall
                 )
         )
     }
