@@ -20,7 +20,7 @@ internal class LaunchPagerFactory @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = LaunchConstants.PAGINATION_LIMIT,
-                enablePlaceholders = false,
+                enablePlaceholders = true,
                 initialLoadSize = LaunchConstants.INITIAL_LOAD_SIZE,
                 prefetchDistance = LaunchConstants.PREFETCH_DISTANCE,
             ),

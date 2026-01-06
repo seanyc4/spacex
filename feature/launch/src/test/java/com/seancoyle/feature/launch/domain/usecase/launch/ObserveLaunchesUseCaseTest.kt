@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.domain.usecase.launch
 
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
-import com.seancoyle.core.domain.Order
 import com.seancoyle.feature.launch.domain.model.LaunchQuery
 import com.seancoyle.feature.launch.domain.model.LaunchStatus
 import com.seancoyle.feature.launch.domain.repository.LaunchRepository
@@ -125,7 +124,7 @@ class ObserveLaunchesUseCaseTest {
     @Test
     fun `invoke with specific query parameters delegates to repository and applies filter`() = runTest {
         val launches = createRandomLaunchList(50)
-        val query = LaunchQuery(query = "Falcon", order = Order.DESC, status = LaunchStatus.GO)
+        val query = LaunchQuery(query = "Falcon", status = LaunchStatus.GO)
         every { launchRepository.pager(query) } returns flowOf(PagingData.from(launches))
 
         val result = underTest.invoke(query).asSnapshot()
