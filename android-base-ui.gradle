@@ -1,18 +1,7 @@
 apply plugin: libs.plugins.ksp.get().pluginId
 
-android {
-    buildFeatures {
-        viewBinding true
-    }
-}
-
 dependencies {
-    implementation(libs.fragmentKtx)
-    implementation(libs.lifecycle.livedataktx)
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.savedstate)
-    implementation(libs.navigation.dynamic)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     ksp(libs.lifecycle.compiler)
 }

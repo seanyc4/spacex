@@ -20,5 +20,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.kotlin.coroutines.android)
-    implementation(libs.scalingPixels)
+    implementation(libs.youtubePlayer)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
 }

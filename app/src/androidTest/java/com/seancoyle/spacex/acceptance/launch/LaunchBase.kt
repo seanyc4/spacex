@@ -1,21 +1,19 @@
 package com.seancoyle.spacex.acceptance.launch
 
-import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_STATUS_ICON
 import androidx.annotation.CallSuper
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
 import com.seancoyle.spacex.presentation.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.test.runTest
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
-import java.net.HttpURLConnection
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @HiltAndroidTest
 open class LaunchBase {
 
@@ -29,14 +27,12 @@ open class LaunchBase {
     @Inject
     lateinit var mockWebServer: MockWebServer
 
-    protected val launchGridTag = LAUNCH_GRID
-
     @Before
     @CallSuper
     fun setup() {
         hiltRule.inject()
         Intents.init()
-        setupMockWebServer()
+      //  setupMockWebServer()
     }
 
     @After
@@ -47,7 +43,7 @@ open class LaunchBase {
         mockWebServer.shutdown()
     }
 
-    private fun setupMockWebServer() = runTest {
+   /* private fun setupMockWebServer() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -58,5 +54,5 @@ open class LaunchBase {
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
-    }
+    }*/
 }

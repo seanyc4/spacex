@@ -19,7 +19,7 @@ object TestDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideSpaceXDb(@ApplicationContext app: Context): Database {
+    fun provideLaunchesDb(@ApplicationContext app: Context): Database {
         return Room
             .inMemoryDatabaseBuilder(app, Database::class.java)
             .fallbackToDestructiveMigration()

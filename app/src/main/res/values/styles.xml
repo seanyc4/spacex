@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!-- Base application theme for Compose -->
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">#212121</item>
         <item name="android:windowBackground">#212121</item>
     </style>
 
     <style name="Theme.CustomisedSplashTheme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/spacex_logo_small</item>
+        <item name="windowSplashScreenBackground">#0B1C2D</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/orbital_splash_icon</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>

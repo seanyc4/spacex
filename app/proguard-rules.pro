@@ -154,7 +154,7 @@
     @dagger.hilt.android.lifecycle.HiltViewModel *;
 }
 
-# Keep Hilt-injected activities, fragments, and services
+# Keep Hilt-injected activities and services
 -keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
 -keep class * extends dagger.hilt.internal.GeneratedComponentManager { *; }
 -keep class * extends dagger.hilt.android.HiltAndroidApp { *; }
