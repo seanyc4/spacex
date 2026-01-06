@@ -1,10 +1,10 @@
-package com.seancoyle.spacex.acceptance.launch
+package com.seancoyle.orbital.acceptance.launch
 
 import androidx.annotation.CallSuper
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
-import com.seancoyle.spacex.presentation.MainActivity
+import com.seancoyle.orbital.presentation.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.MockWebServer

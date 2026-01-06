@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.orbital.di
 
 import android.content.Context
 import com.seancoyle.core.test.JsonFileReader

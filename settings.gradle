@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name='SpaceX'
+rootProject.name='Orbital'
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include ':app'

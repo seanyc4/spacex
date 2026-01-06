@@ -1,7 +1,7 @@
-package com.seancoyle.spacex.presentation
+package com.seancoyle.orbital.presentation
 
 import android.app.Application
-import com.seancoyle.spacex.BuildConfig
+import com.seancoyle.orbital.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

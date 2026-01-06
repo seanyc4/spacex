@@ -16,7 +16,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seancoyle.spacex"
+    namespace = "com.seancoyle.orbital"
     compileSdk = Android.compileSdk
 
     defaultConfig {

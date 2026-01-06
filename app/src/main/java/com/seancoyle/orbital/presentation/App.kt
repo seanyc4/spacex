@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.presentation
+package com.seancoyle.orbital.presentation
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.spacex.navigation.NavigationRoot
+import com.seancoyle.orbital.navigation.NavigationRoot
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable

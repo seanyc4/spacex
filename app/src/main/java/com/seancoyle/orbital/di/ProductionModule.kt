@@ -1,7 +1,7 @@
-package com.seancoyle.spacex.di
+package com.seancoyle.orbital.di
 
 import android.content.Context
-import com.seancoyle.spacex.presentation.BaseApplication
+import com.seancoyle.orbital.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,15 +19,3 @@ object ProductionModule {
         return context as BaseApplication
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

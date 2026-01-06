@@ -1,4 +1,4 @@
-package com.seancoyle.spacex.navigation
+package com.seancoyle.orbital.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
