@@ -4,10 +4,10 @@ import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.uiAutomator
-import com.seancoyle.benchmark.BenchmarkConstants.SPACEX
+import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
 import com.seancoyle.benchmark.actions.scrollHorizontalView
 import com.seancoyle.benchmark.actions.scrollVerticalView
-import com.seancoyle.feature.launch.api.LaunchTestTags.LAUNCH_CAROUSEL_ROW
+import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCH_CAROUSEL_ROW
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,11 +24,11 @@ class StartupBaselineProfile {
 
     @Test
     fun generate() = baselineProfileRule.collect(
-        packageName = SPACEX,
+        packageName = ORBITAL,
         includeInStartupProfile = true
     ) {
         uiAutomator {
-            startApp(SPACEX)
+            startApp(ORBITAL)
             scrollHorizontalView(id = LAUNCH_CAROUSEL_ROW)
             scrollVerticalView()
         }

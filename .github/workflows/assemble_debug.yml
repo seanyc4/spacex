@@ -17,7 +17,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      APK_NAME: spacex-debug_${{ inputs.version }}.apk
+      APK_NAME: orbital-debug_${{ inputs.version }}.apk
     outputs:
       artifact-name: ${{ steps.set-output.outputs.artifact-name }}
 
@@ -49,14 +49,14 @@ jobs:
 
       # Assemble main APK
       - name: Assemble Main Branch Debug APK
-        run: .github/scripts/assemble_debug_apk.sh "spacex-debug-main.apk"
+        run: .github/scripts/assemble_debug_apk.sh "orbital-debug-main.apk"
 
       # Upload main APK
       - name: Upload Main Branch Debug APK
         uses: actions/upload-artifact@v6
         with:
-          name: spacex-debug-main
-          path: app/build/outputs/apk/debug/spacex-debug-main.apk
+          name: orbital-debug-main
+          path: app/build/outputs/apk/debug/orbital-debug-main.apk
 
       # Output APK name
       - name: Set job output from env

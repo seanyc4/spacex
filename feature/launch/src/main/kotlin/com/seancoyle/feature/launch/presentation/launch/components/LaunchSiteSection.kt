@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -50,7 +51,6 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.domain.model.Pad
-import com.seancoyle.feature.launch.presentation.LaunchesTestTags
 
 @Composable
 internal fun LaunchSiteSection(

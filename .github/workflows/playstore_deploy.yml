@@ -27,7 +27,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1.1.3
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_AUTH_JSON }}
-          packageName: com.seancoyle.spacex
+          packageName: com.seancoyle.orbital
           releaseFiles: app/build/outputs/bundle/release/${{ inputs.artifact-name }}
           track: internal
           status: "completed"
