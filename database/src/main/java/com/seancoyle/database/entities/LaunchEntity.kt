@@ -8,13 +8,13 @@ import androidx.room.TypeConverters
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.FamilyListConverter
-import com.seancoyle.database.util.ProgramListConverter
-import com.seancoyle.database.util.LaunchUpdateListConverter
-import com.seancoyle.database.util.VidUrlListConverter
-import com.seancoyle.database.util.MissionPatchListConverter
 import com.seancoyle.database.util.InfoUrlListConverter
+import com.seancoyle.database.util.LaunchUpdateListConverter
 import com.seancoyle.database.util.LauncherStageListConverter
+import com.seancoyle.database.util.MissionPatchListConverter
+import com.seancoyle.database.util.ProgramListConverter
 import com.seancoyle.database.util.SpacecraftStageListConverter
+import com.seancoyle.database.util.VidUrlListConverter
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -77,7 +77,7 @@ data class LaunchEntity(
 
     @field:TypeConverters(ProgramListConverter::class)
     @ColumnInfo(name = "program")
-    val program: List<ProgramEntity>?,
+    val program: List<ProgramEntity>,
 
     @ColumnInfo("orbital_launch_attempt_count")
     val orbitalLaunchAttemptCount: Int?,
@@ -105,22 +105,22 @@ data class LaunchEntity(
 
     @field:TypeConverters(LaunchUpdateListConverter::class)
     @ColumnInfo(name = "updates")
-    val updates: List<LaunchUpdateEntity>?,
+    val updates: List<LaunchUpdateEntity>,
 
     @field:TypeConverters(InfoUrlListConverter::class)
     @ColumnInfo(name = "info_urls")
-    val infoUrls: List<InfoUrlEntity>?,
+    val infoUrls: List<InfoUrlEntity>,
 
     @field:TypeConverters(VidUrlListConverter::class)
     @ColumnInfo(name = "vid_urls")
-    val vidUrls: List<VidUrlEntity>?,
+    val vidUrls: List<VidUrlEntity>,
 
     @ColumnInfo(name = "pad_turnaround")
     val padTurnaround: String?,
 
     @field:TypeConverters(MissionPatchListConverter::class)
     @ColumnInfo(name = "mission_patches")
-    val missionPatches: List<MissionPatchEntity>?,
+    val missionPatches: List<MissionPatchEntity>,
 
     @Embedded(prefix = "status")
     val status: LaunchStatusEntity,
@@ -130,7 +130,7 @@ data class LaunchEntity(
 
     @ColumnInfo(name = "family")
     @field:TypeConverters(FamilyListConverter::class)
-    val families: List<FamilyEntity>?,
+    val families: List<FamilyEntity>,
 )
 
 @Keep
@@ -191,7 +191,7 @@ data class AgencyEntity(
 
     @field:TypeConverters(CountryListConverter::class)
     @ColumnInfo(name = "country")
-    val country: List<CountryEntity>?,
+    val country: List<CountryEntity>,
 
     @ColumnInfo(name = "description")
     val description: String,
@@ -293,11 +293,11 @@ data class RocketEntity(
 
     @field:TypeConverters(LauncherStageListConverter::class)
     @ColumnInfo(name = "launcher_stage")
-    val launcherStage: List<LauncherStageEntity>?,
+    val launcherStage: List<LauncherStageEntity>,
 
     @field:TypeConverters(SpacecraftStageListConverter::class)
     @ColumnInfo(name = "spacecraft_stage")
-    val spacecraftStage: List<SpacecraftStageEntity>?
+    val spacecraftStage: List<SpacecraftStageEntity>
 )
 
 @Keep
@@ -314,7 +314,7 @@ data class PadEntity(
 
     @ColumnInfo(name = "agency")
     @field:TypeConverters(AgencyListConverter::class)
-    val agencies: List<AgencyEntity?>?,
+    val agencies: List<AgencyEntity?>,
 
     @Embedded(prefix = "pad_image")
     val image: ImageEntity,
@@ -403,15 +403,15 @@ data class MissionEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "agencies")
-    val agencies: List<AgencyEntity?>?,
+    val agencies: List<AgencyEntity?>,
 
     @field:TypeConverters(InfoUrlListConverter::class)
     @ColumnInfo(name = "info_urls")
-    val infoUrls: List<InfoUrlEntity>?,
+    val infoUrls: List<InfoUrlEntity>,
 
     @field:TypeConverters(VidUrlListConverter::class)
     @ColumnInfo(name = "vid_urls")
-    val vidUrls: List<VidUrlEntity>?,
+    val vidUrls: List<VidUrlEntity>,
 )
 
 @Keep
@@ -453,7 +453,7 @@ data class ProgramEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "agencies")
-    val agencies: List<AgencyEntity>?
+    val agencies: List<AgencyEntity>
 )
 
 @Keep
@@ -785,7 +785,7 @@ data class ConfigurationEntity(
 
     @field:TypeConverters(FamilyListConverter::class)
     @ColumnInfo(name = "families")
-    val families: List<FamilyEntity>?,
+    val families: List<FamilyEntity>,
 
     @Embedded(prefix = "manufacturer_")
     val manufacturer: AgencyEntity?,
@@ -835,7 +835,7 @@ data class FamilyEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "manufacturer")
-    val manufacturer: List<AgencyEntity?>?,
+    val manufacturer: List<AgencyEntity?>,
 
     @ColumnInfo(name = "description")
     val description: String?,

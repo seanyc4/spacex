@@ -94,7 +94,7 @@ internal fun LaunchDto.toDomain(): Launch? {
         mission = mission?.toDomain() ?: return null,
         pad = pad?.toDomain() ?: return null,
         webcastLive = webcastLive,
-        program = program?.map { it.toDomain() },
+        program = program?.map { it.toDomain() } ?: emptyList(),
         orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
         locationLaunchAttemptCount = locationLaunchAttemptCount,
         padLaunchAttemptCount = padLaunchAttemptCount,
@@ -103,11 +103,11 @@ internal fun LaunchDto.toDomain(): Launch? {
         locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
         padLaunchAttemptCountYear = padLaunchAttemptCountYear,
         agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
-        updates = updates?.map { it.toDomain() },
-        infoUrls = infoUrls?.map { it.toDomain() },
-        vidUrls = vidUrls?.map { it.toDomain() },
+        updates = updates?.map { it.toDomain() } ?: emptyList(),
+        infoUrls = infoUrls?.map { it.toDomain() } ?: emptyList(),
+        vidUrls = vidUrls?.map { it.toDomain() } ?: emptyList(),
         padTurnaround = padTurnaround,
-        missionPatches = missionPatches?.map { it.toDomain() },
+        missionPatches = missionPatches?.map { it.toDomain() } ?: emptyList(),
         status = status?.toDomain() ?: return null,
     )
 }
@@ -146,7 +146,7 @@ private fun AgencyDto.toDomain(): Agency? {
         abbrev = abbrev ?: return null,
         type = type?.name ?: return null,
         featured = featured,
-        country = country?.map { it.toDomain() },
+        country = country?.map { it.toDomain() } ?: emptyList(),
         description = description ?: return null,
         administrator = administrator,
         foundingYear = foundingYear,
@@ -177,8 +177,8 @@ private fun RocketDto.toDomain(): Rocket? {
     return Rocket(
         id = id,
         configuration = configuration?.toDomain() ?: return null,
-        launcherStage = launcherStage?.map { it.toDomain() },
-        spacecraftStage = spacecraftStage?.map { it.toDomain() }
+        launcherStage = launcherStage?.map { it.toDomain() } ?: emptyList(),
+        spacecraftStage = spacecraftStage?.map { it.toDomain() } ?: emptyList()
     )
 }
 
@@ -189,7 +189,7 @@ private fun ConfigurationDto.toDomain() =
         name = name,
         fullName = fullName,
         variant = variant,
-        families = families?.map { it.toDomain() },
+        families = families?.map { it.toDomain() } ?: emptyList(),
         manufacturer = manufacturer?.toDomain(),
         image = image?.toDomain(),
         wikiUrl = wikiUrl,
@@ -230,9 +230,9 @@ private fun MissionDto.toDomain() =
         type = type,
         description = description,
         orbit = orbit?.toDomain(),
-        agencies = agencies?.map { it.toDomain() },
-        infoUrls = infoUrls?.map { it.toDomain() },
-        vidUrls = vidUrls?.map { it.toDomain() }
+        agencies = agencies?.map { it.toDomain() } ?: emptyList(),
+        infoUrls = infoUrls?.map { it.toDomain() } ?: emptyList(),
+        vidUrls = vidUrls?.map { it.toDomain() } ?: emptyList()
     )
 
 private fun OrbitDto.toDomain() =
@@ -246,7 +246,7 @@ private fun PadDto.toDomain() =
     Pad(
         id = id,
         url = url,
-        agencies = agencies?.map { it.toDomain() },
+        agencies = agencies?.map { it.toDomain() } ?: emptyList(),
         name = name,
         image = image?.toDomain() ?: defaultImage(),
         description = description,
@@ -297,7 +297,7 @@ private fun ProgramDto.toDomain() =
         image = image?.toDomain() ?: defaultImage(),
         startDate = startDate,
         endDate = endDate,
-        agencies = agencies?.map { it.toDomain() }
+        agencies = agencies?.map { it.toDomain() } ?: emptyList()
     )
 
 private fun defaultImage() =

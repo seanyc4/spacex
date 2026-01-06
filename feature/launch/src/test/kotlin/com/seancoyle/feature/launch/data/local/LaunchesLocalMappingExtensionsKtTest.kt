@@ -318,8 +318,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     fun `LaunchEntity with null optional fields converts correctly`() {
         val launchEntity = TestData.createLaunchEntity(
             netPrecision = null,
-            launchServiceProvider = null,
-            program = null
+            launchServiceProvider = null
         )
 
         val result = launchEntity.toDomain()
@@ -327,6 +326,5 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertNotNull(result)
         assertEquals(null, result.netPrecision)
         assertEquals(null, result.launchServiceProvider)
-        assertEquals(null, result.program)
     }
 }
