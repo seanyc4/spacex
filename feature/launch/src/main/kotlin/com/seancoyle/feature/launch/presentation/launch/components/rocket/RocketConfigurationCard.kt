@@ -183,7 +183,10 @@ private fun LaunchStatistics(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
@@ -228,7 +231,10 @@ private fun PhysicalSpecifications(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
@@ -299,7 +305,7 @@ private fun PhysicalSpecItem(
                     color = AppTheme.colors.secondary,
                     fontSize = AppTextStyles.labelSmall.fontSize
                 )
-                AppText.bodyLarge(
+                AppText.titleSmall(
                     text = value,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.onSurface
@@ -314,7 +320,10 @@ private fun ManufacturerAndHistory(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.manufacturer_and_history),
             fontWeight = FontWeight.Bold,
@@ -326,25 +335,23 @@ private fun ManufacturerAndHistory(
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
 
-            config.manufacturer?.let { manufacturer ->
-                DetailRow(
-                    label = stringResource(R.string.manufacturer),
-                    value = manufacturer.name,
-                    icon = Icons.Default.Build
-                )
+            DetailRow(
+                label = stringResource(R.string.manufacturer),
+                value = config.manufacturer.name,
+                icon = Icons.Default.Build
+            )
 
-                DetailRow(
-                    label = stringResource(R.string.built_in),
-                    value = manufacturer.countryName,
-                    icon = Icons.Default.Place
-                )
+            DetailRow(
+                label = stringResource(R.string.built_in),
+                value = config.manufacturer.countryName,
+                icon = Icons.Default.Place
+            )
 
-                DetailRow(
-                    label = stringResource(R.string.company_founded),
-                    value = manufacturer.foundingYear,
-                    icon = Icons.Default.DateRange
-                )
-            }
+            DetailRow(
+                label = stringResource(R.string.company_founded),
+                value = config.manufacturer.foundingYear,
+                icon = Icons.Default.DateRange
+            )
         }
 
         DetailRow(
@@ -361,7 +368,7 @@ private fun ExternalLinks(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val hasLinks = !config.wikiUrl.isNullOrEmpty() || !config.manufacturer?.wikiUrl.isNullOrEmpty()
+    val hasLinks = !config.wikiUrl.isNullOrEmpty() || !config.manufacturer.wikiUrl.isNullOrEmpty()
 
     if (hasLinks) {
         Column(
@@ -394,7 +401,7 @@ private fun ExternalLinks(
                     )
                 }
 
-                config.manufacturer?.wikiUrl?.let { wikiUrl ->
+                config.manufacturer.wikiUrl?.let { wikiUrl ->
                     LinkButton(
                         text = stringResource(R.string.manufacturer_on_wikipedia),
                         icon = Icons.Default.Build,
@@ -405,7 +412,7 @@ private fun ExternalLinks(
                     )
                 }
 
-                config.manufacturer?.infoUrl?.let { infoUrl ->
+                config.manufacturer.infoUrl?.let { infoUrl ->
                     LinkButton(
                         text = stringResource(R.string.manufacturer_website),
                         icon = Icons.Default.AccountCircle,

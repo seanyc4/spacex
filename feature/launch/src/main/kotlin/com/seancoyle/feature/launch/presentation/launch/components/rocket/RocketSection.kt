@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
+import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 
 /**
  * Main rocket section that orchestrates the display of rocket-related information.
@@ -22,7 +22,7 @@ import com.seancoyle.feature.launch.presentation.launch.components.previewData
  */
 @Composable
 internal fun RocketSection(
-    rocket: Rocket,
+    rocket: RocketUI,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -31,12 +31,12 @@ internal fun RocketSection(
     ) {
         RocketConfigurationCard(config = rocket.configuration)
 
-        if (rocket.launcherStage.isNotEmpty()) {
-            LauncherStagesSection(stages = rocket.launcherStage)
+        if (rocket.launcherStages.isNotEmpty()) {
+            LauncherStagesSection(stages = rocket.launcherStages)
         }
 
-        if (rocket.spacecraftStage.isNotEmpty()) {
-            SpacecraftStagesSection(stages = rocket.spacecraftStage)
+        if (rocket.spacecraftStages.isNotEmpty()) {
+            SpacecraftStagesSection(stages = rocket.spacecraftStages)
         }
     }
 }

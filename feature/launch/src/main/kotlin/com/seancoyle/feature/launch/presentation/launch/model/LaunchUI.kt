@@ -1,26 +1,29 @@
 package com.seancoyle.feature.launch.presentation.launch.model
 
 import androidx.compose.runtime.Immutable
+import java.time.LocalDateTime
 
 @Immutable
 data class LaunchUI(
+    val id: String,
     val missionName: String,
-    val status: LaunchStatus,
     val launchDate: String,
     val launchTime: String,
+    val launchDateTime: LocalDateTime,
+    val status: LaunchStatus,
+    val windowEnd: String,
+    val windowStart: String,
     val windowStartTime: String,
     val windowEndTime: String,
     val windowDuration: String,
-    val launchWindowPosition: Float,
     val imageUrl: String,
-    val failReason: String?,
+    val failReason: String,
     val launchServiceProvider: AgencyUI?,
     val rocket: RocketUI,
     val mission: MissionUI,
     val pad: PadUI,
     val updates: List<LaunchUpdateUI>,
-    val vidUrls: List<VidUrlUI>,
-    val missionPatches: List<MissionPatchUI>
+    val vidUrls: List<VidUrlUI>
 )
 
 @Immutable
@@ -45,7 +48,7 @@ data class ConfigurationUI(
     val diameter: String,
     val launchMass: String,
     val maidenFlight: String,
-    val manufacturer: ManufacturerUI?,
+    val manufacturer: ManufacturerUI,
     val families: List<RocketFamilyUI>,
     val wikiUrl: String?,
 )
@@ -67,32 +70,30 @@ data class RocketFamilyUI(
     val maidenFlight: String,
     val totalLaunches: String,
     val successfulLaunches: String,
+    val failedLaunches: String
 )
 
 @Immutable
 data class MissionUI(
     val name: String,
-    val description: String?,
-    val type: String?,
-    val orbitName: String?,
+    val description: String,
+    val type: String,
+    val orbitName: String,
+    val orbitAbbrev: String
 )
 
 @Immutable
 data class PadUI(
     val name: String,
-    val locationName: String?,
-    val countryName: String?,
-    val countryCode: String?,
+    val locationName: String,
+    val countryName: String,
     val imageUrl: String,
     val description: String,
-    val latitude: Double?,
-    val longitude: Double?,
+    val latitude: String,
+    val longitude: String,
     val totalLaunchCount: String,
-    val orbitalLaunchAttemptCount: String,
-    val locationTotalLaunchCount: String,
-    val locationTotalLandingCount: String,
-    val mapUrl: String?,
-    val mapImage: String?
+    val wikiUrl: String?,
+    val mapUrl: String?
 )
 
 @Immutable
@@ -101,6 +102,9 @@ data class AgencyUI(
     val abbrev: String,
     val description: String,
     val type: String,
+    val imageUrl: String,
+    val foundingYear: String,
+    val countryNames: String
 )
 
 @Immutable
@@ -108,15 +112,15 @@ data class LaunchUpdateUI(
     val comment: String,
     val createdBy: String,
     val createdOn: String,
+    val profileImage: String
 )
 
 @Immutable
 data class VidUrlUI(
     val title: String,
+    val description: String,
     val url: String,
-    val publisher: String,
-    val isLive: Boolean,
-    val videoId: String?
+    val thumbnailUrl: String
 )
 
 @Immutable
@@ -127,21 +131,31 @@ data class LauncherStageUI(
     val launcherUI: LauncherUI,
     val landing: LandingUI,
     val serialNumber: String,
+    val landingSuccess: String,
+    val landingLocation: String,
 )
 
 @Immutable
 data class LauncherUI(
+    val id: Int,
+    val url: String,
     val flightProven: Boolean,
     val serialNumber: String,
+    val details: String,
     val image: String,
     val successfulLandings: String,
     val attemptedLandings: String,
+    val flights: String,
+    val lastLaunchDate: String,
+    val firstLaunchDate: String,
     val status: String
 )
 
 @Immutable
 data class SpacecraftStageUI(
+    val url: String,
     val destination: String,
+    val missionEnd: String,
     val spacecraft: SpacecraftUI,
     val landing: LandingUI
 )
@@ -158,29 +172,32 @@ data class LandingUI(
 
 @Immutable
 data class SpacecraftUI(
+    val url: String,
     val name: String,
     val serialNumber: String,
-    val spacecraftStatus: SpacecraftStatusUI,
+    val status: SpacecraftStatusUI,
+    val description: String,
     val spacecraftConfig: SpacecraftConfigUI,
 )
 
 @Immutable
 data class SpacecraftStatusUI(
+    val id: Int,
     val name: String
 )
 
 @Immutable
 data class SpacecraftConfigUI(
+    val name: String,
     val type: String,
+    val agencyName: String,
+    val inUse: Boolean,
     val capability: String,
+    val history: String,
     val details: String,
+    val maidenFlight: String,
+    val height: String,
+    val diameter: String,
     val humanRated: Boolean,
     val crewCapacity: String
-)
-
-@Immutable
-data class MissionPatchUI(
-    val name: String,
-    val imageUrl: String,
-    val agencyName: String
 )
