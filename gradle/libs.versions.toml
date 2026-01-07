@@ -42,7 +42,7 @@ testCore = "1.6.1"
 testRules = "1.6.1"
 testRunner = "1.6.2"
 timber = "5.0.1"
-uiautomator = "2.4.0-alpha06"
+uiautomator = "2.4.0-alpha07"
 runtimeSaveable = "1.10.0"
 
 [libraries]
