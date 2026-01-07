@@ -134,5 +134,7 @@
     <string name="map_of_desc">Map of %1$s</string>
     <string name="rocket_icon_desc">Rocket icon</string>
     <string name="star_icon_desc">Star icon</string>
+    <string name="upcoming_tab_desc">Upcoming launches tab</string>
+    <string name="past_tab_desc">Past launches tab</string>
 </resources>
 

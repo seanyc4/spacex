@@ -1,4 +1,4 @@
-package com.seancoyle.benchmark.benchmarks
+package com.seancoyle.benchmark.benchmarks.launches
 
 import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode
@@ -9,10 +9,11 @@ import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.uiAutomator
-import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
-import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
+import com.seancoyle.benchmark.BenchmarkConstants
+import com.seancoyle.benchmark.actions.deleteAppData
+import com.seancoyle.benchmark.benchmarks.classInitMetric
+import com.seancoyle.benchmark.benchmarks.jitCompilationMetric
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,22 +21,22 @@ import org.junit.runner.RunWith
 @OptIn(ExperimentalMetricApi::class)
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class StartupBenchmark {
+class LaunchesBenchmarks {
 
     @get:Rule
     val rule = MacrobenchmarkRule()
 
     @Test
-    fun startupCompilationNone() =
-        startupBenchmark(CompilationMode.None())
+    fun scrollCompilationNone() =
+        launchesScrollBenchmark(CompilationMode.None())
 
     @Test
-    fun startupCompilationBaselineProfiles() =
-        startupBenchmark(CompilationMode.Partial(BaselineProfileMode.Require))
+    fun scrollCompilationBaselineProfiles() =
+        launchesScrollBenchmark(CompilationMode.Partial(BaselineProfileMode.Require))
 
-    private fun startupBenchmark(compilationMode: CompilationMode) {
+    private fun launchesScrollBenchmark(compilationMode: CompilationMode) {
         rule.measureRepeated(
-            packageName = ORBITAL,
+            packageName = BenchmarkConstants.ORBITAL,
             metrics = listOf(
                 StartupTimingMetric(),
                 FrameTimingMetric(),
@@ -44,12 +45,12 @@ class StartupBenchmark {
             ),
             compilationMode = compilationMode,
             startupMode = StartupMode.COLD,
-            iterations = DEFAULT_ITERATIONS,
-            setupBlock = { killProcess() },
+            iterations = BenchmarkConstants.DEFAULT_ITERATIONS,
+            setupBlock = { deleteAppData() },
             measureBlock = {
                 uiAutomator {
-                    startApp(ORBITAL)
-                    onElement { textAsString() == "HEADER" && isVisibleToUser }
+                    startApp(BenchmarkConstants.ORBITAL)
+                    launchesJourney()
                 }
             }
         )
