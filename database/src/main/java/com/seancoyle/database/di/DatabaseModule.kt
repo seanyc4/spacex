@@ -20,7 +20,7 @@ object DatabaseModule {
     fun provideLaunchesDb(@ApplicationContext context: Context): Database {
         return Room
             .databaseBuilder(context, Database::class.java, Database.DATABASE_NAME)
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 }

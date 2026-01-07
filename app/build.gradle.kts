@@ -88,8 +88,12 @@ android {
     }
 
     packaging {
-        resources.pickFirsts.add("META-INF/LICENSE.md")
-        resources.pickFirsts.add("META-INF/LICENSE-notice.md")
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
     }
 
     lint {

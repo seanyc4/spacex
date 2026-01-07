@@ -22,6 +22,15 @@ android {
         buildConfig = true
     }
 
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
+    }
+
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 

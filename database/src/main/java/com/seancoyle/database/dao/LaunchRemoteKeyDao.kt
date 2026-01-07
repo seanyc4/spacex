@@ -12,7 +12,7 @@ interface LaunchRemoteKeyDao {
     suspend fun upsertAll(remoteKey: List<LaunchRemoteKeyEntity>)
 
     @Query("SELECT * FROM launch_remote_keys")
-    suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity?>
+    suspend fun getRemoteKeys(): List<LaunchRemoteKeyEntity>
 
     @Query("SELECT * FROM launch_remote_keys WHERE id = :id")
     suspend fun getRemoteKey(id: String): LaunchRemoteKeyEntity?

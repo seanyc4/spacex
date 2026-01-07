@@ -16,6 +16,10 @@ internal fun UiAutomatorTestScope.findTextAsString(textString: String) =
     onElementOrNull { textAsString() == textString }
         ?: throw ElementNotFoundException("Element with text: $textString not found")
 
-internal fun UiAutomatorTestScope.findObjectByRes(resIdString: String) =
+internal fun UiAutomatorTestScope.findElementByRes(resIdString: String) =
     onElementOrNull { viewIdResourceName == "$ORBITAL:id/$resIdString" }
         ?: throw ElementNotFoundException("Could not find object with resource ID: $ORBITAL:id/$resIdString")
+
+internal fun UiAutomatorTestScope.findElementByTestTag(testTag: String) =
+    onElementOrNull { (viewIdResourceName == testTag) }
+        ?: throw ElementNotFoundException("Could not find object with resource ID: $testTag")
