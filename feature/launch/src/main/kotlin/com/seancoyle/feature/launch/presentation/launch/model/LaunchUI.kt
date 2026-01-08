@@ -1,29 +1,26 @@
 package com.seancoyle.feature.launch.presentation.launch.model
 
 import androidx.compose.runtime.Immutable
-import java.time.LocalDateTime
 
 @Immutable
 data class LaunchUI(
-    val id: String,
     val missionName: String,
+    val status: LaunchStatus,
     val launchDate: String,
     val launchTime: String,
-    val launchDateTime: LocalDateTime,
-    val status: LaunchStatus,
-    val windowEnd: String,
-    val windowStart: String,
     val windowStartTime: String,
     val windowEndTime: String,
     val windowDuration: String,
+    val launchWindowPosition: Float,
     val imageUrl: String,
-    val failReason: String,
+    val failReason: String?,
     val launchServiceProvider: AgencyUI?,
     val rocket: RocketUI,
     val mission: MissionUI,
     val pad: PadUI,
     val updates: List<LaunchUpdateUI>,
-    val vidUrls: List<VidUrlUI>
+    val vidUrls: List<VidUrlUI>,
+    val missionPatches: List<MissionPatchUI>
 )
 
 @Immutable
@@ -48,7 +45,7 @@ data class ConfigurationUI(
     val diameter: String,
     val launchMass: String,
     val maidenFlight: String,
-    val manufacturer: ManufacturerUI,
+    val manufacturer: ManufacturerUI?,
     val families: List<RocketFamilyUI>,
     val wikiUrl: String?,
 )
@@ -76,24 +73,29 @@ data class RocketFamilyUI(
 @Immutable
 data class MissionUI(
     val name: String,
-    val description: String,
-    val type: String,
-    val orbitName: String,
+    val description: String?,
+    val type: String?,
+    val orbitName: String?,
     val orbitAbbrev: String
 )
 
 @Immutable
 data class PadUI(
     val name: String,
-    val locationName: String,
-    val countryName: String,
+    val locationName: String?,
+    val countryName: String?,
+    val countryCode: String?,
     val imageUrl: String,
     val description: String,
-    val latitude: String,
-    val longitude: String,
+    val latitude: Double?,
+    val longitude: Double?,
     val totalLaunchCount: String,
+    val orbitalLaunchAttemptCount: String,
+    val locationTotalLaunchCount: String,
+    val locationTotalLandingCount: String,
     val wikiUrl: String?,
-    val mapUrl: String?
+    val mapUrl: String?,
+    val mapImage: String?
 )
 
 @Immutable
@@ -120,7 +122,9 @@ data class VidUrlUI(
     val title: String,
     val description: String,
     val url: String,
-    val thumbnailUrl: String
+    val thumbnailUrl: String,
+    val publisher: String,
+    val isLive: Boolean
 )
 
 @Immutable
@@ -201,3 +205,11 @@ data class SpacecraftConfigUI(
     val humanRated: Boolean,
     val crewCapacity: String
 )
+
+@Immutable
+data class MissionPatchUI(
+    val name: String,
+    val imageUrl: String,
+    val agencyName: String
+)
+

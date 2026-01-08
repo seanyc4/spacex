@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.presentation
 
 import com.seancoyle.core.common.dataformatter.DateFormatConstants
 import com.seancoyle.core.common.dataformatter.DateTransformer
-import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Family
@@ -66,18 +65,18 @@ class LaunchUiMapper @Inject constructor(
                 status = status.toDomain(),
                 launchDate = formatDate(launchDateTime),
                 launchTime = formatDate(launchDateTime, DateFormatConstants.HH_MM),
-                windowStartTime = windowStartDateTime?.let { formatDate(it, DateFormatConstants.HH_MM) } ?: "00:00",
-                windowEndTime = windowEndDateTime?.let { formatDate(it, DateFormatConstants.HH_MM) } ?: "00:00",
-                windowDuration = duration ?: "00:00",
+                windowStartTime = windowStartDateTime?.let { formatDate(it, DateFormatConstants.HH_MM) } ?: NA,
+                windowEndTime = windowEndDateTime?.let { formatDate(it, DateFormatConstants.HH_MM) } ?: NA,
+                windowDuration = duration ?: NA,
                 launchWindowPosition = windowPosition,
                 imageUrl = image.imageUrl,
-                failReason = failReason,
+                failReason = failReason ?: NA,
                 launchServiceProvider = launchServiceProvider?.toUI(),
                 rocket = rocket.toUI(),
                 mission = mission.toUI(),
                 pad = pad.toUI(),
                 updates = updates.map { it.toUI() },
-                vidUrls = vidUrls.map { it.toUI() }.filter { it.videoId != null },
+                vidUrls = vidUrls.map { it.toUI() },
                 missionPatches = missionPatches.map { it.toUI() }
             )
         }
@@ -123,6 +122,7 @@ class LaunchUiMapper @Inject constructor(
         maidenFlight = maidenFlight ?: NA,
         totalLaunches = totalLaunchCount?.toString() ?: NA,
         successfulLaunches = successfulLaunches?.toString() ?: NA,
+        failedLaunches = failedLaunches?.toString() ?: NA
     )
 
     private fun Mission.toUI() = MissionUI(
@@ -130,6 +130,7 @@ class LaunchUiMapper @Inject constructor(
         description = description,
         type = type,
         orbitName = orbit?.name,
+        orbitAbbrev = orbit?.abbrev ?: NA
     )
 
     private fun Pad.toUI() = PadUI(
@@ -145,6 +146,7 @@ class LaunchUiMapper @Inject constructor(
         orbitalLaunchAttemptCount = orbitalLaunchAttemptCount?.toString() ?: NA,
         locationTotalLaunchCount = location?.totalLaunchCount?.toString() ?: NA,
         locationTotalLandingCount = location?.totalLandingCount?.toString() ?: NA,
+        wikiUrl = wikiUrl,
         mapUrl = mapUrl,
         mapImage = mapImage ?: location?.mapImage
     )
@@ -153,21 +155,26 @@ class LaunchUiMapper @Inject constructor(
         name = name,
         abbrev = abbrev,
         description = description,
-        type = type
+        type = type,
+        imageUrl = image.imageUrl,
+        foundingYear = foundingYear?.toString() ?: NA,
+        countryNames = country.mapNotNull { it.name }.joinToString(", ").ifEmpty { NA }
     )
 
     private fun LaunchUpdate.toUI() = LaunchUpdateUI(
         comment = comment ?: NA,
         createdBy = createdBy ?: NA,
         createdOn = createdOn ?: NA,
+        profileImage = profileImage ?: NA
     )
 
     private fun VidUrl.toUI() = VidUrlUI(
-        title = title.orEmpty(),
-        url = url!!, // we filter out null urls in the domain layer
-        publisher = publisher.orEmpty(),
-        isLive = live ?: false,
-        videoId = extractYouTubeVideoId(url)
+        title = title ?: NA,
+        description = description ?: NA,
+        url = url ?: "",
+        thumbnailUrl = featureImage ?: "",
+        publisher = publisher ?: NA,
+        isLive = live ?: false
     )
 
     private fun LauncherStage.toUI() = LauncherStageUI(
@@ -175,12 +182,20 @@ class LaunchUiMapper @Inject constructor(
         reused = reused?.let { if (it) "Reused" else "New" } ?: NA,
         flightNumber = launcherFlightNumber?.toString() ?: NA,
         serialNumber = launcher?.serialNumber ?: NA,
+        landingSuccess = landing?.success?.let { if (it) "Success" else "Failed" } ?: NA,
+        landingLocation = landing?.location?.name ?: NA,
         launcherUI = launcher?.toUI() ?: LauncherUI(
+            id = 0,
+            url = NA,
             flightProven = false,
             serialNumber = NA,
+            details = NA,
             image = DEFAULT_LAUNCH_IMAGE,
             successfulLandings = NA,
             attemptedLandings = NA,
+            flights = NA,
+            lastLaunchDate = NA,
+            firstLaunchDate = NA,
             status = NA
         ),
         landing = LandingUI(
@@ -194,16 +209,24 @@ class LaunchUiMapper @Inject constructor(
     )
 
     private fun Launcher.toUI() = LauncherUI(
+        id = id ?: 0,
+        url = url ?: NA,
         flightProven = flightProven ?: false,
         serialNumber = serialNumber ?: NA,
+        details = details ?: NA,
         image = image.imageUrl,
         successfulLandings = successfulLandings?.toString() ?: NA,
         attemptedLandings = attemptedLandings?.toString() ?: NA,
+        flights = flights?.toString() ?: NA,
+        lastLaunchDate = lastLaunchDate ?: NA,
+        firstLaunchDate = firstLaunchDate ?: NA,
         status = status?.name ?: NA
     )
 
     private fun SpacecraftStage.toUI() = SpacecraftStageUI(
+        url = url.orEmpty(),
         destination = destination ?: NA,
+        missionEnd = missionEnd ?: NA,
         landing = LandingUI(
             attempt = landing?.attempt ?: false,
             success = landing?.success ?: false,
@@ -212,15 +235,25 @@ class LaunchUiMapper @Inject constructor(
             type = landing?.type?.name ?: NA
         ),
         spacecraft = SpacecraftUI(
+            url = this.spacecraft?.url ?: NA,
             name = this.spacecraft?.name ?: NA,
             serialNumber = this.spacecraft?.serialNumber ?: NA,
-            spacecraftStatus = SpacecraftStatusUI(
+            status = SpacecraftStatusUI(
+                id = this.spacecraft?.status?.id ?: 0,
                 name = this.spacecraft?.status?.name ?: NA,
             ),
+            description = this.spacecraft?.description ?: NA,
             spacecraftConfig = SpacecraftConfigUI(
+                name = this.spacecraft?.spacecraftConfig?.name ?: NA,
                 type = this.spacecraft?.spacecraftConfig?.type?.name ?: NA,
+                agencyName = this.spacecraft?.spacecraftConfig?.agency?.name ?: NA,
+                inUse = this.spacecraft?.spacecraftConfig?.inUse ?: false,
                 capability = this.spacecraft?.spacecraftConfig?.capability ?: NA,
+                history = this.spacecraft?.spacecraftConfig?.history ?: NA,
                 details = this.spacecraft?.spacecraftConfig?.details ?: NA,
+                maidenFlight = this.spacecraft?.spacecraftConfig?.maidenFlight ?: NA,
+                height = this.spacecraft?.spacecraftConfig?.height?.toString() ?: NA,
+                diameter = this.spacecraft?.spacecraftConfig?.diameter?.toString() ?: NA,
                 humanRated = this.spacecraft?.spacecraftConfig?.humanRated ?: false,
                 crewCapacity = this.spacecraft?.spacecraftConfig?.crewCapacity?.toString() ?: NA,
             )
@@ -258,7 +291,7 @@ class LaunchUiMapper @Inject constructor(
         windowEnd: LocalDateTime?,
         launchTime: LocalDateTime?
     ): Float {
-        if (windowStart == null || windowEnd == null || launchTime == null) return 0f
+        if (windowStart == null || windowEnd == null || launchTime == null) return 0.5f
 
         // If launch time is before window, show at start
         if (launchTime.isBefore(windowStart)) return 0f
@@ -270,9 +303,8 @@ class LaunchUiMapper @Inject constructor(
         val totalDuration = Duration.between(windowStart, windowEnd).toMillis().toFloat()
         val launchOffset = Duration.between(windowStart, launchTime).toMillis().toFloat()
 
-        // Avoid division by zero & show indicator when the launch is exactly at the start
-        if (totalDuration == 0f) return 0.1f
-        if (launchOffset == 0f) return 0.1f
+        // Avoid division by zero
+        if (totalDuration == 0f) return 0.5f
 
         // Return position between 0 and 1
         return (launchOffset / totalDuration).coerceIn(0f, 1f)
@@ -313,4 +345,26 @@ class LaunchUiMapper @Inject constructor(
             this.abbrev.contains("To Be Determined", ignoreCase = true) -> LaunchStatus.TBD
             else -> LaunchStatus.TBD
         }
+
+    fun extractYouTubeVideoId(url: String): String? {
+        return try {
+            when {
+                url.contains("youtu.be/") -> {
+                    url.substringAfter("youtu.be/").substringBefore("?")
+                }
+
+                url.contains("youtube.com/watch?v=") -> {
+                    url.substringAfter("v=").substringBefore("&")
+                }
+
+                url.contains("youtube.com/embed/") -> {
+                    url.substringAfter("embed/").substringBefore("?")
+                }
+
+                else -> null
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
