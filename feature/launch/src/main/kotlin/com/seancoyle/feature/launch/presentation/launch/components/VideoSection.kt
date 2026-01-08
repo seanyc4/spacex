@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.videoplayer.EmbeddedYouTubePlayer
-import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -39,30 +37,12 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.VidUrlUI
 
-/**
- * Data class to hold pre-computed video data to avoid repeated computation during recomposition.
- */
-private data class VideoData(
-    val videoId: String,
-    val video: VidUrlUI
-)
-
 @Composable
 internal fun VideoSection(
     videos: List<VidUrlUI>,
     modifier: Modifier = Modifier
 ) {
-    val titleDescription =
-        stringResource(R.string.section_desc, stringResource(R.string.videos_webcasts))
-
-    // Pre-compute video IDs once to avoid repeated extraction during recomposition
-    val videoDataList = remember(videos) {
-        videos.mapNotNull { video ->
-            extractYouTubeVideoId(video.url)?.let { videoId ->
-                VideoData(videoId = videoId, video = video)
-            }
-        }
-    }
+    val titleDescription = stringResource(R.string.section_desc, stringResource(R.string.videos_webcasts))
 
     Column(
         modifier = modifier
@@ -86,12 +66,12 @@ internal fun VideoSection(
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingLarge)
         ) {
             items(
-                items = videoDataList,
-                key = { it.videoId }
-            ) { videoData ->
+                items = videos,
+                key = { it.videoId!! }
+            ) { video ->
                 VideoCard(
-                    videoId = videoData.videoId,
-                    video = videoData.video
+                    videoId = video.videoId!!,
+                    video = video
                 )
             }
         }
@@ -186,7 +166,8 @@ private fun VideoSectionPreview() {
                     url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
                     thumbnailUrl = "",
                     publisher = "SpaceX",
-                    isLive = true
+                    isLive = true,
+                    videoId = "dQw4w9WgXcQ"
                 )
             )
         )
@@ -205,7 +186,8 @@ private fun VideoCardPreview() {
                 url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
                 thumbnailUrl = "",
                 publisher = "SpaceX",
-                isLive = false
+                isLive = false,
+                videoId = "dQw4w9WgXcQ"
             )
         )
     }

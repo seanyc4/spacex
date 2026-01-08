@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.presentation
 
 import com.seancoyle.core.common.dataformatter.DateFormatConstants
 import com.seancoyle.core.common.dataformatter.DateTransformer
+import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Family
@@ -76,7 +77,7 @@ class LaunchUiMapper @Inject constructor(
                 mission = mission.toUI(),
                 pad = pad.toUI(),
                 updates = updates.map { it.toUI() },
-                vidUrls = vidUrls.map { it.toUI() },
+                vidUrls = vidUrls.map { it.toUI() }.filter { it.videoId != null },
                 missionPatches = missionPatches.map { it.toUI() }
             )
         }
@@ -174,7 +175,8 @@ class LaunchUiMapper @Inject constructor(
         url = url ?: "",
         thumbnailUrl = featureImage ?: "",
         publisher = publisher ?: NA,
-        isLive = live ?: false
+        isLive = live ?: false,
+        videoId = url?.let { extractYouTubeVideoId(it) }
     )
 
     private fun LauncherStage.toUI() = LauncherStageUI(
@@ -345,26 +347,4 @@ class LaunchUiMapper @Inject constructor(
             this.abbrev.contains("To Be Determined", ignoreCase = true) -> LaunchStatus.TBD
             else -> LaunchStatus.TBD
         }
-
-    fun extractYouTubeVideoId(url: String): String? {
-        return try {
-            when {
-                url.contains("youtu.be/") -> {
-                    url.substringAfter("youtu.be/").substringBefore("?")
-                }
-
-                url.contains("youtube.com/watch?v=") -> {
-                    url.substringAfter("v=").substringBefore("&")
-                }
-
-                url.contains("youtube.com/embed/") -> {
-                    url.substringAfter("embed/").substringBefore("?")
-                }
-
-                else -> null
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
 }

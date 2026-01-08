@@ -25,9 +25,9 @@ import com.seancoyle.feature.launch.presentation.launch.model.VidUrlUI
  */
 internal fun previewData() = LaunchUI(
     missionName = "Starlink Group 7-12",
+    status = LaunchStatus.SUCCESS,
     launchDate = "26 November 2026",
     launchTime = "10:30",
-    status = LaunchStatus.SUCCESS,
     windowStartTime = "10:00",
     windowEndTime = "11:00",
     windowDuration = "1h",
@@ -190,7 +190,8 @@ internal fun previewData() = LaunchUI(
             url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
             thumbnailUrl = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
             publisher = "SpaceX",
-            isLive = false
+            isLive = false,
+            videoId = "dQw4w9WgXcQ"
         )
     ),
     missionPatches = listOf(

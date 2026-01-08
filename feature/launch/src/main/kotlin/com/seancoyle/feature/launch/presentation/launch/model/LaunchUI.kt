@@ -124,7 +124,8 @@ data class VidUrlUI(
     val url: String,
     val thumbnailUrl: String,
     val publisher: String,
-    val isLive: Boolean
+    val isLive: Boolean,
+    val videoId: String?
 )
 
 @Immutable
@@ -212,4 +213,3 @@ data class MissionPatchUI(
     val imageUrl: String,
     val agencyName: String
 )
-
