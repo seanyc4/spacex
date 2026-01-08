@@ -183,10 +183,7 @@ private fun LaunchStatistics(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
@@ -231,10 +228,7 @@ private fun PhysicalSpecifications(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
@@ -320,10 +314,7 @@ private fun ManufacturerAndHistory(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.manufacturer_and_history),
             fontWeight = FontWeight.Bold,
