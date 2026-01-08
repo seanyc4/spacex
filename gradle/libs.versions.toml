@@ -1,9 +1,9 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.2"
 coil = "3.3.0"
 composeBom = "2025.12.01"
 composeConstraintLayout = "1.1.1"
-composeLifecycle = "2.9.4"
+composeLifecycle = "2.10.0"
 composeWindowSize = "1.4.0"
 coreKtx = "1.16.0"
 datastore = "1.1.4"
