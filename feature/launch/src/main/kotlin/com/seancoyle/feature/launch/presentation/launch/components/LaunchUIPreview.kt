@@ -161,7 +161,7 @@ internal fun previewData() = LaunchUI(
             title = "Starlink Mission",
             url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
             publisher = "SpaceX",
-            isLive = false,
+            isLive = true,
             videoId = "dQw4w9WgXcQ"
         )
     ),

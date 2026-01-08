@@ -163,11 +163,11 @@ class LaunchUiMapper @Inject constructor(
     )
 
     private fun VidUrl.toUI() = VidUrlUI(
-        title = title ?: NA,
-        url = url ?: "",
-        publisher = publisher ?: NA,
+        title = title.orEmpty(),
+        url = url!!, // we filter out null urls in the domain layer
+        publisher = publisher.orEmpty(),
         isLive = live ?: false,
-        videoId = url?.let { extractYouTubeVideoId(it) }
+        videoId = extractYouTubeVideoId(url)
     )
 
     private fun LauncherStage.toUI() = LauncherStageUI(
