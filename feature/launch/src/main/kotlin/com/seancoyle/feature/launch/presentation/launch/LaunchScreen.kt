@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCH_SCREEN
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -39,45 +40,39 @@ fun LaunchScreen(
     val scrollState = rememberSaveable(saver = ScrollState.Saver) {
         ScrollState(0)
     }
-
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(AppTheme.colors.background)
-            .testTag("launch_screen")
+            .verticalScroll(scrollState)
+            .semantics { contentDescription = "Launch details for ${launch.missionName}" }
+            .padding(bottom = 24.dp)
+            .testTag(LAUNCH_SCREEN)
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .semantics { contentDescription = "Launch details for ${launch.missionName}" }
-                .padding(bottom = 24.dp)
-        ) {
-            LaunchHeroSection(launch = launch)
+        LaunchHeroSection(launch = launch)
+        Spacer(modifier = Modifier.height(paddingXLarge))
+
+        LaunchDetailsSection(launch = launch)
+
+        Spacer(modifier = Modifier.height(paddingXLarge))
+        LaunchSiteSection(pad = launch.pad)
+
+        if (launch.vidUrls.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
+            VideoSection(videos = launch.vidUrls)
+        }
 
-            LaunchDetailsSection(launch = launch)
+        Spacer(modifier = Modifier.height(paddingXLarge))
+        RocketSection(rocket = launch.rocket)
 
+        if (launch.launchServiceProvider != null) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            LaunchSiteSection(pad = launch.pad)
+            LaunchProviderSection(agency = launch.launchServiceProvider)
+        }
 
-            if (launch.vidUrls.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(paddingXLarge))
-                VideoSection(videos = launch.vidUrls)
-            }
-
+        if (launch.updates.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            RocketSection(rocket = launch.rocket)
-
-            if (launch.launchServiceProvider != null) {
-                Spacer(modifier = Modifier.height(paddingXLarge))
-                LaunchProviderSection(agency = launch.launchServiceProvider)
-            }
-
-            if (launch.updates.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(paddingXLarge))
-                UpdatesSection(updates = launch.updates)
-            }
+            UpdatesSection(updates = launch.updates)
         }
     }
 }
@@ -87,7 +82,8 @@ fun LaunchScreen(
 private fun LaunchScreenSuccessPreview() {
     AppTheme {
         LaunchScreen(
-            launch = previewData())
+            launch = previewData()
+        )
     }
 }
 
