@@ -166,14 +166,11 @@ class LaunchUiMapper @Inject constructor(
         comment = comment ?: NA,
         createdBy = createdBy ?: NA,
         createdOn = createdOn ?: NA,
-        profileImage = profileImage ?: NA
     )
 
     private fun VidUrl.toUI() = VidUrlUI(
         title = title ?: NA,
-        description = description ?: NA,
         url = url ?: "",
-        thumbnailUrl = featureImage ?: "",
         publisher = publisher ?: NA,
         isLive = live ?: false,
         videoId = url?.let { extractYouTubeVideoId(it) }

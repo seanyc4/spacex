@@ -174,21 +174,17 @@ internal fun previewData() = LaunchUI(
             comment = "Launch scrubbed due to weather conditions. New T-0 is in 24 hours.",
             createdBy = "SpaceX",
             createdOn = "Jan 14, 2026 6:00 PM",
-            profileImage = ""
         ),
         LaunchUpdateUI(
             comment = "All systems are go for launch tomorrow.",
             createdBy = "Launch Director",
             createdOn = "Jan 15, 2026 8:00 AM",
-            profileImage = ""
         )
     ),
     vidUrls = listOf(
         VidUrlUI(
             title = "Starlink Mission",
-            description = "Live coverage of Falcon 9 launch",
             url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-            thumbnailUrl = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
             publisher = "SpaceX",
             isLive = false,
             videoId = "dQw4w9WgXcQ"

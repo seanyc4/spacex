@@ -114,15 +114,12 @@ data class LaunchUpdateUI(
     val comment: String,
     val createdBy: String,
     val createdOn: String,
-    val profileImage: String
 )
 
 @Immutable
 data class VidUrlUI(
     val title: String,
-    val description: String,
     val url: String,
-    val thumbnailUrl: String,
     val publisher: String,
     val isLive: Boolean,
     val videoId: String?

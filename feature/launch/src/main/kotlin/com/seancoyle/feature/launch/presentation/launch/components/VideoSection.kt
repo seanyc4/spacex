@@ -159,17 +159,7 @@ private const val NA = "N/A"
 private fun VideoSectionPreview() {
     AppTheme {
         VideoSection(
-            videos = listOf(
-                VidUrlUI(
-                    title = "Falcon 9 Launch",
-                    description = "Live launch coverage",
-                    url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-                    thumbnailUrl = "",
-                    publisher = "SpaceX",
-                    isLive = true,
-                    videoId = "dQw4w9WgXcQ"
-                )
-            )
+            videos = previewData().vidUrls
         )
     }
 }
@@ -180,15 +170,7 @@ private fun VideoCardPreview() {
     AppTheme {
         VideoCard(
             videoId = "dQw4w9WgXcQ",
-            video = VidUrlUI(
-                title = "Falcon 9 Launch and Landing",
-                description = "Live launch coverage",
-                url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-                thumbnailUrl = "",
-                publisher = "SpaceX",
-                isLive = false,
-                videoId = "dQw4w9WgXcQ"
-            )
+            video = previewData().vidUrls.first()
         )
     }
 }
