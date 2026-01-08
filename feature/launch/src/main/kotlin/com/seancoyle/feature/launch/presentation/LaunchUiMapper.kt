@@ -258,7 +258,7 @@ class LaunchUiMapper @Inject constructor(
         windowEnd: LocalDateTime?,
         launchTime: LocalDateTime?
     ): Float {
-        if (windowStart == null || windowEnd == null || launchTime == null) return 0.5f
+        if (windowStart == null || windowEnd == null || launchTime == null) return 0f
 
         // If launch time is before window, show at start
         if (launchTime.isBefore(windowStart)) return 0f
@@ -270,8 +270,9 @@ class LaunchUiMapper @Inject constructor(
         val totalDuration = Duration.between(windowStart, windowEnd).toMillis().toFloat()
         val launchOffset = Duration.between(windowStart, launchTime).toMillis().toFloat()
 
-        // Avoid division by zero
-        if (totalDuration == 0f) return 0.5f
+        // Avoid division by zero & show indicator when the launch is exactly at the start
+        if (totalDuration == 0f) return 0.1f
+        if (launchOffset == 0f) return 0.1f
 
         // Return position between 0 and 1
         return (launchOffset / totalDuration).coerceIn(0f, 1f)
