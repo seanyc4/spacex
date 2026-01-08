@@ -219,12 +219,8 @@ class LaunchUiMapper @Inject constructor(
             ),
             spacecraftConfig = SpacecraftConfigUI(
                 type = this.spacecraft?.spacecraftConfig?.type?.name ?: NA,
-                agencyName = this.spacecraft?.spacecraftConfig?.agency?.name ?: NA,
-                inUse = this.spacecraft?.spacecraftConfig?.inUse ?: false,
                 capability = this.spacecraft?.spacecraftConfig?.capability ?: NA,
-                history = this.spacecraft?.spacecraftConfig?.history ?: NA,
                 details = this.spacecraft?.spacecraftConfig?.details ?: NA,
-                maidenFlight = this.spacecraft?.spacecraftConfig?.maidenFlight ?: NA,
                 humanRated = this.spacecraft?.spacecraftConfig?.humanRated ?: false,
                 crewCapacity = this.spacecraft?.spacecraftConfig?.crewCapacity?.toString() ?: NA,
             )

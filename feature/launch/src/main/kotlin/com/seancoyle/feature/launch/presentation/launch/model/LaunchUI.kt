@@ -172,12 +172,8 @@ data class SpacecraftStatusUI(
 @Immutable
 data class SpacecraftConfigUI(
     val type: String,
-    val agencyName: String,
-    val inUse: Boolean,
     val capability: String,
-    val history: String,
     val details: String,
-    val maidenFlight: String,
     val humanRated: Boolean,
     val crewCapacity: String
 )

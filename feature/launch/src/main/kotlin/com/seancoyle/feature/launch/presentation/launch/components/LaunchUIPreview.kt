@@ -106,12 +106,8 @@ internal fun previewData() = LaunchUI(
                     spacecraftStatus = SpacecraftStatusUI(name = "Active"),
                     spacecraftConfig = SpacecraftConfigUI(
                         type = "Cargo",
-                        agencyName = "SpaceX",
-                        inUse = true,
                         capability = "Cargo and Crew Transport",
-                        history = "Dragon 2 is a class of reusable spacecraft developed and manufactured by SpaceX.",
                         details = "Dragon 2 can carry up to 7 passengers to and from Earth orbit, and beyond.",
-                        maidenFlight = "2019-03-02",
                         humanRated = true,
                         crewCapacity = "7"
                     )

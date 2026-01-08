@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,7 +17,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCH_SCREEN
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -31,23 +31,47 @@ import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.components.rocket.RocketSection
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
+import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 
 @Composable
 fun LaunchScreen(
-    launch: LaunchUI,
+    launchState: LaunchUiState,
+    onEvent: (LaunchEvent) -> Unit,
     modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background)
+            .testTag("launch_screen")
+    ) {
+        when (launchState) {
+            is LaunchUiState.Loading -> LoadingState()
+            is LaunchUiState.Success -> SuccessState(launch = launchState.launch)
+            is LaunchUiState.Error -> ErrorState(
+                message = launchState.message,
+                onRetry = { onEvent(LaunchEvent.RetryFetch) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SuccessState(
+    launch: LaunchUI,
+    modifier: Modifier = Modifier
 ) {
     val scrollState = rememberSaveable(saver = ScrollState.Saver) {
         ScrollState(0)
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(AppTheme.colors.background)
             .verticalScroll(scrollState)
             .semantics { contentDescription = "Launch details for ${launch.missionName}" }
             .padding(bottom = 24.dp)
-            .testTag(LAUNCH_SCREEN)
     ) {
         LaunchHeroSection(launch = launch)
         Spacer(modifier = Modifier.height(paddingXLarge))
@@ -81,9 +105,13 @@ fun LaunchScreen(
 @Composable
 private fun LaunchScreenSuccessPreview() {
     AppTheme {
-        LaunchScreen(
-            launch = previewData()
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            SuccessState(launch = previewData())
+        }
     }
 }
 
