@@ -30,72 +30,54 @@ import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.components.rocket.RocketSection
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
-import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
-import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 
 @Composable
 fun LaunchScreen(
-    launchState: LaunchUiState,
-    onEvent: (LaunchEvent) -> Unit,
+    launch: LaunchUI,
     modifier: Modifier = Modifier,
 ) {
+    val scrollState = rememberSaveable(saver = ScrollState.Saver) {
+        ScrollState(0)
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(AppTheme.colors.background)
             .testTag("launch_screen")
     ) {
-        when (launchState) {
-            is LaunchUiState.Loading -> LoadingState()
-            is LaunchUiState.Success -> SuccessState(launch = launchState.launch)
-            is LaunchUiState.Error -> ErrorState(
-                message = launchState.message,
-                onRetry = { onEvent(LaunchEvent.RetryFetch) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun SuccessState(
-    launch: LaunchUI,
-    modifier: Modifier = Modifier
-) {
-    val scrollState = rememberSaveable(saver = ScrollState.Saver) {
-        ScrollState(0)
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .semantics { contentDescription = "Launch details for ${launch.missionName}" }
-            .padding(bottom = 24.dp)
-    ) {
-        LaunchHeroSection(launch = launch)
-        Spacer(modifier = Modifier.height(paddingXLarge))
-
-        LaunchDetailsSection(launch = launch)
-
-        Spacer(modifier = Modifier.height(paddingXLarge))
-        LaunchSiteSection(pad = launch.pad)
-
-        if (launch.vidUrls.isNotEmpty()) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .semantics { contentDescription = "Launch details for ${launch.missionName}" }
+                .padding(bottom = 24.dp)
+        ) {
+            LaunchHeroSection(launch = launch)
             Spacer(modifier = Modifier.height(paddingXLarge))
-            VideoSection(videos = launch.vidUrls)
-        }
 
-        Spacer(modifier = Modifier.height(paddingXLarge))
-        RocketSection(rocket = launch.rocket)
+            LaunchDetailsSection(launch = launch)
 
-        if (launch.launchServiceProvider != null) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            LaunchProviderSection(agency = launch.launchServiceProvider)
-        }
+            LaunchSiteSection(pad = launch.pad)
 
-        if (launch.updates.isNotEmpty()) {
+            if (launch.vidUrls.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(paddingXLarge))
+                VideoSection(videos = launch.vidUrls)
+            }
+
             Spacer(modifier = Modifier.height(paddingXLarge))
-            UpdatesSection(updates = launch.updates)
+            RocketSection(rocket = launch.rocket)
+
+            if (launch.launchServiceProvider != null) {
+                Spacer(modifier = Modifier.height(paddingXLarge))
+                LaunchProviderSection(agency = launch.launchServiceProvider)
+            }
+
+            if (launch.updates.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(paddingXLarge))
+                UpdatesSection(updates = launch.updates)
+            }
         }
     }
 }
@@ -104,7 +86,8 @@ private fun SuccessState(
 @Composable
 private fun LaunchScreenSuccessPreview() {
     AppTheme {
-        SuccessState(launch = previewData())
+        LaunchScreen(
+            launch = previewData())
     }
 }
 
