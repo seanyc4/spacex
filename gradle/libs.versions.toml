@@ -34,7 +34,7 @@ profileInstaller = "1.4.1"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.4"
 retrofit2 = "3.0.0"
-robolectricVersion = "4.14.1"
+robolectricVersion = "4.16"
 room = "2.8.4"
 runtimeSaveable = "1.10.0"
 splash = "1.2.0"
@@ -106,9 +106,7 @@ kotlin-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-tes
 kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 # Lifecycle
-lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
 lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 # Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
