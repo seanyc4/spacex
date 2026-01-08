@@ -123,7 +123,6 @@ class LaunchUiMapper @Inject constructor(
         maidenFlight = maidenFlight ?: NA,
         totalLaunches = totalLaunchCount?.toString() ?: NA,
         successfulLaunches = successfulLaunches?.toString() ?: NA,
-        failedLaunches = failedLaunches?.toString() ?: NA
     )
 
     private fun Mission.toUI() = MissionUI(
@@ -131,7 +130,6 @@ class LaunchUiMapper @Inject constructor(
         description = description,
         type = type,
         orbitName = orbit?.name,
-        orbitAbbrev = orbit?.abbrev ?: NA
     )
 
     private fun Pad.toUI() = PadUI(
@@ -147,7 +145,6 @@ class LaunchUiMapper @Inject constructor(
         orbitalLaunchAttemptCount = orbitalLaunchAttemptCount?.toString() ?: NA,
         locationTotalLaunchCount = location?.totalLaunchCount?.toString() ?: NA,
         locationTotalLandingCount = location?.totalLandingCount?.toString() ?: NA,
-        wikiUrl = wikiUrl,
         mapUrl = mapUrl,
         mapImage = mapImage ?: location?.mapImage
     )
@@ -156,10 +153,7 @@ class LaunchUiMapper @Inject constructor(
         name = name,
         abbrev = abbrev,
         description = description,
-        type = type,
-        imageUrl = image.imageUrl,
-        foundingYear = foundingYear?.toString() ?: NA,
-        countryNames = country.mapNotNull { it.name }.joinToString(", ").ifEmpty { NA }
+        type = type
     )
 
     private fun LaunchUpdate.toUI() = LaunchUpdateUI(
@@ -181,20 +175,12 @@ class LaunchUiMapper @Inject constructor(
         reused = reused?.let { if (it) "Reused" else "New" } ?: NA,
         flightNumber = launcherFlightNumber?.toString() ?: NA,
         serialNumber = launcher?.serialNumber ?: NA,
-        landingSuccess = landing?.success?.let { if (it) "Success" else "Failed" } ?: NA,
-        landingLocation = landing?.location?.name ?: NA,
         launcherUI = launcher?.toUI() ?: LauncherUI(
-            id = 0,
-            url = NA,
             flightProven = false,
             serialNumber = NA,
-            details = NA,
             image = DEFAULT_LAUNCH_IMAGE,
             successfulLandings = NA,
             attemptedLandings = NA,
-            flights = NA,
-            lastLaunchDate = NA,
-            firstLaunchDate = NA,
             status = NA
         ),
         landing = LandingUI(
@@ -208,24 +194,16 @@ class LaunchUiMapper @Inject constructor(
     )
 
     private fun Launcher.toUI() = LauncherUI(
-        id = id ?: 0,
-        url = url ?: NA,
         flightProven = flightProven ?: false,
         serialNumber = serialNumber ?: NA,
-        details = details ?: NA,
         image = image.imageUrl,
         successfulLandings = successfulLandings?.toString() ?: NA,
         attemptedLandings = attemptedLandings?.toString() ?: NA,
-        flights = flights?.toString() ?: NA,
-        lastLaunchDate = lastLaunchDate ?: NA,
-        firstLaunchDate = firstLaunchDate ?: NA,
         status = status?.name ?: NA
     )
 
     private fun SpacecraftStage.toUI() = SpacecraftStageUI(
-        url = url.orEmpty(),
         destination = destination ?: NA,
-        missionEnd = missionEnd ?: NA,
         landing = LandingUI(
             attempt = landing?.attempt ?: false,
             success = landing?.success ?: false,
@@ -234,16 +212,12 @@ class LaunchUiMapper @Inject constructor(
             type = landing?.type?.name ?: NA
         ),
         spacecraft = SpacecraftUI(
-            url = this.spacecraft?.url ?: NA,
             name = this.spacecraft?.name ?: NA,
             serialNumber = this.spacecraft?.serialNumber ?: NA,
-            status = SpacecraftStatusUI(
-                id = this.spacecraft?.status?.id ?: 0,
+            spacecraftStatus = SpacecraftStatusUI(
                 name = this.spacecraft?.status?.name ?: NA,
             ),
-            description = this.spacecraft?.description ?: NA,
             spacecraftConfig = SpacecraftConfigUI(
-                name = this.spacecraft?.spacecraftConfig?.name ?: NA,
                 type = this.spacecraft?.spacecraftConfig?.type?.name ?: NA,
                 agencyName = this.spacecraft?.spacecraftConfig?.agency?.name ?: NA,
                 inUse = this.spacecraft?.spacecraftConfig?.inUse ?: false,
@@ -251,8 +225,6 @@ class LaunchUiMapper @Inject constructor(
                 history = this.spacecraft?.spacecraftConfig?.history ?: NA,
                 details = this.spacecraft?.spacecraftConfig?.details ?: NA,
                 maidenFlight = this.spacecraft?.spacecraftConfig?.maidenFlight ?: NA,
-                height = this.spacecraft?.spacecraftConfig?.height?.toString() ?: NA,
-                diameter = this.spacecraft?.spacecraftConfig?.diameter?.toString() ?: NA,
                 humanRated = this.spacecraft?.spacecraftConfig?.humanRated ?: false,
                 crewCapacity = this.spacecraft?.spacecraftConfig?.crewCapacity?.toString() ?: NA,
             )

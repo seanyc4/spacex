@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,8 +36,10 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
+import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LandingStateUI
 import com.seancoyle.feature.launch.presentation.launch.model.LauncherStageUI
 import com.seancoyle.feature.launch.presentation.launch.model.LauncherUI
@@ -125,7 +125,6 @@ internal fun LauncherStageItem(
                     color = AppTheme.colors.secondary
                 )
 
-                Spacer(modifier = Modifier.height(paddingSmall))
                 Chip(
                     text = stage.reused,
                     contentColor = if (stage.reused == "Reused") AppColors.success else AppTheme.colors.primary,
@@ -162,10 +161,10 @@ internal fun LauncherStats(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            launcher.successfulLandings?.let { successful ->
-                launcher.attemptedLandings?.let { attempted ->
+            launcher.successfulLandings.let { successful ->
+                launcher.attemptedLandings.let { attempted ->
                     MiniStatItem(
-                        value = "$successful/$attempted}",
+                        value = "$successful/$attempted",
                         label = stringResource(R.string.landings),
                         icon = Icons.Default.CheckCircle,
                         iconTint = AppColors.success
@@ -281,6 +280,16 @@ private fun resolveLandingState(attempt: Boolean?, success: Boolean?): LandingSt
             iconVector = Icons.Default.Info,
             iconTint = AppTheme.colors.secondary,
             labelResId = R.string.no_landing_attempt
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun LauncherStagesSectionPreview() {
+    AppTheme {
+        LauncherStagesSection(
+            stages = previewData().rocket.launcherStages
         )
     }
 }

@@ -67,7 +67,6 @@ data class RocketFamilyUI(
     val maidenFlight: String,
     val totalLaunches: String,
     val successfulLaunches: String,
-    val failedLaunches: String
 )
 
 @Immutable
@@ -76,7 +75,6 @@ data class MissionUI(
     val description: String?,
     val type: String?,
     val orbitName: String?,
-    val orbitAbbrev: String
 )
 
 @Immutable
@@ -93,7 +91,6 @@ data class PadUI(
     val orbitalLaunchAttemptCount: String,
     val locationTotalLaunchCount: String,
     val locationTotalLandingCount: String,
-    val wikiUrl: String?,
     val mapUrl: String?,
     val mapImage: String?
 )
@@ -104,9 +101,6 @@ data class AgencyUI(
     val abbrev: String,
     val description: String,
     val type: String,
-    val imageUrl: String,
-    val foundingYear: String,
-    val countryNames: String
 )
 
 @Immutable
@@ -133,31 +127,21 @@ data class LauncherStageUI(
     val launcherUI: LauncherUI,
     val landing: LandingUI,
     val serialNumber: String,
-    val landingSuccess: String,
-    val landingLocation: String,
 )
 
 @Immutable
 data class LauncherUI(
-    val id: Int,
-    val url: String,
     val flightProven: Boolean,
     val serialNumber: String,
-    val details: String,
     val image: String,
     val successfulLandings: String,
     val attemptedLandings: String,
-    val flights: String,
-    val lastLaunchDate: String,
-    val firstLaunchDate: String,
     val status: String
 )
 
 @Immutable
 data class SpacecraftStageUI(
-    val url: String,
     val destination: String,
-    val missionEnd: String,
     val spacecraft: SpacecraftUI,
     val landing: LandingUI
 )
@@ -174,23 +158,19 @@ data class LandingUI(
 
 @Immutable
 data class SpacecraftUI(
-    val url: String,
     val name: String,
     val serialNumber: String,
-    val status: SpacecraftStatusUI,
-    val description: String,
+    val spacecraftStatus: SpacecraftStatusUI,
     val spacecraftConfig: SpacecraftConfigUI,
 )
 
 @Immutable
 data class SpacecraftStatusUI(
-    val id: Int,
     val name: String
 )
 
 @Immutable
 data class SpacecraftConfigUI(
-    val name: String,
     val type: String,
     val agencyName: String,
     val inUse: Boolean,
@@ -198,8 +178,6 @@ data class SpacecraftConfigUI(
     val history: String,
     val details: String,
     val maidenFlight: String,
-    val height: String,
-    val diameter: String,
     val humanRated: Boolean,
     val crewCapacity: String
 )
