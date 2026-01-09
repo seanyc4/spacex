@@ -2,6 +2,7 @@ package com.seancoyle.orbital.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,10 @@ fun NavigationRoot(
     val backStack = rememberNavBackStack(
         Route.Launches
     )
+
+    // Determine if we should use navigation for detail
+    val useNavigationForDetail = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Expanded
+
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
@@ -39,7 +44,11 @@ fun NavigationRoot(
                             snackbarHostState = snackbarHostState,
                             windowSizeClass = windowSizeClass,
                             onNavigateToLaunch = { launchId, launchesType ->
-                                backStack.add(Route.Launch(launchId, launchesType))
+                                // Only navigate in compact/medium modes
+                                if (useNavigationForDetail) {
+                                    backStack.add(Route.Launch(launchId, launchesType))
+                                }
+                                // In expanded mode, the selection is handled via state in the Route
                             }
                         )
                     }

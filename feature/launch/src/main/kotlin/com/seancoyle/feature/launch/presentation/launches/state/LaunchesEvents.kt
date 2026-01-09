@@ -14,4 +14,18 @@ sealed interface LaunchesEvents {
         val launchStatus: LaunchStatus,
     ) : LaunchesEvents
     data class TabSelectedEvent(val launchesType: LaunchesType) : LaunchesEvents
+
+    /**
+     * Event to select a launch in two-pane layouts.
+     * Updates the detail pane without navigation.
+     */
+    data class SelectLaunchEvent(
+        val launchId: String,
+        val launchType: LaunchesType
+    ) : LaunchesEvents
+
+    /**
+     * Event to clear the current selection in two-pane layouts.
+     */
+    data object ClearSelectionEvent : LaunchesEvents
 }

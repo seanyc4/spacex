@@ -90,6 +90,8 @@ class LaunchesViewModel @Inject constructor(
                 query = event.query
             )
             is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
+            is LaunchesEvents.SelectLaunchEvent -> onSelectLaunch(event.launchId, event.launchType)
+            is LaunchesEvents.ClearSelectionEvent -> clearSelection()
         }
     }
 
@@ -133,13 +135,40 @@ class LaunchesViewModel @Inject constructor(
     }
 
     private fun onTabSelected(launchesType: LaunchesType) {
-        screenState = screenState.copy(launchesType = launchesType)
+        screenState = screenState.copy(
+            launchesType = launchesType,
+            // Clear selection when switching tabs
+            selectedLaunchId = null,
+            selectedLaunchType = null
+        )
         Timber.tag(TAG).d("Updated launchType: $launchesType")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
         screenState = screenState.copy(isFilterDialogVisible = isDisplayed)
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
+    }
+
+    /**
+     * Selects a launch for display in the detail pane (two-pane layouts).
+     */
+    private fun onSelectLaunch(launchId: String, launchType: LaunchesType) {
+        screenState = screenState.copy(
+            selectedLaunchId = launchId,
+            selectedLaunchType = launchType
+        )
+        Timber.tag(TAG).d("Selected launch: id=$launchId, type=$launchType")
+    }
+
+    /**
+     * Clears the current selection (two-pane layouts).
+     */
+    private fun clearSelection() {
+        screenState = screenState.copy(
+            selectedLaunchId = null,
+            selectedLaunchType = null
+        )
+        Timber.tag(TAG).d("Cleared selection")
     }
 
     fun updateScrollPosition(position: Int) {

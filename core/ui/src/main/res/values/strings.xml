@@ -41,4 +41,9 @@
 
     <!-- Actions -->
     <string name="retry">Retry</string>
+
+    <!-- Adaptive Layout -->
+    <string name="select_item_placeholder">Select an item to view details</string>
+    <string name="list_pane_title">List</string>
+    <string name="detail_pane_title">Details</string>
 </resources>

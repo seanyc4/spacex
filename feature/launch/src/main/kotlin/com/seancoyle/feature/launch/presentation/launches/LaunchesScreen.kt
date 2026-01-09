@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,7 +28,7 @@ import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.AdaptiveLaunchesGrid
 import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
@@ -42,6 +42,8 @@ fun LaunchesScreen(
     state: LaunchesState,
     isRefreshing: Boolean,
     windowSizeClass: WindowSizeClass,
+    columnCount: Int = 1,
+    selectedLaunchId: String? = null,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
@@ -55,8 +57,9 @@ fun LaunchesScreen(
                 }
             )
         },
-    ) { innerPadding ->
+    ) { paddingValues ->
         RefreshableContent(
+            modifier = modifier.padding(paddingValues),
             isRefreshing = isRefreshing,
             onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
             content = {
@@ -64,10 +67,12 @@ fun LaunchesScreen(
                     feedState = feedState,
                     state = state,
                     windowSizeClass = windowSizeClass,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
                     onEvent = onEvent,
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick,
-                    modifier = modifier.padding(innerPadding)
+                    modifier = modifier
                 )
             }
         )
@@ -80,6 +85,8 @@ private fun LaunchesContent(
     state: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
     windowSizeClass: WindowSizeClass,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +97,7 @@ private fun LaunchesContent(
         LaunchesType.PAST -> 1
     }
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(
+        SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = AppTheme.colors.background
         ) {
@@ -140,9 +147,11 @@ private fun LaunchesContent(
                 }
 
                 else -> {
-                    Launches(
+                    AdaptiveLaunchesGrid(
                         launches = feedState,
                         state = state,
+                        columnCount = columnCount,
+                        selectedLaunchId = selectedLaunchId,
                         onEvent = onEvent,
                         onUpdateScrollPosition = onUpdateScrollPosition,
                         onClick = onClick,

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
@@ -43,10 +43,9 @@ internal fun LaunchHeroSection(
     val missionNameDesc = stringResource(R.string.mission_name_desc, launch.missionName)
     val launchDateDesc = stringResource(R.string.launch_date_desc, launch.launchDate)
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .semantics { testTag = LaunchesTestTags.LAUNCH_HERO_SECTION }
+    Box(modifier = modifier
+        .fillMaxWidth()
+        .testTag(LaunchesTestTags.LAUNCH_HERO_SECTION )
     ) {
         Box {
             RemoteImage(

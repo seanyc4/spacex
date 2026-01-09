@@ -55,4 +55,12 @@ object LaunchesTestTags {
     // Tab Components
     const val UPCOMING_TAB = "upcoming_tab"
     const val PAST_TAB = "past_tab"
+
+    // Adaptive Layout Components
+    const val TWO_PANE_LAYOUT = "two_pane_layout"
+    const val LIST_PANE = "list_pane"
+    const val DETAIL_PANE = "detail_pane"
+    const val PLACEHOLDER_PANE = "placeholder_pane"
+    const val PANE_DIVIDER = "pane_divider"
+    const val ADAPTIVE_GRID = "adaptive_grid"
 }

@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -24,28 +27,45 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
-import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 
+/**
+ * Adaptive launches grid that supports both single-column and two-column layouts.
+ *
+ * This component automatically adapts to the specified column count, making it suitable
+ * for different screen sizes:
+ * - 1 column: Portrait phones (Compact width)
+ * - 2 columns: Landscape phones (Medium width) and Tablets (Expanded width)
+ */
 @Composable
-internal fun Launches(
+internal fun AdaptiveLaunchesGrid(
     launches: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = state.scrollPosition)
-    ObserveScrollPosition(listState, onUpdateScrollPosition)
+    val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = state.scrollPosition)
 
-    LazyColumn(
-        state = listState,
+    // Observe scroll position
+    LaunchedEffect(gridState) {
+        snapshotFlow { gridState.firstVisibleItemIndex }
+            .collect { position ->
+                onUpdateScrollPosition(position)
+            }
+    }
+
+    LazyVerticalGrid(
+        state = gridState,
+        columns = GridCells.Fixed(columnCount),
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalArrangement = Arrangement.spacedBy(paddingMedium),
         contentPadding = PaddingValues(
             start = paddingMedium,
             end = paddingMedium,
@@ -57,7 +77,8 @@ internal fun Launches(
             .background(AppTheme.colors.background)
             .testTag(LAUNCHES_SCREEN)
     ) {
-        item {
+        // Prepend loading/error state (full width)
+        item(span = { GridItemSpan(maxLineSpan) }) {
             if (launches.loadState.prepend is LoadState.Error) {
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
@@ -66,20 +87,26 @@ internal fun Launches(
                 )
             }
         }
+
+        // Launch cards
         items(
             count = launches.itemCount,
             key = launches.itemKey { it.id }
         ) { index ->
             val launchItem = launches[index]
             if (launchItem != null) {
-                LaunchCard(
+                val isSelected = launchItem.id == selectedLaunchId
+                SelectableLaunchCard(
                     launchItem = launchItem,
                     onClick = onClick,
                     launchesType = state.launchesType,
+                    isSelected = isSelected
                 )
             }
         }
-        item {
+
+        // Append loading/error state (full width)
+        item(span = { GridItemSpan(maxLineSpan) }) {
             val appendLoadState = launches.loadState.mediator?.append ?: launches.loadState.append
             if (appendLoadState is LoadState.Loading) {
                 CircularProgressBar()

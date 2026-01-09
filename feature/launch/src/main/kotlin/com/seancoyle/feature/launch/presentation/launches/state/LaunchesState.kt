@@ -15,4 +15,7 @@ data class LaunchesState(
     val isFilterDialogVisible: Boolean = false,
     val scrollPosition: Int = 0,
     val isRefreshing: Boolean = false,
+    // Selection state for two-pane layouts
+    val selectedLaunchId: String? = null,
+    val selectedLaunchType: LaunchesType? = null
 ) : Parcelable

@@ -17,7 +17,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.StringResource
+import com.seancoyle.core.ui.adaptive.rememberAdaptiveLayoutConfig
 import com.seancoyle.core.ui.components.notification.NotificationHandler
+import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import timber.log.Timber
 
@@ -36,6 +38,7 @@ fun LaunchesRoute(
     val isRefreshing = state.isRefreshing
     val feedState = viewModel.feedState.collectAsLazyPagingItems()
     val notificationState by viewModel.notificationEvents.collectAsStateWithLifecycle(null)
+    val layoutConfig = rememberAdaptiveLayoutConfig(windowSizeClass)
 
     SideEffect {
         Timber.tag(TAG).d("LaunchRoute: feedState: $feedState")
@@ -78,14 +81,34 @@ fun LaunchesRoute(
         }
     }
 
-    LaunchesScreen(
+    // Create LaunchViewModel for detail pane when in expanded mode and item is selected
+    val launchViewModel: LaunchViewModel? = if (
+        layoutConfig.showDetailPane &&
+        state.selectedLaunchId != null &&
+        state.selectedLaunchType != null
+    ) {
+        hiltViewModel<LaunchViewModel, LaunchViewModel.Factory>(
+            key = "detail_${state.selectedLaunchId}",
+            creationCallback = { factory ->
+                factory.create(
+                    launchId = state.selectedLaunchId,
+                    launchType = state.selectedLaunchType
+                )
+            }
+        )
+    } else {
+        null
+    }
+
+    AdaptiveLaunchesContainer(
         feedState = feedState,
         state = state,
         isRefreshing = isRefreshing,
         windowSizeClass = windowSizeClass,
+        launchViewModel = launchViewModel,
         onEvent = viewModel::onEvent,
         onUpdateScrollPosition = viewModel::updateScrollPosition,
-        onClick = onNavigateToLaunch,
+        onNavigateToDetail = onNavigateToLaunch,
         modifier = modifier
     )
 
