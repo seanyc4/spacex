@@ -299,7 +299,7 @@ private fun PhysicalSpecItem(
                     color = AppTheme.colors.secondary,
                     fontSize = AppTextStyles.labelSmall.fontSize
                 )
-                AppText.titleSmall(
+                AppText.bodyLarge(
                     text = value,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.onSurface
