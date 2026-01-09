@@ -10,15 +10,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCHES_SCREEN
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -56,7 +55,7 @@ internal fun Launches(
         modifier = modifier
             .fillMaxSize()
             .background(AppTheme.colors.background)
-            .semantics { testTag = LaunchesTestTags.LAUNCH_LAZY_COLUMN }
+            .testTag(LAUNCHES_SCREEN)
     ) {
         item {
             if (launches.loadState.prepend is LoadState.Error) {

@@ -43,13 +43,14 @@ internal fun LaunchHeroSection(
     val missionNameDesc = stringResource(R.string.mission_name_desc, launch.missionName)
     val launchDateDesc = stringResource(R.string.launch_date_desc, launch.launchDate)
 
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .semantics { testTag = LaunchesTestTags.LAUNCH_HERO_SECTION }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics { testTag = LaunchesTestTags.LAUNCH_HERO_SECTION }
     ) {
         Box {
             RemoteImage(
-                imageUrl = launch.image.imageUrl,
+                imageUrl = launch.imageUrl,
                 contentDescription = missionImageDesc,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -64,9 +65,10 @@ internal fun LaunchHeroSection(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                AppTheme.colors.background.copy(alpha = 0.9f)
+                                AppTheme.colors.surface.copy(alpha = 0.7f),
+                                AppTheme.colors.surface.copy(alpha = 0.9f)
                             ),
-                            startY = 100f
+                            startY = 300f
                         )
                     )
             )

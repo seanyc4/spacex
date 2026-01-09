@@ -56,13 +56,14 @@ class GetLaunchUseCaseTest {
     }
 
     @Test
-    fun `invoke filters out non-YouTube vidUrls`() = runTest {
+    fun `invoke filters out non-YouTube sources and null urls`() = runTest {
         val id = "456"
         val launchType = LaunchesType.UPCOMING
         val youtubeVid = TestData.createVidUrl(source = "youtube")
+        val youtubeVidNullUrl = TestData.createVidUrl(source = "youtube", url = null)
         val vimeoVid = TestData.createVidUrl(source = "vimeo")
         val otherVid = TestData.createVidUrl(source = "other")
-        val launch = TestData.createLaunch(vidUrls = listOf(youtubeVid, vimeoVid, otherVid))
+        val launch = TestData.createLaunch(vidUrls = listOf(youtubeVid, vimeoVid, otherVid, youtubeVidNullUrl))
         coEvery { launchesRepository.getLaunch(id, launchType) } returns LaunchResult.Success(launch)
 
         val result = underTest(id, launchType)

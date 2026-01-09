@@ -4,22 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import com.seancoyle.core.ui.designsystem.text.AppText
-import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
-import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 
 fun extractYouTubeVideoId(url: String): String? {
@@ -47,9 +41,7 @@ fun extractYouTubeVideoId(url: String): String? {
 @Composable
 fun EmbeddedYouTubePlayer(
     videoId: String,
-    videoTitle: String?,
-    modifier: Modifier = Modifier,
-    showTitle: Boolean = true
+    modifier: Modifier = Modifier
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -57,17 +49,6 @@ fun EmbeddedYouTubePlayer(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
     ) {
-        if (showTitle && !videoTitle.isNullOrEmpty()) {
-            AppText.titleMedium(
-                text = videoTitle,
-                fontWeight = FontWeight.SemiBold,
-                color = AppTheme.colors.onSurface,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = paddingSmall)
-            )
-        }
-
         AndroidView(
             factory = { context ->
                 YouTubePlayerView(context).apply {

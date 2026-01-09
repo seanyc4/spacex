@@ -16,7 +16,12 @@ import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
+import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.model.MissionUI
+import com.seancoyle.feature.launch.presentation.launch.model.PadUI
+import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
 import io.mockk.MockKAnnotations
@@ -33,7 +38,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LaunchViewModelTest {
@@ -122,119 +126,65 @@ class LaunchViewModelTest {
     }
 
     private fun createTestLaunchUI(
-        id: String = "test-launch-id",
         missionName: String = "Test Launch"
     ): LaunchUI {
         return LaunchUI(
-            id = id,
             missionName = missionName,
+            status = LaunchStatus.GO,
             launchDate = "15 January 2026",
             launchTime = "10:30",
-            launchDateTime = LocalDateTime.of(2026, 1, 15, 10, 30),
-            status = com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus.GO,
-            windowEnd = null,
-            windowStart = null,
-            windowStartTime = null,
-            windowEndTime = null,
-            windowDuration = null,
-            windowStartDateTime = null,
-            windowEndDateTime = null,
-            image = Image(
-                id = 1,
-                name = "Test Image",
-                imageUrl = "https://example.com/image.jpg",
-                thumbnailUrl = "https://example.com/thumb.jpg",
-                credit = "Test"
-            ),
+            windowStartTime = "09:00",
+            windowEndTime = "12:00",
+            windowDuration = "3 hrs",
+            launchWindowPosition = 0.5f,
+            imageUrl = "https://example.com/image.jpg",
             failReason = null,
-            launchServiceProvider = null,
-            rocket = Rocket(
-                id = 123,
-                configuration = Configuration(
-                    id = 164,
-                    url = null,
+            launchServiceProvider = null, // AgencyUI? (can be null for test)
+            rocket = RocketUI(
+                configuration = ConfigurationUI(
                     name = "Falcon 9",
                     fullName = "Falcon 9 Block 5",
                     variant = "Block 5",
-                    families = emptyList(),
-                    manufacturer = null,
-                    image = null,
-                    wikiUrl = null,
-                    description = "Falcon 9 rocket",
                     alias = "F9",
-                    totalLaunchCount = 300,
-                    successfulLaunches = 290,
-                    failedLaunches = 10,
-                    length = 56.3,
-                    diameter = 3.35,
+                    description = "Falcon 9 rocket",
+                    imageUrl = "https://example.com/rocket.jpg",
+                    totalLaunchCount = "300",
+                    successfulLaunches = "290",
+                    failedLaunches = "10",
+                    length = "56.3",
+                    diameter = "3.35",
+                    launchMass = "456.0",
                     maidenFlight = "2007-05-13",
-                    launchMass = 456.0
+                    manufacturer = null,
+                    families = emptyList(),
+                    wikiUrl = null
                 ),
-                launcherStage = emptyList(),
-                spacecraftStage = emptyList()
+                launcherStages = emptyList(),
+                spacecraftStages = emptyList()
             ),
-            mission = Mission(
-                id = 456,
+            mission = MissionUI(
                 name = "Starlink Mission",
                 description = "A batch of satellites",
                 type = "Communications",
-                orbit = Orbit(id = 8, name = "Low Earth Orbit", abbrev = "LEO"),
-                agencies = emptyList(),
-                infoUrls = emptyList(),
-                vidUrls = emptyList()
+                orbitName = "Low Earth Orbit"
             ),
-            pad = Pad(
-                id = 87,
-                url = null,
-                agencies = emptyList(),
+            pad = PadUI(
                 name = "Space Launch Complex 40",
-                image = Image(
-                    id = 3,
-                    name = "Pad Image",
-                    imageUrl = "https://example.com/pad.jpg",
-                    thumbnailUrl = "https://example.com/pad_thumb.jpg",
-                    credit = "Test"
-                ),
+                locationName = "Cape Canaveral, FL, USA",
+                countryName = "United States",
+                countryCode = "US",
+                imageUrl = "https://example.com/pad.jpg",
                 description = "Cape Canaveral SLC-40",
-                country = Country(
-                    id = 1,
-                    name = "United States",
-                    alpha2Code = "US",
-                    alpha3Code = "USA",
-                    nationalityName = "American"
-                ),
                 latitude = 28.56194122,
                 longitude = -80.57735736,
+                totalLaunchCount = "957",
+                orbitalLaunchAttemptCount = "457",
+                locationTotalLaunchCount = "778",
+                locationTotalLandingCount = "56",
                 mapUrl = null,
-                mapImage = null,
-                wikiUrl = null,
-                infoUrl = null,
-                totalLaunchCount = 957,
-                orbitalLaunchAttemptCount = 457,
-                fastestTurnaround = null,
-                location = Location(
-                    id = 12,
-                    url = null,
-                    name = "Cape Canaveral, FL, USA",
-                    country = Country(
-                        id = 1,
-                        name = "United States",
-                        alpha2Code = "US",
-                        alpha3Code = "USA",
-                        nationalityName = "American"
-                    ),
-                    description = null,
-                    image = null,
-                    mapImage = null,
-                    longitude = -80.57735736,
-                    latitude = 28.56194122,
-                    timezoneName = "America/New_York",
-                    totalLaunchCount = 778,
-                    totalLandingCount = 56
-                )
+                mapImage = null
             ),
             updates = emptyList(),
-            infoUrls = emptyList(),
             vidUrls = emptyList(),
             missionPatches = emptyList()
         )

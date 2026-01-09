@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,15 +36,17 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Launcher
-import com.seancoyle.feature.launch.domain.model.LauncherStage
 import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
+import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LandingStateUI
+import com.seancoyle.feature.launch.presentation.launch.model.LauncherStageUI
+import com.seancoyle.feature.launch.presentation.launch.model.LauncherUI
 
 @Composable
 internal fun LauncherStagesSection(
-    stages: List<LauncherStage>,
+    stages: List<LauncherStageUI>,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {
@@ -58,9 +58,7 @@ internal fun LauncherStagesSection(
             SectionTitle(text = stringResource(R.string.booster_stages))
             AppText.labelMedium(
                 text = "${stages.size} ${
-                    if (stages.size == 1) stringResource(R.string.stage) else stringResource(
-                        R.string.stages
-                    )
+                    if (stages.size == 1) stringResource(R.string.stage) else stringResource(R.string.stages)
                 }",
                 color = AppTheme.colors.primary,
                 fontWeight = FontWeight.SemiBold
@@ -81,7 +79,7 @@ internal fun LauncherStagesSection(
 
 @Composable
 internal fun LauncherStageItem(
-    stage: LauncherStage,
+    stage: LauncherStageUI,
     index: Int,
     modifier: Modifier = Modifier
 ) {
@@ -95,10 +93,10 @@ internal fun LauncherStageItem(
             verticalAlignment = Alignment.Top
         ) {
             RemoteImage(
-                imageUrl = stage.launcher?.image?.thumbnailUrl!!,
+                imageUrl = stage.launcherUI.image,
                 contentDescription = stringResource(
                     R.string.launcher_desc,
-                    stage.launcher.serialNumber.orEmpty()
+                    stage.launcherUI.serialNumber
                 ),
                 modifier = Modifier
                     .size(80.dp)
@@ -111,74 +109,45 @@ internal fun LauncherStageItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppText.titleMedium(
-                    text = stringResource(
-                        R.string.stage_number,
-                        index,
-                        stage.type ?: stringResource(R.string.core)
-                    ),
+                    text = stringResource(R.string.stage_number, index, stage.type),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary
                 )
 
-                stage.launcher.serialNumber?.let { serial ->
-                    AppText.bodyMedium(
-                        text = stringResource(R.string.serial, serial),
-                        color = AppTheme.colors.secondary,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-
-                stage.reused?.let { isReused ->
-                    Spacer(modifier = Modifier.height(paddingSmall))
-                    Chip(
-                        text = if (isReused) stringResource(R.string.reused) else stringResource(R.string.new_booster),
-                        contentColor = if (isReused) AppColors.success else AppTheme.colors.primary,
-                        containerColor = if (isReused) AppColors.success else AppTheme.colors.primary
-                    )
-                }
-            }
-        }
-
-        stage.launcher?.let { launcher ->
-            LauncherStats(launcher = launcher)
-        }
-
-        stage.landing?.let { landing ->
-            LandingInfo(
-                attempt = landing.attempt,
-                success = landing.success,
-                description = landing.description,
-                locationName = landing.location?.name,
-                typeName = landing.type?.name
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            stage.launcherFlightNumber?.let {
-                InfoChip(
-                    label = stringResource(R.string.flight_number),
-                    value = it.toString(),
-                    icon = Icons.Default.Info
+                AppText.bodyMedium(
+                    text = stringResource(R.string.serial, stage.serialNumber),
+                    color = AppTheme.colors.secondary,
+                    fontWeight = FontWeight.Medium
                 )
-            }
 
-            stage.launcher?.flights?.let {
-                InfoChip(
-                    label = stringResource(R.string.total_flights),
-                    value = it.toString(),
-                    icon = Icons.Default.Star
+                AppText.bodyMedium(
+                    text = stringResource(R.string.flight_number, stage.flightNumber),
+                    color = AppTheme.colors.secondary
+                )
+
+                Chip(
+                    text = stage.reused,
+                    contentColor = if (stage.reused == "Reused") AppColors.success else AppTheme.colors.primary,
+                    containerColor = if (stage.reused == "Reused") AppColors.success else AppTheme.colors.primary
                 )
             }
         }
+
+        LauncherStats(launcher = stage.launcherUI)
+
+        LandingInfo(
+            attempt = stage.landing.attempt,
+            success = stage.landing.success,
+            description = stage.landing.description,
+            locationName = stage.landing.location,
+            typeName = stage.landing.type
+        )
     }
 }
 
 @Composable
 internal fun LauncherStats(
-    launcher: Launcher,
+    launcher: LauncherUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
@@ -192,8 +161,8 @@ internal fun LauncherStats(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            launcher.successfulLandings?.let { successful ->
-                launcher.attemptedLandings?.let { attempted ->
+            launcher.successfulLandings.let { successful ->
+                launcher.attemptedLandings.let { attempted ->
                     MiniStatItem(
                         value = "$successful/$attempted",
                         label = stringResource(R.string.landings),
@@ -203,23 +172,22 @@ internal fun LauncherStats(
                 }
             }
 
-            launcher.flightProven?.let { proven ->
-                MiniStatItem(
-                    value = if (proven) stringResource(R.string.yes) else stringResource(R.string.no),
-                    label = stringResource(R.string.flight_proven),
-                    icon = Icons.Default.Star,
-                    iconTint = if (proven) AppColors.warning else AppTheme.colors.secondary
-                )
-            }
-        }
-
-        launcher.status?.name?.let { status ->
-            AppText.bodySmall(
-                text = stringResource(R.string.status_label, status),
-                color = AppTheme.colors.secondary,
-                fontWeight = FontWeight.Medium
+            MiniStatItem(
+                value = if (launcher.flightProven) stringResource(R.string.yes) else stringResource(
+                    R.string.no
+                ),
+                label = stringResource(R.string.flight_proven),
+                icon = Icons.Default.Star,
+                iconTint = if (launcher.flightProven) AppColors.warning else AppTheme.colors.secondary
             )
         }
+
+        AppText.bodySmall(
+            text = stringResource(R.string.status_label, launcher.status),
+            color = AppTheme.colors.secondary,
+            fontWeight = FontWeight.Medium
+        )
+
     }
 }
 
@@ -227,9 +195,9 @@ internal fun LauncherStats(
 internal fun LandingInfo(
     attempt: Boolean?,
     success: Boolean?,
-    description: String?,
-    locationName: String?,
-    typeName: String?,
+    description: String,
+    locationName: String,
+    typeName: String,
     modifier: Modifier = Modifier
 ) {
     val (containerColor, iconVector, iconTint, labelResId) = resolveLandingState(attempt, success)
@@ -263,27 +231,21 @@ internal fun LandingInfo(
                     color = AppTheme.colors.primary
                 )
 
-                locationName?.let {
-                    AppText.bodySmall(
-                        text = stringResource(R.string.location_label, it),
-                        color = AppTheme.colors.secondary
-                    )
-                }
+                AppText.bodySmall(
+                    text = stringResource(R.string.location_label, locationName),
+                    color = AppTheme.colors.secondary
+                )
 
-                typeName?.let {
-                    AppText.bodySmall(
-                        text = stringResource(R.string.type_label, it),
-                        color = AppTheme.colors.secondary
-                    )
-                }
+                AppText.bodySmall(
+                    text = stringResource(R.string.type_label, typeName),
+                    color = AppTheme.colors.secondary
+                )
 
-                description?.let {
-                    AppText.bodySmall(
-                        text = it,
-                        color = AppTheme.colors.secondary,
-                        modifier = Modifier.padding(top = paddingSmall)
-                    )
-                }
+                AppText.bodySmall(
+                    text = description,
+                    color = AppTheme.colors.secondary,
+                    modifier = Modifier.padding(top = paddingSmall)
+                )
             }
         }
     }
@@ -318,6 +280,16 @@ private fun resolveLandingState(attempt: Boolean?, success: Boolean?): LandingSt
             iconVector = Icons.Default.Info,
             iconTint = AppTheme.colors.secondary,
             labelResId = R.string.no_landing_attempt
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun LauncherStagesSectionPreview() {
+    AppTheme {
+        LauncherStagesSection(
+            stages = previewData().rocket.launcherStages
         )
     }
 }

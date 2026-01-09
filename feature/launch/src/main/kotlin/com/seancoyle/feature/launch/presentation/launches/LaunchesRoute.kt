@@ -78,7 +78,7 @@ fun LaunchesRoute(
         }
     }
 
-    LaunchesRoute(
+    LaunchesScreen(
         feedState = feedState,
         state = state,
         isRefreshing = isRefreshing,

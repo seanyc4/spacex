@@ -22,7 +22,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,34 +49,28 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.presentation.launch.model.PadUI
 
 @Composable
 internal fun LaunchSiteSection(
-    pad: Pad,
+    pad: PadUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {
         SectionTitle(text = stringResource(R.string.location))
         LaunchSiteContent(pad = pad)
 
-        val hasStats = pad.totalLaunchCount != null ||
-                pad.orbitalLaunchAttemptCount != null ||
-                pad.location?.totalLaunchCount != null
-
-        if (hasStats) {
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = paddingMedium),
-                color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
-            )
-            LaunchStatisticsContent(pad = pad)
-        }
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = paddingMedium),
+            color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
+        )
+        LaunchStatisticsContent(pad = pad)
     }
 }
 
 @Composable
 private fun LaunchSiteContent(
-    pad: Pad,
+    pad: PadUI,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -94,7 +87,7 @@ private fun LaunchSiteContent(
                     fontWeight = FontWeight.Bold
                 )
                 AppText.titleMedium(
-                    text = pad.name.orEmpty(),
+                    text = pad.name,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.onSurface,
                     modifier = Modifier.padding(top = paddingSmall, end = paddingMedium)
@@ -124,49 +117,43 @@ private fun LaunchSiteContent(
                 .padding(bottom = paddingMedium),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            pad.location?.name?.let { location ->
+            if (!pad.locationName.isNullOrEmpty()) {
                 AppText.bodyMedium(
-                    text = location,
+                    text = pad.locationName,
                     color = AppTheme.colors.secondary
                 )
             }
 
-            pad.location?.country?.let { country ->
-                val countryFlag = country.alpha2Code?.toCountryFlag() ?: ""
+            if (!pad.countryName.isNullOrEmpty() && !pad.countryCode.isNullOrEmpty()) {
+                val countryFlag = pad.countryCode.toCountryFlag()
                 val countryText = if (countryFlag.isNotEmpty()) {
-                    "$countryFlag ${country.name ?: ""}"
+                    "$countryFlag ${pad.countryName}"
                 } else {
-                    country.name ?: ""
+                    pad.countryName
                 }
 
-                if (countryText.isNotBlank()) {
-                    AppText.bodySmall(
-                        text = countryText,
-                        color = AppTheme.colors.secondary
-                    )
-                }
-            }
-
-            pad.description?.let { desc ->
                 AppText.bodySmall(
-                    text = desc,
+                    text = countryText,
                     color = AppTheme.colors.secondary
                 )
             }
+
+            AppText.bodySmall(
+                text = pad.description,
+                color = AppTheme.colors.secondary
+            )
         }
 
-        val mapImageUrl = remember(pad) { pad.mapImage ?: pad.location?.mapImage }
-        val mapUrl = remember(pad) { pad.mapUrl }
-        if (mapImageUrl != null) {
+        if (pad.mapImage != null) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
                     .then(
-                        if (mapUrl != null) {
+                        if (pad.mapUrl != null) {
                             Modifier.clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, mapUrl.toUri())
+                                val intent = Intent(Intent.ACTION_VIEW, pad.mapUrl.toUri())
                                 context.startActivity(intent)
                             }
                         } else {
@@ -175,14 +162,14 @@ private fun LaunchSiteContent(
                     )
             ) {
                 RemoteImage(
-                    imageUrl = mapImageUrl,
-                    contentDescription = stringResource(R.string.map_of_desc, pad.name.orEmpty()),
+                    imageUrl = pad.imageUrl,
+                    contentDescription = stringResource(R.string.map_of_desc, pad.name),
                     modifier = Modifier
                         .fillMaxSize()
                         .semantics { testTag = LaunchesTestTags.LAUNCH_SITE_MAP },
                 )
 
-                if (mapUrl != null) {
+                if (pad.mapUrl != null) {
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -253,7 +240,7 @@ private fun LaunchSiteContent(
 
 @Composable
 private fun LaunchStatisticsContent(
-    pad: Pad,
+    pad: PadUI,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -261,7 +248,9 @@ private fun LaunchStatisticsContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = paddingSmall),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = paddingSmall),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -285,14 +274,13 @@ private fun LaunchStatisticsContent(
         ) {
             PadStatChip(
                 label = stringResource(R.string.pad_launches),
-                value = pad.totalLaunchCount?.toString() ?: stringResource(R.string.not_available),
+                value = pad.totalLaunchCount,
                 modifier = Modifier.weight(1f)
             )
 
             PadStatChip(
                 label = stringResource(R.string.orbital_attempts),
-                value = pad.orbitalLaunchAttemptCount?.toString()
-                    ?: stringResource(R.string.not_available),
+                value = pad.orbitalLaunchAttemptCount,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -303,15 +291,13 @@ private fun LaunchStatisticsContent(
         ) {
             PadStatChip(
                 label = stringResource(R.string.location_launches),
-                value = pad.location?.totalLaunchCount?.toString()
-                    ?: stringResource(R.string.not_available),
+                value = pad.locationTotalLaunchCount,
                 modifier = Modifier.weight(1f)
             )
 
             PadStatChip(
                 label = stringResource(R.string.location_landings),
-                value = pad.location?.totalLandingCount?.toString()
-                    ?: stringResource(R.string.not_available),
+                value = pad.locationTotalLandingCount,
                 modifier = Modifier.weight(1f)
             )
         }

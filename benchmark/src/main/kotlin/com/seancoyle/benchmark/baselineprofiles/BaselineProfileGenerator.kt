@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
-import com.seancoyle.benchmark.actions.deleteAppData
 import com.seancoyle.benchmark.benchmarks.launch.launchJourney
 import com.seancoyle.benchmark.benchmarks.launches.launchesJourney
 import com.seancoyle.benchmark.benchmarks.launches.waitUntilLaunchesIsVisibleToUser
@@ -32,7 +31,6 @@ class BaselineProfileGenerator {
         includeInStartupProfile = true
     ) {
         uiAutomator {
-            deleteAppData()
             startApp(ORBITAL)
             waitUntilLaunchesIsVisibleToUser()
         }
@@ -43,7 +41,6 @@ class BaselineProfileGenerator {
         packageName = ORBITAL,
     ) {
         uiAutomator {
-            deleteAppData()
             startApp(ORBITAL)
             launchesJourney()
             launchJourney()

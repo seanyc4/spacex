@@ -55,7 +55,7 @@ class LaunchesScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_LAZY_COLUMN)
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCHES_SCREEN)
             .assertIsDisplayed()
     }
 
@@ -191,15 +191,13 @@ class LaunchesScreenTest {
         }
 
         // LazyColumn should still exist even when empty
-        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_LAZY_COLUMN)
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCHES_SCREEN)
             .assertIsDisplayed()
 
         // But no cards should be present
         composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
             .assertDoesNotExist()
     }
-
-    // ==================== STATE-DRIVEN UI TESTS ====================
 
     @Test
     fun launchesList_respectsScrollPositionFromState() {

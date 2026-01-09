@@ -103,6 +103,7 @@ android {
 }
 
 dependencies {
+    ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0") // temp fix until dagger support kotlin 2.3.0
     baselineProfile(projects.benchmark)
     implementation(projects.core.common)
     implementation(projects.core.data)
@@ -119,11 +120,8 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.compose.runtime)
     implementation(libs.coreKtx)
-    implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.savedstate)
-    ksp(libs.lifecycle.compiler)
     implementation(libs.profileInstaller)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)

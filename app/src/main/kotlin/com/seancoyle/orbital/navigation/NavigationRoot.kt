@@ -10,7 +10,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.seancoyle.feature.launch.presentation.launch.LaunchScreen
+import com.seancoyle.feature.launch.presentation.launch.LaunchRoute
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
 import com.seancoyle.feature.launch.presentation.launches.LaunchesRoute
 import com.seancoyle.navigation.Route
@@ -54,7 +54,8 @@ fun NavigationRoot(
                                 )
                             }
                         )
-                        LaunchScreen(viewModel = viewModel)
+
+                        LaunchRoute(viewModel = viewModel)
                     }
                 }
 

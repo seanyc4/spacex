@@ -24,9 +24,11 @@ internal class GetLaunchUseCase @Inject constructor(
         }
     }
 
+    // Filter the vidUrls to only include YouTube videos with a non-null URL
     private fun filterYouTubeVideos(launch: Launch): Launch {
         val filteredVidUrls = launch.vidUrls.filter {
             it.source?.contains("youtube", ignoreCase = true) == true
+                    && it.url !=null
         }
         val filteredLaunch = launch.copy(vidUrls = filteredVidUrls)
         return filteredLaunch

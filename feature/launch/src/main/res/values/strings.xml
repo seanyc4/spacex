@@ -84,6 +84,7 @@
     <string name="active">Active</string>
     <string name="flight_number">Flight #</string>
     <string name="total_flights">Total Flights</string>
+    <string name="description_not_available">Description not available.</string>
 
     <!-- Landing States -->
     <string name="landing_successful">Landing Successful</string>
@@ -113,6 +114,8 @@
 
     <!-- Updates Section -->
     <string name="launch_updates">Launch Updates</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
 
     <!-- Error State -->
     <string name="unable_to_load">Unable to load</string>
