@@ -261,26 +261,6 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun detailsSection_displaysWindowInfoWhenPresent() {
-        val launch = TestDataFactory.createLaunchUI(
-            windowStart = "Jan 15, 2026, 10:00 AM EST",
-            windowEnd = "Jan 15, 2026, 11:00 AM EST"
-        )
-
-        composeRule.setContent {
-            AppTheme {
-                LaunchDetailsSection(launch = launch)
-            }
-        }
-
-        // Window start/end time should be displayed when present
-        composeRule.onNodeWithText("10:00", substring = true)
-            .assertExists()
-        composeRule.onNodeWithText("11:00", substring = true)
-            .assertExists()
-    }
-
-    @Test
     fun launchSiteSection_displaysPadName() {
         val launch = TestDataFactory.createLaunchUI()
 

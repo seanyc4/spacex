@@ -1,10 +1,8 @@
 package com.seancoyle.core.ui.components.image
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -14,7 +12,6 @@ import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.seancoyle.core.ui.R
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 
 @Composable
 fun RemoteImage(
@@ -43,8 +40,7 @@ fun RemoteImage(
         contentDescription = contentDescription,
         error = painterResource(failureImage),
         fallback = painterResource(failureImage),
-        modifier = modifier
-            .clip(RoundedCornerShape(cornerRadiusLarge)),
+        modifier = modifier,
         contentScale = contentScale,
         alignment = alignment,
         alpha = alpha,

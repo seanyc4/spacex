@@ -25,11 +25,11 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Agency
+import com.seancoyle.feature.launch.presentation.launch.model.AgencyUI
 
 @Composable
 internal fun LaunchProviderSection(
-    agency: Agency,
+    agency: AgencyUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {

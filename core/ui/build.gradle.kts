@@ -18,7 +18,6 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.domain)
-    implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.youtubePlayer)
     implementation(libs.coil.compose)

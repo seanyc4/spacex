@@ -21,11 +21,11 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpac
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.MissionPatch
+import com.seancoyle.feature.launch.presentation.launch.model.MissionPatchUI
 
 @Composable
 internal fun MissionPatchesSection(
-    patches: List<MissionPatch>,
+    patches: List<MissionPatchUI>,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {
@@ -44,7 +44,7 @@ internal fun MissionPatchesSection(
 
 @Composable
 private fun MissionPatchItem(
-    patch: MissionPatch,
+    patch: MissionPatchUI,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -53,14 +53,14 @@ private fun MissionPatchItem(
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
     ) {
         RemoteImage(
-            imageUrl = patch.imageUrl!!,
-            contentDescription = stringResource(R.string.mission_patch, patch.name.orEmpty()),
+            imageUrl = patch.imageUrl,
+            contentDescription = stringResource(R.string.mission_patch, patch.name),
             modifier = Modifier
                 .size(160.dp)
                 .clip(CircleShape)
         )
         AppText.labelSmall(
-            text = patch.name ?: "Patch",
+            text = patch.name,
             color = AppTheme.colors.onSurfaceVariant,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis

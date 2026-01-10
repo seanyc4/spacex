@@ -1797,7 +1797,7 @@ internal object TestData {
         title: String = "Starlink Mission",
         description: String = "Live coverage of the Starlink launch.",
         featureImage: String = "https://example.com/feature.jpg",
-        url: String = "https://youtube.com/watch?v=123",
+        url: String? = "https://youtube.com/watch?v=123",
         startTime: String = "2025-12-31T12:00:00Z",
         endTime: String = "2025-12-31T13:00:00Z",
         live: Boolean = false

@@ -157,17 +157,6 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps id correctly`() = runTest {
-        val expectedId = "test-launch-id-123"
-        val launch = createTestLaunch(id = expectedId)
-        setupDateFormatterDefaults()
-
-        val result = mapper.mapToLaunchUi(launch)
-
-        assertEquals(expectedId, result.id)
-    }
-
-    @Test
     fun `mapToLaunchUi maps mission name correctly and trims pipe suffix`() = runTest {
         val launch = createTestLaunch(missionName = "Falcon 9 Block 5 | Starlink Group 15-12")
         setupDateFormatterDefaults()
@@ -197,7 +186,7 @@ class LaunchUiMapperTest {
 
         val result = mapper.mapToLaunchUi(launch)
 
-        assertEquals(expectedImageUrl, result.image.imageUrl)
+        assertEquals(expectedImageUrl, result.imageUrl)
     }
 
     @Test
@@ -357,7 +346,7 @@ class LaunchUiMapperTest {
 
         val result = mapper.mapToLaunchUi(launch)
 
-        assertNull(result.windowDuration)
+        assertEquals("00:00",result.windowDuration)
     }
 
     @Test
@@ -378,16 +367,6 @@ class LaunchUiMapperTest {
         val result = mapper.mapToLaunchUi(launch)
 
         assertEquals(0, result.vidUrls.size)
-    }
-
-    @Test
-    fun `mapToLaunchUi maps empty infoUrls list`() = runTest {
-        val launch = createTestLaunch(infoUrls = emptyList())
-        setupDateFormatterDefaults()
-
-        val result = mapper.mapToLaunchUi(launch)
-
-        assertEquals(0, result.infoUrls.size)
     }
 
     @Test

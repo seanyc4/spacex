@@ -1,7 +1,5 @@
 apply plugin: libs.plugins.ksp.get().pluginId
 
 dependencies {
-    implementation(libs.lifecycle.viewmodelKtx)
     implementation(libs.lifecycle.savedstate)
-    ksp(libs.lifecycle.compiler)
 }

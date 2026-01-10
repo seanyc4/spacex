@@ -9,33 +9,32 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import timber.log.Timber
 import androidx.paging.map
-import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import com.seancoyle.core.common.coroutines.stateIn
+import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.ui.NotificationState
 import com.seancoyle.core.ui.NotificationType
 import com.seancoyle.core.ui.StringResource
 import com.seancoyle.core.ui.UiComponentType
-import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.LaunchUiMapper
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 private const val TAG = "LaunchViewModel"
 
@@ -65,7 +64,7 @@ class LaunchesViewModel @Inject constructor(
             status = if (status == LaunchStatus.ALL) null else status,
             launchesType = type
         )
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, LaunchesQuery())
+    }.stateIn(viewModelScope, LaunchesQuery())
 
     val feedState: Flow<PagingData<LaunchesUi>> = launchesQueryState
         .flatMapLatest { launchQuery ->

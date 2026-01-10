@@ -22,46 +22,40 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Family
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
+import com.seancoyle.feature.launch.presentation.launch.model.RocketFamilyUI
 
 @Composable
 internal fun RocketFamilyCard(
-    family: Family,
+    family: RocketFamilyUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
-        family.name?.let { name ->
-            AppText.titleSmall(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.primary
-            )
-        }
+        AppText.titleSmall(
+            text = family.name,
+            fontWeight = FontWeight.Bold,
+            color = AppTheme.colors.primary
+        )
 
-        family.description?.let { desc ->
+        AppText.bodySmall(
+            text = family.description,
+            color = AppTheme.colors.secondary
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = AppTheme.colors.onSurface,
+                modifier = Modifier.size(16.dp)
+            )
             AppText.bodySmall(
-                text = desc,
+                text = stringResource(R.string.maiden_flight_date, family.maidenFlight),
                 color = AppTheme.colors.secondary
             )
-        }
-
-        family.maidenFlight?.let { maidenFlight ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null,
-                    tint = AppTheme.colors.onSurface,
-                    modifier = Modifier.size(16.dp)
-                )
-                AppText.bodySmall(
-                    text = stringResource(R.string.maiden_flight_date, maidenFlight),
-                    color = AppTheme.colors.secondary
-                )
-            }
         }
 
         Row(
@@ -70,31 +64,25 @@ internal fun RocketFamilyCard(
                 .padding(top = paddingMedium),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            family.totalLaunchCount?.let {
-                MiniStatItem(
-                    value = it.toString(),
-                    label = stringResource(R.string.launches),
-                    icon = Icons.Default.Star
-                )
-            }
+            MiniStatItem(
+                value = family.totalLaunches,
+                label = stringResource(R.string.launches),
+                icon = Icons.Default.Star
+            )
 
-            family.successfulLaunches?.let {
-                MiniStatItem(
-                    value = it.toString(),
-                    label = stringResource(R.string.successful),
-                    icon = Icons.Default.CheckCircle,
-                    iconTint = AppColors.success
-                )
-            }
+            MiniStatItem(
+                value = family.successfulLaunches,
+                label = stringResource(R.string.successful),
+                icon = Icons.Default.CheckCircle,
+                iconTint = AppColors.success
+            )
 
-            family.active?.let { isActive ->
-                MiniStatItem(
-                    value = if (isActive) stringResource(R.string.yes) else stringResource(R.string.no),
-                    label = stringResource(R.string.active),
-                    icon = Icons.Default.CheckCircle,
-                    iconTint = if (isActive) AppColors.success else AppTheme.colors.secondary
-                )
-            }
+            MiniStatItem(
+                value = family.active,
+                label = stringResource(R.string.active),
+                icon = Icons.Default.CheckCircle,
+                iconTint = if (family.active == "Active") AppColors.success else AppTheme.colors.secondary
+            )
         }
     }
 }
@@ -104,24 +92,7 @@ internal fun RocketFamilyCard(
 private fun RocketFamilyCardPreview() {
     AppTheme {
         RocketFamilyCard(
-            family = Family(
-                id = 1,
-                name = "Falcon 9",
-                manufacturer = listOf(previewData().launchServiceProvider!!),
-                description = "A two-stage rocket designed and manufactured by SpaceX",
-                active = true,
-                maidenFlight = "June 4, 2010",
-                totalLaunchCount = 200,
-                consecutiveSuccessfulLaunches = 150,
-                successfulLaunches = 195,
-                failedLaunches = 2,
-                pendingLaunches = 5,
-                attemptedLandings = 180,
-                successfulLandings = 175,
-                failedLandings = 5,
-                consecutiveSuccessfulLandings = 100
-            ),
-            modifier = Modifier.padding(16.dp)
+            family = previewData().rocket.configuration.families.first()
         )
     }
 }

@@ -27,13 +27,14 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.SpacecraftStage
 import com.seancoyle.feature.launch.presentation.launch.components.DetailRow
 import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
+import com.seancoyle.feature.launch.presentation.launch.components.previewData
+import com.seancoyle.feature.launch.presentation.launch.model.SpacecraftStageUI
 
 @Composable
 internal fun SpacecraftStagesSection(
-    stages: List<SpacecraftStage>,
+    stages: List<SpacecraftStageUI>,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {
@@ -68,87 +69,74 @@ internal fun SpacecraftStagesSection(
 
 @Composable
 private fun SpacecraftStageItem(
-    stage: SpacecraftStage,
+    stage: SpacecraftStageUI,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
     ) {
-        stage.spacecraft?.let { spacecraft ->
-            AppText.titleMedium(
-                text = spacecraft.name ?: stringResource(R.string.spacecraft),
-                fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.primary
+        AppText.titleMedium(
+            text = stage.spacecraft.name,
+            fontWeight = FontWeight.Bold,
+            color = AppTheme.colors.primary
+        )
+
+        AppText.bodyMedium(
+            text = stringResource(R.string.serial, stage.spacecraft.serialNumber),
+            color = AppTheme.colors.secondary
+        )
+
+        Spacer(modifier = Modifier.height(paddingMedium))
+
+        DetailRow(
+            label = stringResource(R.string.type),
+            value = stage.spacecraft.spacecraftConfig.type,
+            icon = Icons.Default.Build
+        )
+
+        Spacer(modifier = Modifier.height(paddingMedium))
+        AppText.bodyMedium(
+            text = stage.spacecraft.spacecraftConfig.capability,
+            color = AppTheme.colors.secondary
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = paddingLarge),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            MiniStatItem(
+                value = stage.spacecraft.spacecraftConfig.crewCapacity,
+                label = stringResource(R.string.crew_capacity),
+                icon = Icons.Default.Person
             )
 
-            spacecraft.serialNumber?.let {
-                AppText.bodyMedium(
-                    text = stringResource(R.string.serial, it),
-                    color = AppTheme.colors.secondary
-                )
-            }
-
-            spacecraft.spacecraftConfig?.let { config ->
-                Spacer(modifier = Modifier.height(paddingMedium))
-
-                config.type?.name?.let { type ->
-                    DetailRow(
-                        label = stringResource(R.string.type),
-                        value = type,
-                        icon = Icons.Default.Build
-                    )
-                }
-
-                config.capability?.let { capability ->
-                    Spacer(modifier = Modifier.height(paddingMedium))
-                    AppText.bodyMedium(
-                        text = capability,
-                        color = AppTheme.colors.secondary
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = paddingLarge),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    config.crewCapacity?.let {
-                        MiniStatItem(
-                            value = it.toString(),
-                            label = stringResource(R.string.crew_capacity),
-                            icon = Icons.Default.Person
-                        )
-                    }
-
-                    config.humanRated?.let { rated ->
-                        MiniStatItem(
-                            value = if (rated) stringResource(R.string.yes) else stringResource(R.string.no),
-                            label = stringResource(R.string.human_rated),
-                            icon = Icons.Default.CheckCircle,
-                            iconTint = if (rated) AppColors.success else AppTheme.colors.secondary
-                        )
-                    }
-                }
-            }
-        }
-
-        stage.destination?.let {
-            Spacer(modifier = Modifier.height(paddingMedium))
-            DetailRow(
-                label = stringResource(R.string.destination),
-                value = it,
-                icon = Icons.Default.Place
+            val rated = stage.spacecraft.spacecraftConfig.humanRated
+            MiniStatItem(
+                value = if (rated) stringResource(R.string.yes) else stringResource(R.string.no),
+                label = stringResource(R.string.human_rated),
+                icon = Icons.Default.CheckCircle,
+                iconTint = if (rated) AppColors.success else AppTheme.colors.secondary
             )
         }
     }
+
+    Spacer(modifier = Modifier.height(paddingMedium))
+    DetailRow(
+        label = stringResource(R.string.destination),
+        value = stage.destination,
+        icon = Icons.Default.Place
+    )
 }
 
 @PreviewDarkLightMode
 @Composable
 private fun SpacecraftStagesSectionPreview() {
     AppTheme {
-        // Preview would require mock data
+        SpacecraftStagesSection(
+            stages = previewData().rocket.spacecraftStages
+        )
     }
 }

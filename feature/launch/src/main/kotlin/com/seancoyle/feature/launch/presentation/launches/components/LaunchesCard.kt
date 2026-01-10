@@ -96,11 +96,12 @@ internal fun LaunchCard(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                AppTheme.colors.surface.copy(alpha = 0.9f),
-                                AppTheme.colors.surface.copy(alpha = 1f)
+                                Color.Transparent,
+                                AppTheme.colors.surface.copy(alpha = 0.8f),
+                                AppTheme.colors.surface.copy(alpha = 0.7f)
                             ),
-                            startY = 0f,
-                            endY = 1100f
+                            startY = 200f,
+                            endY = Float.POSITIVE_INFINITY
                         )
                     )
             )

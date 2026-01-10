@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.presentation.launch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seancoyle.core.common.coroutines.stateIn
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
@@ -15,10 +14,12 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel(assistedFactory = LaunchViewModel.Factory::class)
@@ -29,10 +30,10 @@ class LaunchViewModel @AssistedInject constructor(
     @Assisted private val launchType: LaunchesType
 ) : ViewModel() {
 
-    private val retryEvent = MutableSharedFlow<Unit>(replay = 1)
+    private val refreshEvent = MutableSharedFlow<Unit>(replay = 1)
 
     val launchState: StateFlow<LaunchUiState> =
-        retryEvent
+        refreshEvent
             .onStart { emit(Unit) }
             .flatMapLatest {
                 flow {
@@ -52,14 +53,17 @@ class LaunchViewModel @AssistedInject constructor(
                 }
             }.stateIn(
                 scope = viewModelScope,
+                started = SharingStarted.Lazily,
                 initialValue = LaunchUiState.Loading
             )
 
     fun onEvent(event: LaunchEvent) {
         when (event) {
             is LaunchEvent.RetryFetch -> {
-                retryEvent.tryEmit(Unit)
+                refreshEvent.tryEmit(Unit)
             }
+            is LaunchEvent.PullToRefreshEvent ->
+                refreshEvent.tryEmit(Unit)
         }
     }
 

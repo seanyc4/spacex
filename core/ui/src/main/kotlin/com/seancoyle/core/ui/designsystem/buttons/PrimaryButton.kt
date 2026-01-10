@@ -8,9 +8,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXXSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -32,12 +33,13 @@ fun ButtonPrimary(
             contentColor = AppTheme.colors.onPrimary
         ),
         enabled = enabled,
-        shape = RoundedCornerShape(cornerRadiusXXSmall),
+        shape = RoundedCornerShape(cornerRadiusXSmall),
         onClick = onClick
     ) {
-        AppText.bodyMedium(
+        AppText.bodyLarge(
             text,
             color = AppTheme.colors.onPrimary.copy(alpha = if (enabled) 1f else disabledAlpha.toFloat()),
+            fontWeight = FontWeight.ExtraBold,
             modifier = Modifier
                 .padding(
                     horizontal = paddingMedium,

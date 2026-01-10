@@ -55,7 +55,6 @@ baselineProfile {
 dependencies {
     implementation(projects.core.test)
     implementation(libs.junit)
-    implementation(libs.espresso.core)
     implementation(libs.uiautomator)
     implementation(libs.androidx.benchmark.macro.junit4)
 }

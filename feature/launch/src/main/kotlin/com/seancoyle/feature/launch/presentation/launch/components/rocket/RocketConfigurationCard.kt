@@ -54,14 +54,14 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacin
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.presentation.launch.components.DetailRow
 import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
+import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
 
 @Composable
 internal fun RocketConfigurationCard(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Primary(modifier = modifier) {
@@ -71,19 +71,22 @@ internal fun RocketConfigurationCard(
             modifier = Modifier.padding(vertical = paddingLarge),
             color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
         )
+
         LaunchStatistics(config = config)
         HorizontalDivider(
             modifier = Modifier.padding(vertical = paddingLarge),
             color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
         )
+
         PhysicalSpecifications(config = config)
         HorizontalDivider(
             modifier = Modifier.padding(vertical = paddingLarge),
             color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
         )
+
         ManufacturerAndHistory(config = config)
 
-        if (!config.families.isNullOrEmpty()) {
+        if (config.families.isNotEmpty()) {
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = paddingLarge),
                 color = AppTheme.colors.primary.copy(alpha = 0.1f)
@@ -105,7 +108,7 @@ internal fun RocketConfigurationCard(
 
 @Composable
 private fun RocketHeader(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
@@ -120,27 +123,22 @@ private fun RocketHeader(
                     fontWeight = FontWeight.Bold
                 )
                 AppText.titleMedium(
-                    text = config.fullName ?: config.name
-                    ?: stringResource(R.string.unknown_rocket),
+                    text = config.fullName,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.onSurface,
                     modifier = Modifier.padding(top = paddingSmall)
                 )
-                if (!config.variant.isNullOrEmpty()) {
                     AppText.bodyLarge(
                         text = config.variant,
                         color = AppTheme.colors.secondary,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(top = paddingSmall)
                     )
-                }
 
-                if (!config.alias.isNullOrEmpty()) {
                     AppText.bodyMedium(
                         text = stringResource(R.string.also_known_as, config.alias),
                         color = AppTheme.colors.secondary
                     )
-                }
             }
             Box(
                 modifier = Modifier
@@ -160,39 +158,32 @@ private fun RocketHeader(
             }
         }
 
-        config.image?.imageUrl?.let { imageUrl ->
-            RemoteImage(
-                imageUrl = imageUrl,
-                contentDescription = stringResource(
-                    R.string.rocket_desc,
-                    config.name.orEmpty()
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(cornerRadiusMedium)),
-            )
-        }
+        RemoteImage(
+            imageUrl = config.imageUrl,
+            contentDescription = stringResource(
+                R.string.rocket_desc,
+                config.name
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .clip(RoundedCornerShape(cornerRadiusMedium)),
+        )
 
-        config.description?.let { desc ->
             AppText.bodyMedium(
-                text = desc,
+                text = config.description,
                 color = AppTheme.colors.secondary,
                 modifier = Modifier.padding(vertical = paddingMedium)
             )
         }
-    }
 }
 
 @Composable
 private fun LaunchStatistics(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
@@ -205,49 +196,39 @@ private fun LaunchStatistics(
                 .padding(top = paddingMedium),
             horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium)
         ) {
-            config.totalLaunchCount?.let {
-                StatItem(
-                    value = it.toString(),
-                    label = stringResource(R.string.total_launches),
-                    icon = Icons.Default.Star,
-                    modifier = Modifier.weight(1f)
-                )
-            }
 
-            config.failedLaunches?.let {
-                if (it > 0) {
-                    StatItem(
-                        value = it.toString(),
-                        label = stringResource(R.string.failed),
-                        icon = Icons.Default.Warning,
-                        valueColor = AppColors.error,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
+            StatItem(
+                value = config.totalLaunchCount,
+                label = stringResource(R.string.total_launches),
+                icon = Icons.Default.Star,
+                modifier = Modifier.weight(1f)
+            )
 
-            config.successfulLaunches?.let {
-                StatItem(
-                    value = it.toString(),
-                    label = stringResource(R.string.successful),
-                    icon = Icons.Default.CheckCircle,
-                    valueColor = AppColors.success,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            StatItem(
+                value = config.failedLaunches,
+                label = stringResource(R.string.failed),
+                icon = Icons.Default.Warning,
+                valueColor = AppColors.error,
+                modifier = Modifier.weight(1f)
+            )
+
+            StatItem(
+                value = config.successfulLaunches,
+                label = stringResource(R.string.successful),
+                icon = Icons.Default.CheckCircle,
+                valueColor = AppColors.success,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
 
 @Composable
 private fun PhysicalSpecifications(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
@@ -262,32 +243,26 @@ private fun PhysicalSpecifications(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingMedium)
             ) {
-                config.length?.let { length ->
-                    PhysicalSpecItem(
-                        label = stringResource(R.string.length),
-                        value = String.format("%.1f m", length),
-                        icon = Icons.Default.ArrowUpward,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                config.diameter?.let { diameter ->
-                    PhysicalSpecItem(
-                        label = stringResource(R.string.diameter),
-                        value = String.format("%.1f m", diameter),
-                        icon = Icons.Default.Info,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
-            config.launchMass?.let { mass ->
                 PhysicalSpecItem(
-                    label = stringResource(R.string.launch_mass),
-                    value = String.format("%.0f kg", mass),
-                    icon = Icons.Default.Build
+                    label = stringResource(R.string.length),
+                    value = config.length,
+                    icon = Icons.Default.ArrowUpward,
+                    modifier = Modifier.weight(1f)
+                )
+
+                PhysicalSpecItem(
+                    label = stringResource(R.string.diameter),
+                    value = config.diameter,
+                    icon = Icons.Default.Info,
+                    modifier = Modifier.weight(1f)
                 )
             }
+
+            PhysicalSpecItem(
+                label = stringResource(R.string.launch_mass),
+                value = config.launchMass,
+                icon = Icons.Default.Build
+            )
         }
     }
 }
@@ -324,7 +299,7 @@ private fun PhysicalSpecItem(
                     color = AppTheme.colors.secondary,
                     fontSize = AppTextStyles.labelSmall.fontSize
                 )
-                AppText.titleSmall(
+                AppText.bodyLarge(
                     text = value,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.onSurface
@@ -336,13 +311,10 @@ private fun PhysicalSpecItem(
 
 @Composable
 private fun ManufacturerAndHistory(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
-    ) {
+    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
         AppText.titleMedium(
             text = stringResource(R.string.manufacturer_and_history),
             fontWeight = FontWeight.Bold,
@@ -353,6 +325,7 @@ private fun ManufacturerAndHistory(
             modifier = Modifier.padding(top = paddingMedium),
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
+
             config.manufacturer?.let { manufacturer ->
                 DetailRow(
                     label = stringResource(R.string.manufacturer),
@@ -360,41 +333,35 @@ private fun ManufacturerAndHistory(
                     icon = Icons.Default.Build
                 )
 
-                manufacturer.country?.firstOrNull()?.name?.let { country ->
-                    DetailRow(
-                        label = stringResource(R.string.built_in),
-                        value = country,
-                        icon = Icons.Default.Place
-                    )
-                }
-
-                manufacturer.foundingYear?.let { year ->
-                    DetailRow(
-                        label = stringResource(R.string.company_founded),
-                        value = year.toString(),
-                        icon = Icons.Default.DateRange
-                    )
-                }
-            }
-
-            config.maidenFlight?.let { maidenFlight ->
                 DetailRow(
-                    label = stringResource(R.string.maiden_flight),
-                    value = maidenFlight,
-                    icon = Icons.Default.Star
+                    label = stringResource(R.string.built_in),
+                    value = manufacturer.countryName,
+                    icon = Icons.Default.Place
+                )
+
+                DetailRow(
+                    label = stringResource(R.string.company_founded),
+                    value = manufacturer.foundingYear,
+                    icon = Icons.Default.DateRange
                 )
             }
         }
+
+        DetailRow(
+            label = stringResource(R.string.maiden_flight),
+            value = config.maidenFlight,
+            icon = Icons.Default.Star
+        )
     }
 }
 
 @Composable
 private fun ExternalLinks(
-    config: Configuration,
+    config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val hasLinks = config.wikiUrl != null || config.manufacturer?.wikiUrl != null
+    val hasLinks = !config.wikiUrl.isNullOrEmpty() || !config.manufacturer?.wikiUrl.isNullOrEmpty()
 
     if (hasLinks) {
         Column(

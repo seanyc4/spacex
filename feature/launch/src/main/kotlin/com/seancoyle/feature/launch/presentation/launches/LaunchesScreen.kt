@@ -37,7 +37,7 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LaunchesRoute(
+fun LaunchesScreen(
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     isRefreshing: Boolean,

@@ -2,7 +2,8 @@ package com.seancoyle.core.test.testags
 
 object LaunchesTestTags {
     // Grid and List Tags
-    const val LAUNCH_LAZY_COLUMN = "launch_lazy_column"
+    const val LAUNCH_SCREEN = "launch_screen"
+    const val LAUNCHES_SCREEN = "launches_screen"
     const val LAUNCH_CARD = "launch_card"
 
     // Launch Detail Sections

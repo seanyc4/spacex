@@ -1,425 +1,180 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import com.seancoyle.feature.launch.domain.model.*
+import com.seancoyle.feature.launch.presentation.launch.model.AgencyUI
+import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
+import com.seancoyle.feature.launch.presentation.launch.model.LandingUI
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
-import java.time.LocalDateTime
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchUpdateUI
+import com.seancoyle.feature.launch.presentation.launch.model.LauncherStageUI
+import com.seancoyle.feature.launch.presentation.launch.model.LauncherUI
+import com.seancoyle.feature.launch.presentation.launch.model.ManufacturerUI
+import com.seancoyle.feature.launch.presentation.launch.model.MissionPatchUI
+import com.seancoyle.feature.launch.presentation.launch.model.MissionUI
+import com.seancoyle.feature.launch.presentation.launch.model.PadUI
+import com.seancoyle.feature.launch.presentation.launch.model.RocketFamilyUI
+import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
+import com.seancoyle.feature.launch.presentation.launch.model.SpacecraftConfigUI
+import com.seancoyle.feature.launch.presentation.launch.model.SpacecraftStageUI
+import com.seancoyle.feature.launch.presentation.launch.model.SpacecraftStatusUI
+import com.seancoyle.feature.launch.presentation.launch.model.SpacecraftUI
+import com.seancoyle.feature.launch.presentation.launch.model.VidUrlUI
 
 /**
  * Preview data for LaunchUI to be used in Composable previews
  */
 internal fun previewData() = LaunchUI(
-    id = "preview-id-123",
     missionName = "Starlink Group 7-12",
+    status = LaunchStatus.SUCCESS,
     launchDate = "26 November 2026",
     launchTime = "10:30",
-    launchDateTime = LocalDateTime.of(2026, 1, 15, 10, 30),
-    status = LaunchStatus.SUCCESS,
-    windowEnd = "Jan 15, 2026, 11:00 AM EST",
-    windowStart = "Jan 15, 2026, 10:00 AM EST",
     windowStartTime = "10:00",
     windowEndTime = "11:00",
     windowDuration = "1h",
-    windowStartDateTime = LocalDateTime.of(2026, 1, 15, 10, 0),
-    windowEndDateTime = LocalDateTime.of(2026, 1, 15, 11, 0),
-    image = Image(
-        id = 1,
-        name = "Falcon 9",
-        imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-        thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-        credit = "SpaceX"
-    ),
-    failReason = "Failed to reach orbit",
-    launchServiceProvider = Agency(
-        id = 121,
-        url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
+    launchWindowPosition = 0.5f,
+    imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
+    failReason = "The flight experienced a minor anomaly during stage separation.",
+    launchServiceProvider = AgencyUI(
         name = "SpaceX",
         abbrev = "SpX",
-        type = "Commercial",
-        featured = true,
-        country = listOf(
-            Country(
-                id = 1,
-                name = "United States",
-                alpha2Code = "US",
-                alpha3Code = "USA",
-                nationalityName = "American"
-            )
-        ),
         description = "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California.",
-        administrator = "Elon Musk",
-        foundingYear = 2002,
-        launchers = "Falcon 9, Falcon Heavy, Starship",
-        spacecraft = "Dragon, Crew Dragon, Starship",
-        image = Image(
-            id = 2,
-            name = "SpaceX Logo",
-            imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-            thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-            credit = "SpaceX"
-        ),
-        totalLaunchCount = 200,
-        consecutiveSuccessfulLaunches = 150,
-        successfulLaunches = 190,
-        failedLaunches = 10,
-        pendingLaunches = 50,
-        consecutiveSuccessfulLandings = 100,
-        successfulLandings = 180,
-        failedLandings = 20,
-        attemptedLandings = 200,
-        successfulLandingsSpacecraft = 50,
-        failedLandingsSpacecraft = 5,
-        attemptedLandingsSpacecraft = 55,
-        successfulLandingsPayload = 30,
-        failedLandingsPayload = 3,
-        attemptedLandingsPayload = 33,
-        infoUrl = "https://www.spacex.com",
-        wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
+        type = "Commercial",
     ),
-    rocket = Rocket(
-        id = 123,
-        configuration = Configuration(
-            id = 164,
-            url = "https://ll.thespacedevs.com/2.3.0/config/launcher/164/",
+    rocket = RocketUI(
+        configuration = ConfigurationUI(
             name = "Falcon 9",
             fullName = "Falcon 9 Block 5",
             variant = "Block 5",
+            alias = "F9",
+            description = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX",
+            imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
+            totalLaunchCount = "300",
+            successfulLaunches = "290",
+            failedLaunches = "10",
+            length = "56.3 m",
+            diameter = "3.35 m",
+            launchMass = "456 kg",
+            maidenFlight = "2007-05-13",
+            manufacturer = ManufacturerUI(
+                name = "SpaceX",
+                countryName = "United States",
+                foundingYear = "2002",
+                wikiUrl = "https://en.wikipedia.org/wiki/SpaceX",
+                infoUrl = "https://www.spacex.com"
+            ),
             families = listOf(
-                Family(
-                    id = 1,
+                RocketFamilyUI(
                     name = "Falcon",
-                    manufacturer = emptyList(),
                     description = "Falcon rocket family developed by SpaceX",
-                    active = true,
-                    maidenFlight = "2010-06-04T18:45:00Z",
-                    totalLaunchCount = 300,
-                    consecutiveSuccessfulLaunches = 250,
-                    successfulLaunches = 290,
-                    failedLaunches = 10,
-                    pendingLaunches = 50,
-                    attemptedLandings = 200,
-                    successfulLandings = 190,
-                    failedLandings = 10,
-                    consecutiveSuccessfulLandings = 150
+                    active = "Active",
+                    maidenFlight = "2010-06-04",
+                    totalLaunches = "300",
+                    successfulLaunches = "290",
                 )
             ),
-            manufacturer = null,
-            image = null,
-            wikiUrl = "https://en.wikipedia.org/wiki/Falcon_9",
-            description = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX",
-            alias = "F9",
-            totalLaunchCount = 300,
-            successfulLaunches = 290,
-            failedLaunches = 10,
-            length = 56.3,
-            diameter = 3.35,
-            maidenFlight = "2007-05-13",
-            launchMass = 456.0
+            wikiUrl = "https://en.wikipedia.org/wiki/Falcon_9"
         ),
-        launcherStage = listOf(
-            LauncherStage(
-                id = 826,
+        launcherStages = listOf(
+            LauncherStageUI(
                 type = "Core",
-                reused = true,
-                launcherFlightNumber = 6,
-                launcher = Launcher(
-                    id = 187,
-                    url = "https://lldev.thespacedevs.com/2.3.0/launchers/187/",
+                reused = "Reused",
+                flightNumber = "6",
+                serialNumber = "B1062",
+                launcherUI = LauncherUI(
                     flightProven = true,
                     serialNumber = "B1062",
-                    status = Status(id = 3, name = "active", abbrev = "ACT", description = "Active booster"),
-                    details = "Falcon 9 Block 5 booster",
-                    image = Image(
-                        id = 1,
-                        name = "Falcon 9",
-                        imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launcher_images/falcon25209_image_20230807133459.jpeg",
-                        thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launcher_images/falcon25209_image_20230807133459.jpeg",
-                        credit = "SpaceX"
-                    ),
-                    successfulLandings = 6,
-                    attemptedLandings = 6,
-                    flights = 6,
-                    lastLaunchDate = "2025-12-20T14:15:00Z",
-                    firstLaunchDate = "2024-10-23T15:27:00Z"
+                    image = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launcher_images/falcon25209_image_20230807133459.jpeg",
+                    successfulLandings = "6",
+                    attemptedLandings = "6",
+                    status = "Active"
                 ),
-                landing = Landing(
-                    id = 1719,
+                landing = LandingUI(
                     attempt = true,
                     success = true,
                     description = "The Falcon 9 booster B1062 has landed on the droneship.",
-                    location = LandingLocation(
-                        id = 11,
-                        name = "ASDS - Just Read the Instructions",
-                        abbrev = "JRTI",
-                        description = "Autonomous spaceport drone ship"
-                    ),
-                    type = LandingType(
-                        id = 1,
-                        name = "Autonomous Spaceport Drone Ship",
-                        abbrev = "ASDS",
-                        description = "Landing on a floating platform"
-                    )
-                ),
-                previousFlightDate = "2025-09-18T13:00:00Z",
-                turnAroundTime = "P93DT1H15M",
-                previousFlight = PreviousFlight(
-                    id = "92ec4610-4576-4077-b538-65272a5d6491",
-                    name = "Falcon 9 Block 5 | Starlink Group 15-11"
+                    location = "JRTI",
+                    type = "ASDS"
                 )
             )
         ),
-        spacecraftStage = listOf(
-            SpacecraftStage(
-                id = 1,
-                url = "https://ll.thespacedevs.com/2.3.0/spacecraft_stage/1/",
+        spacecraftStages = listOf(
+            SpacecraftStageUI(
                 destination = "International Space Station",
-                missionEnd = "2026-01-16T12:00:00Z",
-                spacecraft = Spacecraft(
-                    id = 1,
-                    url = "https://ll.thespacedevs.com/2.3.0/spacecraft/1/",
+                spacecraft = SpacecraftUI(
                     name = "Dragon C208",
                     serialNumber = "C208",
-                    status = SpacecraftStatus(id = 1, name = "Active"),
-                    description = "Dragon spacecraft for cargo missions",
-                    spacecraftConfig = SpacecraftConfig(
-                        id = 1,
-                        url = "https://ll.thespacedevs.com/2.3.0/config/spacecraft/1/",
-                        name = "Dragon 2",
-                        type = SpacecraftType(id = 1, name = "Cargo"),
-                        agency = null,
-                        inUse = true,
+                    spacecraftStatus = SpacecraftStatusUI(name = "Active"),
+                    spacecraftConfig = SpacecraftConfigUI(
+                        type = "Cargo",
                         capability = "Cargo and Crew Transport",
-                        history = "Dragon 2 is a class of reusable spacecraft developed and manufactured by SpaceX.",
                         details = "Dragon 2 can carry up to 7 passengers to and from Earth orbit, and beyond.",
-                        maidenFlight = "2019-03-02T07:49:00Z",
-                        height = 8.1,
-                        diameter = 4.0,
                         humanRated = true,
-                        crewCapacity = 7
+                        crewCapacity = "7"
                     )
                 ),
-                landing = null
+                landing = LandingUI(
+                    attempt = false,
+                    success = false,
+                    description = "N/A",
+                    location = "N/A",
+                    type = "N/A"
+                )
             )
         )
     ),
-    mission = Mission(
-        id = 456,
+    mission = MissionUI(
         name = "Starlink Group 7-12",
         description = "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system.",
         type = "Communications",
-        orbit = Orbit(
-            id = 8,
-            name = "Low Earth Orbit",
-            abbrev = "LEO"
-        ),
-        agencies = emptyList(),
-        infoUrls = emptyList(),
-        vidUrls = emptyList()
+        orbitName = "Low Earth Orbit",
     ),
-    pad = Pad(
-        id = 87,
-        url = "https://ll.thespacedevs.com/2.2.0/pad/87/",
-        agencies = emptyList(),
+    pad = PadUI(
         name = "Space Launch Complex 40",
-        image = Image(
-            id = 3,
-            name = "Pad Image",
-            imageUrl = "https://example.com/pad_image.png",
-            thumbnailUrl = "https://example.com/pad_image_thumb.png",
-            credit = "SpaceX"
-        ),
+        locationName = "Cape Canaveral, FL, USA",
+        countryName = "United States",
+        countryCode = "US",
+        imageUrl = "https://example.com/pad_image.png",
         description = "Cape Canaveral SLC-40",
-        country = Country(
-            id = 1,
-            name = "United States",
-            alpha2Code = "US",
-            alpha3Code = "USA",
-            nationalityName = "American"
-        ),
         latitude = 28.56194122,
         longitude = -80.57735736,
+        totalLaunchCount = "957",
+        orbitalLaunchAttemptCount = "457",
+        locationTotalLaunchCount = "778",
+        locationTotalLandingCount = "56",
         mapUrl = "https://example.com/pad_image.png",
-        mapImage = "https://example.com/pad_image.png",
-        wikiUrl = null,
-        infoUrl = null,
-        totalLaunchCount = 957,
-        orbitalLaunchAttemptCount = 457,
-        fastestTurnaround = null,
-        location = Location(
-            id = 12,
-            url = "https://ll.thespacedevs.com/2.2.0/location/12/",
-            name = "Cape Canaveral, FL, USA",
-            country = Country(
-                id = 1,
-                name = "United States",
-                alpha2Code = "US",
-                alpha3Code = "USA",
-                nationalityName = "American"
-            ),
-            description = "Cape Canaveral Space Force Station",
-            image = null,
-            mapImage = "https://example.com/pad_image.png",
-            longitude = -80.57735736,
-            latitude = 28.56194122,
-            timezoneName = "America/New_York",
-            totalLaunchCount = 778,
-            totalLandingCount = 56
-        )
+        mapImage = "https://example.com/pad_image.png"
     ),
     updates = listOf(
-        LaunchUpdate(
-            id = 1,
-            profileImage = null,
+        LaunchUpdateUI(
             comment = "Launch scrubbed due to weather conditions. New T-0 is in 24 hours.",
-            infoUrl = "https://spacex.com/updates/1",
             createdBy = "SpaceX",
-            createdOn = "Jan 14, 2026 6:00 PM"
+            createdOn = "Jan 14, 2026 6:00 PM",
         ),
-        LaunchUpdate(
-            id = 2,
-            profileImage = null,
+        LaunchUpdateUI(
             comment = "All systems are go for launch tomorrow.",
-            infoUrl = "https://spacex.com/updates/2",
             createdBy = "Launch Director",
-            createdOn = "Jan 15, 2026 8:00 AM"
-        )
-    ),
-    infoUrls = listOf(
-        InfoUrl(
-            priority = 1,
-            title = "SpaceX Official Site",
-            description = "Learn more about SpaceX launches.",
-            url = "https://www.spacex.com/launches/",
-            source = "SpaceX",
-            featureImage = "https://www.spacex.com/static/images/share.jpg"
-        ),
-        InfoUrl(
-            priority = 2,
-            title = "Wikipedia",
-            description = "Falcon 9 Wikipedia page.",
-            url = "https://en.wikipedia.org/wiki/Falcon_9",
-            source = "Wikipedia",
-            featureImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/F9_maiden_launch_cropped.jpg/800px-F9_maiden_launch_cropped.jpg"
+            createdOn = "Jan 15, 2026 8:00 AM",
         )
     ),
     vidUrls = listOf(
-        VidUrl(
-            priority = 1,
-            source = "YouTube",
-            publisher = "SpaceX",
+        VidUrlUI(
             title = "Starlink Mission",
-            description = "Live coverage of Falcon 9 launch",
-            featureImage = "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
             url = "https://youtube.com/watch?v=dQw4w9WgXcQ",
-            startTime = "2026-01-15T10:00:00Z",
-            endTime = "2026-01-15T12:00:00Z",
-            live = false
+            publisher = "SpaceX",
+            isLive = true,
+            videoId = "dQw4w9WgXcQ"
         )
     ),
     missionPatches = listOf(
-        MissionPatch(
-            id = 1,
+        MissionPatchUI(
             name = "Starlink Mission Patch",
-            priority = 1,
             imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-            agency = Agency(
-                id = 121,
-                url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
-                name = "SpaceX",
-                abbrev = "SpX",
-                type = "Commercial",
-                featured = true,
-                country = listOf(
-                    Country(
-                        id = 1,
-                        name = "United States",
-                        alpha2Code = "US",
-                        alpha3Code = "USA",
-                        nationalityName = "American"
-                    )
-                ),
-                description = "Space Exploration Technologies Corp.",
-                administrator = "Elon Musk",
-                foundingYear = 2002,
-                launchers = "Falcon 9, Falcon Heavy, Starship",
-                spacecraft = "Dragon, Crew Dragon, Starship",
-                image = Image(
-                    id = 2,
-                    name = "SpaceX Logo",
-                    imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-                    thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-                    credit = "SpaceX"
-                ),
-                totalLaunchCount = 200,
-                consecutiveSuccessfulLaunches = 150,
-                successfulLaunches = 190,
-                failedLaunches = 10,
-                pendingLaunches = 50,
-                consecutiveSuccessfulLandings = 100,
-                successfulLandings = 180,
-                failedLandings = 20,
-                attemptedLandings = 200,
-                successfulLandingsSpacecraft = 50,
-                failedLandingsSpacecraft = 5,
-                attemptedLandingsSpacecraft = 55,
-                successfulLandingsPayload = 30,
-                failedLandingsPayload = 3,
-                attemptedLandingsPayload = 33,
-                infoUrl = "https://www.spacex.com",
-                wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
-            )
+            agencyName = "SpaceX"
         ),
-        MissionPatch(
-            id = 2,
+        MissionPatchUI(
             name = "Falcon 9 Mission Patch",
-            priority = 2,
             imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/launch_images/falcon_9_block__image_20240517131654.png",
-            agency = Agency(
-                id = 121,
-                url = "https://ll.thespacedevs.com/2.2.0/agencies/121/",
-                name = "SpaceX",
-                abbrev = "SpX",
-                type = "Commercial",
-                featured = true,
-                country = listOf(
-                    Country(
-                        id = 1,
-                        name = "United States",
-                        alpha2Code = "US",
-                        alpha3Code = "USA",
-                        nationalityName = "American"
-                    )
-                ),
-                description = "Space Exploration Technologies Corp.",
-                administrator = "Elon Musk",
-                foundingYear = 2002,
-                launchers = "Falcon 9, Falcon Heavy, Starship",
-                spacecraft = "Dragon, Crew Dragon, Starship",
-                image = Image(
-                    id = 2,
-                    name = "SpaceX Logo",
-                    imageUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-                    thumbnailUrl = "https://spacelaunchnow-prod-east.nyc3.digitaloceanspaces.com/media/agency_images/spacex_image_20190207032501.jpeg",
-                    credit = "SpaceX"
-                ),
-                totalLaunchCount = 200,
-                consecutiveSuccessfulLaunches = 150,
-                successfulLaunches = 190,
-                failedLaunches = 10,
-                pendingLaunches = 50,
-                consecutiveSuccessfulLandings = 100,
-                successfulLandings = 180,
-                failedLandings = 20,
-                attemptedLandings = 200,
-                successfulLandingsSpacecraft = 50,
-                failedLandingsSpacecraft = 5,
-                attemptedLandingsSpacecraft = 55,
-                successfulLandingsPayload = 30,
-                failedLandingsPayload = 3,
-                attemptedLandingsPayload = 33,
-                infoUrl = "https://www.spacex.com",
-                wikiUrl = "https://en.wikipedia.org/wiki/SpaceX"
-            )
+            agencyName = "SpaceX"
         )
     )
 )
