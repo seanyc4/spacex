@@ -19,15 +19,12 @@ class ListDetailSceneStrategy<T : Any>(
             return null
         }
 
-        val detailEntry = entries
-            .lastOrNull()
-            ?.takeIf {
-                it.metadata.containsKey(ListDetailScene.DETAIL_KEY)
-            }
+        val listEntry = entries.findLast { it.metadata.containsKey(ListDetailScene.LIST_KEY) }
             ?: return null
-        val listEntry = entries
-            .findLast { it.metadata.containsKey(ListDetailScene.LIST_KEY) }
-            ?: return null
+
+        val detailEntry = entries.lastOrNull()?.takeIf {
+            it.metadata.containsKey(ListDetailScene.DETAIL_KEY)
+        } ?: return null
 
         return ListDetailScene(
             listEntry = listEntry,

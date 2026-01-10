@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         //crashlytics.init(true)
 
         setContent {
-            val windowSizeClass = calculateWindowSizeClass(this)
+            val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
             App(windowSizeClass)
         }
     }

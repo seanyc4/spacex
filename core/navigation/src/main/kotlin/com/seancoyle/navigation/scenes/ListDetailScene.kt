@@ -18,16 +18,17 @@ class ListDetailScene<T: Any>(
     override val entries: List<NavEntry<T>>
         get() = listOf(listEntry, detailEntry)
 
-    override val content: @Composable (() -> Unit) = {
-        Row(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.weight(0.5f)) {
-                listEntry.Content()
-            }
-            Column(modifier = Modifier.weight(0.5f)) {
-                detailEntry.Content()
+    override val content: @Composable () -> Unit
+        get() = {
+            Row(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.weight(0.5f)) {
+                    listEntry.Content()
+                }
+                Column(modifier = Modifier.weight(0.5f)) {
+                    detailEntry.Content()
+                }
             }
         }
-    }
 
     companion object {
         const val LIST_KEY = "ListDetailScene-List"

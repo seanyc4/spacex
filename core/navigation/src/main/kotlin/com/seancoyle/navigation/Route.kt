@@ -11,6 +11,9 @@ sealed interface Route : NavKey {
     data object Launches : Route
 
     @Serializable
+    data object PlaceholderDetail : Route
+
+    @Serializable
     data class Launch(
         val launchId: String,
         val launchesType: LaunchesType

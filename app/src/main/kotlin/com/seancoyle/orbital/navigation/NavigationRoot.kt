@@ -1,9 +1,6 @@
 package com.seancoyle.orbital.navigation
 
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,20 +11,26 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.seancoyle.feature.launch.presentation.launch.LaunchRoute
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
 import com.seancoyle.feature.launch.presentation.launches.LaunchesRoute
 import com.seancoyle.navigation.Route
 import com.seancoyle.navigation.scenes.ListDetailScene
+import com.seancoyle.navigation.scenes.rememberListDetailSceneStrategy
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun NavigationRoot(
     snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier
 ) {
-    val backStack = rememberNavBackStack(Route.Launches)
+    val isExpandedScreen = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)
+    val backStack = rememberNavBackStack(
+        Route.Launches,
+        *if (isExpandedScreen) arrayOf(Route.PlaceholderDetail) else emptyArray()
+    )
     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
     NavDisplay(
@@ -45,11 +48,15 @@ fun NavigationRoot(
             ) {
                 LaunchesRoute(
                     snackbarHostState = snackbarHostState,
-                    windowSizeClass = windowSizeClass,
                     onNavigateToLaunch = { launchId, launchesType ->
                         backStack.addDetail(Route.Launch(launchId, launchesType))
                     }
                 )
+            }
+            entry<Route.PlaceholderDetail>(
+                metadata = ListDetailScene.detailPane()
+            ) {
+                PlaceholderDetailScreen()
             }
             entry<Route.Launch>(
                 metadata = ListDetailScene.detailPane()
@@ -69,7 +76,7 @@ fun NavigationRoot(
 }
 
 private fun NavBackStack<NavKey>.addDetail(detailRoute: Route.Launch) {
-    // Remove any existing detail routes, then add the new detail route
-    removeIf { it is Route.Launch }
+    // Remove any existing detail routes (including placeholder), then add the new detail route
+    removeIf { it is Route.Launch || it is Route.PlaceholderDetail }
     add(detailRoute)
 }

@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,7 +28,6 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
-import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
@@ -41,7 +39,6 @@ fun LaunchesScreen(
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     isRefreshing: Boolean,
-    windowSizeClass: WindowSizeClass,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
@@ -63,7 +60,6 @@ fun LaunchesScreen(
                 LaunchesContent(
                     feedState = feedState,
                     state = state,
-                    windowSizeClass = windowSizeClass,
                     onEvent = onEvent,
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick,
@@ -79,7 +75,6 @@ private fun LaunchesContent(
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
-    windowSizeClass: WindowSizeClass,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +85,7 @@ private fun LaunchesContent(
         LaunchesType.PAST -> 1
     }
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(
+        SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = AppTheme.colors.background
         ) {
@@ -152,11 +147,11 @@ private fun LaunchesContent(
             }
         }
         if (state.isFilterDialogVisible) {
-            LaunchesFilterDialog(
+           /* LaunchesFilterDialog(
                 currentFilterState = state,
                 onEvent = onEvent,
                 windowSizeClass = windowSizeClass
-            )
+            )*/
         }
     }
 }
