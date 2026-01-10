@@ -1,5 +1,6 @@
 package com.seancoyle.core.ui.designsystem.chip
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -49,7 +50,7 @@ fun Chip(
             }
         },
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = containerColor.copy(alpha = 0.4f),
+            containerColor = containerColor.copy(alpha = 0.5f),
             labelColor = contentColor,
             leadingIconContentColor = contentColor
         ),
@@ -59,7 +60,8 @@ fun Chip(
             if (onClick != null) {
                 role = Role.Button
             }
-        }
+        },
+        border = BorderStroke(0.25.dp, AppTheme.colors.onSurfaceVariant)
     )
 }
 
