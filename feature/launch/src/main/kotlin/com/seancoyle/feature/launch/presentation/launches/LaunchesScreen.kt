@@ -30,6 +30,7 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
@@ -158,11 +159,10 @@ private fun LaunchesContent(
             }
         }
         if (state.isFilterDialogVisible) {
-            /* LaunchesFilterDialog(
+             LaunchesFilterDialog(
                  currentFilterState = state,
-                 onEvent = onEvent,
-                 windowSizeClass = windowSizeClass
-             )*/
+                 onEvent = onEvent
+             )
         }
     }
 }
