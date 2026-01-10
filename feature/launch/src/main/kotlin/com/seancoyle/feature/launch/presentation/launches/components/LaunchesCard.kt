@@ -1,5 +1,6 @@
 package com.seancoyle.feature.launch.presentation.launches.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,10 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,6 +55,7 @@ internal fun LaunchCard(
     launchItem: LaunchesUi,
     onClick: (String, LaunchesType) -> Unit,
     launchesType: LaunchesType,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val launchCardDesc = stringResource(
@@ -64,23 +67,31 @@ internal fun LaunchCard(
     val missionNameDesc = stringResource(R.string.mission_name_desc, launchItem.missionName)
     val dateTimeDescription = stringResource(R.string.launch_date_desc, launchItem.launchDate)
 
+    val borderStroke = if (isSelected) {
+        BorderStroke(3.dp, AppTheme.colors.primary)
+    } else {
+        null
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(launchesCardHeight)
             .clickable { onClick(launchItem.id, launchesType) }
             .semantics {
-                testTag = LaunchesTestTags.LAUNCH_CARD
                 contentDescription = launchCardDesc
-            },
+                selected = isSelected
+            }
+            .testTag(LaunchesTestTags.LAUNCH_CARD),
         shape = RoundedCornerShape(cornerRadiusLarge),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surface
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp,
+            defaultElevation = if (isSelected) 4.dp else 2.dp,
             pressedElevation = 4.dp
-        )
+        ),
+        border = borderStroke
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             RemoteImage(
@@ -121,9 +132,7 @@ internal fun LaunchCard(
                         containerColor = launchItem.status.containerColor(),
                         contentColor = launchItem.status.contentColor(),
                         icon = launchItem.status.icon(),
-                        modifier = Modifier.semantics {
-                            testTag = LaunchesTestTags.CARD_STATUS_CHIP
-                        }
+                        modifier = Modifier.testTag(LaunchesTestTags.CARD_STATUS_CHIP)
                     )
                 }
 
@@ -180,7 +189,8 @@ private fun LaunchCardPreview() {
                 imageUrl = ""
             ),
             onClick = { _, _ -> },
-            launchesType = LaunchesType.UPCOMING
+            launchesType = LaunchesType.UPCOMING,
+            isSelected = true
         )
     }
 }

@@ -59,11 +59,13 @@ compose-iconsCore = { module = "androidx.compose.material:material-icons-core" }
 compose-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
 compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycle" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
+compose-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout" }
+compose-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material3Adaptive" }
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable-android", version.ref = "runtimeSaveable" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
-compose-windowSize = { module = "androidx.compose.material3:material3-window-size-class-android", version.ref = "composeWindowSize" }
 
 # Compose Test Libraries
 compose-uiTest = { module = "androidx.compose.ui:ui-test" }
@@ -111,7 +113,6 @@ lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-saveds
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3LifecycleViewmodel" }
-androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material3Adaptive" }
 
 # Paging
 paging3-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
@@ -218,8 +219,11 @@ composeBundle = [
     "compose-iconsExtended",
     "compose-lifecycle",
     "compose-material3",
+    "compose-material3-adaptive",
+    "compose-material3-adaptive-layout",
+    "compose-material3-adaptive-navigation3",
     "compose-uiTestJunit4",
     "compose-viewmodelLifecycle",
-    "compose-windowSize",
+    "compose-tooling",
     "hilt-navigationCompose"
 ]

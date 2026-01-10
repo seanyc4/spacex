@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rocket_icon_desc">Icon depicting a rocket</string>
+    <string name="select_item_placeholder">Select an item to see more information</string>
+</resources>

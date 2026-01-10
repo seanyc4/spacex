@@ -19,6 +19,4 @@ dependencies {
 
     // Debug implementations
     debugImplementation(libs.compose.uiTestManifest)
-    debugImplementation(libs.compose.preview)
-    debugImplementation(libs.compose.tooling)
-}
+    debugImplementation(libs.compose.preview)}

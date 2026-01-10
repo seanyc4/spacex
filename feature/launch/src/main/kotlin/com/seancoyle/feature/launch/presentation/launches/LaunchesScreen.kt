@@ -4,13 +4,14 @@ package com.seancoyle.feature.launch.presentation.launches
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -38,14 +39,15 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchesScreen(
+    modifier: Modifier = Modifier,
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     isRefreshing: Boolean,
-    windowSizeClass: WindowSizeClass,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit,
-    modifier: Modifier = Modifier,
+    onClick: (String, LaunchesType) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -54,20 +56,22 @@ fun LaunchesScreen(
                     onEvent(LaunchesEvents.DisplayFilterDialogEvent)
                 }
             )
-        },
-    ) { innerPadding ->
+        }, contentWindowInsets = WindowInsets.statusBars
+    ) { paddingValues ->
         RefreshableContent(
+            modifier = modifier,
             isRefreshing = isRefreshing,
             onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
             content = {
                 LaunchesContent(
                     feedState = feedState,
                     state = state,
-                    windowSizeClass = windowSizeClass,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
                     onEvent = onEvent,
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick,
-                    modifier = modifier.padding(innerPadding)
+                    modifier = modifier.padding(paddingValues)
                 )
             }
         )
@@ -78,8 +82,9 @@ fun LaunchesScreen(
 private fun LaunchesContent(
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
-    windowSizeClass: WindowSizeClass,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +95,7 @@ private fun LaunchesContent(
         LaunchesType.PAST -> 1
     }
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(
+        SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = AppTheme.colors.background
         ) {
@@ -143,6 +148,8 @@ private fun LaunchesContent(
                     Launches(
                         launches = feedState,
                         state = state,
+                        columnCount = columnCount,
+                        selectedLaunchId = selectedLaunchId,
                         onEvent = onEvent,
                         onUpdateScrollPosition = onUpdateScrollPosition,
                         onClick = onClick,
@@ -152,11 +159,10 @@ private fun LaunchesContent(
             }
         }
         if (state.isFilterDialogVisible) {
-            LaunchesFilterDialog(
-                currentFilterState = state,
-                onEvent = onEvent,
-                windowSizeClass = windowSizeClass
-            )
+             LaunchesFilterDialog(
+                 currentFilterState = state,
+                 onEvent = onEvent
+             )
         }
     }
 }

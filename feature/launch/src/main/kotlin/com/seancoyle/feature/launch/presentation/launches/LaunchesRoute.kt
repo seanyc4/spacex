@@ -4,7 +4,6 @@ package com.seancoyle.feature.launch.presentation.launches
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -28,8 +27,9 @@ private const val TAG = "LaunchesRoute"
 fun LaunchesRoute(
     modifier: Modifier = Modifier,
     viewModel: LaunchesViewModel = hiltViewModel(),
+    columnCount: Int = 1,
+    selectedLaunchId: String? = null,
     snackbarHostState: SnackbarHostState,
-    windowSizeClass: WindowSizeClass,
     onNavigateToLaunch: (String, LaunchesType) -> Unit,
 ) {
     val state = viewModel.screenState
@@ -82,7 +82,8 @@ fun LaunchesRoute(
         feedState = feedState,
         state = state,
         isRefreshing = isRefreshing,
-        windowSizeClass = windowSizeClass,
+        columnCount = columnCount,
+        selectedLaunchId = selectedLaunchId,
         onEvent = viewModel::onEvent,
         onUpdateScrollPosition = viewModel::updateScrollPosition,
         onClick = onNavigateToLaunch,

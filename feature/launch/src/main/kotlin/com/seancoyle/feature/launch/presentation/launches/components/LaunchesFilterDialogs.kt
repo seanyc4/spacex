@@ -14,8 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
@@ -38,31 +38,31 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.N
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 
+
 @Composable
 internal fun LaunchesFilterDialog(
     currentFilterState: LaunchesState,
     onEvent: (LaunchesEvents) -> Unit,
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier
 ) {
     var localQuery by remember { mutableStateOf(currentFilterState.query) }
     var localLaunchStatus by remember { mutableStateOf(currentFilterState.launchStatus) }
 
+    val windowSizeClass = currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = true).windowSizeClass
+
     AlertDialog(
         onDismissRequest = { onEvent(DismissFilterDialogEvent) },
         title = { AppText.headlineMedium(stringResource(R.string.filter_options)) },
         text = {
-            when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> {
-                    PortraitDialogContent(
-                        query = localQuery,
-                        onQueryChange = { localQuery = it },
-                        launchStatus = localLaunchStatus,
-                        onLaunchStatusChange = { localLaunchStatus = it },
-                        modifier = modifier
-                    )
-                }
-                else -> {
+            if (!windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+                PortraitDialogContent(
+                    query = localQuery,
+                    onQueryChange = { localQuery = it },
+                    launchStatus = localLaunchStatus,
+                    onLaunchStatusChange = { localLaunchStatus = it },
+                    modifier = modifier
+                )
+            } else {
                     LandscapeDialogContent(
                         query = localQuery,
                         onQueryChange = { localQuery = it },
@@ -71,7 +71,6 @@ internal fun LaunchesFilterDialog(
                         modifier = modifier
                     )
                 }
-            }
         },
         confirmButton = {
             ConfirmButton {
