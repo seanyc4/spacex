@@ -224,5 +224,6 @@ composeBundle = [
     "compose-material3-adaptive-navigation3",
     "compose-uiTestJunit4",
     "compose-viewmodelLifecycle",
+    "compose-tooling",
     "hilt-navigationCompose"
 ]
