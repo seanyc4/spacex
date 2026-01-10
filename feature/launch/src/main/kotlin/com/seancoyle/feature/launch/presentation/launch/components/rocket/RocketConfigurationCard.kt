@@ -47,6 +47,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.launchImageHeight
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
@@ -166,7 +167,7 @@ private fun RocketHeader(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(launchImageHeight)
                 .clip(RoundedCornerShape(cornerRadiusMedium)),
         )
 
