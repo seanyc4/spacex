@@ -41,6 +41,10 @@ fun NavigationRoot(
         sceneStrategy = listDetailStrategy,
         entryProvider = entryProvider {
             entry<Route.PlaceholderDetail>(metadata = ListDetailScene.detailPane()) {
+                if (!isExpandedScreen) {
+                    // On compact screens, remove placeholder detail when in portrait mode
+                    backStack.removeIf { it is Route.PlaceholderDetail }
+                }
                 PlaceholderDetailScreen()
             }
 
