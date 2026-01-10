@@ -27,10 +27,7 @@ fun NavigationRoot(
     modifier: Modifier = Modifier
 ) {
     val isExpandedScreen = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)
-    val backStack = rememberNavBackStack(
-        Route.Launches,
-        *if (isExpandedScreen) arrayOf(Route.PlaceholderDetail) else emptyArray()
-    )
+    val backStack = rememberNavBackStack(Route.Launches)
     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
     NavDisplay(
@@ -43,9 +40,18 @@ fun NavigationRoot(
         ),
         sceneStrategy = listDetailStrategy,
         entryProvider = entryProvider {
-            entry<Route.Launches>(
-                metadata = ListDetailScene.listPane()
-            ) {
+            entry<Route.PlaceholderDetail>(metadata = ListDetailScene.detailPane()) {
+                PlaceholderDetailScreen()
+            }
+
+            entry<Route.Launches>(metadata = ListDetailScene.listPane()) {
+                if (isExpandedScreen) {
+                    // On expanded screens, ensure a detail placeholder is present if no detail exists
+                    val hasDetail = backStack.any { it is Route.Launch || it is Route.PlaceholderDetail }
+                    if (!hasDetail) {
+                        backStack.add(Route.PlaceholderDetail)
+                    }
+                }
                 LaunchesRoute(
                     snackbarHostState = snackbarHostState,
                     onNavigateToLaunch = { launchId, launchesType ->
@@ -58,14 +64,8 @@ fun NavigationRoot(
                         ?.launchId
                 )
             }
-            entry<Route.PlaceholderDetail>(
-                metadata = ListDetailScene.detailPane()
-            ) {
-                PlaceholderDetailScreen()
-            }
-            entry<Route.Launch>(
-                metadata = ListDetailScene.detailPane()
-            ) { key ->
+
+            entry<Route.Launch>(metadata = ListDetailScene.detailPane()) { key ->
                 val viewModel = hiltViewModel<LaunchViewModel, LaunchViewModel.Factory>(
                     creationCallback = { factory ->
                         factory.create(
