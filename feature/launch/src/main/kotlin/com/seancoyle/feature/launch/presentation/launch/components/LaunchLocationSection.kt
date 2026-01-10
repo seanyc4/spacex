@@ -1,6 +1,5 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,13 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.card.AppCard
@@ -48,6 +45,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.PadUI
@@ -151,30 +149,22 @@ private fun LaunchSiteContent(
                     .fillMaxWidth()
                     .height(launchImageHeight)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
-                    .then(
-                        if (pad.mapUrl != null) {
-                            Modifier.clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, pad.mapUrl.toUri())
-                                context.startActivity(intent)
-                            }
-                        } else {
-                            Modifier
-                        }
-                    )
+                    .clickable {
+                        context.openUrl(pad.mapUrl)
+                    }
             ) {
                 RemoteImage(
                     imageUrl = pad.imageUrl,
                     contentDescription = stringResource(R.string.map_of_desc, pad.name),
                     modifier = Modifier
                         .fillMaxSize()
-                        .semantics { testTag = LaunchesTestTags.LAUNCH_SITE_MAP },
+                        .testTag(LaunchesTestTags.LAUNCH_SITE_MAP ),
                 )
 
                 if (pad.mapUrl != null) {
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(paddingMedium)
                             .background(
                                 color = AppTheme.colors.inversePrimary,
                                 shape = RoundedCornerShape(cornerRadiusXSmall)
