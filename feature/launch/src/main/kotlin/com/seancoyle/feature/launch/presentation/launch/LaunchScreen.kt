@@ -5,8 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -15,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCH_SCREEN
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.presentation.launch.components.ErrorState
@@ -46,8 +49,8 @@ fun LaunchScreen(
             .background(AppTheme.colors.background)
             .verticalScroll(scrollState)
             .semantics { contentDescription = "Launch details for ${launch.missionName}" }
-            .padding(bottom = 24.dp)
             .testTag(LAUNCH_SCREEN)
+            .padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
     ) {
         LaunchHeroSection(launch = launch)
         Spacer(modifier = Modifier.height(paddingXLarge))
@@ -73,6 +76,7 @@ fun LaunchScreen(
         if (launch.updates.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
             UpdatesSection(updates = launch.updates)
+            Spacer(modifier = Modifier.height(paddingLarge))
         }
     }
 }
