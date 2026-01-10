@@ -36,13 +36,15 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchesScreen(
+    modifier: Modifier = Modifier,
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     isRefreshing: Boolean,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit,
-    modifier: Modifier = Modifier,
+    onClick: (String, LaunchesType) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -60,6 +62,8 @@ fun LaunchesScreen(
                 LaunchesContent(
                     feedState = feedState,
                     state = state,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
                     onEvent = onEvent,
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick,
@@ -74,6 +78,8 @@ fun LaunchesScreen(
 private fun LaunchesContent(
     feedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
@@ -138,6 +144,8 @@ private fun LaunchesContent(
                     Launches(
                         launches = feedState,
                         state = state,
+                        columnCount = columnCount,
+                        selectedLaunchId = selectedLaunchId,
                         onEvent = onEvent,
                         onUpdateScrollPosition = onUpdateScrollPosition,
                         onClick = onClick,

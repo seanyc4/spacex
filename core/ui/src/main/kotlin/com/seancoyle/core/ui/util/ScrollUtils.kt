@@ -1,6 +1,6 @@
 package com.seancoyle.core.ui.util
 
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.debounce
 @OptIn(FlowPreview::class)
 @Composable
 fun ObserveScrollPosition(
-    listState: LazyListState,
+    listState: LazyGridState,
     onUpdateScrollPosition: (Int) -> Unit,
 ) {
     LaunchedEffect(listState) {

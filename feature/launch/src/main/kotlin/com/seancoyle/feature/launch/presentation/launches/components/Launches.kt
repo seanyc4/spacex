@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -34,18 +35,21 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 internal fun Launches(
     launches: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
+    columnCount: Int,
+    selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = state.scrollPosition)
-    ObserveScrollPosition(listState, onUpdateScrollPosition)
+    val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = state.scrollPosition)
+    ObserveScrollPosition(gridState, onUpdateScrollPosition)
 
-    LazyColumn(
-        state = listState,
+    LazyVerticalGrid(
+        state = gridState,
+        columns = GridCells.Fixed(columnCount),
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalArrangement = Arrangement.spacedBy(paddingMedium),
         contentPadding = PaddingValues(
             start = paddingMedium,
             end = paddingMedium,
@@ -57,7 +61,8 @@ internal fun Launches(
             .background(AppTheme.colors.background)
             .testTag(LAUNCHES_SCREEN)
     ) {
-        item {
+        // Prepend loading/error state (full width)
+        item(span = { GridItemSpan(maxLineSpan) }) {
             if (launches.loadState.prepend is LoadState.Error) {
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
@@ -66,20 +71,24 @@ internal fun Launches(
                 )
             }
         }
+
         items(
             count = launches.itemCount,
             key = launches.itemKey { it.id }
         ) { index ->
             val launchItem = launches[index]
             if (launchItem != null) {
+                val isSelected = launchItem.id == selectedLaunchId
                 LaunchCard(
                     launchItem = launchItem,
                     onClick = onClick,
                     launchesType = state.launchesType,
+                    isSelected = isSelected
                 )
             }
         }
-        item {
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
             val appendLoadState = launches.loadState.mediator?.append ?: launches.loadState.append
             if (appendLoadState is LoadState.Loading) {
                 CircularProgressBar()

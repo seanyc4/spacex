@@ -50,7 +50,12 @@ fun NavigationRoot(
                     snackbarHostState = snackbarHostState,
                     onNavigateToLaunch = { launchId, launchesType ->
                         backStack.addDetail(Route.Launch(launchId, launchesType))
-                    }
+                    },
+                    columnCount = if (isExpandedScreen) 2 else 1,
+                    selectedLaunchId = backStack
+                        .filterIsInstance<Route.Launch>()
+                        .lastOrNull()
+                        ?.launchId
                 )
             }
             entry<Route.PlaceholderDetail>(
