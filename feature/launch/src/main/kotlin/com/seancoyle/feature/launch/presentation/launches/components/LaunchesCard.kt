@@ -39,6 +39,7 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.launchCardHeight
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -48,7 +49,6 @@ import com.seancoyle.feature.launch.presentation.launch.model.containerColor
 import com.seancoyle.feature.launch.presentation.launch.model.contentColor
 import com.seancoyle.feature.launch.presentation.launch.model.icon
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.util.Dimens.launchesCardHeight
 
 @Composable
 internal fun LaunchCard(
@@ -76,7 +76,7 @@ internal fun LaunchCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(launchesCardHeight)
+            .height(launchCardHeight)
             .clickable { onClick(launchItem.id, launchesType) }
             .semantics {
                 contentDescription = launchCardDesc
