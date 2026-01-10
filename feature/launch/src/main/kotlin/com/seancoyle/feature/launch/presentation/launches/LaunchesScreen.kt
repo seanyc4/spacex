@@ -4,8 +4,10 @@ package com.seancoyle.feature.launch.presentation.launches
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
@@ -53,9 +55,10 @@ fun LaunchesScreen(
                     onEvent(LaunchesEvents.DisplayFilterDialogEvent)
                 }
             )
-        },
-    ) { innerPadding ->
+        }, contentWindowInsets = WindowInsets.statusBars
+    ) { paddingValues ->
         RefreshableContent(
+            modifier = modifier,
             isRefreshing = isRefreshing,
             onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
             content = {
@@ -67,7 +70,7 @@ fun LaunchesScreen(
                     onEvent = onEvent,
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick,
-                    modifier = modifier.padding(innerPadding)
+                    modifier = modifier.padding(paddingValues)
                 )
             }
         )
@@ -155,11 +158,11 @@ private fun LaunchesContent(
             }
         }
         if (state.isFilterDialogVisible) {
-           /* LaunchesFilterDialog(
-                currentFilterState = state,
-                onEvent = onEvent,
-                windowSizeClass = windowSizeClass
-            )*/
+            /* LaunchesFilterDialog(
+                 currentFilterState = state,
+                 onEvent = onEvent,
+                 windowSizeClass = windowSizeClass
+             )*/
         }
     }
 }
