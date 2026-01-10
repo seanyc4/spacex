@@ -66,7 +66,6 @@ compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable-android", version.ref = "runtimeSaveable" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
-compose-windowSize = { module = "androidx.compose.material3:material3-window-size-class-android", version.ref = "composeWindowSize" }
 
 # Compose Test Libraries
 compose-uiTest = { module = "androidx.compose.ui:ui-test" }
@@ -225,6 +224,5 @@ composeBundle = [
     "compose-material3-adaptive-navigation3",
     "compose-uiTestJunit4",
     "compose-viewmodelLifecycle",
-    "compose-windowSize",
     "hilt-navigationCompose"
 ]
