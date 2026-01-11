@@ -82,7 +82,6 @@ class LaunchesViewModel @Inject constructor(
         when (event) {
             is LaunchesEvents.DismissFilterDialogEvent -> displayFilterDialog(false)
             is LaunchesEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
-            is LaunchesEvents.NewSearchEvent -> newSearch()
             is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
             is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
             is LaunchesEvents.UpdateFilterStateEvent -> setLaunchFilterState(

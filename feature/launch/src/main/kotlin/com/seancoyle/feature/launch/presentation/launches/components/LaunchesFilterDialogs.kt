@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -34,7 +32,6 @@ import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.DismissFilterDialogEvent
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.NewSearchEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents.UpdateFilterStateEvent
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 
@@ -80,7 +77,7 @@ internal fun LaunchesFilterDialog(
                         query = localQuery
                     )
                 )
-                onEvent(NewSearchEvent)
+                onEvent(DismissFilterDialogEvent)
             }
         },
         dismissButton = {
@@ -157,8 +154,7 @@ fun QueryInputField(
             text = stringResource(R.string.mission_name),
             color = AppTheme.colors.secondary
         ) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        singleLine = true
     )
 }
 
