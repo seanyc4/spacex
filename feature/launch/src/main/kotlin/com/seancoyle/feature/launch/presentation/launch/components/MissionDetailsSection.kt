@@ -129,7 +129,8 @@ private fun MissionHighlightCard(
                         AppText.labelMedium(
                             text = stringResource(R.string.mission).uppercase(),
                             color = AppTheme.colors.primary,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            isSelectable = false
                         )
 
                         AppText.titleMedium(
@@ -214,7 +215,8 @@ private fun LaunchWindowTimeline(
                 AppText.labelMedium(
                     text = stringResource(R.string.launch_window).uppercase(),
                     color = AppTheme.colors.primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    isSelectable = false
                 )
 
                 AppText.titleMedium(
@@ -444,11 +446,12 @@ private fun FailReasonCard(
                 AppText.titleSmall(
                     text = stringResource(R.string.failure_reason),
                     fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.error
+                    color = AppTheme.colors.error,
+                    isSelectable = false
                 )
                 AppText.bodyMedium(
                     text = reason,
-                    color = AppTheme.colors.onSurface
+                    color = AppTheme.colors.onSurface,
                 )
             }
         }

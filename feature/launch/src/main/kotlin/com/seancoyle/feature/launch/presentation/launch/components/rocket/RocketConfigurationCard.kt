@@ -124,7 +124,8 @@ private fun RocketHeader(
                 AppText.labelMedium(
                     text = stringResource(R.string.rocket).uppercase(),
                     color = AppTheme.colors.primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    isSelectable = false
                 )
                 AppText.titleMedium(
                     text = config.fullName,
@@ -193,7 +194,8 @@ private fun LaunchStatistics(
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.primary
+            color = AppTheme.colors.primary,
+            isSelectable = false
         )
 
         Row(
@@ -238,7 +240,8 @@ private fun PhysicalSpecifications(
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.primary
+            color = AppTheme.colors.primary,
+            isSelectable = false
         )
 
         Column(

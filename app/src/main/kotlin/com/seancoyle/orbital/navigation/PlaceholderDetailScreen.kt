@@ -107,7 +107,8 @@ fun PlaceholderDetailScreen(
 
         AppText.titleLarge(
             text = messageText,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            isSelectable = false
         )
     }
 }

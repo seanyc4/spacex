@@ -170,11 +170,13 @@ internal fun ErrorState(
 
             AppText.titleLarge(
                 text = stringResource(R.string.unable_to_load),
-                color = AppTheme.colors.onBackground
+                color = AppTheme.colors.onBackground,
+                isSelectable = false
             )
             AppText.bodyMedium(
                 text = message,
-                color = AppTheme.colors.onSurfaceVariant
+                color = AppTheme.colors.onSurfaceVariant,
+                isSelectable = false
             )
 
             Spacer(modifier)

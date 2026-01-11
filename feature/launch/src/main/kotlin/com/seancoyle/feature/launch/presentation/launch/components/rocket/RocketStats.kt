@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ internal fun MiniStatItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             imageVector = icon,
             contentDescription = null,
             tint = iconTint,
@@ -56,7 +57,8 @@ internal fun MiniStatItem(
             text = label,
             color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
-            fontSize = AppTextStyles.labelSmall.fontSize
+            fontSize = AppTextStyles.labelSmall.fontSize,
+            isSelectable = false
         )
     }
 }
@@ -74,7 +76,7 @@ internal fun StatItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(paddingSmall)
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             imageVector = icon,
             contentDescription = null,
             tint = valueColor,
@@ -89,7 +91,8 @@ internal fun StatItem(
         AppText.bodySmall(
             text = label,
             color = AppTheme.colors.secondary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            isSelectable = false
         )
     }
 }
@@ -106,7 +109,7 @@ internal fun InfoChip(
         horizontalArrangement = Arrangement.spacedBy(paddingSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             imageVector = icon,
             contentDescription = null,
             tint = AppTheme.colors.primary,

@@ -125,7 +125,8 @@ private fun LaunchesContent(
                                 AppTheme.colors.onSurface
                             } else {
                                 AppTheme.colors.onSurface.copy(alpha = 0.6f)
-                            }
+                            },
+                            isSelectable = false
                         )
                     },
                     modifier = Modifier

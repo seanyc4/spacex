@@ -37,7 +37,8 @@ fun Chip(
                 text = text,
                 fontWeight = FontWeight.SemiBold,
                 color = contentColor,
-                maxLines = 1
+                maxLines = 1,
+                isSelectable = false
             )
         },
         leadingIcon = {

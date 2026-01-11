@@ -216,7 +216,8 @@ private fun LaunchSiteContent(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText.labelMedium(
                         text = stringResource(R.string.coordinates),
-                        color = AppTheme.colors.onSurfaceVariant
+                        color = AppTheme.colors.onSurfaceVariant,
+                        isSelectable = false
                     )
                     AppText.bodyMedium(
                         text = "$latitude, $longitude",
@@ -256,6 +257,7 @@ private fun LaunchStatisticsContent(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary,
+                isSelectable = false
             )
         }
 
@@ -319,12 +321,14 @@ private fun PadStatChip(
                 text = value,
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                isSelectable = false
             )
             AppText.bodySmall(
                 text = label,
                 color = AppTheme.colors.secondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                isSelectable = false
             )
         }
     }

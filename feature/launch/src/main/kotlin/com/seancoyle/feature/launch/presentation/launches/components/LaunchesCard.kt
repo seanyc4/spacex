@@ -147,7 +147,8 @@ internal fun LaunchCard(
                         maxLines = 1,
                         modifier = Modifier.semantics {
                             contentDescription = missionNameDesc
-                        }
+                        },
+                        isSelectable = false
                     )
 
                     Row(
@@ -167,7 +168,8 @@ internal fun LaunchCard(
                             maxLines = 1,
                             modifier = Modifier.semantics {
                                 contentDescription = dateTimeDescription
-                            }
+                            },
+                            isSelectable = false
                         )
                     }
                 }
@@ -184,7 +186,7 @@ private fun LaunchCardPreview() {
             launchItem = LaunchesUi(
                 id = "1",
                 missionName = "Starlink Mission",
-                launchDate = "2024-01-15",
+                launchDate = "11 January 2026",
                 status = LaunchStatus.SUCCESS,
                 imageUrl = ""
             ),
