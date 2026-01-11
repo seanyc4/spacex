@@ -8,7 +8,6 @@ import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants
 import com.seancoyle.benchmark.actions.deleteAppData
@@ -20,7 +19,6 @@ import org.junit.runner.RunWith
 
 @OptIn(ExperimentalMetricApi::class)
 @RunWith(AndroidJUnit4::class)
-@LargeTest
 class LaunchesBenchmarks {
 
     @get:Rule
