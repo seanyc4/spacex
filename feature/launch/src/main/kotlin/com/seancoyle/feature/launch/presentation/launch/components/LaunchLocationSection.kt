@@ -158,7 +158,7 @@ private fun LaunchSiteContent(
                     contentDescription = stringResource(R.string.map_of_desc, pad.name),
                     modifier = Modifier
                         .fillMaxSize()
-                        .testTag(LaunchesTestTags.LAUNCH_SITE_MAP ),
+                        .testTag(LaunchesTestTags.LAUNCH_SITE_MAP),
                 )
 
                 if (pad.mapUrl != null) {
@@ -167,7 +167,12 @@ private fun LaunchSiteContent(
                             .align(Alignment.BottomEnd)
                             .background(
                                 color = AppTheme.colors.inversePrimary,
-                                shape = RoundedCornerShape(cornerRadiusXSmall)
+                                shape = RoundedCornerShape(
+                                    topEnd = 0.dp,
+                                    topStart = cornerRadiusXSmall,
+                                    bottomEnd = 0.dp,
+                                    bottomStart = 0.dp
+                                )
                             )
                             .padding(horizontal = 12.dp, vertical = 8.dp)
                     ) {
