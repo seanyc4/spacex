@@ -19,11 +19,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCH_SCREEN
+import com.seancoyle.core.ui.components.error.ErrorState
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.presentation.launch.components.ErrorState
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchDetailsSection
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchHeroSection
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchProviderSection

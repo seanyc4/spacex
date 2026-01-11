@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launch.components
+package com.seancoyle.core.ui.components.error
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -26,24 +26,24 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.rocketIconSize
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.feature.launch.R
 
 @Composable
-internal fun ErrorState(
-    message: String,
+fun ErrorState(
+    title: String = stringResource(R.string.unable_to_load),
+    message: String? = null,
     modifier: Modifier = Modifier,
     onRetry: () -> Unit
 ) {
-    val errorDescription = stringResource(R.string.error_loading_launch, message)
+    val errorDescription = stringResource(R.string.error_loading_launch, message.orEmpty())
 
     val infiniteTransition = rememberInfiniteTransition(label = "errorRocketAnimation")
 
@@ -140,9 +140,9 @@ internal fun ErrorState(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
+            .testTag(LaunchesTestTags.ERROR_STATE)
             .semantics {
                 contentDescription = errorDescription
-                testTag = LaunchesTestTags.ERROR_STATE
             },
         contentAlignment = Alignment.Center
     ) {
@@ -169,12 +169,12 @@ internal fun ErrorState(
             Spacer(modifier.height(16.dp))
 
             AppText.titleLarge(
-                text = stringResource(R.string.unable_to_load),
+                text = title,
                 color = AppTheme.colors.onBackground,
                 
             )
             AppText.bodyMedium(
-                text = message,
+                text = message.orEmpty(),
                 color = AppTheme.colors.onSurfaceVariant,
                 
             )

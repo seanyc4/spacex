@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.seancoyle.core.ui.components.error.ErrorState
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
-import com.seancoyle.feature.launch.presentation.launch.components.ErrorState
 import com.seancoyle.feature.launch.presentation.launch.components.LoadingState
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState

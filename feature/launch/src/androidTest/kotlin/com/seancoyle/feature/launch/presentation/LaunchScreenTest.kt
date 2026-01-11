@@ -12,8 +12,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.ui.components.error.ErrorState
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.feature.launch.presentation.launch.components.ErrorState
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchDetailsSection
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchHeroSection
 import com.seancoyle.feature.launch.presentation.launch.components.LaunchProviderSection

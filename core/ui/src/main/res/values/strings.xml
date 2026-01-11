@@ -6,9 +6,9 @@
     <string name="rocket_icon_desc">Rocket Launch Icon</string>
 
     <!-- Error Messages-->
-    <string name="no_links">This launch event has no media links</string>
-    <string name="error_links">Unable to load link</string>
-    <string name="no_internet">Please check your internet connection and try again</string>
+    <string name="empty_data">No launches matching that query</string>
+    <string name="unable_to_load">Unable to load</string>
+    <string name="error_loading_launch">Error loading launch: %1$s</string>
 
     <!-- Database Error Messages -->
     <string name="cache_error">Database error</string>
