@@ -1,5 +1,6 @@
 apply {
     from("$rootDir/android-base.gradle")
+    from("$rootDir/android-base-compose.gradle")
     from("$rootDir/hilt.gradle")
 }
 
