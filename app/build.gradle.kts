@@ -1,6 +1,5 @@
 apply {
     from("$rootDir/hilt.gradle")
-    from("$rootDir/android-base-ui.gradle")
     from("$rootDir/android-base-compose.gradle")
 }
 

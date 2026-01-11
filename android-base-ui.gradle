@@ -1,5 +1,0 @@
-apply plugin: libs.plugins.ksp.get().pluginId
-
-dependencies {
-    implementation(libs.lifecycle.savedstate)
-}
