@@ -28,6 +28,6 @@ object Dimens {
 
     val launchCardHeight = 210.dp
     val launchImageHeight = 220.dp
-    val rocketIconSize = 150.dp
+    val rocketIconSize = 125.dp
 
 }

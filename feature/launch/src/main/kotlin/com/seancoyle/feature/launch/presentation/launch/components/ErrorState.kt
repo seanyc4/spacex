@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -31,7 +32,6 @@ import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.rocketIconSize
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -58,7 +58,7 @@ internal fun ErrorState(
                 1.15f at 600                              // Growing during takeoff
                 1.25f at 1200                             // Max size at peak
                 1.2f at 2000                              // Slight shrink as trouble starts
-                1.1f at 3000                              // Shrinking during fall
+                1f at 3000                              // Shrinking during fall
                 1f at 4000                                // Back to normal
                 1f at 5000                                // Hold
             },
@@ -77,14 +77,14 @@ internal fun ErrorState(
                 0f at 0                                   // Start upright
                 (-5f) at 400                              // Slight tilt during takeoff
                 0f at 800                                 // Straighten out
-                5f at 1200                                // Peak - slight wobble right
-                (-8f) at 1600                             // Wobble left - something's wrong
-                15f at 2000                               // Starting to tip
-                45f at 2400                               // Tipping over
-                90f at 2800                               // Horizontal
-                120f at 3200                              // Nose pointing down
-                135f at 3600                              // Crashed - pointing southeast
-                135f at 4200                              // Hold crashed position
+                10f at 1200                                // Peak - slight wobble right
+                30f at 1600                             // Wobble left - something's wrong
+                50f at 2000                               // Starting to tip
+                65f at 2400                               // Tipping over
+                85f at 2800                               // Horizontal
+                100f at 3200                              // Nose pointing down
+                110f at 3600                              // Crashed - pointing southeast
+                110f at 4200                              // Hold crashed position
                 0f at 5000                                // Smooth reset
             },
             repeatMode = RepeatMode.Restart
@@ -150,6 +150,8 @@ internal fun ErrorState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
+            Spacer(modifier)
+
             Icon(
                 imageVector = Icons.Default.RocketLaunch,
                 contentDescription = null,
@@ -164,7 +166,7 @@ internal fun ErrorState(
                 tint = AppTheme.colors.error
             )
 
-            Spacer(modifier = modifier.height(40.dp))
+            Spacer(modifier.height(16.dp))
 
             AppText.titleLarge(
                 text = stringResource(R.string.unable_to_load),
@@ -175,16 +177,13 @@ internal fun ErrorState(
                 color = AppTheme.colors.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(paddingMedium))
+            Spacer(modifier)
 
             ButtonPrimary(
                 text = stringResource(R.string.retry),
                 onClick = onRetry,
-                modifier = Modifier.semantics {
-                    testTag = LaunchesTestTags.RETRY_BUTTON
-                }
+                modifier = Modifier.testTag(LaunchesTestTags.RETRY_BUTTON)
             )
-
         }
     }
 }
