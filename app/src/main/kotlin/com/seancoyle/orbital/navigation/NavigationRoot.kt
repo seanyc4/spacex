@@ -19,6 +19,7 @@ import com.seancoyle.feature.launch.presentation.launches.LaunchesRoute
 import com.seancoyle.navigation.Route
 import com.seancoyle.navigation.scenes.ListDetailScene
 import com.seancoyle.navigation.scenes.rememberListDetailSceneStrategy
+import com.seancoyle.navigation.transitions.fadeOutTransition
 
 @Composable
 fun NavigationRoot(
@@ -39,8 +40,13 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator()
         ),
         sceneStrategy = listDetailStrategy,
+        transitionSpec = { fadeOutTransition() },
+        popTransitionSpec = { fadeOutTransition() },
+        predictivePopTransitionSpec = { fadeOutTransition() },
         entryProvider = entryProvider {
-            entry<Route.PlaceholderDetail>(metadata = ListDetailScene.detailPane()) {
+            entry<Route.PlaceholderDetail>(
+                metadata = ListDetailScene.detailPane(),
+            ) {
                 if (!isExpandedScreen) {
                     // On compact screens, remove placeholder detail when in portrait mode
                     backStack.removeIf { it is Route.PlaceholderDetail }
@@ -51,7 +57,8 @@ fun NavigationRoot(
             entry<Route.Launches>(metadata = ListDetailScene.listPane()) {
                 if (isExpandedScreen) {
                     // On expanded screens, ensure a detail placeholder is present if no detail exists
-                    val hasDetail = backStack.any { it is Route.Launch || it is Route.PlaceholderDetail }
+                    val hasDetail =
+                        backStack.any { it is Route.Launch || it is Route.PlaceholderDetail }
                     if (!hasDetail) {
                         backStack.add(Route.PlaceholderDetail)
                     }
@@ -69,7 +76,9 @@ fun NavigationRoot(
                 )
             }
 
-            entry<Route.Launch>(metadata = ListDetailScene.detailPane()) { key ->
+            entry<Route.Launch>(
+                metadata = ListDetailScene.detailPane()
+            ) { key ->
                 val viewModel = hiltViewModel<LaunchViewModel, LaunchViewModel.Factory>(
                     creationCallback = { factory ->
                         factory.create(
