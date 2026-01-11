@@ -214,12 +214,7 @@ private fun LaunchSiteContent(
                         color = AppTheme.colors.onSurfaceVariant
                     )
                     AppText.bodyMedium(
-                        text = "${String.format("%.6f", latitude)}, ${
-                            String.format(
-                                "%.6f",
-                                longitude
-                            )
-                        }",
+                        text = "$latitude, $longitude",
                         color = AppTheme.colors.onSurface,
                         fontWeight = FontWeight.Medium
                     )

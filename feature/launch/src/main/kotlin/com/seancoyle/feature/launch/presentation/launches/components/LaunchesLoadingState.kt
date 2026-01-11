@@ -27,11 +27,11 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.launchCardHeight
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.util.Dimens.launchesCardHeight
 
 @Composable
 fun LaunchesLoadingState(
@@ -63,7 +63,7 @@ private fun LoadingLaunchCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(launchesCardHeight)
+            .height(launchCardHeight)
             .clip(RoundedCornerShape(cornerRadiusLarge))
             .background(AppTheme.colors.surface)
     ) {
