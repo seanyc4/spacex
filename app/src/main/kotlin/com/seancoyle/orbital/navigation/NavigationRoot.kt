@@ -85,7 +85,6 @@ fun NavigationRoot(
 }
 
 private fun NavBackStack<NavKey>.addDetail(detailRoute: Route.Launch) {
-    // Remove any existing detail routes (including placeholder), then add the new detail route
-    removeIf { it is Route.Launch || it is Route.PlaceholderDetail }
+    removeIf { it is Route.Launch }
     add(detailRoute)
 }
