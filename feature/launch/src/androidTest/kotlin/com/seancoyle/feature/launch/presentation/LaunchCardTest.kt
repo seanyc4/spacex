@@ -35,7 +35,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(missionName = missionName),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -54,7 +55,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(launchDate = launchDate),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -71,7 +73,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.SUCCESS),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.PAST,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -88,7 +91,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -105,7 +109,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.SUCCESS),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.PAST,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -122,7 +127,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.GO),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -139,7 +145,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.FAILED),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.PAST,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -156,7 +163,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.TBD),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -173,7 +181,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.TBC),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -197,7 +206,8 @@ class LaunchCardTest {
                         clickedType = type
                     },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -219,7 +229,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(),
                     onClick = { _, type -> clickedType = type },
                     launchesType = LaunchesType.PAST,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -244,7 +255,8 @@ class LaunchCardTest {
                     ),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -262,7 +274,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(status = LaunchStatus.GO),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
@@ -282,7 +295,8 @@ class LaunchCardTest {
                     launchItem = createTestLaunchesUi(missionName = longMissionName),
                     onClick = { _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    isSelected = true
                 )
             }
         }
