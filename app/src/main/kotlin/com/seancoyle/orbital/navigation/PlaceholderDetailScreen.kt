@@ -44,7 +44,7 @@ fun PlaceholderDetailScreen(
 
     val floatingOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -12f, // Moves up 12dp
+        targetValue = -18f, // Moves up 12dp
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = 2000,
@@ -60,7 +60,7 @@ fun PlaceholderDetailScreen(
         targetValue = 1.2f, // Scales to 120%
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2500,
+                durationMillis = 2000,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Reverse
@@ -69,11 +69,11 @@ fun PlaceholderDetailScreen(
     )
 
     val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.8f,
+        initialValue = 0.6f,
         targetValue = 1f, // Fades from 80% to 100% opacity
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 2500,
+                durationMillis = 2000,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Reverse
@@ -96,7 +96,7 @@ fun PlaceholderDetailScreen(
             contentDescription = stringResource(R.string.rocket_icon_desc),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(100.dp)
+                .size(150.dp)
                 .offset(y = floatingOffset.dp) // Vertical floating motion
                 .scale(scale)
                 .alpha(alpha)
@@ -104,7 +104,7 @@ fun PlaceholderDetailScreen(
 
         Spacer(modifier = modifier.height(28.dp))
 
-        AppText.bodyLarge(
+        AppText.titleLarge(
             text = messageText,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
