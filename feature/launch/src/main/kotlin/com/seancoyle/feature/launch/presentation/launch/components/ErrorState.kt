@@ -1,6 +1,5 @@
 package com.seancoyle.feature.launch.presentation.launch.components
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -33,6 +32,7 @@ import com.seancoyle.core.ui.designsystem.buttons.ButtonPrimary
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.rocketIconSize
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
@@ -47,62 +47,93 @@ internal fun ErrorState(
 
     val infiniteTransition = rememberInfiniteTransition(label = "errorRocketAnimation")
 
-    // Scale animation: grows bigger then returns to normal
+    // Scale animation: grows bigger during takeoff then returns to normal during crash
     val scale by infiniteTransition.animateFloat(
         initialValue = 1f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 3000
-                1f at 0 using FastOutSlowInEasing        // Start normal
-                1.3f at 800 using FastOutSlowInEasing    // Grow bigger
-                1.3f at 1200 using FastOutSlowInEasing   // Hold at max size
-                1f at 2000 using FastOutSlowInEasing     // Shrink back
-                1f at 3000                                // Hold at normal
+                durationMillis = 5000
+                1f at 0                                   // Start normal
+                1.15f at 600                              // Growing during takeoff
+                1.25f at 1200                             // Max size at peak
+                1.2f at 2000                              // Slight shrink as trouble starts
+                1.1f at 3000                              // Shrinking during fall
+                1f at 4000                                // Back to normal
+                1f at 5000                                // Hold
             },
             repeatMode = RepeatMode.Restart
         ),
         label = "crashingScale"
     )
 
-    // Rotation animation: tips over like crashing
+    // Rotation animation: takes off, wobbles, then crashes pointing southeast
     val rotation by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 0f,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 3000
-                0f at 0 using FastOutSlowInEasing        // Start upright
-                0f at 800 using FastOutSlowInEasing      // Still upright while growing
-                (-10f) at 1000 using FastOutSlowInEasing   // Wobble left
-                10f at 1200 using FastOutSlowInEasing    // Wobble right
-                45f at 1600 using FastOutSlowInEasing    // Tip over to the right
-                60f at 2000 using FastOutSlowInEasing    // Crash angle
-                60f at 2400                               // Hold crashed
-                0f at 3000 using FastOutSlowInEasing     // Reset to upright
+                durationMillis = 5000
+                0f at 0                                   // Start upright
+                (-5f) at 400                              // Slight tilt during takeoff
+                0f at 800                                 // Straighten out
+                5f at 1200                                // Peak - slight wobble right
+                (-8f) at 1600                             // Wobble left - something's wrong
+                15f at 2000                               // Starting to tip
+                45f at 2400                               // Tipping over
+                90f at 2800                               // Horizontal
+                120f at 3200                              // Nose pointing down
+                135f at 3600                              // Crashed - pointing southeast
+                135f at 4200                              // Hold crashed position
+                0f at 5000                                // Smooth reset
             },
             repeatMode = RepeatMode.Restart
         ),
         label = "crashingRotation"
     )
 
-    // Vertical offset: drops down when crashing
+    // Vertical offset: rises up during takeoff, then falls down during crash
     val offsetY by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 0f,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 3000
-                0f at 0 using FastOutSlowInEasing        // Start position
-                (-8f) at 800 using FastOutSlowInEasing     // Rise up slightly while growing
-                (-8f) at 1200 using FastOutSlowInEasing    // Hold up
-                12f at 2000 using FastOutSlowInEasing    // Drop down (crash)
-                12f at 2400                               // Hold at crash position
-                0f at 3000 using FastOutSlowInEasing     // Reset
+                durationMillis = 5000
+                0f at 0                                   // Start position
+                (-15f) at 600                             // Rising up - takeoff!
+                (-25f) at 1200                            // Peak height
+                (-20f) at 1600                            // Starting to fall
+                (-10f) at 2000                            // Falling
+                5f at 2400                                // Dropping faster
+                20f at 2800                               // Accelerating down
+                35f at 3200                               // Almost crashed
+                45f at 3600                               // Crashed position
+                45f at 4200                               // Hold at crash
+                0f at 5000                                // Reset
             },
             repeatMode = RepeatMode.Restart
         ),
         label = "crashingOffsetY"
+    )
+
+    // Horizontal offset: drifts right as it crashes
+    val offsetX by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 0f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 5000
+                0f at 0                                   // Start centered
+                0f at 1200                                // Stay centered during takeoff
+                5f at 2000                                // Slight drift right
+                15f at 2800                               // Drifting more
+                25f at 3600                               // Crashed offset
+                25f at 4200                               // Hold
+                0f at 5000                                // Reset
+            },
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "crashingOffsetX"
     )
 
     Box(
@@ -123,14 +154,18 @@ internal fun ErrorState(
                 imageVector = Icons.Default.RocketLaunch,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(rocketIconSize)
                     .scale(scale)
                     .graphicsLayer {
                         rotationZ = rotation
+                        translationX = offsetX.dp.toPx()
                         translationY = offsetY.dp.toPx()
                     },
                 tint = AppTheme.colors.error
             )
+
+            Spacer(modifier = modifier.height(40.dp))
+
             AppText.titleLarge(
                 text = stringResource(R.string.unable_to_load),
                 color = AppTheme.colors.onBackground
@@ -141,6 +176,7 @@ internal fun ErrorState(
             )
 
             Spacer(modifier = Modifier.height(paddingMedium))
+
             ButtonPrimary(
                 text = stringResource(R.string.retry),
                 onClick = onRetry,

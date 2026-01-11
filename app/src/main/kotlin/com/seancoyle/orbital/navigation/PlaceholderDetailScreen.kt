@@ -30,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens.rocketIconSize
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.navigation.R
 
@@ -96,7 +97,7 @@ fun PlaceholderDetailScreen(
             contentDescription = stringResource(R.string.rocket_icon_desc),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(150.dp)
+                .size(rocketIconSize)
                 .offset(y = floatingOffset.dp) // Vertical floating motion
                 .scale(scale)
                 .alpha(alpha)
