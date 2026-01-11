@@ -49,7 +49,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -82,7 +85,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -112,7 +118,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -151,7 +160,9 @@ class LaunchesScreenTest {
                         onClick = { id, type ->
                             clickedId = id
                             clickedType = type
-                        }
+                        },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
                     )
                 }
             }
@@ -184,7 +195,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -218,7 +232,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(scrollPosition = 0),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -249,7 +266,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = { pos -> scrollPosition = pos },
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }
@@ -286,7 +306,9 @@ class LaunchesScreenTest {
                         state = LaunchesState(launchesType = LaunchesType.UPCOMING),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, type -> clickedType = type }
+                        onClick = { _, type -> clickedType = type },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
                     )
                 }
             }
@@ -318,7 +340,9 @@ class LaunchesScreenTest {
                         state = LaunchesState(launchesType = LaunchesType.PAST),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, type -> clickedType = type }
+                        onClick = { _, type -> clickedType = type },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
                     )
                 }
             }
@@ -353,7 +377,10 @@ class LaunchesScreenTest {
                         state = LaunchesState(),
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> }
+                        onClick = { _, _ -> },
+                        columnCount = 2,
+                        selectedLaunchId = "34235462424"
+
                     )
                 }
             }

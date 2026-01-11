@@ -56,9 +56,9 @@ class LaunchUiMapper @Inject constructor(
             val windowEndDateTime = windowEnd?.let { dateFormatter.formatDate(it) }
             val duration = calculateDuration(windowStartDateTime, windowEndDateTime)
             val windowPosition = calculateLaunchWindowPosition(
-                windowStartDateTime,
-                windowEndDateTime,
-                launchDateTime
+                windowStart = windowStartDateTime,
+                windowEnd = windowEndDateTime,
+                launchTime = launchDateTime
             )
 
             return LaunchUI(
@@ -139,8 +139,8 @@ class LaunchUiMapper @Inject constructor(
         countryCode = country?.alpha2Code ?: location?.country?.alpha2Code.orEmpty(),
         imageUrl = image.imageUrl,
         description = description.orEmpty(),
-        latitude = latitude,
-        longitude = longitude,
+        latitude = String.format("%.6f", latitude),
+        longitude = String.format("%.6f", longitude),
         totalLaunchCount = totalLaunchCount?.toString() ?: NA,
         orbitalLaunchAttemptCount = orbitalLaunchAttemptCount?.toString() ?: NA,
         locationTotalLaunchCount = location?.totalLaunchCount?.toString() ?: NA,

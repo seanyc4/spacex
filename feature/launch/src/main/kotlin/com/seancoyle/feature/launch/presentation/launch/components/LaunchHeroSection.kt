@@ -86,7 +86,8 @@ internal fun LaunchHeroSection(
                 color = AppTheme.colors.primary,
                 modifier = Modifier.semantics {
                     contentDescription = missionNameDesc
-                }
+                },
+                
             )
 
             Spacer(modifier = Modifier.height(paddingMedium))
@@ -107,7 +108,8 @@ internal fun LaunchHeroSection(
                     color = AppTheme.colors.secondary,
                     modifier = Modifier.semantics {
                         contentDescription = launchDateDesc
-                    }
+                    },
+                    
                 )
             }
         }

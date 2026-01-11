@@ -8,7 +8,7 @@
 
     <style name="Theme.CustomisedSplashTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#0B1C2D</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/orbital_splash_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>

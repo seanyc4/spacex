@@ -1,5 +1,6 @@
 package com.seancoyle.navigation.scenes
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,13 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.Scene
+import com.seancoyle.navigation.transitions.fadeOutTransition
 
-class ListDetailScene<T: Any>(
+class ListDetailScene<T : Any>(
     val listEntry: NavEntry<T>,
     val detailEntry: NavEntry<T>,
     override val key: Any,
     override val previousEntries: List<NavEntry<T>>
-): Scene<T> {
+) : Scene<T> {
 
     override val entries: List<NavEntry<T>>
         get() = listOf(listEntry, detailEntry)
@@ -25,7 +27,15 @@ class ListDetailScene<T: Any>(
                     listEntry.Content()
                 }
                 Column(modifier = Modifier.weight(0.5f)) {
-                    detailEntry.Content()
+                    AnimatedContent(
+                        targetState = detailEntry,
+                        transitionSpec = {
+                            fadeOutTransition()
+                        },
+                        label = "DetailPaneTransition"
+                    ) { entry ->
+                        entry.Content()
+                    }
                 }
             }
         }

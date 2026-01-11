@@ -11,8 +11,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -21,7 +20,6 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
@@ -43,10 +41,10 @@ object AppCard {
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = paddingXLarge)
+                .padding(horizontal = paddingLarge)
                 .then(
                     if (testTag != null) {
-                        Modifier.semantics { this.testTag = testTag }
+                        Modifier.testTag(testTag)
                     } else {
                         Modifier
                     }
@@ -59,7 +57,7 @@ object AppCard {
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge),
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(20.dp),
                 content = content
             )
         }
@@ -85,7 +83,7 @@ object AppCard {
                 .fillMaxWidth()
                 .then(
                     if (testTag != null) {
-                        Modifier.semantics { this.testTag = testTag }
+                        Modifier.testTag(testTag)
                     } else {
                         Modifier
                     }
@@ -121,7 +119,7 @@ object AppCard {
                 .fillMaxWidth()
                 .then(
                     if (testTag != null) {
-                        Modifier.semantics { this.testTag = testTag }
+                        Modifier.testTag(testTag)
                     } else {
                         Modifier
                     }

@@ -53,9 +53,10 @@ enum class AppText {
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
+        val displayText = if (isUppercase) text.uppercase() else text
         Text(
             modifier = modifier,
-            text = if (isUppercase) text.uppercase() else text,
+            text = displayText,
             style = style,
             textDecoration = textDecoration,
             textAlign = textAlign,
@@ -113,8 +114,9 @@ enum class AppText {
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
+        val displayText = if (isUppercase) annotatedString.toUpperCase() else annotatedString
         Text(
-            text = if (isUppercase) annotatedString.toUpperCase() else annotatedString,
+            text = displayText,
             modifier = modifier,
             style = style,
             textDecoration = textDecoration,

@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.presentation.launch.components.rocket
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,12 +48,14 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
+import com.seancoyle.core.ui.designsystem.theme.Dimens.launchImageHeight
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
+import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.components.DetailRow
 import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
@@ -111,6 +114,7 @@ private fun RocketHeader(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -120,7 +124,8 @@ private fun RocketHeader(
                 AppText.labelMedium(
                     text = stringResource(R.string.rocket).uppercase(),
                     color = AppTheme.colors.primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    
                 )
                 AppText.titleMedium(
                     text = config.fullName,
@@ -128,17 +133,16 @@ private fun RocketHeader(
                     color = AppTheme.colors.onSurface,
                     modifier = Modifier.padding(top = paddingSmall)
                 )
-                    AppText.bodyLarge(
-                        text = config.variant,
-                        color = AppTheme.colors.secondary,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(top = paddingSmall)
-                    )
-
-                    AppText.bodyMedium(
-                        text = stringResource(R.string.also_known_as, config.alias),
-                        color = AppTheme.colors.secondary
-                    )
+                AppText.bodyLarge(
+                    text = config.variant,
+                    color = AppTheme.colors.secondary,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(top = paddingSmall)
+                )
+                AppText.bodyMedium(
+                    text = stringResource(R.string.also_known_as, config.alias),
+                    color = AppTheme.colors.secondary
+                )
             }
             Box(
                 modifier = Modifier
@@ -166,16 +170,19 @@ private fun RocketHeader(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(cornerRadiusMedium)),
+                .height(launchImageHeight)
+                .clip(RoundedCornerShape(cornerRadiusMedium))
+                .clickable {
+                    context.openUrl(config.imageUrl)
+                },
         )
 
-            AppText.bodyMedium(
-                text = config.description,
-                color = AppTheme.colors.secondary,
-                modifier = Modifier.padding(vertical = paddingMedium)
-            )
-        }
+        AppText.bodyMedium(
+            text = config.description,
+            color = AppTheme.colors.secondary,
+            modifier = Modifier.padding(vertical = paddingMedium)
+        )
+    }
 }
 
 @Composable
@@ -187,7 +194,8 @@ private fun LaunchStatistics(
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.primary
+            color = AppTheme.colors.primary,
+            
         )
 
         Row(
@@ -232,7 +240,8 @@ private fun PhysicalSpecifications(
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
-            color = AppTheme.colors.primary
+            color = AppTheme.colors.primary,
+            
         )
 
         Column(
