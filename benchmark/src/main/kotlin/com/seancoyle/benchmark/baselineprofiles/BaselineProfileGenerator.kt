@@ -2,7 +2,6 @@ package com.seancoyle.benchmark.baselineprofiles
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
 import com.seancoyle.benchmark.benchmarks.launch.launchJourney
@@ -20,7 +19,6 @@ import org.junit.runner.RunWith
  * Run ./gradlew :app:generateBaselineProfile to generate using gradle managed device
  */
 @RunWith(AndroidJUnit4::class)
-@LargeTest
 class BaselineProfileGenerator {
     @get:Rule
     val baselineProfileRule = BaselineProfileRule()
