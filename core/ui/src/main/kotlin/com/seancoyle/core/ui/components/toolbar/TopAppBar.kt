@@ -54,7 +54,7 @@ fun TopAppBar(
                     AppText.headlineLarge(
                         text = stringResource(id = R.string.app_name),
                         color = AppTheme.colors.primary,
-                        isSelectable = false
+                        
                     )
                     Spacer(modifier = Modifier.width(paddingLarge))
                     Icon(

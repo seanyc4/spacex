@@ -148,7 +148,7 @@ internal fun LaunchCard(
                         modifier = Modifier.semantics {
                             contentDescription = missionNameDesc
                         },
-                        isSelectable = false
+                        
                     )
 
                     Row(
@@ -169,7 +169,7 @@ internal fun LaunchCard(
                             modifier = Modifier.semantics {
                                 contentDescription = dateTimeDescription
                             },
-                            isSelectable = false
+                            
                         )
                     }
                 }

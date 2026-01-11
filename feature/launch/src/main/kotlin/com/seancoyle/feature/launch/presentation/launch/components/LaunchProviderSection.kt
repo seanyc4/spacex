@@ -45,7 +45,7 @@ internal fun LaunchProviderSection(
                         text = stringResource(R.string.name).uppercase(),
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
-                        isSelectable = false
+                        
                     )
                     AppText.titleMedium(
                         text = agency.name,
@@ -58,7 +58,7 @@ internal fun LaunchProviderSection(
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 14.dp),
-                        isSelectable = false
+                        
                     )
                     AppText.titleMedium(
                         text = agency.abbrev,
@@ -71,7 +71,7 @@ internal fun LaunchProviderSection(
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 14.dp),
-                        isSelectable = false
+                        
                     )
                     AppText.titleMedium(
                         text = agency.type,

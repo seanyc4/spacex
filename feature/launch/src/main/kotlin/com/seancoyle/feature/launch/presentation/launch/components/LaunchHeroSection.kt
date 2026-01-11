@@ -87,7 +87,7 @@ internal fun LaunchHeroSection(
                 modifier = Modifier.semantics {
                     contentDescription = missionNameDesc
                 },
-                isSelectable = false
+                
             )
 
             Spacer(modifier = Modifier.height(paddingMedium))
@@ -109,7 +109,7 @@ internal fun LaunchHeroSection(
                     modifier = Modifier.semantics {
                         contentDescription = launchDateDesc
                     },
-                    isSelectable = false
+                    
                 )
             }
         }

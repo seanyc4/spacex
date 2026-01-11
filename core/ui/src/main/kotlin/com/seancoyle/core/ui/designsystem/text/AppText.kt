@@ -1,7 +1,6 @@
 package com.seancoyle.core.ui.designsystem.text
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -51,44 +50,24 @@ enum class AppText {
         lineHeight: TextUnit? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        isSelectable: Boolean = true,
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
         val displayText = if (isUppercase) text.uppercase() else text
-        if (isSelectable) {
-            SelectionContainer {
-                Text(
-                    modifier = modifier,
-                    text = displayText,
-                    style = style,
-                    textDecoration = textDecoration,
-                    textAlign = textAlign,
-                    maxLines = maxLines,
-                    color = color,
-                    overflow = overflow,
-                    onTextLayout = onTextLayout,
-                    fontWeight = fontWeight ?: style.fontWeight,
-                    fontSize = fontSize ?: style.fontSize,
-                    lineHeight = lineHeight ?: style.lineHeight,
-                )
-            }
-        } else {
-            Text(
-                modifier = modifier,
-                text = displayText,
-                style = style,
-                textDecoration = textDecoration,
-                textAlign = textAlign,
-                maxLines = maxLines,
-                color = color,
-                overflow = overflow,
-                onTextLayout = onTextLayout,
-                fontWeight = fontWeight ?: style.fontWeight,
-                fontSize = fontSize ?: style.fontSize,
-                lineHeight = lineHeight ?: style.lineHeight,
-            )
-        }
+        Text(
+            modifier = modifier,
+            text = displayText,
+            style = style,
+            textDecoration = textDecoration,
+            textAlign = textAlign,
+            maxLines = maxLines,
+            color = color,
+            overflow = overflow,
+            onTextLayout = onTextLayout,
+            fontWeight = fontWeight ?: style.fontWeight,
+            fontSize = fontSize ?: style.fontSize,
+            lineHeight = lineHeight ?: style.lineHeight,
+        )
     }
 
     @Composable
@@ -103,7 +82,6 @@ enum class AppText {
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        isSelectable: Boolean = true,
         modifier: Modifier = Modifier,
     ) {
         this(
@@ -118,7 +96,6 @@ enum class AppText {
             fontWeight = fontWeight,
             onTextLayout = onTextLayout,
             isUppercase = isUppercase,
-            isSelectable = isSelectable,
         )
     }
 
@@ -134,42 +111,23 @@ enum class AppText {
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        isSelectable: Boolean = true,
         modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
         val displayText = if (isUppercase) annotatedString.toUpperCase() else annotatedString
-        if (isSelectable) {
-            SelectionContainer {
-                Text(
-                    text = displayText,
-                    modifier = modifier,
-                    style = style,
-                    textDecoration = textDecoration,
-                    textAlign = textAlign,
-                    maxLines = maxLines,
-                    color = color,
-                    overflow = overflow,
-                    onTextLayout = onTextLayout,
-                    fontWeight = fontWeight ?: style.fontWeight,
-                    fontSize = fontSize ?: style.fontSize,
-                )
-            }
-        } else {
-            Text(
-                text = displayText,
-                modifier = modifier,
-                style = style,
-                textDecoration = textDecoration,
-                textAlign = textAlign,
-                maxLines = maxLines,
-                color = color,
-                overflow = overflow,
-                onTextLayout = onTextLayout,
-                fontWeight = fontWeight ?: style.fontWeight,
-                fontSize = fontSize ?: style.fontSize,
-            )
-        }
+        Text(
+            text = displayText,
+            modifier = modifier,
+            style = style,
+            textDecoration = textDecoration,
+            textAlign = textAlign,
+            maxLines = maxLines,
+            color = color,
+            overflow = overflow,
+            onTextLayout = onTextLayout,
+            fontWeight = fontWeight ?: style.fontWeight,
+            fontSize = fontSize ?: style.fontSize,
+        )
     }
 
     @Composable

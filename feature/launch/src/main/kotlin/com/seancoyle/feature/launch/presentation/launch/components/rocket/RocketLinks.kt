@@ -62,7 +62,7 @@ internal fun LinkButton(
                 color = AppTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
-                isSelectable = false
+                
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

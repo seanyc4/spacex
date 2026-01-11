@@ -45,7 +45,7 @@ fun ButtonPrimary(
                     horizontal = paddingMedium,
                     vertical = paddingSmall
                 ),
-            isSelectable = false
+            
         )
     }
 }

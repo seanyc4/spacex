@@ -40,8 +40,7 @@ internal fun SectionTitle(
             .semantics {
                 contentDescription = sectionDescription
             }
-            .testTag(LaunchesTestTags.SECTION_TITLE),
-        isSelectable = false
+            .testTag(LaunchesTestTags.SECTION_TITLE)
     )
 }
 
@@ -71,8 +70,7 @@ internal fun DetailRow(
         Column(modifier = Modifier.weight(1f)) {
             AppText.labelMedium(
                 text = label,
-                color = AppTheme.colors.secondary,
-                isSelectable = false
+                color = AppTheme.colors.secondary
             )
             AppText.bodyLarge(
                 text = value,

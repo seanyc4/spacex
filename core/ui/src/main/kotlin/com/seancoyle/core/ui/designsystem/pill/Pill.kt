@@ -28,7 +28,7 @@ fun Pill(
                 color = AppColors.White,
                 isUppercase = true,
                 fontWeight = FontWeight.ExtraBold,
-                isSelectable = false
+                
             )
         },
         colors = AssistChipDefaults.assistChipColors(containerColor = color),

@@ -58,7 +58,7 @@ internal fun MiniStatItem(
             color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
             fontSize = AppTextStyles.labelSmall.fontSize,
-            isSelectable = false
+            
         )
     }
 }
@@ -92,7 +92,7 @@ internal fun StatItem(
             text = label,
             color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
-            isSelectable = false
+            
         )
     }
 }
