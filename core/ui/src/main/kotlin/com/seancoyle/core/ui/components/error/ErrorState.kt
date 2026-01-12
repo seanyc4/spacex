@@ -45,8 +45,6 @@ fun ErrorState(
     onRetry: () -> Unit,
     showRetryButton: Boolean = true
 ) {
-    val errorDescription = stringResource(R.string.unable_to_load, message.orEmpty())
-
     val infiniteTransition = rememberInfiniteTransition(label = "errorRocketAnimation")
 
     // Scale animation: grows bigger during takeoff then returns to normal during crash
@@ -144,7 +142,7 @@ fun ErrorState(
             .padding(24.dp)
             .testTag(LaunchesTestTags.ERROR_STATE)
             .semantics {
-                contentDescription = errorDescription
+                contentDescription = message
             },
         contentAlignment = Alignment.Center
     ) {

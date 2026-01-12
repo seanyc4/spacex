@@ -38,7 +38,6 @@ fun LaunchRoute(
 
         is LaunchUiState.Error -> {
             ErrorState(
-                message = state.message,
                 onRetry = { viewModel.onEvent(LaunchEvent.RetryFetch) }
             )
         }
