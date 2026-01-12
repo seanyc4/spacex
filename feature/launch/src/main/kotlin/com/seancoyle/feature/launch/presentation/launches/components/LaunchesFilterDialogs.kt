@@ -49,7 +49,7 @@ internal fun LaunchesFilterDialog(
 
     AlertDialog(
         onDismissRequest = { onEvent(DismissFilterDialogEvent) },
-        title = { AppText.headlineMedium(stringResource(R.string.filter_options)) },
+        title = { AppText.headlineMedium(text = stringResource(R.string.filter_options)) },
         text = {
             if (!windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
                 PortraitDialogContent(
@@ -95,7 +95,7 @@ private fun PortraitDialogContent(
     modifier: Modifier
 ) {
     Column {
-        AppText.bodyLarge(stringResource(R.string.search))
+        AppText.bodyLarge(text = stringResource(R.string.search))
         QueryInputField(query = query, onQueryChange = onQueryChange)
         AppText.bodyLarge(
             text = stringResource(R.string.launch_status),
@@ -123,7 +123,7 @@ private fun LandscapeDialogContent(
                 .weight(1f)
                 .padding(end = 8.dp)
         ) {
-            AppText.bodyLarge(stringResource(R.string.search))
+            AppText.bodyLarge(text = stringResource(R.string.search))
             QueryInputField(query = query, onQueryChange = onQueryChange)
             Spacer(modifier = Modifier.height(paddingXLarge))
         }
@@ -231,7 +231,7 @@ private fun PortraitDialogContentPreview() {
     AppTheme {
         AlertDialog(
             onDismissRequest = {},
-            title = { AppText.headlineMedium("Filter Options") },
+            title = { AppText.headlineMedium(text = "Filter Options") },
             text = {
                 PortraitDialogContent(
                     query = "Mission Name",
@@ -261,7 +261,7 @@ private fun LandscapeDialogContentPreview() {
     AppTheme {
         AlertDialog(
             onDismissRequest = {},
-            title = { AppText.headlineMedium("Filter Options") },
+            title = { AppText.headlineMedium(text = "Filter Options") },
             text = {
                 LandscapeDialogContent(
                     query = "Mission Name",

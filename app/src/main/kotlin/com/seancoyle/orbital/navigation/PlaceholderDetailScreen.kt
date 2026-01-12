@@ -37,10 +37,8 @@ import com.seancoyle.navigation.R
 @Composable
 fun PlaceholderDetailScreen(
     modifier: Modifier = Modifier,
-    message: Int = R.string.select_item_placeholder
+    message: String = stringResource(R.string.select_item_placeholder)
 ) {
-    val messageText = stringResource(message)
-
     val infiniteTransition = rememberInfiniteTransition(label = "placeholderAnimation")
 
     val floatingOffset by infiniteTransition.animateFloat(
@@ -87,7 +85,7 @@ fun PlaceholderDetailScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
             .semantics {
-                contentDescription = messageText
+                contentDescription = message
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -106,9 +104,8 @@ fun PlaceholderDetailScreen(
         Spacer(modifier = modifier.height(28.dp))
 
         AppText.titleLarge(
-            text = messageText,
+            text = message,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            
         )
     }
 }

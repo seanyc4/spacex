@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.R
@@ -38,12 +40,12 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
 fun ErrorState(
-    title: String = stringResource(R.string.unable_to_load),
-    message: String? = null,
     modifier: Modifier = Modifier,
-    onRetry: () -> Unit
+    message: String = stringResource(R.string.unable_to_load),
+    onRetry: () -> Unit,
+    showRetryButton: Boolean = true
 ) {
-    val errorDescription = stringResource(R.string.error_loading_launch, message.orEmpty())
+    val errorDescription = stringResource(R.string.unable_to_load, message.orEmpty())
 
     val infiniteTransition = rememberInfiniteTransition(label = "errorRocketAnimation")
 
@@ -150,7 +152,7 @@ fun ErrorState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)
         ) {
-            Spacer(modifier)
+            Spacer(Modifier)
 
             Icon(
                 imageVector = Icons.Default.RocketLaunch,
@@ -166,26 +168,23 @@ fun ErrorState(
                 tint = AppTheme.colors.error
             )
 
-            Spacer(modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             AppText.titleLarge(
-                text = title,
-                color = AppTheme.colors.onBackground,
-                
-            )
-            AppText.bodyMedium(
-                text = message.orEmpty(),
-                color = AppTheme.colors.onSurfaceVariant,
-                
+                text = message,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
 
-            Spacer(modifier)
+            Spacer(Modifier)
 
-            ButtonPrimary(
-                text = stringResource(R.string.retry),
-                onClick = onRetry,
-                modifier = Modifier.testTag(LaunchesTestTags.RETRY_BUTTON)
-            )
+            if (showRetryButton) {
+                ButtonPrimary(
+                    text = stringResource(R.string.retry),
+                    onClick = onRetry,
+                    modifier = Modifier.testTag(LaunchesTestTags.RETRY_BUTTON)
+                )
+            }
         }
     }
 }
@@ -196,7 +195,20 @@ private fun ErrorStatePreview() {
     AppTheme {
         ErrorState(
             message = "Network connection error. Please try again.",
-            onRetry = {}
+            onRetry = {},
+            showRetryButton = true
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun ErrorStateNoButtonPreview() {
+    AppTheme {
+        ErrorState(
+            message = "Unexpected error occurred.",
+            onRetry = {},
+            showRetryButton = false
         )
     }
 }

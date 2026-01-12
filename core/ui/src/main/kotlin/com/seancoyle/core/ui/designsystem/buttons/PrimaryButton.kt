@@ -37,7 +37,7 @@ fun ButtonPrimary(
         onClick = onClick
     ) {
         AppText.bodyLarge(
-            text,
+            text = text,
             color = AppTheme.colors.onPrimary.copy(alpha = if (enabled) 1f else disabledAlpha.toFloat()),
             fontWeight = FontWeight.ExtraBold,
             modifier = Modifier

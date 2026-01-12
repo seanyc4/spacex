@@ -46,7 +46,7 @@ internal class LaunchRemoteMediator(
 
         Timber.tag(TAG).d(
             "Initialize - Current: query='$currentQuery', launchType=$currentLaunchType, launchStatus=$currentLaunchStatus | " +
-            "Cached: query='$cachedQuery', launchType=$cachedLaunchType, launchstatus=$cachedLaunchStatus | Changed: $queryHasChanged"
+            "Cached: query='$cachedQuery', launchType=$cachedLaunchType, launchStatus=$cachedLaunchStatus | Changed: $queryHasChanged"
         )
 
         // If query parameters have changed, refresh to get relevant results
@@ -71,7 +71,7 @@ internal class LaunchRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, LaunchSummaryEntity>
     ): MediatorResult {
-        return try {
+        try {
 
             val page = when (loadType) {
                 LoadType.REFRESH -> {
@@ -101,7 +101,7 @@ internal class LaunchRemoteMediator(
             when (val remoteLaunchesResult = launchesRemoteDataSource.getLaunches(page, launchesQuery)) {
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
-                    val endOfPaginationReached = launches.size < state.config.pageSize
+                    val endOfPaginationReached = launches.isEmpty() || launches.size < state.config.pageSize
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
                     val prevPage = if (page > 0) page.minus(1) else null
 
@@ -137,7 +137,7 @@ internal class LaunchRemoteMediator(
                         )
                     }
 
-                    MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+                    return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
                 }
 
                 is LaunchResult.Error -> {
