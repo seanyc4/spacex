@@ -92,10 +92,6 @@ class LaunchesViewModel @Inject constructor(
         }
     }
 
-    private fun newSearch() {
-        displayFilterDialog(false)
-    }
-
     private fun clearQueryParameters() {
         setLaunchFilterState(
             query = "",
