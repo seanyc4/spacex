@@ -55,7 +55,8 @@ class LaunchLocalDataSourceImplTest {
             prevKey = null,
             currentPage = 0,
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         val remoteKey2 = LaunchRemoteKeyEntity(
             id = "2",
@@ -63,7 +64,8 @@ class LaunchLocalDataSourceImplTest {
             prevKey = 0,
             currentPage = 1,
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { remoteKeyDao.getRemoteKeys() } returns listOf(remoteKey1, remoteKey2)
 
@@ -93,7 +95,8 @@ class LaunchLocalDataSourceImplTest {
             prevKey = null,
             currentPage = 0,
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { remoteKeyDao.getRemoteKey(ID) } returns remoteKey
 

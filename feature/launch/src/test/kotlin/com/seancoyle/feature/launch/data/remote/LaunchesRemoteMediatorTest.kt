@@ -73,7 +73,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -99,7 +100,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = recentTimestamp,
             cachedQuery = "Falcon",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -125,7 +127,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = staleTimestamp,
             cachedQuery = "Falcon",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -250,7 +253,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
@@ -283,7 +287,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
@@ -314,7 +319,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -345,7 +351,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Error(Throwable("Network error"))
@@ -366,7 +373,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
@@ -388,7 +396,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
@@ -420,7 +429,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 0,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
 
@@ -451,7 +461,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
@@ -472,7 +483,8 @@ class LaunchesRemoteMediatorTest {
             currentPage = 1,
             createdAt = System.currentTimeMillis(),
             cachedQuery = "",
-            cachedLaunchType = LaunchesType.UPCOMING.name
+            cachedLaunchType = LaunchesType.UPCOMING.name,
+            cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
