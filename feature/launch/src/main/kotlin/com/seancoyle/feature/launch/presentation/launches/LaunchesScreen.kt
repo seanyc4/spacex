@@ -136,7 +136,7 @@ private fun LaunchesContent(
             }
         }
         Box(modifier = Modifier.weight(1f)) {
-            val refreshLoadState = feedState.loadState.mediator?.refresh
+            val refreshLoadState = feedState.loadState.refresh
             val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
 
             when (refreshLoadState) {
