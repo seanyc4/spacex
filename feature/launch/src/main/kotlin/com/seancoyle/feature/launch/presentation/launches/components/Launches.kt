@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
@@ -62,6 +64,7 @@ internal fun Launches(
             .fillMaxSize()
             .background(AppTheme.colors.background)
             .testTag(LAUNCHES_SCREEN)
+            .semantics { contentDescription = LAUNCHES_SCREEN }
     ) {
         // Prepend loading/error state (full width)
         item(span = { GridItemSpan(maxLineSpan) }) {
