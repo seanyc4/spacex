@@ -10,6 +10,7 @@ private const val UPCOMING_LAUNCH_URL = "/2.3.0/launches/upcoming/{id}/?mode=det
 private const val PREVIOUS_LAUNCH_URL = "/2.3.0/launches/previous/{id}/?mode=detailed"
 private const val OFFSET = "offset"
 private const val SEARCH = "search"
+private const val STATUS = "status"
 private const val ID = "id"
 
 internal interface LaunchApi {
@@ -18,12 +19,14 @@ internal interface LaunchApi {
     suspend fun getUpcomingLaunches(
         @Query(OFFSET) offset: Int = 0,
         @Query(SEARCH) search: String? = null,
+        @Query(STATUS) status: Int? = null,
     ): LaunchesDto
 
     @GET(PREVIOUS_LAUNCHES_URL)
     suspend fun getPreviousLaunches(
         @Query(OFFSET) offset: Int = 0,
         @Query(SEARCH) search: String? = null,
+        @Query(STATUS) status: Int? = null,
     ): LaunchesDto
 
     @GET(UPCOMING_LAUNCH_URL)

@@ -117,10 +117,6 @@
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
 
-    <!-- Error State -->
-    <string name="unable_to_load">Unable to load</string>
-    <string name="error_loading_launch">Error loading launch: %1$s</string>
-
     <!-- Loading State -->
     <string name="loading_launch_details">Loading launch details</string>
 

@@ -22,7 +22,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.testags.LaunchesTestTags
-import com.seancoyle.core.ui.components.error.ErrorScreen
+import com.seancoyle.core.ui.components.error.ErrorState
 import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
@@ -126,8 +126,8 @@ private fun LaunchesContent(
                             } else {
                                 AppTheme.colors.onSurface.copy(alpha = 0.6f)
                             },
-                            
-                        )
+
+                            )
                     },
                     modifier = Modifier
                         .testTag(testTag)
@@ -136,13 +136,41 @@ private fun LaunchesContent(
             }
         }
         Box(modifier = Modifier.weight(1f)) {
-            when (feedState.loadState.mediator?.refresh) {
+            val refreshLoadState = feedState.loadState.refresh
+            val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
+
+            when (refreshLoadState) {
                 is LoadState.Loading -> {
                     CircularProgressBar()
                 }
 
                 is LoadState.Error -> {
-                    ErrorScreen(onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+                    ErrorState(
+                        onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+                }
+
+                is LoadState.NotLoading -> {
+                    if (feedState.itemCount == 0 && endOfPaginationReached) {
+                        // Only show empty state if we've finished loading and there are no items
+                        ErrorState(
+                            message = stringResource(R.string.empty_data),
+                            modifier = Modifier.fillMaxSize(),
+                            showRetryButton = false,
+                            onRetry = { }
+                        )
+                    } else {
+                        // Show the list (even if it's empty, but not at end of pagination yet)
+                        Launches(
+                            launches = feedState,
+                            state = state,
+                            columnCount = columnCount,
+                            selectedLaunchId = selectedLaunchId,
+                            onEvent = onEvent,
+                            onUpdateScrollPosition = onUpdateScrollPosition,
+                            onClick = onClick,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
 
                 else -> {
@@ -160,10 +188,10 @@ private fun LaunchesContent(
             }
         }
         if (state.isFilterDialogVisible) {
-             LaunchesFilterDialog(
-                 currentFilterState = state,
-                 onEvent = onEvent
-             )
+            LaunchesFilterDialog(
+                currentFilterState = state,
+                onEvent = onEvent
+            )
         }
     }
 }

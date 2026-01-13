@@ -27,7 +27,7 @@ import com.seancoyle.database.util.VidUrlListConverter
         LaunchEntity::class,
         LaunchRemoteKeyEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(

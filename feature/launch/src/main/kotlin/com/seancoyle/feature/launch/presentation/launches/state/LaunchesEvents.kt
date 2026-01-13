@@ -6,7 +6,6 @@ import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 sealed interface LaunchesEvents {
     data object DismissFilterDialogEvent : LaunchesEvents
     data object DisplayFilterDialogEvent : LaunchesEvents
-    data object NewSearchEvent : LaunchesEvents
     data object PullToRefreshEvent : LaunchesEvents
     data object RetryFetchEvent : LaunchesEvents
     data class UpdateFilterStateEvent(

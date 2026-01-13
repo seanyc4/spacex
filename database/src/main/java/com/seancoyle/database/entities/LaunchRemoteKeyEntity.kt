@@ -12,5 +12,6 @@ data class LaunchRemoteKeyEntity(
     val currentPage: Int,
     val createdAt: Long = System.currentTimeMillis(),
     val cachedQuery: String?,
-    val cachedLaunchType: String?
+    val cachedLaunchType: String?,
+    val cachedLaunchStatus: String?
 )

@@ -29,21 +29,24 @@ internal class LaunchRemoteMediator(
             CACHE_TIMEOUT_HOURS,
             TimeUnit.HOURS
         )
-        val remoteKeys = launchesLocalDataSource.getRemoteKeys()
-        val firstKey = remoteKeys.firstOrNull()
+        val firstKey = launchesLocalDataSource.getRemoteKeys().firstOrNull()
         val createdTime = firstKey?.createdAt
 
         // Check if the query parameters have changed from what was cached
         val cachedQuery = firstKey?.cachedQuery
         val cachedLaunchType = firstKey?.cachedLaunchType
+        val cachedLaunchStatus = firstKey?.cachedLaunchStatus
         val currentQuery = launchesQuery.query
         val currentLaunchType = launchesQuery.launchesType.name
+        val currentLaunchStatus = launchesQuery.status?.name
 
-        val queryHasChanged = cachedQuery != currentQuery || cachedLaunchType != currentLaunchType
+        val queryHasChanged = cachedQuery != currentQuery
+                || cachedLaunchType != currentLaunchType
+                || cachedLaunchStatus != currentLaunchStatus
 
         Timber.tag(TAG).d(
-            "Initialize - Current: query='$currentQuery', launchType=$currentLaunchType | " +
-            "Cached: query='$cachedQuery', launchType=$cachedLaunchType | Changed: $queryHasChanged"
+            "Initialize - Current: query='$currentQuery', launchType=$currentLaunchType, launchStatus=$currentLaunchStatus | " +
+            "Cached: query='$cachedQuery', launchType=$cachedLaunchType, launchStatus=$cachedLaunchStatus | Changed: $queryHasChanged"
         )
 
         // If query parameters have changed, refresh to get relevant results
@@ -68,7 +71,7 @@ internal class LaunchRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, LaunchSummaryEntity>
     ): MediatorResult {
-        return try {
+        try {
 
             val page = when (loadType) {
                 LoadType.REFRESH -> {
@@ -98,7 +101,7 @@ internal class LaunchRemoteMediator(
             when (val remoteLaunchesResult = launchesRemoteDataSource.getLaunches(page, launchesQuery)) {
                 is LaunchResult.Success -> {
                     val launches = remoteLaunchesResult.data
-                    val endOfPaginationReached = launches.size < state.config.pageSize
+                    val endOfPaginationReached = launches.isEmpty() || launches.size < state.config.pageSize
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
                     val prevPage = if (page > 0) page.minus(1) else null
 
@@ -118,7 +121,8 @@ internal class LaunchRemoteMediator(
                             prevPage = null, // Always null on refresh since we're starting fresh
                             currentPage = STARTING_PAGE,
                             cachedQuery = launchesQuery.query,
-                            cachedLaunchType = launchesQuery.launchesType.name
+                            cachedLaunchType = launchesQuery.launchesType.name,
+
                         )
                     } else {
                         // Append or prepend data to existing cache
@@ -133,7 +137,7 @@ internal class LaunchRemoteMediator(
                         )
                     }
 
-                    MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+                    return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
                 }
 
                 is LaunchResult.Error -> {

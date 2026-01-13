@@ -39,6 +39,7 @@ enum class AppText {
 
     @Composable
     operator fun invoke(
+        modifier: Modifier = Modifier,
         text: String,
         textDecoration: TextDecoration = TextDecoration.None,
         textAlign: TextAlign? = null,
@@ -50,7 +51,6 @@ enum class AppText {
         lineHeight: TextUnit? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        modifier: Modifier = Modifier,
     ) {
         val style = asStyle()
         val displayText = if (isUppercase) text.uppercase() else text

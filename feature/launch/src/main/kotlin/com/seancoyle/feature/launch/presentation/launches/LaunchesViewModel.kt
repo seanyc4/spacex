@@ -82,7 +82,6 @@ class LaunchesViewModel @Inject constructor(
         when (event) {
             is LaunchesEvents.DismissFilterDialogEvent -> displayFilterDialog(false)
             is LaunchesEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
-            is LaunchesEvents.NewSearchEvent -> newSearch()
             is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
             is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
             is LaunchesEvents.UpdateFilterStateEvent -> setLaunchFilterState(
@@ -91,10 +90,6 @@ class LaunchesViewModel @Inject constructor(
             )
             is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
         }
-    }
-
-    private fun newSearch() {
-        displayFilterDialog(false)
     }
 
     private fun clearQueryParameters() {

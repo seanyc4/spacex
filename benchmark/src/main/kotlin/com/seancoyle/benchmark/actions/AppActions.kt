@@ -12,15 +12,12 @@ private const val INDEX = 1
 internal fun UiAutomatorTestScope.scrollVerticalView(
     repeatDown: Int = 3,
     repeatUp: Int = 3,
-    id: String = ""
+    id: String? = null
 ) {
     waitForStableInActiveWindow()
-    repeat(repeatDown) {
-        findScrollableElement(id).fling(Direction.DOWN)
-    }
-    repeat(repeatUp) {
-        findScrollableElement(id).fling(Direction.UP)
-    }
+    val element = id?.let { findScrollableElement(it) } ?: findScrollableElement()
+    repeat(repeatDown) { element.fling(Direction.DOWN) }
+    repeat(repeatUp) { element.fling(Direction.UP) }
 }
 
 internal fun UiAutomatorTestScope.scrollHorizontalView(
