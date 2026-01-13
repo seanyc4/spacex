@@ -4,6 +4,7 @@ import androidx.test.uiautomator.UiAutomatorTestScope
 import com.seancoyle.benchmark.actions.findElementByTestTag
 import com.seancoyle.benchmark.actions.scrollVerticalView
 import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.test.testags.LaunchesTestTags.LAUNCHES_SCREEN
 import com.seancoyle.core.test.testags.LaunchesTestTags.PAST_TAB
 
 internal fun UiAutomatorTestScope.waitUntilLaunchesIsVisibleToUser() {
@@ -13,7 +14,7 @@ internal fun UiAutomatorTestScope.waitUntilLaunchesIsVisibleToUser() {
 }
 
 internal fun UiAutomatorTestScope.launchesJourney() {
-    scrollVerticalView()
+    scrollVerticalView(id = LAUNCHES_SCREEN)
     findElementByTestTag(PAST_TAB).click()
-    scrollVerticalView()
+    scrollVerticalView(id = LAUNCHES_SCREEN)
 }
