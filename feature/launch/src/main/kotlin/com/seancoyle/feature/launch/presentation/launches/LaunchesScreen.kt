@@ -124,7 +124,7 @@ private fun LaunchesContent(
                             color = if (selectedTabIndex == index) {
                                 AppTheme.colors.onSurface
                             } else {
-                                AppTheme.colors.onSurface.copy(alpha = 0.6f)
+                                AppTheme.colors.onSurface.copy(alpha = 0.3f)
                             },
 
                             )
@@ -143,12 +143,10 @@ private fun LaunchesContent(
                 is LoadState.Loading -> {
                     CircularProgressBar()
                 }
-
                 is LoadState.Error -> {
                     ErrorState(
                         onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
                 }
-
                 is LoadState.NotLoading -> {
                     if (feedState.itemCount == 0 && endOfPaginationReached) {
                         // Only show empty state if we've finished loading and there are no items
@@ -171,19 +169,6 @@ private fun LaunchesContent(
                             modifier = Modifier.fillMaxSize()
                         )
                     }
-                }
-
-                else -> {
-                    Launches(
-                        launches = feedState,
-                        state = state,
-                        columnCount = columnCount,
-                        selectedLaunchId = selectedLaunchId,
-                        onEvent = onEvent,
-                        onUpdateScrollPosition = onUpdateScrollPosition,
-                        onClick = onClick,
-                        modifier = Modifier.fillMaxSize()
-                    )
                 }
             }
         }
