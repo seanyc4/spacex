@@ -11,7 +11,6 @@ import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.LauncherEntity
 import com.seancoyle.database.entities.LauncherStageEntity
@@ -123,20 +122,33 @@ internal object TestData {
         status = status
     )
 
-    fun createLaunchSummaryEntity(
+
+    fun createUpcomingLaunchEntity(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: ImageEntity = createImageEntity(),
-        status: LaunchStatusEntity = createLaunchStatusEntity(),
-        launchType: String = "UPCOMING"
-    ) = LaunchSummaryEntity(
+        status: LaunchStatusEntity = createLaunchStatusEntity()
+    ) = com.seancoyle.database.entities.UpcomingLaunchEntity(
         id = id,
         missionName = name,
         net = net,
         imageUrl = image.imageUrl,
-        status = status,
-        launchType = launchType
+        status = status
+    )
+
+    fun createPastLaunchEntity(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        net: String = "2025-12-13T05:34:00Z",
+        image: ImageEntity = createImageEntity(),
+        status: LaunchStatusEntity = createLaunchStatusEntity()
+    ) = com.seancoyle.database.entities.PastLaunchEntity(
+        id = id,
+        missionName = name,
+        net = net,
+        imageUrl = image.imageUrl,
+        status = status
     )
 
     fun createStatusDto(
@@ -817,6 +829,13 @@ internal object TestData {
         next = next,
         previous = previous,
         results = results
+    )
+
+    fun createEmptyLaunchesDto() = LaunchesDto(
+        count = 0,
+        next = null,
+        previous = null,
+        results = emptyList()
     )
 
 

@@ -5,7 +5,8 @@ import androidx.paging.PagingData
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.database.entities.PastLaunchEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.util.TestData
@@ -28,13 +29,16 @@ import kotlin.test.assertTrue
 class LaunchesRepositoryImplTest {
 
     @MockK
-    private lateinit var pagerFactory: LaunchesPagerFactory
+    private lateinit var upcomingPagerFactory: UpcomingLaunchesPagerFactory
+
+    @MockK
+    private lateinit var pastPagerFactory: PastLaunchesPagerFactory
 
     @MockK
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var launchesLocalDataSource: LaunchesLocalDataSource
+    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
 
     private lateinit var underTest: LaunchesRepository
 
@@ -42,59 +46,78 @@ class LaunchesRepositoryImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchesRepositoryImpl(
-            pagerFactory = pagerFactory,
+            upcomingPagerFactory = upcomingPagerFactory,
+            pastPagerFactory = pastPagerFactory,
             launchesRemoteDataSource = launchesRemoteDataSource,
-            launchesLocalDataSource = launchesLocalDataSource
+            launchDetailLocalDataSource = launchDetailLocalDataSource
         )
     }
 
     @Test
-    fun `pager returns flow of paging data with query`() = runTest {
+    fun `upcomingPager returns flow of paging data with query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "Falcon")
-        val launchEntity = TestData.createLaunchSummaryEntity()
-        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
+        val launchEntity = TestData.createUpcomingLaunchEntity()
+        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
         val pagingData = PagingData.from(listOf(launchEntity))
 
-        every { pagerFactory.create(launchesQuery) } returns mockPager
+        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
-        val result = underTest.pager(launchesQuery)
+        val result = underTest.upcomingPager(launchesQuery)
 
         assertNotNull(result)
         assertNotNull(result.first())
 
-        verify { pagerFactory.create(launchesQuery) }
+        verify { upcomingPagerFactory.create(launchesQuery) }
     }
 
     @Test
-    fun `pager returns empty flow when no data available`() = runTest {
+    fun `pastPager returns flow of paging data with query`() = runTest {
+        val launchesQuery = LaunchesQuery(query = "Falcon")
+        val launchEntity = TestData.createPastLaunchEntity()
+        val mockPager = mockk<Pager<Int, PastLaunchEntity>>()
+        val pagingData = PagingData.from(listOf(launchEntity))
+
+        every { pastPagerFactory.create(launchesQuery) } returns mockPager
+        every { mockPager.flow } returns flowOf(pagingData)
+
+        val result = underTest.pastPager(launchesQuery)
+
+        assertNotNull(result)
+        assertNotNull(result.first())
+
+        verify { pastPagerFactory.create(launchesQuery) }
+    }
+
+    @Test
+    fun `upcomingPager returns empty flow when no data available`() = runTest {
         val launchesQuery = LaunchesQuery(query = "")
-        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
-        val pagingData = PagingData.empty<LaunchSummaryEntity>()
+        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
+        val pagingData = PagingData.empty<UpcomingLaunchEntity>()
 
-        every { pagerFactory.create(launchesQuery) } returns mockPager
+        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
-        val result = underTest.pager(launchesQuery)
+        val result = underTest.upcomingPager(launchesQuery)
 
         assertNotNull(result)
         assertNotNull(result.first())
 
-        verify { pagerFactory.create(launchesQuery) }
+        verify { upcomingPagerFactory.create(launchesQuery) }
     }
 
     @Test
-    fun `pager creates pager with correct launch query`() = runTest {
+    fun `upcomingPager creates pager with correct launch query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "SpaceX")
-        val mockPager = mockk<Pager<Int, LaunchSummaryEntity>>()
-        val pagingData = PagingData.empty<LaunchSummaryEntity>()
+        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
+        val pagingData = PagingData.empty<UpcomingLaunchEntity>()
 
-        every { pagerFactory.create(launchesQuery) } returns mockPager
+        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
-        underTest.pager(launchesQuery)
+        underTest.upcomingPager(launchesQuery)
 
-        verify(exactly = 1) { pagerFactory.create(launchesQuery) }
+        verify(exactly = 1) { upcomingPagerFactory.create(launchesQuery) }
     }
 
     @Test
@@ -102,7 +125,7 @@ class LaunchesRepositoryImplTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         val cachedLaunch = TestData.createLaunch()
-        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
+        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
 
         val result = underTest.getLaunch(id, launchType)
 
@@ -116,7 +139,7 @@ class LaunchesRepositoryImplTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         val remoteLaunch = TestData.createLaunch()
-        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
         val result = underTest.getLaunch(id, launchType)
@@ -131,7 +154,7 @@ class LaunchesRepositoryImplTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val remoteLaunch = TestData.createLaunch()
-        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
+        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
         val result = underTest.getLaunch(id, launchType)
@@ -146,7 +169,7 @@ class LaunchesRepositoryImplTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val error = RemoteError.NETWORK_UNKNOWN_ERROR
-        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Error(error)
 
         val result = underTest.getLaunch(id, launchType)

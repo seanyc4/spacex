@@ -1,7 +1,6 @@
 package com.seancoyle.feature.launch.data.repository
 
 import androidx.paging.ExperimentalPagingApi
-import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -11,25 +10,29 @@ import org.junit.Test
 import kotlin.test.assertNotNull
 
 @OptIn(ExperimentalPagingApi::class)
-class LaunchesPagerFactoryTest {
+class PastLaunchesPagerFactoryTest {
 
     @MockK
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var launchesLocalDataSource: LaunchesLocalDataSource
+    private lateinit var pastLaunchesLocalDataSource: PastLaunchesLocalDataSource
 
-    private lateinit var launchDao: LaunchDao
-    private lateinit var underTest: LaunchesPagerFactory
+    @MockK
+    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+
+    private lateinit var pastLaunchDao: com.seancoyle.database.dao.PastLaunchDao
+    private lateinit var underTest: PastLaunchesPagerFactory
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        launchDao = mockk(relaxed = true)
-        underTest = LaunchesPagerFactory(
-            launchDao = launchDao,
-            launchesRemoteDataSource = launchesRemoteDataSource,
-            launchesLocalDataSource = launchesLocalDataSource
+        pastLaunchDao = mockk(relaxed = true)
+        underTest = PastLaunchesPagerFactory(
+            pastLaunchDao = pastLaunchDao,
+            remoteDataSource = launchesRemoteDataSource,
+            localDataSource = pastLaunchesLocalDataSource,
+            launchDetailLocalDataSource = launchDetailLocalDataSource
         )
     }
 
@@ -100,5 +103,4 @@ class LaunchesPagerFactoryTest {
         assertNotNull(result)
         assertNotNull(result.flow)
     }
-
 }

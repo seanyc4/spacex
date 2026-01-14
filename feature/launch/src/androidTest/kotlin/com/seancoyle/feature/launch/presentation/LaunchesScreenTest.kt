@@ -47,12 +47,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -83,12 +83,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -116,12 +116,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -155,6 +155,7 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { id, type ->
@@ -193,12 +194,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -229,13 +230,13 @@ class LaunchesScreenTest {
 
                     Launches(
                         launches = lazyPagingItems,
-                        state = LaunchesState(scrollPosition = 0),
+                        state = LaunchesState(upcomingScrollPosition = 0),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -264,12 +265,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = { pos -> scrollPosition = pos },
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }
@@ -304,6 +305,7 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, type -> clickedType = type },
@@ -338,6 +340,7 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(launchesType = LaunchesType.PAST),
+                        launchesType = LaunchesType.PAST,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, type -> clickedType = type },
@@ -375,12 +378,12 @@ class LaunchesScreenTest {
                     Launches(
                         launches = lazyPagingItems,
                         state = LaunchesState(),
+                        launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
                         onClick = { _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
-
                     )
                 }
             }

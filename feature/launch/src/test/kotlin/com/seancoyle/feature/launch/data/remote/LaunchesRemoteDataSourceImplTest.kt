@@ -38,155 +38,164 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunches returns upcoming launches when API call is successful`() = runTest {
+    fun `getUpcomingDetailedLaunches returns summaries and details when API call is successful`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "Falcon",
-            launchesType = LaunchesType.UPCOMING
-        )
+        val launchesQuery = LaunchesQuery(query = "Falcon")
         val offset = 0
         coEvery {
             api.getUpcomingLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
         } returns TestData.createLaunchesDto()
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getUpcomingDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
+        val detailedResult = result.data
+        assertTrue(detailedResult.summaries.isNotEmpty())
+        assertTrue(detailedResult.details.isNotEmpty())
 
-        val actualLaunch = result.data[0]
-        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
-        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualLaunch.missionName)
-        assertEquals("Go for Launch", actualLaunch.status.name)
-        assertEquals("2025-12-13T05:34:00Z", actualLaunch.net)
-        assertEquals("https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png", actualLaunch.imageUrl)
+        val actualSummary = detailedResult.summaries[0]
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualSummary.id)
+        assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualSummary.missionName)
+        assertEquals("Go for Launch", actualSummary.status.name)
+        assertEquals("2025-12-13T05:34:00Z", actualSummary.net)
     }
 
     @Test
-    fun `getLaunches returns past launches when API call is successful`() = runTest {
+    fun `getPastDetailedLaunches returns summaries and details when API call is successful`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "Falcon",
-            launchesType = LaunchesType.PAST
-        )
+        val launchesQuery = LaunchesQuery(query = "Falcon")
         val offset = 0
         coEvery {
             api.getPreviousLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
         } returns TestData.createLaunchesDto()
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getPastDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
+        val detailedResult = result.data
+        assertTrue(detailedResult.summaries.isNotEmpty())
+        assertTrue(detailedResult.details.isNotEmpty())
 
-        val actualLaunch = result.data[0]
-        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualLaunch.id)
+        val actualSummary = detailedResult.summaries[0]
+        assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualSummary.id)
     }
 
     @Test
-    fun `getLaunches returns error when API call fails for upcoming launches`() = runTest {
+    fun `getUpcomingDetailedLaunches returns error when API call fails`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "",
-            launchesType = LaunchesType.UPCOMING
-        )
+        val launchesQuery = LaunchesQuery(query = "")
         val offset = 0
         val exception = RuntimeException("Network Failure")
         coEvery {
             api.getUpcomingLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
         } throws exception
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getUpcomingDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Error)
         assertEquals(exception, result.error)
     }
 
     @Test
-    fun `getLaunches returns error when API call fails for past launches`() = runTest {
+    fun `getPastDetailedLaunches returns error when API call fails`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "",
-            launchesType = LaunchesType.PAST
-        )
+        val launchesQuery = LaunchesQuery(query = "")
         val offset = 0
         val exception = RuntimeException("Network Failure")
         coEvery {
             api.getPreviousLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
         } throws exception
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getPastDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Error)
         assertEquals(exception, result.error)
     }
 
     @Test
-    fun `getLaunches calculates correct offset for pagination`() = runTest {
+    fun `getUpcomingDetailedLaunches calculates correct offset for pagination`() = runTest {
         val page = 2
-        val launchesQuery = LaunchesQuery(
-            query = "SpaceX",
-            launchesType = LaunchesType.UPCOMING
-        )
-        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT * 2 // page 2 * PAGINATION_LIMIT (20)
+        val launchesQuery = LaunchesQuery(query = "SpaceX")
+        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT * 2
         coEvery {
             api.getUpcomingLaunches(
                 offset = expectedOffset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
         } returns TestData.createLaunchesDto()
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getUpcomingDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
     }
 
     @Test
-    fun `getLaunches passes query parameters correctly for upcoming launches`() = runTest {
-        val page = 1
-        val launchesQuery = LaunchesQuery(
-            query = "Dragon",
-            launchesType = LaunchesType.UPCOMING
-        )
-        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT // page 1 * PAGINATION_LIMIT (20)
-        coEvery {
-            api.getUpcomingLaunches(
-                offset = expectedOffset,
-                search = "Dragon"
-            )
-        } returns TestData.createLaunchesDto()
-
-        val result = underTest.getLaunches(page, launchesQuery)
-
-        assertTrue(result is LaunchResult.Success)
-    }
-
-    @Test
-    fun `getLaunches passes query parameters correctly for past launches`() = runTest {
-        val page = 1
-        val launchesQuery = LaunchesQuery(
-            query = "Dragon",
-            launchesType = LaunchesType.PAST
-        )
-        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT // page 1 * PAGINATION_LIMIT (20)
+    fun `getPastDetailedLaunches calculates correct offset for pagination`() = runTest {
+        val page = 2
+        val launchesQuery = LaunchesQuery(query = "SpaceX")
+        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT * 2
         coEvery {
             api.getPreviousLaunches(
                 offset = expectedOffset,
-                search = "Dragon"
+                search = launchesQuery.query,
+                status = null
             )
         } returns TestData.createLaunchesDto()
 
-        val result = underTest.getLaunches(page, launchesQuery)
+        val result = underTest.getPastDetailedLaunches(page, launchesQuery)
+
+        assertTrue(result is LaunchResult.Success)
+    }
+
+    @Test
+    fun `getUpcomingDetailedLaunches passes query parameters correctly`() = runTest {
+        val page = 1
+        val launchesQuery = LaunchesQuery(query = "Dragon")
+        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT
+        coEvery {
+            api.getUpcomingLaunches(
+                offset = expectedOffset,
+                search = "Dragon",
+                status = null
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getUpcomingDetailedLaunches(page, launchesQuery)
+
+        assertTrue(result is LaunchResult.Success)
+    }
+
+    @Test
+    fun `getPastDetailedLaunches passes query parameters correctly`() = runTest {
+        val page = 1
+        val launchesQuery = LaunchesQuery(query = "Dragon")
+        val expectedOffset = LaunchesConstants.PAGINATION_LIMIT
+        coEvery {
+            api.getPreviousLaunches(
+                offset = expectedOffset,
+                search = "Dragon",
+                status = null
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getPastDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
     }
@@ -246,72 +255,44 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getDetailedLaunches returns summaries and details for upcoming launches`() = runTest {
+    fun `getUpcomingDetailedLaunches returns empty lists when API returns no results`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "Falcon",
-            launchesType = LaunchesType.UPCOMING
-        )
+        val launchesQuery = LaunchesQuery(query = "nonexistent")
         val offset = 0
         coEvery {
             api.getUpcomingLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
-        } returns TestData.createLaunchesDto()
+        } returns TestData.createEmptyLaunchesDto()
 
-        val result = underTest.getDetailedLaunches(page, launchesQuery)
+        val result = underTest.getUpcomingDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
         val detailedResult = result.data
-        assertTrue(detailedResult.summaries.isNotEmpty())
-        assertTrue(detailedResult.details.isNotEmpty())
-        assertEquals(detailedResult.summaries.first().id, detailedResult.details.first().id)
+        assertTrue(detailedResult.summaries.isEmpty())
+        assertTrue(detailedResult.details.isEmpty())
     }
 
     @Test
-    fun `getDetailedLaunches returns summaries and details for past launches`() = runTest {
+    fun `getPastDetailedLaunches returns empty lists when API returns no results`() = runTest {
         val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "Falcon",
-            launchesType = LaunchesType.PAST
-        )
+        val launchesQuery = LaunchesQuery(query = "nonexistent")
         val offset = 0
         coEvery {
             api.getPreviousLaunches(
                 offset = offset,
-                search = launchesQuery.query
+                search = launchesQuery.query,
+                status = null
             )
-        } returns TestData.createLaunchesDto()
+        } returns TestData.createEmptyLaunchesDto()
 
-        val result = underTest.getDetailedLaunches(page, launchesQuery)
+        val result = underTest.getPastDetailedLaunches(page, launchesQuery)
 
         assertTrue(result is LaunchResult.Success)
         val detailedResult = result.data
-        assertTrue(detailedResult.summaries.isNotEmpty())
-        assertTrue(detailedResult.details.isNotEmpty())
+        assertTrue(detailedResult.summaries.isEmpty())
+        assertTrue(detailedResult.details.isEmpty())
     }
-
-    @Test
-    fun `getDetailedLaunches returns error when API call fails`() = runTest {
-        val page = 0
-        val launchesQuery = LaunchesQuery(
-            query = "",
-            launchesType = LaunchesType.UPCOMING
-        )
-        val offset = 0
-        val exception = RuntimeException("Network Failure")
-        coEvery {
-            api.getUpcomingLaunches(
-                offset = offset,
-                search = launchesQuery.query
-            )
-        } throws exception
-
-        val result = underTest.getDetailedLaunches(page, launchesQuery)
-
-        assertTrue(result is LaunchResult.Error)
-        assertEquals(exception, result.error)
-    }
-
 }
