@@ -128,13 +128,15 @@ internal object TestData {
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: ImageEntity = createImageEntity(),
-        status: LaunchStatusEntity = createLaunchStatusEntity()
+        status: LaunchStatusEntity = createLaunchStatusEntity(),
+        launchType: String = "UPCOMING"
     ) = LaunchSummaryEntity(
         id = id,
         missionName = name,
         net = net,
         imageUrl = image.imageUrl,
-        status = status
+        status = status,
+        launchType = launchType
     )
 
     fun createStatusDto(
@@ -807,9 +809,9 @@ internal object TestData {
 
     fun createLaunchesDto(
         count: Int = 109,
-        next: String = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list&offset=10&ordering=net",
+        next: String = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=100&mode=detailed&offset=100&ordering=net",
         previous: String = "",
-        results: List<LaunchSummaryDto> = listOf(createLaunchSummaryDto())
+        results: List<LaunchDto> = listOf(createLaunchDto())
     ) = LaunchesDto(
         count = count,
         next = next,

@@ -26,7 +26,11 @@ interface LaunchDao {
         prevPage: Int?,
         currentPage: Int
     ) {
-        deleteAll()
+        // Only delete launches for this specific launch type
+        if (launches.isNotEmpty()) {
+            val launchType = launches.first().launchType
+            deleteByLaunchType(launchType)
+        }
         remoteKeyDao.deleteRemoteKey()
         upsertAll(launches)
         remoteKeyDao.upsertAll(remoteKeys)
@@ -34,6 +38,9 @@ interface LaunchDao {
 
     @Query("SELECT * FROM launch_summary")
     fun pagingSource(): PagingSource<Int, LaunchSummaryEntity>
+
+    @Query("SELECT * FROM launch_summary WHERE launch_type = :launchType")
+    fun pagingSourceByType(launchType: String): PagingSource<Int, LaunchSummaryEntity>
 
     @Upsert
     suspend fun upsert(launch: LaunchSummaryEntity): Long
@@ -44,9 +51,15 @@ interface LaunchDao {
     @Query("DELETE FROM launch_summary")
     suspend fun deleteAll()
 
+    @Query("DELETE FROM launch_summary WHERE launch_type = :launchType")
+    suspend fun deleteByLaunchType(launchType: String)
+
     @Query("SELECT * FROM launch_summary WHERE id = :id")
     suspend fun getById(id: String): LaunchSummaryEntity?
 
     @Query("SELECT COUNT(*) FROM launch_summary")
     suspend fun getTotalEntries(): Int
+
+    @Query("SELECT COUNT(*) FROM launch_summary WHERE launch_type = :launchType")
+    suspend fun getTotalEntriesByType(launchType: String): Int
 }

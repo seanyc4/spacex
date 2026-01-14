@@ -3,11 +3,11 @@ package com.seancoyle.feature.launch.data.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.entities.LaunchSummaryEntity
-import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import com.seancoyle.feature.launch.data.remote.LaunchRemoteMediator
+import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import javax.inject.Inject
 
 internal class LaunchesPagerFactory @Inject constructor(
@@ -30,7 +30,8 @@ internal class LaunchesPagerFactory @Inject constructor(
                 launchesQuery = launchesQuery
             ),
             pagingSourceFactory = {
-                launchDao.pagingSource()
+                // Filter by launch type to support separate caches per tab
+                launchDao.pagingSourceByType(launchesQuery.launchesType.name)
             }
         )
     }

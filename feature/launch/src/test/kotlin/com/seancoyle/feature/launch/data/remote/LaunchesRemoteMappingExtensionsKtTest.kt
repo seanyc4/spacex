@@ -3,7 +3,6 @@ package com.seancoyle.feature.launch.data.remote
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.feature.launch.util.TestData
 import com.seancoyle.feature.launch.util.TestData.createLaunchDto
-import com.seancoyle.feature.launch.util.TestData.createLaunchSummaryDto
 import com.seancoyle.feature.launch.util.TestData.createLaunchesDto
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
@@ -123,8 +122,8 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
     fun `LaunchesDto toDomain should map valid launches and filter out invalid ones`() {
-        val validLaunchDto = createLaunchSummaryDto()
-        val invalidLaunchDto = createLaunchSummaryDto(id = null)
+        val validLaunchDto = createLaunchDto()
+        val invalidLaunchDto = createLaunchDto(id = null)
 
         val launchesDto = createLaunchesDto(
             count = 2,

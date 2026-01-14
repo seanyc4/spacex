@@ -4,15 +4,18 @@ import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.dao.LaunchDao
+import com.seancoyle.database.dao.LaunchDetailDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
+import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LaunchesLocalDataSourceImpl @Inject constructor(
     private val launchDao: LaunchDao,
+    private val launchDetailDao: LaunchDetailDao,
     private val remoteKeyDao: LaunchRemoteKeyDao,
     private val crashlytics: Crashlytics
 ) : LaunchesLocalDataSource {
@@ -59,7 +62,7 @@ internal class LaunchesLocalDataSourceImpl @Inject constructor(
             )
         }
         launchDao.refreshLaunchesWithKeys(
-            launches = launches.toEntity(),
+            launches = launches.toEntity(launchType = cachedLaunchType ?: ""),
             remoteKeyDao = remoteKeyDao,
             nextPage = nextPage,
             prevPage = prevPage,
@@ -77,7 +80,7 @@ internal class LaunchesLocalDataSourceImpl @Inject constructor(
         cachedLaunchType: String?,
         cachedLaunchStatus: String?
     ) {
-        val launchEntities = launches.toEntity()
+        val launchEntities = launches.toEntity(launchType = cachedLaunchType ?: "")
         launchDao.upsertAll(launchEntities)
 
         // Create a remote key for each launch item
@@ -168,4 +171,73 @@ internal class LaunchesLocalDataSourceImpl @Inject constructor(
         )
     }
 
+    override suspend fun getTotalEntriesByType(launchType: String): LaunchResult<Int, Throwable> {
+        return runSuspendCatching {
+            launchDao.getTotalEntriesByType(launchType)
+        }.fold(
+            onSuccess = { LaunchResult.Success(it) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(it)
+            }
+        )
+    }
+
+    // Launch detail caching methods
+    override suspend fun getLaunchDetail(id: String): LaunchResult<Launch?, Throwable> {
+        return runSuspendCatching {
+            launchDetailDao.getById(id)
+        }.fold(
+            onSuccess = { result ->
+                result?.let {
+                    LaunchResult.Success(result.toDomain())
+                } ?: LaunchResult.Success(null)
+            },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(it)
+            }
+        )
+    }
+
+    override suspend fun upsertLaunchDetail(launch: Launch): LaunchResult<Unit, Throwable> {
+        return runSuspendCatching {
+            launchDetailDao.upsert(launch.toEntity())
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(it)
+            }
+        )
+    }
+
+    override suspend fun upsertAllLaunchDetails(launches: List<Launch>): LaunchResult<Unit, Throwable> {
+        return runSuspendCatching {
+            launchDetailDao.upsertAll(launches.toEntity())
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(it)
+            }
+        )
+    }
+
+    override suspend fun deleteAllLaunchDetails(): LaunchResult<Unit, Throwable> {
+        return runSuspendCatching {
+            launchDetailDao.deleteAll()
+        }.fold(
+            onSuccess = { LaunchResult.Success(Unit) },
+            onFailure = {
+                Timber.e(it)
+                crashlytics.logException(it)
+                LaunchResult.Error(it)
+            }
+        )
+    }
 }

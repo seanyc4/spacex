@@ -98,9 +98,11 @@ internal class LaunchRemoteMediator(
             }
 
             Timber.tag(TAG).d("API call with $page and $launchesQuery")
-            when (val remoteLaunchesResult = launchesRemoteDataSource.getLaunches(page, launchesQuery)) {
+            when (val remoteLaunchesResult = launchesRemoteDataSource.getDetailedLaunches(page, launchesQuery)) {
                 is LaunchResult.Success -> {
-                    val launches = remoteLaunchesResult.data
+                    val detailedResult = remoteLaunchesResult.data
+                    val launches = detailedResult.summaries
+                    val launchDetails = detailedResult.details
                     val endOfPaginationReached = launches.isEmpty() || launches.size < state.config.pageSize
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
                     val prevPage = if (page > 0) page.minus(1) else null
@@ -115,6 +117,9 @@ internal class LaunchRemoteMediator(
                         // Clear all data and insert fresh data
                         // When refreshing, we always start from page 0, so prevPage should be null
                         Timber.tag(TAG).d("REFRESH - refreshing cache with new data")
+                        // Delete old details and insert new ones
+                        launchesLocalDataSource.deleteAllLaunchDetails()
+                        launchesLocalDataSource.upsertAllLaunchDetails(launchDetails)
                         launchesLocalDataSource.refreshLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,
@@ -127,6 +132,8 @@ internal class LaunchRemoteMediator(
                     } else {
                         // Append or prepend data to existing cache
                         Timber.tag(TAG).d("$loadType - APPEND - appending data to cache")
+                        // Also cache the details for appended items
+                        launchesLocalDataSource.upsertAllLaunchDetails(launchDetails)
                         launchesLocalDataSource.appendLaunchesWithKeys(
                             launches = launches,
                             nextPage = nextPage,

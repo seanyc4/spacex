@@ -4,6 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.database.dao.LaunchDao
+import com.seancoyle.database.dao.LaunchDetailDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
@@ -30,6 +31,9 @@ class LaunchLocalDataSourceImplTest {
     private lateinit var launchDao: LaunchDao
 
     @MockK
+    private lateinit var launchDetailDao: LaunchDetailDao
+
+    @MockK
     private lateinit var remoteKeyDao: LaunchRemoteKeyDao
 
     @RelaxedMockK
@@ -42,6 +46,7 @@ class LaunchLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchesLocalDataSourceImpl(
             launchDao = launchDao,
+            launchDetailDao = launchDetailDao,
             remoteKeyDao = remoteKeyDao,
             crashlytics = crashlytics
         )
@@ -294,5 +299,95 @@ class LaunchLocalDataSourceImplTest {
         assertTrue(result is LaunchResult.Error)
         assertEquals(exception, result.error)
         coVerify { launchDao.getTotalEntries() }
+    }
+
+    @Test
+    fun `getTotalEntriesByType returns count of launches for specific type`() = runTest {
+        val launchType = LaunchesType.UPCOMING.name
+        coEvery { launchDao.getTotalEntriesByType(launchType) } returns 5
+
+        val result = underTest.getTotalEntriesByType(launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(5, result.data)
+        coVerify { launchDao.getTotalEntriesByType(launchType) }
+    }
+
+    @Test
+    fun `getLaunchDetail returns launch when found in database`() = runTest {
+        val launchEntity = TestData.createLaunchEntity()
+        coEvery { launchDetailDao.getById(ID) } returns launchEntity
+
+        val result = underTest.getLaunchDetail(ID)
+
+        assertTrue(result is LaunchResult.Success)
+        assertNotNull(result.data)
+        assertEquals(launchEntity.id, result.data?.id)
+        coVerify { launchDetailDao.getById(ID) }
+    }
+
+    @Test
+    fun `getLaunchDetail returns null when not found in database`() = runTest {
+        coEvery { launchDetailDao.getById(ID) } returns null
+
+        val result = underTest.getLaunchDetail(ID)
+
+        assertTrue(result is LaunchResult.Success)
+        assertNull(result.data)
+        coVerify { launchDetailDao.getById(ID) }
+    }
+
+    @Test
+    fun `getLaunchDetail returns error on exception`() = runTest {
+        val exception = RuntimeException("Database error")
+        coEvery { launchDetailDao.getById(ID) } throws exception
+
+        val result = underTest.getLaunchDetail(ID)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(exception, result.error)
+    }
+
+    @Test
+    fun `upsertLaunchDetail inserts launch successfully`() = runTest {
+        val launch = TestData.createLaunch()
+        coEvery { launchDetailDao.upsert(any()) } returns 1L
+
+        val result = underTest.upsertLaunchDetail(launch)
+
+        assertTrue(result is LaunchResult.Success)
+        coVerify { launchDetailDao.upsert(any()) }
+    }
+
+    @Test
+    fun `upsertAllLaunchDetails inserts all launches successfully`() = runTest {
+        val launches = listOf(TestData.createLaunch(), TestData.createLaunch(id = "id-2"))
+        coEvery { launchDetailDao.upsertAll(any()) } returns longArrayOf(1L, 2L)
+
+        val result = underTest.upsertAllLaunchDetails(launches)
+
+        assertTrue(result is LaunchResult.Success)
+        coVerify { launchDetailDao.upsertAll(any()) }
+    }
+
+    @Test
+    fun `deleteAllLaunchDetails deletes all launches successfully`() = runTest {
+        coJustRun { launchDetailDao.deleteAll() }
+
+        val result = underTest.deleteAllLaunchDetails()
+
+        assertTrue(result is LaunchResult.Success)
+        coVerify { launchDetailDao.deleteAll() }
+    }
+
+    @Test
+    fun `deleteAllLaunchDetails returns error on exception`() = runTest {
+        val exception = RuntimeException("Database error")
+        coEvery { launchDetailDao.deleteAll() } throws exception
+
+        val result = underTest.deleteAllLaunchDetails()
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(exception, result.error)
     }
 }

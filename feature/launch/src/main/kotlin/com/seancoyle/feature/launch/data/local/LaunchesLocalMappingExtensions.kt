@@ -84,16 +84,17 @@ internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
         status = status.toDomain()
     )
 
-internal fun List<LaunchSummary>.toEntity(): List<LaunchSummaryEntity> =
-    map { it.toEntity() }
+internal fun List<LaunchSummary>.toEntity(launchType: String = ""): List<LaunchSummaryEntity> =
+    map { it.toEntity(launchType) }
 
-internal fun LaunchSummary.toEntity(): LaunchSummaryEntity =
+internal fun LaunchSummary.toEntity(launchType: String = ""): LaunchSummaryEntity =
     LaunchSummaryEntity(
         id = id,
         missionName = missionName,
         net = net,
         imageUrl = imageUrl,
-        status = status.toEntity()
+        status = status.toEntity(),
+        launchType = launchType
     )
 
 internal fun List<LaunchEntity>.toDomain(): List<Launch> =

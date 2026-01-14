@@ -245,4 +245,73 @@ class LaunchesRemoteDataSourceImplTest {
         assertEquals(expectedException, result.error)
     }
 
+    @Test
+    fun `getDetailedLaunches returns summaries and details for upcoming launches`() = runTest {
+        val page = 0
+        val launchesQuery = LaunchesQuery(
+            query = "Falcon",
+            launchesType = LaunchesType.UPCOMING
+        )
+        val offset = 0
+        coEvery {
+            api.getUpcomingLaunches(
+                offset = offset,
+                search = launchesQuery.query
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getDetailedLaunches(page, launchesQuery)
+
+        assertTrue(result is LaunchResult.Success)
+        val detailedResult = result.data
+        assertTrue(detailedResult.summaries.isNotEmpty())
+        assertTrue(detailedResult.details.isNotEmpty())
+        assertEquals(detailedResult.summaries.first().id, detailedResult.details.first().id)
+    }
+
+    @Test
+    fun `getDetailedLaunches returns summaries and details for past launches`() = runTest {
+        val page = 0
+        val launchesQuery = LaunchesQuery(
+            query = "Falcon",
+            launchesType = LaunchesType.PAST
+        )
+        val offset = 0
+        coEvery {
+            api.getPreviousLaunches(
+                offset = offset,
+                search = launchesQuery.query
+            )
+        } returns TestData.createLaunchesDto()
+
+        val result = underTest.getDetailedLaunches(page, launchesQuery)
+
+        assertTrue(result is LaunchResult.Success)
+        val detailedResult = result.data
+        assertTrue(detailedResult.summaries.isNotEmpty())
+        assertTrue(detailedResult.details.isNotEmpty())
+    }
+
+    @Test
+    fun `getDetailedLaunches returns error when API call fails`() = runTest {
+        val page = 0
+        val launchesQuery = LaunchesQuery(
+            query = "",
+            launchesType = LaunchesType.UPCOMING
+        )
+        val offset = 0
+        val exception = RuntimeException("Network Failure")
+        coEvery {
+            api.getUpcomingLaunches(
+                offset = offset,
+                search = launchesQuery.query
+            )
+        } throws exception
+
+        val result = underTest.getDetailedLaunches(page, launchesQuery)
+
+        assertTrue(result is LaunchResult.Error)
+        assertEquals(exception, result.error)
+    }
+
 }

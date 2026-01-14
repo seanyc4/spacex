@@ -22,6 +22,9 @@ data class LaunchSummaryEntity(
     val imageUrl: String,
 
     @Embedded(prefix = "status")
-    val status: LaunchStatusEntity
+    val status: LaunchStatusEntity,
+
+    @ColumnInfo(name = "launch_type")
+    val launchType: String = ""  // "UPCOMING" or "PAST"
 
 )

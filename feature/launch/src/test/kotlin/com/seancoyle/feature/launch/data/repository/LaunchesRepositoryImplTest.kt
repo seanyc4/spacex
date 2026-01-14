@@ -11,6 +11,7 @@ import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -32,6 +33,9 @@ class LaunchesRepositoryImplTest {
     @MockK
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
+    @MockK
+    private lateinit var launchesLocalDataSource: LaunchesLocalDataSource
+
     private lateinit var underTest: LaunchesRepository
 
     @Before
@@ -39,7 +43,8 @@ class LaunchesRepositoryImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchesRepositoryImpl(
             pagerFactory = pagerFactory,
-            launchesRemoteDataSource = launchesRemoteDataSource
+            launchesRemoteDataSource = launchesRemoteDataSource,
+            launchesLocalDataSource = launchesLocalDataSource
         )
     }
 
@@ -93,26 +98,56 @@ class LaunchesRepositoryImplTest {
     }
 
     @Test
-    fun `getLaunch returns success when remote data source returns launches`() = runTest {
+    fun `getLaunch returns cached data when available in local data source`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
-        val launches = TestData.createLaunch()
-        val expectedResult = LaunchResult.Success(launches)
-        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns expectedResult
+        val cachedLaunch = TestData.createLaunch()
+        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
 
         val result = underTest.getLaunch(id, launchType)
 
         assertTrue(result is LaunchResult.Success)
-        assertEquals(launches, result.data)
+        assertEquals(cachedLaunch, result.data)
+        coVerify(exactly = 0) { launchesRemoteDataSource.getLaunch(any(), any()) }
     }
 
     @Test
-    fun `getLaunch returns error when remote data source returns error`() = runTest {
+    fun `getLaunch falls back to remote when cache returns null`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.UPCOMING
+        val remoteLaunch = TestData.createLaunch()
+        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(remoteLaunch, result.data)
+        coVerify(exactly = 1) { launchesRemoteDataSource.getLaunch(id, launchType) }
+    }
+
+    @Test
+    fun `getLaunch falls back to remote when cache returns error`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.PAST
+        val remoteLaunch = TestData.createLaunch()
+        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
+        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(remoteLaunch, result.data)
+        coVerify(exactly = 1) { launchesRemoteDataSource.getLaunch(id, launchType) }
+    }
+
+    @Test
+    fun `getLaunch returns error when both cache and remote fail`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val error = RemoteError.NETWORK_UNKNOWN_ERROR
-        val expectedResult = LaunchResult.Error(error)
-        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns expectedResult
+        coEvery { launchesLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Error(error)
 
         val result = underTest.getLaunch(id, launchType)
 

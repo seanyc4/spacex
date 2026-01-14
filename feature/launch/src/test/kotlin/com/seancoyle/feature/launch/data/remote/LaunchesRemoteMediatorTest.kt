@@ -9,6 +9,7 @@ import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.database.entities.LaunchRemoteKeyEntity
 import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.feature.launch.data.repository.DetailedLaunchesResult
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
@@ -149,10 +150,14 @@ class LaunchesRemoteMediatorTest {
     @Test
     fun `load refresh succeeds and clears old data`() = runTest {
         val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
+        val launchDetails = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val detailedResult = DetailedLaunchesResult(summaries = launches, details = launchDetails)
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
-        coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } returns LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(0, launchesQuery) } returns LaunchResult.Success(detailedResult)
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
+        coEvery { launchesLocalDataSource.deleteAllLaunchDetails() } returns LaunchResult.Success(Unit)
+        coEvery { launchesLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
         coJustRun {
             launchesLocalDataSource.refreshLaunchesWithKeys(
                 launches = launches,
@@ -183,10 +188,14 @@ class LaunchesRemoteMediatorTest {
     @Test
     fun `load refresh succeeds with end of pagination reached`() = runTest {
         val launches = List(5) { TestData.createLaunchSummary(id = "id-$it") }
+        val launchDetails = List(5) { TestData.createLaunch(id = "id-$it") }
+        val detailedResult = DetailedLaunchesResult(summaries = launches, details = launchDetails)
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
-        coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } returns LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(0, launchesQuery) } returns LaunchResult.Success(detailedResult)
+        coEvery { launchesLocalDataSource.deleteAllLaunchDetails() } returns LaunchResult.Success(Unit)
+        coEvery { launchesLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
         coJustRun {
             launchesLocalDataSource.refreshLaunchesWithKeys(
                 launches = launches,
@@ -208,7 +217,7 @@ class LaunchesRemoteMediatorTest {
     fun `load refresh fails with no cached data returns error`() = runTest {
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
-        coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(0, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
 
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -220,7 +229,7 @@ class LaunchesRemoteMediatorTest {
     fun `load refresh fails with cached data available shows cache`() = runTest {
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
-        coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(0, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -233,7 +242,7 @@ class LaunchesRemoteMediatorTest {
     fun `load refresh with exception and cached data shows cache`() = runTest {
         val pagingState = createPagingState()
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns emptyList()
-        coEvery { launchesRemoteDataSource.getLaunches(0, launchesQuery) } throws RuntimeException("Unexpected error")
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(0, launchesQuery) } throws RuntimeException("Unexpected error")
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -245,6 +254,8 @@ class LaunchesRemoteMediatorTest {
     @Test
     fun `load append succeeds with more data`() = runTest {
         val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
+        val launchDetails = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val detailedResult = DetailedLaunchesResult(summaries = launches, details = launchDetails)
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -257,8 +268,9 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } returns LaunchResult.Success(detailedResult)
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
+        coEvery { launchesLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
         coJustRun {
             launchesLocalDataSource.appendLaunchesWithKeys(
                 launches = launches,
@@ -279,6 +291,8 @@ class LaunchesRemoteMediatorTest {
     @Test
     fun `load append succeeds with end of pagination reached`() = runTest {
         val launches = List(PAGINATION_LIMIT - 1) { TestData.createLaunchSummary(id = "id-$it") }
+        val launchDetails = List(PAGINATION_LIMIT - 1) { TestData.createLaunch(id = "id-$it") }
+        val detailedResult = DetailedLaunchesResult(summaries = launches, details = launchDetails)
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "last-id",
@@ -291,7 +305,8 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } returns LaunchResult.Success(detailedResult)
+        coEvery { launchesLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
         coJustRun {
             launchesLocalDataSource.appendLaunchesWithKeys(
                 launches = launches,
@@ -355,7 +370,7 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Error(Throwable("Network error"))
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } returns LaunchResult.Error(Throwable("Network error"))
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.APPEND, pagingState)
@@ -377,7 +392,7 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.APPEND, pagingState)
@@ -388,6 +403,8 @@ class LaunchesRemoteMediatorTest {
     @Test
     fun `load prepend succeeds with more data`() = runTest {
         val launches = List(PAGINATION_LIMIT) { TestData.createLaunchSummary(id = "id-$it") }
+        val launchDetails = List(PAGINATION_LIMIT) { TestData.createLaunch(id = "id-$it") }
+        val detailedResult = DetailedLaunchesResult(summaries = launches, details = launchDetails)
         val pagingState = createPagingState()
         val remoteKey = LaunchRemoteKeyEntity(
             id = "first-id",
@@ -400,8 +417,9 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Success(launches)
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } returns LaunchResult.Success(detailedResult)
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(0)
+        coEvery { launchesLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
         coJustRun {
             launchesLocalDataSource.appendLaunchesWithKeys(
                 launches = launches,
@@ -465,7 +483,7 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } returns LaunchResult.Error(RuntimeException("Network error"))
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.PREPEND, pagingState)
@@ -487,7 +505,7 @@ class LaunchesRemoteMediatorTest {
             cachedLaunchStatus = null
         )
         coEvery { launchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
-        coEvery { launchesRemoteDataSource.getLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
+        coEvery { launchesRemoteDataSource.getDetailedLaunches(1, launchesQuery) } throws RuntimeException("Unexpected error")
         coEvery { launchesLocalDataSource.getTotalEntries() } returns LaunchResult.Success(10)
 
         val result = underTest.load(LoadType.PREPEND, pagingState)

@@ -60,8 +60,24 @@ internal fun map(throwable: Throwable): RemoteError {
 
 internal fun LaunchesDto.toDomain(): List<LaunchSummary> {
     return results?.mapNotNull { launchDto ->
+        launchDto.toSummary()
+    } ?: emptyList()
+}
+
+internal fun LaunchesDto.toDetailedDomain(): List<Launch> {
+    return results?.mapNotNull { launchDto ->
         launchDto.toDomain()
     } ?: emptyList()
+}
+
+internal fun LaunchDto.toSummary(): LaunchSummary? {
+    return LaunchSummary(
+        id = id ?: return null,
+        missionName = name ?: return null,
+        net = net ?: return null,
+        imageUrl = image?.toDomain()?.imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
+        status = status?.toDomain() ?: return null
+    )
 }
 
 internal fun LaunchSummaryDto.toDomain(): LaunchSummary? {

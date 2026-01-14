@@ -2,6 +2,7 @@ package com.seancoyle.database.di
 
 import com.seancoyle.database.Database
 import com.seancoyle.database.dao.LaunchDao
+import com.seancoyle.database.dao.LaunchDetailDao
 import com.seancoyle.database.dao.LaunchRemoteKeyDao
 import dagger.Module
 import dagger.Provides
@@ -17,6 +18,12 @@ internal object LaunchCacheDaoModule {
     @Provides
     fun provideLaunchDao(database: Database): LaunchDao {
         return database.launchDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchDetailDao(database: Database): LaunchDetailDao {
+        return database.launchDetailDao()
     }
 
     @Singleton
