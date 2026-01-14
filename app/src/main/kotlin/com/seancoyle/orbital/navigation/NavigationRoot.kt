@@ -64,7 +64,6 @@ fun NavigationRoot(
                     }
                 }
                 LaunchesRoute(
-                    snackbarHostState = snackbarHostState,
                     onNavigateToLaunch = { launchId, launchesType ->
                         backStack.addDetail(Route.Launch(launchId, launchesType))
                     },

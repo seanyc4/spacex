@@ -40,13 +40,14 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 @Composable
 fun LaunchesScreen(
     modifier: Modifier = Modifier,
-    feedState: LazyPagingItems<LaunchesUi>,
+    upcomingFeedState: LazyPagingItems<LaunchesUi>,
+    pastFeedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     isRefreshing: Boolean,
     columnCount: Int,
     selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
-    onUpdateScrollPosition: (Int) -> Unit,
+    onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit
 ) {
     Scaffold(
@@ -64,7 +65,8 @@ fun LaunchesScreen(
             onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
             content = {
                 LaunchesContent(
-                    feedState = feedState,
+                    upcomingFeedState = upcomingFeedState,
+                    pastFeedState = pastFeedState,
                     state = state,
                     columnCount = columnCount,
                     selectedLaunchId = selectedLaunchId,
@@ -80,12 +82,13 @@ fun LaunchesScreen(
 
 @Composable
 private fun LaunchesContent(
-    feedState: LazyPagingItems<LaunchesUi>,
+    upcomingFeedState: LazyPagingItems<LaunchesUi>,
+    pastFeedState: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
     columnCount: Int,
     selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
-    onUpdateScrollPosition: (Int) -> Unit,
+    onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -94,6 +97,7 @@ private fun LaunchesContent(
         LaunchesType.UPCOMING -> 0
         LaunchesType.PAST -> 1
     }
+
     Column(modifier = modifier.fillMaxSize()) {
         SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
@@ -136,40 +140,35 @@ private fun LaunchesContent(
             }
         }
         Box(modifier = Modifier.weight(1f)) {
-            val refreshLoadState = feedState.loadState.refresh
-            val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
+            // Render BOTH lists but only show the currently selected one
+            // This ensures each list maintains its own scroll position and paging state
 
-            when (refreshLoadState) {
-                is LoadState.Loading -> {
-                    CircularProgressBar()
-                }
-                is LoadState.Error -> {
-                    ErrorState(
-                        onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
-                }
-                is LoadState.NotLoading -> {
-                    if (feedState.itemCount == 0 && endOfPaginationReached) {
-                        // Only show empty state if we've finished loading and there are no items
-                        ErrorState(
-                            message = stringResource(R.string.empty_data),
-                            modifier = Modifier.fillMaxSize(),
-                            showRetryButton = false,
-                            onRetry = { }
-                        )
-                    } else {
-                        // Show the list (even if it's empty, but not at end of pagination yet)
-                        Launches(
-                            launches = feedState,
-                            state = state,
-                            columnCount = columnCount,
-                            selectedLaunchId = selectedLaunchId,
-                            onEvent = onEvent,
-                            onUpdateScrollPosition = onUpdateScrollPosition,
-                            onClick = onClick,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
+            // UPCOMING list - always composed but visibility controlled
+            if (state.launchesType == LaunchesType.UPCOMING) {
+                LaunchesListContent(
+                    feedState = upcomingFeedState,
+                    state = state,
+                    launchesType = LaunchesType.UPCOMING,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
+                    onEvent = onEvent,
+                    onUpdateScrollPosition = onUpdateScrollPosition,
+                    onClick = onClick
+                )
+            }
+
+            // PAST list - always composed but visibility controlled
+            if (state.launchesType == LaunchesType.PAST) {
+                LaunchesListContent(
+                    feedState = pastFeedState,
+                    state = state,
+                    launchesType = LaunchesType.PAST,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
+                    onEvent = onEvent,
+                    onUpdateScrollPosition = onUpdateScrollPosition,
+                    onClick = onClick
+                )
             }
         }
         if (state.isFilterDialogVisible) {
@@ -177,6 +176,57 @@ private fun LaunchesContent(
                 currentFilterState = state,
                 onEvent = onEvent
             )
+        }
+    }
+}
+
+@Composable
+private fun LaunchesListContent(
+    feedState: LazyPagingItems<LaunchesUi>,
+    state: LaunchesState,
+    launchesType: LaunchesType,
+    columnCount: Int,
+    selectedLaunchId: String?,
+    onEvent: (LaunchesEvents) -> Unit,
+    onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
+    onClick: (String, LaunchesType) -> Unit
+) {
+    val refreshLoadState = feedState.loadState.refresh
+    val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
+
+    when (refreshLoadState) {
+        is LoadState.Loading -> {
+            CircularProgressBar()
+        }
+        is LoadState.Error -> {
+            ErrorState(
+                onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
+        }
+        is LoadState.NotLoading -> {
+            if (feedState.itemCount == 0 && endOfPaginationReached) {
+                // Only show empty state if we've finished loading and there are no items
+                ErrorState(
+                    message = stringResource(R.string.empty_data),
+                    modifier = Modifier.fillMaxSize(),
+                    showRetryButton = false,
+                    onRetry = { }
+                )
+            } else {
+                // Show the list (even if it's empty, but not at end of pagination yet)
+                Launches(
+                    launches = feedState,
+                    state = state,
+                    launchesType = launchesType,
+                    columnCount = columnCount,
+                    selectedLaunchId = selectedLaunchId,
+                    onEvent = onEvent,
+                    onUpdateScrollPosition = { position ->
+                        onUpdateScrollPosition(launchesType, position)
+                    },
+                    onClick = onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }
