@@ -7,10 +7,10 @@ import com.seancoyle.feature.launch.domain.repository.LaunchesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-internal class ObserveLaunchesUseCase @Inject constructor(
+internal class ObserveUpcomingLaunchesUseCase @Inject constructor(
     private val launchesRepository: LaunchesRepository
 ) {
     operator fun invoke(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
-        return launchesRepository.pager(launchesQuery)
+        return launchesRepository.upcomingPager(launchesQuery)
     }
 }
