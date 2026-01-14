@@ -14,7 +14,6 @@ import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
 import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.LauncherEntity
 import com.seancoyle.database.entities.LauncherStageEntity
@@ -23,6 +22,7 @@ import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.database.entities.NetPrecisionEntity
 import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PreviousFlightEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
@@ -31,6 +31,7 @@ import com.seancoyle.database.entities.SpacecraftEntity
 import com.seancoyle.database.entities.SpacecraftStageEntity
 import com.seancoyle.database.entities.SpacecraftStatusEntity
 import com.seancoyle.database.entities.SpacecraftTypeEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
@@ -75,7 +76,7 @@ internal fun map(throwable: Throwable): LocalError {
     }
 }
 
-internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
+internal fun UpcomingLaunchEntity.toDomain(): LaunchSummary =
     LaunchSummary(
         id = id,
         missionName = missionName,
@@ -84,17 +85,31 @@ internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
         status = status.toDomain()
     )
 
-internal fun List<LaunchSummary>.toEntity(launchType: String = ""): List<LaunchSummaryEntity> =
-    map { it.toEntity(launchType) }
-
-internal fun LaunchSummary.toEntity(launchType: String = ""): LaunchSummaryEntity =
-    LaunchSummaryEntity(
+internal fun LaunchSummary.toPastEntity(): PastLaunchEntity =
+    PastLaunchEntity(
         id = id,
         missionName = missionName,
         net = net,
         imageUrl = imageUrl,
-        status = status.toEntity(),
-        launchType = launchType
+        status = status.toEntity()
+    )
+
+internal fun LaunchSummary.toUpcomingEntity(): UpcomingLaunchEntity =
+    UpcomingLaunchEntity(
+        id = id,
+        missionName = missionName,
+        net = net,
+        imageUrl = imageUrl,
+        status = status.toEntity()
+    )
+
+internal fun PastLaunchEntity.toDomain(): LaunchSummary =
+    LaunchSummary(
+        id = id,
+        missionName = missionName,
+        net = net,
+        imageUrl = imageUrl,
+        status = status.toDomain()
     )
 
 internal fun List<LaunchEntity>.toDomain(): List<Launch> =
@@ -329,6 +344,12 @@ private fun ProgramEntity.toDomain(): Program =
 @JvmName("launchListToEntity")
 internal fun List<Launch>.toEntity(): List<LaunchEntity> =
     map { it.toEntity() }
+
+internal fun List<LaunchSummary>.toPastEntity(): List<PastLaunchEntity> =
+    map { it.toPastEntity() }
+
+internal fun List<LaunchSummary>.toUpcomingEntity(): List<UpcomingLaunchEntity> =
+    map { it.toUpcomingEntity() }
 
 internal fun Launch.toEntity(): LaunchEntity =
     LaunchEntity(

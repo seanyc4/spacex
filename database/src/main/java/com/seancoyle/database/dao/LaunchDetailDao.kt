@@ -2,6 +2,7 @@ package com.seancoyle.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.seancoyle.database.entities.LaunchEntity
 
@@ -22,4 +23,10 @@ interface LaunchDetailDao {
 
     @Query("SELECT COUNT(*) FROM launch")
     suspend fun getTotalEntries(): Int
+
+    @Transaction
+    suspend fun refreshLaunches(launches: List<LaunchEntity>) {
+        deleteAll()
+        upsertAll(launches)
+    }
 }

@@ -39,6 +39,7 @@ import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
 internal fun Launches(
     launches: LazyPagingItems<LaunchesUi>,
     state: LaunchesState,
+    launchesType: LaunchesType,
     columnCount: Int,
     selectedLaunchId: String?,
     onEvent: (LaunchesEvents) -> Unit,
@@ -46,7 +47,16 @@ internal fun Launches(
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = state.scrollPosition)
+    // Use the correct scroll position based on the tab type passed in
+    val initialScrollPosition = when (launchesType) {
+        LaunchesType.UPCOMING -> state.upcomingScrollPosition
+        LaunchesType.PAST -> state.pastScrollPosition
+    }
+
+    // Each tab gets its own grid state - using key ensures they're independent
+    val gridState = rememberLazyGridState(
+        initialFirstVisibleItemIndex = initialScrollPosition
+    )
     ObserveScrollPosition(gridState, onUpdateScrollPosition)
 
     LazyVerticalGrid(
@@ -87,7 +97,7 @@ internal fun Launches(
                 LaunchCard(
                     launchItem = launchItem,
                     onClick = onClick,
-                    launchesType = state.launchesType,
+                    launchesType = launchesType,
                     isSelected = isSelected
                 )
             }

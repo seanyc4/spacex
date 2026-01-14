@@ -3,12 +3,16 @@ package com.seancoyle.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.seancoyle.database.dao.LaunchDao
 import com.seancoyle.database.dao.LaunchDetailDao
-import com.seancoyle.database.dao.LaunchRemoteKeyDao
+import com.seancoyle.database.dao.PastLaunchDao
+import com.seancoyle.database.dao.PastRemoteKeyDao
+import com.seancoyle.database.dao.UpcomingLaunchDao
+import com.seancoyle.database.dao.UpcomingRemoteKeyDao
 import com.seancoyle.database.entities.LaunchEntity
-import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.database.entities.PastLaunchEntity
+import com.seancoyle.database.entities.PastRemoteKeyEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
+import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
 import com.seancoyle.database.util.AgencyListConverter
 import com.seancoyle.database.util.CountryListConverter
 import com.seancoyle.database.util.FamilyListConverter
@@ -24,11 +28,13 @@ import com.seancoyle.database.util.VidUrlListConverter
 @Database(
     entities =
     [
-        LaunchSummaryEntity::class,
         LaunchEntity::class,
-        LaunchRemoteKeyEntity::class
+        UpcomingLaunchEntity::class,
+        UpcomingRemoteKeyEntity::class,
+        PastLaunchEntity::class,
+        PastRemoteKeyEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(
@@ -45,10 +51,11 @@ import com.seancoyle.database.util.VidUrlListConverter
     VidUrlListConverter::class
 )
 abstract class Database : RoomDatabase() {
-
-    abstract fun launchDao(): LaunchDao
     abstract fun launchDetailDao(): LaunchDetailDao
-    abstract fun launchRemoteKeyDao(): LaunchRemoteKeyDao
+    abstract fun upcomingLaunchDao(): UpcomingLaunchDao
+    abstract fun upcomingRemoteKeyDao(): UpcomingRemoteKeyDao
+    abstract fun pastLaunchDao(): PastLaunchDao
+    abstract fun pastRemoteKeyDao(): PastRemoteKeyDao
 
     companion object {
         const val DATABASE_NAME: String = "launches_db"

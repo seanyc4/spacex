@@ -6,8 +6,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 
 @Keep
-@Entity(tableName = "launch_summary", primaryKeys = ["id"])
-data class LaunchSummaryEntity(
+@Entity(tableName = "past_launches", primaryKeys = ["id"])
+data class PastLaunchEntity(
 
     @ColumnInfo(name = "id")
     val id: String,
@@ -22,9 +22,5 @@ data class LaunchSummaryEntity(
     val imageUrl: String,
 
     @Embedded(prefix = "status")
-    val status: LaunchStatusEntity,
-
-    @ColumnInfo(name = "launch_type")
-    val launchType: String = ""  // "UPCOMING" or "PAST"
-
+    val status: LaunchStatusEntity
 )

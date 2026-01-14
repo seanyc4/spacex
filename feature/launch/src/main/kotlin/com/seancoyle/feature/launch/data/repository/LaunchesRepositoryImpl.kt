@@ -18,13 +18,22 @@ import javax.inject.Inject
 private const val TAG = "LaunchesRepositoryImpl"
 
 internal class LaunchesRepositoryImpl @Inject constructor(
-    private val pagerFactory: LaunchesPagerFactory,
+    private val upcomingPagerFactory: UpcomingLaunchesPagerFactory,
+    private val pastPagerFactory: PastLaunchesPagerFactory,
     private val launchesRemoteDataSource: LaunchesRemoteDataSource,
-    private val launchesLocalDataSource: LaunchesLocalDataSource
+    private val launchDetailLocalDataSource: LaunchDetailLocalDataSource
 ) : LaunchesRepository {
 
-    override fun pager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
-        return pagerFactory.create(launchesQuery).flow.map {
+    override fun upcomingPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
+        Timber.tag(TAG).d("Creating UPCOMING pager with query: $launchesQuery")
+        return upcomingPagerFactory.create(launchesQuery).flow.map {
+            it.map { entity -> entity.toDomain() }
+        }
+    }
+
+    override fun pastPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
+        Timber.tag(TAG).d("Creating PAST pager with query: $launchesQuery")
+        return pastPagerFactory.create(launchesQuery).flow.map {
             it.map { entity -> entity.toDomain() }
         }
     }
@@ -33,8 +42,7 @@ internal class LaunchesRepositoryImpl @Inject constructor(
         id: String,
         launchType: LaunchesType
     ): LaunchResult<Launch, RemoteError> {
-        // Try cache first
-        when (val cachedResult = launchesLocalDataSource.getLaunchDetail(id)) {
+        when (val cachedResult = launchDetailLocalDataSource.getLaunchDetail(id)) {
             is LaunchResult.Success -> {
                 val cachedLaunch = cachedResult.data
                 if (cachedLaunch != null) {
