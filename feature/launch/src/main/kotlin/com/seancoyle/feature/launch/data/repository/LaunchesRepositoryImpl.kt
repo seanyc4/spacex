@@ -20,8 +20,7 @@ import javax.inject.Inject
 private const val TAG = "LaunchesRepositoryImpl"
 
 internal class LaunchesRepositoryImpl @Inject constructor(
-    private val upcomingPagerFactory: UpcomingLaunchesPagerFactory,
-    private val pastPagerFactory: PastLaunchesPagerFactory,
+    private val pagerFactory: LaunchesPagerFactory,
     private val launchesRemoteDataSource: LaunchesRemoteDataSource,
     @param:UpcomingLaunches private val upcomingDetailLocalDataSource: DetailLocalDataSource,
     @param:PastLaunches private val pastDetailLocalDataSource: DetailLocalDataSource,
@@ -29,14 +28,14 @@ internal class LaunchesRepositoryImpl @Inject constructor(
 
     override fun upcomingPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
         Timber.tag(TAG).d("Creating UPCOMING pager with query: $launchesQuery")
-        return upcomingPagerFactory.create(launchesQuery).flow.map {
+        return pagerFactory.createUpcoming(launchesQuery).flow.map {
             it.map { entity -> entity.toDomain() }
         }
     }
 
     override fun pastPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
         Timber.tag(TAG).d("Creating PAST pager with query: $launchesQuery")
-        return pastPagerFactory.create(launchesQuery).flow.map {
+        return pagerFactory.createPast(launchesQuery).flow.map {
             it.map { entity -> entity.toDomain() }
         }
     }
