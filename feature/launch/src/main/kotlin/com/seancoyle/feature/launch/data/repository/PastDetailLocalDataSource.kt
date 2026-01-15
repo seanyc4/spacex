@@ -3,8 +3,7 @@ package com.seancoyle.feature.launch.data.repository
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.feature.launch.domain.model.Launch
 
-internal interface LaunchDetailLocalDataSource {
-
+internal interface PastDetailLocalDataSource {
     suspend fun getTotalEntries(): LaunchResult<Int, Throwable>
 
     suspend fun getLaunchDetail(id: String): LaunchResult<Launch?, Throwable>

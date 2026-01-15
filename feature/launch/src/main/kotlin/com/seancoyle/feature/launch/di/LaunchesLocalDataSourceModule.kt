@@ -1,10 +1,12 @@
 package com.seancoyle.feature.launch.di
 
-import com.seancoyle.feature.launch.data.local.LaunchDetailLocalDataSourceImpl
+import com.seancoyle.feature.launch.data.local.PastDetailLocalDataSourceImpl
 import com.seancoyle.feature.launch.data.local.PastLaunchesLocalDataSourceImpl
+import com.seancoyle.feature.launch.data.local.UpcomingDetailLocalDataSourceImpl
 import com.seancoyle.feature.launch.data.local.UpcomingLaunchesLocalDataSourceImpl
-import com.seancoyle.feature.launch.data.repository.LaunchDetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.PastDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
+import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
 import dagger.Binds
 import dagger.Module
@@ -16,9 +18,14 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class LaunchesLocalDataSourceModule {
 
     @Binds
-    abstract fun bindLaunchDetailLocalDataSource(
-        impl: LaunchDetailLocalDataSourceImpl
-    ): LaunchDetailLocalDataSource
+    abstract fun bindUpcomingDetailLocalDataSource(
+        impl: UpcomingDetailLocalDataSourceImpl
+    ): UpcomingDetailLocalDataSource
+
+    @Binds
+    abstract fun bindPastDetailLocalDataSource(
+        impl: PastDetailLocalDataSourceImpl
+    ): PastDetailLocalDataSource
 
     @Binds
     abstract fun bindUpcomingLaunchesLocalDataSource(

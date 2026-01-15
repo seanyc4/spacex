@@ -7,8 +7,8 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.LaunchDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import timber.log.Timber
@@ -21,8 +21,8 @@ private const val CACHE_TIMEOUT_HOURS = 1L
 @OptIn(ExperimentalPagingApi::class)
 internal class UpcomingLaunchesRemoteMediator(
     private val remotedataSource: LaunchesRemoteDataSource,
-    private val localDataSource: UpcomingLaunchesLocalDataSource,
-    private val launchDetailLocalDataSource: LaunchDetailLocalDataSource,
+    private val launchesLocalDataSource: UpcomingLaunchesLocalDataSource,
+    private val detailLocalDataSource: UpcomingDetailLocalDataSource,
     private val launchesQuery: LaunchesQuery
 ) : RemoteMediator<Int, UpcomingLaunchEntity>() {
 
@@ -31,7 +31,7 @@ internal class UpcomingLaunchesRemoteMediator(
             CACHE_TIMEOUT_HOURS,
             TimeUnit.HOURS
         )
-        val remoteKeys = localDataSource.getRemoteKeys().firstOrNull()
+        val remoteKeys = launchesLocalDataSource.getRemoteKeys().firstOrNull()
         val createdTime = remoteKeys?.createdAt
 
         // Check if the query parameters have changed from what was cached
@@ -78,7 +78,7 @@ internal class UpcomingLaunchesRemoteMediator(
                 }
 
                 LoadType.PREPEND -> {
-                    val remoteKeys = localDataSource.getRemoteKeys()
+                    val remoteKeys = launchesLocalDataSource.getRemoteKeys()
                     val firstKey = remoteKeys.firstOrNull()
                     val prevKey = firstKey?.prevKey
                     Timber.tag(TAG).d("LoadType.PREPEND - prev page: $prevKey")
@@ -86,7 +86,7 @@ internal class UpcomingLaunchesRemoteMediator(
                 }
 
                 LoadType.APPEND -> {
-                    val remoteKeys = localDataSource.getRemoteKeys()
+                    val remoteKeys = launchesLocalDataSource.getRemoteKeys()
                     val lastKey = remoteKeys.lastOrNull()
                     val nextKey = lastKey?.nextKey
                     Timber.tag(TAG).d("LoadType.APPEND - next page: $nextKey")
@@ -110,8 +110,8 @@ internal class UpcomingLaunchesRemoteMediator(
 
                     if (loadType == LoadType.REFRESH) {
                         Timber.tag(TAG).d("REFRESH - refreshing cache with new data")
-                        launchDetailLocalDataSource.refreshLaunches(launchDetails)
-                        localDataSource.refreshWithKeys(
+                        detailLocalDataSource.refreshLaunches(launchDetails)
+                        launchesLocalDataSource.refreshWithKeys(
                             launches = launches,
                             nextPage = nextPage,
                             prevPage = null, // Always null on refresh since we're starting fresh
@@ -121,8 +121,8 @@ internal class UpcomingLaunchesRemoteMediator(
                         )
                     } else {
                         Timber.tag(TAG).d("$loadType - appending data to cache")
-                        launchDetailLocalDataSource.upsertAllLaunchDetails(launchDetails)
-                        localDataSource.appendWithKeys(
+                        detailLocalDataSource.upsertAllLaunchDetails(launchDetails)
+                        launchesLocalDataSource.appendWithKeys(
                             launches = launches,
                             nextPage = nextPage,
                             prevPage = prevPage,
@@ -150,7 +150,7 @@ internal class UpcomingLaunchesRemoteMediator(
         loadType: LoadType,
         exception: Throwable
     ): MediatorResult {
-        val cachedItemCount = localDataSource.getTotalEntries()
+        val cachedItemCount = launchesLocalDataSource.getTotalEntries()
 
         // If we're refreshing and have cached data, allow it to be displayed
         if (loadType == LoadType.REFRESH && cachedItemCount > 0) {
@@ -169,6 +169,6 @@ internal class UpcomingLaunchesRemoteMediator(
     ): UpcomingRemoteKeyEntity? {
         val position = state.anchorPosition ?: return null
         val item = state.closestItemToPosition(position) ?: return null
-        return localDataSource.getRemoteKey(item.id)
+        return launchesLocalDataSource.getRemoteKey(item.id)
     }
 }

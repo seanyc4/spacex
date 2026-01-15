@@ -8,8 +8,8 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PastRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.LaunchDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.data.repository.PastDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.DetailedLaunchesResult
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
@@ -37,7 +37,7 @@ class PastLaunchesRemoteMediatorTest {
     private lateinit var pastLaunchesLocalDataSource: PastLaunchesLocalDataSource
 
     @MockK
-    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private lateinit var detailLocalDataSource: PastDetailLocalDataSource
 
     private lateinit var launchesQuery: LaunchesQuery
     private lateinit var underTest: PastLaunchesRemoteMediator
@@ -54,9 +54,9 @@ class PastLaunchesRemoteMediatorTest {
         MockKAnnotations.init(this)
         launchesQuery = LaunchesQuery(query = "")
         underTest = PastLaunchesRemoteMediator(
-            launchesRemoteDataSource = launchesRemoteDataSource,
-            localDataSource = pastLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource,
+            remoteDataSource = launchesRemoteDataSource,
+            pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
+            pastDetailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
     }
@@ -112,9 +112,9 @@ class PastLaunchesRemoteMediatorTest {
     fun `initialize returns LAUNCH_INITIAL_REFRESH when search query has changed from cached`() = runTest {
         launchesQuery = LaunchesQuery(query = "Falcon")
         underTest = PastLaunchesRemoteMediator(
-            launchesRemoteDataSource = launchesRemoteDataSource,
-            localDataSource = pastLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource,
+            remoteDataSource = launchesRemoteDataSource,
+            pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
+            pastDetailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
 
@@ -144,7 +144,7 @@ class PastLaunchesRemoteMediatorTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getPastDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { pastLaunchesLocalDataSource.refreshWithKeys(any(), any(), any(), any(), any(), any()) }
-        coJustRun { launchDetailLocalDataSource.refreshLaunches(any()) }
+        coJustRun { detailLocalDataSource.refreshLaunches(any()) }
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -162,7 +162,7 @@ class PastLaunchesRemoteMediatorTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getPastDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { pastLaunchesLocalDataSource.refreshWithKeys(any(), any(), any(), any(), any(), any()) }
-        coJustRun { launchDetailLocalDataSource.refreshLaunches(any()) }
+        coJustRun { detailLocalDataSource.refreshLaunches(any()) }
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -230,7 +230,7 @@ class PastLaunchesRemoteMediatorTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getPastDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { pastLaunchesLocalDataSource.appendWithKeys(any(), any(), any(), any(), any(), any()) }
-        coEvery { launchDetailLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
+        coEvery { detailLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.APPEND, pagingState)

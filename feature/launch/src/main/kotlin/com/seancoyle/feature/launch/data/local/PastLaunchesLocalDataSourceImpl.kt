@@ -121,6 +121,6 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun refreshPastLaunches(launches: List<LaunchSummary>) {
-        launchDao.refreshLaunches(launches.toPastEntity())
+        launchDao.refreshLaunches(launches.map { it.toPastEntity() })
     }
 }

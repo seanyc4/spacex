@@ -1,9 +1,10 @@
 package com.seancoyle.database.di
 
 import com.seancoyle.database.Database
-import com.seancoyle.database.dao.LaunchDetailDao
+import com.seancoyle.database.dao.PastDetailDao
 import com.seancoyle.database.dao.PastLaunchDao
 import com.seancoyle.database.dao.PastRemoteKeyDao
+import com.seancoyle.database.dao.UpcomingDetailDao
 import com.seancoyle.database.dao.UpcomingLaunchDao
 import com.seancoyle.database.dao.UpcomingRemoteKeyDao
 import dagger.Module
@@ -18,8 +19,14 @@ internal object LaunchCacheDaoModule {
 
     @Singleton
     @Provides
-    fun provideLaunchDetailDao(database: Database): LaunchDetailDao {
-        return database.launchDetailDao()
+    fun provideUpcomingDetailDao(database: Database): UpcomingDetailDao {
+        return database.upcomingDetailDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePastDetailDao(database: Database): PastDetailDao {
+        return database.pastDetailDao()
     }
 
     @Singleton

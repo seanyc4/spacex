@@ -9,7 +9,6 @@ import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LandingEntity
 import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
-import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.LauncherEntity
@@ -27,6 +26,7 @@ import com.seancoyle.database.entities.SpacecraftEntity
 import com.seancoyle.database.entities.SpacecraftStageEntity
 import com.seancoyle.database.entities.SpacecraftStatusEntity
 import com.seancoyle.database.entities.SpacecraftTypeEntity
+import com.seancoyle.database.entities.UpcomingDetailEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.data.remote.AgencyDto
 import com.seancoyle.feature.launch.data.remote.ConfigurationDto
@@ -1435,7 +1435,7 @@ internal object TestData {
         missionPatches: List<MissionPatchEntity> = listOf(createMissionPatchEntity()),
         configuration: ConfigurationEntity? = createConfigurationEntity(),
         families: List<FamilyEntity> = listOf(createFamilyEntity())
-    ) = LaunchEntity(
+    ) = UpcomingDetailEntity(
         id = id,
         url = url,
         name = name,
@@ -2120,7 +2120,7 @@ internal object TestData {
         }
     }
 
-    fun createLaunchEntityList(count: Int = 10): List<LaunchEntity> {
+    fun createLaunchEntityList(count: Int = 10): List<UpcomingDetailEntity> {
         return (1..count).map { index ->
             createLaunchEntity(
                 id = "launch-id-$index",

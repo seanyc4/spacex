@@ -16,9 +16,9 @@ import javax.inject.Inject
 internal class PastLaunchesPagerFactory @Inject constructor(
     private val pastLaunchDao: PastLaunchDao,
     private val remoteDataSource: LaunchesRemoteDataSource,
-    private val localDataSource: PastLaunchesLocalDataSource,
-    private val launchDetailLocalDataSource: LaunchDetailLocalDataSource,
-    ) {
+    private val pastLaunchesLocalDataSource: PastLaunchesLocalDataSource,
+    private val pastDetailLocalDataSource: PastDetailLocalDataSource,
+) {
 
     fun create(launchesQuery: LaunchesQuery): Pager<Int, PastLaunchEntity> {
         return Pager(
@@ -29,10 +29,10 @@ internal class PastLaunchesPagerFactory @Inject constructor(
                 prefetchDistance = PREFETCH_DISTANCE
             ),
             remoteMediator = PastLaunchesRemoteMediator(
-                launchesRemoteDataSource = remoteDataSource,
+                remoteDataSource = remoteDataSource,
                 launchesQuery = launchesQuery,
-                localDataSource = localDataSource,
-                launchDetailLocalDataSource = launchDetailLocalDataSource
+                pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
+                pastDetailLocalDataSource = pastDetailLocalDataSource
             ),
             pagingSourceFactory = { pastLaunchDao.pagingSource() }
         )

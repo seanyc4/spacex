@@ -19,7 +19,7 @@ class PastLaunchesPagerFactoryTest {
     private lateinit var pastLaunchesLocalDataSource: PastLaunchesLocalDataSource
 
     @MockK
-    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private lateinit var pastDetailLocalDataSource: PastDetailLocalDataSource
 
     private lateinit var pastLaunchDao: com.seancoyle.database.dao.PastLaunchDao
     private lateinit var underTest: PastLaunchesPagerFactory
@@ -31,8 +31,8 @@ class PastLaunchesPagerFactoryTest {
         underTest = PastLaunchesPagerFactory(
             pastLaunchDao = pastLaunchDao,
             remoteDataSource = launchesRemoteDataSource,
-            localDataSource = pastLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource
+            pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
+            pastDetailLocalDataSource = pastDetailLocalDataSource
         )
     }
 

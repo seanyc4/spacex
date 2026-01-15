@@ -3,14 +3,16 @@ package com.seancoyle.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.seancoyle.database.dao.LaunchDetailDao
+import com.seancoyle.database.dao.PastDetailDao
 import com.seancoyle.database.dao.PastLaunchDao
 import com.seancoyle.database.dao.PastRemoteKeyDao
+import com.seancoyle.database.dao.UpcomingDetailDao
 import com.seancoyle.database.dao.UpcomingLaunchDao
 import com.seancoyle.database.dao.UpcomingRemoteKeyDao
-import com.seancoyle.database.entities.LaunchEntity
+import com.seancoyle.database.entities.PastDetailEntity
 import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PastRemoteKeyEntity
+import com.seancoyle.database.entities.UpcomingDetailEntity
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
 import com.seancoyle.database.util.AgencyListConverter
@@ -28,13 +30,14 @@ import com.seancoyle.database.util.VidUrlListConverter
 @Database(
     entities =
     [
-        LaunchEntity::class,
+        UpcomingDetailEntity::class,
+        PastDetailEntity::class,
         UpcomingLaunchEntity::class,
         UpcomingRemoteKeyEntity::class,
         PastLaunchEntity::class,
         PastRemoteKeyEntity::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = true
 )
 @TypeConverters(
@@ -51,7 +54,8 @@ import com.seancoyle.database.util.VidUrlListConverter
     VidUrlListConverter::class
 )
 abstract class Database : RoomDatabase() {
-    abstract fun launchDetailDao(): LaunchDetailDao
+    abstract fun pastDetailDao(): PastDetailDao
+    abstract fun upcomingDetailDao(): UpcomingDetailDao
     abstract fun upcomingLaunchDao(): UpcomingLaunchDao
     abstract fun upcomingRemoteKeyDao(): UpcomingRemoteKeyDao
     abstract fun pastLaunchDao(): PastLaunchDao

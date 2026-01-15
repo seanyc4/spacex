@@ -38,7 +38,10 @@ class LaunchesRepositoryImplTest {
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private lateinit var upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource
+
+    @MockK
+    private lateinit var pastDetailLocalDataSource: PastDetailLocalDataSource
 
     private lateinit var underTest: LaunchesRepository
 
@@ -49,7 +52,8 @@ class LaunchesRepositoryImplTest {
             upcomingPagerFactory = upcomingPagerFactory,
             pastPagerFactory = pastPagerFactory,
             launchesRemoteDataSource = launchesRemoteDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource
+            upcomingDetailLocalDataSource = upcomingDetailLocalDataSource,
+            pastDetailLocalDataSource = pastDetailLocalDataSource
         )
     }
 
@@ -121,11 +125,11 @@ class LaunchesRepositoryImplTest {
     }
 
     @Test
-    fun `getLaunch returns cached data when available in local data source`() = runTest {
+    fun `getLaunch returns cached data when available in UPCOMING detail cache`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         val cachedLaunch = TestData.createLaunch()
-        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
+        coEvery { upcomingDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
 
         val result = underTest.getLaunch(id, launchType)
 
@@ -135,11 +139,25 @@ class LaunchesRepositoryImplTest {
     }
 
     @Test
-    fun `getLaunch falls back to remote when cache returns null`() = runTest {
+    fun `getLaunch returns cached data when available in PAST detail cache`() = runTest {
+        val id = "test-id"
+        val launchType = LaunchesType.PAST
+        val cachedLaunch = TestData.createLaunch()
+        coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
+
+        val result = underTest.getLaunch(id, launchType)
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(cachedLaunch, result.data)
+        coVerify(exactly = 0) { launchesRemoteDataSource.getLaunch(any(), any()) }
+    }
+
+    @Test
+    fun `getLaunch falls back to remote when upcoming cache returns null`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         val remoteLaunch = TestData.createLaunch()
-        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { upcomingDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
         val result = underTest.getLaunch(id, launchType)
@@ -150,11 +168,11 @@ class LaunchesRepositoryImplTest {
     }
 
     @Test
-    fun `getLaunch falls back to remote when cache returns error`() = runTest {
+    fun `getLaunch falls back to remote when past cache returns error`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val remoteLaunch = TestData.createLaunch()
-        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
+        coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
         val result = underTest.getLaunch(id, launchType)
@@ -169,7 +187,7 @@ class LaunchesRepositoryImplTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val error = RemoteError.NETWORK_UNKNOWN_ERROR
-        coEvery { launchDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
+        coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Error(error)
 
         val result = underTest.getLaunch(id, launchType)

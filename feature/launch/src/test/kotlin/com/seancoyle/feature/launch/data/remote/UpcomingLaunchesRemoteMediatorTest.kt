@@ -8,8 +8,8 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.LaunchDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.DetailedLaunchesResult
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
@@ -37,7 +37,7 @@ class UpcomingLaunchesRemoteMediatorTest {
     private lateinit var upcomingLaunchesLocalDataSource: UpcomingLaunchesLocalDataSource
 
     @MockK
-    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private lateinit var detailLocalDataSource: UpcomingDetailLocalDataSource
 
     private lateinit var launchesQuery: LaunchesQuery
     private lateinit var underTest: UpcomingLaunchesRemoteMediator
@@ -55,8 +55,8 @@ class UpcomingLaunchesRemoteMediatorTest {
         launchesQuery = LaunchesQuery(query = "")
         underTest = UpcomingLaunchesRemoteMediator(
             remotedataSource = launchesRemoteDataSource,
-            localDataSource = upcomingLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource,
+            launchesLocalDataSource = upcomingLaunchesLocalDataSource,
+            detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
     }
@@ -113,8 +113,8 @@ class UpcomingLaunchesRemoteMediatorTest {
         launchesQuery = LaunchesQuery(query = "Falcon")
         underTest = UpcomingLaunchesRemoteMediator(
             remotedataSource = launchesRemoteDataSource,
-            localDataSource = upcomingLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource,
+            launchesLocalDataSource = upcomingLaunchesLocalDataSource,
+            detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
 
@@ -144,7 +144,7 @@ class UpcomingLaunchesRemoteMediatorTest {
         coEvery { upcomingLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getUpcomingDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { upcomingLaunchesLocalDataSource.refreshWithKeys(any(), any(), any(), any(), any(), any()) }
-        coJustRun { launchDetailLocalDataSource.refreshLaunches(any()) }
+        coJustRun { detailLocalDataSource.refreshLaunches(any()) }
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -162,7 +162,7 @@ class UpcomingLaunchesRemoteMediatorTest {
         coEvery { upcomingLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getUpcomingDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { upcomingLaunchesLocalDataSource.refreshWithKeys(any(), any(), any(), any(), any(), any()) }
-        coJustRun { launchDetailLocalDataSource.refreshLaunches(any()) }
+        coJustRun { detailLocalDataSource.refreshLaunches(any()) }
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.REFRESH, pagingState)
@@ -230,7 +230,7 @@ class UpcomingLaunchesRemoteMediatorTest {
         coEvery { upcomingLaunchesLocalDataSource.getRemoteKeys() } returns listOf(remoteKey)
         coEvery { launchesRemoteDataSource.getUpcomingDetailedLaunches(any(), any()) } returns LaunchResult.Success(detailedResult)
         coJustRun { upcomingLaunchesLocalDataSource.appendWithKeys(any(), any(), any(), any(), any(), any()) }
-        coEvery { launchDetailLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
+        coEvery { detailLocalDataSource.upsertAllLaunchDetails(any()) } returns LaunchResult.Success(Unit)
 
         val pagingState = createPagingState()
         val result = underTest.load(LoadType.APPEND, pagingState)

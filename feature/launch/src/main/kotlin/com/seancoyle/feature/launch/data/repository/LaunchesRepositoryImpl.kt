@@ -21,7 +21,8 @@ internal class LaunchesRepositoryImpl @Inject constructor(
     private val upcomingPagerFactory: UpcomingLaunchesPagerFactory,
     private val pastPagerFactory: PastLaunchesPagerFactory,
     private val launchesRemoteDataSource: LaunchesRemoteDataSource,
-    private val launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private val upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource,
+    private val pastDetailLocalDataSource: PastDetailLocalDataSource,
 ) : LaunchesRepository {
 
     override fun upcomingPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {
@@ -42,25 +43,31 @@ internal class LaunchesRepositoryImpl @Inject constructor(
         id: String,
         launchType: LaunchesType
     ): LaunchResult<Launch, RemoteError> {
-        when (val cachedResult = launchDetailLocalDataSource.getLaunchDetail(id)) {
-            is LaunchResult.Success -> {
-                val cachedLaunch = cachedResult.data
-                if (cachedLaunch != null) {
-                    Timber.tag(TAG).d("getLaunch: Cache hit for launch id=$id")
-                    return LaunchResult.Success(cachedLaunch)
+        val cachedLaunch: Launch? = when (launchType) {
+            LaunchesType.UPCOMING -> {
+                when (val cachedResult = upcomingDetailLocalDataSource.getLaunchDetail(id)) {
+                    is LaunchResult.Success -> cachedResult.data
+                    is LaunchResult.Error -> null
                 }
             }
-            is LaunchResult.Error -> {
-                Timber.tag(TAG).d("getLaunch: Cache error for launch id=$id")
+
+            LaunchesType.PAST -> {
+                when (val cachedResult = pastDetailLocalDataSource.getLaunchDetail(id)) {
+                    is LaunchResult.Success -> cachedResult.data
+                    is LaunchResult.Error -> null
+                }
             }
         }
 
-        // Fallback to network if not in cache
-        Timber.tag(TAG).d("getLaunch: Cache miss for launch id=$id, fetching from network")
+        if (cachedLaunch != null) {
+            Timber.tag(TAG).d("getLaunch: Cache hit for launch id=$id type=$launchType")
+            return LaunchResult.Success(cachedLaunch)
+        }
+
+        Timber.tag(TAG).d("getLaunch: Cache miss for launch id=$id type=$launchType, fetching from network")
         return launchesRemoteDataSource.getLaunch(
             id = id,
             launchType = launchType
         )
     }
-
 }

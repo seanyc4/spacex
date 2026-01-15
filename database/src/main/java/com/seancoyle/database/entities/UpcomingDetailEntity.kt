@@ -18,8 +18,8 @@ import com.seancoyle.database.util.VidUrlListConverter
 import kotlinx.serialization.Serializable
 
 @Keep
-@Entity(tableName = "launch", primaryKeys = ["id"])
-data class LaunchEntity(
+@Entity(tableName = "upcoming_detail", primaryKeys = ["id"])
+data class UpcomingDetailEntity(
 
     @ColumnInfo(name = "id")
     val id: String,

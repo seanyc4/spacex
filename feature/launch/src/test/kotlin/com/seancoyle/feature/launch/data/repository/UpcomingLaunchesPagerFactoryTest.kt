@@ -19,7 +19,7 @@ class UpcomingLaunchesPagerFactoryTest {
     private lateinit var upcomingLaunchesLocalDataSource: UpcomingLaunchesLocalDataSource
 
     @MockK
-    private lateinit var launchDetailLocalDataSource: LaunchDetailLocalDataSource
+    private lateinit var upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource
 
     private lateinit var upcomingLaunchDao: com.seancoyle.database.dao.UpcomingLaunchDao
     private lateinit var underTest: UpcomingLaunchesPagerFactory
@@ -31,8 +31,8 @@ class UpcomingLaunchesPagerFactoryTest {
         underTest = UpcomingLaunchesPagerFactory(
             upcomingLaunchDao = upcomingLaunchDao,
             remoteDataSource = launchesRemoteDataSource,
-            localDataSource = upcomingLaunchesLocalDataSource,
-            launchDetailLocalDataSource = launchDetailLocalDataSource
+            upcomingLaunchesLocalDataSource = upcomingLaunchesLocalDataSource,
+            upcomingDetailLocalDataSource = upcomingDetailLocalDataSource
         )
     }
 
