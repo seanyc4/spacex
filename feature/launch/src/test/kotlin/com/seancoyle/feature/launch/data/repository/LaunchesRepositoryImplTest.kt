@@ -29,19 +29,16 @@ import kotlin.test.assertTrue
 class LaunchesRepositoryImplTest {
 
     @MockK
-    private lateinit var upcomingPagerFactory: UpcomingLaunchesPagerFactory
-
-    @MockK
-    private lateinit var pastPagerFactory: PastLaunchesPagerFactory
+    private lateinit var pagerFactory: LaunchesPagerFactory
 
     @MockK
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource
+    private lateinit var upcomingDetailLocalDataSource: DetailLocalDataSource
 
     @MockK
-    private lateinit var pastDetailLocalDataSource: PastDetailLocalDataSource
+    private lateinit var pastDetailLocalDataSource: DetailLocalDataSource
 
     private lateinit var underTest: LaunchesRepository
 
@@ -49,8 +46,7 @@ class LaunchesRepositoryImplTest {
     fun setup() {
         MockKAnnotations.init(this)
         underTest = LaunchesRepositoryImpl(
-            upcomingPagerFactory = upcomingPagerFactory,
-            pastPagerFactory = pastPagerFactory,
+            pagerFactory = pagerFactory,
             launchesRemoteDataSource = launchesRemoteDataSource,
             upcomingDetailLocalDataSource = upcomingDetailLocalDataSource,
             pastDetailLocalDataSource = pastDetailLocalDataSource
@@ -61,10 +57,10 @@ class LaunchesRepositoryImplTest {
     fun `upcomingPager returns flow of paging data with query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "Falcon")
         val launchEntity = TestData.createUpcomingLaunchEntity()
-        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
+        val mockPager: Pager<Int, UpcomingLaunchEntity> = mockk()
         val pagingData = PagingData.from(listOf(launchEntity))
 
-        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
+        every { pagerFactory.createUpcoming(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
         val result = underTest.upcomingPager(launchesQuery)
@@ -72,17 +68,17 @@ class LaunchesRepositoryImplTest {
         assertNotNull(result)
         assertNotNull(result.first())
 
-        verify { upcomingPagerFactory.create(launchesQuery) }
+        verify { pagerFactory.createUpcoming(launchesQuery) }
     }
 
     @Test
     fun `pastPager returns flow of paging data with query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "Falcon")
         val launchEntity = TestData.createPastLaunchEntity()
-        val mockPager = mockk<Pager<Int, PastLaunchEntity>>()
+        val mockPager: Pager<Int, PastLaunchEntity> = mockk()
         val pagingData = PagingData.from(listOf(launchEntity))
 
-        every { pastPagerFactory.create(launchesQuery) } returns mockPager
+        every { pagerFactory.createPast(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
         val result = underTest.pastPager(launchesQuery)
@@ -90,16 +86,16 @@ class LaunchesRepositoryImplTest {
         assertNotNull(result)
         assertNotNull(result.first())
 
-        verify { pastPagerFactory.create(launchesQuery) }
+        verify { pagerFactory.createPast(launchesQuery) }
     }
 
     @Test
     fun `upcomingPager returns empty flow when no data available`() = runTest {
         val launchesQuery = LaunchesQuery(query = "")
-        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
+        val mockPager: Pager<Int, UpcomingLaunchEntity> = mockk()
         val pagingData = PagingData.empty<UpcomingLaunchEntity>()
 
-        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
+        every { pagerFactory.createUpcoming(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
         val result = underTest.upcomingPager(launchesQuery)
@@ -107,21 +103,21 @@ class LaunchesRepositoryImplTest {
         assertNotNull(result)
         assertNotNull(result.first())
 
-        verify { upcomingPagerFactory.create(launchesQuery) }
+        verify { pagerFactory.createUpcoming(launchesQuery) }
     }
 
     @Test
     fun `upcomingPager creates pager with correct launch query`() = runTest {
         val launchesQuery = LaunchesQuery(query = "SpaceX")
-        val mockPager = mockk<Pager<Int, UpcomingLaunchEntity>>()
+        val mockPager: Pager<Int, UpcomingLaunchEntity> = mockk()
         val pagingData = PagingData.empty<UpcomingLaunchEntity>()
 
-        every { upcomingPagerFactory.create(launchesQuery) } returns mockPager
+        every { pagerFactory.createUpcoming(launchesQuery) } returns mockPager
         every { mockPager.flow } returns flowOf(pagingData)
 
-        underTest.upcomingPager(launchesQuery)
+        underTest.upcomingPager(launchesQuery).first()
 
-        verify(exactly = 1) { upcomingPagerFactory.create(launchesQuery) }
+        verify(exactly = 1) { pagerFactory.createUpcoming(launchesQuery) }
     }
 
     @Test

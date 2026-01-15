@@ -8,9 +8,9 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PastRemoteKeyEntity
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
-import com.seancoyle.feature.launch.data.repository.PastDetailLocalDataSource
-import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.DetailedLaunchesResult
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
@@ -34,10 +34,10 @@ class PastLaunchesRemoteMediatorTest {
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var pastLaunchesLocalDataSource: PastLaunchesLocalDataSource
+    private lateinit var pastLaunchesLocalDataSource: LaunchesLocalDataSource<PastRemoteKeyEntity>
 
     @MockK
-    private lateinit var detailLocalDataSource: PastDetailLocalDataSource
+    private lateinit var detailLocalDataSource: DetailLocalDataSource
 
     private lateinit var launchesQuery: LaunchesQuery
     private lateinit var underTest: PastLaunchesRemoteMediator
@@ -55,8 +55,8 @@ class PastLaunchesRemoteMediatorTest {
         launchesQuery = LaunchesQuery(query = "")
         underTest = PastLaunchesRemoteMediator(
             remoteDataSource = launchesRemoteDataSource,
-            pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
-            pastDetailLocalDataSource = detailLocalDataSource,
+            launchesLocalDataSource = pastLaunchesLocalDataSource,
+            detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
     }
@@ -113,8 +113,8 @@ class PastLaunchesRemoteMediatorTest {
         launchesQuery = LaunchesQuery(query = "Falcon")
         underTest = PastLaunchesRemoteMediator(
             remoteDataSource = launchesRemoteDataSource,
-            pastLaunchesLocalDataSource = pastLaunchesLocalDataSource,
-            pastDetailLocalDataSource = detailLocalDataSource,
+            launchesLocalDataSource = pastLaunchesLocalDataSource,
+            detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
         )
 

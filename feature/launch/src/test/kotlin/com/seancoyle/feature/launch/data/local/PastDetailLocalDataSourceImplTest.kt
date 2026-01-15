@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.data.local
 
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.database.dao.UpcomingDetailDao
+import com.seancoyle.database.dao.PastDetailDao
 import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
@@ -19,10 +19,10 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class UpcomingDetailLocalDataSourceImplTest {
+class PastDetailLocalDataSourceImplTest {
 
     @MockK
-    private lateinit var upcomingDetailDao: UpcomingDetailDao
+    private lateinit var pastDetailDao: PastDetailDao
 
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
@@ -32,26 +32,26 @@ class UpcomingDetailLocalDataSourceImplTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = UpcomingDetailLocalDataSourceImpl(
-            upcomingDetailDao = upcomingDetailDao,
+        underTest = PastDetailLocalDataSourceImpl(
+            pastDetailDao = pastDetailDao,
             crashlytics = crashlytics
         )
     }
 
     @Test
     fun `getTotalEntries returns count`() = runTest {
-        coEvery { upcomingDetailDao.getTotalEntries() } returns 10
+        coEvery { pastDetailDao.getTotalEntries() } returns 10
 
         val result = underTest.getTotalEntries()
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(10, result.data)
-        coVerify { upcomingDetailDao.getTotalEntries() }
+        coVerify { pastDetailDao.getTotalEntries() }
     }
 
     @Test
     fun `getTotalEntries returns error on exception`() = runTest {
-        coEvery { upcomingDetailDao.getTotalEntries() } throws RuntimeException("db")
+        coEvery { pastDetailDao.getTotalEntries() } throws RuntimeException("db")
 
         val result = underTest.getTotalEntries()
 
@@ -61,7 +61,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     @Test
     fun `getLaunchDetail returns domain launch when found`() = runTest {
         val id = "id"
-        coEvery { upcomingDetailDao.getById(id) } returns TestData.createLaunchEntity(id = id)
+        coEvery { pastDetailDao.getById(id) } returns TestData.createPastDetailEntity(id = id)
 
         val result = underTest.getLaunchDetail(id)
 
@@ -72,7 +72,7 @@ class UpcomingDetailLocalDataSourceImplTest {
 
     @Test
     fun `getLaunchDetail returns null when missing`() = runTest {
-        coEvery { upcomingDetailDao.getById(any()) } returns null
+        coEvery { pastDetailDao.getById(any()) } returns null
 
         val result = underTest.getLaunchDetail("missing")
 
@@ -82,40 +82,40 @@ class UpcomingDetailLocalDataSourceImplTest {
 
     @Test
     fun `upsertLaunchDetail succeeds`() = runTest {
-        coEvery { upcomingDetailDao.upsert(any()) } returns 1L
+        coEvery { pastDetailDao.upsert(any()) } returns 1L
 
         val result = underTest.upsertLaunchDetail(TestData.createLaunch())
 
         assertTrue(result is LaunchResult.Success)
-        coVerify { upcomingDetailDao.upsert(any()) }
+        coVerify { pastDetailDao.upsert(any()) }
     }
 
     @Test
     fun `upsertAllLaunchDetails succeeds`() = runTest {
-        coEvery { upcomingDetailDao.upsertAll(any()) } returns longArrayOf(1L)
+        coEvery { pastDetailDao.upsertAll(any()) } returns longArrayOf(1L)
 
         val result = underTest.upsertAllLaunchDetails(listOf(TestData.createLaunch()))
 
         assertTrue(result is LaunchResult.Success)
-        coVerify { upcomingDetailDao.upsertAll(any()) }
+        coVerify { pastDetailDao.upsertAll(any()) }
     }
 
     @Test
     fun `deleteAllLaunchDetails succeeds`() = runTest {
-        coJustRun { upcomingDetailDao.deleteAll() }
+        coJustRun { pastDetailDao.deleteAll() }
 
         val result = underTest.deleteAllLaunchDetails()
 
         assertTrue(result is LaunchResult.Success)
-        coVerify { upcomingDetailDao.deleteAll() }
+        coVerify { pastDetailDao.deleteAll() }
     }
 
     @Test
     fun `refreshLaunches delegates`() = runTest {
-        coJustRun { upcomingDetailDao.refreshLaunches(any()) }
+        coJustRun { pastDetailDao.refreshLaunches(any()) }
 
         underTest.refreshLaunches(listOf(TestData.createLaunch()))
 
-        coVerify { upcomingDetailDao.refreshLaunches(any()) }
+        coVerify { pastDetailDao.refreshLaunches(any()) }
     }
 }

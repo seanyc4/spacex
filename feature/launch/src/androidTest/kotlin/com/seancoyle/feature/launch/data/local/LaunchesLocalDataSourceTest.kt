@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.data.local
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.data.repository.LaunchDetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
 import com.seancoyle.feature.launch.domain.model.Configuration
 import com.seancoyle.feature.launch.domain.model.Image
 import com.seancoyle.feature.launch.domain.model.Launch
@@ -32,7 +32,7 @@ internal class LaunchesLocalDataSourceTest {
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var underTest: LaunchDetailLocalDataSource
+    lateinit var underTest: DetailLocalDataSource
 
     @Before
     fun setup() {

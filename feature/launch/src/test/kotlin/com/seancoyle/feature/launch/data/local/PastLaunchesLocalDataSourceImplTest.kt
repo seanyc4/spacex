@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.database.dao.PastLaunchDao
 import com.seancoyle.database.dao.PastRemoteKeyDao
 import com.seancoyle.database.entities.PastRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -30,7 +30,7 @@ class PastLaunchesLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: PastLaunchesLocalDataSource
+    private lateinit var underTest: LaunchesLocalDataSource<PastRemoteKeyEntity>
 
     @Before
     fun setup() {

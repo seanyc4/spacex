@@ -8,9 +8,9 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
-import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
-import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.DetailedLaunchesResult
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
@@ -34,10 +34,10 @@ class UpcomingLaunchesRemoteMediatorTest {
     private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
 
     @MockK
-    private lateinit var upcomingLaunchesLocalDataSource: UpcomingLaunchesLocalDataSource
+    private lateinit var upcomingLaunchesLocalDataSource: LaunchesLocalDataSource<UpcomingRemoteKeyEntity>
 
     @MockK
-    private lateinit var detailLocalDataSource: UpcomingDetailLocalDataSource
+    private lateinit var detailLocalDataSource: DetailLocalDataSource
 
     private lateinit var launchesQuery: LaunchesQuery
     private lateinit var underTest: UpcomingLaunchesRemoteMediator
@@ -54,7 +54,7 @@ class UpcomingLaunchesRemoteMediatorTest {
         MockKAnnotations.init(this)
         launchesQuery = LaunchesQuery(query = "")
         underTest = UpcomingLaunchesRemoteMediator(
-            remotedataSource = launchesRemoteDataSource,
+            remoteDataSource = launchesRemoteDataSource,
             launchesLocalDataSource = upcomingLaunchesLocalDataSource,
             detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery
@@ -112,7 +112,7 @@ class UpcomingLaunchesRemoteMediatorTest {
     fun `initialize returns LAUNCH_INITIAL_REFRESH when search query has changed from cached`() = runTest {
         launchesQuery = LaunchesQuery(query = "Falcon")
         underTest = UpcomingLaunchesRemoteMediator(
-            remotedataSource = launchesRemoteDataSource,
+            remoteDataSource = launchesRemoteDataSource,
             launchesLocalDataSource = upcomingLaunchesLocalDataSource,
             detailLocalDataSource = detailLocalDataSource,
             launchesQuery = launchesQuery

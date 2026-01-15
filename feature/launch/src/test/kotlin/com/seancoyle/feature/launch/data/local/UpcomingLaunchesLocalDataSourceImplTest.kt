@@ -4,7 +4,7 @@ import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.database.dao.UpcomingLaunchDao
 import com.seancoyle.database.dao.UpcomingRemoteKeyDao
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -30,7 +30,7 @@ class UpcomingLaunchesLocalDataSourceImplTest {
     @RelaxedMockK
     private lateinit var crashlytics: Crashlytics
 
-    private lateinit var underTest: UpcomingLaunchesLocalDataSource
+    private lateinit var underTest: LaunchesLocalDataSource<UpcomingRemoteKeyEntity>
 
     @Before
     fun setup() {

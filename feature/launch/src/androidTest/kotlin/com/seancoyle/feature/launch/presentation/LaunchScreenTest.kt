@@ -227,7 +227,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(launch.mission.name.orEmpty())
+        composeRule.onNodeWithText(launch.mission.name)
             .assertIsDisplayed()
     }
 
@@ -270,7 +270,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(launch.pad.name.orEmpty())
+        composeRule.onNodeWithText(launch.pad.name)
             .assertIsDisplayed()
     }
 
