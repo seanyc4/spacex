@@ -6,7 +6,7 @@ import com.seancoyle.database.dao.PastRemoteKeyDao
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PastRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,7 +15,7 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
     private val launchDao: PastLaunchDao,
     private val remoteKeyDao: PastRemoteKeyDao,
     private val crashlytics: Crashlytics
-) : PastLaunchesLocalDataSource {
+) : LaunchesLocalDataSource<PastRemoteKeyEntity> {
 
     override suspend fun getRemoteKeys(): List<PastRemoteKeyEntity?> {
         return try {
@@ -120,7 +120,7 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun refreshPastLaunches(launches: List<LaunchSummary>) {
+    override suspend fun refreshLaunches(launches: List<LaunchSummary>) {
         launchDao.refreshLaunches(launches.map { it.toPastEntity() })
     }
 }

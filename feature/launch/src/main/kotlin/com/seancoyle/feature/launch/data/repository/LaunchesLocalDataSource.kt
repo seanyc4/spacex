@@ -1,13 +1,12 @@
 package com.seancoyle.feature.launch.data.repository
 
-import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
 
-internal interface UpcomingLaunchesLocalDataSource {
+internal interface LaunchesLocalDataSource<RemoteKey : Any> {
 
-    suspend fun getRemoteKeys(): List<UpcomingRemoteKeyEntity?>
+    suspend fun getRemoteKeys(): List<RemoteKey?>
 
-    suspend fun getRemoteKey(id: String): UpcomingRemoteKeyEntity?
+    suspend fun getRemoteKey(id: String): RemoteKey?
 
     suspend fun refreshWithKeys(
         launches: List<LaunchSummary>,
@@ -31,5 +30,5 @@ internal interface UpcomingLaunchesLocalDataSource {
 
     suspend fun deleteAll()
 
-    suspend fun refreshPastLaunches(launches: List<LaunchSummary>)
+    suspend fun refreshLaunches(launches: List<LaunchSummary>)
 }

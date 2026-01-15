@@ -4,7 +4,7 @@ import com.seancoyle.core.common.coroutines.runSuspendCatching
 import com.seancoyle.core.common.crashlytics.Crashlytics
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.dao.UpcomingDetailDao
-import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
 import com.seancoyle.feature.launch.domain.model.Launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -12,7 +12,7 @@ import javax.inject.Inject
 internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
     private val upcomingDetailDao: UpcomingDetailDao,
     private val crashlytics: Crashlytics,
-) : UpcomingDetailLocalDataSource {
+) : DetailLocalDataSource {
 
     override suspend fun getTotalEntries(): LaunchResult<Int, Throwable> {
         return runSuspendCatching {

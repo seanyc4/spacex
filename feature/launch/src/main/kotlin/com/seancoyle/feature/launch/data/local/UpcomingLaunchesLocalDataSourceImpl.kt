@@ -6,7 +6,7 @@ import com.seancoyle.database.dao.UpcomingRemoteKeyDao
 import com.seancoyle.database.entities.LaunchStatusEntity
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
-import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,7 +15,7 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
     private val launchDao: UpcomingLaunchDao,
     private val remoteKeyDao: UpcomingRemoteKeyDao,
     private val crashlytics: Crashlytics
-) : UpcomingLaunchesLocalDataSource {
+) : LaunchesLocalDataSource<UpcomingRemoteKeyEntity> {
 
     override suspend fun getRemoteKeys(): List<UpcomingRemoteKeyEntity?> {
         return try {
@@ -119,7 +119,7 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun refreshPastLaunches(launches: List<LaunchSummary>) {
+    override suspend fun refreshLaunches(launches: List<LaunchSummary>) {
         launchDao.refreshUpcomingLaunches(launches.map { it.toUpcomingEntity() })
     }
 }

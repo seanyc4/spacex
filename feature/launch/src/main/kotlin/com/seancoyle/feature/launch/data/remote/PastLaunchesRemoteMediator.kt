@@ -6,9 +6,10 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.PastLaunchEntity
+import com.seancoyle.database.entities.PastRemoteKeyEntity
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
-import com.seancoyle.feature.launch.data.repository.PastDetailLocalDataSource
-import com.seancoyle.feature.launch.data.repository.PastLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -20,8 +21,8 @@ private const val CACHE_TIMEOUT_HOURS = 1L
 @OptIn(ExperimentalPagingApi::class)
 internal class PastLaunchesRemoteMediator(
     private val remoteDataSource: LaunchesRemoteDataSource,
-    private val pastLaunchesLocalDataSource: PastLaunchesLocalDataSource,
-    private val pastDetailLocalDataSource: PastDetailLocalDataSource,
+    private val pastLaunchesLocalDataSource: LaunchesLocalDataSource<PastRemoteKeyEntity>,
+    private val pastDetailLocalDataSource: DetailLocalDataSource,
     private val launchesQuery: LaunchesQuery,
 ) : RemoteMediator<Int, PastLaunchEntity>() {
 
@@ -166,7 +167,7 @@ internal class PastLaunchesRemoteMediator(
 
     private suspend fun remoteKeyClosestToCurrentPosition(
         state: PagingState<Int, PastLaunchEntity>
-    ): com.seancoyle.database.entities.PastRemoteKeyEntity? {
+    ): PastRemoteKeyEntity? {
         val position = state.anchorPosition ?: return null
         val item = state.closestItemToPosition(position) ?: return null
         return pastLaunchesLocalDataSource.getRemoteKey(item.id)

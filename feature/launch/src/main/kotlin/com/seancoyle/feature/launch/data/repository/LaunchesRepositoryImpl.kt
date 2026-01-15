@@ -6,6 +6,8 @@ import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.data.local.toDomain
+import com.seancoyle.feature.launch.di.PastLaunches
+import com.seancoyle.feature.launch.di.UpcomingLaunches
 import com.seancoyle.feature.launch.domain.model.Launch
 import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
@@ -21,8 +23,8 @@ internal class LaunchesRepositoryImpl @Inject constructor(
     private val upcomingPagerFactory: UpcomingLaunchesPagerFactory,
     private val pastPagerFactory: PastLaunchesPagerFactory,
     private val launchesRemoteDataSource: LaunchesRemoteDataSource,
-    private val upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource,
-    private val pastDetailLocalDataSource: PastDetailLocalDataSource,
+    @param:UpcomingLaunches private val upcomingDetailLocalDataSource: DetailLocalDataSource,
+    @param:PastLaunches private val pastDetailLocalDataSource: DetailLocalDataSource,
 ) : LaunchesRepository {
 
     override fun upcomingPager(launchesQuery: LaunchesQuery): Flow<PagingData<LaunchSummary>> {

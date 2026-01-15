@@ -554,7 +554,7 @@ private fun Mission.toEntity(): MissionEntity =
         type = type,
         description = description,
         orbit = orbit?.toEntity(),
-        agencies = agencies.mapNotNull { it?.toEntity() },
+        agencies = agencies.map { it.toEntity() },
         infoUrls = infoUrls.map { it.toEntity() },
         vidUrls = vidUrls.map { it.toEntity() }
     )
@@ -605,7 +605,7 @@ private fun Program.toEntity(): ProgramEntity =
         image = image.toEntity(),
         startDate = startDate,
         endDate = endDate,
-        agencies = agencies.mapNotNull { it?.toEntity() }
+        agencies = agencies.map { it.toEntity() }
     )
 
 private fun LaunchUpdateEntity.toDomain(): LaunchUpdate =

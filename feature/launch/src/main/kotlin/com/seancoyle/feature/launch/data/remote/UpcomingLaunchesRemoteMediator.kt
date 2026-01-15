@@ -7,9 +7,9 @@ import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
+import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
-import com.seancoyle.feature.launch.data.repository.UpcomingDetailLocalDataSource
-import com.seancoyle.feature.launch.data.repository.UpcomingLaunchesLocalDataSource
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -21,8 +21,8 @@ private const val CACHE_TIMEOUT_HOURS = 1L
 @OptIn(ExperimentalPagingApi::class)
 internal class UpcomingLaunchesRemoteMediator(
     private val remotedataSource: LaunchesRemoteDataSource,
-    private val launchesLocalDataSource: UpcomingLaunchesLocalDataSource,
-    private val detailLocalDataSource: UpcomingDetailLocalDataSource,
+    private val launchesLocalDataSource: LaunchesLocalDataSource<UpcomingRemoteKeyEntity>,
+    private val detailLocalDataSource: DetailLocalDataSource,
     private val launchesQuery: LaunchesQuery
 ) : RemoteMediator<Int, UpcomingLaunchEntity>() {
 

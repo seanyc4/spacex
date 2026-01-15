@@ -5,7 +5,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.seancoyle.database.dao.UpcomingLaunchDao
 import com.seancoyle.database.entities.UpcomingLaunchEntity
+import com.seancoyle.database.entities.UpcomingRemoteKeyEntity
 import com.seancoyle.feature.launch.data.remote.UpcomingLaunchesRemoteMediator
+import com.seancoyle.feature.launch.di.UpcomingLaunches
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.presentation.LaunchesConstants.INITIAL_LOAD_SIZE
 import com.seancoyle.feature.launch.presentation.LaunchesConstants.PAGINATION_LIMIT
@@ -16,9 +18,9 @@ import javax.inject.Inject
 internal class UpcomingLaunchesPagerFactory @Inject constructor(
     private val upcomingLaunchDao: UpcomingLaunchDao,
     private val remoteDataSource: LaunchesRemoteDataSource,
-    private val upcomingLaunchesLocalDataSource: UpcomingLaunchesLocalDataSource,
-    private val upcomingDetailLocalDataSource: UpcomingDetailLocalDataSource,
-    ) {
+    @param:UpcomingLaunches private val upcomingLaunchesLocalDataSource: LaunchesLocalDataSource<UpcomingRemoteKeyEntity>,
+    @param:UpcomingLaunches private val upcomingDetailLocalDataSource: DetailLocalDataSource,
+) {
 
     fun create(launchesQuery: LaunchesQuery): Pager<Int, UpcomingLaunchEntity> {
         return Pager(
