@@ -173,4 +173,59 @@ object MockWebServerResponseLaunches {
         }
       ]
     }""".trimIndent()
+
+    // Single launch response for getLaunch endpoint
+    val singleLaunchResponse = """{
+      "id": "test-launch-1",
+      "url": "https://lldev.thespacedevs.com/2.3.0/launches/test-launch-1/",
+      "name": "Falcon 9 Block 5 | Starlink Group 15-12",
+      "status": {
+        "id": 1,
+        "name": "Go for Launch",
+        "abbrev": "Go",
+        "description": "Current T-0 confirmed by official or reliable sources."
+      },
+      "last_updated": "2025-12-05T18:39:36Z",
+      "net": "2025-12-13T05:34:00Z",
+      "window_end": "2025-12-13T09:34:00Z",
+      "window_start": "2025-12-13T05:34:00Z",
+      "image": {
+        "id": 1296,
+        "name": "Starlink night fairing",
+        "image_url": "https://example.com/path_to_mission_patch.jpg",
+        "thumbnail_url": "https://example.com/path_to_thumbnail.jpg",
+        "credit": "SpaceX"
+      },
+      "rocket": {
+        "id": 1,
+        "configuration": {
+          "id": 1,
+          "name": "Falcon 9",
+          "full_name": "Falcon 9 Block 5",
+          "family": "Falcon",
+          "variant": "Block 5"
+        }
+      },
+      "mission": {
+        "id": 1,
+        "name": "Starlink Group 15-12",
+        "type": "Communications",
+        "orbit": {
+          "id": 1,
+          "name": "Low Earth Orbit",
+          "abbrev": "LEO"
+        }
+      },
+      "pad": {
+        "id": 1,
+        "name": "Launch Complex 39A",
+        "latitude": "28.6",
+        "longitude": "-80.6",
+        "location": {
+          "id": 1,
+          "name": "Kennedy Space Center",
+          "country_code": "US"
+        }
+      }
+    }""".trimIndent()
 }

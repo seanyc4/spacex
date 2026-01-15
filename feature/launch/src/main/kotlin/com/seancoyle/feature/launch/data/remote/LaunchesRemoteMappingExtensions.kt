@@ -154,16 +154,16 @@ private fun ImageDto.toDomain() =
         credit = credit ?: "default"
     )
 
-private fun AgencyDto.toDomain(): Agency? {
+private fun AgencyDto.toDomain(): Agency {
     return Agency(
         id = id,
         url = url,
-        name = name?: return null,
-        abbrev = abbrev ?: return null,
-        type = type?.name ?: return null,
+        name = name?: NA,
+        abbrev = abbrev ?: NA,
+        type = type?.name ?: NA,
         featured = featured,
         country = country?.map { it.toDomain() } ?: emptyList(),
-        description = description ?: return null,
+        description = description ?: NA,
         administrator = administrator,
         foundingYear = foundingYear,
         launchers = launchers,
@@ -224,7 +224,7 @@ private fun FamilyDto.toDomain() =
     Family(
         id = id,
         name = name,
-        manufacturer = manufacturer?.map { it.toDomain() } ?: emptyList(),
+        manufacturer = (manufacturer?.map { it.toDomain() } ?: emptyList()),
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -469,3 +469,5 @@ private fun SpacecraftTypeDto.toDomain() = SpacecraftType(
     id = id,
     name = name
 )
+
+private const val NA = "N/A"

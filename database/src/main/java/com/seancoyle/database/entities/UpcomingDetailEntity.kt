@@ -314,7 +314,7 @@ data class PadEntity(
 
     @ColumnInfo(name = "agency")
     @field:TypeConverters(AgencyListConverter::class)
-    val agencies: List<AgencyEntity?>,
+    val agencies: List<AgencyEntity>,
 
     @Embedded(prefix = "pad_image")
     val image: ImageEntity,
@@ -403,7 +403,7 @@ data class MissionEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "agencies")
-    val agencies: List<AgencyEntity?>,
+    val agencies: List<AgencyEntity>,
 
     @field:TypeConverters(InfoUrlListConverter::class)
     @ColumnInfo(name = "info_urls")
@@ -835,7 +835,7 @@ data class FamilyEntity(
 
     @field:TypeConverters(AgencyListConverter::class)
     @ColumnInfo(name = "manufacturer")
-    val manufacturer: List<AgencyEntity?>,
+    val manufacturer: List<AgencyEntity>,
 
     @ColumnInfo(name = "description")
     val description: String?,

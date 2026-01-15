@@ -248,7 +248,7 @@ private fun FamilyEntity.toDomain(): Family =
     Family(
         id = id,
         name = name,
-        manufacturer = manufacturer.map { it?.toDomain() },
+        manufacturer = manufacturer.map { it.toDomain() },
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -278,7 +278,7 @@ private fun MissionEntity.toDomain(): Mission =
         type = type,
         description = description,
         orbit = orbit?.toDomain(),
-        agencies = agencies.map { it?.toDomain() },
+        agencies = agencies.map { it.toDomain() },
         infoUrls = infoUrls.map { it.toDomain() },
         vidUrls = vidUrls.map { it.toDomain() }
     )
@@ -294,7 +294,7 @@ private fun PadEntity.toDomain(): Pad =
     Pad(
         id = id,
         url = url,
-        agencies = agencies.map { it?.toDomain() },
+        agencies = agencies.map { it.toDomain() },
         name = name,
         image = image.toDomain(),
         description = description,
@@ -524,7 +524,7 @@ private fun Family.toEntity(): FamilyEntity =
     FamilyEntity(
         id = id,
         name = name,
-        manufacturer = manufacturer.map { it?.toEntity() },
+        manufacturer = manufacturer.map { it.toEntity() },
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -591,7 +591,7 @@ private fun Pad.toEntity(): PadEntity =
         locationLongitude = location?.longitude,
         locationLatitude = location?.latitude,
         locationMapImage = location?.mapImage,
-        agencies = agencies.map { it?.toEntity() },
+        agencies = agencies.map { it.toEntity() },
         image = image.toEntity(),
         country = country?.toEntity()
     )

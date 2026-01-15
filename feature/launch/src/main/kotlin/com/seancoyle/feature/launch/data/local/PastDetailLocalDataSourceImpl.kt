@@ -59,10 +59,9 @@ internal class PastDetailLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getLaunchDetail(id: String): LaunchResult<Launch?, Throwable> {
         return runSuspendCatching {
-            val result = pastDetailDao.getById(id)
-            result?.toDomain()
+            pastDetailDao.getById(id)?.toDomain()
         }.fold(
-            onSuccess = { result -> LaunchResult.Success(result) },
+            onSuccess = { LaunchResult.Success(it) },
             onFailure = {
                 Timber.e(it)
                 crashlytics.logException(it)

@@ -57,7 +57,8 @@ fun LaunchesScreen(
                     onEvent(LaunchesEvents.DisplayFilterDialogEvent)
                 }
             )
-        }, contentWindowInsets = WindowInsets.statusBars
+        },
+        contentWindowInsets = WindowInsets.statusBars
     ) { paddingValues ->
         RefreshableContent(
             modifier = modifier,
@@ -142,8 +143,6 @@ private fun LaunchesContent(
         Box(modifier = Modifier.weight(1f)) {
             // Render BOTH lists but only show the currently selected one
             // This ensures each list maintains its own scroll position and paging state
-
-            // UPCOMING list - always composed but visibility controlled
             if (state.launchesType == LaunchesType.UPCOMING) {
                 LaunchesListContent(
                     feedState = upcomingFeedState,
@@ -157,7 +156,6 @@ private fun LaunchesContent(
                 )
             }
 
-            // PAST list - always composed but visibility controlled
             if (state.launchesType == LaunchesType.PAST) {
                 LaunchesListContent(
                     feedState = pastFeedState,
@@ -198,10 +196,12 @@ private fun LaunchesListContent(
         is LoadState.Loading -> {
             CircularProgressBar()
         }
+
         is LoadState.Error -> {
             ErrorState(
                 onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
         }
+
         is LoadState.NotLoading -> {
             if (feedState.itemCount == 0 && endOfPaginationReached) {
                 // Only show empty state if we've finished loading and there are no items

@@ -1,6 +1,5 @@
 package com.seancoyle.orbital.navigation
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +22,6 @@ import com.seancoyle.navigation.transitions.fadeOutTransition
 
 @Composable
 fun NavigationRoot(
-    snackbarHostState: SnackbarHostState,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier
 ) {
