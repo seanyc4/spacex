@@ -15,7 +15,7 @@ internal data class LaunchesDto(
     val previous: String?,
 
     @SerialName("results")
-    val results: List<LaunchSummaryDto>?,
+    val results: List<LaunchDto>?,
 )
 
 @Serializable

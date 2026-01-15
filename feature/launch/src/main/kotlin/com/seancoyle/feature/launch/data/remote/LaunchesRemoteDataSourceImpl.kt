@@ -6,8 +6,8 @@ import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.domain.model.DetailedLaunchesResult
 import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import timber.log.Timber
@@ -18,25 +18,46 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
     private val crashlytics: Crashlytics
 ) : LaunchesRemoteDataSource {
 
-    override suspend fun getLaunches(
+    override suspend fun getUpcomingDetailedLaunches(
         page: Int,
         launchesQuery: LaunchesQuery
-    ): LaunchResult<List<LaunchSummary>, Throwable> {
+    ): LaunchResult<DetailedLaunchesResult, Throwable> {
         return runSuspendCatching {
-            val result = when (launchesQuery.launchesType) {
-                LaunchesType.UPCOMING -> api.getUpcomingLaunches(
+            val result = api.getUpcomingLaunches(
                     offset = page * LaunchesConstants.PAGINATION_LIMIT,
                     search = launchesQuery.query,
                     status = launchesQuery.status?.id
                 )
-
-                LaunchesType.PAST -> api.getPreviousLaunches(
-                    offset = page * LaunchesConstants.PAGINATION_LIMIT,
-                    search = launchesQuery.query,
-                    status = launchesQuery.status?.id
-                )
+            DetailedLaunchesResult(
+                summaries = result.toDomain(),
+                details = result.toDetailedDomain()
+            )
+        }.fold(
+            onSuccess = { mappedResult ->
+                LaunchResult.Success(mappedResult)
+            },
+            onFailure = { exception ->
+                Timber.e(exception)
+                crashlytics.logException(exception)
+                LaunchResult.Error(exception)
             }
-            result.toDomain()
+        )
+    }
+
+    override suspend fun getPastDetailedLaunches(
+        page: Int,
+        launchesQuery: LaunchesQuery
+    ): LaunchResult<DetailedLaunchesResult, Throwable> {
+        return runSuspendCatching {
+           val result = api.getPreviousLaunches(
+                offset = page * LaunchesConstants.PAGINATION_LIMIT,
+                search = launchesQuery.query,
+                status = launchesQuery.status?.id
+            )
+            DetailedLaunchesResult(
+                summaries = result.toDomain(),
+                details = result.toDetailedDomain()
+            )
         }.fold(
             onSuccess = { mappedResult ->
                 LaunchResult.Success(mappedResult)

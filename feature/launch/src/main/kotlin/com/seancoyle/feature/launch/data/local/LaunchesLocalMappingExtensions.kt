@@ -12,9 +12,7 @@ import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LandingEntity
 import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
-import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.LauncherEntity
 import com.seancoyle.database.entities.LauncherStageEntity
@@ -23,6 +21,8 @@ import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.database.entities.NetPrecisionEntity
 import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.PastDetailEntity
+import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PreviousFlightEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
@@ -31,6 +31,8 @@ import com.seancoyle.database.entities.SpacecraftEntity
 import com.seancoyle.database.entities.SpacecraftStageEntity
 import com.seancoyle.database.entities.SpacecraftStatusEntity
 import com.seancoyle.database.entities.SpacecraftTypeEntity
+import com.seancoyle.database.entities.UpcomingDetailEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.domain.model.Agency
 import com.seancoyle.feature.launch.domain.model.Configuration
@@ -75,7 +77,7 @@ internal fun map(throwable: Throwable): LocalError {
     }
 }
 
-internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
+internal fun UpcomingLaunchEntity.toDomain(): LaunchSummary =
     LaunchSummary(
         id = id,
         missionName = missionName,
@@ -84,11 +86,8 @@ internal fun LaunchSummaryEntity.toDomain(): LaunchSummary =
         status = status.toDomain()
     )
 
-internal fun List<LaunchSummary>.toEntity(): List<LaunchSummaryEntity> =
-    map { it.toEntity() }
-
-internal fun LaunchSummary.toEntity(): LaunchSummaryEntity =
-    LaunchSummaryEntity(
+internal fun LaunchSummary.toPastEntity(): PastLaunchEntity =
+    PastLaunchEntity(
         id = id,
         missionName = missionName,
         net = net,
@@ -96,10 +95,28 @@ internal fun LaunchSummary.toEntity(): LaunchSummaryEntity =
         status = status.toEntity()
     )
 
-internal fun List<LaunchEntity>.toDomain(): List<Launch> =
+internal fun LaunchSummary.toUpcomingEntity(): UpcomingLaunchEntity =
+    UpcomingLaunchEntity(
+        id = id,
+        missionName = missionName,
+        net = net,
+        imageUrl = imageUrl,
+        status = status.toEntity()
+    )
+
+internal fun PastLaunchEntity.toDomain(): LaunchSummary =
+    LaunchSummary(
+        id = id,
+        missionName = missionName,
+        net = net,
+        imageUrl = imageUrl,
+        status = status.toDomain()
+    )
+
+internal fun List<UpcomingDetailEntity>.toDomain(): List<Launch> =
     map { it.toDomain() }
 
-internal fun LaunchEntity.toDomain(): Launch =
+internal fun UpcomingDetailEntity.toDomain(): Launch =
     Launch(
         id = id,
         url = url,
@@ -135,6 +152,7 @@ internal fun LaunchEntity.toDomain(): Launch =
         missionPatches = missionPatches.map { it.toDomain() },
         status = status.toDomain(),
     )
+
 
 fun LaunchStatusEntity.toDomain(): Status =
     Status(
@@ -230,7 +248,7 @@ private fun FamilyEntity.toDomain(): Family =
     Family(
         id = id,
         name = name,
-        manufacturer = manufacturer.map { it?.toDomain() },
+        manufacturer = manufacturer.map { it.toDomain() },
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -260,7 +278,7 @@ private fun MissionEntity.toDomain(): Mission =
         type = type,
         description = description,
         orbit = orbit?.toDomain(),
-        agencies = agencies.map { it?.toDomain() },
+        agencies = agencies.map { it.toDomain() },
         infoUrls = infoUrls.map { it.toDomain() },
         vidUrls = vidUrls.map { it.toDomain() }
     )
@@ -276,7 +294,7 @@ private fun PadEntity.toDomain(): Pad =
     Pad(
         id = id,
         url = url,
-        agencies = agencies.map { it?.toDomain() },
+        agencies = agencies.map { it.toDomain() },
         name = name,
         image = image.toDomain(),
         description = description,
@@ -325,12 +343,13 @@ private fun ProgramEntity.toDomain(): Program =
         agencies = agencies.map { it.toDomain() }
     )
 
-@JvmName("launchListToEntity")
-internal fun List<Launch>.toEntity(): List<LaunchEntity> =
-    map { it.toEntity() }
 
-internal fun Launch.toEntity(): LaunchEntity =
-    LaunchEntity(
+@JvmName("launchListToUpcomingDetailEntity")
+internal fun List<Launch>.toUpcomingDetailEntity(): List<UpcomingDetailEntity> =
+    map { it.toUpcomingDetailEntity() }
+
+internal fun Launch.toUpcomingDetailEntity(): UpcomingDetailEntity =
+    UpcomingDetailEntity(
         id = id,
         url = url,
         name = missionName,
@@ -367,6 +386,49 @@ internal fun Launch.toEntity(): LaunchEntity =
         configuration = rocket.configuration.toEntity(),
         families = rocket.configuration.families.map { it.toEntity() }
     )
+
+internal fun Launch.toPastDetailEntity(): PastDetailEntity =
+    PastDetailEntity(
+        id = id,
+        url = url,
+        name = missionName,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision?.toEntity(),
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image.toEntity(),
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider?.toEntity(),
+        rocket = rocket.toEntity(),
+        mission = mission.toEntity(),
+        pad = pad.toEntity(),
+        program = program.map { it.toEntity() },
+        webcastLive = webcastLive,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates.map { it.toEntity() },
+        infoUrls = infoUrls.map { it.toEntity() },
+        vidUrls = vidUrls.map { it.toEntity() },
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches.map { it.toEntity() },
+        status = status.toEntity(),
+        configuration = rocket.configuration.toEntity(),
+        families = rocket.configuration.families.map { it.toEntity() }
+    )
+
+@JvmName("launchListToPastDetailEntity")
+internal fun List<Launch>.toPastDetailEntity(): List<com.seancoyle.database.entities.PastDetailEntity> =
+    map { it.toPastDetailEntity() }
 
 private fun Status.toEntity(): LaunchStatusEntity =
     LaunchStatusEntity(
@@ -462,7 +524,7 @@ private fun Family.toEntity(): FamilyEntity =
     FamilyEntity(
         id = id,
         name = name,
-        manufacturer = manufacturer.map { it?.toEntity() },
+        manufacturer = manufacturer.map { it.toEntity() },
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -492,7 +554,7 @@ private fun Mission.toEntity(): MissionEntity =
         type = type,
         description = description,
         orbit = orbit?.toEntity(),
-        agencies = agencies.mapNotNull { it?.toEntity() },
+        agencies = agencies.map { it.toEntity() },
         infoUrls = infoUrls.map { it.toEntity() },
         vidUrls = vidUrls.map { it.toEntity() }
     )
@@ -529,7 +591,7 @@ private fun Pad.toEntity(): PadEntity =
         locationLongitude = location?.longitude,
         locationLatitude = location?.latitude,
         locationMapImage = location?.mapImage,
-        agencies = agencies.map { it?.toEntity() },
+        agencies = agencies.map { it.toEntity() },
         image = image.toEntity(),
         country = country?.toEntity()
     )
@@ -543,7 +605,7 @@ private fun Program.toEntity(): ProgramEntity =
         image = image.toEntity(),
         startDate = startDate,
         endDate = endDate,
-        agencies = agencies.mapNotNull { it?.toEntity() }
+        agencies = agencies.map { it.toEntity() }
     )
 
 private fun LaunchUpdateEntity.toDomain(): LaunchUpdate =
@@ -870,4 +932,45 @@ private fun Status.toEntityStatus(): LaunchStatusEntity =
         name = name,
         abbrev = abbrev,
         description = description
+    )
+
+@JvmName("pastDetailEntityListToDomain")
+internal fun List<PastDetailEntity>.toDomain(): List<Launch> =
+    map { it.toDomain() }
+
+internal fun PastDetailEntity.toDomain(): Launch =
+    Launch(
+        id = id,
+        url = url,
+        missionName = name,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision?.toDomain(),
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image.toDomain(),
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider?.toDomain(),
+        rocket = rocket.toDomain(),
+        mission = mission.toDomain(),
+        pad = pad.toDomain(),
+        webcastLive = webcastLive,
+        program = program.map { it.toDomain() },
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates.map { it.toDomain() },
+        infoUrls = infoUrls.map { it.toDomain() },
+        vidUrls = vidUrls.map { it.toDomain() },
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches.map { it.toDomain() },
+        status = status.toDomain(),
     )

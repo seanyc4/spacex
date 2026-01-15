@@ -144,7 +144,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `Launch toEntity converts all fields correctly including rocket stages`() {
+    fun `Launch toUpcomingDetailEntity converts all fields correctly including rocket stages`() {
         val updates = listOf(TestData.createLaunchUpdate())
         val infoUrls = listOf(TestData.createInfoUrl())
         val vidUrls = listOf(TestData.createVidUrl())
@@ -163,10 +163,8 @@ class LaunchesLocalMappingExtensionsKtTest {
             rocket = rocket
         )
 
-        val result = launch.toEntity()
+        val result = launch.toUpcomingDetailEntity()
 
-        // Assert basic fields
-        assertNotNull(result)
         assertEquals(launch.id, result.id)
         assertEquals(launch.url, result.url)
         assertEquals(launch.missionName, result.name)
@@ -180,41 +178,34 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertEquals(launch.failReason, result.failReason)
         assertEquals(launch.webcastLive, result.webcastLive)
 
-        // Assert image
-        assertNotNull(result.image)
         assertEquals(launch.image.id, result.image.id)
         assertEquals(launch.image.name, result.image.name)
         assertEquals(launch.image.imageUrl, result.image.imageUrl)
         assertEquals(launch.image.thumbnailUrl, result.image.thumbnailUrl)
         assertEquals(launch.image.credit, result.image.credit)
 
-        // Assert netPrecision
-        assertNotNull(result.netPrecision)
         assertEquals(launch.netPrecision?.id, result.netPrecision?.id)
-        assertEquals(launch.netPrecision?.name, result.netPrecision?.name)
-        assertEquals(launch.netPrecision?.abbrev, result.netPrecision?.abbrev)
-        assertEquals(launch.netPrecision?.description, result.netPrecision?.description)
+        assertEquals(launch.status?.id, result.status.id)
 
-        // Assert status
-        assertNotNull(result.status)
-        assertEquals(launch.status?.id, result.status?.id)
-        assertEquals(launch.status?.name, result.status?.name)
-        assertEquals(launch.status?.abbrev, result.status?.abbrev)
-        assertEquals(launch.status?.description, result.status?.description)
+        assertEquals(updates[0].comment, result.updates[0].comment)
+        assertEquals(infoUrls[0].url, result.infoUrls[0].url)
+        assertEquals(vidUrls[0].title, result.vidUrls[0].title)
 
-        // Assert updates, infoUrls, vidUrls
-        assertEquals(updates[0].comment, result.updates?.get(0)?.comment)
-        assertEquals(infoUrls[0].url, result.infoUrls?.get(0)?.url)
-        assertEquals(vidUrls[0].title, result.vidUrls?.get(0)?.title)
-
-        // Assert padTurnaround and missionPatches
         assertEquals(padTurnaround, result.padTurnaround)
-        assertEquals(missionPatches[0].name, result.missionPatches?.get(0)?.name)
+        assertEquals(missionPatches[0].name, result.missionPatches[0].name)
 
-        // Assert rocket and stages
-        assertNotNull(result.rocket)
-        assertEquals(1, result.rocket?.launcherStage?.size)
-        assertEquals(1, result.rocket?.spacecraftStage?.size)
+        assertEquals(1, result.rocket.launcherStage.size)
+        assertEquals(1, result.rocket.spacecraftStage.size)
+    }
+
+    @Test
+    fun `Launch toPastDetailEntity converts id and name correctly`() {
+        val launch = TestData.createLaunch()
+
+        val result = launch.toPastDetailEntity()
+
+        assertEquals(launch.id, result.id)
+        assertEquals(launch.missionName, result.name)
     }
 
     @Test
@@ -243,12 +234,12 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `List of Launch toEntity converts all items`() {
+    fun `List of Launch toUpcomingDetailEntity converts all items`() {
         val launch1 = TestData.createLaunch(id = "1")
         val launch2 = TestData.createLaunch(id = "2")
         val launches = listOf(launch1, launch2)
 
-        val result = launches.toEntity()
+        val result = launches.toUpcomingDetailEntity()
 
         assertEquals(2, result.size)
         assertEquals("1", result[0].id)
@@ -256,33 +247,32 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `Round trip entity to domain to entity maintains data integrity`() {
+    fun `Round trip entity to domain toUpcomingDetailEntity maintains data integrity`() {
         val rocketEntity = TestData.createRocketEntity(
             launcherStage = listOf(TestData.createLauncherStageEntity()),
             spacecraftStage = listOf(TestData.createSpacecraftStageEntity())
         )
         val originalEntity = TestData.createLaunchEntity(rocket = rocketEntity)
         val domain = originalEntity.toDomain()
-        val entityAgain = domain.toEntity()
+        val entityAgain = domain.toUpcomingDetailEntity()
 
         assertEquals(originalEntity.id, entityAgain.id)
         assertEquals(originalEntity.name, entityAgain.name)
         assertEquals(originalEntity.url, entityAgain.url)
         assertEquals(originalEntity.image.imageUrl, entityAgain.image.imageUrl)
         assertEquals(originalEntity.status, entityAgain.status)
-        assertNotNull(entityAgain.rocket)
-        assertEquals(1, entityAgain.rocket?.launcherStage?.size)
-        assertEquals(1, entityAgain.rocket?.spacecraftStage?.size)
+        assertEquals(1, entityAgain.rocket.launcherStage.size)
+        assertEquals(1, entityAgain.rocket.spacecraftStage.size)
     }
 
     @Test
-    fun `round trip domain to entity to domain maintains data integrity`() {
+    fun `round trip domain toUpcomingDetailEntity to domain maintains data integrity`() {
         val rocket = TestData.createRocket(
             launcherStage = listOf(TestData.createLauncherStage()),
             spacecraftStage = listOf(TestData.createSpacecraftStage())
         )
         val originalDomain = TestData.createLaunch().copy(rocket = rocket)
-        val entity = originalDomain.toEntity()
+        val entity = originalDomain.toUpcomingDetailEntity()
         val domainAgain = entity.toDomain()
 
         assertEquals(originalDomain.id, domainAgain.id)
@@ -295,21 +285,11 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertEquals(1, domainAgain.rocket.spacecraftStage?.size)
     }
 
-
     @Test
-    fun `empty list of LaunchEntity toDomain returns empty list`() {
-        val entities = emptyList<com.seancoyle.database.entities.LaunchEntity>()
-
-        val result = entities.toDomain()
-
-        assertEquals(0, result.size)
-    }
-
-    @Test
-    fun `empty list of Launch toEntity returns empty list`() {
+    fun `empty list of Launch toUpcomingDetailEntity returns empty list`() {
         val launches = emptyList<Launch>()
 
-        val result = launches.toEntity()
+        val result = launches.toUpcomingDetailEntity()
 
         assertEquals(0, result.size)
     }

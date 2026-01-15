@@ -21,34 +21,57 @@ class ObserveLaunchesUseCaseTest {
     @MockK
     private lateinit var launchesRepository: LaunchesRepository
 
-    private lateinit var underTest: ObserveLaunchesUseCase
+    private lateinit var observeUpcomingLaunchesUseCase: ObserveUpcomingLaunchesUseCase
+    private lateinit var observePastLaunchesUseCase: ObservePastLaunchesUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = ObserveLaunchesUseCase(launchesRepository)
+        observeUpcomingLaunchesUseCase = ObserveUpcomingLaunchesUseCase(launchesRepository)
+        observePastLaunchesUseCase = ObservePastLaunchesUseCase(launchesRepository)
     }
 
     @Test
-    fun `invoke with null status returns all launches without filtering`() = runTest {
+    fun `upcoming with null status returns all upcoming launches without filtering`() = runTest {
         val launches = createLaunchSummaryList(100)
         val query = LaunchesQuery(status = null)
-        every { launchesRepository.pager(query) } returns flowOf(PagingData.from(launches))
+        every { launchesRepository.upcomingPager(query) } returns flowOf(PagingData.from(launches))
 
-        val result = underTest.invoke(query).asSnapshot()
+        val result = observeUpcomingLaunchesUseCase(query).asSnapshot()
 
         assertEquals(launches.size, result.size)
         assertEquals(launches, result)
     }
 
     @Test
-    fun `invoke with status filter on empty list returns empty list`() = runTest {
+    fun `past with status filter on empty list returns empty list`() = runTest {
         val query = LaunchesQuery(status = LaunchStatus.SUCCESS)
-        every { launchesRepository.pager(query) } returns flowOf(PagingData.from(emptyList()))
+        every { launchesRepository.pastPager(query) } returns flowOf(PagingData.from(emptyList()))
 
-        val result = underTest.invoke(query).asSnapshot()
+        val result = observePastLaunchesUseCase(query).asSnapshot()
 
         assertTrue(result.isEmpty())
     }
 
+    @Test
+    fun `upcoming returns flow from repository upcomingPager`() = runTest {
+        val launches = createLaunchSummaryList(50)
+        val query = LaunchesQuery()
+        every { launchesRepository.upcomingPager(query) } returns flowOf(PagingData.from(launches))
+
+        val result = observeUpcomingLaunchesUseCase(query).asSnapshot()
+
+        assertEquals(50, result.size)
+    }
+
+    @Test
+    fun `past returns flow from repository pastPager`() = runTest {
+        val launches = createLaunchSummaryList(50)
+        val query = LaunchesQuery()
+        every { launchesRepository.pastPager(query) } returns flowOf(PagingData.from(launches))
+
+        val result = observePastLaunchesUseCase(query).asSnapshot()
+
+        assertEquals(50, result.size)
+    }
 }

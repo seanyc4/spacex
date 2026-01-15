@@ -12,10 +12,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.seancoyle.core.common.coroutines.stateIn
 import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.core.ui.NotificationState
-import com.seancoyle.core.ui.NotificationType
-import com.seancoyle.core.ui.StringResource
-import com.seancoyle.core.ui.UiComponentType
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.LaunchUiMapper
@@ -49,27 +45,37 @@ class LaunchesViewModel @Inject constructor(
     var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesState()) }
         private set
 
-    private val _notificationEvents = Channel<NotificationState>(Channel.BUFFERED)
-    val notificationEvents = _notificationEvents.receiveAsFlow()
+    private val _upcomingPagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
+    val upcomingPagingEvents = _upcomingPagingEvents.receiveAsFlow()
 
-    private val _pagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
-    val pagingEvents = _pagingEvents.receiveAsFlow()
+    private val _pastPagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
+    val pastPagingEvents = _pastPagingEvents.receiveAsFlow()
 
     val launchesQueryState: StateFlow<LaunchesQuery> = snapshotFlow {
         val query = screenState.query
         val status = screenState.launchStatus
-        val type = screenState.launchesType
         LaunchesQuery(
             query = query,
-            status = if (status == LaunchStatus.ALL) null else status,
-            launchesType = type
+            status = if (status == LaunchStatus.ALL) null else status
         )
     }.stateIn(viewModelScope, LaunchesQuery())
 
-    val feedState: Flow<PagingData<LaunchesUi>> = launchesQueryState
-        .flatMapLatest { launchQuery ->
-            Timber.tag(TAG).d("Creating new pager for query: $launchQuery")
-            launchesComponent.observeLaunchesUseCase(launchQuery)
+    val upcomingLaunchesFlow: Flow<PagingData<LaunchesUi>> = launchesQueryState
+        .flatMapLatest { launchesQuery ->
+            Timber.tag(TAG).d("Creating new pager for query: $launchesQuery")
+            launchesComponent.observeUpcomingLaunches(launchesQuery)
+                .map { pagingData ->
+                    pagingData.map { launch ->
+                        uiMapper.mapToLaunchesUi(launch)
+                    }
+                }
+        }
+        .cachedIn(viewModelScope)
+
+    val pastLaunchesFlow: Flow<PagingData<LaunchesUi>> = launchesQueryState
+        .flatMapLatest { launchesQuery ->
+            Timber.tag(TAG).d("Creating new pager for query: $launchesQuery")
+            launchesComponent.observePastLaunches(launchesQuery)
                 .map { pagingData ->
                     pagingData.map { launch ->
                         uiMapper.mapToLaunchesUi(launch)
@@ -84,11 +90,11 @@ class LaunchesViewModel @Inject constructor(
             is LaunchesEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
             is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
             is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
+            is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
             is LaunchesEvents.UpdateFilterStateEvent -> setLaunchFilterState(
                 launchStatus = event.launchStatus,
                 query = event.query
             )
-            is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
         }
     }
 
@@ -102,11 +108,17 @@ class LaunchesViewModel @Inject constructor(
     private suspend fun onPullToRefresh() {
         clearQueryParameters()
         setRefreshing(true)
-        _pagingEvents.send(PagingEvents.Refresh)
+        when (screenState.launchesType) {
+            LaunchesType.UPCOMING -> _upcomingPagingEvents.send(PagingEvents.Refresh)
+            LaunchesType.PAST -> _pastPagingEvents.send(PagingEvents.Refresh)
+        }
     }
 
     private suspend fun onRetryFetch() {
-        _pagingEvents.send(PagingEvents.Retry)
+        when (screenState.launchesType) {
+            LaunchesType.UPCOMING -> _upcomingPagingEvents.send(PagingEvents.Retry)
+            LaunchesType.PAST -> _pastPagingEvents.send(PagingEvents.Retry)
+        }
     }
 
     fun setRefreshing(isRefreshing: Boolean) {
@@ -124,12 +136,13 @@ class LaunchesViewModel @Inject constructor(
             launchStatus = launchStatus,
             launchesType = launchesType
         )
-        Timber.tag(TAG).d("Updated filterState: status=$launchStatus, query=$query, launchType=$launchesType")
+        Timber.tag(TAG)
+            .d("Updated filterState: status=$launchStatus, query=$query, launchType=$launchesType")
     }
 
     private fun onTabSelected(launchesType: LaunchesType) {
         screenState = screenState.copy(launchesType = launchesType)
-        Timber.tag(TAG).d("Updated launchType: $launchesType")
+        Timber.tag(TAG).d("Tab selected: $launchesType (no pager invalidation)")
     }
 
     private fun displayFilterDialog(isDisplayed: Boolean) {
@@ -137,28 +150,17 @@ class LaunchesViewModel @Inject constructor(
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
     }
 
-    fun updateScrollPosition(position: Int) {
-        screenState = screenState.copy(scrollPosition = position)
-        Timber.tag(TAG).d("Updated scrollState.scrollPosition: $position")
+    fun updateScrollPosition(launchesType: LaunchesType, position: Int) {
+        screenState = when (launchesType) {
+            LaunchesType.UPCOMING -> {
+                screenState.copy(upcomingScrollPosition = position)
+            }
+
+            LaunchesType.PAST -> {
+                screenState.copy(pastScrollPosition = position)
+            }
+        }
+        Timber.tag(TAG).d("Updated scrollPosition for $launchesType: $position")
     }
 
-    fun emitErrorNotification(errorMessage: StringResource) = viewModelScope.launch {
-        _notificationEvents.send(
-            NotificationState(
-                message = errorMessage,
-                uiComponentType = UiComponentType.Snackbar,
-                notificationType = NotificationType.Error
-            )
-        )
-    }
-
-    fun clearNotification() = viewModelScope.launch {
-        _notificationEvents.send(
-            NotificationState(
-                message = StringResource.Text(""),
-                uiComponentType = UiComponentType.None,
-                notificationType = NotificationType.Info
-            )
-        )
-    }
 }

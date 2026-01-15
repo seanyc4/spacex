@@ -4,8 +4,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-private const val UPCOMING_LAUNCHES_URL = "/2.3.0/launches/upcoming/?mode=list&limit=20&ordering=net"
-private const val PREVIOUS_LAUNCHES_URL = "/2.3.0/launches/previous/?mode=list&limit=20&ordering=-net"
+private const val UPCOMING_LAUNCHES_URL = "/2.3.0/launches/upcoming/?mode=detailed&limit=100&ordering=net"
+private const val PREVIOUS_LAUNCHES_URL = "/2.3.0/launches/previous/?mode=detailed&limit=100&ordering=-net"
 private const val UPCOMING_LAUNCH_URL = "/2.3.0/launches/upcoming/{id}/?mode=detailed"
 private const val PREVIOUS_LAUNCH_URL = "/2.3.0/launches/previous/{id}/?mode=detailed"
 private const val OFFSET = "offset"

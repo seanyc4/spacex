@@ -60,8 +60,24 @@ internal fun map(throwable: Throwable): RemoteError {
 
 internal fun LaunchesDto.toDomain(): List<LaunchSummary> {
     return results?.mapNotNull { launchDto ->
+        launchDto.toSummary()
+    } ?: emptyList()
+}
+
+internal fun LaunchesDto.toDetailedDomain(): List<Launch> {
+    return results?.mapNotNull { launchDto ->
         launchDto.toDomain()
     } ?: emptyList()
+}
+
+internal fun LaunchDto.toSummary(): LaunchSummary? {
+    return LaunchSummary(
+        id = id ?: return null,
+        missionName = name ?: return null,
+        net = net ?: return null,
+        imageUrl = image?.toDomain()?.imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
+        status = status?.toDomain() ?: return null
+    )
 }
 
 internal fun LaunchSummaryDto.toDomain(): LaunchSummary? {
@@ -138,16 +154,16 @@ private fun ImageDto.toDomain() =
         credit = credit ?: "default"
     )
 
-private fun AgencyDto.toDomain(): Agency? {
+private fun AgencyDto.toDomain(): Agency {
     return Agency(
         id = id,
         url = url,
-        name = name?: return null,
-        abbrev = abbrev ?: return null,
-        type = type?.name ?: return null,
+        name = name?: NA,
+        abbrev = abbrev ?: NA,
+        type = type?.name ?: NA,
         featured = featured,
         country = country?.map { it.toDomain() } ?: emptyList(),
-        description = description ?: return null,
+        description = description ?: NA,
         administrator = administrator,
         foundingYear = foundingYear,
         launchers = launchers,
@@ -208,7 +224,7 @@ private fun FamilyDto.toDomain() =
     Family(
         id = id,
         name = name,
-        manufacturer = manufacturer?.map { it.toDomain() } ?: emptyList(),
+        manufacturer = (manufacturer?.map { it.toDomain() } ?: emptyList()),
         description = description,
         active = active,
         maidenFlight = maidenFlight,
@@ -453,3 +469,5 @@ private fun SpacecraftTypeDto.toDomain() = SpacecraftType(
     id = id,
     name = name
 )
+
+private const val NA = "N/A"

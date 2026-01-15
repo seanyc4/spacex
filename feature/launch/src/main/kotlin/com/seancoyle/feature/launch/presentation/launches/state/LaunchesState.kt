@@ -13,6 +13,7 @@ data class LaunchesState(
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchesType: LaunchesType = LaunchesType.UPCOMING,
     val isFilterDialogVisible: Boolean = false,
-    val scrollPosition: Int = 0,
+    val upcomingScrollPosition: Int = 0,
+    val pastScrollPosition: Int = 0,
     val isRefreshing: Boolean = false,
 ) : Parcelable

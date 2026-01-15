@@ -9,9 +9,7 @@ import com.seancoyle.database.entities.InfoUrlEntity
 import com.seancoyle.database.entities.LandingEntity
 import com.seancoyle.database.entities.LandingLocationEntity
 import com.seancoyle.database.entities.LandingTypeEntity
-import com.seancoyle.database.entities.LaunchEntity
 import com.seancoyle.database.entities.LaunchStatusEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
 import com.seancoyle.database.entities.LaunchUpdateEntity
 import com.seancoyle.database.entities.LauncherEntity
 import com.seancoyle.database.entities.LauncherStageEntity
@@ -20,6 +18,8 @@ import com.seancoyle.database.entities.MissionPatchEntity
 import com.seancoyle.database.entities.NetPrecisionEntity
 import com.seancoyle.database.entities.OrbitEntity
 import com.seancoyle.database.entities.PadEntity
+import com.seancoyle.database.entities.PastDetailEntity
+import com.seancoyle.database.entities.PastLaunchEntity
 import com.seancoyle.database.entities.PreviousFlightEntity
 import com.seancoyle.database.entities.ProgramEntity
 import com.seancoyle.database.entities.RocketEntity
@@ -28,6 +28,7 @@ import com.seancoyle.database.entities.SpacecraftEntity
 import com.seancoyle.database.entities.SpacecraftStageEntity
 import com.seancoyle.database.entities.SpacecraftStatusEntity
 import com.seancoyle.database.entities.SpacecraftTypeEntity
+import com.seancoyle.database.entities.UpcomingDetailEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.data.remote.AgencyDto
 import com.seancoyle.feature.launch.data.remote.ConfigurationDto
@@ -123,13 +124,28 @@ internal object TestData {
         status = status
     )
 
-    fun createLaunchSummaryEntity(
+
+    fun createUpcomingLaunchEntity(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: ImageEntity = createImageEntity(),
         status: LaunchStatusEntity = createLaunchStatusEntity()
-    ) = LaunchSummaryEntity(
+    ) = com.seancoyle.database.entities.UpcomingLaunchEntity(
+        id = id,
+        missionName = name,
+        net = net,
+        imageUrl = image.imageUrl,
+        status = status
+    )
+
+    fun createPastLaunchEntity(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        net: String = "2025-12-13T05:34:00Z",
+        image: ImageEntity = createImageEntity(),
+        status: LaunchStatusEntity = createLaunchStatusEntity()
+    ) = PastLaunchEntity(
         id = id,
         missionName = name,
         net = net,
@@ -807,14 +823,21 @@ internal object TestData {
 
     fun createLaunchesDto(
         count: Int = 109,
-        next: String = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list&offset=10&ordering=net",
+        next: String = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=100&mode=detailed&offset=100&ordering=net",
         previous: String = "",
-        results: List<LaunchSummaryDto> = listOf(createLaunchSummaryDto())
+        results: List<LaunchDto> = listOf(createLaunchDto())
     ) = LaunchesDto(
         count = count,
         next = next,
         previous = previous,
         results = results
+    )
+
+    fun createEmptyLaunchesDto() = LaunchesDto(
+        count = 0,
+        next = null,
+        previous = null,
+        results = emptyList()
     )
 
 
@@ -1414,7 +1437,7 @@ internal object TestData {
         missionPatches: List<MissionPatchEntity> = listOf(createMissionPatchEntity()),
         configuration: ConfigurationEntity? = createConfigurationEntity(),
         families: List<FamilyEntity> = listOf(createFamilyEntity())
-    ) = LaunchEntity(
+    ) = UpcomingDetailEntity(
         id = id,
         url = url,
         name = name,
@@ -1450,6 +1473,80 @@ internal object TestData {
         status = status,
         configuration = configuration,
         families = families
+    )
+
+    fun createPastDetailEntity(
+        id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
+        url: String = "https://lldev.thespacedevs.com/2.3.0/launches/faf4a0bc-7dad-4842-b74c-73a9f648b5cc/",
+        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
+        lastUpdated: String = "2025-12-05T18:39:36Z",
+        net: String = "2025-12-13T05:34:00Z",
+        netPrecision: NetPrecisionEntity? = createNetPrecisionEntity(),
+        windowEnd: String = "2025-12-13T09:34:00Z",
+        windowStart: String = "2025-12-13T05:34:00Z",
+        image: ImageEntity = createImageEntity(),
+        infographic: String = "https://example.com/infographic.jpg",
+        probability: Int = 90,
+        weatherConcerns: String = "10% chance of unfavorable winds",
+        failReason: String = "Failed",
+        launchServiceProvider: AgencyEntity? = createAgencyEntity(),
+        rocket: RocketEntity = createRocketEntity(),
+        mission: MissionEntity = createMissionEntity(),
+        pad: PadEntity = createPadEntity(),
+        webcastLive: Boolean = false,
+        program: List<ProgramEntity> = listOf(createProgramEntity()),
+        orbitalLaunchAttemptCount: Int = 6789,
+        locationLaunchAttemptCount: Int = 456,
+        padLaunchAttemptCount: Int = 234,
+        agencyLaunchAttemptCount: Int = 234,
+        orbitalLaunchAttemptCountYear: Int = 123,
+        locationLaunchAttemptCountYear: Int = 45,
+        padLaunchAttemptCountYear: Int = 23,
+        agencyLaunchAttemptCountYear: Int = 67,
+        status: LaunchStatusEntity = createLaunchStatusEntity(),
+        updates: List<LaunchUpdateEntity> = listOf(createLaunchUpdateEntity()),
+        infoUrls: List<InfoUrlEntity> = listOf(createInfoUrlEntity()),
+        vidUrls: List<VidUrlEntity> = listOf(createVidUrlEntity()),
+        padTurnaround: String = "PT240H",
+        missionPatches: List<MissionPatchEntity> = listOf(createMissionPatchEntity()),
+        configuration: ConfigurationEntity? = createConfigurationEntity(),
+        families: List<FamilyEntity> = listOf(createFamilyEntity())
+    ) = PastDetailEntity(
+        id = id,
+        url = url,
+        name = name,
+        lastUpdated = lastUpdated,
+        net = net,
+        netPrecision = netPrecision,
+        windowEnd = windowEnd,
+        windowStart = windowStart,
+        image = image,
+        infographic = infographic,
+        probability = probability,
+        weatherConcerns = weatherConcerns,
+        failReason = failReason,
+        launchServiceProvider = launchServiceProvider,
+        rocket = rocket,
+        mission = mission,
+        pad = pad,
+        webcastLive = webcastLive,
+        program = program,
+        orbitalLaunchAttemptCount = orbitalLaunchAttemptCount,
+        locationLaunchAttemptCount = locationLaunchAttemptCount,
+        padLaunchAttemptCount = padLaunchAttemptCount,
+        agencyLaunchAttemptCount = agencyLaunchAttemptCount,
+        orbitalLaunchAttemptCountYear = orbitalLaunchAttemptCountYear,
+        locationLaunchAttemptCountYear = locationLaunchAttemptCountYear,
+        padLaunchAttemptCountYear = padLaunchAttemptCountYear,
+        agencyLaunchAttemptCountYear = agencyLaunchAttemptCountYear,
+        updates = updates,
+        infoUrls = infoUrls,
+        vidUrls = vidUrls,
+        padTurnaround = padTurnaround,
+        missionPatches = missionPatches,
+        status = status,
+        configuration = configuration,
+        families = families,
     )
 
     fun createNetPrecision(
@@ -2099,7 +2196,7 @@ internal object TestData {
         }
     }
 
-    fun createLaunchEntityList(count: Int = 10): List<LaunchEntity> {
+    fun createLaunchEntityList(count: Int = 10): List<UpcomingDetailEntity> {
         return (1..count).map { index ->
             createLaunchEntity(
                 id = "launch-id-$index",

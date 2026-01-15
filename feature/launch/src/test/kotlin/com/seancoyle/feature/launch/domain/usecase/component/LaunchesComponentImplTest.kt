@@ -9,7 +9,8 @@ import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
-import com.seancoyle.feature.launch.domain.usecase.launch.ObserveLaunchesUseCase
+import com.seancoyle.feature.launch.domain.usecase.launch.ObservePastLaunchesUseCase
+import com.seancoyle.feature.launch.domain.usecase.launch.ObserveUpcomingLaunchesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchesPreferencesUseCase
 import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
@@ -34,7 +35,10 @@ class LaunchesComponentImplTest {
     private lateinit var getLaunchesPreferencesUseCase: GetLaunchesPreferencesUseCase
 
     @MockK
-    private lateinit var observeLaunchesUseCase: ObserveLaunchesUseCase
+    private lateinit var observePastLaunchesUseCase: ObservePastLaunchesUseCase
+
+    @MockK
+    private lateinit var observeUpcomingLaunchesUseCase: ObserveUpcomingLaunchesUseCase
 
     @MockK
     private lateinit var getLaunchUseCase: GetLaunchUseCase
@@ -47,19 +51,32 @@ class LaunchesComponentImplTest {
         underTest = LaunchesComponentImpl(
             saveLaunchesPreferencesUseCase = { saveLaunchesPreferencesUseCase },
             getLaunchesPreferencesUseCase = getLaunchesPreferencesUseCase,
-            observeLaunchesUseCase = observeLaunchesUseCase,
+            observePastLaunchesUseCase = observePastLaunchesUseCase,
+            observeUpcomingLaunchesUseCase = observeUpcomingLaunchesUseCase,
             getLaunchUseCase = getLaunchUseCase
         )
     }
 
     @Test
-    fun `component delegates to observeLaunchesUseCase`() = runTest {
+    fun `component delegates to observeUpcomingLaunches`() = runTest {
         val launchesQuery = LaunchesQuery(query = "Falcon")
         val pagingData = PagingData.empty<LaunchSummary>()
         val flow = flowOf(pagingData)
-        every { observeLaunchesUseCase.invoke(launchesQuery) } returns flow
+        every { observeUpcomingLaunchesUseCase.invoke(launchesQuery) } returns flow
 
-        val result = underTest.observeLaunchesUseCase(launchesQuery)
+        val result = underTest.observeUpcomingLaunches(launchesQuery)
+        assertNotNull(result)
+        result.collect {}
+    }
+
+    @Test
+    fun `component delegates to observePastLaunches`() = runTest {
+        val launchesQuery = LaunchesQuery(query = "Falcon")
+        val pagingData = PagingData.empty<LaunchSummary>()
+        val flow = flowOf(pagingData)
+        every { observePastLaunchesUseCase.invoke(launchesQuery) } returns flow
+
+        val result = underTest.observePastLaunches(launchesQuery)
         assertNotNull(result)
         result.collect {}
     }

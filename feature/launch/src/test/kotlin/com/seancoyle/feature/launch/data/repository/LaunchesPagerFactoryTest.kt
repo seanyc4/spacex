@@ -1,104 +1,60 @@
 package com.seancoyle.feature.launch.data.repository
 
-import androidx.paging.ExperimentalPagingApi
-import com.seancoyle.database.dao.LaunchDao
+import androidx.paging.Pager
+import com.seancoyle.database.entities.PastLaunchEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertNotNull
+import kotlin.test.assertSame
 
-@OptIn(ExperimentalPagingApi::class)
 class LaunchesPagerFactoryTest {
 
     @MockK
-    private lateinit var launchesRemoteDataSource: LaunchesRemoteDataSource
+    private lateinit var upcoming: PagerFactory<UpcomingLaunchEntity>
 
     @MockK
-    private lateinit var launchesLocalDataSource: LaunchesLocalDataSource
+    private lateinit var past: PagerFactory<PastLaunchEntity>
 
-    private lateinit var launchDao: LaunchDao
     private lateinit var underTest: LaunchesPagerFactory
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        launchDao = mockk(relaxed = true)
         underTest = LaunchesPagerFactory(
-            launchDao = launchDao,
-            launchesRemoteDataSource = launchesRemoteDataSource,
-            launchesLocalDataSource = launchesLocalDataSource
+            upcoming = upcoming,
+            past = past
         )
     }
 
     @Test
-    fun `create returns Pager with valid flow`() {
+    fun `createUpcoming delegates to upcoming pager factory`() {
         val launchesQuery = LaunchesQuery(query = "Falcon")
+        val pager = mockk<Pager<Int, UpcomingLaunchEntity>>(relaxed = true)
+        every { upcoming.create(launchesQuery) } returns pager
 
-        val result = underTest.create(launchesQuery)
+        val result = underTest.createUpcoming(launchesQuery)
 
         assertNotNull(result)
         assertNotNull(result.flow)
+        assertSame(pager, result)
     }
 
     @Test
-    fun `create returns new Pager instance on each invocation`() {
+    fun `createPast returns Pager with flow`() {
         val launchesQuery = LaunchesQuery(query = "Falcon")
+        val pager = mockk<Pager<Int, PastLaunchEntity>>(relaxed = true)
+        every { past.create(launchesQuery) } returns pager
 
-        val pager1 = underTest.create(launchesQuery)
-        val pager2 = underTest.create(launchesQuery)
-
-        // Should be different instances even with same query
-        assert(pager1 !== pager2) { "Expected different Pager instances" }
-    }
-
-    @Test
-    fun `created Pager flow can be accessed multiple times`() {
-        val launchesQuery = LaunchesQuery(query = "Dragon")
-
-        val pager = underTest.create(launchesQuery)
-
-        // Flow should be stable and accessible multiple times
-        val flow1 = pager.flow
-        val flow2 = pager.flow
-        val flow3 = pager.flow
-
-        assertNotNull(flow1)
-        assertNotNull(flow2)
-        assertNotNull(flow3)
-    }
-
-    @Test
-    fun `create handles empty query string`() {
-        val launchesQuery = LaunchesQuery(query = "")
-
-        val result = underTest.create(launchesQuery)
+        val result = underTest.createPast(launchesQuery)
 
         assertNotNull(result)
         assertNotNull(result.flow)
+        assertSame(pager, result)
     }
-
-    @Test
-    fun `create handles very long query string`() {
-        val longQuery = "A".repeat(1000)
-        val launchesQuery = LaunchesQuery(query = longQuery)
-
-        val result = underTest.create(launchesQuery)
-
-        assertNotNull(result)
-        assertNotNull(result.flow)
-    }
-
-    @Test
-    fun `create handles special characters in query`() {
-        val launchesQuery = LaunchesQuery(query = "Test @#\$% & * ()")
-
-        val result = underTest.create(launchesQuery)
-
-        assertNotNull(result)
-        assertNotNull(result.flow)
-    }
-
 }

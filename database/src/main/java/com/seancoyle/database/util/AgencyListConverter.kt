@@ -15,24 +15,20 @@ class AgencyListConverter {
     }
 
     @TypeConverter
-    fun fromAgencyList(value: List<AgencyEntity?>?): String? {
-        return value?.let {
-            try {
-                json.encodeToString(it)
-            } catch (_: Exception) {
-                null
-            }
+    fun fromAgencyList(value: List<AgencyEntity>): String {
+        return try {
+            json.encodeToString(value)
+        } catch (_: Exception) {
+            ""
         }
     }
 
     @TypeConverter
-    fun toAgencyList(value: String?): List<AgencyEntity?>? {
-        return value?.let {
-            try {
-                json.decodeFromString<List<AgencyEntity>>(it)
-            } catch (_: Exception) {
-                null
-            }
+    fun toAgencyList(value: String): List<AgencyEntity> {
+        return try {
+            json.decodeFromString<List<AgencyEntity>>(value)
+        } catch (_: Exception) {
+            emptyList()
         }
     }
 }

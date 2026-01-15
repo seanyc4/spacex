@@ -141,7 +141,7 @@ data class Configuration(
 data class Family(
     val id: Int?,
     val name: String?,
-    val manufacturer: List<Agency?>,
+    val manufacturer: List<Agency>,
     val description: String?,
     val active: Boolean?,
     val maidenFlight: String?,
@@ -163,7 +163,7 @@ data class Mission(
     val type: String?,
     val description: String?,
     val orbit: Orbit?,
-    val agencies: List<Agency?>,
+    val agencies: List<Agency>,
     val infoUrls: List<InfoUrl>,
     val vidUrls: List<VidUrl>
 )
@@ -179,7 +179,7 @@ data class Orbit(
 data class Pad(
     val id: Int?,
     val url: String?,
-    val agencies: List<Agency?>,
+    val agencies: List<Agency>,
     val name: String?,
     val image: Image,
     val description: String?,
@@ -221,7 +221,7 @@ data class Program(
     val image: Image,
     val startDate: String?,
     val endDate: String?,
-    val agencies: List<Agency?>
+    val agencies: List<Agency>
 )
 
 @Immutable

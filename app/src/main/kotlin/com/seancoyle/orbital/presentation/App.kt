@@ -26,7 +26,6 @@ fun App(windowSizeClass: WindowSizeClass) {
             containerColor = MaterialTheme.colorScheme.background
         ) {
             NavigationRoot(
-                snackbarHostState = snackbarHostState,
                 windowSizeClass = windowSizeClass
             )
         }

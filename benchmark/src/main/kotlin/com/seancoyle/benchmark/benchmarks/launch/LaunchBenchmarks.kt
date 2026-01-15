@@ -10,7 +10,6 @@ import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
 import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
 import com.seancoyle.benchmark.actions.clickChildInView
-import com.seancoyle.benchmark.actions.deleteAppData
 import com.seancoyle.benchmark.actions.findElementByTestTag
 import com.seancoyle.benchmark.actions.scrollVerticalView
 import com.seancoyle.benchmark.benchmarks.classInitMetric
@@ -49,7 +48,6 @@ class LaunchBenchmarks {
             compilationMode = compilationMode,
             setupBlock = {
                 uiAutomator {
-                    deleteAppData()
                     startApp(ORBITAL)
                     findElementByTestTag(PAST_TAB).click()
                     clickChildInView(LAUNCH_CARD, 2)

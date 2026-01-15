@@ -5,187 +5,163 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.database.entities.LaunchRemoteKeyEntity
-import com.seancoyle.database.entities.LaunchSummaryEntity
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
 import com.seancoyle.feature.launch.data.repository.LaunchesLocalDataSource
-import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.LaunchSummary
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "LaunchRemoteMediator"
 private const val STARTING_PAGE = 0
 private const val CACHE_TIMEOUT_HOURS = 1L
 
 @OptIn(ExperimentalPagingApi::class)
-internal class LaunchRemoteMediator(
-    private val launchesRemoteDataSource: LaunchesRemoteDataSource,
-    private val launchesLocalDataSource: LaunchesLocalDataSource,
-    private val launchesQuery: LaunchesQuery
-) : RemoteMediator<Int, LaunchSummaryEntity>() {
+internal open class LaunchesRemoteMediator<Entity : Any, RemoteKey : Any>(
+    private val tag: String,
+    private val launchesLocalDataSource: LaunchesLocalDataSource<RemoteKey>,
+    private val detailLocalDataSource: DetailLocalDataSource,
+    private val launchesQuery: LaunchesQuery,
+    private val entityId: (Entity) -> String,
+    private val remoteKeyCreatedAt: (RemoteKey) -> Long?,
+    private val remoteKeyCachedQuery: (RemoteKey) -> String?,
+    private val remoteKeyCachedLaunchStatus: (RemoteKey) -> String?,
+    private val remoteKeyPrevKey: (RemoteKey) -> Int?,
+    private val remoteKeyNextKey: (RemoteKey) -> Int?,
+    private val fetchPage: suspend (page: Int, query: LaunchesQuery) -> LaunchResult<RemoteDetailedLaunches, Throwable>,
+) : RemoteMediator<Int, Entity>() {
+
+    internal data class RemoteDetailedLaunches(
+        val summaries: List<LaunchSummary>,
+        val details: List<Launch>,
+    )
 
     override suspend fun initialize(): InitializeAction {
-        val cacheTimeout = TimeUnit.MILLISECONDS.convert(
-            CACHE_TIMEOUT_HOURS,
-            TimeUnit.HOURS
-        )
-        val firstKey = launchesLocalDataSource.getRemoteKeys().firstOrNull()
-        val createdTime = firstKey?.createdAt
+        val cacheTimeout = TimeUnit.MILLISECONDS.convert(CACHE_TIMEOUT_HOURS, TimeUnit.HOURS)
 
-        // Check if the query parameters have changed from what was cached
-        val cachedQuery = firstKey?.cachedQuery
-        val cachedLaunchType = firstKey?.cachedLaunchType
-        val cachedLaunchStatus = firstKey?.cachedLaunchStatus
+        val remoteKeys = launchesLocalDataSource.getRemoteKeys()
+        val firstKey = remoteKeys.firstOrNull()
+        val createdTime = firstKey?.let(remoteKeyCreatedAt)
+
+        val cachedQuery = firstKey?.let(remoteKeyCachedQuery)
+        val cachedLaunchStatus = firstKey?.let(remoteKeyCachedLaunchStatus)
         val currentQuery = launchesQuery.query
-        val currentLaunchType = launchesQuery.launchesType.name
         val currentLaunchStatus = launchesQuery.status?.name
 
-        val queryHasChanged = cachedQuery != currentQuery
-                || cachedLaunchType != currentLaunchType
-                || cachedLaunchStatus != currentLaunchStatus
+        val queryHasChanged = cachedQuery != currentQuery || cachedLaunchStatus != currentLaunchStatus
 
-        Timber.tag(TAG).d(
-            "Initialize - Current: query='$currentQuery', launchType=$currentLaunchType, launchStatus=$currentLaunchStatus | " +
-            "Cached: query='$cachedQuery', launchType=$cachedLaunchType, launchStatus=$cachedLaunchStatus | Changed: $queryHasChanged"
+        Timber.tag(tag).d(
+            "Initialize - Current: query='$currentQuery', launchStatus=$currentLaunchStatus | " +
+                "Cached: query='$cachedQuery', launchStatus=$cachedLaunchStatus | Changed: $queryHasChanged"
         )
 
-        // If query parameters have changed, refresh to get relevant results
         if (queryHasChanged) {
-            Timber.tag(TAG).d("Query/order/launchType changed - refreshing data.")
+            Timber.tag(tag).d("Query/order/launchType changed - refreshing data.")
             return InitializeAction.LAUNCH_INITIAL_REFRESH
         }
 
-        // Check if the cache is still valid based on createdAt timestamp & cache timeout
-        return if (createdTime != null &&
-            System.currentTimeMillis().minus(createdTime) <= cacheTimeout
-        ) {
-            Timber.tag(TAG).d("Skipping initial refresh; cache is still valid.")
+        return if (createdTime != null && System.currentTimeMillis().minus(createdTime) <= cacheTimeout) {
+            Timber.tag(tag).d("Skipping initial refresh; cache is still valid.")
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
-            Timber.tag(TAG).d("Initial Refresh; cache is stale - fetching from network.")
+            Timber.tag(tag).d("Initial Refresh; cache is stale - fetching from network.")
             InitializeAction.LAUNCH_INITIAL_REFRESH
         }
     }
 
-    override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<Int, LaunchSummaryEntity>
-    ): MediatorResult {
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, Entity>): MediatorResult {
         try {
-
             val page = when (loadType) {
                 LoadType.REFRESH -> {
                     val remoteKey = remoteKeyClosestToCurrentPosition(state)
-                    remoteKey?.nextKey?.minus(1) ?: STARTING_PAGE
+                    val nextKey = remoteKey?.let(remoteKeyNextKey)
+                    nextKey?.minus(1) ?: STARTING_PAGE
                 }
 
                 LoadType.PREPEND -> {
-                    val remoteKey = getRemoteKeyForFirstItem()
-                    val prevKey = remoteKey?.prevKey
-                    Timber.tag(TAG).d("LoadType.PREPEND - prev page: $prevKey")
-                    // If prevKey is null, we've reached the beginning
+                    val firstKey = launchesLocalDataSource.getRemoteKeys().firstOrNull()
+                    val prevKey = firstKey?.let(remoteKeyPrevKey)
+                    Timber.tag(tag).d("LoadType.PREPEND - prev page: $prevKey")
                     prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
 
                 LoadType.APPEND -> {
-                    val remoteKey = getRemoteKeyForLastItem()
-                    // If remoteKey is null, that means refresh has never been called
-                    // If nextKey is null, that means we've reached the end
-                    val nextKey = remoteKey?.nextKey
-                    Timber.tag(TAG).d("LoadType.APPEND - next page: $nextKey")
-                    nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
+                    val lastKey = launchesLocalDataSource.getRemoteKeys().lastOrNull()
+                    val nextKey = lastKey?.let(remoteKeyNextKey)
+                    Timber.tag(tag).d("LoadType.APPEND - next page: $nextKey")
+                    nextKey ?: return MediatorResult.Success(endOfPaginationReached = lastKey != null)
                 }
             }
 
-            Timber.tag(TAG).d("API call with $page and $launchesQuery")
-            when (val remoteLaunchesResult = launchesRemoteDataSource.getLaunches(page, launchesQuery)) {
+            Timber.tag(tag).d("API call with page=$page and query=$launchesQuery")
+
+            return when (val remote = fetchPage(page, launchesQuery)) {
                 is LaunchResult.Success -> {
-                    val launches = remoteLaunchesResult.data
+                    val launchDetails = remote.data.details
+                    val launches = remote.data.summaries
+
                     val endOfPaginationReached = launches.isEmpty() || launches.size < state.config.pageSize
                     val nextPage = if (endOfPaginationReached) null else page.plus(1)
                     val prevPage = if (page > 0) page.minus(1) else null
 
-                    Timber.tag(TAG).d(
+                    Timber.tag(tag).d(
                         "Loaded ${launches.size} items for page $page. " +
-                                "EndReached: $endOfPaginationReached, NextPage: $nextPage, PrevPage: $prevPage"
+                            "EndReached: $endOfPaginationReached, NextPage: $nextPage, PrevPage: $prevPage"
                     )
 
-                    // Save to database with remote keys in a transaction
                     if (loadType == LoadType.REFRESH) {
-                        // Clear all data and insert fresh data
-                        // When refreshing, we always start from page 0, so prevPage should be null
-                        Timber.tag(TAG).d("REFRESH - refreshing cache with new data")
-                        launchesLocalDataSource.refreshLaunchesWithKeys(
+                        Timber.tag(tag).d("REFRESH - refreshing cache with new data")
+                        detailLocalDataSource.refreshLaunches(launchDetails)
+                        launchesLocalDataSource.refreshWithKeys(
                             launches = launches,
                             nextPage = nextPage,
-                            prevPage = null, // Always null on refresh since we're starting fresh
+                            prevPage = null,
                             currentPage = STARTING_PAGE,
                             cachedQuery = launchesQuery.query,
-                            cachedLaunchType = launchesQuery.launchesType.name,
-
+                            cachedLaunchStatus = launchesQuery.status?.name
                         )
                     } else {
-                        // Append or prepend data to existing cache
-                        Timber.tag(TAG).d("$loadType - APPEND - appending data to cache")
-                        launchesLocalDataSource.appendLaunchesWithKeys(
+                        Timber.tag(tag).d("$loadType - appending data to cache")
+                        detailLocalDataSource.upsertAllLaunchDetails(launchDetails)
+                        launchesLocalDataSource.appendWithKeys(
                             launches = launches,
                             nextPage = nextPage,
                             prevPage = prevPage,
                             currentPage = page,
                             cachedQuery = launchesQuery.query,
-                            cachedLaunchType = launchesQuery.launchesType.name
+                            cachedLaunchStatus = launchesQuery.status?.name
                         )
                     }
 
-                    return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+                    MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
                 }
 
                 is LaunchResult.Error -> {
-                    Timber.tag(TAG).e("Error loading page $page: ${remoteLaunchesResult.error}")
-                    return fallbackToCacheAvailable(loadType, remoteLaunchesResult.error)
+                    Timber.tag(tag).e("Error loading page $page: ${remote.error}")
+                    fallbackToCacheAvailable(loadType, Exception("${remote.error}"))
                 }
             }
-        } catch (exception: Exception) {
-            Timber.tag(TAG).e(exception, "Exception in load()")
-            return fallbackToCacheAvailable(loadType, exception)
+        } catch (e: Exception) {
+            Timber.tag(tag).e(e, "Exception in load()")
+            return fallbackToCacheAvailable(loadType, e)
         }
     }
 
-    private suspend fun fallbackToCacheAvailable(
-        loadType: LoadType,
-        exception: Throwable): MediatorResult {
-        // Check if we have cached data to fall back to
-        val cachedItemCount = when (val totalResult = launchesLocalDataSource.getTotalEntries()) {
-            is LaunchResult.Success -> totalResult.data
-            is LaunchResult.Error -> 0
-        }
+    private suspend fun fallbackToCacheAvailable(loadType: LoadType, exception: Throwable): MediatorResult {
+        val cachedItemCount = launchesLocalDataSource.getTotalEntries()
 
-        // If we're refreshing and have cached data, allow it to be displayed
         if (loadType == LoadType.REFRESH && cachedItemCount > 0) {
-            Timber.tag(TAG)
-                .d("Exception during REFRESH but have $cachedItemCount cached items, showing cache")
+            Timber.tag(tag).d("Exception during REFRESH but have $cachedItemCount cached items, showing cache")
             return MediatorResult.Success(endOfPaginationReached = false)
         }
 
-        // For APPEND and PREPEND, return error so retry button can be shown
-        Timber.tag(TAG).d("Exception during $loadType, returning error for retry")
+        Timber.tag(tag).d("Exception during $loadType, returning error for retry")
         return MediatorResult.Error(exception)
     }
 
-    private suspend fun getRemoteKeyForFirstItem(): LaunchRemoteKeyEntity? {
-        return launchesLocalDataSource.getRemoteKeys().firstOrNull()
-    }
-
-    private suspend fun getRemoteKeyForLastItem(): LaunchRemoteKeyEntity? {
-        return launchesLocalDataSource.getRemoteKeys().lastOrNull()
-    }
-
-    private suspend fun remoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, LaunchSummaryEntity>
-    ): LaunchRemoteKeyEntity? {
+    private suspend fun remoteKeyClosestToCurrentPosition(state: PagingState<Int, Entity>): RemoteKey? {
         val position = state.anchorPosition ?: return null
         val item = state.closestItemToPosition(position) ?: return null
-        return launchesLocalDataSource.getRemoteKey(item.id)
+        return launchesLocalDataSource.getRemoteKey(entityId(item))
     }
-
 }

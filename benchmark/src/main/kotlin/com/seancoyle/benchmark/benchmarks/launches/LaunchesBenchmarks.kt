@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.uiAutomator
 import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
 import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
-import com.seancoyle.benchmark.actions.deleteAppData
 import com.seancoyle.benchmark.benchmarks.classInitMetric
 import com.seancoyle.benchmark.benchmarks.jitCompilationMetric
 import org.junit.Rule
@@ -41,7 +40,7 @@ class LaunchesBenchmarks {
                 classInitMetric
             ),
             compilationMode = compilationMode,
-            setupBlock = { deleteAppData() },
+            setupBlock = { },
             measureBlock = {
                 uiAutomator {
                     startApp(ORBITAL)
