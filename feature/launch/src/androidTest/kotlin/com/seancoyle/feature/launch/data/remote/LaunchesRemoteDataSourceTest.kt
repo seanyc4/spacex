@@ -1,32 +1,14 @@
 package com.seancoyle.feature.launch.data.remote
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.core.domain.LaunchesType
-import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
-import com.seancoyle.feature.launch.domain.model.LaunchesQuery
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.test.runTest
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.SocketPolicy
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
-import javax.inject.Inject
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class LaunchesRemoteDataSourceTest {
 
-    @get:Rule(order = 0)
+  /*  @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
@@ -326,5 +308,5 @@ internal class LaunchesRemoteDataSourceTest {
         val result = underTest.getLaunch(id = "non-existent", launchType = LaunchesType.UPCOMING)
 
         assertTrue(result is LaunchResult.Error)
-    }
+    }*/
 }

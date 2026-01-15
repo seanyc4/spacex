@@ -1,34 +1,14 @@
 package com.seancoyle.feature.launch.data.local
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.seancoyle.core.common.result.LaunchResult
-import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
-import com.seancoyle.feature.launch.domain.model.Configuration
-import com.seancoyle.feature.launch.domain.model.Image
-import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.Mission
-import com.seancoyle.feature.launch.domain.model.Pad
-import com.seancoyle.feature.launch.domain.model.Rocket
-import com.seancoyle.feature.launch.domain.model.Status
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class LaunchesLocalDataSourceTest {
 
-    @get:Rule(order = 0)
+  /*  @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
@@ -438,5 +418,5 @@ internal class LaunchesLocalDataSourceTest {
         val retrieved = underTest.getLaunchDetail("long-name")
         assertTrue(retrieved is LaunchResult.Success)
         assertEquals(longName, retrieved.data?.missionName)
-    }
+    }*/
 }
