@@ -12,7 +12,7 @@ data class LaunchesState(
     val query: String = "",
     val launchStatus: LaunchStatus = LaunchStatus.ALL,
     val launchesType: LaunchesType = LaunchesType.UPCOMING,
-    val isFilterDialogVisible: Boolean = false,
+    val isFilterBottomSheetVisible: Boolean = false,
     val upcomingScrollPosition: Int = 0,
     val pastScrollPosition: Int = 0,
     val isRefreshing: Boolean = false,

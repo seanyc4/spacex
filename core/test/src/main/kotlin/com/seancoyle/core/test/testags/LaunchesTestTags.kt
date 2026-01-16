@@ -50,6 +50,10 @@ object LaunchesTestTags {
     const val FILTER_DIALOG = "filter_dialog"
     const val FILTER_SEARCH = "filter_search"
     const val FILTER_STATUS_CHIP = "filter_status_chip"
+    const val FILTER_CLEAR_ALL = "filter_clear_all"
+    const val FILTER_APPLY_BUTTON = "filter_apply_button"
+    const val FILTER_CANCEL_BUTTON = "filter_cancel_button"
+    const val FILTER_RECENT_SEARCH = "filter_recent_search"
     const val CARD_STATUS_CHIP = "card_status_chip"
 
     // Tab Components

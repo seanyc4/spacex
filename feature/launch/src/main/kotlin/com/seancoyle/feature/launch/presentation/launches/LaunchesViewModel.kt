@@ -86,8 +86,8 @@ class LaunchesViewModel @Inject constructor(
 
     fun onEvent(event: LaunchesEvents) = viewModelScope.launch {
         when (event) {
-            is LaunchesEvents.DismissFilterDialogEvent -> displayFilterDialog(false)
-            is LaunchesEvents.DisplayFilterDialogEvent -> displayFilterDialog(true)
+            is LaunchesEvents.DisplayFilterBottomSheetEvent -> displayFilterBottomSheet(true)
+            is LaunchesEvents.DismissFilterBottomSheetEvent -> displayFilterBottomSheet(false)
             is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
             is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
             is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
@@ -129,15 +129,12 @@ class LaunchesViewModel @Inject constructor(
     private fun setLaunchFilterState(
         query: String,
         launchStatus: LaunchStatus,
-        launchesType: LaunchesType = screenState.launchesType
     ) {
         screenState = screenState.copy(
             query = query,
-            launchStatus = launchStatus,
-            launchesType = launchesType
+            launchStatus = launchStatus
         )
-        Timber.tag(TAG)
-            .d("Updated filterState: status=$launchStatus, query=$query, launchType=$launchesType")
+        Timber.tag(TAG).d("Updated filterState: status=$launchStatus, query=$query")
     }
 
     private fun onTabSelected(launchesType: LaunchesType) {
@@ -145,8 +142,8 @@ class LaunchesViewModel @Inject constructor(
         Timber.tag(TAG).d("Tab selected: $launchesType (no pager invalidation)")
     }
 
-    private fun displayFilterDialog(isDisplayed: Boolean) {
-        screenState = screenState.copy(isFilterDialogVisible = isDisplayed)
+    private fun displayFilterBottomSheet(isDisplayed: Boolean) {
+        screenState = screenState.copy(isFilterBottomSheetVisible = isDisplayed)
         Timber.tag(TAG).d("Updated filterState.isVisible: $isDisplayed")
     }
 

@@ -19,4 +19,10 @@ sealed interface Route : NavKey {
         val launchesType: LaunchesType
     ) : Route
 
+    @Serializable
+    data class Filter(
+        val currentQuery: String,
+        val currentStatusId: Int
+    ) : Route
+
 }

@@ -4,6 +4,12 @@
     <string name="mission_name">Mission Name</string>
     <string name="filter_options">Filter Options</string>
     <string name="launch_status">Filter by Launch Status</string>
+    <string name="text_clear_all">Clear All</string>
+    <string name="text_apply_filters">Apply Filters</string>
+    <string name="recent_searches">Recent</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_search">Search</string>
+    <string name="empty_data">No data available</string>
 
     <!-- Launch Items -->
     <string name="launch_image">Launch image</string>

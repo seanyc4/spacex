@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -27,12 +26,6 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-/**
- * Tests for LaunchesViewModel focusing on the new architecture where:
- * - Each tab has its own independent Pager flow
- * - Tab switching is a pure UI concern (no Pager invalidation)
- * - Scroll positions are maintained per tab
- */
 @OptIn(ExperimentalCoroutinesApi::class)
 class LaunchesViewModelTest {
 
@@ -46,7 +39,6 @@ class LaunchesViewModelTest {
     private lateinit var underTest: LaunchesViewModel
 
     private val testDispatcher = StandardTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
 
     @Before
     fun setup() {
@@ -201,22 +193,22 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `DisplayFilterDialogEvent shows filter dialog`() = runTest {
-        underTest.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
+    fun `DisplayFilterBottomSheetEvent shows filter bottom sheet`() = runTest {
+        underTest.onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(true, underTest.screenState.isFilterDialogVisible)
+        assertEquals(true, underTest.screenState.isFilterBottomSheetVisible)
     }
 
     @Test
-    fun `DismissFilterDialogEvent hides filter dialog`() = runTest {
-        underTest.onEvent(LaunchesEvents.DisplayFilterDialogEvent)
+    fun `DismissFilterBottomSheetEvent hides filter bottom sheet`() = runTest {
+        underTest.onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        underTest.onEvent(LaunchesEvents.DismissFilterDialogEvent)
+        underTest.onEvent(LaunchesEvents.DismissFilterBottomSheetEvent)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(false, underTest.screenState.isFilterDialogVisible)
+        assertEquals(false, underTest.screenState.isFilterBottomSheetVisible)
     }
 
     @Test
