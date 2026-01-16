@@ -3,6 +3,7 @@ package com.seancoyle.benchmark.baselineprofiles
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.uiAutomator
+import com.seancoyle.benchmark.BenchmarkConstants.DEFAULT_ITERATIONS
 import com.seancoyle.benchmark.BenchmarkConstants.ORBITAL
 import com.seancoyle.benchmark.benchmarks.launch.launchJourney
 import com.seancoyle.benchmark.benchmarks.launches.launchesJourney
@@ -26,6 +27,7 @@ class BaselineProfileGenerator {
     @Test
     fun generateStartupProfile() = baselineProfileRule.collect(
         packageName = ORBITAL,
+        maxIterations = DEFAULT_ITERATIONS,
         includeInStartupProfile = true
     ) {
         uiAutomator {
@@ -37,6 +39,7 @@ class BaselineProfileGenerator {
     @Test
     fun generateBaselineProfile() = baselineProfileRule.collect(
         packageName = ORBITAL,
+        maxIterations = DEFAULT_ITERATIONS,
     ) {
         uiAutomator {
             startApp(ORBITAL)
