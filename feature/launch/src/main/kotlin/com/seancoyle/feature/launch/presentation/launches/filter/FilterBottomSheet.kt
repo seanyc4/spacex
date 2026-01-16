@@ -67,6 +67,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import com.seancoyle.feature.launch.presentation.launch.model.getLaunchStatusColors
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -484,15 +485,6 @@ private fun StatusFilterSection(
     selectedStatus: LaunchStatus,
     onStatusSelected: (LaunchStatus) -> Unit
 ) {
-    val statusOptions = listOf(
-        LaunchStatus.ALL to null,
-        LaunchStatus.SUCCESS to Color(0xFF4CAF50),
-        LaunchStatus.GO to Color(0xFF2196F3),
-        LaunchStatus.TBC to Color(0xFFFF9800),
-        LaunchStatus.TBD to Color(0xFF9E9E9E),
-        LaunchStatus.FAILED to Color(0xFFF44336)
-    )
-
     Column {
         AppText.titleSmall(
             text = stringResource(R.string.launch_status),
@@ -504,7 +496,7 @@ private fun StatusFilterSection(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            statusOptions.forEach { (status, color) ->
+            getLaunchStatusColors().forEach { (status, color) ->
                 StatusFilterChip(
                     status = status,
                     isSelected = selectedStatus == status,

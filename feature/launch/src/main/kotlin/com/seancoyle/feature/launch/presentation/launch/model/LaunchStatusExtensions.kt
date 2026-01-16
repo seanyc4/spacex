@@ -10,6 +10,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.seancoyle.core.ui.designsystem.theme.AppColors
 
+fun getLaunchStatusColors() = listOf(
+    LaunchStatus.ALL to null,
+    LaunchStatus.SUCCESS to AppColors.successDark,
+    LaunchStatus.GO to AppColors.successDark,
+    LaunchStatus.TBC to AppColors.warningDark,
+    LaunchStatus.TBD to AppColors.warningDark,
+    LaunchStatus.FAILED to AppColors.errorDark,
+)
+
 @Stable
 @Composable
 fun LaunchStatus.containerColor(): Color = when (this) {

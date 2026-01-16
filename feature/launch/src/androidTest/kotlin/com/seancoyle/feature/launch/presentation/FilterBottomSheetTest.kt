@@ -17,17 +17,6 @@ import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomShe
 import org.junit.Rule
 import org.junit.Test
 
-/**
- * UI tests for the Filter Bottom Sheet.
- *
- * Tests cover:
- * - Filter dialog visibility and test tags
- * - Search input behavior
- * - Status chip selection
- * - Clear all functionality
- * - Responsive layout behavior (compact vs expanded)
- * - Accessibility
- */
 class FilterBottomSheetTest {
 
     @get:Rule

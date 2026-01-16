@@ -129,15 +129,12 @@ class LaunchesViewModel @Inject constructor(
     private fun setLaunchFilterState(
         query: String,
         launchStatus: LaunchStatus,
-        launchesType: LaunchesType = screenState.launchesType
     ) {
         screenState = screenState.copy(
             query = query,
-            launchStatus = launchStatus,
-            launchesType = launchesType
+            launchStatus = launchStatus
         )
-        Timber.tag(TAG)
-            .d("Updated filterState: status=$launchStatus, query=$query, launchType=$launchesType")
+        Timber.tag(TAG).d("Updated filterState: status=$launchStatus, query=$query")
     }
 
     private fun onTabSelected(launchesType: LaunchesType) {
