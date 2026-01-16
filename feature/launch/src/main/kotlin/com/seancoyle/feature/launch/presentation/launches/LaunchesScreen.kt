@@ -30,7 +30,7 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
-import com.seancoyle.feature.launch.presentation.launches.components.LaunchesFilterDialog
+import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetRoute
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
@@ -54,7 +54,7 @@ fun LaunchesScreen(
         topBar = {
             TopAppBar(
                 onClick = {
-                    onEvent(LaunchesEvents.DisplayFilterDialogEvent)
+                    onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
                 }
             )
         },
@@ -169,10 +169,23 @@ private fun LaunchesContent(
                 )
             }
         }
-        if (state.isFilterDialogVisible) {
-            LaunchesFilterDialog(
-                currentFilterState = state,
-                onEvent = onEvent
+
+        // Filter Bottom Sheet
+        if (state.isFilterBottomSheetVisible) {
+            FilterBottomSheetRoute(
+                currentQuery = state.query,
+                currentStatus = state.launchStatus,
+                onApplyFilters = { result ->
+                    onEvent(
+                        LaunchesEvents.UpdateFilterStateEvent(
+                            query = result.query,
+                            launchStatus = result.status
+                        )
+                    )
+                },
+                onDismiss = {
+                    onEvent(LaunchesEvents.DismissFilterBottomSheetEvent)
+                }
             )
         }
     }
