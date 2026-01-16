@@ -69,7 +69,6 @@ import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launch.model.getLaunchStatusColors
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheetRoute(
@@ -643,4 +642,3 @@ private fun StatusFilterChipPreview() {
         }
     }
 }
-
