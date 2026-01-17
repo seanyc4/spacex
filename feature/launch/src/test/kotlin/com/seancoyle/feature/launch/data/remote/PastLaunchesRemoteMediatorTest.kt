@@ -62,7 +62,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `initialize returns LAUNCH_INITIAL_REFRESH when no remote keys exist`() = runTest {
+    fun `GIVEN no remote keys exist WHEN initialize THEN returns LAUNCH_INITIAL_REFRESH`() = runTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
 
         val result = underTest.initialize()
@@ -71,8 +71,8 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `initialize returns LAUNCH_INITIAL_REFRESH when cache is stale but query hasn't changed`() = runTest {
-        val staleCreatedAt = System.currentTimeMillis() - (2 * 60 * 60 * 1000) // 2 hours ago
+    fun `GIVEN cache is stale WHEN initialize THEN returns LAUNCH_INITIAL_REFRESH`() = runTest {
+        val staleCreatedAt = System.currentTimeMillis() - (2 * 60 * 60 * 1000)
         val remoteKey = PastRemoteKeyEntity(
             id = "1",
             prevKey = null,
@@ -90,8 +90,8 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `initialize returns SKIP_INITIAL_REFRESH when cache is valid and query hasn't changed`() = runTest {
-        val recentCreatedAt = System.currentTimeMillis() // Just now
+    fun `GIVEN cache is valid and query unchanged WHEN initialize THEN returns SKIP_INITIAL_REFRESH`() = runTest {
+        val recentCreatedAt = System.currentTimeMillis()
         val remoteKey = PastRemoteKeyEntity(
             id = "1",
             prevKey = null,
@@ -109,7 +109,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `initialize returns LAUNCH_INITIAL_REFRESH when search query has changed from cached`() = runTest {
+    fun `GIVEN search query changed from cached WHEN initialize THEN returns LAUNCH_INITIAL_REFRESH`() = runTest {
         launchesQuery = LaunchesQuery(query = "Falcon")
         underTest = PastLaunchesRemoteMediator(
             remoteDataSource = launchesRemoteDataSource,
@@ -135,7 +135,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load refresh succeeds and clears old data`() = runTest {
+    fun `GIVEN REFRESH load type WHEN load succeeds THEN clears old data`() = runTest {
         val launches = listOf(TestData.createLaunchSummary())
         val detailedResult = DetailedLaunchesResult(
             summaries = launches,
@@ -154,7 +154,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load refresh succeeds with end of pagination reached`() = runTest {
+    fun `GIVEN empty response WHEN REFRESH load THEN returns end of pagination`() = runTest {
         val detailedResult = DetailedLaunchesResult(
             summaries = emptyList(),
             details = emptyList()
@@ -172,7 +172,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load prepend when prevKey is null returns end of pagination`() = runTest {
+    fun `GIVEN prevKey is null WHEN PREPEND load THEN returns end of pagination`() = runTest {
         val remoteKey = PastRemoteKeyEntity(
             id = "1",
             prevKey = null,
@@ -192,7 +192,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load append when nextKey is null returns end of pagination`() = runTest {
+    fun `GIVEN nextKey is null WHEN APPEND load THEN returns end of pagination`() = runTest {
         val remoteKey = PastRemoteKeyEntity(
             id = "1",
             prevKey = 0,
@@ -212,7 +212,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load append succeeds with more data`() = runTest {
+    fun `GIVEN more data available WHEN APPEND load THEN succeeds`() = runTest {
         val remoteKey = PastRemoteKeyEntity(
             id = "1",
             prevKey = 0,
@@ -240,7 +240,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load refresh fails with no cached data returns error`() = runTest {
+    fun `GIVEN network error and no cached data WHEN REFRESH load THEN returns error`() = runTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getPastDetailedLaunches(any(), any()) } returns LaunchResult.Error(Throwable("Network error"))
         coEvery { pastLaunchesLocalDataSource.getTotalEntries() } returns 0
@@ -252,7 +252,7 @@ class PastLaunchesRemoteMediatorTest {
     }
 
     @Test
-    fun `load refresh fails with cached data available shows cache`() = runTest {
+    fun `GIVEN network error and cached data available WHEN REFRESH load THEN shows cache`() = runTest {
         coEvery { pastLaunchesLocalDataSource.getRemoteKeys() } returns emptyList()
         coEvery { launchesRemoteDataSource.getPastDetailedLaunches(any(), any()) } returns LaunchResult.Error(Throwable("Network error"))
         coEvery { pastLaunchesLocalDataSource.getTotalEntries() } returns 10

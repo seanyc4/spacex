@@ -14,7 +14,7 @@ import kotlin.test.assertNotNull
 class LaunchesLocalMappingExtensionsKtTest {
 
     @Test
-    fun `map returns CACHE_ERROR_TIMEOUT for TimeoutCancellationException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_ERROR_TIMEOUT for TimeoutCancellationException`() {
         val throwable = mockk<TimeoutCancellationException>()
 
         val result = map(throwable)
@@ -23,7 +23,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_CONSTRAINT_VIOLATION for SQLiteConstraintException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_CONSTRAINT_VIOLATION for SQLiteConstraintException`() {
         val throwable = SQLiteConstraintException("Constraint violation")
 
         val result = map(throwable)
@@ -32,7 +32,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_ERROR for SQLiteException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_ERROR for SQLiteException`() {
         val throwable = SQLiteException("SQLite error")
 
         val result = map(throwable)
@@ -41,7 +41,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_DATA_NULL for NullPointerException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_DATA_NULL for NullPointerException`() {
         val throwable = NullPointerException("Null pointer")
 
         val result = map(throwable)
@@ -50,7 +50,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_DATA_NULL for IllegalStateException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_DATA_NULL for IllegalStateException`() {
         val throwable = IllegalStateException("Illegal state")
 
         val result = map(throwable)
@@ -59,7 +59,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_UNKNOWN_DATABASE_ERROR for generic exception`() {
+    fun `GIVEN map WHEN returns THEN CACHE_UNKNOWN_DATABASE_ERROR for generic exception`() {
         val throwable = RuntimeException("Generic error")
 
         val result = map(throwable)
@@ -68,7 +68,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `map returns CACHE_UNKNOWN_DATABASE_ERROR for IOException`() {
+    fun `GIVEN map WHEN returns THEN CACHE_UNKNOWN_DATABASE_ERROR for IOException`() {
         val throwable = java.io.IOException("IO error")
 
         val result = map(throwable)
@@ -77,7 +77,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchEntity toDomain converts all fields correctly including rocket stages`() {
+    fun `GIVEN LaunchEntity toDomain WHEN converts all fields correctly including rocket stages`() {
         val updates = listOf(TestData.createLaunchUpdateEntity())
         val infoUrls = listOf(TestData.createInfoUrlEntity())
         val vidUrls = listOf(TestData.createVidUrlEntity())
@@ -144,7 +144,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `Launch toUpcomingDetailEntity converts all fields correctly including rocket stages`() {
+    fun `GIVEN Launch toUpcomingDetailEntity WHEN converts all fields correctly including rocket stages`() {
         val updates = listOf(TestData.createLaunchUpdate())
         val infoUrls = listOf(TestData.createInfoUrl())
         val vidUrls = listOf(TestData.createVidUrl())
@@ -199,7 +199,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `Launch toPastDetailEntity converts id and name correctly`() {
+    fun `GIVEN Launch toPastDetailEntity WHEN converts id and name correctly`() {
         val launch = TestData.createLaunch()
 
         val result = launch.toPastDetailEntity()
@@ -209,7 +209,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchStatusEntity toDomain converts all fields correctly`() {
+    fun `GIVEN LaunchStatusEntity toDomain WHEN converts all fields correctly`() {
         val launchEntity = TestData.createLaunchStatusEntity()
 
         val result = launchEntity.toDomain()
@@ -221,7 +221,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `List of LaunchEntity toDomain converts all items`() {
+    fun `GIVEN List of LaunchEntity toDomain WHEN converts all items`() {
         val entity1 = TestData.createLaunchEntity(id = "1")
         val entity2 = TestData.createLaunchEntity(id = "2")
         val entities = listOf(entity1, entity2)
@@ -234,7 +234,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `List of Launch toUpcomingDetailEntity converts all items`() {
+    fun `GIVEN List of Launch toUpcomingDetailEntity WHEN converts all items`() {
         val launch1 = TestData.createLaunch(id = "1")
         val launch2 = TestData.createLaunch(id = "2")
         val launches = listOf(launch1, launch2)
@@ -286,7 +286,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `empty list of Launch toUpcomingDetailEntity returns empty list`() {
+    fun `GIVEN empty list of Launch toUpcomingDetailEntity WHEN returns THEN empty list`() {
         val launches = emptyList<Launch>()
 
         val result = launches.toUpcomingDetailEntity()
@@ -295,7 +295,7 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchEntity with null optional fields converts correctly`() {
+    fun `GIVEN LaunchEntity with null optional fields WHEN converts correctly`() {
         val launchEntity = TestData.createLaunchEntity(
             netPrecision = null,
             launchServiceProvider = null

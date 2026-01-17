@@ -68,28 +68,28 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `initial state has UPCOMING as default launch type`() {
+    fun `GIVEN ViewModel created WHEN initial state observed THEN has UPCOMING as default launch type`() {
         assertEquals(LaunchesType.UPCOMING, underTest.screenState.launchesType)
     }
 
     @Test
-    fun `initial state has zero scroll positions for both tabs`() {
+    fun `GIVEN ViewModel created WHEN initial state observed THEN has zero scroll positions for both tabs`() {
         assertEquals(0, underTest.screenState.upcomingScrollPosition)
         assertEquals(0, underTest.screenState.pastScrollPosition)
     }
 
     @Test
-    fun `upcomingLaunchesFlow is not null`() {
+    fun `GIVEN ViewModel created WHEN upcomingLaunchesFlow accessed THEN is not null`() {
         assertNotNull(underTest.upcomingLaunchesFlow)
     }
 
     @Test
-    fun `pastLaunchesFlow is not null`() {
+    fun `GIVEN ViewModel created WHEN pastLaunchesFlow accessed THEN is not null`() {
         assertNotNull(underTest.pastLaunchesFlow)
     }
 
     @Test
-    fun `onTabSelected updates launchesType in state`() = runTest {
+    fun `GIVEN UPCOMING tab selected WHEN onTabSelected with PAST THEN updates launchesType in state`() = runTest {
         // Start with UPCOMING (default)
         assertEquals(LaunchesType.UPCOMING, underTest.screenState.launchesType)
 
@@ -101,7 +101,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `onTabSelected does not affect scroll positions`() = runTest {
+    fun `GIVEN scroll positions set WHEN onTabSelected THEN does not affect scroll positions`() = runTest {
         // Set scroll positions for both tabs
         underTest.updateScrollPosition(LaunchesType.UPCOMING, 50)
         underTest.updateScrollPosition(LaunchesType.PAST, 100)
@@ -116,7 +116,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `updateScrollPosition updates only the specified tab's scroll position`() {
+    fun `GIVEN UPCOMING tab WHEN updateScrollPosition THEN updates only upcoming scroll position`() {
         underTest.updateScrollPosition(LaunchesType.UPCOMING, 42)
 
         assertEquals(42, underTest.screenState.upcomingScrollPosition)
@@ -124,7 +124,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `updateScrollPosition for PAST tab updates only past scroll position`() {
+    fun `GIVEN PAST tab WHEN updateScrollPosition THEN updates only past scroll position`() {
         underTest.updateScrollPosition(LaunchesType.PAST, 99)
 
         assertEquals(0, underTest.screenState.upcomingScrollPosition) // Unchanged
@@ -132,7 +132,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `onPullToRefresh sends Refresh event to the correct channel for UPCOMING tab`() = runTest {
+    fun `GIVEN UPCOMING tab selected WHEN onPullToRefresh THEN sends Refresh event to upcoming channel`() = runTest {
         val events = mutableListOf<PagingEvents>()
         val job = launch {
             underTest.upcomingPagingEvents.toList(events)
@@ -148,7 +148,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `onPullToRefresh sends Refresh event to PAST channel when on PAST tab`() = runTest {
+    fun `GIVEN PAST tab selected WHEN onPullToRefresh THEN sends Refresh event to past channel`() = runTest {
         // Switch to PAST tab first
         underTest.onEvent(LaunchesEvents.TabSelectedEvent(LaunchesType.PAST))
         testDispatcher.scheduler.advanceUntilIdle()
@@ -168,7 +168,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `onRetryFetch sends Retry event to correct channel for UPCOMING tab`() = runTest {
+    fun `GIVEN UPCOMING tab selected WHEN onRetryFetch THEN sends Retry event to upcoming channel`() = runTest {
         val events = mutableListOf<PagingEvents>()
         val job = launch {
             underTest.upcomingPagingEvents.toList(events)
@@ -184,7 +184,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `setRefreshing updates isRefreshing state`() {
+    fun `GIVEN isRefreshing false WHEN setRefreshing true THEN updates isRefreshing state`() {
         underTest.setRefreshing(true)
         assertEquals(true, underTest.screenState.isRefreshing)
 
@@ -193,7 +193,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `DisplayFilterBottomSheetEvent shows filter bottom sheet`() = runTest {
+    fun `GIVEN filter bottom sheet hidden WHEN DisplayFilterBottomSheetEvent THEN shows filter bottom sheet`() = runTest {
         underTest.onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -201,7 +201,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `DismissFilterBottomSheetEvent hides filter bottom sheet`() = runTest {
+    fun `GIVEN filter bottom sheet visible WHEN DismissFilterBottomSheetEvent THEN hides filter bottom sheet`() = runTest {
         underTest.onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -212,7 +212,7 @@ class LaunchesViewModelTest {
     }
 
     @Test
-    fun `UpdateFilterStateEvent updates query and launch status`() = runTest {
+    fun `GIVEN filter values WHEN UpdateFilterStateEvent THEN updates query and launch status`() = runTest {
         underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
             launchStatus = LaunchStatus.SUCCESS,
             query = "SpaceX"
@@ -223,4 +223,3 @@ class LaunchesViewModelTest {
         assertEquals(LaunchStatus.SUCCESS, underTest.screenState.launchStatus)
     }
 }
-

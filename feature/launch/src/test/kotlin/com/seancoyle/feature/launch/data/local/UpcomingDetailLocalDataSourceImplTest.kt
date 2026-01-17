@@ -39,7 +39,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getTotalEntries returns count`() = runTest {
+    fun `GIVEN database has entries WHEN getTotalEntries THEN returns count`() = runTest {
         coEvery { upcomingDetailDao.getTotalEntries() } returns 10
 
         val result = underTest.getTotalEntries()
@@ -50,7 +50,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getTotalEntries returns error on exception`() = runTest {
+    fun `GIVEN database throws exception WHEN getTotalEntries THEN returns error`() = runTest {
         coEvery { upcomingDetailDao.getTotalEntries() } throws RuntimeException("db")
 
         val result = underTest.getTotalEntries()
@@ -59,7 +59,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchDetail returns domain launch when found`() = runTest {
+    fun `GIVEN launch exists in database WHEN getLaunchDetail THEN returns domain launch`() = runTest {
         val id = "id"
         coEvery { upcomingDetailDao.getById(id) } returns TestData.createLaunchEntity(id = id)
 
@@ -71,7 +71,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchDetail returns null when missing`() = runTest {
+    fun `GIVEN launch does not exist WHEN getLaunchDetail THEN returns null`() = runTest {
         coEvery { upcomingDetailDao.getById(any()) } returns null
 
         val result = underTest.getLaunchDetail("missing")
@@ -81,7 +81,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `upsertLaunchDetail succeeds`() = runTest {
+    fun `GIVEN launch detail WHEN upsertLaunchDetail THEN succeeds`() = runTest {
         coEvery { upcomingDetailDao.upsert(any()) } returns 1L
 
         val result = underTest.upsertLaunchDetail(TestData.createLaunch())
@@ -91,7 +91,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `upsertAllLaunchDetails succeeds`() = runTest {
+    fun `GIVEN multiple launches WHEN upsertAllLaunchDetails THEN succeeds`() = runTest {
         coEvery { upcomingDetailDao.upsertAll(any()) } returns longArrayOf(1L)
 
         val result = underTest.upsertAllLaunchDetails(listOf(TestData.createLaunch()))
@@ -101,7 +101,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `deleteAllLaunchDetails succeeds`() = runTest {
+    fun `GIVEN delete request WHEN deleteAllLaunchDetails THEN succeeds`() = runTest {
         coJustRun { upcomingDetailDao.deleteAll() }
 
         val result = underTest.deleteAllLaunchDetails()
@@ -111,11 +111,31 @@ class UpcomingDetailLocalDataSourceImplTest {
     }
 
     @Test
-    fun `refreshLaunches delegates`() = runTest {
+    fun `GIVEN launches list WHEN refreshLaunches THEN delegates to dao`() = runTest {
         coJustRun { upcomingDetailDao.refreshLaunches(any()) }
 
         underTest.refreshLaunches(listOf(TestData.createLaunch()))
 
         coVerify { upcomingDetailDao.refreshLaunches(any()) }
+    }
+
+    @Test
+    fun `GIVEN empty list WHEN upsertAllLaunchDetails THEN succeeds`() = runTest {
+        coEvery { upcomingDetailDao.upsertAll(any()) } returns longArrayOf()
+
+        val result = underTest.upsertAllLaunchDetails(emptyList())
+
+        assertTrue(result is LaunchResult.Success)
+        coVerify { upcomingDetailDao.upsertAll(emptyList()) }
+    }
+
+    @Test
+    fun `GIVEN database has no entries WHEN getTotalEntries THEN returns zero`() = runTest {
+        coEvery { upcomingDetailDao.getTotalEntries() } returns 0
+
+        val result = underTest.getTotalEntries()
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(0, result.data)
     }
 }

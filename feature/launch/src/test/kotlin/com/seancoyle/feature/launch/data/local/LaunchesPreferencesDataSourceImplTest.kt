@@ -40,11 +40,10 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `saveLaunchPreferences saves ASC order to datastore`() = runTest {
+    fun `GIVEN ASC order WHEN saveLaunchPreferences THEN saves to datastore`() = runTest {
         val order = Order.ASC
         val updateSlot = slot<suspend (LaunchPreferencesProto) -> LaunchPreferencesProto>()
         val currentProto = createLaunchPreferencesProto(OrderProto.DESC)
-
         coEvery { dataStore.updateData(capture(updateSlot)) } coAnswers {
             val updateFunction = updateSlot.captured
             updateFunction(currentProto)
@@ -56,11 +55,10 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `saveLaunchPreferences saves DESC order to datastore`() = runTest {
+    fun `GIVEN DESC order WHEN saveLaunchPreferences THEN saves to datastore`() = runTest {
         val order = Order.DESC
         val updateSlot = slot<suspend (LaunchPreferencesProto) -> LaunchPreferencesProto>()
         val currentProto = createLaunchPreferencesProto(OrderProto.ASC)
-
         coEvery { dataStore.updateData(capture(updateSlot)) } coAnswers {
             val updateFunction = updateSlot.captured
             updateFunction(currentProto)
@@ -72,10 +70,9 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `saveLaunchPreferences handles exception gracefully`() = runTest {
+    fun `GIVEN datastore throws exception WHEN saveLaunchPreferences THEN handles gracefully`() = runTest {
         val order = Order.ASC
         val exception = RuntimeException("DataStore error")
-
         coEvery { dataStore.updateData(any()) } throws exception
 
         underTest.saveLaunchPreferences(order)
@@ -85,7 +82,7 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchPreferences returns preferences with ASC order`() = runTest {
+    fun `GIVEN proto has ASC order WHEN getLaunchPreferences THEN returns ASC`() = runTest {
         val proto = createLaunchPreferencesProto(OrderProto.ASC)
         every { dataStore.data } returns flowOf(proto)
 
@@ -95,7 +92,7 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchPreferences returns preferences with DESC order`() = runTest {
+    fun `GIVEN proto has DESC order WHEN getLaunchPreferences THEN returns DESC`() = runTest {
         val proto = createLaunchPreferencesProto(OrderProto.DESC)
         every { dataStore.data } returns flowOf(proto)
 
@@ -105,7 +102,7 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchPreferences returns default preferences on exception`() = runTest {
+    fun `GIVEN datastore throws exception WHEN getLaunchPreferences THEN returns default`() = runTest {
         val exception = RuntimeException("DataStore error")
         every { dataStore.data } throws exception
 
@@ -117,7 +114,7 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunchPreferences handles corrupted data gracefully`() = runTest {
+    fun `GIVEN corrupted data WHEN getLaunchPreferences THEN returns default`() = runTest {
         val exception = IllegalArgumentException("Invalid proto format")
         every { dataStore.data } throws exception
 
@@ -128,21 +125,18 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `save and retrieve preferences flow works correctly`() = runTest {
+    fun `GIVEN saved preferences WHEN getLaunchPreferences THEN retrieves correctly`() = runTest {
         val order = Order.DESC
         val updateSlot = slot<suspend (LaunchPreferencesProto) -> LaunchPreferencesProto>()
         val initialProto = createLaunchPreferencesProto(OrderProto.ASC)
         val savedProto = createLaunchPreferencesProto(OrderProto.DESC)
-
         coEvery { dataStore.updateData(capture(updateSlot)) } coAnswers {
             val updateFunction = updateSlot.captured
             updateFunction(initialProto)
         }
-
         every { dataStore.data } returns flowOf(savedProto)
 
         underTest.saveLaunchPreferences(order)
-
         val result = underTest.getLaunchPreferences()
 
         assertEquals(Order.DESC, result.order)
@@ -150,17 +144,15 @@ class LaunchesPreferencesDataSourceImplTest {
     }
 
     @Test
-    fun `multiple save operations update datastore correctly`() = runTest {
+    fun `GIVEN multiple saves WHEN saveLaunchPreferences called twice THEN updates datastore twice`() = runTest {
         val updateSlot = slot<suspend (LaunchPreferencesProto) -> LaunchPreferencesProto>()
         val currentProto = createLaunchPreferencesProto(OrderProto.ASC)
-
         coEvery { dataStore.updateData(capture(updateSlot)) } coAnswers {
             val updateFunction = updateSlot.captured
             updateFunction(currentProto)
         }
 
         underTest.saveLaunchPreferences(Order.ASC)
-
         underTest.saveLaunchPreferences(Order.DESC)
 
         coVerify(exactly = 2) { dataStore.updateData(any()) }

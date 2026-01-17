@@ -43,7 +43,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getRemoteKeys returns list of remote keys`() = runTest {
+    fun `GIVEN remote keys exist WHEN getRemoteKeys THEN returns list of remote keys`() = runTest {
         val remoteKey1 = PastRemoteKeyEntity(
             id = "1",
             nextKey = 1,
@@ -71,7 +71,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getRemoteKeys returns empty list on exception`() = runTest {
+    fun `GIVEN exception thrown WHEN getRemoteKeys THEN returns empty list`() = runTest {
         coEvery { remoteKeyDao.getAll() } throws RuntimeException("Database error")
 
         val result = underTest.getRemoteKeys()
@@ -81,7 +81,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getRemoteKey returns remote key for given id`() = runTest {
+    fun `GIVEN remote key exists WHEN getRemoteKey THEN returns remote key for given id`() = runTest {
         val id = "test-id"
         val remoteKey = PastRemoteKeyEntity(
             id = id,
@@ -102,7 +102,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `getRemoteKey returns null on exception`() = runTest {
+    fun `GIVEN exception thrown WHEN getRemoteKey THEN returns null`() = runTest {
         val id = "test-id"
         coEvery { remoteKeyDao.getById(id) } throws RuntimeException("Database error")
 
@@ -113,7 +113,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `refreshWithKeys clears and inserts launches with remote keys`() = runTest {
+    fun `GIVEN launches and keys WHEN refreshWithKeys THEN clears and inserts`() = runTest {
         val launches = listOf(TestData.createLaunchSummary())
         coJustRun { launchDao.refreshLaunchesWithKeys(any(), any(), any(), any(), any(), any()) }
 
@@ -130,7 +130,7 @@ class PastLaunchesLocalDataSourceImplTest {
     }
 
     @Test
-    fun `appendWithKeys upserts launches and remote keys`() = runTest {
+    fun `GIVEN launches and keys WHEN appendWithKeys THEN upserts`() = runTest {
         val launches = listOf(TestData.createLaunchSummary())
         coEvery { launchDao.upsertAll(any()) } returns longArrayOf(1L)
         coJustRun { remoteKeyDao.upsertAll(any()) }

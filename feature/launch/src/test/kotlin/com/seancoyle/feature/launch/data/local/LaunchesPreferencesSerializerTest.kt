@@ -22,7 +22,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `defaultValue returns default LaunchPreferencesProto instance`() {
+    fun `GIVEN serializer WHEN defaultValue accessed THEN returns default LaunchPreferencesProto`() {
         val result = underTest.defaultValue
 
         assertNotNull(result)
@@ -30,15 +30,14 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `defaultValue has default order value`() {
+    fun `GIVEN serializer WHEN defaultValue accessed THEN has default order value`() {
         val result = underTest.defaultValue
 
-        // Default proto should have UNRECOGNIZED or first enum value
         assertNotNull(result.order)
     }
 
     @Test
-    fun `readFrom deserializes valid proto with ASC order`() = runTest {
+    fun `GIVEN valid proto with ASC order WHEN readFrom THEN deserializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.ASC)
             .build()
@@ -51,7 +50,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `readFrom deserializes valid proto with DESC order`() = runTest {
+    fun `GIVEN valid proto with DESC order WHEN readFrom THEN deserializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.DESC)
             .build()
@@ -64,7 +63,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `readFrom deserializes default instance`() = runTest {
+    fun `GIVEN default instance WHEN readFrom THEN deserializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.getDefaultInstance()
         val inputStream = ByteArrayInputStream(proto.toByteArray())
 
@@ -75,7 +74,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `readFrom throws CorruptionException on invalid proto data`() = runTest {
+    fun `GIVEN invalid proto data WHEN readFrom THEN throws CorruptionException`() = runTest {
         val invalidData = "invalid proto data".toByteArray()
         val inputStream = ByteArrayInputStream(invalidData)
 
@@ -85,7 +84,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `readFrom throws CorruptionException on empty invalid data`() = runTest {
+    fun `GIVEN empty invalid data WHEN readFrom THEN throws CorruptionException`() = runTest {
         val invalidData = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
         val inputStream = ByteArrayInputStream(invalidData)
 
@@ -95,18 +94,17 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `readFrom handles empty stream`() = runTest {
+    fun `GIVEN empty stream WHEN readFrom THEN handles gracefully`() = runTest {
         val emptyData = byteArrayOf()
         val inputStream = ByteArrayInputStream(emptyData)
 
         val result = underTest.readFrom(inputStream)
 
-        // Empty byte array should deserialize to default proto
         assertNotNull(result)
     }
 
     @Test
-    fun `writeTo serializes proto with ASC order`() = runTest {
+    fun `GIVEN proto with ASC order WHEN writeTo THEN serializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.ASC)
             .build()
@@ -116,15 +114,13 @@ class LaunchesPreferencesSerializerTest {
 
         val bytes = outputStream.toByteArray()
         assertNotNull(bytes)
-        // Proto3 omits default values, so the byte array may be empty for ASC (default)
-        // Instead, check round-trip integrity
         val inputStream = ByteArrayInputStream(bytes)
         val deserialized = underTest.readFrom(inputStream)
         assertEquals(proto, deserialized)
     }
 
     @Test
-    fun `writeTo serializes proto with DESC order`() = runTest {
+    fun `GIVEN proto with DESC order WHEN writeTo THEN serializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.DESC)
             .build()
@@ -138,7 +134,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `writeTo serializes default instance`() = runTest {
+    fun `GIVEN default instance WHEN writeTo THEN serializes correctly`() = runTest {
         val proto = LaunchPreferencesProto.getDefaultInstance()
         val outputStream = ByteArrayOutputStream()
 
@@ -149,14 +145,13 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `round trip serialization with ASC order maintains data integrity`() = runTest {
+    fun `GIVEN ASC order proto WHEN round trip serialization THEN maintains data integrity`() = runTest {
         val originalProto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.ASC)
             .build()
         val outputStream = ByteArrayOutputStream()
 
         underTest.writeTo(originalProto, outputStream)
-
         val inputStream = ByteArrayInputStream(outputStream.toByteArray())
         val deserializedProto = underTest.readFrom(inputStream)
 
@@ -165,14 +160,13 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `round trip serialization with DESC order maintains data integrity`() = runTest {
+    fun `GIVEN DESC order proto WHEN round trip serialization THEN maintains data integrity`() = runTest {
         val originalProto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.DESC)
             .build()
         val outputStream = ByteArrayOutputStream()
 
         underTest.writeTo(originalProto, outputStream)
-
         val inputStream = ByteArrayInputStream(outputStream.toByteArray())
         val deserializedProto = underTest.readFrom(inputStream)
 
@@ -181,12 +175,11 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `round trip with default instance maintains data integrity`() = runTest {
+    fun `GIVEN default instance WHEN round trip serialization THEN maintains data integrity`() = runTest {
         val originalProto = LaunchPreferencesProto.getDefaultInstance()
         val outputStream = ByteArrayOutputStream()
 
         underTest.writeTo(originalProto, outputStream)
-
         val inputStream = ByteArrayInputStream(outputStream.toByteArray())
         val deserializedProto = underTest.readFrom(inputStream)
 
@@ -194,7 +187,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `multiple round trips maintain consistency`() = runTest {
+    fun `GIVEN proto WHEN multiple round trips THEN maintains consistency`() = runTest {
         val originalProto = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.ASC)
             .build()
@@ -214,7 +207,7 @@ class LaunchesPreferencesSerializerTest {
     }
 
     @Test
-    fun `serializer handles multiple different values consecutively`() = runTest {
+    fun `GIVEN different protos WHEN serialized consecutively THEN handles correctly`() = runTest {
         val protoAsc = LaunchPreferencesProto.newBuilder()
             .setOrder(OrderProto.ASC)
             .build()
