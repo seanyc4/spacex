@@ -16,8 +16,14 @@ internal fun UiAutomatorTestScope.scrollVerticalView(
 ) {
     waitForStableInActiveWindow()
     val element = id?.let { findScrollableElement(it) } ?: findScrollableElement()
-    repeat(repeatDown) { element.fling(Direction.DOWN) }
-    repeat(repeatUp) { element.fling(Direction.UP) }
+    repeat(repeatDown) {
+        element.fling(Direction.DOWN)
+        device.waitForIdle(DEFAULT_TIMEOUT)
+    }
+    repeat(repeatUp) {
+        element.fling(Direction.UP)
+        device.waitForIdle(DEFAULT_TIMEOUT)
+    }
 }
 
 internal fun UiAutomatorTestScope.scrollHorizontalView(
@@ -29,6 +35,7 @@ internal fun UiAutomatorTestScope.scrollHorizontalView(
         val element = findScrollableElement(id)
         element.fling(Direction.RIGHT)
         element.fling(Direction.LEFT)
+        device.waitForIdle(DEFAULT_TIMEOUT)
     }
 }
 

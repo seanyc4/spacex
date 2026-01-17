@@ -13,14 +13,20 @@ plugins {
 android {
     namespace = "com.seancoyle.benchmark"
 
-    defaultConfig {
-        minSdk = 29
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     buildFeatures {
         buildConfig = true
     }
+
+    defaultConfig {
+        minSdk = 29
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // https://issuetracker.google.com/issues/351582215?pli=1
+        testInstrumentationRunnerArguments["androidx.benchmark.killProcessDelayMillis"] = "10000"
+    }
+
+    // Specifies that baseline profiles should be generated for the :app module
+    targetProjectPath = ":app"
 
     packaging {
         resources {
@@ -31,7 +37,6 @@ android {
         }
     }
 
-    targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
     // Setup GMD for running the baseline profile generation
@@ -39,7 +44,8 @@ android {
         create<ManagedVirtualDevice>("pixel6Api34") {
             device = "Pixel 6"
             apiLevel = 34
-            systemImageSource = "default"
+            systemImageSource = "google"
+            require64Bit = true
         }
     }
 }
