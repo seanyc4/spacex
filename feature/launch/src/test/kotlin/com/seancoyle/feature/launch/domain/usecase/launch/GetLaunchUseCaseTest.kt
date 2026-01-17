@@ -33,9 +33,9 @@ class GetLaunchUseCaseTest {
         val launchType = LaunchesType.UPCOMING
         val launch = TestData.createLaunch()
         val expected = LaunchResult.Success(launch)
-        coEvery { launchesRepository.getLaunch(id, launchType) } returns expected
+        coEvery { launchesRepository.getLaunch(id, launchType, isRefresh = false) } returns expected
 
-        val result = underTest(id, launchType)
+        val result = underTest(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(launch, (result as LaunchResult.Success).data)
@@ -47,9 +47,9 @@ class GetLaunchUseCaseTest {
         val launchType = LaunchesType.PAST
         val error = RemoteError.NETWORK_UNKNOWN_ERROR
         val expected = LaunchResult.Error(error)
-        coEvery { launchesRepository.getLaunch(id, launchType) } returns expected
+        coEvery { launchesRepository.getLaunch(id, launchType, isRefresh = false) } returns expected
 
-        val result = underTest(id, launchType)
+        val result = underTest(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Error)
         assertEquals(error, (result as LaunchResult.Error).error)
@@ -64,9 +64,9 @@ class GetLaunchUseCaseTest {
         val vimeoVid = TestData.createVidUrl(source = "vimeo")
         val otherVid = TestData.createVidUrl(source = "other")
         val launch = TestData.createLaunch(vidUrls = listOf(youtubeVid, vimeoVid, otherVid, youtubeVidNullUrl))
-        coEvery { launchesRepository.getLaunch(id, launchType) } returns LaunchResult.Success(launch)
+        coEvery { launchesRepository.getLaunch(id, launchType, isRefresh = false) } returns LaunchResult.Success(launch)
 
-        val result = underTest(id, launchType)
+        val result = underTest(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         val filtered = (result as LaunchResult.Success).data.vidUrls

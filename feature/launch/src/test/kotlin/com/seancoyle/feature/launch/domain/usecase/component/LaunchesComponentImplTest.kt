@@ -110,11 +110,11 @@ class LaunchesComponentImplTest {
         val launchType = LaunchesType.UPCOMING
         val launches = TestData.createLaunch(launchId)
         val expectedResult = LaunchResult.Success(launches)
-        coEvery { getLaunchUseCase.invoke(launchId, launchType) } returns expectedResult
+        coEvery { getLaunchUseCase.invoke(launchId, launchType, isRefresh = false) } returns expectedResult
 
-        val result = underTest.getLaunchUseCase(launchId, launchType)
+        val result = underTest.getLaunchUseCase(launchId, launchType, isRefresh = false)
 
         assertEquals(expectedResult, result)
-        coVerify { getLaunchUseCase.invoke(launchId, launchType) }
+        coVerify { getLaunchUseCase.invoke(launchId, launchType, isRefresh = false) }
     }
 }

@@ -23,6 +23,7 @@ interface LaunchesComponent {
 
     suspend fun getLaunchUseCase(
         launchId: String,
-        launchType: LaunchesType
+        launchType: LaunchesType,
+        isRefresh: Boolean = false
     ): LaunchResult<Launch, RemoteError>
 }

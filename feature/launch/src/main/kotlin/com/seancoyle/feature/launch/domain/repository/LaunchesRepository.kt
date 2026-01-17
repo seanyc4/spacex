@@ -17,6 +17,7 @@ internal interface LaunchesRepository {
 
     suspend fun getLaunch(
         id: String,
-        launchType: LaunchesType
+        launchType: LaunchesType,
+        isRefresh: Boolean
     ): LaunchResult<Launch, RemoteError>
 }

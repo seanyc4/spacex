@@ -30,19 +30,24 @@ class LaunchViewModel @AssistedInject constructor(
     @Assisted private val launchType: LaunchesType
 ) : ViewModel() {
 
-    private val refreshEvent = MutableSharedFlow<Unit>(replay = 1)
+    private val loadTriggers = MutableSharedFlow<Boolean>(replay = 1)
 
     val launchState: StateFlow<LaunchUiState> =
-        refreshEvent
-            .onStart { emit(Unit) }
-            .flatMapLatest {
+        loadTriggers
+            .onStart { emit(false) }
+            .flatMapLatest { forceRefresh ->
                 flow {
                     emit(LaunchUiState.Loading)
 
-                    when (val result = launchesComponent.getLaunchUseCase(launchId, launchType)) {
+                    when (
+                        val result = launchesComponent.getLaunchUseCase(
+                            launchId = launchId,
+                            launchType = launchType,
+                            isRefresh = forceRefresh
+                        )
+                    ) {
                         is LaunchResult.Success -> {
-                            val launch = result.data
-                            val launchUi = uiMapper.mapToLaunchUi(launch)
+                            val launchUi = uiMapper.mapToLaunchUi(result.data)
                             emit(LaunchUiState.Success(launchUi))
                         }
 
@@ -51,7 +56,8 @@ class LaunchViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            }.stateIn(
+            }
+            .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily,
                 initialValue = LaunchUiState.Loading
@@ -60,10 +66,12 @@ class LaunchViewModel @AssistedInject constructor(
     fun onEvent(event: LaunchEvent) {
         when (event) {
             is LaunchEvent.RetryFetch -> {
-                refreshEvent.tryEmit(Unit)
+                loadTriggers.tryEmit(true)
             }
-            is LaunchEvent.PullToRefreshEvent ->
-                refreshEvent.tryEmit(Unit)
+
+            is LaunchEvent.PullToRefreshEvent -> {
+                loadTriggers.tryEmit(true)
+            }
         }
     }
 

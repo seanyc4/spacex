@@ -127,7 +127,7 @@ class LaunchesRepositoryImplTest {
         val cachedLaunch = TestData.createLaunch()
         coEvery { upcomingDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
 
-        val result = underTest.getLaunch(id, launchType)
+        val result = underTest.getLaunch(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(cachedLaunch, result.data)
@@ -141,7 +141,7 @@ class LaunchesRepositoryImplTest {
         val cachedLaunch = TestData.createLaunch()
         coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(cachedLaunch)
 
-        val result = underTest.getLaunch(id, launchType)
+        val result = underTest.getLaunch(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(cachedLaunch, result.data)
@@ -156,7 +156,7 @@ class LaunchesRepositoryImplTest {
         coEvery { upcomingDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
-        val result = underTest.getLaunch(id, launchType)
+        val result = underTest.getLaunch(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(remoteLaunch, result.data)
@@ -171,7 +171,7 @@ class LaunchesRepositoryImplTest {
         coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Error(Throwable("Cache error"))
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Success(remoteLaunch)
 
-        val result = underTest.getLaunch(id, launchType)
+        val result = underTest.getLaunch(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(remoteLaunch, result.data)
@@ -186,7 +186,7 @@ class LaunchesRepositoryImplTest {
         coEvery { pastDetailLocalDataSource.getLaunchDetail(id) } returns LaunchResult.Success(null)
         coEvery { launchesRemoteDataSource.getLaunch(id, launchType) } returns LaunchResult.Error(error)
 
-        val result = underTest.getLaunch(id, launchType)
+        val result = underTest.getLaunch(id, launchType, isRefresh = false)
 
         assertTrue(result is LaunchResult.Error)
         assertEquals(error, result.error)

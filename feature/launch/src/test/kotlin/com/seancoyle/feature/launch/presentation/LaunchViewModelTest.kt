@@ -74,7 +74,7 @@ class LaunchViewModelTest {
     fun `launchState emits Success state when use case returns data`() = runTest {
         val testLaunch = createTestLaunch(missionName = "Starlink Mission")
         val testLaunchUI = createTestLaunchUI(missionName = "Starlink Mission")
-        coEvery { launchesComponent.getLaunchUseCase(any(), any()) } returns LaunchResult.Success(testLaunch)
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -86,7 +86,7 @@ class LaunchViewModelTest {
 
     @Test
     fun `launchState emits Error state when use case returns error`() = runTest {
-        coEvery { launchesComponent.getLaunchUseCase(any(), any()) } returns
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns
             LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -101,7 +101,7 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI(missionName = "Starlink Mission")
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
         var callCount = 0
-        coEvery { launchesComponent.getLaunchUseCase(any(), any()) } answers {
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } answers {
             callCount++
             if (callCount == 1) {
                 LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)

@@ -44,11 +44,13 @@ internal class LaunchesComponentImpl @Inject constructor(
 
     override suspend fun getLaunchUseCase(
         launchId: String,
-        launchType: LaunchesType
+        launchType: LaunchesType,
+        isRefresh: Boolean
     ): LaunchResult<Launch, DataError.RemoteError> {
         return getLaunchUseCase.invoke(
             id = launchId,
-            launchType = launchType
+            launchType = launchType,
+            isRefresh = isRefresh
         )
     }
 }

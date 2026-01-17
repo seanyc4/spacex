@@ -12,9 +12,10 @@ internal class GetLaunchUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         id: String,
-        launchType: LaunchesType
+        launchType: LaunchesType,
+        isRefresh: Boolean
     ): LaunchResult<Launch, DataError.RemoteError> {
-        return when (val result = launchesRepository.getLaunch(id, launchType)) {
+        return when (val result = launchesRepository.getLaunch(id, launchType, isRefresh)) {
             is LaunchResult.Success -> {
                 val filteredResult = filterYouTubeVideos(result.data)
                 LaunchResult.Success(filteredResult)
