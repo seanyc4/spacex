@@ -38,7 +38,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getUpcomingDetailedLaunches returns summaries and details when API call is successful`() = runTest {
+    fun `GIVEN API returns data WHEN getUpcomingDetailedLaunches THEN returns summaries and details`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "Falcon")
         val offset = 0
@@ -56,7 +56,6 @@ class LaunchesRemoteDataSourceImplTest {
         val detailedResult = result.data
         assertTrue(detailedResult.summaries.isNotEmpty())
         assertTrue(detailedResult.details.isNotEmpty())
-
         val actualSummary = detailedResult.summaries[0]
         assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualSummary.id)
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", actualSummary.missionName)
@@ -65,7 +64,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getPastDetailedLaunches returns summaries and details when API call is successful`() = runTest {
+    fun `GIVEN API returns data WHEN getPastDetailedLaunches THEN returns summaries and details`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "Falcon")
         val offset = 0
@@ -83,13 +82,12 @@ class LaunchesRemoteDataSourceImplTest {
         val detailedResult = result.data
         assertTrue(detailedResult.summaries.isNotEmpty())
         assertTrue(detailedResult.details.isNotEmpty())
-
         val actualSummary = detailedResult.summaries[0]
         assertEquals("faf4a0bc-7dad-4842-b74c-73a9f648b5cc", actualSummary.id)
     }
 
     @Test
-    fun `getUpcomingDetailedLaunches returns error when API call fails`() = runTest {
+    fun `GIVEN API throws exception WHEN getUpcomingDetailedLaunches THEN returns error`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "")
         val offset = 0
@@ -109,7 +107,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getPastDetailedLaunches returns error when API call fails`() = runTest {
+    fun `GIVEN API throws exception WHEN getPastDetailedLaunches THEN returns error`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "")
         val offset = 0
@@ -129,7 +127,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getUpcomingDetailedLaunches calculates correct offset for pagination`() = runTest {
+    fun `GIVEN page number WHEN getUpcomingDetailedLaunches THEN calculates correct offset`() = runTest {
         val page = 2
         val launchesQuery = LaunchesQuery(query = "SpaceX")
         val expectedOffset = LaunchesConstants.PAGINATION_LIMIT * 2
@@ -147,7 +145,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getPastDetailedLaunches calculates correct offset for pagination`() = runTest {
+    fun `GIVEN page number WHEN getPastDetailedLaunches THEN calculates correct offset`() = runTest {
         val page = 2
         val launchesQuery = LaunchesQuery(query = "SpaceX")
         val expectedOffset = LaunchesConstants.PAGINATION_LIMIT * 2
@@ -165,7 +163,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getUpcomingDetailedLaunches passes query parameters correctly`() = runTest {
+    fun `GIVEN query parameters WHEN getUpcomingDetailedLaunches THEN passes them correctly`() = runTest {
         val page = 1
         val launchesQuery = LaunchesQuery(query = "Dragon")
         val expectedOffset = LaunchesConstants.PAGINATION_LIMIT
@@ -183,7 +181,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getPastDetailedLaunches passes query parameters correctly`() = runTest {
+    fun `GIVEN query parameters WHEN getPastDetailedLaunches THEN passes them correctly`() = runTest {
         val page = 1
         val launchesQuery = LaunchesQuery(query = "Dragon")
         val expectedOffset = LaunchesConstants.PAGINATION_LIMIT
@@ -201,7 +199,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunch returns upcoming launch when API call is successful`() = runTest {
+    fun `GIVEN UPCOMING type WHEN getLaunch THEN returns upcoming launch`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         coEvery { api.getUpcomingLaunch(id) } returns TestData.createLaunchDto()
@@ -214,7 +212,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunch returns past launch when API call is successful`() = runTest {
+    fun `GIVEN PAST type WHEN getLaunch THEN returns past launch`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         coEvery { api.getPreviousLaunch(id) } returns TestData.createLaunchDto()
@@ -227,7 +225,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunch returns error when API call fails for upcoming launch`() = runTest {
+    fun `GIVEN API fails WHEN getLaunch for UPCOMING THEN returns error`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.UPCOMING
         val givenException = RuntimeException("Network Failure")
@@ -241,7 +239,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getLaunch returns error when API call fails for past launch`() = runTest {
+    fun `GIVEN API fails WHEN getLaunch for PAST THEN returns error`() = runTest {
         val id = "test-id"
         val launchType = LaunchesType.PAST
         val givenException = RuntimeException("Network Failure")
@@ -255,7 +253,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getUpcomingDetailedLaunches returns empty lists when API returns no results`() = runTest {
+    fun `GIVEN API returns no results WHEN getUpcomingDetailedLaunches THEN returns empty lists`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "nonexistent")
         val offset = 0
@@ -276,7 +274,7 @@ class LaunchesRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getPastDetailedLaunches returns empty lists when API returns no results`() = runTest {
+    fun `GIVEN API returns no results WHEN getPastDetailedLaunches THEN returns empty lists`() = runTest {
         val page = 0
         val launchesQuery = LaunchesQuery(query = "nonexistent")
         val offset = 0

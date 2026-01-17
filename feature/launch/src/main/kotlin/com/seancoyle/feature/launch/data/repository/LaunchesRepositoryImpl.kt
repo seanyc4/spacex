@@ -42,30 +42,45 @@ internal class LaunchesRepositoryImpl @Inject constructor(
 
     override suspend fun getLaunch(
         id: String,
-        launchType: LaunchesType
+        launchType: LaunchesType,
+        isRefresh: Boolean
     ): LaunchResult<Launch, RemoteError> {
-        val cachedLaunch: Launch? = when (launchType) {
-            LaunchesType.UPCOMING -> {
-                when (val cachedResult = upcomingDetailLocalDataSource.getLaunchDetail(id)) {
-                    is LaunchResult.Success -> cachedResult.data
-                    is LaunchResult.Error -> null
-                }
-            }
-
-            LaunchesType.PAST -> {
-                when (val cachedResult = pastDetailLocalDataSource.getLaunchDetail(id)) {
-                    is LaunchResult.Success -> cachedResult.data
-                    is LaunchResult.Error -> null
-                }
-            }
+        if (isRefresh) {
+            Timber.tag(TAG).d("getLaunch: Refresh requested for launch id=$id type=$launchType, fetching from network")
+            return fetchLaunchFromNetwork(
+                id = id,
+                launchType = launchType
+            )
         }
 
-        if (cachedLaunch != null) {
+        cachedLaunchOrNull(id = id, launchType = launchType)?.let { cached ->
             Timber.tag(TAG).d("getLaunch: Cache hit for launch id=$id type=$launchType")
-            return LaunchResult.Success(cachedLaunch)
+            return LaunchResult.Success(cached)
         }
 
         Timber.tag(TAG).d("getLaunch: Cache miss for launch id=$id type=$launchType, fetching from network")
+        return fetchLaunchFromNetwork(
+            id = id,
+            launchType = launchType
+        )
+    }
+
+    private fun detailLocalDataSourceFor(launchType: LaunchesType): DetailLocalDataSource = when (launchType) {
+        LaunchesType.UPCOMING -> upcomingDetailLocalDataSource
+        LaunchesType.PAST -> pastDetailLocalDataSource
+    }
+
+    private suspend fun cachedLaunchOrNull(id: String, launchType: LaunchesType): Launch? {
+        return when (val cachedResult = detailLocalDataSourceFor(launchType).getLaunchDetail(id)) {
+            is LaunchResult.Success -> cachedResult.data
+            is LaunchResult.Error -> null
+        }
+    }
+
+    private suspend fun fetchLaunchFromNetwork(
+        id: String,
+        launchType: LaunchesType
+    ): LaunchResult<Launch, RemoteError> {
         return launchesRemoteDataSource.getLaunch(
             id = id,
             launchType = launchType
