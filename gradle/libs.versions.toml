@@ -42,6 +42,7 @@ testCore = "1.7.0"
 testRules = "1.7.0"
 testRunner = "1.7.0"
 timber = "5.0.1"
+turbine = "1.2.1"
 uiautomator = "2.4.0-alpha07"
 
 [libraries]
@@ -165,6 +166,9 @@ uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", versi
 # Timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+# Testing helpers (Flow)
+turbineTesting = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
 # YouTube Player
 youtubePlayer = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubePlayer" }
 
@@ -208,7 +212,8 @@ unitTestBundle = [
     "test-robolectric",
     "kotlin-coroutinesTest",
     "kotlin-junit",
-    "paging3-testing"
+    "paging3-testing",
+    "turbineTesting"
 ]
 
 composeBundle = [
