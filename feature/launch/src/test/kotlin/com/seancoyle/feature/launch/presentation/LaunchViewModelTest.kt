@@ -4,16 +4,6 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.TestCoroutineRule
-import com.seancoyle.feature.launch.domain.model.Configuration
-import com.seancoyle.feature.launch.domain.model.Country
-import com.seancoyle.feature.launch.domain.model.Image
-import com.seancoyle.feature.launch.domain.model.Launch
-import com.seancoyle.feature.launch.domain.model.Location
-import com.seancoyle.feature.launch.domain.model.Mission
-import com.seancoyle.feature.launch.domain.model.Orbit
-import com.seancoyle.feature.launch.domain.model.Pad
-import com.seancoyle.feature.launch.domain.model.Rocket
-import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
@@ -24,8 +14,10 @@ import com.seancoyle.feature.launch.presentation.launch.model.PadUI
 import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchEvent
 import com.seancoyle.feature.launch.presentation.launch.state.LaunchUiState
+import com.seancoyle.feature.launch.util.TestData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,7 +40,7 @@ class LaunchViewModelTest {
     @MockK
     private lateinit var launchesComponent: LaunchesComponent
 
-    @MockK()
+    @MockK
     private lateinit var launchUiMapper: LaunchUiMapper
 
     private lateinit var underTest: LaunchViewModel
@@ -56,26 +48,34 @@ class LaunchViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+    }
 
-        underTest = LaunchViewModel(
+    private fun createViewModel(
+        launchId: String = "test-launch-id",
+        launchType: LaunchesType = LaunchesType.UPCOMING
+    ): LaunchViewModel {
+        return LaunchViewModel(
             launchesComponent = launchesComponent,
             uiMapper = launchUiMapper,
-            launchId = "test-launch-id",
-            launchType = LaunchesType.UPCOMING
+            launchId = launchId,
+            launchType = launchType
         )
     }
 
     @Test
-    fun `initial state is Loading`() = runTest {
+    fun `GIVEN ViewModel created WHEN initial state observed THEN state is Loading`() = runTest {
+        underTest = createViewModel()
+
         assertTrue(underTest.launchState.value is LaunchUiState.Loading)
     }
 
     @Test
-    fun `launchState emits Success state when use case returns data`() = runTest {
-        val testLaunch = createTestLaunch(missionName = "Starlink Mission")
+    fun `GIVEN use case returns launch WHEN state collected THEN emits Success state`() = runTest {
+        val testLaunch = TestData.createLaunch(name = "Starlink Mission")
         val testLaunchUI = createTestLaunchUI(missionName = "Starlink Mission")
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
@@ -85,9 +85,10 @@ class LaunchViewModelTest {
     }
 
     @Test
-    fun `launchState emits Error state when use case returns error`() = runTest {
+    fun `GIVEN use case returns error WHEN state collected THEN emits Error state`() = runTest {
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns
             LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
+        underTest = createViewModel()
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
@@ -96,8 +97,8 @@ class LaunchViewModelTest {
     }
 
     @Test
-    fun `onEvent RetryFetch reloads launch data`() = runTest {
-        val testLaunch = createTestLaunch(missionName = "Starlink Mission")
+    fun `GIVEN Error state WHEN RetryFetch event THEN reloads launch data`() = runTest {
+        val testLaunch = TestData.createLaunch(name = "Starlink Mission")
         val testLaunchUI = createTestLaunchUI(missionName = "Starlink Mission")
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
         var callCount = 0
@@ -109,20 +110,140 @@ class LaunchViewModelTest {
                 LaunchResult.Success(testLaunch)
             }
         }
-
+        underTest = createViewModel()
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
         assertTrue(underTest.launchState.value is LaunchUiState.Error)
 
         underTest.onEvent(LaunchEvent.RetryFetch)
-
         testScheduler.advanceUntilIdle()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        val state = underTest.launchState.value
+        assertTrue(state is LaunchUiState.Success)
+    }
+
+    @Test
+    fun `GIVEN Success state WHEN PullToRefreshEvent THEN triggers refresh with isRefresh true`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+
+        coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
+    }
+
+    @Test
+    fun `GIVEN Error state WHEN RetryFetch THEN triggers reload with isRefresh true`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.RetryFetch)
+        testScheduler.advanceUntilIdle()
+
+        coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
+    }
+
+    @Test
+    fun `GIVEN initial load WHEN state collected THEN triggers with isRefresh false`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = false) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
-        // Second call should succeed
-        val secondState = underTest.launchState.value
-        assertTrue(secondState is LaunchUiState.Success)
+        coVerify { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = false) }
+    }
+
+    @Test
+    fun `GIVEN UPCOMING launch type WHEN ViewModel created THEN delegates to component with UPCOMING type`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase("test-id", LaunchesType.UPCOMING, any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel(launchId = "test-id", launchType = LaunchesType.UPCOMING)
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        coVerify { launchesComponent.getLaunchUseCase("test-id", LaunchesType.UPCOMING, any()) }
+    }
+
+    @Test
+    fun `GIVEN PAST launch type WHEN ViewModel created THEN delegates to component with PAST type`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase("test-id", LaunchesType.PAST, any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel(launchId = "test-id", launchType = LaunchesType.PAST)
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        coVerify { launchesComponent.getLaunchUseCase("test-id", LaunchesType.PAST, any()) }
+    }
+
+    @Test
+    fun `GIVEN multiple PullToRefresh events WHEN onEvent called THEN each triggers network fetch`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+
+        coVerify(atLeast = 2) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
+    }
+
+    @Test
+    fun `GIVEN network error WHEN PullToRefresh THEN emits Error state`() = runTest {
+        var callCount = 0
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } answers {
+            callCount++
+            if (callCount == 1) {
+                LaunchResult.Success(testLaunch)
+            } else {
+                LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
+            }
+        }
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+        assertTrue(underTest.launchState.value is LaunchUiState.Success)
+
+        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+
+        assertTrue(underTest.launchState.value is LaunchUiState.Error)
+    }
+
+    @Test
+    fun `GIVEN launch ID WHEN ViewModel created THEN uses provided launch ID`() = runTest {
+        val launchId = "specific-launch-id"
+        val testLaunch = TestData.createLaunch(id = launchId)
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(launchId, any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel(launchId = launchId)
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        coVerify { launchesComponent.getLaunchUseCase(launchId, any(), any()) }
     }
 
     private fun createTestLaunchUI(
@@ -139,7 +260,7 @@ class LaunchViewModelTest {
             launchWindowPosition = 0.5f,
             imageUrl = "https://example.com/image.jpg",
             failReason = null,
-            launchServiceProvider = null, // AgencyUI? (can be null for test)
+            launchServiceProvider = null,
             rocket = RocketUI(
                 configuration = ConfigurationUI(
                     name = "Falcon 9",
@@ -163,24 +284,24 @@ class LaunchViewModelTest {
                 spacecraftStages = emptyList()
             ),
             mission = MissionUI(
-                name = "Starlink Mission",
-                description = "A batch of satellites",
+                name = "Test Mission",
+                description = "Test description",
                 type = "Communications",
                 orbitName = "Low Earth Orbit"
             ),
             pad = PadUI(
-                name = "Space Launch Complex 40",
-                locationName = "Cape Canaveral, FL, USA",
+                name = "Launch Complex 39A",
+                locationName = "Kennedy Space Center",
                 countryName = "United States",
                 countryCode = "US",
                 imageUrl = "https://example.com/pad.jpg",
-                description = "Cape Canaveral SLC-40",
-                latitude = "28.56194122",
-                longitude = "-80.57735736",
-                totalLaunchCount = "957",
-                orbitalLaunchAttemptCount = "457",
-                locationTotalLaunchCount = "778",
-                locationTotalLandingCount = "56",
+                description = "Test pad",
+                latitude = "28.56",
+                longitude = "-80.57",
+                totalLaunchCount = "100",
+                orbitalLaunchAttemptCount = "95",
+                locationTotalLaunchCount = "200",
+                locationTotalLandingCount = "50",
                 mapUrl = null,
                 mapImage = null
             ),
@@ -189,131 +310,4 @@ class LaunchViewModelTest {
             missionPatches = emptyList()
         )
     }
-
-    private fun createTestLaunch(
-        id: String = "test-launch-id",
-        missionName: String = "Test Launch"
-    ): Launch = Launch(
-        id = id,
-        url = null,
-        missionName = missionName,
-        lastUpdated = null,
-        net = "2026-01-15T10:30:00Z",
-        netPrecision = null,
-        status = Status(id = 1, name = "Go", abbrev = "Go", description = null),
-        windowEnd = null,
-        windowStart = null,
-        image = Image(
-            id = 1,
-            name = "Test Image",
-            imageUrl = "https://example.com/image.jpg",
-            thumbnailUrl = "https://example.com/thumb.jpg",
-            credit = "Test"
-        ),
-        infographic = null,
-        probability = null,
-        weatherConcerns = null,
-        failReason = null,
-        launchServiceProvider = null,
-        rocket = Rocket(
-            id = 123,
-            configuration = Configuration(
-                id = 164,
-                url = null,
-                name = "Falcon 9",
-                fullName = "Falcon 9 Block 5",
-                variant = "Block 5",
-                families = emptyList(),
-                manufacturer = null,
-                image = null,
-                wikiUrl = null,
-                description = "Falcon 9 rocket",
-                alias = "F9",
-                totalLaunchCount = 300,
-                successfulLaunches = 290,
-                failedLaunches = 10,
-                length = 56.3,
-                diameter = 3.35,
-                maidenFlight = "2007-05-13",
-                launchMass = 456.0
-            ),
-            launcherStage = emptyList(),
-            spacecraftStage = emptyList()
-        ),
-        mission = Mission(
-            id = 456,
-            name = "Starlink Mission",
-            description = "A batch of satellites",
-            type = "Communications",
-            orbit = Orbit(id = 8, name = "Low Earth Orbit", abbrev = "LEO"),
-            agencies = emptyList(),
-            infoUrls = emptyList(),
-            vidUrls = emptyList()
-        ),
-        pad = Pad(
-            id = 87,
-            url = null,
-            agencies = emptyList(),
-            name = "Space Launch Complex 40",
-            image = Image(
-                id = 3,
-                name = "Pad Image",
-                imageUrl = "https://example.com/pad.jpg",
-                thumbnailUrl = "https://example.com/pad_thumb.jpg",
-                credit = "Test"
-            ),
-            description = "Cape Canaveral SLC-40",
-            country = Country(
-                id = 1,
-                name = "United States",
-                alpha2Code = "US",
-                alpha3Code = "USA",
-                nationalityName = "American"
-            ),
-            latitude = 28.56194122,
-            longitude = -80.57735736,
-            mapUrl = null,
-            mapImage = null,
-            wikiUrl = null,
-            infoUrl = null,
-            totalLaunchCount = 957,
-            orbitalLaunchAttemptCount = 457,
-            fastestTurnaround = null,
-            location = Location(
-                id = 12,
-                url = null,
-                name = "Cape Canaveral, FL, USA",
-                country = Country(
-                    id = 1,
-                    name = "United States",
-                    alpha2Code = "US",
-                    alpha3Code = "USA",
-                    nationalityName = "American"
-                ),
-                description = null,
-                image = null,
-                mapImage = null,
-                longitude = -80.57735736,
-                latitude = 28.56194122,
-                timezoneName = "America/New_York",
-                totalLaunchCount = 778,
-                totalLandingCount = 56
-            )
-        ),
-        webcastLive = null,
-        program = emptyList(),
-        orbitalLaunchAttemptCount = null,
-        locationLaunchAttemptCount = null,
-        padLaunchAttemptCount = null,
-        agencyLaunchAttemptCount = null,
-        orbitalLaunchAttemptCountYear = null,
-        locationLaunchAttemptCountYear = null,
-        padLaunchAttemptCountYear = null,
-        agencyLaunchAttemptCountYear = null,
-        updates = emptyList(),
-        infoUrls = emptyList(),
-        vidUrls = emptyList(),
-        padTurnaround = null,
-        missionPatches = emptyList()
-    )
 }
