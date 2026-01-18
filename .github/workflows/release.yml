@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  # Stage 1: Testing
+  unit-tests:
+    uses: ./.github/workflows/unit_test.yml
+
+  ui-tests:
+    uses: ./.github/workflows/ui_test.yml
+
+  # Stage 2: Version & Build
+  get-current-version:
+    uses: ./.github/workflows/app_version.yml
+    needs: [unit-tests, ui-tests]
+
+  assemble-release:
+    uses: ./.github/workflows/assemble_release_aab.yml
+    needs: [get-current-version]
+    secrets: inherit
+    with:
+      version: ${{ needs.get-current-version.outputs.version }}
+
+  # Stage 3: Deployment
+  deploy-playstore:
+    uses: ./.github/workflows/playstore_deploy.yml
+    needs: [assemble-release, get-current-version]
+    secrets: inherit
+    with:
+      artifact-name: ${{ needs.assemble-release.outputs.artifact-name }}
+
+  # Stage 4: Post-Deployment - tag release and bump version
+  tag-release:
+    uses: ./.github/workflows/tag_release.yml
+    needs: [deploy-playstore]
+
+  version-bump:
+    uses: ./.github/workflows/version_bump.yml
+    needs: [tag-release]
+    secrets: inherit
+
+  commit-changes:
+    uses: ./.github/workflows/commit.yml
+    needs: [version-bump]
+    secrets: inherit
+    with:
+      artifact-name: ${{ needs.version-bump.outputs.artifact-name }}
+      file-path: ${{ needs.version-bump.outputs.file-path }}
+
+  github-release:
+    uses: ./.github/workflows/github_release.yml
+    needs: [tag-release, commit-changes]
+    secrets: inherit
+    with:
+      release-tag: ${{ needs.tag-release.outputs.release-tag }}
