@@ -1,6 +1,8 @@
 package com.seancoyle.feature.launch.di
 
-import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT
+import com.seancoyle.core.data.NetworkConstants.NETWORK_TIMEOUT_SECONDS
+import com.seancoyle.feature.launch.BuildConfig
+import com.seancoyle.feature.launch.data.remote.RetryInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import com.seancoyle.feature.launch.BuildConfig
 
 const val PROD_BASE_URL = "https://ll.thespacedevs.com/"
 const val DEV_BASE_URL = "https://lldev.thespacedevs.com/"
@@ -45,8 +46,11 @@ open class NetworkModule {
     @Provides
     internal fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder()
-            .callTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-            .connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+            .callTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .connectTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .addInterceptor(RetryInterceptor())
 
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor().apply {
