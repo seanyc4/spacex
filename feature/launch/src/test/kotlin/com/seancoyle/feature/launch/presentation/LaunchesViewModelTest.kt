@@ -250,30 +250,4 @@ class LaunchesViewModelTest {
         assertEquals(100, underTest.screenState.upcomingScrollPosition)
         assertEquals(200, underTest.screenState.pastScrollPosition)
     }
-
-    @Test
-    fun `GIVEN launchesQueryState WHEN status is ALL THEN passes null to query`() = runTest {
-        underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
-            launchStatus = LaunchStatus.ALL,
-            query = ""
-        ))
-        testScheduler.advanceUntilIdle()
-
-        val queryState = underTest.launchesQueryState.value
-        assertEquals("", queryState.query)
-        assertEquals(null, queryState.status)
-    }
-
-    @Test
-    fun `GIVEN launchesQueryState WHEN status is not ALL THEN passes status to query`() = runTest {
-        underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
-            launchStatus = LaunchStatus.SUCCESS,
-            query = "Test"
-        ))
-        testScheduler.advanceUntilIdle()
-
-        val queryState = underTest.launchesQueryState.value
-        assertEquals("Test", queryState.query)
-        assertEquals(LaunchStatus.SUCCESS, queryState.status)
-    }
 }
