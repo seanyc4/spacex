@@ -35,11 +35,13 @@ import com.seancoyle.feature.launch.presentation.LaunchesConstants
 import kotlinx.coroutines.TimeoutCancellationException
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.SocketTimeoutException
 import kotlin.coroutines.cancellation.CancellationException
 
 internal fun map(throwable: Throwable): RemoteError {
     return when (throwable) {
         is TimeoutCancellationException -> RemoteError.NETWORK_TIMEOUT
+        is SocketTimeoutException -> RemoteError.NETWORK_TIMEOUT
         is IOException -> RemoteError.NETWORK_CONNECTION_FAILED
         is HttpException -> {
             when (throwable.code()) {
