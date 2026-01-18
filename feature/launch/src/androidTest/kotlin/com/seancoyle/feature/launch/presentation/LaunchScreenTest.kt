@@ -30,7 +30,7 @@ class LaunchScreenTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun loadingState_displaysLoadingIndicator() {
+    fun givenLoadingState_whenDisplayed_thenShowsLoadingIndicator() {
         composeRule.setContent {
             AppTheme {
                 Box(
@@ -48,7 +48,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun loadingState_hasAccessibleContentDescription() {
+    fun givenLoadingState_whenDisplayed_thenHasAccessibleContentDescription() {
         composeRule.setContent {
             AppTheme {
                 LoadingState()
@@ -60,7 +60,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun errorState_displaysErrorMessage() {
+    fun givenErrorMessage_whenErrorStateDisplayed_thenShowsErrorMessage() {
         val errorMessage = "Unable to connect to server"
 
         composeRule.setContent {
@@ -85,7 +85,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun errorState_displaysRetryButton() {
+    fun givenErrorState_whenDisplayed_thenShowsRetryButton() {
         composeRule.setContent {
             AppTheme {
                 Box(
@@ -106,7 +106,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun errorState_retryButtonInvokesCallback() {
+    fun givenErrorState_whenRetryButtonClicked_thenInvokesCallback() {
         var retryClicked = false
 
         composeRule.setContent {
@@ -131,7 +131,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun errorState_hasAccessibleContentDescription() {
+    fun givenErrorMessage_whenErrorStateDisplayed_thenHasAccessibleContentDescription() {
         val errorMessage = "Network timeout"
 
         composeRule.setContent {
@@ -148,7 +148,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysMissionName() {
+    fun givenMissionName_whenHeroSectionDisplayed_thenShowsMissionName() {
         val launch = TestDataFactory.createLaunchUI(missionName = "Starlink Group 7-12")
 
         composeRule.setContent {
@@ -162,7 +162,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysLaunchDate() {
+    fun givenLaunchDate_whenHeroSectionDisplayed_thenShowsLaunchDate() {
         val launch = TestDataFactory.createLaunchUI(launchDate = "26 November 2026")
 
         composeRule.setContent {
@@ -176,7 +176,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysStatusChip() {
+    fun givenSuccessStatus_whenHeroSectionDisplayed_thenShowsStatusChip() {
         val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.SUCCESS)
 
         composeRule.setContent {
@@ -190,7 +190,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_hasCorrectTestTag() {
+    fun givenHeroSection_whenDisplayed_thenHasCorrectTestTag() {
         val launch = TestDataFactory.createLaunchUI()
 
         composeRule.setContent {
@@ -204,7 +204,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_hasAccessibleMissionNameDescription() {
+    fun givenMissionName_whenHeroSectionDisplayed_thenHasAccessibleMissionNameDescription() {
         val launch = TestDataFactory.createLaunchUI(missionName = "Demo Mission")
 
         composeRule.setContent {
@@ -218,7 +218,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun detailsSection_displaysMissionDescription() {
+    fun givenLaunchUI_whenDetailsSectionDisplayed_thenShowsMissionDescription() {
         val launch = TestDataFactory.createLaunchUI()
 
         composeRule.setContent {
@@ -232,7 +232,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun detailsSection_displaysFailReasonWhenPresent() {
+    fun givenFailReason_whenDetailsSectionDisplayed_thenShowsFailReason() {
         val launch = TestDataFactory.createLaunchUIWithFailure()
 
         composeRule.setContent {
@@ -246,7 +246,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun detailsSection_hidesFailReasonWhenAbsent() {
+    fun givenNoFailReason_whenDetailsSectionDisplayed_thenHidesFailReason() {
         val launch = TestDataFactory.createLaunchUI(failReason = null)
 
         composeRule.setContent {
@@ -255,13 +255,12 @@ class LaunchScreenTest {
             }
         }
 
-        // Should not find any node with typical failure text patterns
         composeRule.onNodeWithText("Failed", substring = true, ignoreCase = true)
             .assertDoesNotExist()
     }
 
     @Test
-    fun launchSiteSection_displaysPadName() {
+    fun givenPadInfo_whenLaunchSiteSectionDisplayed_thenShowsPadName() {
         val launch = TestDataFactory.createLaunchUI()
 
         composeRule.setContent {
@@ -275,7 +274,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun launchSiteSection_displaysLocationName() {
+    fun givenPadInfo_whenLaunchSiteSectionDisplayed_thenShowsLocationName() {
         val launch = TestDataFactory.createLaunchUI()
 
         composeRule.setContent {
@@ -289,7 +288,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun launchProviderSection_displaysAgencyName() {
+    fun givenAgency_whenLaunchProviderSectionDisplayed_thenShowsAgencyName() {
         val launch = TestDataFactory.createLaunchUI()
         val agency = launch.launchServiceProvider!!
 
@@ -304,7 +303,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun launchProviderSection_displaysAgencyAbbreviation() {
+    fun givenAgency_whenLaunchProviderSectionDisplayed_thenShowsAgencyAbbreviation() {
         val launch = TestDataFactory.createLaunchUI()
         val agency = launch.launchServiceProvider!!
 
@@ -319,7 +318,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun launchProviderSection_displaysAgencyDescription() {
+    fun givenAgency_whenLaunchProviderSectionDisplayed_thenShowsAgencyDescription() {
         val launch = TestDataFactory.createLaunchUI()
         val agency = launch.launchServiceProvider!!
 
@@ -334,7 +333,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun updatesSection_displaysUpdatesWhenPresent() {
+    fun givenUpdates_whenUpdatesSectionDisplayed_thenShowsUpdates() {
         val launch = TestDataFactory.createLaunchUIWithUpdates()
 
         composeRule.setContent {
@@ -348,7 +347,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun updatesSection_displaysUpdateAuthor() {
+    fun givenUpdates_whenUpdatesSectionDisplayed_thenShowsUpdateAuthor() {
         val launch = TestDataFactory.createLaunchUIWithUpdates()
 
         composeRule.setContent {
@@ -357,12 +356,12 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText( "SpaceX")
+        composeRule.onNodeWithText("SpaceX")
             .assertIsDisplayed()
     }
 
     @Test
-    fun updatesSection_displaysUpdateTimestamp() {
+    fun givenUpdates_whenUpdatesSectionDisplayed_thenShowsUpdateTimestamp() {
         val launch = TestDataFactory.createLaunchUIWithUpdates()
 
         composeRule.setContent {
@@ -376,13 +375,11 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun successState_hidesProviderSectionWhenNoProvider() {
+    fun givenNoProvider_whenSuccessStateDisplayed_thenHidesProviderSection() {
         val launch = TestDataFactory.createLaunchUIWithoutOptionalData()
 
         composeRule.setContent {
             AppTheme {
-                // We test that provider section is not rendered when agency is null
-                // by verifying the provider-specific content is absent
                 if (launch.launchServiceProvider != null) {
                     LaunchProviderSection(agency = launch.launchServiceProvider)
                 }
@@ -394,7 +391,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun successState_hidesUpdatesSectionWhenNoUpdates() {
+    fun givenNoUpdates_whenSuccessStateDisplayed_thenHidesUpdatesSection() {
         val launch = TestDataFactory.createLaunchUIWithoutOptionalData()
 
         composeRule.setContent {
@@ -405,13 +402,12 @@ class LaunchScreenTest {
             }
         }
 
-        // Section title should not exist when there are no updates
         composeRule.onNodeWithText("Launch Updates", substring = true, ignoreCase = true)
             .assertDoesNotExist()
     }
 
     @Test
-    fun heroSection_displaysGoStatus() {
+    fun givenGoStatus_whenHeroSectionDisplayed_thenShowsGoStatus() {
         val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.GO)
 
         composeRule.setContent {
@@ -425,7 +421,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysFailedStatus() {
+    fun givenFailedStatus_whenHeroSectionDisplayed_thenShowsFailedStatus() {
         val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.FAILED)
 
         composeRule.setContent {
@@ -439,7 +435,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysTBDStatus() {
+    fun givenTBDStatus_whenHeroSectionDisplayed_thenShowsTBDStatus() {
         val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.TBD)
 
         composeRule.setContent {
@@ -453,7 +449,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun heroSection_displaysTBCStatus() {
+    fun givenTBCStatus_whenHeroSectionDisplayed_thenShowsTBCStatus() {
         val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.TBC)
 
         composeRule.setContent {
@@ -463,6 +459,175 @@ class LaunchScreenTest {
         }
 
         composeRule.onNodeWithText(LaunchStatus.TBC.label)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenGoStatus_whenHeroSectionDisplayed_thenShowsHeroSection() {
+        val launch = TestDataFactory.createLaunchUI(status = LaunchStatus.GO)
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchHeroSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_HERO_SECTION)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenMissionName_whenHeroSectionDisplayed_thenShowsImageWithContentDescription() {
+        val launch = TestDataFactory.createLaunchUI(missionName = "Test Mission")
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchHeroSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithContentDescription("Mission image for Test Mission")
+            .assertExists()
+    }
+
+    @Test
+    fun givenLaunchUI_whenDetailsSectionDisplayed_thenShowsMissionDetailsTitle() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchDetailsSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithText("Mission Details")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenMissionType_whenDetailsSectionDisplayed_thenShowsMissionType() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchDetailsSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithText(launch.mission.type!!)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenOrbitName_whenDetailsSectionDisplayed_thenShowsOrbitName() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchDetailsSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithText(launch.mission.orbitName!!)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenLaunchTime_whenDetailsSectionDisplayed_thenShowsLaunchTime() {
+        val launch = TestDataFactory.createLaunchUI(launchTime = "14:30")
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchDetailsSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithText("14:30")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenWindowDuration_whenDetailsSectionDisplayed_thenShowsWindowDuration() {
+        val launch = TestDataFactory.createLaunchUI(windowDuration = "1h")
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchDetailsSection(launch = launch)
+            }
+        }
+
+        composeRule.onNodeWithText("1h")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenPadInfo_whenLaunchSiteSectionDisplayed_thenShowsMapUrl() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchSiteSection(pad = launch.pad)
+            }
+        }
+
+        composeRule.onNodeWithText(launch.pad.name)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenPadInfo_whenLaunchSiteSectionDisplayed_thenShowsLatitudeLongitude() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchSiteSection(pad = launch.pad)
+            }
+        }
+
+        composeRule.onNodeWithText(launch.pad.latitude!!, substring = true)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenPadInfo_whenLaunchSiteSectionDisplayed_thenShowsTotalLaunchCount() {
+        val launch = TestDataFactory.createLaunchUI()
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchSiteSection(pad = launch.pad)
+            }
+        }
+
+        composeRule.onNodeWithText(launch.pad.totalLaunchCount, substring = true)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenMultipleUpdates_whenUpdatesSectionDisplayed_thenShowsMultipleUpdates() {
+        val launch = TestDataFactory.createLaunchUIWithUpdates()
+
+        composeRule.setContent {
+            AppTheme {
+                UpdatesSection(updates = launch.updates)
+            }
+        }
+
+        composeRule.onNodeWithText("All systems are go for launch tomorrow.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun givenAgency_whenLaunchProviderSectionDisplayed_thenShowsAgencyType() {
+        val launch = TestDataFactory.createLaunchUI()
+        val agency = launch.launchServiceProvider!!
+
+        composeRule.setContent {
+            AppTheme {
+                LaunchProviderSection(agency = agency)
+            }
+        }
+
+        composeRule.onNodeWithText(agency.type)
             .assertIsDisplayed()
     }
 }

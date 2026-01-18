@@ -12,10 +12,6 @@ import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 import com.seancoyle.feature.launch.presentation.launch.model.VidUrlUI
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 
-/**
- * Test data factory for UI tests.
- * Provides realistic fake data for testing Compose UI components.
- */
 object TestDataFactory {
 
     fun createLaunchesUi(

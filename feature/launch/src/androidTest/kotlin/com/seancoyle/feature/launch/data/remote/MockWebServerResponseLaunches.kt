@@ -12,7 +12,7 @@ object MockWebServerResponseLaunches {
           "id": "test-launch-1",
           "url": "https://lldev.thespacedevs.com/2.3.0/launches/test-launch-1/",
           "name": "Falcon 9 Block 5 | Starlink Group 15-12",
-          "response_mode": "list",
+          "response_mode": "detailed",
           "status": {
             "id": 1,
             "name": "Go for Launch",
@@ -37,13 +37,61 @@ object MockWebServerResponseLaunches {
             "credit": "SpaceX"
           },
           "infographic": null,
-          "webcast_live": false
+          "webcast_live": false,
+          "launch_service_provider": {
+            "id": 121,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/121/",
+            "name": "SpaceX",
+            "abbrev": "SpX",
+            "type": {
+              "id": 3,
+              "name": "Commercial"
+            },
+            "country_code": "USA",
+            "description": "Space Exploration Technologies Corp."
+          },
+          "rocket": {
+            "id": 2804,
+            "configuration": {
+              "id": 164,
+              "url": "https://lldev.thespacedevs.com/2.3.0/config/launcher/164/",
+              "name": "Falcon 9",
+              "full_name": "Falcon 9 Block 5",
+              "family": "Falcon",
+              "variant": "Block 5"
+            }
+          },
+          "mission": {
+            "id": 6428,
+            "name": "Starlink Group 15-12",
+            "description": "A batch of satellites for the Starlink mega-constellation.",
+            "type": "Communications",
+            "orbit": {
+              "id": 8,
+              "name": "Low Earth Orbit",
+              "abbrev": "LEO"
+            }
+          },
+          "pad": {
+            "id": 80,
+            "url": "https://lldev.thespacedevs.com/2.3.0/pad/80/",
+            "name": "Space Launch Complex 40",
+            "latitude": "28.56194122",
+            "longitude": "-80.57735736",
+            "location": {
+              "id": 12,
+              "name": "Cape Canaveral, FL, USA",
+              "country_code": "USA"
+            },
+            "total_launch_count": 250,
+            "orbital_launch_attempt_count": 250
+          }
         },
         {
           "id": "test-launch-2",
           "url": "https://lldev.thespacedevs.com/2.3.0/launches/test-launch-2/",
           "name": "Falcon Heavy | Mission 2",
-          "response_mode": "list",
+          "response_mode": "detailed",
           "status": {
             "id": 1,
             "name": "Go for Launch",
@@ -68,7 +116,55 @@ object MockWebServerResponseLaunches {
             "credit": "SpaceX"
           },
           "infographic": null,
-          "webcast_live": true
+          "webcast_live": true,
+          "launch_service_provider": {
+            "id": 121,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/121/",
+            "name": "SpaceX",
+            "abbrev": "SpX",
+            "type": {
+              "id": 3,
+              "name": "Commercial"
+            },
+            "country_code": "USA",
+            "description": "Space Exploration Technologies Corp."
+          },
+          "rocket": {
+            "id": 2805,
+            "configuration": {
+              "id": 165,
+              "url": "https://lldev.thespacedevs.com/2.3.0/config/launcher/165/",
+              "name": "Falcon Heavy",
+              "full_name": "Falcon Heavy",
+              "family": "Falcon",
+              "variant": "Heavy"
+            }
+          },
+          "mission": {
+            "id": 6429,
+            "name": "Mission 2",
+            "description": "A heavy-lift mission.",
+            "type": "Communications",
+            "orbit": {
+              "id": 8,
+              "name": "Low Earth Orbit",
+              "abbrev": "LEO"
+            }
+          },
+          "pad": {
+            "id": 81,
+            "url": "https://lldev.thespacedevs.com/2.3.0/pad/81/",
+            "name": "Launch Complex 39A",
+            "latitude": "28.6",
+            "longitude": "-80.6",
+            "location": {
+              "id": 12,
+              "name": "Kennedy Space Center, FL, USA",
+              "country_code": "USA"
+            },
+            "total_launch_count": 150,
+            "orbital_launch_attempt_count": 150
+          }
         }
       ]
     }""".trimIndent()
@@ -196,10 +292,23 @@ object MockWebServerResponseLaunches {
         "thumbnail_url": "https://example.com/path_to_thumbnail.jpg",
         "credit": "SpaceX"
       },
+      "launch_service_provider": {
+        "id": 121,
+        "url": "https://lldev.thespacedevs.com/2.3.0/agencies/121/",
+        "name": "SpaceX",
+        "abbrev": "SpX",
+        "type": {
+          "id": 3,
+          "name": "Commercial"
+        },
+        "country_code": "USA",
+        "description": "Space Exploration Technologies Corp."
+      },
       "rocket": {
-        "id": 1,
+        "id": 2804,
         "configuration": {
-          "id": 1,
+          "id": 164,
+          "url": "https://lldev.thespacedevs.com/2.3.0/config/launcher/164/",
           "name": "Falcon 9",
           "full_name": "Falcon 9 Block 5",
           "family": "Falcon",
@@ -207,25 +316,29 @@ object MockWebServerResponseLaunches {
         }
       },
       "mission": {
-        "id": 1,
+        "id": 6428,
         "name": "Starlink Group 15-12",
+        "description": "A batch of satellites for the Starlink mega-constellation.",
         "type": "Communications",
         "orbit": {
-          "id": 1,
+          "id": 8,
           "name": "Low Earth Orbit",
           "abbrev": "LEO"
         }
       },
       "pad": {
-        "id": 1,
-        "name": "Launch Complex 39A",
-        "latitude": "28.6",
-        "longitude": "-80.6",
+        "id": 80,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pad/80/",
+        "name": "Space Launch Complex 40",
+        "latitude": "28.56194122",
+        "longitude": "-80.57735736",
         "location": {
-          "id": 1,
-          "name": "Kennedy Space Center",
-          "country_code": "US"
-        }
+          "id": 12,
+          "name": "Cape Canaveral, FL, USA",
+          "country_code": "USA"
+        },
+        "total_launch_count": 250,
+        "orbital_launch_attempt_count": 250
       }
     }""".trimIndent()
 }

@@ -1,14 +1,32 @@
 package com.seancoyle.feature.launch.data.remote
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.core.domain.LaunchesType
+import com.seancoyle.feature.launch.data.repository.LaunchesRemoteDataSource
+import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
+import java.net.HttpURLConnection
+import javax.inject.Inject
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class LaunchesRemoteDataSourceTest {
 
-  /*  @get:Rule(order = 0)
+    @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
@@ -18,7 +36,7 @@ internal class LaunchesRemoteDataSourceTest {
     lateinit var underTest: LaunchesRemoteDataSource
 
     @Before
-    fun init() {
+    fun setup() {
         hiltRule.inject()
     }
 
@@ -28,7 +46,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenAPISuccessful_getUpcomingDetailedLaunchesReturnsNonEmptyList() = runTest {
+    fun givenApiReturnsValidData_whenGetUpcomingDetailedLaunches_thenReturnsNonEmptyList() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -41,8 +59,6 @@ internal class LaunchesRemoteDataSourceTest {
         val detailedResult = result.data
         assertEquals(2, detailedResult.summaries.size)
         assertEquals(2, detailedResult.details.size)
-
-        // Verify first launch summary
         val firstSummary = detailedResult.summaries[0]
         assertEquals("test-launch-1", firstSummary.id)
         assertEquals("Falcon 9 Block 5 | Starlink Group 15-12", firstSummary.missionName)
@@ -50,8 +66,6 @@ internal class LaunchesRemoteDataSourceTest {
         assertEquals("https://example.com/path_to_mission_patch.jpg", firstSummary.imageUrl)
         assertEquals("Go for Launch", firstSummary.status.name)
         assertEquals("Go", firstSummary.status.abbrev)
-
-        // Verify second launch summary
         val secondSummary = detailedResult.summaries[1]
         assertEquals("test-launch-2", secondSummary.id)
         assertEquals("Falcon Heavy | Mission 2", secondSummary.missionName)
@@ -60,7 +74,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenAPISuccessful_getPastDetailedLaunchesReturnsNonEmptyList() = runTest {
+    fun givenApiReturnsValidData_whenGetPastDetailedLaunches_thenReturnsNonEmptyList() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -76,7 +90,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenNetworkFails_getUpcomingDetailedLaunchesThrowsException() = runTest {
+    fun givenNetworkFailsWithNoResponse_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
@@ -88,7 +102,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenNetworkTimesOut_getUpcomingDetailedLaunchesReturnsError() = runTest {
+    fun givenNetworkTimesOut_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setSocketPolicy(SocketPolicy.NO_RESPONSE)
@@ -100,7 +114,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsNotFound_getUpcomingDetailedLaunchesReturnsError() = runTest {
+    fun givenApiReturnsNotFound_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
@@ -112,7 +126,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsUnauthorized_getUpcomingDetailedLaunchesHandlesUnauthorized() = runTest {
+    fun givenApiReturnsUnauthorized_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED)
@@ -124,7 +138,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenServerErrors_getUpcomingDetailedLaunchesHandlesServerError() = runTest {
+    fun givenApiReturnsInternalServerError_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR)
@@ -136,7 +150,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenNetworkFails_getUpcomingDetailedLaunchesReturnsNetworkError() = runTest {
+    fun givenNetworkDisconnectsAfterRequest_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
@@ -148,7 +162,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsForbidden_getUpcomingDetailedLaunchesHandlesForbidden() = runTest {
+    fun givenApiReturnsForbidden_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
@@ -160,7 +174,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsRequestTimeout_getUpcomingDetailedLaunchesHandlesRequestTimeout() = runTest {
+    fun givenApiReturnsRequestTimeout_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT)
@@ -172,7 +186,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsPayloadTooLarge_getUpcomingDetailedLaunchesHandlesPayloadTooLarge() = runTest {
+    fun givenApiReturnsPayloadTooLarge_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
@@ -184,7 +198,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsEmptyList_getUpcomingDetailedLaunchesReturnsEmptyList() = runTest {
+    fun givenApiReturnsEmptyList_whenGetUpcomingDetailedLaunches_thenReturnsEmptyList() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -198,7 +212,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsNullResults_getUpcomingDetailedLaunchesReturnsEmptyList() = runTest {
+    fun givenApiReturnsNullResults_whenGetUpcomingDetailedLaunches_thenReturnsEmptyList() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -212,7 +226,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsPartialData_getUpcomingDetailedLaunchesFiltersInvalidItems() = runTest {
+    fun givenApiReturnsPartialData_whenGetUpcomingDetailedLaunches_thenFiltersInvalidItems() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -227,7 +241,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenApiReturnsMalformedJson_getUpcomingDetailedLaunchesReturnsError() = runTest {
+    fun givenApiReturnsMalformedJson_whenGetUpcomingDetailedLaunches_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -240,21 +254,21 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun whenLaunchesQueryHasFilters_apiIsCalled() = runTest {
+    fun givenQueryWithFilters_whenGetUpcomingDetailedLaunches_thenApiIsCalled() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setBody(MockWebServerResponseLaunches.launchesResponse)
         )
-
         val query = LaunchesQuery(query = "Falcon 9")
+
         val result = underTest.getUpcomingDetailedLaunches(page = 0, launchesQuery = query)
 
         assertTrue(result is LaunchResult.Success)
     }
 
     @Test
-    fun whenApiReturnsMissingImageUrl_usesDefaultImage() = runTest {
+    fun givenApiReturnsMissingImageUrl_whenGetUpcomingDetailedLaunches_thenUsesDefaultImage() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -265,12 +279,11 @@ internal class LaunchesRemoteDataSourceTest {
 
         assertTrue(result is LaunchResult.Success)
         assertEquals(1, result.data.summaries.size)
-        // Should use default image URL when image is null
         assertTrue(result.data.summaries[0].imageUrl.isNotEmpty())
     }
 
     @Test
-    fun whenApiReturnsMultiplePages_handlesCorrectly() = runTest {
+    fun givenApiReturnsMultiplePages_whenGetUpcomingDetailedLaunches_thenHandlesCorrectly() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -284,7 +297,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun getLaunch_whenApiSuccessful_returnsLaunch() = runTest {
+    fun givenApiReturnsValidLaunch_whenGetLaunch_thenReturnsLaunch() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -299,7 +312,7 @@ internal class LaunchesRemoteDataSourceTest {
     }
 
     @Test
-    fun getLaunch_whenApiReturnsError_returnsError() = runTest {
+    fun givenApiReturnsNotFound_whenGetLaunch_thenReturnsError() = runTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
@@ -308,5 +321,58 @@ internal class LaunchesRemoteDataSourceTest {
         val result = underTest.getLaunch(id = "non-existent", launchType = LaunchesType.UPCOMING)
 
         assertTrue(result is LaunchResult.Error)
-    }*/
+    }
+
+    @Test
+    fun givenApiReturnsValidData_whenGetPastLaunch_thenReturnsLaunch() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+                .setBody(MockWebServerResponseLaunches.singleLaunchResponse)
+        )
+
+        val result = underTest.getLaunch(id = "test-launch-1", launchType = LaunchesType.PAST)
+
+        assertTrue(result is LaunchResult.Success)
+        assertNotNull(result.data)
+    }
+
+    @Test
+    fun givenNetworkFailsWithNoResponse_whenGetPastDetailedLaunches_thenReturnsError() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setSocketPolicy(SocketPolicy.NO_RESPONSE)
+        )
+
+        val result = underTest.getPastDetailedLaunches(page = 0, launchesQuery = LaunchesQuery())
+
+        assertTrue(result is LaunchResult.Error)
+    }
+
+    @Test
+    fun givenApiReturnsEmptyList_whenGetPastDetailedLaunches_thenReturnsEmptyList() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+                .setBody(MockWebServerResponseLaunches.emptyLaunchesResponse)
+        )
+
+        val result = underTest.getPastDetailedLaunches(page = 0, launchesQuery = LaunchesQuery())
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(0, result.data.summaries.size)
+    }
+
+    @Test
+    fun givenPageNumber_whenGetUpcomingDetailedLaunches_thenCalculatesCorrectOffset() = runTest {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+                .setBody(MockWebServerResponseLaunches.launchesResponse)
+        )
+
+        val result = underTest.getUpcomingDetailedLaunches(page = 2, launchesQuery = LaunchesQuery())
+
+        assertTrue(result is LaunchResult.Success)
+    }
 }
