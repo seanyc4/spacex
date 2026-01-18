@@ -178,7 +178,7 @@ private fun LaunchesContent(
                 .weight(1f)
         ) { page ->
             when (page) {
-                0 -> LaunchesListContent(
+                LaunchesType.UPCOMING.ordinal -> LaunchesListContent(
                     feedState = upcomingFeedState,
                     state = state,
                     launchesType = LaunchesType.UPCOMING,
@@ -188,7 +188,7 @@ private fun LaunchesContent(
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick
                 )
-                1 -> LaunchesListContent(
+                LaunchesType.PAST.ordinal -> LaunchesListContent(
                     feedState = pastFeedState,
                     state = state,
                     launchesType = LaunchesType.PAST,
