@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -47,16 +49,23 @@ internal fun Launches(
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Use the correct scroll position based on the tab type passed in
     val initialScrollPosition = when (launchesType) {
         LaunchesType.UPCOMING -> state.upcomingScrollPosition
         LaunchesType.PAST -> state.pastScrollPosition
     }
 
-    // Each tab gets its own grid state - using key ensures they're independent
-    val gridState = rememberLazyGridState(
-        initialFirstVisibleItemIndex = initialScrollPosition
-    )
+    // Don't use rememberSaveable - ViewModel is the source of truth
+    val gridState = remember(launchesType) {
+        LazyGridState()
+    }
+
+    // Scroll to position when items are loaded
+    LaunchedEffect(launchesType, launches.itemCount) {
+        if (launches.itemCount > 0 && initialScrollPosition > 0) {
+            gridState.scrollToItem(initialScrollPosition)
+        }
+    }
+
     ObserveScrollPosition(gridState, onUpdateScrollPosition)
 
     LazyVerticalGrid(
