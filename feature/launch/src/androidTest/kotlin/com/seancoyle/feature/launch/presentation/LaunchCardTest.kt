@@ -26,7 +26,7 @@ class LaunchCardTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun launchCard_displaysMissionName() {
+    fun givenMissionName_whenLaunchCardDisplayed_thenShowsMissionName() {
         val missionName = "Starlink Mission"
 
         composeRule.setContent {
@@ -46,7 +46,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysLaunchDate() {
+    fun givenLaunchDate_whenLaunchCardDisplayed_thenShowsLaunchDate() {
         val launchDate = "January 15, 2026"
 
         composeRule.setContent {
@@ -66,7 +66,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysStatusChip() {
+    fun givenSuccessStatus_whenLaunchCardDisplayed_thenShowsStatusChip() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -84,7 +84,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_hasCorrectTestTag() {
+    fun givenLaunchCard_whenDisplayed_thenHasCorrectTestTag() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -102,7 +102,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysSuccessStatus() {
+    fun givenSuccessStatus_whenLaunchCardDisplayed_thenShowsSuccessStatusAbbrev() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -120,7 +120,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysGoStatus() {
+    fun givenGoStatus_whenLaunchCardDisplayed_thenShowsGoStatusAbbrev() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -138,7 +138,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysFailedStatus() {
+    fun givenFailedStatus_whenLaunchCardDisplayed_thenShowsFailedStatusAbbrev() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -156,7 +156,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysTBDStatus() {
+    fun givenTBDStatus_whenLaunchCardDisplayed_thenShowsTBDStatusAbbrev() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -174,7 +174,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_displaysTBCStatus() {
+    fun givenTBCStatus_whenLaunchCardDisplayed_thenShowsTBCStatusAbbrev() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -192,7 +192,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_triggersOnClickWithCorrectId() {
+    fun givenLaunchId_whenLaunchCardClicked_thenTriggersOnClickWithCorrectId() {
         var clickedId: String? = null
         var clickedType: LaunchesType? = null
         val testId = "test-launch-id"
@@ -220,7 +220,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_triggersOnClickWithPastLaunchType() {
+    fun givenPastLaunchType_whenLaunchCardClicked_thenTriggersOnClickWithPastType() {
         var clickedType: LaunchesType? = null
 
         composeRule.setContent {
@@ -242,7 +242,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_hasAccessibleContentDescription() {
+    fun givenMissionName_whenLaunchCardDisplayed_thenHasAccessibleContentDescription() {
         val missionName = "Starlink Mission"
         val launchDate = "January 15, 2026"
 
@@ -267,7 +267,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_statusChipHasMeaningfulContent() {
+    fun givenGoStatus_whenLaunchCardDisplayed_thenStatusChipHasMeaningfulContent() {
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
@@ -286,7 +286,7 @@ class LaunchCardTest {
     }
 
     @Test
-    fun launchCard_handlesLongMissionName() {
+    fun givenLongMissionName_whenLaunchCardDisplayed_thenRendersProperlyWithLongText() {
         val longMissionName = "Very Long Mission Name That Should Be Truncated Properly"
 
         composeRule.setContent {

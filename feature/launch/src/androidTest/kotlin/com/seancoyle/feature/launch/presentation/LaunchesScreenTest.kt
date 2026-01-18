@@ -31,7 +31,7 @@ class LaunchesScreenTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun launchesList_hasCorrectTestTag() {
+    fun givenLaunchesList_whenDisplayed_thenHasCorrectTestTag() {
         val launches = createTestLaunches(count = 3)
         val pagingData = PagingData.from(launches)
 
@@ -63,7 +63,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_displaysMultipleLaunchCards() {
+    fun givenMultipleLaunches_whenListDisplayed_thenShowsMultipleLaunchCards() {
         val launches = listOf(
             createTestLaunchesUi(id = "1", missionName = "Mission Alpha"),
             createTestLaunchesUi(id = "2", missionName = "Mission Beta"),
@@ -100,7 +100,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_scrollsToRevealLaterItems() {
+    fun givenManyLaunches_whenScrolled_thenRevealsLaterItems() {
         val launches = createTestLaunches(count = 60)
         val pagingData = PagingData.from(launches)
 
@@ -137,7 +137,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_invokesClickCallback() {
+    fun givenLaunchCard_whenClicked_thenInvokesClickCallback() {
         var clickedId: String? = null
         var clickedType: LaunchesType? = null
         val testLaunch = createTestLaunchesUi(id = "test-id-123")
@@ -176,10 +176,8 @@ class LaunchesScreenTest {
         assert(clickedType == LaunchesType.UPCOMING) { "Expected UPCOMING but got $clickedType" }
     }
 
-    // ==================== EMPTY STATE TESTS ====================
-
     @Test
-    fun launchesList_emptyState_displaysLazyColumn() {
+    fun givenEmptyLaunchesList_whenDisplayed_thenShowsLazyColumn() {
         val pagingData = PagingData.from(emptyList<LaunchesUi>())
 
         composeRule.setContent {
@@ -215,7 +213,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_respectsScrollPositionFromState() {
+    fun givenScrollPositionInState_whenListDisplayed_thenRespectsScrollPosition() {
         val launches = createTestLaunches(count = 10)
         val pagingData = PagingData.from(launches)
 
@@ -248,7 +246,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_invokesScrollPositionCallback() {
+    fun givenLaunchesList_whenScrolled_thenInvokesScrollPositionCallback() {
         var scrollPosition = -1
         val launches = createTestLaunches(count = 20)
         val pagingData = PagingData.from(launches)
@@ -281,14 +279,14 @@ class LaunchesScreenTest {
 
         // Initial scroll position should be reported after 750ms
         composeRule.waitUntil(1000L) {
-            scrollPosition >0
+            scrollPosition > 0
         }
 
         assert(scrollPosition >= 0) { "Expected scroll position to be tracked" }
     }
 
     @Test
-    fun launchesList_passesUpcomingTypeToCallback() {
+    fun givenUpcomingType_whenLaunchCardClicked_thenPassesUpcomingTypeToCallback() {
         var clickedType: LaunchesType? = null
         val testLaunch = createTestLaunchesUi()
         val pagingData = PagingData.from(listOf(testLaunch))
@@ -323,7 +321,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_passesPastTypeToCallback() {
+    fun givenPastType_whenLaunchCardClicked_thenPassesPastTypeToCallback() {
         var clickedType: LaunchesType? = null
         val testLaunch = createTestLaunchesUi()
         val pagingData = PagingData.from(listOf(testLaunch))
@@ -358,7 +356,7 @@ class LaunchesScreenTest {
     }
 
     @Test
-    fun launchesList_displaysCardsWithDifferentStatuses() {
+    fun givenLaunchesWithDifferentStatuses_whenListDisplayed_thenShowsCardsWithDifferentStatuses() {
         val launches = listOf(
             createTestLaunchesUi(id = "1", missionName = "GO Mission", status = LaunchStatus.GO),
             createTestLaunchesUi(id = "2", missionName = "TBD Mission", status = LaunchStatus.TBD),

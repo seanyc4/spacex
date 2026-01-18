@@ -2,17 +2,20 @@
 
 package com.seancoyle.feature.launch.presentation.launches
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -94,20 +97,49 @@ private fun LaunchesContent(
     modifier: Modifier = Modifier,
 ) {
     val tabs = LaunchesTab.provideTabs()
-    val selectedTabIndex = when (state.launchesType) {
-        LaunchesType.UPCOMING -> 0
-        LaunchesType.PAST -> 1
+    val pagerState = rememberPagerState(
+        initialPage = when (state.launchesType) {
+            LaunchesType.UPCOMING -> 0
+            LaunchesType.PAST -> 1
+        }
+    ) {
+        tabs.size
+    }
+
+    // Sync pager state with external state changes
+    LaunchedEffect(state.launchesType) {
+        val targetPage = when (state.launchesType) {
+            LaunchesType.UPCOMING -> 0
+            LaunchesType.PAST -> 1
+        }
+        if (pagerState.currentPage != targetPage) {
+            pagerState.animateScrollToPage(targetPage)
+        }
+    }
+
+    // Sync external state with pager gestures
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            val launchType = when (pagerState.currentPage) {
+                0 -> LaunchesType.UPCOMING
+                1 -> LaunchesType.PAST
+                else -> LaunchesType.UPCOMING
+            }
+            if (state.launchesType != launchType) {
+                onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+            }
+        }
     }
 
     Column(modifier = modifier.fillMaxSize()) {
         SecondaryTabRow(
-            selectedTabIndex = selectedTabIndex,
+            selectedTabIndex = pagerState.currentPage,
             containerColor = AppTheme.colors.background
         ) {
             tabs.forEachIndexed { index, tab ->
-                var testTag: String
-                var contentDesc: String
-                var launchType: LaunchesType
+                val testTag: String
+                val contentDesc: String
+                val launchType: LaunchesType
 
                 if (index == 0) {
                     testTag = LaunchesTestTags.UPCOMING_TAB
@@ -119,20 +151,19 @@ private fun LaunchesContent(
                     launchType = LaunchesType.PAST
                 }
                 Tab(
-                    selected = selectedTabIndex == index,
+                    selected = pagerState.currentPage == index,
                     onClick = {
                         onEvent(LaunchesEvents.TabSelectedEvent(launchType))
                     },
                     text = {
                         AppText.titleSmall(
                             text = stringResource(tab.title),
-                            color = if (selectedTabIndex == index) {
+                            color = if (pagerState.currentPage == index) {
                                 AppTheme.colors.onSurface
                             } else {
                                 AppTheme.colors.onSurface.copy(alpha = 0.3f)
-                            },
-
-                            )
+                            }
+                        )
                     },
                     modifier = Modifier
                         .testTag(testTag)
@@ -140,11 +171,14 @@ private fun LaunchesContent(
                 )
             }
         }
-        Box(modifier = Modifier.weight(1f)) {
-            // Render BOTH lists but only show the currently selected one
-            // This ensures each list maintains its own scroll position and paging state
-            if (state.launchesType == LaunchesType.UPCOMING) {
-                LaunchesListContent(
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) { page ->
+            when (page) {
+                0 -> LaunchesListContent(
                     feedState = upcomingFeedState,
                     state = state,
                     launchesType = LaunchesType.UPCOMING,
@@ -154,10 +188,7 @@ private fun LaunchesContent(
                     onUpdateScrollPosition = onUpdateScrollPosition,
                     onClick = onClick
                 )
-            }
-
-            if (state.launchesType == LaunchesType.PAST) {
-                LaunchesListContent(
+                1 -> LaunchesListContent(
                     feedState = pastFeedState,
                     state = state,
                     launchesType = LaunchesType.PAST,

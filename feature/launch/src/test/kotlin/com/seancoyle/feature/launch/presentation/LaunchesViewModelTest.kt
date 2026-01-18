@@ -199,4 +199,81 @@ class LaunchesViewModelTest {
         assertEquals("SpaceX", underTest.screenState.query)
         assertEquals(LaunchStatus.SUCCESS, underTest.screenState.launchStatus)
     }
+
+    @Test
+    fun `GIVEN pull to refresh WHEN event fired THEN clears query and status`() = runTest {
+        underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
+            launchStatus = LaunchStatus.SUCCESS,
+            query = "SpaceX"
+        ))
+        testScheduler.advanceUntilIdle()
+
+        underTest.onEvent(LaunchesEvents.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+
+        assertEquals("", underTest.screenState.query)
+        assertEquals(LaunchStatus.ALL, underTest.screenState.launchStatus)
+    }
+
+    @Test
+    fun `GIVEN pull to refresh WHEN event fired THEN sets isRefreshing true`() = runTest {
+        underTest.onEvent(LaunchesEvents.PullToRefreshEvent)
+        testScheduler.advanceUntilIdle()
+
+        assertEquals(true, underTest.screenState.isRefreshing)
+    }
+
+    @Test
+    fun `GIVEN PAST tab selected WHEN onRetryFetch THEN sends Retry event to past channel`() = runTest {
+        underTest.onEvent(LaunchesEvents.TabSelectedEvent(LaunchesType.PAST))
+        testScheduler.advanceUntilIdle()
+
+        underTest.pastPagingEvents.test {
+            underTest.onEvent(LaunchesEvents.RetryFetchEvent)
+            testScheduler.advanceUntilIdle()
+
+            assertEquals(PagingEvents.Retry, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `GIVEN multiple tab switches WHEN performed THEN preserves all scroll positions`() = runTest {
+        underTest.updateScrollPosition(LaunchesType.UPCOMING, 100)
+        underTest.onEvent(LaunchesEvents.TabSelectedEvent(LaunchesType.PAST))
+        testScheduler.advanceUntilIdle()
+
+        underTest.updateScrollPosition(LaunchesType.PAST, 200)
+        underTest.onEvent(LaunchesEvents.TabSelectedEvent(LaunchesType.UPCOMING))
+        testScheduler.advanceUntilIdle()
+
+        assertEquals(100, underTest.screenState.upcomingScrollPosition)
+        assertEquals(200, underTest.screenState.pastScrollPosition)
+    }
+
+    @Test
+    fun `GIVEN launchesQueryState WHEN status is ALL THEN passes null to query`() = runTest {
+        underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
+            launchStatus = LaunchStatus.ALL,
+            query = ""
+        ))
+        testScheduler.advanceUntilIdle()
+
+        val queryState = underTest.launchesQueryState.value
+        assertEquals("", queryState.query)
+        assertEquals(null, queryState.status)
+    }
+
+    @Test
+    fun `GIVEN launchesQueryState WHEN status is not ALL THEN passes status to query`() = runTest {
+        underTest.onEvent(LaunchesEvents.UpdateFilterStateEvent(
+            launchStatus = LaunchStatus.SUCCESS,
+            query = "Test"
+        ))
+        testScheduler.advanceUntilIdle()
+
+        val queryState = underTest.launchesQueryState.value
+        assertEquals("Test", queryState.query)
+        assertEquals(LaunchStatus.SUCCESS, queryState.status)
+    }
 }

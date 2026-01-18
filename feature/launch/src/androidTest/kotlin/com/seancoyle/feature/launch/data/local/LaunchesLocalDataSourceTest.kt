@@ -1,17 +1,39 @@
 package com.seancoyle.feature.launch.data.local
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.seancoyle.core.common.result.LaunchResult
+import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
+import com.seancoyle.feature.launch.di.PastLaunches
+import com.seancoyle.feature.launch.domain.model.Configuration
+import com.seancoyle.feature.launch.domain.model.Image
+import com.seancoyle.feature.launch.domain.model.Launch
+import com.seancoyle.feature.launch.domain.model.Mission
+import com.seancoyle.feature.launch.domain.model.Pad
+import com.seancoyle.feature.launch.domain.model.Rocket
+import com.seancoyle.feature.launch.domain.model.Status
+import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4ClassRunner::class)
 internal class LaunchesLocalDataSourceTest {
 
-  /*  @get:Rule(order = 0)
+    @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
+    @PastLaunches
     lateinit var underTest: DetailLocalDataSource
 
     @Before
@@ -22,6 +44,253 @@ internal class LaunchesLocalDataSourceTest {
     @After
     fun tearDown() = runTest {
         underTest.deleteAllLaunchDetails()
+    }
+
+    @Test
+    fun givenLaunchDetail_whenUpserted_thenCanBeRetrieved() = runTest {
+        val testLaunch = createTestLaunch(id = "launch-1")
+
+        val upsertResult = underTest.upsertLaunchDetail(testLaunch)
+
+        assertTrue(upsertResult is LaunchResult.Success)
+        val getResult = underTest.getLaunchDetail(id = "launch-1")
+        assertTrue(getResult is LaunchResult.Success)
+        val retrievedLaunch = getResult.data
+        assertNotNull(retrievedLaunch)
+        assertEquals(testLaunch.id, retrievedLaunch.id)
+        assertEquals(testLaunch.missionName, retrievedLaunch.missionName)
+        assertEquals(testLaunch.net, retrievedLaunch.net)
+        assertEquals(testLaunch.status.name, retrievedLaunch.status.name)
+        assertEquals(testLaunch.status.abbrev, retrievedLaunch.status.abbrev)
+    }
+
+    @Test
+    fun givenExistingLaunch_whenUpsertedWithSameId_thenUpdatesExistingRecord() = runTest {
+        val originalLaunch = createTestLaunch(id = "launch-1", name = "Original Name")
+        underTest.upsertLaunchDetail(originalLaunch)
+        val updatedLaunch = originalLaunch.copy(missionName = "Updated Name")
+
+        val upsertResult = underTest.upsertLaunchDetail(updatedLaunch)
+
+        assertTrue(upsertResult is LaunchResult.Success)
+        val getResult = underTest.getLaunchDetail(id = "launch-1")
+        assertTrue(getResult is LaunchResult.Success)
+        assertEquals("Updated Name", getResult.data?.missionName)
+    }
+
+    @Test
+    fun givenMultipleLaunches_whenUpsertAll_thenAllAreInserted() = runTest {
+        val testLaunches = createTestLaunchList(10)
+
+        val result = underTest.upsertAllLaunchDetails(testLaunches)
+
+        assertTrue(result is LaunchResult.Success)
+        val countResult = underTest.getTotalEntries()
+        assertTrue(countResult is LaunchResult.Success)
+        assertEquals(10, countResult.data)
+    }
+
+    @Test
+    fun givenDuplicateLaunches_whenUpsertAll_thenUpdatesExisting() = runTest {
+        val initialLaunches = createTestLaunchList(5)
+        underTest.upsertAllLaunchDetails(initialLaunches)
+        val updatedLaunches = initialLaunches.map { it.copy(missionName = "Updated ${it.missionName}") }
+
+        val result = underTest.upsertAllLaunchDetails(updatedLaunches)
+
+        assertTrue(result is LaunchResult.Success)
+        val countResult = underTest.getTotalEntries()
+        assertTrue(countResult is LaunchResult.Success)
+        assertEquals(5, countResult.data)
+        val firstLaunch = underTest.getLaunchDetail("test-1")
+        assertTrue(firstLaunch is LaunchResult.Success)
+        assertTrue(firstLaunch.data?.missionName?.startsWith("Updated") ?: false)
+    }
+
+    @Test
+    fun givenEmptyList_whenUpsertAll_thenReturnsSuccess() = runTest {
+        val result = underTest.upsertAllLaunchDetails(emptyList())
+
+        assertTrue(result is LaunchResult.Success)
+    }
+
+    @Test
+    fun givenNonExistentId_whenGetLaunchDetail_thenReturnsSuccessWithNull() = runTest {
+        val result = underTest.getLaunchDetail(id = "non-existent-id")
+
+        assertTrue(result is LaunchResult.Success)
+        assertNull(result.data)
+    }
+
+    @Test
+    fun givenEmptyDatabase_whenGetTotalEntries_thenReturnsZero() = runTest {
+        val result = underTest.getTotalEntries()
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(0, result.data)
+    }
+
+    @Test
+    fun givenMultipleLaunches_whenGetTotalEntries_thenReturnsCorrectCount() = runTest {
+        val testLaunches = createTestLaunchList(25)
+        underTest.upsertAllLaunchDetails(testLaunches)
+
+        val result = underTest.getTotalEntries()
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(25, result.data)
+    }
+
+    @Test
+    fun givenDuplicatesUpserted_whenGetTotalEntries_thenDoesNotDoubleCount() = runTest {
+        val testLaunches = createTestLaunchList(5)
+        underTest.upsertAllLaunchDetails(testLaunches)
+        underTest.upsertAllLaunchDetails(testLaunches)
+
+        val result = underTest.getTotalEntries()
+
+        assertTrue(result is LaunchResult.Success)
+        assertEquals(5, result.data)
+    }
+
+    @Test
+    fun givenLaunchesExist_whenDeleteAll_thenRemovesAllEntries() = runTest {
+        val testLaunches = createTestLaunchList(20)
+        underTest.upsertAllLaunchDetails(testLaunches)
+        val preDeleteCount = underTest.getTotalEntries()
+        assertTrue(preDeleteCount is LaunchResult.Success)
+        assertEquals(20, preDeleteCount.data)
+
+        val deleteResult = underTest.deleteAllLaunchDetails()
+
+        assertTrue(deleteResult is LaunchResult.Success)
+        val postDeleteCount = underTest.getTotalEntries()
+        assertTrue(postDeleteCount is LaunchResult.Success)
+        assertEquals(0, postDeleteCount.data)
+    }
+
+    @Test
+    fun givenEmptyDatabase_whenDeleteAll_thenReturnsSuccess() = runTest {
+        val result = underTest.deleteAllLaunchDetails()
+
+        assertTrue(result is LaunchResult.Success)
+    }
+
+    @Test
+    fun givenLaunchExists_whenDeleteAllAndGetLaunchDetail_thenReturnsNull() = runTest {
+        val testLaunch = createTestLaunch(id = "launch-1")
+        underTest.upsertLaunchDetail(testLaunch)
+
+        underTest.deleteAllLaunchDetails()
+        val result = underTest.getLaunchDetail(id = "launch-1")
+
+        assertTrue(result is LaunchResult.Success)
+        assertNull(result.data)
+    }
+
+    @Test
+    fun givenInitialLaunches_whenRefreshLaunches_thenReplacesAllData() = runTest {
+        val initialLaunches = createTestLaunchList(10)
+        underTest.upsertAllLaunchDetails(initialLaunches)
+        val newLaunches = createTestLaunchList(5).map { it.copy(id = "new-${it.id}") }
+
+        underTest.refreshLaunches(newLaunches)
+
+        val countResult = underTest.getTotalEntries()
+        assertTrue(countResult is LaunchResult.Success)
+        assertEquals(5, countResult.data)
+        val oldLaunch = underTest.getLaunchDetail("test-1")
+        assertTrue(oldLaunch is LaunchResult.Success)
+        assertNull(oldLaunch.data)
+        val newLaunch = underTest.getLaunchDetail("new-test-1")
+        assertTrue(newLaunch is LaunchResult.Success)
+        assertNotNull(newLaunch.data)
+    }
+
+    @Test
+    fun givenLargeDataSet_whenUpsertAll_thenHandlesCorrectly() = runTest {
+        val largeLaunchList = createTestLaunchList(200)
+
+        val upsertResult = underTest.upsertAllLaunchDetails(largeLaunchList)
+
+        assertTrue(upsertResult is LaunchResult.Success)
+        val countResult = underTest.getTotalEntries()
+        assertTrue(countResult is LaunchResult.Success)
+        assertEquals(200, countResult.data)
+    }
+
+    @Test
+    fun givenLargeDataSet_whenRefreshLaunches_thenReplacesCorrectly() = runTest {
+        val initialData = createTestLaunchList(100)
+        underTest.upsertAllLaunchDetails(initialData)
+        val newData = createTestLaunchList(200).map { it.copy(id = "new-${it.id}") }
+
+        underTest.refreshLaunches(newData)
+
+        val countResult = underTest.getTotalEntries()
+        assertTrue(countResult is LaunchResult.Success)
+        assertEquals(200, countResult.data)
+    }
+
+    @Test
+    fun givenSpecialCharactersInId_whenUpsertLaunchDetail_thenHandlesCorrectly() = runTest {
+        val testLaunch = createTestLaunch(id = "launch-special-123")
+
+        val result = underTest.upsertLaunchDetail(testLaunch)
+
+        assertTrue(result is LaunchResult.Success)
+        val getResult = underTest.getLaunchDetail("launch-special-123")
+        assertTrue(getResult is LaunchResult.Success)
+        assertNotNull(getResult.data)
+    }
+
+    @Test
+    fun givenMultipleRefreshes_whenPerformed_thenMaintainsDataIntegrity() = runTest {
+        repeat(5) { iteration ->
+            val launches = createTestLaunchList(10).map { it.copy(id = "iteration-$iteration-${it.id}") }
+
+            underTest.refreshLaunches(launches)
+
+            val count = underTest.getTotalEntries()
+            assertTrue(count is LaunchResult.Success)
+            assertEquals(10, count.data)
+        }
+    }
+
+    @Test
+    fun givenLaunchesWithDifferentStatuses_whenUpsertAll_thenPreservesStatuses() = runTest {
+        val launches = listOf(
+            createTestLaunch(id = "launch-1", status = Status(1, "Go for Launch", "Go", "Launch is confirmed")),
+            createTestLaunch(id = "launch-2", status = Status(2, "TBD", "TBD", "To be determined")),
+            createTestLaunch(id = "launch-3", status = Status(3, "Success", "Success", "Launch was successful")),
+            createTestLaunch(id = "launch-4", status = Status(4, "Failure", "Failed", "Launch failed"))
+        )
+
+        val result = underTest.upsertAllLaunchDetails(launches)
+
+        assertTrue(result is LaunchResult.Success)
+        val count = underTest.getTotalEntries()
+        assertTrue(count is LaunchResult.Success)
+        assertEquals(4, count.data)
+        val launch1 = underTest.getLaunchDetail("launch-1")
+        assertTrue(launch1 is LaunchResult.Success)
+        assertEquals("Go for Launch", launch1.data?.status?.name)
+        val launch3 = underTest.getLaunchDetail("launch-3")
+        assertTrue(launch3 is LaunchResult.Success)
+        assertEquals("Success", launch3.data?.status?.name)
+    }
+
+    @Test
+    fun givenVeryLongMissionName_whenUpsertLaunchDetail_thenHandlesCorrectly() = runTest {
+        val longName = "A".repeat(500)
+        val testLaunch = createTestLaunch(id = "long-name", name = longName)
+
+        val result = underTest.upsertLaunchDetail(testLaunch)
+
+        assertTrue(result is LaunchResult.Success)
+        val retrieved = underTest.getLaunchDetail("long-name")
+        assertTrue(retrieved is LaunchResult.Success)
+        assertEquals(longName, retrieved.data?.missionName)
     }
 
     private fun createTestLaunch(
@@ -148,275 +417,4 @@ internal class LaunchesLocalDataSourceTest {
             )
         }
     }
-
-    @Test
-    fun upsertLaunchDetail_thenGetLaunchDetail_returnsSuccess() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-1")
-
-        val upsertResult = underTest.upsertLaunchDetail(testLaunch)
-        assertTrue(upsertResult is LaunchResult.Success)
-
-        val getResult = underTest.getLaunchDetail(id = "launch-1")
-        assertTrue(getResult is LaunchResult.Success)
-        val retrievedLaunch = getResult.data
-        assertNotNull(retrievedLaunch)
-        assertEquals(testLaunch.id, retrievedLaunch.id)
-        assertEquals(testLaunch.missionName, retrievedLaunch.missionName)
-        assertEquals(testLaunch.net, retrievedLaunch.net)
-        assertEquals(testLaunch.status.name, retrievedLaunch.status.name)
-        assertEquals(testLaunch.status.abbrev, retrievedLaunch.status.abbrev)
-    }
-
-    @Test
-    fun upsertSameLaunchTwice_updatesExistingRecord() = runTest {
-        val originalLaunch = createTestLaunch(id = "launch-1", name = "Original Name")
-        underTest.upsertLaunchDetail(originalLaunch)
-
-        val updatedLaunch = originalLaunch.copy(missionName = "Updated Name")
-        val upsertResult = underTest.upsertLaunchDetail(updatedLaunch)
-        assertTrue(upsertResult is LaunchResult.Success)
-
-        val getResult = underTest.getLaunchDetail(id = "launch-1")
-        assertTrue(getResult is LaunchResult.Success)
-        assertEquals("Updated Name", getResult.data?.missionName)
-    }
-
-    @Test
-    fun upsertAllLaunchDetails_insertsSuccessfully() = runTest {
-        val testLaunches = createTestLaunchList(10)
-
-        val result = underTest.upsertAllLaunchDetails(testLaunches)
-
-        assertTrue(result is LaunchResult.Success)
-
-        val countResult = underTest.getTotalEntries()
-        assertTrue(countResult is LaunchResult.Success)
-        assertEquals(10, countResult.data)
-    }
-
-    @Test
-    fun upsertAllLaunchDetails_withDuplicates_updatesExisting() = runTest {
-        val initialLaunches = createTestLaunchList(5)
-        underTest.upsertAllLaunchDetails(initialLaunches)
-
-        val updatedLaunches = initialLaunches.map { it.copy(missionName = "Updated ${it.missionName}") }
-        val result = underTest.upsertAllLaunchDetails(updatedLaunches)
-
-        assertTrue(result is LaunchResult.Success)
-
-        val countResult = underTest.getTotalEntries()
-        assertTrue(countResult is LaunchResult.Success)
-        assertEquals(5, countResult.data)
-
-        val firstLaunch = underTest.getLaunchDetail("test-1")
-        assertTrue(firstLaunch is LaunchResult.Success)
-        assertTrue(firstLaunch.data?.missionName?.startsWith("Updated") ?: false)
-    }
-
-    @Test
-    fun upsertAllLaunchDetails_emptyList_returnsSuccess() = runTest {
-        val result = underTest.upsertAllLaunchDetails(emptyList())
-
-        assertTrue(result is LaunchResult.Success)
-    }
-
-    @Test
-    fun getLaunchDetail_nonExistent_returnsSuccessWithNull() = runTest {
-        val result = underTest.getLaunchDetail(id = "non-existent-id")
-
-        assertTrue(result is LaunchResult.Success)
-        assertNull(result.data)
-    }
-
-    @Test
-    fun getTotalEntries_withNoData_returnsZero() = runTest {
-        val result = underTest.getTotalEntries()
-
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(0, result.data)
-    }
-
-    @Test
-    fun getTotalEntries_afterInsertingMultiple_returnsCorrectCount() = runTest {
-        val testLaunches = createTestLaunchList(25)
-        underTest.upsertAllLaunchDetails(testLaunches)
-
-        val result = underTest.getTotalEntries()
-
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(25, result.data)
-    }
-
-    @Test
-    fun getTotalEntries_afterUpsertingDuplicates_doesNotDoubleCount() = runTest {
-        val testLaunches = createTestLaunchList(5)
-        underTest.upsertAllLaunchDetails(testLaunches)
-        underTest.upsertAllLaunchDetails(testLaunches)
-
-        val result = underTest.getTotalEntries()
-
-        assertTrue(result is LaunchResult.Success)
-        assertEquals(5, result.data)
-    }
-
-    @Test
-    fun deleteAllLaunchDetails_removesAllEntries() = runTest {
-        val testLaunches = createTestLaunchList(20)
-        underTest.upsertAllLaunchDetails(testLaunches)
-
-        val preDeleteCount = underTest.getTotalEntries()
-        assertTrue(preDeleteCount is LaunchResult.Success)
-        assertEquals(20, preDeleteCount.data)
-
-        val deleteResult = underTest.deleteAllLaunchDetails()
-        assertTrue(deleteResult is LaunchResult.Success)
-
-        val postDeleteCount = underTest.getTotalEntries()
-        assertTrue(postDeleteCount is LaunchResult.Success)
-        assertEquals(0, postDeleteCount.data)
-    }
-
-    @Test
-    fun deleteAllLaunchDetails_onEmptyDatabase_returnsSuccess() = runTest {
-        val result = underTest.deleteAllLaunchDetails()
-
-        assertTrue(result is LaunchResult.Success)
-    }
-
-    @Test
-    fun deleteAllLaunchDetails_thenGetLaunchDetail_returnsNull() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-1")
-        underTest.upsertLaunchDetail(testLaunch)
-
-        underTest.deleteAllLaunchDetails()
-
-        val result = underTest.getLaunchDetail(id = "launch-1")
-        assertTrue(result is LaunchResult.Success)
-        assertNull(result.data)
-    }
-
-    @Test
-    fun refreshLaunches_replacesAllData() = runTest {
-        val initialLaunches = createTestLaunchList(10)
-        underTest.upsertAllLaunchDetails(initialLaunches)
-
-        val newLaunches = createTestLaunchList(5).map {
-            it.copy(id = "new-${it.id}")
-        }
-        underTest.refreshLaunches(newLaunches)
-
-        val countResult = underTest.getTotalEntries()
-        assertTrue(countResult is LaunchResult.Success)
-        assertEquals(5, countResult.data)
-
-        val oldLaunch = underTest.getLaunchDetail("test-1")
-        assertTrue(oldLaunch is LaunchResult.Success)
-        assertNull(oldLaunch.data)
-
-        val newLaunch = underTest.getLaunchDetail("new-test-1")
-        assertTrue(newLaunch is LaunchResult.Success)
-        assertNotNull(newLaunch.data)
-    }
-
-    @Test
-    fun upsertAllLaunchDetails_largeDataSet_handlesCorrectly() = runTest {
-        val largeLaunchList = createTestLaunchList(200)
-
-        val upsertResult = underTest.upsertAllLaunchDetails(largeLaunchList)
-        assertTrue(upsertResult is LaunchResult.Success)
-
-        val countResult = underTest.getTotalEntries()
-        assertTrue(countResult is LaunchResult.Success)
-        assertEquals(200, countResult.data)
-    }
-
-    @Test
-    fun refreshLaunches_largeDataSet_replacesCorrectly() = runTest {
-        val initialData = createTestLaunchList(100)
-        underTest.upsertAllLaunchDetails(initialData)
-
-        val newData = createTestLaunchList(200).map { it.copy(id = "new-${it.id}") }
-        underTest.refreshLaunches(newData)
-
-        val countResult = underTest.getTotalEntries()
-        assertTrue(countResult is LaunchResult.Success)
-        assertEquals(200, countResult.data)
-    }
-
-    @Test
-    fun upsertLaunchDetail_withSpecialCharactersInId_handlesCorrectly() = runTest {
-        val testLaunch = createTestLaunch(id = "launch-special-123")
-
-        val result = underTest.upsertLaunchDetail(testLaunch)
-        assertTrue(result is LaunchResult.Success)
-
-        val getResult = underTest.getLaunchDetail("launch-special-123")
-        assertTrue(getResult is LaunchResult.Success)
-        assertNotNull(getResult.data)
-    }
-
-    @Test
-    fun multipleRefreshes_maintainsDataIntegrity() = runTest {
-        repeat(5) { iteration ->
-            val launches = createTestLaunchList(10).map {
-                it.copy(id = "iteration-$iteration-${it.id}")
-            }
-            underTest.refreshLaunches(launches)
-
-            val count = underTest.getTotalEntries()
-            assertTrue(count is LaunchResult.Success)
-            assertEquals(10, count.data)
-        }
-    }
-
-    @Test
-    fun upsertLaunchesWithDifferentStatuses_handlesCorrectly() = runTest {
-        val launches = listOf(
-            createTestLaunch(
-                id = "launch-1",
-                status = Status(1, "Go for Launch", "Go", "Launch is confirmed")
-            ),
-            createTestLaunch(
-                id = "launch-2",
-                status = Status(2, "TBD", "TBD", "To be determined")
-            ),
-            createTestLaunch(
-                id = "launch-3",
-                status = Status(3, "Success", "Success", "Launch was successful")
-            ),
-            createTestLaunch(
-                id = "launch-4",
-                status = Status(4, "Failure", "Failed", "Launch failed")
-            )
-        )
-
-        val result = underTest.upsertAllLaunchDetails(launches)
-        assertTrue(result is LaunchResult.Success)
-
-        val count = underTest.getTotalEntries()
-        assertTrue(count is LaunchResult.Success)
-        assertEquals(4, count.data)
-
-        // Verify each status was preserved
-        val launch1 = underTest.getLaunchDetail("launch-1")
-        assertTrue(launch1 is LaunchResult.Success)
-        assertEquals("Go for Launch", launch1.data?.status?.name)
-
-        val launch3 = underTest.getLaunchDetail("launch-3")
-        assertTrue(launch3 is LaunchResult.Success)
-        assertEquals("Success", launch3.data?.status?.name)
-    }
-
-    @Test
-    fun upsertLaunchWithVeryLongMissionName_handlesCorrectly() = runTest {
-        val longName = "A".repeat(500)
-        val testLaunch = createTestLaunch(id = "long-name", name = longName)
-
-        val result = underTest.upsertLaunchDetail(testLaunch)
-        assertTrue(result is LaunchResult.Success)
-
-        val retrieved = underTest.getLaunchDetail("long-name")
-        assertTrue(retrieved is LaunchResult.Success)
-        assertEquals(longName, retrieved.data?.missionName)
-    }*/
 }

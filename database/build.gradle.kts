@@ -28,4 +28,8 @@ dependencies {
     implementation(libs.room.paging)
     implementation(libs.kotlin.serialization)
     ksp(libs.room.compiler)
+
+    androidTestImplementation(projects.core.test)
+    androidTestImplementation(libs.bundles.unitTestBundle)
+    androidTestImplementation(libs.bundles.androidTestBundle)
 }

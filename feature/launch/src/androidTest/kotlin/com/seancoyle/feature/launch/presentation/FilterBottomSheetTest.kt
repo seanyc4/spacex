@@ -2,6 +2,7 @@ package com.seancoyle.feature.launch.presentation
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -23,7 +24,7 @@ class FilterBottomSheetTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun filterBottomSheet_displaysFilterOptionsTitle() {
+    fun givenFilterBottomSheet_whenDisplayed_thenShowsFilterOptionsTitle() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -40,7 +41,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_displaysSearchSection() {
+    fun givenFilterBottomSheet_whenDisplayed_thenShowsSearchSection() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -50,7 +51,7 @@ class FilterBottomSheetTest {
             }
         }
 
-        composeRule.onNodeWithText("Search")
+        composeRule.onAllNodesWithText("Search")[0]
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag(LaunchesTestTags.FILTER_SEARCH)
@@ -58,7 +59,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_displaysStatusFilterSection() {
+    fun givenFilterBottomSheet_whenDisplayed_thenShowsStatusFilterSection() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -73,7 +74,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_displaysAllStatusChips() {
+    fun givenFilterBottomSheet_whenDisplayed_thenShowsAllStatusChips() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -93,7 +94,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_searchInputUpdatesState() {
+    fun givenFilterBottomSheet_whenSearchInputUpdated_thenTriggersQueryChangedEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -116,7 +117,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_showsExistingQuery() {
+    fun givenExistingQuery_whenFilterBottomSheetDisplayed_thenShowsExistingQuery() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -131,7 +132,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_clearButtonAppearsWhenQueryExists() {
+    fun givenQueryExists_whenFilterBottomSheetDisplayed_thenShowsClearButton() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -147,7 +148,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_statusChipClickTriggersEvent() {
+    fun givenFilterBottomSheet_whenStatusChipClicked_thenTriggersStatusSelectedEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -170,7 +171,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_selectedStatusChipIsHighlighted() {
+    fun givenSelectedStatus_whenFilterBottomSheetDisplayed_thenHighlightsSelectedStatusChip() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -186,7 +187,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_clearAllButtonVisibleWhenFiltersActive() {
+    fun givenActiveFilters_whenFilterBottomSheetDisplayed_thenShowsClearAllButton() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -204,7 +205,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_clearAllButtonClickTriggersEvent() {
+    fun givenActiveFilters_whenClearAllClicked_thenTriggersClearAllFiltersEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -223,27 +224,26 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_applyButtonTriggersEvent() {
+    fun givenFilterBottomSheet_whenApplyButtonClicked_thenTriggersApplyFiltersEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
-                    state = FilterBottomSheetState(),
+                    state = FilterBottomSheetState(query = "Test"),
                     onEvent = { events.add(it) }
                 )
             }
         }
 
-        // Click the apply button (shows "Search" when no active filters)
-        composeRule.onNodeWithText("Search")
+        composeRule.onNodeWithText("Apply Filters")
             .performClick()
 
         assert(events.any { it is FilterBottomSheetEvent.ApplyFilters })
     }
 
     @Test
-    fun filterBottomSheet_cancelButtonTriggersEvent() {
+    fun givenFilterBottomSheet_whenCancelButtonClicked_thenTriggersDismissEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -262,7 +262,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_applyButtonShowsApplyFiltersWhenActive() {
+    fun givenActiveFilters_whenFilterBottomSheetDisplayed_thenShowsApplyFiltersButtonText() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -280,7 +280,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_displaysRecentSearches() {
+    fun givenRecentSearches_whenFilterBottomSheetDisplayed_thenShowsRecentSearches() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -301,7 +301,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_recentSearchClickTriggersEvent() {
+    fun givenRecentSearches_whenRecentSearchClicked_thenTriggersRecentSearchSelectedEvent() {
         val events = mutableListOf<FilterBottomSheetEvent>()
 
         composeRule.setContent {
@@ -323,7 +323,7 @@ class FilterBottomSheetTest {
     }
 
     @Test
-    fun filterBottomSheet_expandedLayoutDisplaysBothColumns() {
+    fun givenExpandedLayout_whenFilterBottomSheetDisplayed_thenShowsBothColumns() {
         composeRule.setContent {
             AppTheme {
                 ExpandedFilterContent(
@@ -333,15 +333,14 @@ class FilterBottomSheetTest {
             }
         }
 
-        // Both search and status sections should be visible
-        composeRule.onNodeWithText("Search")
+        composeRule.onAllNodesWithText("Search")[0]
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filter by Launch Status")
             .assertIsDisplayed()
     }
 
     @Test
-    fun filterBottomSheet_compactLayoutDisplaysVerticalStack() {
+    fun givenCompactLayout_whenFilterBottomSheetDisplayed_thenShowsVerticalStack() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -351,15 +350,14 @@ class FilterBottomSheetTest {
             }
         }
 
-        // Both sections should be visible in vertical arrangement
-        composeRule.onNodeWithText("Search")
+        composeRule.onAllNodesWithText("Search")[0]
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filter by Launch Status")
             .assertIsDisplayed()
     }
 
     @Test
-    fun filterBottomSheet_showsFilterCountWhenFiltersActive() {
+    fun givenActiveFilters_whenFilterBottomSheetDisplayed_thenShowsFilterCount() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
@@ -372,13 +370,12 @@ class FilterBottomSheetTest {
             }
         }
 
-        // Should show "2" in badge (query + status)
         composeRule.onNodeWithContentDescription("2 active filters")
             .assertIsDisplayed()
     }
 
     @Test
-    fun filterBottomSheet_statusChipsHaveContentDescriptions() {
+    fun givenFilterBottomSheet_whenDisplayed_thenStatusChipsHaveContentDescriptions() {
         composeRule.setContent {
             AppTheme {
                 CompactFilterContent(
