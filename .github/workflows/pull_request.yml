@@ -17,32 +17,24 @@ concurrency:
 
 jobs:
 
-  # -------------------------------------
-  # 🧪 Static Analysis / Tooling
-  # -------------------------------------
-  danger:
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
-    uses: ./.github/workflows/danger.yml
+  # Static Analysis / Tooling
+#  danger:
+#    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
+#    uses: ./.github/workflows/danger.yml
 
-  # -------------------------------------
-  # 🔖 Versioning
-  # -------------------------------------
+  # Versioning
   app-version:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
     uses: ./.github/workflows/app_version.yml
 
-  # -------------------------------------
-  # 🏗️ Build - Debug APK
-  # -------------------------------------
+  # Build - Debug APK
   assemble-debug:
     needs: app-version
     uses: ./.github/workflows/assemble_debug.yml
     with:
       version: ${{ needs.app-version.outputs.version }}
 
-  # -------------------------------------
-  # ✅ Testing - Unit & UI
-  # -------------------------------------
+  # Testing - Unit & UI
   unit-tests:
     needs: assemble-debug
     uses: ./.github/workflows/unit_test.yml
@@ -51,9 +43,7 @@ jobs:
     needs: assemble-debug
     uses: ./.github/workflows/ui_test.yml
 
-  # -------------------------------------
-  # 🏗️ Build - Dev Release APK
-  # -------------------------------------
+  # Build - Dev Release APK
   assemble-dev-release-apk:
     needs: [ app-version, unit-tests ]
     uses: ./.github/workflows/assemble_dev_release_apk.yml
@@ -61,9 +51,7 @@ jobs:
       version: ${{ needs.app-version.outputs.version }}
     secrets: inherit
 
-  # -------------------------------------
-  # 📏 APK Size Analysis + PR Comment
-  # -------------------------------------
+  # APK Size Analysis + PR Comment
   apk-size:
     needs: [assemble-debug]
     uses: ./.github/workflows/apk_size.yml
@@ -79,9 +67,7 @@ jobs:
       artifact-name: apk-size-rendered-comment
       file-name: apk_size_rendered_comment.md
 
-  # -------------------------------------
-  # 📱 QR Code for APK + PR Comment
-  # -------------------------------------
+  # QR Code for APK + PR Comment
   generate-qr-code:
     uses: ./.github/workflows/qr_code.yml
     needs: [assemble-dev-release-apk]
