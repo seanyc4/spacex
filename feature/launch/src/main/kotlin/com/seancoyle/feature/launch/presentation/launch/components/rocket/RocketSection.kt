@@ -35,9 +35,10 @@ internal fun RocketSection(
             LauncherStagesSection(stages = rocket.launcherStages)
         }
 
-        if (rocket.spacecraftStages.isNotEmpty()) {
+        // needs ui redesign before re-adding
+        /*if (rocket.spacecraftStages.isNotEmpty()) {
             SpacecraftStagesSection(stages = rocket.spacecraftStages)
-        }
+        }*/
     }
 }
 
