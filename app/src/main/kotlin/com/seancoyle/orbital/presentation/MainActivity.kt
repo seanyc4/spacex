@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var crashlytics: Crashlytics
+    lateinit var crashLogger: CrashLogger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()

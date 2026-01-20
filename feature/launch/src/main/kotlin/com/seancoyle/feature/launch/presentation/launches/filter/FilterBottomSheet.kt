@@ -445,7 +445,7 @@ private fun RecentSearchesSection(
         ) {
             Icon(
                 imageVector = Icons.Default.History,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.recent_searches),
                 modifier = Modifier.size(16.dp),
                 tint = AppTheme.colors.onSurfaceVariant.copy(alpha = 0.6f)
             )
@@ -471,7 +471,7 @@ private fun RecentSearchesSection(
                     colors = SuggestionChipDefaults.suggestionChipColors(
                         containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.5f)
                     ),
-                    border = null
+                    border = null,
                 )
             }
         }

@@ -7,6 +7,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUpdateUI
@@ -85,7 +87,7 @@ internal fun UpdatesSection(
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)) {
                 collapsibleUpdates.forEach { update ->
                     UpdateItem(update = update)
                 }
@@ -99,11 +101,11 @@ private fun UpdateItem(
     update: LaunchUpdateUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
-        Row(
+    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            itemVerticalAlignment = Alignment.CenterVertically
         ) {
             AppText.labelMedium(
                 text = update.createdBy,

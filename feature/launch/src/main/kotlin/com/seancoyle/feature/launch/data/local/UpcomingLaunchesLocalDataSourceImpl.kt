@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.data.local
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.database.dao.UpcomingLaunchDao
 import com.seancoyle.database.dao.UpcomingRemoteKeyDao
 import com.seancoyle.database.entities.LaunchStatusEntity
@@ -14,7 +14,7 @@ import javax.inject.Inject
 internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
     private val launchDao: UpcomingLaunchDao,
     private val remoteKeyDao: UpcomingRemoteKeyDao,
-    private val crashlytics: Crashlytics
+    private val crashLogger: CrashLogger
 ) : LaunchesLocalDataSource<UpcomingRemoteKeyEntity> {
 
     override suspend fun getRemoteKeys(): List<UpcomingRemoteKeyEntity?> {
@@ -22,7 +22,7 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
             remoteKeyDao.getAll()
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             emptyList()
         }
     }
@@ -32,7 +32,7 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
             remoteKeyDao.getById(id)
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             null
         }
     }
@@ -94,7 +94,7 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
             launchDao.getTotalEntries()
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             0
         }
     }

@@ -57,13 +57,19 @@ fun LaunchScreen(
 
         LaunchDetailsSection(launch = launch)
 
-        Spacer(modifier = Modifier.height(paddingXLarge))
-        LaunchSiteSection(pad = launch.pad)
-
         if (launch.vidUrls.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
             VideoSection(videos = launch.vidUrls)
         }
+
+        if (launch.updates.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(paddingXLarge))
+            UpdatesSection(updates = launch.updates)
+            Spacer(modifier = Modifier.height(paddingLarge))
+        }
+
+        Spacer(modifier = Modifier.height(paddingXLarge))
+        LaunchSiteSection(pad = launch.pad)
 
         Spacer(modifier = Modifier.height(paddingXLarge))
         RocketSection(rocket = launch.rocket)
@@ -71,12 +77,6 @@ fun LaunchScreen(
         if (launch.launchServiceProvider != null) {
             Spacer(modifier = Modifier.height(paddingXLarge))
             LaunchProviderSection(agency = launch.launchServiceProvider)
-        }
-
-        if (launch.updates.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(paddingXLarge))
-            UpdatesSection(updates = launch.updates)
-            Spacer(modifier = Modifier.height(paddingLarge))
         }
     }
 }

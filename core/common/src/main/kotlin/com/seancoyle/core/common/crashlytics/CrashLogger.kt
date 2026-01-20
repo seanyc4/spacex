@@ -1,6 +1,6 @@
 package com.seancoyle.core.common.crashlytics
 
-interface Crashlytics {
+interface CrashLogger {
     fun init(isEnabled: Boolean)
 
     fun setCustomKey(key: String, value: String)

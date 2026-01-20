@@ -16,6 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
@@ -28,20 +32,27 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
 fun ErrorScreen(
+    modifier: Modifier = Modifier,
     message: StringResource? = null,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
+    val errorMessage = message?.resolve() ?: stringResource(R.string.network_connection_failed)
+    val errorDescription = stringResource(R.string.error_occurred, errorMessage)
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(paddingXLarge),
+            .padding(paddingXLarge)
+            .semantics {
+                contentDescription = errorDescription
+                liveRegion = LiveRegionMode.Polite
+            },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             imageVector = Icons.Default.Error,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.error_icon_desc),
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.error
         )
@@ -49,13 +60,13 @@ fun ErrorScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         AppText.headlineLarge(
-            text = message?.resolve() ?: stringResource(R.string.network_connection_failed),
+            text = errorMessage,
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = modifier.height(20.dp))
+        Spacer(Modifier.height(20.dp))
 
         ButtonPrimary(
             text = stringResource(R.string.retry),

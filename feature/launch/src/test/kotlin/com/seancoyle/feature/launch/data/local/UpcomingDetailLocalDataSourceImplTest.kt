@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.data.local
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.dao.UpcomingDetailDao
 import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
@@ -25,7 +25,7 @@ class UpcomingDetailLocalDataSourceImplTest {
     private lateinit var upcomingDetailDao: UpcomingDetailDao
 
     @RelaxedMockK
-    private lateinit var crashlytics: Crashlytics
+    private lateinit var crashLogger: CrashLogger
 
     private lateinit var underTest: DetailLocalDataSource
 
@@ -34,7 +34,7 @@ class UpcomingDetailLocalDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = UpcomingDetailLocalDataSourceImpl(
             upcomingDetailDao = upcomingDetailDao,
-            crashlytics = crashlytics
+            crashLogger = crashLogger
         )
     }
 

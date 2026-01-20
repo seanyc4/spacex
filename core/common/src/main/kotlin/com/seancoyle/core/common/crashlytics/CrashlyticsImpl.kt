@@ -4,7 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CrashlyticsImpl @Inject constructor() : Crashlytics {
+class CrashlyticsImpl @Inject constructor() : CrashLogger {
 
     /**
      * Enable this implementation for a production app with a valid google-services.json file

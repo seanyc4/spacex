@@ -1,6 +1,6 @@
 package com.seancoyle.core.datastore.implementation.data
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.datastore.implementation.domain.DataStorePreferences
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -25,7 +25,7 @@ class DataStorePreferencesImplTest {
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     @MockK(relaxed = true)
-    private lateinit var crashlyticsWrapper: Crashlytics
+    private lateinit var crashLoggerWrapper: CrashLogger
 
     private val testScope = TestScope(UnconfinedTestDispatcher())
 
@@ -36,7 +36,7 @@ class DataStorePreferencesImplTest {
         MockKAnnotations.init(this)
         underTest = DataStorePreferencesImpl(
             dataStore = fakeDataStore(testScope, tmpFolder),
-            crashlyticsWrapper = crashlyticsWrapper
+            crashLoggerWrapper = crashLoggerWrapper
         )
     }
 
@@ -268,13 +268,13 @@ class DataStorePreferencesImplTest {
                 tmpFolder = tmpFolder,
                 throwException = true
             ),
-            crashlyticsWrapper = crashlyticsWrapper
+            crashLoggerWrapper = crashLoggerWrapper
         )
 
         val result = underTest.getString("some_key", "default")
         assertEquals("default", result)
 
-        verify { crashlyticsWrapper.logException(any()) }
+        verify { crashLoggerWrapper.logException(any()) }
     }
 
     @Test
@@ -285,12 +285,12 @@ class DataStorePreferencesImplTest {
                 tmpFolder = tmpFolder,
                 throwException = true
             ),
-            crashlyticsWrapper = crashlyticsWrapper
+            crashLoggerWrapper = crashLoggerWrapper
         )
 
         underTest.saveString("some_key", "some_value")
 
-        verify { crashlyticsWrapper.logException(any()) }
+        verify { crashLoggerWrapper.logException(any()) }
     }
 
 }
