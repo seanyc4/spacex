@@ -155,7 +155,7 @@ object AppCard {
     @Composable
     fun Subtle(
         modifier: Modifier = Modifier,
-        alpha: Float = 0.5f,
+        alpha: Float = 0.6f,
         testTag: String? = null,
         content: @Composable ColumnScope.() -> Unit
     ) {
