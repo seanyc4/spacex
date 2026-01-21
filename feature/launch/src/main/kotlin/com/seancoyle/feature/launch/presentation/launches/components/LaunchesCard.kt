@@ -112,7 +112,7 @@ internal fun LaunchCard(
                                 AppTheme.colors.surface.copy(alpha = 0.8f),
                                 AppTheme.colors.surface.copy(alpha = 0.7f)
                             ),
-                            startY = 200f,
+                            startY = 100f,
                             endY = Float.POSITIVE_INFINITY
                         )
                     )
