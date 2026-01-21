@@ -76,7 +76,6 @@ internal fun Launches(
         contentPadding = PaddingValues(
             start = paddingMedium,
             end = paddingMedium,
-            top = paddingSmall,
             bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
         ),
         modifier = modifier

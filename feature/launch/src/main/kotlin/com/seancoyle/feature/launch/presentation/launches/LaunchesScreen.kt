@@ -238,7 +238,7 @@ private fun LaunchesListContent(
 
     when (refreshLoadState) {
         is LoadState.Loading -> {
-            LaunchesLoadingState()
+            LaunchesLoadingState(columnCount = columnCount)
         }
 
         is LoadState.Error -> {
