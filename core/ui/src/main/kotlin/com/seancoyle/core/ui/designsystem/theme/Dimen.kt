@@ -26,7 +26,7 @@ object Dimens {
     val toolbarHeight = 54.dp
     val toolbarHeightExpanded = 110.dp
 
-    val launchCardHeight = 210.dp
+    val launchCardHeight = 220.dp
     val launchImageHeight = 220.dp
     val rocketIconSize = 125.dp
 
