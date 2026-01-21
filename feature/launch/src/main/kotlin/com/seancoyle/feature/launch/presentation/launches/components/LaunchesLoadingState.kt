@@ -52,7 +52,7 @@ fun LaunchesLoadingState(
         ),
         verticalArrangement = Arrangement.spacedBy(paddingMedium)
     ) {
-        items(10) {
+        items(30) {
             LoadingLaunchCard()
         }
     }
@@ -106,6 +106,14 @@ private fun LoadingLaunchCard() {
                 Box(
                     modifier = Modifier
                         .width(160.dp)
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(cornerRadiusXSmall))
+                        .shimmerEffect()
+                )
+
+                Box(
+                    modifier = Modifier
+                        .width(180.dp)
                         .height(16.dp)
                         .clip(RoundedCornerShape(cornerRadiusXSmall))
                         .shimmerEffect()

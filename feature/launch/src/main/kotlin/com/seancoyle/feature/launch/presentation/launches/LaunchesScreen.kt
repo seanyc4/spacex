@@ -26,13 +26,13 @@ import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.error.ErrorState
-import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesLoadingState
 import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetRoute
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
@@ -238,7 +238,7 @@ private fun LaunchesListContent(
 
     when (refreshLoadState) {
         is LoadState.Loading -> {
-            CircularProgressBar()
+            LaunchesLoadingState()
         }
 
         is LoadState.Error -> {
