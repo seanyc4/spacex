@@ -2,13 +2,17 @@ package com.seancoyle.core.ui.designsystem.buttons
 
 import android.R.attr.disabledAlpha
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
@@ -25,7 +29,11 @@ fun ButtonPrimary(
 ) {
     return Button(
         modifier = modifier
-            .focusable(true),
+            .defaultMinSize(minHeight = 48.dp)
+            .focusable(true)
+            .semantics {
+                contentDescription = text
+            },
         colors = ButtonDefaults.textButtonColors(
             containerColor = AppTheme.colors.primary,
             disabledContainerColor = AppTheme.colors.primary.copy(alpha = disabledAlpha.toFloat()),

@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -41,12 +43,16 @@ fun extractYouTubeVideoId(url: String): String? {
 @Composable
 fun EmbeddedYouTubePlayer(
     videoId: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    videoTitle: String = "Video player"
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val accessibilityDescription = "YouTube video: $videoTitle. Double tap to play or pause."
 
     Column(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = accessibilityDescription
+        },
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall)
     ) {
         AndroidView(

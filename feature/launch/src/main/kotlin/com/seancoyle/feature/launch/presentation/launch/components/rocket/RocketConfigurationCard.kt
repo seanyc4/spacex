@@ -23,8 +23,6 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -45,7 +43,6 @@ import com.seancoyle.core.ui.designsystem.theme.AppTextStyles
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusXSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.launchImageHeight
@@ -125,7 +122,6 @@ private fun RocketHeader(
                     text = stringResource(R.string.rocket).uppercase(),
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.Bold,
-                    
                 )
                 AppText.titleMedium(
                     text = config.fullName,
@@ -195,7 +191,6 @@ private fun LaunchStatistics(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
             color = AppTheme.colors.primary,
-            
         )
 
         Row(
@@ -241,7 +236,6 @@ private fun PhysicalSpecifications(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
             color = AppTheme.colors.primary,
-            
         )
 
         Column(
@@ -283,37 +277,29 @@ private fun PhysicalSpecItem(
     icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = AppTheme.colors.surfaceVariant.copy(alpha = 0.3f)
-        ),
-        shape = RoundedCornerShape(cornerRadiusXSmall)
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = AppTheme.colors.onSurface,
-                modifier = Modifier.size(20.dp)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = AppTheme.colors.onSurface,
+            modifier = Modifier.size(20.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            AppText.bodySmall(
+                text = label,
+                color = AppTheme.colors.secondary,
+                fontSize = AppTextStyles.labelSmall.fontSize
             )
-            Column(modifier = Modifier.weight(1f)) {
-                AppText.bodySmall(
-                    text = label,
-                    color = AppTheme.colors.secondary,
-                    fontSize = AppTextStyles.labelSmall.fontSize
-                )
-                AppText.bodyLarge(
-                    text = value,
-                    fontWeight = FontWeight.Bold,
-                    color = AppTheme.colors.onSurface
-                )
-            }
+            AppText.bodyLarge(
+                text = value,
+                fontWeight = FontWeight.Bold,
+                color = AppTheme.colors.onSurface
+            )
         }
     }
 }
@@ -434,6 +420,26 @@ private fun ExternalLinks(
 private fun RocketConfigurationCardPreview() {
     AppTheme {
         RocketConfigurationCard(
+            config = previewData().rocket.configuration
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun PhysicalSpecificationCardPreview() {
+    AppTheme {
+        PhysicalSpecifications(
+            config = previewData().rocket.configuration
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun ManufacturerCardPreview() {
+    AppTheme {
+        ManufacturerAndHistory(
             config = previewData().rocket.configuration
         )
     }

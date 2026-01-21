@@ -9,6 +9,8 @@
     <string name="empty_data">No launches matching that query</string>
     <string name="unable_to_load">Unable to load</string>
     <string name="error_loading_launch">Error loading launch: %1$s</string>
+    <string name="error_occurred">Error occurred: %1$s</string>
+    <string name="error_icon_desc">Error icon</string>
 
     <!-- Database Error Messages -->
     <string name="cache_error">Database error</string>

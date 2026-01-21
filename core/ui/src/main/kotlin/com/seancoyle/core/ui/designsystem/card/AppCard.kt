@@ -1,6 +1,8 @@
 package com.seancoyle.core.ui.designsystem.card
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
@@ -103,6 +106,48 @@ object AppCard {
         }
     }
 
+    @Composable
+    fun Blended(
+        modifier: Modifier = Modifier,
+        testTag: String? = null,
+        content: @Composable ColumnScope.() -> Unit
+    ) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .then(
+                    if (testTag != null) {
+                        Modifier.testTag(testTag)
+                    } else {
+                        Modifier
+                    }
+                ),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+            shape = RoundedCornerShape(cornerRadiusMedium),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                AppTheme.colors.primary.copy(alpha = 0.15f),
+                                AppTheme.colors.secondary.copy(alpha = 0.15f)
+                            )
+                        )
+                    )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
+                    content = content
+                )
+            }
+        }
+    }
+
     /**
      * Subtle card with surface variant background.
      * Use for secondary or nested content.
@@ -110,7 +155,7 @@ object AppCard {
     @Composable
     fun Subtle(
         modifier: Modifier = Modifier,
-        alpha: Float = 0.5f,
+        alpha: Float = 0.6f,
         testTag: String? = null,
         content: @Composable ColumnScope.() -> Unit
     ) {

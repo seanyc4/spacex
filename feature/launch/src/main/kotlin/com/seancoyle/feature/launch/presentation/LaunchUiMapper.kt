@@ -1,6 +1,7 @@
 package com.seancoyle.feature.launch.presentation
 
 import com.seancoyle.core.common.dataformatter.DateFormatConstants
+import com.seancoyle.core.common.dataformatter.DateFormatConstants.DD_MMMM_YYYY_AT_HH_MM
 import com.seancoyle.core.common.dataformatter.DateTransformer
 import com.seancoyle.core.ui.components.videoplayer.extractYouTubeVideoId
 import com.seancoyle.feature.launch.domain.model.Agency
@@ -89,32 +90,35 @@ class LaunchUiMapper @Inject constructor(
         spacecraftStages = spacecraftStage.map { it.toUI() }
     )
 
-    private fun Configuration.toUI() = ConfigurationUI(
-        name = name ?: NA,
-        fullName = fullName ?: name ?: NA,
-        variant = variant ?: NA,
-        alias = alias ?: NA,
-        description = description ?: NA,
-        imageUrl = image?.imageUrl ?: NA,
-        totalLaunchCount = totalLaunchCount?.toString() ?: NA,
-        successfulLaunches = successfulLaunches?.toString() ?: NA,
-        failedLaunches = failedLaunches?.toString() ?: NA,
-        length = length?.let { if (it > 0) String.format("%.1f m", it) else NA } ?: NA,
-        diameter = diameter?.let { if (it > 0) String.format("%.1f m", it) else NA } ?: NA,
-        launchMass = launchMass?.let { if (it > 0) String.format("%.0f kg", it) else NA } ?: NA,
-        maidenFlight = maidenFlight ?: NA,
-        manufacturer = manufacturer?.let { agency ->
-            ManufacturerUI(
-                name = agency.name,
-                countryName = agency.country.firstOrNull()?.name ?: NA,
-                foundingYear = agency.foundingYear?.toString() ?: NA,
-                wikiUrl = agency.wikiUrl,
-                infoUrl = agency.infoUrl
-            )
-        },
-        families = families.map { it.toUI() },
-        wikiUrl = wikiUrl
-    )
+    private fun Configuration.toUI(): ConfigurationUI {
+        val locateDateTime = dateFormatter.formatDate(maidenFlight)
+        return ConfigurationUI(
+            name = name ?: NA,
+            fullName = fullName ?: name ?: NA,
+            variant = variant ?: NA,
+            alias = alias ?: NA,
+            description = description ?: NA,
+            imageUrl = image?.imageUrl ?: NA,
+            totalLaunchCount = totalLaunchCount?.toString() ?: NA,
+            successfulLaunches = successfulLaunches?.toString() ?: NA,
+            failedLaunches = failedLaunches?.toString() ?: NA,
+            length = length?.let { if (it > 0) String.format("%.1f m", it) else NA } ?: NA,
+            diameter = diameter?.let { if (it > 0) String.format("%.1f m", it) else NA } ?: NA,
+            launchMass = launchMass?.let { if (it > 0) String.format("%.0f kg", it) else NA } ?: NA,
+            maidenFlight = dateFormatter.formatDateTimeToString(locateDateTime),
+            manufacturer = manufacturer?.let { agency ->
+                ManufacturerUI(
+                    name = agency.name,
+                    countryName = agency.country.firstOrNull()?.name ?: NA,
+                    foundingYear = agency.foundingYear?.toString() ?: NA,
+                    wikiUrl = agency.wikiUrl,
+                    infoUrl = agency.infoUrl
+                )
+            },
+            families = families.map { it.toUI() },
+            wikiUrl = wikiUrl
+        )
+    }
 
     private fun Family.toUI() = RocketFamilyUI(
         name = name ?: NA,
@@ -156,11 +160,14 @@ class LaunchUiMapper @Inject constructor(
         type = type
     )
 
-    private fun LaunchUpdate.toUI() = LaunchUpdateUI(
-        comment = comment ?: NA,
-        createdBy = createdBy ?: NA,
-        createdOn = createdOn ?: NA,
-    )
+    private fun LaunchUpdate.toUI(): LaunchUpdateUI {
+        val localDatetime = dateFormatter.formatDate(createdOn)
+        return LaunchUpdateUI(
+            comment = comment ?: NA,
+            createdBy = createdBy ?: NA,
+            createdOn = dateFormatter.formatDateTimeToString(localDatetime, DD_MMMM_YYYY_AT_HH_MM),
+        )
+    }
 
     private fun VidUrl.toUI() = VidUrlUI(
         title = title.orEmpty(),

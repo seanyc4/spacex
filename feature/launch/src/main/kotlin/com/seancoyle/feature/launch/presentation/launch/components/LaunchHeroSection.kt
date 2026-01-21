@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +27,7 @@ import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
+import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
@@ -92,24 +93,26 @@ internal fun LaunchHeroSection(
 
             Spacer(modifier = Modifier.height(paddingMedium))
 
-            Row(
+            FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall),
-                verticalAlignment = Alignment.CenterVertically
+                itemVerticalAlignment = Alignment.CenterVertically,
+                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingSmall),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Chip(
                     text = launch.status.label,
                     containerColor = launch.status.containerColor(),
                     contentColor = launch.status.contentColor(),
-                    icon = launch.status.icon()
+                    icon = launch.status.icon(),
                 )
 
                 AppText.bodyLarge(
                     text = launch.launchDate,
                     color = AppTheme.colors.secondary,
+                    maxLines = 2,
                     modifier = Modifier.semantics {
                         contentDescription = launchDateDesc
                     },
-                    
                 )
             }
         }

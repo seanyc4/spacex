@@ -2,7 +2,7 @@ package com.seancoyle.feature.launch.data.local
 
 import androidx.datastore.core.DataStore
 import com.seancoyle.core.common.coroutines.runSuspendCatching
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import com.seancoyle.core.domain.Order
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 internal class LaunchesPreferencesDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<LaunchPreferencesProto>,
-    private val crashlytics: Crashlytics
+    private val crashLogger: CrashLogger
 ) : LaunchesPreferencesDataSource {
 
     override suspend fun saveLaunchPreferences(order: Order) {
@@ -25,7 +25,7 @@ internal class LaunchesPreferencesDataSourceImpl @Inject constructor(
             }
         }.getOrElse { exception ->
             printLogDebug(this.javaClass.name, exception.message.toString())
-            crashlytics.logException(exception)
+            crashLogger.logException(exception)
         }
     }
 
@@ -34,7 +34,7 @@ internal class LaunchesPreferencesDataSourceImpl @Inject constructor(
             dataStore.data.first().toModel()
         }.getOrElse { exception ->
             printLogDebug(this.javaClass.name, exception.message.toString())
-            crashlytics.logException(exception)
+            crashLogger.logException(exception)
             LaunchPrefs()
         }
     }

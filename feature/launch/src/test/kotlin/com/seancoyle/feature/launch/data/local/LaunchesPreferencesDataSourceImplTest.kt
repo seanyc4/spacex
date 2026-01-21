@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.data.local
 
 import androidx.datastore.core.DataStore
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.datastore_proto.LaunchPreferencesProto
 import com.seancoyle.core.datastore_proto.OrderProto
 import com.seancoyle.core.domain.Order
@@ -26,7 +26,7 @@ class LaunchesPreferencesDataSourceImplTest {
     private lateinit var dataStore: DataStore<LaunchPreferencesProto>
 
     @RelaxedMockK
-    private lateinit var crashlytics: Crashlytics
+    private lateinit var crashLogger: CrashLogger
 
     private lateinit var underTest: LaunchesPreferencesDataSource
 
@@ -35,7 +35,7 @@ class LaunchesPreferencesDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchesPreferencesDataSourceImpl(
             dataStore = dataStore,
-            crashlytics = crashlytics
+            crashLogger = crashLogger
         )
     }
 
@@ -78,7 +78,7 @@ class LaunchesPreferencesDataSourceImplTest {
         underTest.saveLaunchPreferences(order)
 
         coVerify { dataStore.updateData(any()) }
-        coVerify { crashlytics.logException(exception) }
+        coVerify { crashLogger.logException(exception) }
     }
 
     @Test
@@ -110,7 +110,7 @@ class LaunchesPreferencesDataSourceImplTest {
 
         assertEquals(LaunchPrefs(), result)
         assertEquals(Order.ASC, result.order)
-        coVerify { crashlytics.logException(exception) }
+        coVerify { crashLogger.logException(exception) }
     }
 
     @Test
@@ -121,7 +121,7 @@ class LaunchesPreferencesDataSourceImplTest {
         val result = underTest.getLaunchPreferences()
 
         assertEquals(LaunchPrefs(), result)
-        coVerify { crashlytics.logException(exception) }
+        coVerify { crashLogger.logException(exception) }
     }
 
     @Test

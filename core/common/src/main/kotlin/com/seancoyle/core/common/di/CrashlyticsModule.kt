@@ -1,6 +1,6 @@
 package com.seancoyle.core.common.di
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.crashlytics.CrashlyticsImpl
 import dagger.Binds
 import dagger.Module
@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class CrashlyticsModule {
     @Binds
-    abstract fun bindCrashlytics(crashlytics: CrashlyticsImpl): Crashlytics
+    abstract fun bindCrashlytics(crashlytics: CrashlyticsImpl): CrashLogger
 }

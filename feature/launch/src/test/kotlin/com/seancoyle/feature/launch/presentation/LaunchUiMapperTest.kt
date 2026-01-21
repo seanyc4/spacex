@@ -269,13 +269,8 @@ class LaunchUiMapperTest {
 
         val startDateTime = LocalDateTime.of(2026, 1, 15, 10, 0)
         val endDateTime = LocalDateTime.of(2026, 1, 15, 11, 0)
-        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(
-            2026,
-            1,
-            15,
-            10,
-            30
-        )
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
         every { dateTransformer.formatDate(windowStart) } returns startDateTime
         every { dateTransformer.formatDate(windowEnd) } returns endDateTime
         every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
@@ -293,13 +288,8 @@ class LaunchUiMapperTest {
 
         val startDateTime = LocalDateTime.of(2026, 1, 15, 10, 0)
         val endDateTime = LocalDateTime.of(2026, 1, 15, 11, 30)
-        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(
-            2026,
-            1,
-            15,
-            10,
-            30
-        )
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
         every { dateTransformer.formatDate(windowStart) } returns startDateTime
         every { dateTransformer.formatDate(windowEnd) } returns endDateTime
         every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
@@ -316,13 +306,8 @@ class LaunchUiMapperTest {
         val launch = createTestLaunch(windowStart = windowStart, windowEnd = windowEnd)
 
         val sameDateTime = LocalDateTime.of(2026, 1, 15, 10, 0)
-        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(
-            2026,
-            1,
-            15,
-            10,
-            30
-        )
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
         every { dateTransformer.formatDate(windowStart) } returns sameDateTime
         every { dateTransformer.formatDate(windowEnd) } returns sameDateTime
         every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
@@ -335,13 +320,8 @@ class LaunchUiMapperTest {
     @Test
     fun `mapToLaunchUi handles null windowStart and windowEnd`() = runTest {
         val launch = createTestLaunch(windowStart = null, windowEnd = null)
-        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(
-            2026,
-            1,
-            15,
-            10,
-            30
-        )
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
         every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
 
         val result = mapper.mapToLaunchUi(launch)
@@ -377,6 +357,121 @@ class LaunchUiMapperTest {
         val result = mapper.mapToLaunchUi(launch)
 
         assertEquals(0, result.missionPatches.size)
+    }
+
+    @Test
+    fun `mapToLaunchUi formats maidenFlight date correctly`() = runTest {
+        val expectedMaidenFlight = "13 May 2007"
+        val launch = createTestLaunch()
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2026-01-15T10:00:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 0)
+        every { dateTransformer.formatDate("2026-01-15T11:00:00Z") } returns LocalDateTime.of(2026, 1, 15, 11, 0)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
+        every { dateTransformer.formatDateTimeToString(any(), any()) } answers {
+            if (firstArg<LocalDateTime>().year == 2007) expectedMaidenFlight else "Formatted Date"
+        }
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals(expectedMaidenFlight, result.rocket.configuration.maidenFlight)
+    }
+
+    @Test
+    fun `mapToLaunchUi handles null maidenFlight gracefully`() = runTest {
+        val rocket = createRocket().copy(
+            configuration = createRocket().configuration.copy(maidenFlight = null)
+        )
+        val launch = createTestLaunch(rocket = rocket)
+        every { dateTransformer.formatDate(any()) } returns LocalDateTime.now()
+        every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        // Should use fallback date (current time) since formatDate now handles nulls
+        assertEquals("Formatted Date", result.rocket.configuration.maidenFlight)
+    }
+
+    @Test
+    fun `mapToLaunchUi formats LaunchUpdate createdOn correctly`() = runTest {
+        val expectedUpdateDate = "20 January 2026 at 14:30"
+        val launchUpdate = LaunchUpdate(
+            id = 1,
+            profileImage = null,
+            comment = "Launch delayed",
+            infoUrl = null,
+            createdBy = "Launch Director",
+            createdOn = "2026-01-20T14:30:00Z"
+        )
+        val launch = createTestLaunch(updates = listOf(launchUpdate))
+
+        every { dateTransformer.formatDate("2026-01-15T10:30:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        every { dateTransformer.formatDate("2026-01-15T10:00:00Z") } returns LocalDateTime.of(2026, 1, 15, 10, 0)
+        every { dateTransformer.formatDate("2026-01-15T11:00:00Z") } returns LocalDateTime.of(2026, 1, 15, 11, 0)
+        every { dateTransformer.formatDate("2007-05-13") } returns LocalDateTime.of(2007, 5, 13, 0, 0)
+        every { dateTransformer.formatDate("2026-01-20T14:30:00Z") } returns LocalDateTime.of(2026, 1, 20, 14, 30)
+        every { dateTransformer.formatDateTimeToString(any(), any()) } answers {
+            val dateTime = firstArg<LocalDateTime>()
+            when {
+                dateTime.year == 2026 && dateTime.monthValue == 1 && dateTime.dayOfMonth == 20 -> expectedUpdateDate
+                else -> "Formatted Date"
+            }
+        }
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals(1, result.updates.size)
+        assertEquals(expectedUpdateDate, result.updates[0].createdOn)
+        assertEquals("Launch Director", result.updates[0].createdBy)
+    }
+
+    @Test
+    fun `mapToLaunchUi handles null LaunchUpdate createdOn gracefully`() = runTest {
+        val launchUpdate = LaunchUpdate(
+            id = 1,
+            profileImage = null,
+            comment = "Update comment",
+            infoUrl = null,
+            createdBy = "Admin",
+            createdOn = null
+        )
+        val launch = createTestLaunch(updates = listOf(launchUpdate))
+        every { dateTransformer.formatDate(any()) } returns LocalDateTime.now()
+        every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals(1, result.updates.size)
+        // Should use fallback date since formatDate now handles nulls
+        assertEquals("Formatted Date", result.updates[0].createdOn)
+    }
+
+    @Test
+    fun `mapToLaunchUi handles malformed date strings without crashing`() = runTest {
+        val launchUpdate = LaunchUpdate(
+            id = 1,
+            profileImage = null,
+            comment = "Update",
+            infoUrl = null,
+            createdBy = "User",
+            createdOn = "invalid-date-format"
+        )
+        val rocket = createRocket().copy(
+            configuration = createRocket().configuration.copy(maidenFlight = "also-invalid")
+        )
+        val launch = createTestLaunch(
+            updates = listOf(launchUpdate),
+            rocket = rocket
+        )
+
+        // formatDate now returns current time as fallback for unparseable dates
+        every { dateTransformer.formatDate(any()) } returns LocalDateTime.now()
+        every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
+
+        // Should not throw exception
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals("Formatted Date", result.rocket.configuration.maidenFlight)
+        assertEquals("Formatted Date", result.updates[0].createdOn)
     }
 
     @Test
@@ -426,7 +521,9 @@ class LaunchUiMapperTest {
     }
 
     private fun setupDateFormatterDefaults() {
+        // Mock formatDate for all possible inputs (net, windowStart, windowEnd, maidenFlight, createdOn)
         every { dateTransformer.formatDate(any()) } returns LocalDateTime.of(2026, 1, 15, 10, 30)
+        // Mock formatDateTimeToString for all format outputs (dates, times, updates)
         every { dateTransformer.formatDateTimeToString(any(), any()) } returns "Formatted Date"
     }
 

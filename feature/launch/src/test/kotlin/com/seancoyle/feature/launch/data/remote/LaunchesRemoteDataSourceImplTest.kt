@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.data.remote
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
@@ -24,7 +24,7 @@ class LaunchesRemoteDataSourceImplTest {
     private lateinit var api: LaunchApi
 
     @RelaxedMockK
-    private lateinit var crashlytics: Crashlytics
+    private lateinit var crashLogger: CrashLogger
 
     private lateinit var underTest: LaunchesRemoteDataSource
 
@@ -33,7 +33,7 @@ class LaunchesRemoteDataSourceImplTest {
         MockKAnnotations.init(this)
         underTest = LaunchesRemoteDataSourceImpl(
             api = api,
-            crashlytics = crashlytics
+            crashLogger = crashLogger
         )
     }
 

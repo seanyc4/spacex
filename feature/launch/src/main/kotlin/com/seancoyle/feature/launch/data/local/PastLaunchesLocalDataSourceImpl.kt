@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.data.local
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.database.dao.PastLaunchDao
 import com.seancoyle.database.dao.PastRemoteKeyDao
 import com.seancoyle.database.entities.LaunchStatusEntity
@@ -14,7 +14,7 @@ import javax.inject.Inject
 internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
     private val launchDao: PastLaunchDao,
     private val remoteKeyDao: PastRemoteKeyDao,
-    private val crashlytics: Crashlytics
+    private val crashLogger: CrashLogger
 ) : LaunchesLocalDataSource<PastRemoteKeyEntity> {
 
     override suspend fun getRemoteKeys(): List<PastRemoteKeyEntity?> {
@@ -22,7 +22,7 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
             remoteKeyDao.getAll()
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             emptyList()
         }
     }
@@ -32,7 +32,7 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
             remoteKeyDao.getById(id)
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             null
         }
     }
@@ -95,7 +95,7 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
             launchDao.getTotalEntries()
         } catch (e: Exception) {
             Timber.e(e)
-            crashlytics.logException(e)
+            crashLogger.logException(e)
             0
         }
     }

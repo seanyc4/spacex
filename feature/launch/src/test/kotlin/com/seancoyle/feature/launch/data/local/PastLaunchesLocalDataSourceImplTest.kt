@@ -1,6 +1,6 @@
 package com.seancoyle.feature.launch.data.local
 
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.database.dao.PastLaunchDao
 import com.seancoyle.database.dao.PastRemoteKeyDao
 import com.seancoyle.database.entities.PastRemoteKeyEntity
@@ -28,7 +28,7 @@ class PastLaunchesLocalDataSourceImplTest {
     private lateinit var remoteKeyDao: PastRemoteKeyDao
 
     @RelaxedMockK
-    private lateinit var crashlytics: Crashlytics
+    private lateinit var crashLogger: CrashLogger
 
     private lateinit var underTest: LaunchesLocalDataSource<PastRemoteKeyEntity>
 
@@ -38,7 +38,7 @@ class PastLaunchesLocalDataSourceImplTest {
         underTest = PastLaunchesLocalDataSourceImpl(
             launchDao = launchDao,
             remoteKeyDao = remoteKeyDao,
-            crashlytics = crashlytics
+            crashLogger = crashLogger
         )
     }
 

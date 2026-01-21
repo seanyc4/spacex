@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.data.local
 
 import com.seancoyle.core.common.coroutines.runSuspendCatching
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.database.dao.UpcomingDetailDao
 import com.seancoyle.feature.launch.data.repository.DetailLocalDataSource
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
     private val upcomingDetailDao: UpcomingDetailDao,
-    private val crashlytics: Crashlytics,
+    private val crashLogger: CrashLogger,
 ) : DetailLocalDataSource {
 
     override suspend fun getTotalEntries(): LaunchResult<Int, Throwable> {
@@ -21,7 +21,7 @@ internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
             onSuccess = { LaunchResult.Success(it) },
             onFailure = {
                 Timber.e(it)
-                crashlytics.logException(it)
+                crashLogger.logException(it)
                 LaunchResult.Error(it)
             }
         )
@@ -34,7 +34,7 @@ internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
             onSuccess = { LaunchResult.Success(it) },
             onFailure = {
                 Timber.e(it)
-                crashlytics.logException(it)
+                crashLogger.logException(it)
                 LaunchResult.Error(it)
             }
         )
@@ -47,7 +47,7 @@ internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
             onSuccess = { LaunchResult.Success(Unit) },
             onFailure = {
                 Timber.e(it)
-                crashlytics.logException(it)
+                crashLogger.logException(it)
                 LaunchResult.Error(it)
             }
         )
@@ -60,7 +60,7 @@ internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
             onSuccess = { LaunchResult.Success(Unit) },
             onFailure = {
                 Timber.e(it)
-                crashlytics.logException(it)
+                crashLogger.logException(it)
                 LaunchResult.Error(it)
             }
         )
@@ -73,7 +73,7 @@ internal class UpcomingDetailLocalDataSourceImpl @Inject constructor(
             onSuccess = { LaunchResult.Success(Unit) },
             onFailure = {
                 Timber.e(it)
-                crashlytics.logException(it)
+                crashLogger.logException(it)
                 LaunchResult.Error(it)
             }
         )

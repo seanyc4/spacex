@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -31,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,14 +40,12 @@ import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.cornerRadiusSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.horizontalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingXLarge
-import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
@@ -97,97 +95,76 @@ private fun MissionHighlightCard(
     description: String?,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        shape = RoundedCornerShape(cornerRadiusLarge)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            AppTheme.colors.primary.copy(alpha = 0.15f),
-                            AppTheme.colors.secondary.copy(alpha = 0.15f)
-                        )
-                    )
-                )
+    AppCard.Blended(modifier = modifier) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium)
+                    .weight(1f)
+                    .padding(end = paddingMedium)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        AppText.labelMedium(
-                            text = stringResource(R.string.mission).uppercase(),
-                            color = AppTheme.colors.primary,
-                            fontWeight = FontWeight.Bold,
-                            
-                        )
+                AppText.labelMedium(
+                    text = stringResource(R.string.mission).uppercase(),
+                    color = AppTheme.colors.primary,
+                    fontWeight = FontWeight.Bold,
+                )
 
-                        AppText.titleMedium(
-                            text = missionName,
-                            fontWeight = FontWeight.Bold,
-                            color = AppTheme.colors.onSurface,
-                            modifier = Modifier.padding(top = paddingSmall)
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .background(
-                                color = AppTheme.colors.primary.copy(alpha = 0.15f),
-                                shape = RoundedCornerShape(cornerRadiusSmall)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = AppTheme.colors.primary,
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(paddingMedium),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    missionType?.let { type ->
-                        Chip(
-                            text = type,
-                            icon = Icons.Default.Build,
-                            contentColor = AppTheme.colors.primary,
-                            containerColor = AppTheme.colors.primary
-                        )
-                    }
-
-                    orbitName?.let { orbit ->
-                        Chip(
-                            text = orbit,
-                            icon = Icons.Default.MyLocation,
-                            contentColor = AppTheme.colors.secondary,
-                            containerColor = AppTheme.colors.secondary
-                        )
-                    }
-                }
-
-                AppText.bodyMedium(
-                    text = description ?: stringResource(R.string.description_not_available),
-                    color = AppTheme.colors.secondary,
+                AppText.titleMedium(
+                    text = missionName,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onSurface,
                     modifier = Modifier.padding(top = paddingSmall)
                 )
             }
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = AppTheme.colors.primary.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(cornerRadiusSmall)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = stringResource(R.string.mission),
+                    tint = AppTheme.colors.primary,
+                    modifier = Modifier.size(36.dp)
+                )
+            }
         }
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(paddingMedium),
+            itemVerticalAlignment = Alignment.CenterVertically,
+        ) {
+            missionType?.let { type ->
+                Chip(
+                    text = type,
+                    icon = Icons.Default.Build,
+                    contentColor = AppTheme.colors.primary,
+                    containerColor = AppTheme.colors.primary
+                )
+            }
+
+            orbitName?.let { orbit ->
+                Chip(
+                    text = orbit,
+                    icon = Icons.Default.MyLocation,
+                    contentColor = AppTheme.colors.secondary,
+                    containerColor = AppTheme.colors.secondary
+                )
+            }
+        }
+
+        AppText.bodyMedium(
+            text = description ?: stringResource(R.string.description_not_available),
+            color = AppTheme.colors.secondary,
+            modifier = Modifier.padding(top = paddingSmall)
+        )
     }
 }
 
@@ -211,13 +188,17 @@ private fun LaunchWindowTimeline(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = paddingMedium)
+            ) {
                 AppText.labelMedium(
                     text = stringResource(R.string.launch_window).uppercase(),
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.Bold,
-                    
-                )
+
+                    )
 
                 AppText.titleMedium(
                     text = launchDate,
@@ -237,7 +218,7 @@ private fun LaunchWindowTimeline(
             ) {
                 Icon(
                     imageVector = Icons.Default.Rocket,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.launch_window),
                     tint = AppTheme.colors.primary,
                     modifier = Modifier.size(36.dp)
                 )
@@ -342,17 +323,17 @@ private fun LaunchWindowTimeline(
                                 .padding(horizontal = 20.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                                AppText.bodyLarge(
-                                    text = windowStartTime,
-                                    color = AppTheme.colors.secondary,
-                                    fontWeight = FontWeight.Medium
-                                )
+                            AppText.bodyLarge(
+                                text = windowStartTime,
+                                color = AppTheme.colors.secondary,
+                                fontWeight = FontWeight.Medium
+                            )
 
-                                AppText.bodyLarge(
-                                    text = windowEndTime,
-                                    color = AppTheme.colors.secondary,
-                                    fontWeight = FontWeight.Medium
-                                )
+                            AppText.bodyLarge(
+                                text = windowEndTime,
+                                color = AppTheme.colors.secondary,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
                     }
                 }
@@ -385,16 +366,16 @@ private fun LaunchWindowTimeline(
                     ),
                     shape = RoundedCornerShape(cornerRadiusSmall)
                 ) {
-                    Row(
+                    FlowRow(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(paddingLarge),
                         horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                        itemVerticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Default.AccessTime,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.duration),
                             tint = AppTheme.colors.primary,
                             modifier = Modifier.size(13.dp)
                         )
@@ -447,8 +428,8 @@ private fun FailReasonCard(
                     text = stringResource(R.string.failure_reason),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.error,
-                    
-                )
+
+                    )
                 AppText.bodyMedium(
                     text = reason,
                     color = AppTheme.colors.onSurface,

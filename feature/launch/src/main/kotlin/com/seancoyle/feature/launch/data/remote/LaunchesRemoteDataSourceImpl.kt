@@ -1,7 +1,7 @@
 package com.seancoyle.feature.launch.data.remote
 
 import com.seancoyle.core.common.coroutines.runSuspendCatching
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.result.DataError.RemoteError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 internal class LaunchesRemoteDataSourceImpl @Inject constructor(
     private val api: LaunchApi,
-    private val crashlytics: Crashlytics
+    private val crashLogger: CrashLogger
 ) : LaunchesRemoteDataSource {
 
     override suspend fun getUpcomingDetailedLaunches(
@@ -38,7 +38,7 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
             },
             onFailure = { exception ->
                 Timber.e(exception)
-                crashlytics.logException(exception)
+                crashLogger.logException(exception)
                 LaunchResult.Error(exception)
             }
         )
@@ -64,7 +64,7 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
             },
             onFailure = { exception ->
                 Timber.e(exception)
-                crashlytics.logException(exception)
+                crashLogger.logException(exception)
                 LaunchResult.Error(exception)
             }
         )
@@ -90,7 +90,7 @@ internal class LaunchesRemoteDataSourceImpl @Inject constructor(
             },
             onFailure = { exception ->
                 Timber.e(exception)
-                crashlytics.logException(exception)
+                crashLogger.logException(exception)
                 val mappedError = map(exception)
                 LaunchResult.Error(mappedError)
             }

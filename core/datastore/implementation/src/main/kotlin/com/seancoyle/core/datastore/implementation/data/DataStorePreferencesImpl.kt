@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.seancoyle.core.common.crashlytics.Crashlytics
+import com.seancoyle.core.common.crashlytics.CrashLogger
 import com.seancoyle.core.common.crashlytics.printLogDebug
 import com.seancoyle.core.datastore.implementation.domain.DataStorePreferences
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 internal class DataStorePreferencesImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val crashlyticsWrapper: Crashlytics
+    private val crashLoggerWrapper: CrashLogger
 ) : DataStorePreferences {
 
     override suspend fun getString(
@@ -207,6 +207,6 @@ internal class DataStorePreferencesImpl @Inject constructor(
 
     private fun logException(message: String, exception: Throwable) {
         printLogDebug(message, exception.message.orEmpty())
-        crashlyticsWrapper.logException(exception)
+        crashLoggerWrapper.logException(exception)
     }
 }
