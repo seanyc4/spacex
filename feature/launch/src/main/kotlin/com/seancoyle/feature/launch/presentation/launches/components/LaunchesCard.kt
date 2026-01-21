@@ -109,10 +109,15 @@ internal fun LaunchCard(
                             colors = listOf(
                                 Color.Transparent,
                                 Color.Transparent,
-                                AppTheme.colors.surface.copy(alpha = 0.8f),
-                                AppTheme.colors.surface.copy(alpha = 0.7f)
+                                Color.Transparent,
+                                Color.Transparent,
+                                Color.Transparent,
+                                AppTheme.colors.surface.copy(alpha = 0.65f),
+                                AppTheme.colors.surface.copy(alpha = 0.70f),
+                                AppTheme.colors.surface.copy(alpha = 0.75f),
+                                AppTheme.colors.surface.copy(alpha = 0.8f)
                             ),
-                            startY = 100f,
+                            startY = 80f,
                             endY = Float.POSITIVE_INFINITY
                         )
                     )
