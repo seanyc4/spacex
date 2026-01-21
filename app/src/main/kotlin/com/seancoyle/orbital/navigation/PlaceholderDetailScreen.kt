@@ -83,7 +83,7 @@ fun PlaceholderDetailScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            .background(MaterialTheme.colorScheme.background)
             .semantics {
                 contentDescription = message
             },
