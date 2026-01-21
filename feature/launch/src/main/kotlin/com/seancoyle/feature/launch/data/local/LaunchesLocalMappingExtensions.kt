@@ -83,25 +83,8 @@ internal fun UpcomingLaunchEntity.toDomain(): LaunchSummary =
         missionName = missionName,
         net = net,
         imageUrl = imageUrl,
-        status = status.toDomain()
-    )
-
-internal fun LaunchSummary.toPastEntity(): PastLaunchEntity =
-    PastLaunchEntity(
-        id = id,
-        missionName = missionName,
-        net = net,
-        imageUrl = imageUrl,
-        status = status.toEntity()
-    )
-
-internal fun LaunchSummary.toUpcomingEntity(): UpcomingLaunchEntity =
-    UpcomingLaunchEntity(
-        id = id,
-        missionName = missionName,
-        net = net,
-        imageUrl = imageUrl,
-        status = status.toEntity()
+        status = status.toDomain(),
+        location = location
     )
 
 internal fun PastLaunchEntity.toDomain(): LaunchSummary =
@@ -110,7 +93,8 @@ internal fun PastLaunchEntity.toDomain(): LaunchSummary =
         missionName = missionName,
         net = net,
         imageUrl = imageUrl,
-        status = status.toDomain()
+        status = status.toDomain(),
+        location = location
     )
 
 internal fun List<UpcomingDetailEntity>.toDomain(): List<Launch> =
@@ -152,7 +136,6 @@ internal fun UpcomingDetailEntity.toDomain(): Launch =
         missionPatches = missionPatches.map { it.toDomain() },
         status = status.toDomain(),
     )
-
 
 fun LaunchStatusEntity.toDomain(): Status =
     Status(
@@ -427,7 +410,7 @@ internal fun Launch.toPastDetailEntity(): PastDetailEntity =
     )
 
 @JvmName("launchListToPastDetailEntity")
-internal fun List<Launch>.toPastDetailEntity(): List<com.seancoyle.database.entities.PastDetailEntity> =
+internal fun List<Launch>.toPastDetailEntity(): List<PastDetailEntity> =
     map { it.toPastDetailEntity() }
 
 private fun Status.toEntity(): LaunchStatusEntity =

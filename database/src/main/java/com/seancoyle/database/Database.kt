@@ -37,7 +37,7 @@ import com.seancoyle.database.util.VidUrlListConverter
         PastLaunchEntity::class,
         PastRemoteKeyEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(

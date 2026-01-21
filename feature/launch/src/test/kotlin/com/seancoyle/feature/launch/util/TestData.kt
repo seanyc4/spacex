@@ -29,6 +29,7 @@ import com.seancoyle.database.entities.SpacecraftStageEntity
 import com.seancoyle.database.entities.SpacecraftStatusEntity
 import com.seancoyle.database.entities.SpacecraftTypeEntity
 import com.seancoyle.database.entities.UpcomingDetailEntity
+import com.seancoyle.database.entities.UpcomingLaunchEntity
 import com.seancoyle.database.entities.VidUrlEntity
 import com.seancoyle.feature.launch.data.remote.AgencyDto
 import com.seancoyle.feature.launch.data.remote.ConfigurationDto
@@ -40,7 +41,6 @@ import com.seancoyle.feature.launch.data.remote.LandingDto
 import com.seancoyle.feature.launch.data.remote.LandingLocationDto
 import com.seancoyle.feature.launch.data.remote.LandingTypeDto
 import com.seancoyle.feature.launch.data.remote.LaunchDto
-import com.seancoyle.feature.launch.data.remote.LaunchSummaryDto
 import com.seancoyle.feature.launch.data.remote.LaunchUpdateDto
 import com.seancoyle.feature.launch.data.remote.LauncherDto
 import com.seancoyle.feature.launch.data.remote.LauncherStageDto
@@ -96,32 +96,21 @@ import kotlin.random.Random
 
 internal object TestData {
 
-    fun createLaunchSummaryDto(
-        id: String? = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
-        name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
-        net: String = "2025-12-13T05:34:00Z",
-        image: ImageDto = createImageDto(),
-        status: StatusDto = createStatusDto()
-    ) = LaunchSummaryDto(
-        id = id,
-        name = name,
-        net = net,
-        image = image,
-        status = status
-    )
 
     fun createLaunchSummary(
         id: String = "faf4a0bc-7dad-4842-b74c-73a9f648b5cc",
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: Image = createImage(),
-        status: Status = createStatus()
+        status: Status = createStatus(),
+        location: String = "Kennedy Space Center, FL, USA"
     ) = LaunchSummary(
         id = id,
         missionName = name,
         net = net,
         imageUrl = image.imageUrl,
-        status = status
+        status = status,
+        location = location
     )
 
 
@@ -130,13 +119,15 @@ internal object TestData {
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: ImageEntity = createImageEntity(),
-        status: LaunchStatusEntity = createLaunchStatusEntity()
-    ) = com.seancoyle.database.entities.UpcomingLaunchEntity(
+        status: LaunchStatusEntity = createLaunchStatusEntity(),
+        location: String = "Kennedy Space Center, FL, USA"
+    ) = UpcomingLaunchEntity(
         id = id,
         missionName = name,
         net = net,
         imageUrl = image.imageUrl,
-        status = status
+        status = status,
+        location = location
     )
 
     fun createPastLaunchEntity(
@@ -144,13 +135,15 @@ internal object TestData {
         name: String = "Falcon 9 Block 5 | Starlink Group 15-12",
         net: String = "2025-12-13T05:34:00Z",
         image: ImageEntity = createImageEntity(),
-        status: LaunchStatusEntity = createLaunchStatusEntity()
+        status: LaunchStatusEntity = createLaunchStatusEntity(),
+        location: String = "Kennedy Space Center, FL, USA"
     ) = PastLaunchEntity(
         id = id,
         missionName = name,
         net = net,
         imageUrl = image.imageUrl,
-        status = status
+        status = status,
+        location = location
     )
 
     fun createStatusDto(

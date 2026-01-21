@@ -19,24 +19,6 @@ internal data class LaunchesDto(
 )
 
 @Serializable
-internal data class LaunchSummaryDto(
-    @SerialName("id")
-    val id: String?,
-
-    @SerialName("name")
-    val name: String?,
-
-    @SerialName("net")
-    val net: String?,
-
-    @SerialName("image")
-    val image: ImageDto?,
-
-    @SerialName("status")
-    val status: StatusDto?,
-)
-
-@Serializable
 internal data class LaunchDto(
     @SerialName("id")
     val id: String?,

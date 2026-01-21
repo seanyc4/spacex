@@ -22,5 +22,8 @@ data class PastLaunchEntity(
     val imageUrl: String,
 
     @Embedded(prefix = "status")
-    val status: LaunchStatusEntity
+    val status: LaunchStatusEntity,
+
+    @ColumnInfo(name = "location")
+    val location: String,
 )

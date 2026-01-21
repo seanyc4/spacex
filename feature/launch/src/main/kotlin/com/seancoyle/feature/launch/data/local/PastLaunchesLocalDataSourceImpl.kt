@@ -116,7 +116,8 @@ internal class PastLaunchesLocalDataSourceImpl @Inject constructor(
                 name = status.name,
                 abbrev = status.abbrev,
                 description = status.description
-            )
+            ),
+            location = location
         )
     }
 

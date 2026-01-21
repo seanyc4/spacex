@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -168,8 +169,28 @@ internal fun LaunchCard(
                             maxLines = 1,
                             modifier = Modifier.semantics {
                                 contentDescription = dateTimeDescription
-                            },
-                            
+                            }
+                        )
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = stringResource(R.string.location),
+                            tint = AppTheme.colors.secondary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        AppText.bodyMedium(
+                            text = launchItem.location,
+                            color = AppTheme.colors.secondary,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            modifier = Modifier.semantics {
+                                contentDescription = dateTimeDescription
+                            }
                         )
                     }
                 }
@@ -188,7 +209,8 @@ private fun LaunchCardPreview() {
                 missionName = "Starlink Mission",
                 launchDate = "11 January 2026",
                 status = LaunchStatus.SUCCESS,
-                imageUrl = ""
+                imageUrl = "",
+                location = "Cape Canaveral, FL"
             ),
             onClick = { _, _ -> },
             launchesType = LaunchesType.UPCOMING,
