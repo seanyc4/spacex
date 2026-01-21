@@ -106,6 +106,10 @@ object AppCard {
         }
     }
 
+    /**
+     * Blended card with horizontal gradient background.
+     * Used for Hero or special emphasis sections.
+     */
     @Composable
     fun Blended(
         modifier: Modifier = Modifier,
@@ -239,6 +243,27 @@ private fun AppCardPrimaryPreview() {
                 )
                 AppText.bodyMedium(
                     text = "This is the primary elevated card style",
+                    color = AppTheme.colors.secondary
+                )
+            }
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun AppCardBlendedPreview() {
+    AppTheme {
+        AppCard.Blended(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                AppText.titleMedium(
+                    text = "Blended Card",
+                    color = AppTheme.colors.onSurface
+                )
+                AppText.bodyMedium(
+                    text = "This is the blended elevated card style",
                     color = AppTheme.colors.secondary
                 )
             }
