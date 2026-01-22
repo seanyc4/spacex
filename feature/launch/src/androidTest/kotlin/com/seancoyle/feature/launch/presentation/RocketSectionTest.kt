@@ -4,8 +4,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
-import com.seancoyle.feature.launch.presentation.launch.components.rocket.RocketConfigurationCard
-import com.seancoyle.feature.launch.presentation.launch.components.rocket.RocketSection
+import com.seancoyle.feature.launch.presentation.launch.components.RocketConfigurationCard
+import com.seancoyle.feature.launch.presentation.launch.components.RocketSection
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
 import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 import org.junit.Rule
@@ -143,6 +143,52 @@ class RocketSectionTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun givenRocketConfigurationCardWithWikiUrl_whenDisplayed_thenShowsLearnMoreSection() {
+        val config = createTestConfiguration(wikiUrl = "https://en.wikipedia.org/wiki/Falcon_9")
+
+        composeRule.setContent {
+            AppTheme {
+                RocketConfigurationCard(config = config)
+            }
+        }
+
+        composeRule.onNodeWithText("Learn More")
+            .assertExists()
+    }
+
+    @Test
+    fun givenRocketConfigurationCardWithWikiUrl_whenDisplayed_thenShowsWikipediaLink() {
+        val config = createTestConfiguration(wikiUrl = "https://en.wikipedia.org/wiki/Falcon_9")
+
+        composeRule.setContent {
+            AppTheme {
+                RocketConfigurationCard(config = config)
+            }
+        }
+
+        composeRule.onNodeWithText("Rocket on Wikipedia")
+            .assertExists()
+    }
+
+    @Test
+    fun givenRocketConfigurationCardWithoutWikiUrl_whenDisplayed_thenLearnMoreSectionIsNotVisible() {
+        val config = createTestConfiguration(wikiUrl = null)
+
+        composeRule.setContent {
+            AppTheme {
+                RocketConfigurationCard(config = config)
+            }
+        }
+
+        val node = composeRule.onNodeWithText("Learn More")
+        try {
+            node.assertIsDisplayed()
+            assert(false) { "Learn More section should not be displayed when wikiUrl is null" }
+        } catch (_: AssertionError) {
+        }
+    }
+
     private fun createTestRocket(
         name: String = "Falcon 9",
         fullName: String = "Falcon 9 Block 5",
@@ -184,7 +230,8 @@ class RocketSectionTest {
         failedLaunches: String = "10",
         length: String = "70.0 m",
         diameter: String = "3.7 m",
-        launchMass: String = "549,054 kg"
+        launchMass: String = "549,054 kg",
+        wikiUrl: String? = null
     ): ConfigurationUI = ConfigurationUI(
         name = name,
         fullName = fullName,
@@ -201,6 +248,6 @@ class RocketSectionTest {
         maidenFlight = "2007-05-13",
         manufacturer = null,
         families = emptyList(),
-        wikiUrl = null
+        wikiUrl = wikiUrl
     )
 }

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launch.components.rocket
+package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

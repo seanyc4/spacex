@@ -65,11 +65,11 @@ class LaunchViewModel @AssistedInject constructor(
 
     fun onEvent(event: LaunchEvent) {
         when (event) {
-            is LaunchEvent.RetryFetch -> {
+            is LaunchEvent.Retry -> {
                 loadTriggers.tryEmit(true)
             }
 
-            is LaunchEvent.PullToRefreshEvent -> {
+            is LaunchEvent.PullToRefresh -> {
                 loadTriggers.tryEmit(true)
             }
         }

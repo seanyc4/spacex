@@ -18,9 +18,9 @@ import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
-import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesGrid
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
@@ -44,9 +44,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -80,9 +80,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -113,9 +113,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -152,9 +152,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        state = LaunchesUiState(launchesType = LaunchesType.UPCOMING),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -189,9 +189,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -226,9 +226,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(upcomingScrollPosition = 0),
+                        state = LaunchesUiState(upcomingScrollPosition = 0),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -260,9 +260,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = { pos -> scrollPosition = pos },
@@ -300,9 +300,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        state = LaunchesUiState(launchesType = LaunchesType.UPCOMING),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -335,9 +335,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.PAST),
+                        state = LaunchesUiState(launchesType = LaunchesType.PAST),
                         launchesType = LaunchesType.PAST,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -373,9 +373,9 @@ class LaunchesScreenTest {
                 ) {
                     val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
-                    Launches(
+                    LaunchesGrid(
                         launches = lazyPagingItems,
-                        state = LaunchesState(),
+                        state = LaunchesUiState(),
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
@@ -409,12 +409,14 @@ class LaunchesScreenTest {
         missionName: String = "Test Mission",
         launchDate: String = "January 1, 2026",
         status: LaunchStatus = LaunchStatus.GO,
-        imageUrl: String = "https://example.com/image.jpg"
+        imageUrl: String = "https://example.com/image.jpg",
+        location: String = "United States of America"
     ): LaunchesUi = LaunchesUi(
         id = id,
         missionName = missionName,
         launchDate = launchDate,
         status = status,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        location = location
     )
 }

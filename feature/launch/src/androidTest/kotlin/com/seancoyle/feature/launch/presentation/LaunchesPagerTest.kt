@@ -16,8 +16,8 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.LaunchesScreen
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
@@ -47,7 +47,7 @@ class LaunchesPagerTest {
                     LaunchesScreen(
                         upcomingFeedState = upcomingPagingItems,
                         pastFeedState = pastPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        state = LaunchesUiState(launchesType = LaunchesType.UPCOMING),
                         isRefreshing = false,
                         columnCount = 1,
                         selectedLaunchId = null,
@@ -83,7 +83,7 @@ class LaunchesPagerTest {
                     LaunchesScreen(
                         upcomingFeedState = upcomingPagingItems,
                         pastFeedState = pastPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.PAST),
+                        state = LaunchesUiState(launchesType = LaunchesType.PAST),
                         isRefreshing = false,
                         columnCount = 1,
                         selectedLaunchId = null,
@@ -120,12 +120,12 @@ class LaunchesPagerTest {
                     LaunchesScreen(
                         upcomingFeedState = upcomingPagingItems,
                         pastFeedState = pastPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        state = LaunchesUiState(launchesType = LaunchesType.UPCOMING),
                         isRefreshing = false,
                         columnCount = 1,
                         selectedLaunchId = null,
                         onEvent = { event ->
-                            if (event is LaunchesEvents.TabSelectedEvent) {
+                            if (event is LaunchesEvent.TabSelected) {
                                 selectedType = event.launchesType
                             }
                         },
@@ -163,7 +163,7 @@ class LaunchesPagerTest {
                     LaunchesScreen(
                         upcomingFeedState = upcomingPagingItems,
                         pastFeedState = pastPagingItems,
-                        state = LaunchesState(launchesType = LaunchesType.UPCOMING),
+                        state = LaunchesUiState(launchesType = LaunchesType.UPCOMING),
                         isRefreshing = false,
                         columnCount = 1,
                         selectedLaunchId = null,
@@ -195,12 +195,14 @@ class LaunchesPagerTest {
         missionName: String = "Test Mission",
         launchDate: String = "January 1, 2026",
         status: LaunchStatus = LaunchStatus.GO,
-        imageUrl: String = "https://example.com/image.jpg"
+        imageUrl: String = "https://example.com/image.jpg",
+        location: String = "United States of America"
     ): LaunchesUi = LaunchesUi(
         id = id,
         missionName = missionName,
         launchDate = launchDate,
         status = status,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        location = location
     )
 }

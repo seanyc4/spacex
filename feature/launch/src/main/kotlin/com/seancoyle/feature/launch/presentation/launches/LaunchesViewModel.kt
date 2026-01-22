@@ -17,8 +17,8 @@ import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.LaunchUiMapper
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +42,7 @@ class LaunchesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesState()) }
+    var screenState by savedStateHandle.saveable { mutableStateOf(LaunchesUiState()) }
         private set
 
     private val _upcomingPagingEvents = Channel<PagingEvents>(Channel.BUFFERED)
@@ -84,14 +84,14 @@ class LaunchesViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    fun onEvent(event: LaunchesEvents) = viewModelScope.launch {
+    fun onEvent(event: LaunchesEvent) = viewModelScope.launch {
         when (event) {
-            is LaunchesEvents.DisplayFilterBottomSheetEvent -> displayFilterBottomSheet(true)
-            is LaunchesEvents.DismissFilterBottomSheetEvent -> displayFilterBottomSheet(false)
-            is LaunchesEvents.PullToRefreshEvent -> onPullToRefresh()
-            is LaunchesEvents.RetryFetchEvent -> onRetryFetch()
-            is LaunchesEvents.TabSelectedEvent -> onTabSelected(event.launchesType)
-            is LaunchesEvents.UpdateFilterStateEvent -> setLaunchFilterState(
+            is LaunchesEvent.DisplayFilterBottomSheet -> displayFilterBottomSheet(true)
+            is LaunchesEvent.DismissFilterBottomSheet -> displayFilterBottomSheet(false)
+            is LaunchesEvent.PullToRefresh -> onPullToRefresh()
+            is LaunchesEvent.RetryFetch -> onRetryFetch()
+            is LaunchesEvent.TabSelected -> onTabSelected(event.launchesType)
+            is LaunchesEvent.UpdateFilterState -> setLaunchFilterState(
                 launchStatus = event.launchStatus,
                 query = event.query
             )

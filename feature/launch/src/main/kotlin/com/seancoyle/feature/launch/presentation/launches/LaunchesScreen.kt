@@ -33,13 +33,13 @@ import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesGrid
 import com.seancoyle.feature.launch.presentation.launches.components.LaunchesLoadingState
 import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetRoute
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,11 +47,11 @@ fun LaunchesScreen(
     modifier: Modifier = Modifier,
     upcomingFeedState: LazyPagingItems<LaunchesUi>,
     pastFeedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     isRefreshing: Boolean,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit
 ) {
@@ -59,7 +59,7 @@ fun LaunchesScreen(
         topBar = {
             TopAppBar(
                 onClick = {
-                    onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
+                    onEvent(LaunchesEvent.DisplayFilterBottomSheet)
                 }
             )
         },
@@ -68,7 +68,7 @@ fun LaunchesScreen(
         RefreshableContent(
             modifier = modifier,
             isRefreshing = isRefreshing,
-            onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
+            onRefresh = { onEvent(LaunchesEvent.PullToRefresh) },
             content = {
                 LaunchesContent(
                     upcomingFeedState = upcomingFeedState,
@@ -90,10 +90,10 @@ fun LaunchesScreen(
 private fun LaunchesContent(
     upcomingFeedState: LazyPagingItems<LaunchesUi>,
     pastFeedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
@@ -128,7 +128,7 @@ private fun LaunchesContent(
                 else -> LaunchesType.UPCOMING
             }
             if (state.launchesType != launchType) {
-                onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+                onEvent(LaunchesEvent.TabSelected(launchType))
             }
         }
     }
@@ -155,7 +155,7 @@ private fun LaunchesContent(
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = {
-                        onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+                        onEvent(LaunchesEvent.TabSelected(launchType))
                     },
                     text = {
                         AppText.titleSmall(
@@ -210,14 +210,14 @@ private fun LaunchesContent(
                 currentStatus = state.launchStatus,
                 onApplyFilters = { result ->
                     onEvent(
-                        LaunchesEvents.UpdateFilterStateEvent(
+                        LaunchesEvent.UpdateFilterState(
                             query = result.query,
                             launchStatus = result.status
                         )
                     )
                 },
                 onDismiss = {
-                    onEvent(LaunchesEvents.DismissFilterBottomSheetEvent)
+                    onEvent(LaunchesEvent.DismissFilterBottomSheet)
                 }
             )
         }
@@ -227,11 +227,11 @@ private fun LaunchesContent(
 @Composable
 private fun LaunchesListContent(
     feedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     launchesType: LaunchesType,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit
 ) {
@@ -253,7 +253,7 @@ private fun LaunchesListContent(
                     message = stringResource(R.string.unable_to_load),
                     modifier = Modifier.fillMaxSize(),
                     showRetryButton = true,
-                    onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) }
+                    onRetry = { onEvent(LaunchesEvent.RetryFetch) }
                 )
             }
 
@@ -266,7 +266,7 @@ private fun LaunchesListContent(
                         onRetry = { }
                     )
                 } else {
-                    Launches(
+                    LaunchesGrid(
                         launches = feedState,
                         state = state,
                         launchesType = launchesType,

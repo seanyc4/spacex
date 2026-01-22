@@ -27,7 +27,7 @@ fun LaunchRoute(
         is LaunchUiState.Success -> {
             RefreshableContent(
                 isRefreshing = false,
-                onRefresh = { viewModel.onEvent(LaunchEvent.PullToRefreshEvent) },
+                onRefresh = { viewModel.onEvent(LaunchEvent.PullToRefresh) },
                 content ={
                 LaunchScreen(
                     launch = state.launch,
@@ -38,7 +38,7 @@ fun LaunchRoute(
 
         is LaunchUiState.Error -> {
             ErrorState(
-                onRetry = { viewModel.onEvent(LaunchEvent.RetryFetch) }
+                onRetry = { viewModel.onEvent(LaunchEvent.Retry) }
             )
         }
     }

@@ -310,7 +310,7 @@ Manual Trigger
 ## 📐 Key Design Patterns
 
 ### MVI (Model-View-Intent)
-- **State**: Single immutable state class per screen (`LaunchesState`, `LaunchUiState`)
+- **State**: Single immutable state class per screen (`LaunchesUiState`, `LaunchUiState`)
 - **Events**: Sealed classes for user actions (`LaunchesEvents`, `LaunchEvent`)
 - **ViewModel**: Transforms intents to state updates
 

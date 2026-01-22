@@ -311,12 +311,14 @@ class LaunchCardTest {
         missionName: String = "Test Mission",
         launchDate: String = "January 1, 2026",
         status: LaunchStatus = LaunchStatus.GO,
-        imageUrl: String = "https://example.com/image.jpg"
+        imageUrl: String = "https://example.com/image.jpg",
+        location: String = "United State of America"
     ): LaunchesUi = LaunchesUi(
         id = id,
         missionName = missionName,
         launchDate = launchDate,
         status = status,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        location = location
     )
 }
