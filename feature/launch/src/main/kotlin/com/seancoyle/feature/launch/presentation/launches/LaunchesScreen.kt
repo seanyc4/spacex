@@ -2,6 +2,7 @@
 
 package com.seancoyle.feature.launch.presentation.launches
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.ui.animation.ContentStateTransitions.slowFadeTransition
 import com.seancoyle.core.ui.components.error.ErrorState
 import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
@@ -236,40 +238,48 @@ private fun LaunchesListContent(
     val refreshLoadState = feedState.loadState.refresh
     val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
 
-    when (refreshLoadState) {
-        is LoadState.Loading -> {
-            LaunchesLoadingState(columnCount = columnCount)
-        }
+    AnimatedContent(
+        targetState = refreshLoadState,
+        transitionSpec = { slowFadeTransition() },
+        label = "LaunchesContentAnimation"
+    ) { loadState ->
+        when (loadState) {
+            is LoadState.Loading -> {
+                LaunchesLoadingState(columnCount = columnCount)
+            }
 
-        is LoadState.Error -> {
-            ErrorState(
-                onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
-        }
-
-        is LoadState.NotLoading -> {
-            if (feedState.itemCount == 0 && endOfPaginationReached) {
-                // Only show empty state if we've finished loading and there are no items
+            is LoadState.Error -> {
                 ErrorState(
-                    message = stringResource(R.string.empty_data),
+                    message = stringResource(R.string.unable_to_load),
                     modifier = Modifier.fillMaxSize(),
-                    showRetryButton = false,
-                    onRetry = { }
+                    showRetryButton = true,
+                    onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) }
                 )
-            } else {
-                // Show the list (even if it's empty, but not at end of pagination yet)
-                Launches(
-                    launches = feedState,
-                    state = state,
-                    launchesType = launchesType,
-                    columnCount = columnCount,
-                    selectedLaunchId = selectedLaunchId,
-                    onEvent = onEvent,
-                    onUpdateScrollPosition = { position ->
-                        onUpdateScrollPosition(launchesType, position)
-                    },
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxSize()
-                )
+            }
+
+            is LoadState.NotLoading -> {
+                if (feedState.itemCount == 0 && endOfPaginationReached) {
+                    ErrorState(
+                        message = stringResource(R.string.empty_data),
+                        modifier = Modifier.fillMaxSize(),
+                        showRetryButton = false,
+                        onRetry = { }
+                    )
+                } else {
+                    Launches(
+                        launches = feedState,
+                        state = state,
+                        launchesType = launchesType,
+                        columnCount = columnCount,
+                        selectedLaunchId = selectedLaunchId,
+                        onEvent = onEvent,
+                        onUpdateScrollPosition = { position ->
+                            onUpdateScrollPosition(launchesType, position)
+                        },
+                        onClick = onClick,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
     }
