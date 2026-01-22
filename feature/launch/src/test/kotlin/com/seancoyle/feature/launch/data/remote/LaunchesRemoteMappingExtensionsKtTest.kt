@@ -17,83 +17,102 @@ import kotlin.test.assertTrue
 class LaunchesRemoteMappingExtensionsKtTest {
 
     @Test
-    fun `map should return NETWORK_CONNECTION_FAILED for IOException`() {
+    fun `GIVEN IOException WHEN map THEN returns NETWORK_CONNECTION_FAILED`() {
         val exception = IOException("Connection failed")
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_CONNECTION_FAILED, result)
     }
 
     @Test
-    fun `map should return NETWORK_UNAUTHORIZED for 401 HttpException`() {
+    fun `GIVEN 401 HttpException WHEN map THEN returns NETWORK_UNAUTHORIZED`() {
         val response = Response.error<Any>(401, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_UNAUTHORIZED, result)
     }
 
     @Test
-    fun `map should return NETWORK_FORBIDDEN for 403 HttpException`() {
+    fun `GIVEN 403 HttpException WHEN map THEN returns NETWORK_FORBIDDEN`() {
         val response = Response.error<Any>(403, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_FORBIDDEN, result)
     }
 
     @Test
-    fun `map should return NETWORK_NOT_FOUND for 404 HttpException`() {
+    fun `GIVEN 404 HttpException WHEN map THEN returns NETWORK_NOT_FOUND`() {
         val response = Response.error<Any>(404, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_NOT_FOUND, result)
     }
 
     @Test
-    fun `map should return NETWORK_TIMEOUT for 408 HttpException`() {
+    fun `GIVEN 408 HttpException WHEN map THEN returns NETWORK_TIMEOUT`() {
         val response = Response.error<Any>(408, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_TIMEOUT, result)
     }
 
     @Test
-    fun `map should return NETWORK_PAYLOAD_TOO_LARGE for 413 HttpException`() {
+    fun `GIVEN 413 HttpException WHEN map THEN returns NETWORK_PAYLOAD_TOO_LARGE`() {
         val response = Response.error<Any>(413, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_PAYLOAD_TOO_LARGE, result)
     }
 
     @Test
-    fun `map should return NETWORK_INTERNAL_SERVER_ERROR for 500 HttpException`() {
+    fun `GIVEN 500 HttpException WHEN map THEN returns NETWORK_INTERNAL_SERVER_ERROR`() {
         val response = Response.error<Any>(500, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_INTERNAL_SERVER_ERROR, result)
     }
 
     @Test
-    fun `map should return NETWORK_UNKNOWN_ERROR for other HttpException codes`() {
+    fun `GIVEN 503 HttpException WHEN map THEN returns NETWORK_UNKNOWN_ERROR`() {
         val response = Response.error<Any>(503, "".toResponseBody(null))
         val exception = HttpException(response)
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_UNKNOWN_ERROR, result)
     }
 
     @Test(expected = CancellationException::class)
-    fun `map should rethrow CancellationException`() {
+    fun `GIVEN CancellationException WHEN map THEN rethrows exception`() {
         val exception = CancellationException("Cancelled")
+
         map(exception)
     }
 
     @Test
-    fun `map should return NETWORK_UNKNOWN_ERROR for unknown exceptions`() {
+    fun `GIVEN unknown exception WHEN map THEN returns NETWORK_UNKNOWN_ERROR`() {
         val exception = RuntimeException("Unknown error")
+
         val result = map(exception)
+
         assertEquals(RemoteError.NETWORK_UNKNOWN_ERROR, result)
     }
 
     @Test
-    fun `LaunchesDto toDomain should return empty list when results is null`() {
+    fun `GIVEN launchesDto with null results WHEN toDomain THEN returns empty list`() {
         val launchesDto = LaunchesDto(
             count = 0,
             next = null,
@@ -107,7 +126,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchesDto toDomain should return empty list when results is empty`() {
+    fun `GIVEN launchesDto with empty results WHEN toDomain THEN returns empty list`() {
         val launchesDto = LaunchesDto(
             count = 0,
             next = null,
@@ -121,7 +140,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchesDto toDomain should map valid launches and filter out invalid ones`() {
+    fun `GIVEN launchesDto with valid and invalid launches WHEN toDomain THEN filters out invalid ones`() {
         val validLaunchDto = createLaunchDto()
         val invalidLaunchDto = createLaunchDto(id = null)
 
@@ -137,7 +156,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchDto toDomain should map all fields correctly including rocket stages and nested objects`() {
+    fun `GIVEN launchDto with all fields WHEN toDomain THEN maps all fields including rocket stages correctly`() {
         val updates = listOf(TestData.createLaunchUpdateDto())
         val infoUrls = listOf(TestData.createInfoUrlDto())
         val vidUrls = listOf(TestData.createVidUrlDto())
@@ -180,18 +199,13 @@ class LaunchesRemoteMappingExtensionsKtTest {
 
         val launch = launchDto.toDomain()!!
 
-        // Assert basic fields
         assertEquals("test-id", launch.id)
         assertEquals("https://example.com/launch", launch.url)
         assertEquals("Test Launch", launch.missionName)
         assertEquals("2025-12-05T18:39:36Z", launch.lastUpdated)
         assertEquals("2025-12-13T05:34:00Z", launch.net)
-
-        // Assert status
         assertNotNull(launch.status)
         assertEquals("Go for Launch", launch.status.name)
-
-        // Assert image
         assertEquals("Starlink night fairing", launch.image.name)
         assertEquals(1296, launch.image.id)
         assertEquals(
@@ -203,17 +217,11 @@ class LaunchesRemoteMappingExtensionsKtTest {
             launch.image.thumbnailUrl
         )
         assertEquals("SpaceX", launch.image.credit)
-
-        // Assert updates, infoUrls, vidUrls
         assertEquals(updates[0].comment, launch.updates?.get(0)?.comment)
         assertEquals(infoUrls[0].title, launch.infoUrls?.get(0)?.title)
         assertEquals(vidUrls[0].title, launch.vidUrls?.get(0)?.title)
-
-        // Assert padTurnaround and missionPatches
         assertEquals(padTurnaround, launch.padTurnaround)
         assertEquals(missionPatches[0].name, launch.missionPatches?.get(0)?.name)
-
-        // Assert rocket and stages
         assertNotNull(launch.rocket)
         assertNotNull(launch.rocket.launcherStage)
         assertEquals(1, launch.rocket.launcherStage.size)
@@ -224,7 +232,7 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchDto toDomain should return null when id is missing`() {
+    fun `GIVEN launchDto with null id WHEN toDomain THEN returns null`() {
         val launchDto = createLaunchDto(id = null)
 
         val result = launchDto.toDomain()
@@ -233,11 +241,55 @@ class LaunchesRemoteMappingExtensionsKtTest {
     }
 
     @Test
-    fun `LaunchDto toDomain should return null when name is missing`() {
+    fun `GIVEN launchDto with null name WHEN toDomain THEN returns null`() {
         val launchDto = createLaunchDto(name = null)
 
         val result = launchDto.toDomain()
 
         assertEquals(result, null)
+    }
+
+    @Test
+    fun `GIVEN launchDto with pad location country WHEN toSummary THEN maps location from country name`() {
+        val countryDto = TestData.createCountryDto(name = "United States")
+        val locationDto = TestData.createLocationDto(country = countryDto)
+        val padDto = TestData.createPadDto(location = locationDto)
+        val launchDto = createLaunchDto(pad = padDto)
+
+        val result = launchDto.toSummary()
+
+        assertNotNull(result)
+        assertEquals("United States", result?.location)
+    }
+
+    @Test
+    fun `GIVEN launchDto with null pad WHEN toSummary THEN returns null`() {
+        val launchDto = createLaunchDto(pad = null)
+
+        val result = launchDto.toSummary()
+
+        assertEquals(null, result)
+    }
+
+    @Test
+    fun `GIVEN launchDto with pad and location WHEN toDomain THEN maps all location fields correctly`() {
+        val countryDto = TestData.createCountryDto(name = "United States")
+        val locationDto = TestData.createLocationDto(
+            id = 27,
+            name = "Kennedy Space Center, FL, USA",
+            country = countryDto,
+            totalLaunchCount = 500
+        )
+        val padDto = TestData.createPadDto(location = locationDto)
+        val launchDto = createLaunchDto(pad = padDto)
+
+        val launch = launchDto.toDomain()
+
+        assertNotNull(launch)
+        assertNotNull(launch?.pad?.location)
+        assertEquals(27, launch?.pad?.location?.id)
+        assertEquals("Kennedy Space Center, FL, USA", launch?.pad?.location?.name)
+        assertEquals("United States", launch?.pad?.location?.country?.name)
+        assertEquals(500, launch?.pad?.location?.totalLaunchCount)
     }
 }

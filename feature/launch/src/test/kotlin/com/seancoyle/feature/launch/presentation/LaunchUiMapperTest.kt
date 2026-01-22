@@ -18,8 +18,9 @@ import com.seancoyle.feature.launch.domain.model.Rocket
 import com.seancoyle.feature.launch.domain.model.Status
 import com.seancoyle.feature.launch.domain.model.VidUrl
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
+import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -29,17 +30,18 @@ import java.time.LocalDateTime
 
 class LaunchUiMapperTest {
 
+    @MockK
     private lateinit var dateTransformer: DateTransformer
     private lateinit var mapper: LaunchUiMapper
 
     @Before
     fun setup() {
-        dateTransformer = mockk()
+        MockKAnnotations.init(this)
         mapper = LaunchUiMapper(dateTransformer)
     }
 
     @Test
-    fun `mapToLaunchUi maps success status correctly`() = runTest {
+    fun `GIVEN launch with success status WHEN mapToLaunchUi THEN maps to SUCCESS status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "Success")
         )
@@ -51,7 +53,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps partial success status correctly`() = runTest {
+    fun `GIVEN launch with partial success status WHEN mapToLaunchUi THEN maps to SUCCESS status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "Partial Success")
         )
@@ -63,7 +65,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps failed status correctly`() = runTest {
+    fun `GIVEN launch with failure status WHEN mapToLaunchUi THEN maps to FAILED status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "Failure")
         )
@@ -75,7 +77,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps go status correctly`() = runTest {
+    fun `GIVEN launch with go status WHEN mapToLaunchUi THEN maps to GO status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "Go")
         )
@@ -87,7 +89,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps TBD status correctly`() = runTest {
+    fun `GIVEN launch with TBD status WHEN mapToLaunchUi THEN maps to TBD status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "To Be Determined")
         )
@@ -99,7 +101,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps TBC status correctly`() = runTest {
+    fun `GIVEN launch with TBC status WHEN mapToLaunchUi THEN maps to TBC status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "To Be Confirmed")
         )
@@ -111,7 +113,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps unknown status to TBD`() = runTest {
+    fun `GIVEN launch with unknown status WHEN mapToLaunchUi THEN maps to TBD status`() = runTest {
         val launch = createTestLaunch(
             status = createStatus(abbrev = "Unknown Status")
         )
@@ -123,7 +125,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi handles missing status abbrev`() = runTest {
+    fun `GIVEN launch with missing status abbrev WHEN mapToLaunchUi THEN maps to TBD status`() = runTest {
         val launch = createTestLaunch(status = Status(0, "", "", ""))
         setupDateFormatterDefaults()
 
@@ -133,7 +135,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi formats launch date correctly`() = runTest {
+    fun `GIVEN launch with date WHEN mapToLaunchUi THEN formats launch date correctly`() = runTest {
         val expectedDate = "26 November 2026"
         val launch = createTestLaunch()
         every { dateTransformer.formatDate(any()) } returns LocalDateTime.of(2026, 11, 26, 10, 30)
@@ -145,7 +147,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi formats launch time correctly`() = runTest {
+    fun `GIVEN launch with time WHEN mapToLaunchUi THEN formats launch time correctly`() = runTest {
         val expectedTime = "10:30"
         val launch = createTestLaunch()
         every { dateTransformer.formatDate(any()) } returns LocalDateTime.of(2026, 1, 15, 10, 30)
@@ -157,7 +159,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps mission name correctly and trims pipe suffix`() = runTest {
+    fun `GIVEN launch with mission name containing pipe WHEN mapToLaunchUi THEN trims after pipe`() = runTest {
         val launch = createTestLaunch(missionName = "Falcon 9 Block 5 | Starlink Group 15-12")
         setupDateFormatterDefaults()
 
@@ -167,7 +169,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi handles mission name without pipe`() = runTest {
+    fun `GIVEN launch with mission name without pipe WHEN mapToLaunchUi THEN keeps full name`() = runTest {
         val launch = createTestLaunch(missionName = "Starlink Group 7-12")
         setupDateFormatterDefaults()
 
@@ -177,7 +179,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps image correctly`() = runTest {
+    fun `GIVEN launch with image WHEN mapToLaunchUi THEN maps image correctly`() = runTest {
         val expectedImageUrl = "https://example.com/image.jpg"
         val launch = createTestLaunch(
             image = createImage(imageUrl = expectedImageUrl)
@@ -190,7 +192,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps failReason correctly when present`() = runTest {
+    fun `GIVEN launch with failReason WHEN mapToLaunchUi THEN maps failReason correctly`() = runTest {
         val expectedFailReason = "Engine malfunction during ascent"
         val launch = createTestLaunch(failReason = expectedFailReason)
         setupDateFormatterDefaults()
@@ -201,7 +203,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi handles null failReason`() = runTest {
+    fun `GIVEN launch with null failReason WHEN mapToLaunchUi THEN returns null failReason`() = runTest {
         val launch = createTestLaunch(failReason = null)
         setupDateFormatterDefaults()
 
@@ -211,7 +213,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi handles null launchServiceProvider`() = runTest {
+    fun `GIVEN launch with null launchServiceProvider WHEN mapToLaunchUi THEN returns null provider`() = runTest {
         val launch = createTestLaunch(launchServiceProvider = null)
         setupDateFormatterDefaults()
 
@@ -221,7 +223,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps launchServiceProvider correctly when present`() = runTest {
+    fun `GIVEN launch with launchServiceProvider WHEN mapToLaunchUi THEN maps provider correctly`() = runTest {
         val expectedAgency = createAgency(name = "SpaceX")
         val launch = createTestLaunch(launchServiceProvider = expectedAgency)
         setupDateFormatterDefaults()
@@ -232,7 +234,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps rocket correctly`() = runTest {
+    fun `GIVEN launch with rocket WHEN mapToLaunchUi THEN maps rocket correctly`() = runTest {
         val launch = createTestLaunch()
         setupDateFormatterDefaults()
 
@@ -242,7 +244,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps mission correctly`() = runTest {
+    fun `GIVEN launch with mission WHEN mapToLaunchUi THEN maps mission correctly`() = runTest {
         val launch = createTestLaunch()
         setupDateFormatterDefaults()
 
@@ -252,7 +254,7 @@ class LaunchUiMapperTest {
     }
 
     @Test
-    fun `mapToLaunchUi maps pad correctly`() = runTest {
+    fun `GIVEN launch with pad WHEN mapToLaunchUi THEN maps pad correctly`() = runTest {
         val launch = createTestLaunch()
         setupDateFormatterDefaults()
 
@@ -260,6 +262,66 @@ class LaunchUiMapperTest {
 
         assertEquals("Space Launch Complex 40", result.pad.name)
     }
+
+    @Test
+    fun `GIVEN pad with location WHEN mapToLaunchUi THEN maps location name and counts correctly`() = runTest {
+        val location = Location(
+            id = 12,
+            url = "https://ll.thespacedevs.com/2.2.0/location/12/",
+            name = "Cape Canaveral, FL, USA",
+            country = Country(
+                id = 1,
+                name = "United States",
+                alpha2Code = "US",
+                alpha3Code = "USA",
+                nationalityName = "American"
+            ),
+            description = "Cape Canaveral Space Force Station",
+            image = null,
+            mapImage = null,
+            longitude = -80.57735736,
+            latitude = 28.56194122,
+            timezoneName = "America/New_York",
+            totalLaunchCount = 778,
+            totalLandingCount = 56
+        )
+        val pad = createPad().copy(location = location)
+        val launch = createTestLaunch(pad = pad)
+        setupDateFormatterDefaults()
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals("Cape Canaveral, FL, USA", result.pad.locationName)
+        assertEquals("778", result.pad.locationTotalLaunchCount)
+        assertEquals("56", result.pad.locationTotalLandingCount)
+    }
+
+    @Test
+    fun `GIVEN pad with location counts WHEN mapToLaunchUi THEN formats counts as strings correctly`() = runTest {
+        val location = Location(
+            id = 12,
+            url = "https://ll.thespacedevs.com/2.2.0/location/12/",
+            name = "Kennedy Space Center, FL, USA",
+            country = null,
+            description = null,
+            image = null,
+            mapImage = null,
+            longitude = null,
+            latitude = null,
+            timezoneName = "America/New_York",
+            totalLaunchCount = 1543,
+            totalLandingCount = 89
+        )
+        val pad = createPad().copy(location = location)
+        val launch = createTestLaunch(pad = pad)
+        setupDateFormatterDefaults()
+
+        val result = mapper.mapToLaunchUi(launch)
+
+        assertEquals("1543", result.pad.locationTotalLaunchCount)
+        assertEquals("89", result.pad.locationTotalLandingCount)
+    }
+
 
     @Test
     fun `mapToLaunchUi calculates window duration for 1 hour window`() = runTest {
@@ -585,13 +647,15 @@ class LaunchUiMapperTest {
         missionName: String = "Test Summary",
         net: String = "2026-01-15T10:30:00Z",
         status: Status = createStatus(),
-        imageUrl: String = "https://example.com/image.jpg"
+        imageUrl: String = "https://example.com/image.jpg",
+        location: String = "Kennedy Space Center, FL, USA"
     ): LaunchSummary = LaunchSummary(
         id = id,
         missionName = missionName,
         net = net,
         status = status,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        location = location
     )
 
     private fun createStatus(

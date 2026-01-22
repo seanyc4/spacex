@@ -66,10 +66,13 @@ internal fun LaunchHeroSection(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
+                                Color.Transparent,
+                                Color.Transparent,
+                                AppTheme.colors.surface.copy(alpha = 0.65f),
                                 AppTheme.colors.surface.copy(alpha = 0.7f),
-                                AppTheme.colors.surface.copy(alpha = 0.9f)
+                                AppTheme.colors.surface.copy(alpha = 0.8f)
                             ),
-                            startY = 300f
+                            startY = 100f
                         )
                     )
             )

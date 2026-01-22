@@ -114,7 +114,7 @@ class LaunchViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
         assertTrue(underTest.launchState.value is LaunchUiState.Error)
 
-        underTest.onEvent(LaunchEvent.RetryFetch)
+        underTest.onEvent(LaunchEvent.Retry)
         testScheduler.advanceUntilIdle()
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
@@ -131,7 +131,7 @@ class LaunchViewModelTest {
         underTest = createViewModel()
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
-        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        underTest.onEvent(LaunchEvent.PullToRefresh)
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -146,7 +146,7 @@ class LaunchViewModelTest {
         underTest = createViewModel()
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
-        underTest.onEvent(LaunchEvent.RetryFetch)
+        underTest.onEvent(LaunchEvent.Retry)
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -200,9 +200,9 @@ class LaunchViewModelTest {
         underTest = createViewModel()
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
-        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        underTest.onEvent(LaunchEvent.PullToRefresh)
         testScheduler.advanceUntilIdle()
-        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        underTest.onEvent(LaunchEvent.PullToRefresh)
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 2) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -226,7 +226,7 @@ class LaunchViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
         assertTrue(underTest.launchState.value is LaunchUiState.Success)
 
-        underTest.onEvent(LaunchEvent.PullToRefreshEvent)
+        underTest.onEvent(LaunchEvent.PullToRefresh)
         testScheduler.advanceUntilIdle()
 
         assertTrue(underTest.launchState.value is LaunchUiState.Error)

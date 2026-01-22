@@ -1,6 +1,5 @@
-package com.seancoyle.feature.launch.presentation.launch.components.rocket
+package com.seancoyle.feature.launch.presentation.launch.components
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.seancoyle.core.ui.components.image.RemoteImage
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -54,19 +52,17 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacin
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.launch.components.DetailRow
-import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
-import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
 
 @Composable
 internal fun RocketConfigurationCard(
     config: ConfigurationUI,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } }
 ) {
     AppCard.Primary(modifier = modifier) {
         SectionTitle(text = stringResource(R.string.rocket_config))
-        RocketHeader(config = config)
+        RocketHeader(config = config, onOpenUrl = onOpenUrl)
         HorizontalDivider(
             modifier = Modifier.padding(vertical = paddingLarge),
             color = AppTheme.colors.onSurface.copy(alpha = 0.12f)
@@ -102,16 +98,16 @@ internal fun RocketConfigurationCard(
             }
         }
 
-        ExternalLinks(config = config)
+        ExternalLinks(config = config, onOpenUrl = onOpenUrl)
     }
 }
 
 @Composable
 private fun RocketHeader(
     config: ConfigurationUI,
+    onOpenUrl: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -169,7 +165,7 @@ private fun RocketHeader(
                 .height(launchImageHeight)
                 .clip(RoundedCornerShape(cornerRadiusMedium))
                 .clickable {
-                    context.openUrl(config.imageUrl)
+                    onOpenUrl(config.imageUrl)
                 },
         )
 
@@ -353,9 +349,9 @@ private fun ManufacturerAndHistory(
 @Composable
 private fun ExternalLinks(
     config: ConfigurationUI,
+    onOpenUrl: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val hasLinks = !config.wikiUrl.isNullOrEmpty() || !config.manufacturer?.wikiUrl.isNullOrEmpty()
 
     if (hasLinks) {
@@ -382,10 +378,7 @@ private fun ExternalLinks(
                     LinkButton(
                         text = stringResource(R.string.rocket_on_wikipedia),
                         icon = Icons.Default.Info,
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
-                            context.startActivity(intent)
-                        }
+                        onClick = { onOpenUrl(wikiUrl) }
                     )
                 }
 
@@ -393,10 +386,7 @@ private fun ExternalLinks(
                     LinkButton(
                         text = stringResource(R.string.manufacturer_on_wikipedia),
                         icon = Icons.Default.Build,
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, wikiUrl.toUri())
-                            context.startActivity(intent)
-                        }
+                        onClick = { onOpenUrl(wikiUrl) }
                     )
                 }
 
@@ -404,10 +394,7 @@ private fun ExternalLinks(
                     LinkButton(
                         text = stringResource(R.string.manufacturer_website),
                         icon = Icons.Default.AccountCircle,
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, infoUrl.toUri())
-                            context.startActivity(intent)
-                        }
+                        onClick = { onOpenUrl(infoUrl) }
                     )
                 }
             }

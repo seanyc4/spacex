@@ -299,7 +299,8 @@ class LaunchUiMapper @Inject constructor(
                 launchDate = formatDate(locateDateTime),
                 missionName = missionName.substringBefore("|").trim(),
                 status = status.toDomain(),
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                location = location
             )
         }
     }

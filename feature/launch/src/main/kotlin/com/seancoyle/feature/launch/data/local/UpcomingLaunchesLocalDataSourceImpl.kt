@@ -115,7 +115,8 @@ internal class UpcomingLaunchesLocalDataSourceImpl @Inject constructor(
                 name = status.name,
                 abbrev = status.abbrev,
                 description = status.description
-            )
+            ),
+            location = location
         )
     }
 

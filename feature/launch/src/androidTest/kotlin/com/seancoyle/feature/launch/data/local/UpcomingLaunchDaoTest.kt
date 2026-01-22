@@ -25,7 +25,8 @@ class UpcomingLaunchDaoTest {
             missionName = "Test Mission",
             net = "2026-01-15T10:00:00Z",
             imageUrl = "https://example.com/image.jpg",
-            status = status
+            status = status,
+            location = "United States of America"
         )
 
         assertEquals("test-1", entity.id)
@@ -64,7 +65,8 @@ class UpcomingLaunchDaoTest {
                     name = "Go",
                     abbrev = "Go",
                     description = "Go for launch"
-                )
+                ),
+                location = "United States of America"
             )
         }
 
@@ -84,7 +86,8 @@ class UpcomingLaunchDaoTest {
                 name = "Go",
                 abbrev = "Go",
                 description = "Go for launch"
-            )
+            ),
+            location = "United States of America"
         )
 
         val copy = original.copy(missionName = "Updated")

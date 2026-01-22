@@ -295,6 +295,37 @@ class LaunchesLocalMappingExtensionsKtTest {
     }
 
     @Test
+    fun `GIVEN launch with location WHEN round trip to entity and back THEN preserves all location fields`() {
+        val location = TestData.createLocation(
+            id = 27,
+            name = "Kennedy Space Center, FL, USA",
+            description = "Historic NASA launch site",
+            timezoneName = "America/New_York",
+            totalLaunchCount = 500,
+            totalLandingCount = 50,
+            longitude = -80.6039558,
+            latitude = 28.6080585,
+            mapImage = "https://example.com/location-map.jpg"
+        )
+        val pad = TestData.createPad(location = location)
+        val originalLaunch = TestData.createLaunch(pad = pad)
+
+        val entity = originalLaunch.toUpcomingDetailEntity()
+        val launchAgain = entity.toDomain()
+
+        assertNotNull(launchAgain.pad.location)
+        assertEquals(27, launchAgain.pad.location?.id)
+        assertEquals("Kennedy Space Center, FL, USA", launchAgain.pad.location?.name)
+        assertEquals("Historic NASA launch site", launchAgain.pad.location?.description)
+        assertEquals("America/New_York", launchAgain.pad.location?.timezoneName)
+        assertEquals(500, launchAgain.pad.location?.totalLaunchCount)
+        assertEquals(50, launchAgain.pad.location?.totalLandingCount)
+        assertEquals(-80.6039558, launchAgain.pad.location?.longitude)
+        assertEquals(28.6080585, launchAgain.pad.location?.latitude)
+        assertEquals("https://example.com/location-map.jpg", launchAgain.pad.location?.mapImage)
+    }
+
+    @Test
     fun `GIVEN LaunchEntity with null optional fields WHEN converts correctly`() {
         val launchEntity = TestData.createLaunchEntity(
             netPrecision = null,
@@ -306,5 +337,57 @@ class LaunchesLocalMappingExtensionsKtTest {
         assertNotNull(result)
         assertEquals(null, result.netPrecision)
         assertEquals(null, result.launchServiceProvider)
+    }
+
+    @Test
+    fun `GIVEN upcomingLaunchEntity with location WHEN toDomain THEN maps location field correctly`() {
+        val entity = TestData.createUpcomingLaunchEntity(
+            location = "Cape Canaveral, FL, USA"
+        )
+
+        val result = entity.toDomain()
+
+        assertEquals("Cape Canaveral, FL, USA", result.location)
+    }
+
+    @Test
+    fun `GIVEN pastLaunchEntity with location WHEN toDomain THEN maps location field correctly`() {
+        val entity = TestData.createPastLaunchEntity(
+            location = "Vandenberg Space Force Base, CA, USA"
+        )
+
+        val result = entity.toDomain()
+
+        assertEquals("Vandenberg Space Force Base, CA, USA", result.location)
+    }
+
+
+    @Test
+    fun `GIVEN launch with pad location WHEN toUpcomingDetailEntity THEN flattens location to entity fields`() {
+        val location = TestData.createLocation(
+            id = 27,
+            name = "Kennedy Space Center, FL, USA",
+            description = "Historic launch site",
+            timezoneName = "America/New_York",
+            totalLaunchCount = 500,
+            totalLandingCount = 50,
+            longitude = -80.6039558,
+            latitude = 28.6080585,
+            mapImage = "https://example.com/map.jpg"
+        )
+        val pad = TestData.createPad(location = location)
+        val launch = TestData.createLaunch(pad = pad)
+
+        val result = launch.toUpcomingDetailEntity()
+
+        assertEquals(27, result.pad.locationId)
+        assertEquals("Kennedy Space Center, FL, USA", result.pad.locationName)
+        assertEquals("Historic launch site", result.pad.locationDescription)
+        assertEquals("America/New_York", result.pad.locationTimezone)
+        assertEquals(500, result.pad.locationTotalLaunchCount)
+        assertEquals(50, result.pad.locationTotalLandingCount)
+        assertEquals(-80.6039558, result.pad.locationLongitude)
+        assertEquals(28.6080585, result.pad.locationLatitude)
+        assertEquals("https://example.com/map.jpg", result.pad.locationMapImage)
     }
 }

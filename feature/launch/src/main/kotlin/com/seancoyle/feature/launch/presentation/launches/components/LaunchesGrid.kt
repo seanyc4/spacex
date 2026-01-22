@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -31,20 +32,22 @@ import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingMedium
 import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingMedium
+import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.ObserveScrollPosition
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 
 @Composable
-internal fun Launches(
+internal fun LaunchesGrid(
     launches: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     launchesType: LaunchesType,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier
@@ -76,7 +79,6 @@ internal fun Launches(
         contentPadding = PaddingValues(
             start = paddingMedium,
             end = paddingMedium,
-            top = paddingSmall,
             bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
         ),
         modifier = modifier
@@ -90,7 +92,7 @@ internal fun Launches(
             if (launches.loadState.prepend is LoadState.Error) {
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
-                    onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
+                    onClick = { onEvent(LaunchesEvent.RetryFetch) },
                     modifier = Modifier.padding(vertical = paddingMedium)
                 )
             }
@@ -120,8 +122,65 @@ internal fun Launches(
             if (appendLoadState is LoadState.Error) {
                 ButtonPrimary(
                     text = stringResource(R.string.retry),
-                    onClick = { onEvent(LaunchesEvents.RetryFetchEvent) },
+                    onClick = { onEvent(LaunchesEvent.RetryFetch) },
                     modifier = Modifier.padding(paddingSmall)
+                )
+            }
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun LaunchesGridPreview() {
+    val sampleLaunches = listOf(
+        LaunchesUi(
+            id = "1",
+            missionName = "Starlink Mission",
+            launchDate = "22 January 2026",
+            status = LaunchStatus.SUCCESS,
+            imageUrl = "",
+            location = "Cape Canaveral, FL"
+        ),
+        LaunchesUi(
+            id = "2",
+            missionName = "Crew Dragon Demo",
+            launchDate = "25 January 2026",
+            status = LaunchStatus.GO,
+            imageUrl = "",
+            location = "Kennedy Space Center"
+        ),
+        LaunchesUi(
+            id = "3",
+            missionName = "Falcon Heavy",
+            launchDate = "30 January 2026",
+            status = LaunchStatus.TBD,
+            imageUrl = "",
+            location = "Vandenberg SFB"
+        )
+    )
+
+    AppTheme {
+        // Note: Preview uses static list since LazyPagingItems requires collector
+        // For full preview, see LaunchesScreenTest
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(1),
+            verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingMedium),
+            horizontalArrangement = Arrangement.spacedBy(paddingMedium),
+            contentPadding = PaddingValues(paddingMedium),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background)
+        ) {
+            items(
+                items = sampleLaunches,
+                key = { it.id }
+            ) { launchItem ->
+                LaunchCard(
+                    launchItem = launchItem,
+                    onClick = { _, _ -> },
+                    launchesType = LaunchesType.UPCOMING,
+                    isSelected = launchItem.id == "1"
                 )
             }
         }

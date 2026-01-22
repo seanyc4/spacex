@@ -25,7 +25,8 @@ class PastLaunchDaoTest {
             missionName = "Past Mission",
             net = "2024-06-15T10:00:00Z",
             imageUrl = "https://example.com/image.jpg",
-            status = status
+            status = status,
+            location = "United States of America"
         )
 
         assertEquals("past-1", entity.id)
@@ -49,7 +50,8 @@ class PastLaunchDaoTest {
             missionName = "Failed Mission",
             net = "2024-01-15T10:00:00Z",
             imageUrl = "https://example.com/image.jpg",
-            status = status
+            status = status,
+            location = "United States of America"
         )
 
         assertEquals(4, entity.status.id)
@@ -70,7 +72,8 @@ class PastLaunchDaoTest {
                     name = "Success",
                     abbrev = "Success",
                     description = "Launch was successful"
-                )
+                ),
+                location = "United States of America"
             )
         }
 
@@ -90,7 +93,8 @@ class PastLaunchDaoTest {
                 name = "Success",
                 abbrev = "Success",
                 description = "Successful"
-            )
+            ),
+            location = "United States of America"
         )
 
         val copy = original.copy(missionName = "Updated Past Mission")

@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launch.components.rocket
+package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -35,10 +39,19 @@ internal fun LinkButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val linkDescription = "Link to $text"
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(
+                onClick = onClick,
+                role = Role.Button
+            )
+            .semantics {
+                contentDescription = linkDescription
+                role = Role.Button
+            },
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),

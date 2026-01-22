@@ -19,13 +19,15 @@ object TestDataFactory {
         missionName: String = "Starlink Mission",
         launchDate: String = "January 15, 2026",
         status: LaunchStatus = LaunchStatus.GO,
-        imageUrl: String = "https://example.com/image.jpg"
+        imageUrl: String = "https://example.com/image.jpg",
+        location: String = "Cape Canaveral, FL, USA"
     ): LaunchesUi = LaunchesUi(
         id = id,
         missionName = missionName,
         launchDate = launchDate,
         status = status,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        location = location
     )
 
     fun createLaunchUI(

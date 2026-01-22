@@ -1,4 +1,4 @@
-package com.seancoyle.feature.launch.presentation.launch.components.rocket
+package com.seancoyle.feature.launch.presentation.launch.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,8 +38,6 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.launch.components.SectionTitle
-import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LandingStateUI
 import com.seancoyle.feature.launch.presentation.launch.model.LauncherStageUI
 import com.seancoyle.feature.launch.presentation.launch.model.LauncherUI

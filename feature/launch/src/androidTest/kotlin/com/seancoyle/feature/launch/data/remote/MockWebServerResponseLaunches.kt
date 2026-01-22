@@ -2,7 +2,6 @@ package com.seancoyle.feature.launch.data.remote
 
 object MockWebServerResponseLaunches {
 
-    // Standard successful response with 2 launches
     val launchesResponse = """{
       "count": 2,
       "next": null,
@@ -81,7 +80,14 @@ object MockWebServerResponseLaunches {
             "location": {
               "id": 12,
               "name": "Cape Canaveral, FL, USA",
-              "country_code": "USA"
+              "country_code": "USA",
+              "country": {
+                "id": 1,
+                "name": "United States",
+                "alpha_2_code": "US",
+                "alpha_3_code": "USA",
+                "nationality_name": "American"
+              }
             },
             "total_launch_count": 250,
             "orbital_launch_attempt_count": 250
@@ -160,7 +166,14 @@ object MockWebServerResponseLaunches {
             "location": {
               "id": 12,
               "name": "Kennedy Space Center, FL, USA",
-              "country_code": "USA"
+              "country_code": "USA",
+              "country": {
+                "id": 1,
+                "name": "United States",
+                "alpha_2_code": "US",
+                "alpha_3_code": "USA",
+                "nationality_name": "American"
+              }
             },
             "total_launch_count": 150,
             "orbital_launch_attempt_count": 150
@@ -207,6 +220,20 @@ object MockWebServerResponseLaunches {
             "name": "Go for Launch",
             "abbrev": "Go",
             "description": "Ready"
+          },
+          "pad": {
+            "id": 80,
+            "location": {
+              "id": 12,
+              "name": "Cape Canaveral, FL, USA",
+              "country": {
+                "id": 1,
+                "name": "United States",
+                "alpha_2_code": "US",
+                "alpha_3_code": "USA",
+                "nationality_name": "American"
+              }
+            }
           }
         },
         {
@@ -238,6 +265,20 @@ object MockWebServerResponseLaunches {
             "name": "Go for Launch",
             "abbrev": "Go",
             "description": "Ready"
+          },
+          "pad": {
+            "id": 80,
+            "location": {
+              "id": 12,
+              "name": "Cape Canaveral, FL, USA",
+              "country": {
+                "id": 1,
+                "name": "United States",
+                "alpha_2_code": "US",
+                "alpha_3_code": "USA",
+                "nationality_name": "American"
+              }
+            }
           }
         }
       ]
@@ -265,6 +306,20 @@ object MockWebServerResponseLaunches {
             "name": "Go for Launch",
             "abbrev": "Go",
             "description": "Ready"
+          },
+          "pad": {
+            "id": 80,
+            "location": {
+              "id": 12,
+              "name": "Cape Canaveral, FL, USA",
+              "country": {
+                "id": 1,
+                "name": "United States",
+                "alpha_2_code": "US",
+                "alpha_3_code": "USA",
+                "nationality_name": "American"
+              }
+            }
           }
         }
       ]
@@ -335,7 +390,14 @@ object MockWebServerResponseLaunches {
         "location": {
           "id": 12,
           "name": "Cape Canaveral, FL, USA",
-          "country_code": "USA"
+          "country_code": "USA",
+          "country": {
+            "id": 1,
+            "name": "United States",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American"
+          }
         },
         "total_launch_count": 250,
         "orbital_launch_attempt_count": 250

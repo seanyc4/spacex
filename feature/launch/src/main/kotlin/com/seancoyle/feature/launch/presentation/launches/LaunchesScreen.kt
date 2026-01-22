@@ -2,6 +2,7 @@
 
 package com.seancoyle.feature.launch.presentation.launches
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,19 +26,20 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.testags.LaunchesTestTags
+import com.seancoyle.core.ui.animation.ContentStateTransitions.slowFadeTransition
 import com.seancoyle.core.ui.components.error.ErrorState
-import com.seancoyle.core.ui.components.progress.CircularProgressBar
 import com.seancoyle.core.ui.components.toolbar.TopAppBar
 import com.seancoyle.core.ui.designsystem.pulltorefresh.RefreshableContent
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.feature.launch.R
-import com.seancoyle.feature.launch.presentation.launches.components.Launches
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesGrid
+import com.seancoyle.feature.launch.presentation.launches.components.LaunchesLoadingState
 import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetRoute
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesTab
 import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvents
-import com.seancoyle.feature.launch.presentation.launches.state.LaunchesState
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
+import com.seancoyle.feature.launch.presentation.launches.state.LaunchesUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,11 +47,11 @@ fun LaunchesScreen(
     modifier: Modifier = Modifier,
     upcomingFeedState: LazyPagingItems<LaunchesUi>,
     pastFeedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     isRefreshing: Boolean,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit
 ) {
@@ -57,7 +59,7 @@ fun LaunchesScreen(
         topBar = {
             TopAppBar(
                 onClick = {
-                    onEvent(LaunchesEvents.DisplayFilterBottomSheetEvent)
+                    onEvent(LaunchesEvent.DisplayFilterBottomSheet)
                 }
             )
         },
@@ -66,7 +68,7 @@ fun LaunchesScreen(
         RefreshableContent(
             modifier = modifier,
             isRefreshing = isRefreshing,
-            onRefresh = { onEvent(LaunchesEvents.PullToRefreshEvent) },
+            onRefresh = { onEvent(LaunchesEvent.PullToRefresh) },
             content = {
                 LaunchesContent(
                     upcomingFeedState = upcomingFeedState,
@@ -88,10 +90,10 @@ fun LaunchesScreen(
 private fun LaunchesContent(
     upcomingFeedState: LazyPagingItems<LaunchesUi>,
     pastFeedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit,
     modifier: Modifier = Modifier,
@@ -126,7 +128,7 @@ private fun LaunchesContent(
                 else -> LaunchesType.UPCOMING
             }
             if (state.launchesType != launchType) {
-                onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+                onEvent(LaunchesEvent.TabSelected(launchType))
             }
         }
     }
@@ -153,7 +155,7 @@ private fun LaunchesContent(
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = {
-                        onEvent(LaunchesEvents.TabSelectedEvent(launchType))
+                        onEvent(LaunchesEvent.TabSelected(launchType))
                     },
                     text = {
                         AppText.titleSmall(
@@ -208,14 +210,14 @@ private fun LaunchesContent(
                 currentStatus = state.launchStatus,
                 onApplyFilters = { result ->
                     onEvent(
-                        LaunchesEvents.UpdateFilterStateEvent(
+                        LaunchesEvent.UpdateFilterState(
                             query = result.query,
                             launchStatus = result.status
                         )
                     )
                 },
                 onDismiss = {
-                    onEvent(LaunchesEvents.DismissFilterBottomSheetEvent)
+                    onEvent(LaunchesEvent.DismissFilterBottomSheet)
                 }
             )
         }
@@ -225,51 +227,59 @@ private fun LaunchesContent(
 @Composable
 private fun LaunchesListContent(
     feedState: LazyPagingItems<LaunchesUi>,
-    state: LaunchesState,
+    state: LaunchesUiState,
     launchesType: LaunchesType,
     columnCount: Int,
     selectedLaunchId: String?,
-    onEvent: (LaunchesEvents) -> Unit,
+    onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
     onClick: (String, LaunchesType) -> Unit
 ) {
     val refreshLoadState = feedState.loadState.refresh
     val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached
 
-    when (refreshLoadState) {
-        is LoadState.Loading -> {
-            CircularProgressBar()
-        }
+    AnimatedContent(
+        targetState = refreshLoadState,
+        transitionSpec = { slowFadeTransition() },
+        label = "LaunchesContentAnimation"
+    ) { loadState ->
+        when (loadState) {
+            is LoadState.Loading -> {
+                LaunchesLoadingState(columnCount = columnCount)
+            }
 
-        is LoadState.Error -> {
-            ErrorState(
-                onRetry = { onEvent(LaunchesEvents.RetryFetchEvent) })
-        }
-
-        is LoadState.NotLoading -> {
-            if (feedState.itemCount == 0 && endOfPaginationReached) {
-                // Only show empty state if we've finished loading and there are no items
+            is LoadState.Error -> {
                 ErrorState(
-                    message = stringResource(R.string.empty_data),
+                    message = stringResource(R.string.unable_to_load),
                     modifier = Modifier.fillMaxSize(),
-                    showRetryButton = false,
-                    onRetry = { }
+                    showRetryButton = true,
+                    onRetry = { onEvent(LaunchesEvent.RetryFetch) }
                 )
-            } else {
-                // Show the list (even if it's empty, but not at end of pagination yet)
-                Launches(
-                    launches = feedState,
-                    state = state,
-                    launchesType = launchesType,
-                    columnCount = columnCount,
-                    selectedLaunchId = selectedLaunchId,
-                    onEvent = onEvent,
-                    onUpdateScrollPosition = { position ->
-                        onUpdateScrollPosition(launchesType, position)
-                    },
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxSize()
-                )
+            }
+
+            is LoadState.NotLoading -> {
+                if (feedState.itemCount == 0 && endOfPaginationReached) {
+                    ErrorState(
+                        message = stringResource(R.string.empty_data),
+                        modifier = Modifier.fillMaxSize(),
+                        showRetryButton = false,
+                        onRetry = { }
+                    )
+                } else {
+                    LaunchesGrid(
+                        launches = feedState,
+                        state = state,
+                        launchesType = launchesType,
+                        columnCount = columnCount,
+                        selectedLaunchId = selectedLaunchId,
+                        onEvent = onEvent,
+                        onUpdateScrollPosition = { position ->
+                            onUpdateScrollPosition(launchesType, position)
+                        },
+                        onClick = onClick,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
     }

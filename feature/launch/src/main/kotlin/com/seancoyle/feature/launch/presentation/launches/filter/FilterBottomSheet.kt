@@ -642,3 +642,139 @@ private fun StatusFilterChipPreview() {
         }
     }
 }
+
+@PreviewDarkLightMode
+@Composable
+private fun FilterHeaderPreview() {
+    AppTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            FilterHeader(
+                hasActiveFilters = false,
+                activeFilterCount = 0,
+                onClearAll = {}
+            )
+            FilterHeader(
+                hasActiveFilters = true,
+                activeFilterCount = 2,
+                onClearAll = {}
+            )
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun FilterCountBadgePreview() {
+    AppTheme {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FilterCountBadge(count = 1)
+            FilterCountBadge(count = 3)
+            FilterCountBadge(count = 5)
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun SearchSectionPreview() {
+    AppTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            SearchSection(
+                query = "",
+                onQueryChanged = {},
+                onClear = {}
+            )
+            SearchSection(
+                query = "Falcon 9",
+                onQueryChanged = {},
+                onClear = {}
+            )
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun RecentSearchesSectionPreview() {
+    AppTheme {
+        RecentSearchesSection(
+            recentSearches = listOf("Starlink", "Dragon", "Falcon Heavy"),
+            onSearchSelected = {}
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun StatusFilterSectionPreview() {
+    AppTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            StatusFilterSection(
+                selectedStatus = LaunchStatus.ALL,
+                onStatusSelected = {}
+            )
+            StatusFilterSection(
+                selectedStatus = LaunchStatus.SUCCESS,
+                onStatusSelected = {}
+            )
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun FilterActionButtonsPreview() {
+    AppTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            FilterActionButtons(
+                hasActiveFilters = false,
+                onApply = {},
+                onDismiss = {}
+            )
+            FilterActionButtons(
+                hasActiveFilters = true,
+                onApply = {},
+                onDismiss = {}
+            )
+        }
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun FilterBottomSheetDragHandlePreview() {
+    AppTheme {
+        FilterBottomSheetDragHandle()
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun CompactFilterContentEmptyStatePreview() {
+    AppTheme {
+        CompactFilterContent(
+            state = FilterBottomSheetState(
+                query = "",
+                selectedStatus = LaunchStatus.ALL,
+                recentSearches = emptyList()
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun ExpandedFilterContentWithFiltersPreview() {
+    AppTheme {
+        ExpandedFilterContent(
+            state = FilterBottomSheetState(
+                query = "SpaceX",
+                selectedStatus = LaunchStatus.GO,
+                recentSearches = listOf("Falcon", "Dragon")
+            ),
+            onEvent = {}
+        )
+    }
+}
+

@@ -6,4 +6,5 @@ data class LaunchSummary(
     val net: String,
     val imageUrl: String,
     val status: Status,
+    val location: String
 )

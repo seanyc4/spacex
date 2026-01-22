@@ -78,17 +78,8 @@ internal fun LaunchDto.toSummary(): LaunchSummary? {
         missionName = name ?: return null,
         net = net ?: return null,
         imageUrl = image?.toDomain()?.imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
-        status = status?.toDomain() ?: return null
-    )
-}
-
-internal fun LaunchSummaryDto.toDomain(): LaunchSummary? {
-    return LaunchSummary(
-        id = id ?: return null,
-        missionName = name ?: return null,
-        net = net ?: return null,
-        imageUrl = image?.toDomain()?.imageUrl ?: LaunchesConstants.DEFAULT_LAUNCH_IMAGE,
-        status = status?.toDomain() ?: return null
+        status = status?.toDomain() ?: return null,
+        location = pad?.location?.country?.name ?: return null
     )
 }
 
