@@ -1,0 +1,85 @@
+name: Pull Request
+
+permissions:
+  checks: write
+  contents: read
+  actions: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  # Static Analysis / Tooling
+#  danger:
+#    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
+#    uses: ./.github/workflows/danger.yml
+
+  # Versioning
+  app-version:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Skip CI') }}
+    uses: ./.github/workflows/app_version.yml
+
+  # Build - Debug APK
+  assemble-debug:
+    needs: app-version
+    uses: ./.github/workflows/assemble_debug.yml
+    with:
+      version: ${{ needs.app-version.outputs.version }}
+
+  # Testing - Unit & UI
+  unit-tests:
+    needs: assemble-debug
+    uses: ./.github/workflows/unit_test.yml
+
+  ui-tests:
+    needs: assemble-debug
+    uses: ./.github/workflows/ui_test.yml
+
+  # Build - Dev Release APK
+  assemble-dev-release-apk:
+    needs: [ app-version, unit-tests ]
+    uses: ./.github/workflows/assemble_dev_release_apk.yml
+    with:
+      version: ${{ needs.app-version.outputs.version }}
+    secrets: inherit
+
+  # APK Size Analysis + PR Comment
+  apk-size:
+    needs: [assemble-debug]
+    uses: ./.github/workflows/apk_size.yml
+    with:
+      artifact-name: ${{ needs.assemble-debug.outputs.artifact-name }}
+
+  comment-apk-size:
+    uses: ./.github/workflows/post_pr_comment.yml
+    needs: apk-size
+    with:
+      issue-number: ${{ github.event.pull_request.number }}
+      comment-trigger: APK size
+      artifact-name: apk-size-rendered-comment
+      file-name: apk_size_rendered_comment.md
+
+  # QR Code for APK + PR Comment
+  generate-qr-code:
+    uses: ./.github/workflows/qr_code.yml
+    needs: [assemble-dev-release-apk]
+    secrets: inherit
+    with:
+      artifact-name: ${{ needs.assemble-dev-release-apk.outputs.artifact-name }}
+
+  comment-qr-code:
+    uses: ./.github/workflows/post_pr_comment.yml
+    needs: generate-qr-code
+    with:
+      issue-number: ${{ github.event.pull_request.number }}
+      comment-trigger: Scan this QR code to download the release APK.
+      artifact-name: qr-code-rendered-comment
+      file-name: qr_code_rendered_comment.md

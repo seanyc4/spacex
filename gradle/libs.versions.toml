@@ -1,0 +1,238 @@
+[versions]
+activityVersion = "1.12.2"
+agp = "8.13.2"
+coil = "3.3.0"
+composeBom = "2025.12.01"
+composeConstraintLayout = "1.1.1"
+composeLifecycle = "2.10.0"
+coreKtx = "1.17.0"
+datastore = "1.1.4"
+firebaseBoM = "34.7.0"
+hiltNavigationCompose = "1.3.0"
+hilt = "2.57.2"
+youtubePlayer = "13.0.0"
+junit = "1.3.0"
+junit4 = "4.13.2"
+kotlin = "2.3.0"
+kotlinCoroutines = "1.10.2"
+ksp = "2.3.4"
+kotlinSerialization = "1.9.0"
+kotlinxSerializationCore = "1.9.0"
+kotlinxDateTime = "0.7.1"
+leakCanary = "2.14"
+lifecycle = "2.10.0"
+mockk = "1.14.6"  # .15 & .16 are bugged
+nav3Core = "1.0.0"
+nav3LifecycleViewmodel = "2.10.0"
+nav3Material3Adaptive = "1.3.0-alpha05"
+macroBenchmark = "1.4.1"
+okHttp = "5.3.2"
+okhttpIdling = "1.0.0"
+paging = "3.4.0-beta01"
+profileInstaller = "1.4.1"
+protobuf = "4.31.1"
+protobufPlugin = "0.9.4"
+retrofit2 = "3.0.0"
+revenueCat = "9.19.2"
+robolectricVersion = "4.16"
+room = "2.8.4"
+runtimeSaveable = "1.10.0"
+splash = "1.2.0"
+testArchCore = "2.2.0"
+testCore = "1.7.0"
+testRules = "1.7.0"
+testRunner = "1.7.0"
+timber = "5.0.1"
+turbine = "1.2.1"
+uiautomator = "2.4.0-alpha07"
+
+[libraries]
+
+# Coil
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+
+# Compose
+compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activityVersion" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "composeConstraintLayout" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-iconsCore = { module = "androidx.compose.material:material-icons-core" }
+compose-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycle" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
+compose-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout" }
+compose-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material3Adaptive" }
+compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable-android", version.ref = "runtimeSaveable" }
+compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-viewmodelLifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
+
+# Compose Test Libraries
+compose-uiTest = { module = "androidx.compose.ui:ui-test" }
+compose-uiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-uiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+
+# Core KTX
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+
+# DataStore
+dataStore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+# Firebase
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBoM" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
+# GradleAGP
+gradle-buildtools = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-androidTesting = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+hilt-navigationCompose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+# Kotlin
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+
+# Kotlin Testing
+kotlin-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
+kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
+# Lifecycle
+lifecycle-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
+
+# Navigation 3 libraries
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3LifecycleViewmodel" }
+
+# Paging
+paging3-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
+paging3-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging3-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
+
+# Performance
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "macroBenchmark" }
+profileInstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileInstaller" }
+
+# Protobuf
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+protobuf-gradlePlugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobufPlugin" }
+
+# Retrofit
+square-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
+square-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
+square-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okHttp" }
+square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
+square-retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
+square-retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit2" }
+
+# RevenueCat
+revenueCat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenueCat" }
+
+# Room
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+
+# Serialization
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+
+# Splash Screen
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
+
+# TestDependecies
+test-androidxTestExt = { module = "androidx.test.ext:junit-ktx", version.ref = "junit" }
+test-okhttp-idlingResource = { module = "com.jakewharton.espresso:okhttp3-idling-resource", version.ref = "okhttpIdling" }
+test-junit4 = { module = "junit:junit", version.ref = "junit4" }
+test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+test-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+test-archCore = { module = "androidx.arch.core:core-testing", version.ref = "testArchCore" }
+test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCore" }
+test-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
+test-testRules = { module = "androidx.test:rules", version.ref = "testRules" }
+test-testRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
+junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+
+# Timber
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+# Testing helpers (Flow)
+turbineTesting = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
+# YouTube Player
+youtubePlayer = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubePlayer" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp"  }
+android-test = { id = "com.android.test", version.ref = "agp" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "macroBenchmark"}
+compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+hiltTestRunner = { id = "com.seancoyle.core.test.HiltTestRunner" }
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp",  version.ref = "ksp" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+room = { id = "androidx.room", version.ref = "room" }
+
+[bundles]
+androidTestBundle = [
+    "compose-uiTestJunit4",
+    "compose-uiTest",
+    "kotlin-junit",
+    "square-okhttp",
+    "square-mockwebserver",
+    "square-retrofit-core",
+    "square-retrofit-serialization",
+    "test-androidxTestExt",
+    "test-okhttp-idlingResource",
+    "hilt-androidTesting",
+    "test-mockkAndroid",
+    "test-archCore",
+    "test-coreKtx",
+    "test-testRules",
+    "test-testRunner"
+]
+
+unitTestBundle = [
+    "test-junit4",
+    "test-mockk",
+    "test-robolectric",
+    "kotlin-coroutinesTest",
+    "kotlin-junit",
+    "paging3-testing",
+    "turbineTesting"
+]
+
+composeBundle = [
+    "compose-activity",
+    "compose-constraintLayout",
+    "compose-foundation",
+    "compose-iconsCore",
+    "compose-iconsExtended",
+    "compose-lifecycle",
+    "compose-material3",
+    "compose-material3-adaptive",
+    "compose-material3-adaptive-layout",
+    "compose-material3-adaptive-navigation3",
+    "compose-uiTestJunit4",
+    "compose-viewmodelLifecycle",
+    "compose-tooling",
+    "hilt-navigationCompose"
+]

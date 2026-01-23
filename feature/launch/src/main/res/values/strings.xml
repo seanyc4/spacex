@@ -1,0 +1,145 @@
+<resources>
+    <!-- Filter Dialog -->
+    <string name="search">Search</string>
+    <string name="mission_name">Mission Name</string>
+    <string name="filter_options">Filter Options</string>
+    <string name="launch_status">Filter by Launch Status</string>
+    <string name="text_clear_all">Clear All</string>
+    <string name="text_apply_filters">Apply Filters</string>
+    <string name="recent_searches">Recent</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_search">Search</string>
+    <string name="empty_data">No data available</string>
+
+    <!-- Launch Items -->
+    <string name="launch_image">Launch image</string>
+    <string name="mission" formatted="false">Mission</string>
+    <string name="date_time">Date/time</string>
+    <string name="rocket">Rocket</string>
+
+    <!-- Launch Tabs -->
+    <string name="upcoming_launches">Upcoming</string>
+    <string name="past_launches">Past</string>
+
+    <string name="mission_details">Mission Details</string>
+    <string name="launch_window">Launch Window</string>
+    <string name="duration">Duration</string>
+    <string name="window_opens">Window Opens</string>
+    <string name="window_closes">Window Closes</string>
+    <string name="location">Location</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="launch_statistics">Launch Statistics</string>
+    <string name="site_statistics">Site Statistics</string>
+    <string name="pad_launches">Pad Launches</string>
+    <string name="orbital_attempts">Orbital Attempts</string>
+    <string name="location_launches">Location Launches</string>
+    <string name="location_landings">Location Landings</string>
+    <string name="failure_reason">Failure Reason</string>
+    <string name="open_in_maps">Open in Maps</string>
+    <string name="not_available">N/A</string>
+    <string name="launch_site">Launch Site</string>
+    <string name="rocket_config">Rocket Configuration</string>
+    <string name="name">Name</string>
+    <string name="abbreviation">Abbreviation</string>
+    <string name="type">Type</string>
+    <string name="retry">Retry</string>
+
+    <!-- Common -->
+    <string name="example_section">Example Section</string>
+    <string name="example_content">This is example content inside a section card</string>
+    <string name="also_known_as">Also known as: %1$s</string>
+    <string name="unknown_rocket">Unknown Rocket</string>
+    <string name="learn_more">Learn More</string>
+
+    <!-- Rocket Section -->
+    <string name="total_launches">Total Launches</string>
+    <string name="failed">Failed</string>
+    <string name="successful">Successful</string>
+    <string name="physical_specifications">Physical Specifications</string>
+    <string name="length">Length</string>
+    <string name="diameter">Diameter</string>
+    <string name="launch_mass">Launch Mass</string>
+    <string name="manufacturer_and_history">Manufacturer &amp; History</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="built_in">Built In</string>
+    <string name="company_founded">Company Founded</string>
+    <string name="maiden_flight">Maiden Flight</string>
+    <string name="rocket_family">Rocket Family</string>
+    <string name="rocket_on_wikipedia">Rocket on Wikipedia</string>
+    <string name="manufacturer_on_wikipedia">Manufacturer on Wikipedia</string>
+    <string name="manufacturer_website">Manufacturer Website</string>
+    <string name="maiden_flight_date">Maiden Flight: %1$s</string>
+    <string name="booster_stages">Booster Stages</string>
+    <string name="stage">Stage</string>
+    <string name="stages">Stages</string>
+    <string name="stage_number">Stage %1$d - %2$s</string>
+    <string name="core">Core</string>
+    <string name="serial">Serial: %1$s</string>
+    <string name="reused">♻️ Reused</string>
+    <string name="new_booster">🆕 New</string>
+    <string name="launcher_performance">Launcher Performance</string>
+    <string name="landings">Landings</string>
+    <string name="flight_proven">Flight Proven</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="location_label">Location: %1$s</string>
+    <string name="type_label">Type: %1$s</string>
+    <string name="spacecraft_stages">Spacecraft Stages</string>
+    <string name="label_value_format">%1$s: </string>
+    <string name="launches">Launches</string>
+    <string name="active">Active</string>
+    <string name="flight_number">Flight #</string>
+    <string name="total_flights">Total Flights</string>
+    <string name="description_not_available">Description not available.</string>
+
+    <!-- Landing States -->
+    <string name="landing_successful">Landing Successful</string>
+    <string name="landing_failed">Landing Failed</string>
+    <string name="landing_attempted">Landing Attempted</string>
+    <string name="no_landing_attempt">No Landing Attempt</string>
+    <string name="status_label">Status: %1$s</string>
+
+    <!-- Spacecraft -->
+    <string name="spacecraft">Spacecraft</string>
+    <string name="crew_capacity">Crew Capacity</string>
+    <string name="human_rated">Human Rated</string>
+    <string name="destination">Destination</string>
+
+    <!-- Video Section -->
+    <string name="videos_webcasts">Videos &amp; Webcasts</string>
+    <string name="live">LIVE</string>
+    <string name="video_thumbnail">Video thumbnail</string>
+    <string name="play_video">Play video</string>
+
+    <!-- Mission Patches Section -->
+    <string name="mission_patches">Mission Patches</string>
+    <string name="mission_patch">Mission patch: %1$s</string>
+
+    <!-- Launch Provider Section -->
+    <string name="launch_provider">Launch Provider</string>
+
+    <!-- Updates Section -->
+    <string name="launch_updates">Launch Updates</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+
+    <!-- Loading State -->
+    <string name="loading_launch_details">Loading launch details</string>
+
+    <!-- Content Descriptions -->
+    <string name="mission_image">Mission image for %1$s</string>
+    <string name="mission_name_desc">Mission name: %1$s</string>
+    <string name="mission_card_desc">Mission card for %1$s</string>
+    <string name="mission_card_desc_full">%1$s, %2$s, launching %3$s</string>
+    <string name="launch_date_desc">Launch date: %1$s</string>
+    <string name="section_desc">Section: %1$s</string>
+    <string name="detail_row_desc">%1$s: %2$s</string>
+    <string name="rocket_desc">Rocket %1$s</string>
+    <string name="launcher_desc">Launcher %1$s</string>
+    <string name="map_of_desc">Map of %1$s</string>
+    <string name="rocket_icon_desc">Rocket icon</string>
+    <string name="star_icon_desc">Star icon</string>
+    <string name="upcoming_tab_desc">Upcoming launches tab</string>
+    <string name="past_tab_desc">Past launches tab</string>
+</resources>
+

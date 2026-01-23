@@ -1,0 +1,27 @@
+name: Assemble Dev Release APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version: { required: true, type: string, description: "Version Name" }
+
+  workflow_call:
+    inputs:
+      version: { required: true, type: string }
+    outputs:
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_sign.yml
+    with:
+      assemble-script: .github/scripts/assemble_release_apk.sh
+      output-dir:      app/build/outputs/apk/release
+      unsigned-name:   app-release-unsigned-signed.apk
+      artifact-name:   orbitalDev-release_${{ inputs.version }}.apk
+    secrets:
+      signing-key:       ${{ secrets.TEST_SIGNING_KEY }}
+      alias:             ${{ secrets.TEST_ALIAS }}
+      keystore-password: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
+      key-password:      ${{ secrets.TEST_KEY_PASSWORD }}

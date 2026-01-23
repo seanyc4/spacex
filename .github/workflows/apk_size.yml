@@ -1,0 +1,45 @@
+name: Compare APK Sizes
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name: { required: true, type: string }
+
+jobs:
+  apk-size:
+    name: Analyse
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Download APKs from the main and branch builds
+      - name: Download branch APK
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      - name: Download main APK
+        uses: actions/download-artifact@v7
+        with:
+          name: orbital-debug-main
+
+      # Generates APK size message for PR comment
+      - name: Render comment body
+        run: .github/scripts/render_apk_size_comment.sh \
+          "${{ inputs.artifact-name }}" \
+          "${{ github.head_ref }}" \
+
+      # Uploads PR comment template to be accessed in the post_pr-comment workflow
+      - name: Upload rendered comment
+        uses: actions/upload-artifact@v6
+        with:
+          name: apk-size-rendered-comment
+          path: .github/templates/apk_size_rendered_comment.md

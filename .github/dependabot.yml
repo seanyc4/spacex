@@ -1,0 +1,35 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+
+  # Enable dependency updates for the project
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "[DEPENDABOT]"
+    labels:
+    - "Dependency Update"
+    open-pull-requests-limit: 5
+    groups:
+      kotlin-updates:
+        patterns:
+        - "org.jetbrains.kotlin:*"
+        - "com.google.devtools.ksp:*"
+      compose-updates:
+        patterns:
+        - "com.google.accompanist:accompanist-*"
+        - "androidx.compose:compose-bom"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

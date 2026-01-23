@@ -1,0 +1,58 @@
+name: Post PR Comment
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue-number: { required: true, type: string, description: "Pull request number" }
+      comment-trigger: { required: true, type: string, description: "Text of the comment we're searching for" }
+      artifact-name: { required: true, type: string, description: "Artifact name" }
+      file-name: { required: true, type: string, description: "The template md file" }
+  workflow_call:
+    inputs:
+      issue-number: { required: true, type: string }
+      comment-trigger: { required: true, type: string }
+      artifact-name: { required: true, type: string }
+      file-name: { required: true, type: string }
+
+jobs:
+  post:
+    name: Post
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # Download rendered_comment.md from qr_code workflow
+      - name: Download rendered comment
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ./comment
+
+      # Save comment path to environment variable
+      - name: Save body path
+        run: echo "BODY_PATH=./comment/${{ inputs.file-name }}" >> $GITHUB_ENV
+
+      - name: Find existing comment
+        id: fc
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ inputs.issue-number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: ${{ inputs.comment-trigger }}
+
+      - name: Create comment
+        if: steps.fc.outputs.comment-id == ''
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ inputs.issue-number }}
+          body-path: ${{ env.BODY_PATH }}
+
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body-path: ${{ env.BODY_PATH }}
