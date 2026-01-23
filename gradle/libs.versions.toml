@@ -2,7 +2,7 @@
 activityVersion = "1.12.2"
 agp = "8.13.2"
 coil = "3.3.0"
-composeBom = "2025.12.01"
+composeBom = "2026.01.00"
 composeConstraintLayout = "1.1.1"
 composeLifecycle = "2.10.0"
 coreKtx = "1.17.0"
