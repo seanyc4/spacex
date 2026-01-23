@@ -12,6 +12,7 @@ on:
       alias:             { required: true }
       keystore-password: { required: true }
       key-password:      { required: true }
+      revenuecat-api-key-prod: { required: false }
     outputs:
       artifact-name:
         value: ${{ jobs.build-sign.outputs.artifact-name }}
@@ -24,6 +25,8 @@ jobs:
     env:
       BUILD_TOOLS_VERSION: "34.0.0"
       ARTIFACT_NAME: ${{ inputs.artifact-name }}
+      REVENUECAT_API_KEY_PROD: ${{ secrets.revenuecat-api-key-prod }}
+      REVENUECAT_API_KEY_DEBUG: ${{ secrets.revenuecat-api-key-debug }}
 
     steps:
       - uses: actions/checkout@v6

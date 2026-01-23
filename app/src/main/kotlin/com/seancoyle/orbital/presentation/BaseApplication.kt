@@ -33,10 +33,11 @@ class BaseApplication : Application() {
     }
 
     private fun initRevenueCat() {
-        Purchases.logLevel = LogLevel.DEBUG
+        if (BuildConfig.DEBUG) Purchases.logLevel = LogLevel.DEBUG
         Purchases.configure(
-            PurchasesConfiguration.Builder(this, "test_NZDLpGlsZajOFtquLDCzvpZpYbs")
-                .build())
+            PurchasesConfiguration.Builder(this, BuildConfig.REVENUECAT_API_KEY)
+                .build()
+        )
     }
 
     private fun initAnalyticsLogging() {

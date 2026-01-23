@@ -35,6 +35,9 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             manifestPlaceholders["enableCrashReporting"] = false
+
+            val revenueCatKey = (project.findProperty("REVENUECAT_API_KEY_DEBUG") as String?)
+            buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatKey\"")
         }
 
         release {
@@ -45,6 +48,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            val revenueCatKey = System.getenv("REVENUECAT_API_KEY_PROD")
+            buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatKey\"")
         }
 
         create("benchmark") {
