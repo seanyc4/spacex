@@ -120,6 +120,7 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.coreKtx)
+    implementation(libs.googleAds)
     implementation(libs.lifecycle.savedstate)
     implementation(libs.profileInstaller)
     implementation(libs.revenueCat)
