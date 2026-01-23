@@ -33,6 +33,7 @@ profileInstaller = "1.4.1"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.4"
 retrofit2 = "3.0.0"
+revenueCat = "9.19.2"
 robolectricVersion = "4.16"
 room = "2.8.4"
 runtimeSaveable = "1.10.0"
@@ -136,6 +137,9 @@ square-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
 square-retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 square-retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit2" }
+
+# RevenueCat
+revenueCat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenueCat" }
 
 # Room
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
