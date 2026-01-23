@@ -122,6 +122,7 @@ dependencies {
     implementation(libs.coreKtx)
     implementation(libs.lifecycle.savedstate)
     implementation(libs.profileInstaller)
+    implementation(libs.revenueCat)
     implementation(libs.room.runtime)
     implementation(libs.splashScreen)
     implementation(libs.timber)
