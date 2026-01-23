@@ -181,3 +181,17 @@
 -dontwarn org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher
 -dontwarn org.slf4j.Logger
 -dontwarn org.slf4j.LoggerFactory
+
+# RevenueCat - Keep Google API client classes (optional dependencies)
+-dontwarn com.google.api.client.http.**
+-dontwarn com.google.api.client.json.**
+-dontwarn com.google.api.client.util.**
+-dontwarn org.joda.time.**
+
+# RevenueCat - Keep necessary classes
+-keep class com.revenuecat.purchases.** { *; }
+-keep interface com.revenuecat.purchases.** { *; }
+
+# RevenueCat - Keep Google Crypto Tink classes (used by RevenueCat)
+-keep class com.google.crypto.tink.** { *; }
+-dontwarn com.google.crypto.tink.**
