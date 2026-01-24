@@ -50,7 +50,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -86,7 +86,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -119,7 +119,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -138,9 +138,9 @@ class LaunchesScreenTest {
 
     @Test
     fun givenLaunchCard_whenClicked_thenInvokesClickCallback() {
-        var clickedId: String? = null
+        var clickedPosition = 0
         var clickedType: LaunchesType? = null
-        val testLaunch = createTestLaunchesUi(id = "test-id-123")
+        var testLaunch = createTestLaunchesUi(id = "test-id-123")
         val pagingData = PagingData.from(listOf(testLaunch))
 
         composeRule.setContent {
@@ -158,9 +158,10 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { id, type ->
-                            clickedId = id
-                            clickedType = type
+                        onClick = { launchItem, launchesType, position ->
+                            clickedType = launchesType
+                            testLaunch = launchItem
+                            clickedPosition = position
                         },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
@@ -172,7 +173,7 @@ class LaunchesScreenTest {
         composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
             .performClick()
 
-        assert(clickedId == "test-id-123") { "Expected id test-id-123 but got $clickedId" }
+        assert(testLaunch.id == "test-id-123") { "Expected id test-id-123 but got ${testLaunch.id}" }
         assert(clickedType == LaunchesType.UPCOMING) { "Expected UPCOMING but got $clickedType" }
     }
 
@@ -195,7 +196,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -232,7 +233,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -266,7 +267,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = { pos -> scrollPosition = pos },
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -306,7 +307,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, type -> clickedType = type },
+                        onClick = { _, type, _ -> clickedType = type },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -341,7 +342,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.PAST,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, type -> clickedType = type },
+                        onClick = { _, type, _ -> clickedType = type },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )
@@ -379,7 +380,7 @@ class LaunchesScreenTest {
                         launchesType = LaunchesType.UPCOMING,
                         onEvent = {},
                         onUpdateScrollPosition = {},
-                        onClick = { _, _ -> },
+                        onClick = { _, _, _ -> },
                         columnCount = 2,
                         selectedLaunchId = "34235462424"
                     )

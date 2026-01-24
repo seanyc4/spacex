@@ -31,6 +31,9 @@ fun LaunchRoute(
                 content ={
                 LaunchScreen(
                     launch = state.launch,
+                    onVideoPlay = viewModel::trackVideoPlay,
+                    onExternalLinkClick = viewModel::trackExternalLinkTap,
+                    onSectionExpand = viewModel::trackSectionExpand,
                     modifier = modifier
                 )
             })

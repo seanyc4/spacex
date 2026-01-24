@@ -1,9 +1,11 @@
 package com.seancoyle.feature.launch.di
 
-import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
-import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCaseImpl
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponentImpl
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponentImpl
+import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCase
+import com.seancoyle.feature.launch.domain.usecase.launch.GetLaunchesPreferencesUseCaseImpl
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchesPreferencesUseCase
 import com.seancoyle.feature.launch.domain.usecase.launch.SaveLaunchesPreferencesUseCaseImpl
 import dagger.Binds
@@ -19,6 +21,11 @@ internal abstract class LaunchesUseCaseModule {
     abstract fun bindLaunchesComponent(
         impl: LaunchesComponentImpl
     ): LaunchesComponent
+
+    @Binds
+    abstract fun bindLaunchAnalyticsComponent(
+        impl: LaunchAnalyticsComponentImpl
+    ): LaunchAnalyticsComponent
 
     @Binds
     abstract fun bindSaveLaunchPreferencesUseCase(

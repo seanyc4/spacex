@@ -34,7 +34,8 @@ import com.seancoyle.feature.launch.presentation.launch.model.LaunchUpdateUI
 @Composable
 internal fun UpdatesSection(
     updates: List<LaunchUpdateUI>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSectionExpand: () -> Unit = {}
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(
@@ -52,7 +53,12 @@ internal fun UpdatesSection(
                 .fillMaxWidth()
                 .then(
                     if (hasMoreUpdates) {
-                        Modifier.clickable { isExpanded = !isExpanded }
+                        Modifier.clickable {
+                            if (!isExpanded) {
+                                onSectionExpand()
+                            }
+                            isExpanded = !isExpanded
+                        }
                     } else {
                         Modifier
                     }

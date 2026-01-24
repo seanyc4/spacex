@@ -16,4 +16,10 @@ data class LaunchesUiState(
     val upcomingScrollPosition: Int = 0,
     val pastScrollPosition: Int = 0,
     val isRefreshing: Boolean = false,
-) : Parcelable
+) : Parcelable {
+    val activeFilterCount: Int
+        get() = listOf(
+            query.isNotBlank(),
+            launchStatus != LaunchStatus.ALL
+        ).count { it }
+}

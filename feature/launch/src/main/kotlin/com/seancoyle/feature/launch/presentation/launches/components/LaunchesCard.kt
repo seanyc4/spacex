@@ -54,9 +54,10 @@ import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 @Composable
 internal fun LaunchCard(
     launchItem: LaunchesUi,
-    onClick: (String, LaunchesType) -> Unit,
+    onClick: (LaunchesUi, LaunchesType, Int) -> Unit,
     launchesType: LaunchesType,
     isSelected: Boolean,
+    position: Int,
     modifier: Modifier = Modifier,
 ) {
     val launchCardDesc = stringResource(
@@ -78,7 +79,7 @@ internal fun LaunchCard(
         modifier = modifier
             .fillMaxWidth()
             .height(launchCardHeight)
-            .clickable { onClick(launchItem.id, launchesType) }
+            .clickable { onClick(launchItem, launchesType, position) }
             .semantics {
                 contentDescription = launchCardDesc
                 selected = isSelected
@@ -217,9 +218,10 @@ private fun LaunchCardPreview() {
                 imageUrl = "",
                 location = "Cape Canaveral, FL"
             ),
-            onClick = { _, _ -> },
+            onClick = { _, _, _ -> },
             launchesType = LaunchesType.UPCOMING,
-            isSelected = true
+            isSelected = true,
+            position = 0
         )
     }
 }

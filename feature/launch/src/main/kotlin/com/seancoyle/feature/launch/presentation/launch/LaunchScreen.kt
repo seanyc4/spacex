@@ -34,10 +34,14 @@ import com.seancoyle.feature.launch.presentation.launch.components.UpdatesSectio
 import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.model.LinkType
 
 @Composable
 fun LaunchScreen(
     launch: LaunchUI,
+    onVideoPlay: (videoId: String, isLive: Boolean) -> Unit,
+    onExternalLinkClick: (linkType: String) -> Unit,
+    onSectionExpand: (sectionName: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberSaveable(saver = ScrollState.Saver) {
@@ -59,20 +63,32 @@ fun LaunchScreen(
 
         if (launch.vidUrls.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            VideoSection(videos = launch.vidUrls)
+            VideoSection(
+                videos = launch.vidUrls,
+                onVideoPlay = onVideoPlay
+            )
         }
 
         if (launch.updates.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            UpdatesSection(updates = launch.updates)
+            UpdatesSection(
+                updates = launch.updates,
+                onSectionExpand = { onSectionExpand("updates") }
+            )
             Spacer(modifier = Modifier.height(paddingLarge))
         }
 
         Spacer(modifier = Modifier.height(paddingXLarge))
-        LaunchSiteSection(pad = launch.pad)
+        LaunchSiteSection(
+            pad = launch.pad,
+            onExternalLinkClick = { onExternalLinkClick(LinkType.MAP.type) }
+        )
 
         Spacer(modifier = Modifier.height(paddingXLarge))
-        RocketSection(rocket = launch.rocket)
+        RocketSection(
+            rocket = launch.rocket,
+            onExternalLinkClick = { onExternalLinkClick(LinkType.WEB.type) },
+        )
 
         if (launch.launchServiceProvider != null) {
             Spacer(modifier = Modifier.height(paddingXLarge))
@@ -86,7 +102,10 @@ fun LaunchScreen(
 private fun LaunchScreenSuccessPreview() {
     AppTheme {
         LaunchScreen(
-            launch = previewData()
+            launch = previewData(),
+            onVideoPlay = { _, _ -> },
+            onExternalLinkClick = { },
+            onSectionExpand = { }
         )
     }
 }

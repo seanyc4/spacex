@@ -37,6 +37,7 @@ import com.seancoyle.feature.launch.presentation.launch.model.VidUrlUI
 @Composable
 internal fun VideoSection(
     videos: List<VidUrlUI>,
+    onVideoPlay: (videoId: String, isLive: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { videos.size })
@@ -51,7 +52,8 @@ internal fun VideoSection(
             val video = videos[page]
             VideoContent(
                 videoId = video.videoId!!,
-                video = video
+                video = video,
+                onVideoPlay = { onVideoPlay(video.videoId, video.isLive) }
             )
         }
 
@@ -70,6 +72,7 @@ internal fun VideoSection(
 private fun VideoContent(
     videoId: String,
     video: VidUrlUI,
+    onVideoPlay: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -79,7 +82,8 @@ private fun VideoContent(
         EmbeddedYouTubePlayer(
             videoId = videoId,
             modifier = Modifier.fillMaxWidth(),
-            videoTitle = video.title
+            videoTitle = video.title,
+            onVideoStarted = onVideoPlay
         )
 
         VideoMetadata(video = video)
@@ -161,7 +165,8 @@ private fun VideoMetadata(
 private fun VideoSectionPreview() {
     AppTheme {
         VideoSection(
-            videos = previewData().vidUrls
+            videos = previewData().vidUrls,
+            onVideoPlay = { _, _ -> }
         )
     }
 }
@@ -173,7 +178,8 @@ private fun VideoContentPreview() {
         AppCard.Primary {
             VideoContent(
                 videoId = "dQw4w9WgXcQ",
-                video = previewData().vidUrls.first()
+                video = previewData().vidUrls.first(),
+                onVideoPlay = {}
             )
         }
     }

@@ -90,7 +90,10 @@ fun LaunchesRoute(
         selectedLaunchId = selectedLaunchId,
         onEvent = viewModel::onEvent,
         onUpdateScrollPosition = viewModel::updateScrollPosition,
-        onClick = onNavigateToLaunch,
+        onClick = { launch, launchType, position ->
+            viewModel.trackLaunchClick(launch, position)
+            onNavigateToLaunch(launch.id, launchType)
+        },
         modifier = modifier
     )
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,6 +26,7 @@ private const val MAX_RECENT_SEARCHES = 5
 class FilterBottomSheetViewModel @AssistedInject constructor(
     @Assisted private val initialQuery: String,
     @Assisted private val initialStatus: LaunchStatus,
+    private val launchAnalyticsComponent: LaunchAnalyticsComponent,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -58,10 +60,16 @@ class FilterBottomSheetViewModel @AssistedInject constructor(
             is FilterBottomSheetEvent.QueryChanged -> onQueryChanged(event.query)
             is FilterBottomSheetEvent.StatusSelected -> onStatusSelected(event.status)
             is FilterBottomSheetEvent.ApplyFilters -> onApplyFilters()
-            is FilterBottomSheetEvent.ClearAllFilters -> onClearAllFilters()
+            is FilterBottomSheetEvent.ClearAllFilters -> {
+                launchAnalyticsComponent.trackFilterClear(state.activeFilterCount)
+                onClearAllFilters()
+            }
             is FilterBottomSheetEvent.Dismiss -> onDismiss()
             is FilterBottomSheetEvent.ToggleExpanded -> onToggleExpanded()
-            is FilterBottomSheetEvent.RecentSearchSelected -> onRecentSearchSelected(event.query)
+            is FilterBottomSheetEvent.RecentSearchSelected -> {
+                launchAnalyticsComponent.trackRecentSearchTap()
+                onRecentSearchSelected(event.query)
+            }
         }
     }
 
@@ -70,7 +78,6 @@ class FilterBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun onStatusSelected(status: LaunchStatus) {
-        // Toggle: if already selected, deselect (go back to ALL)
         val newStatus = if (state.selectedStatus == status && status != LaunchStatus.ALL) {
             LaunchStatus.ALL
         } else {
@@ -86,13 +93,19 @@ class FilterBottomSheetViewModel @AssistedInject constructor(
             status = state.selectedStatus
         )
 
-        // Add to recent searches if query is not empty
         if (state.query.isNotBlank()) {
             val updatedRecent = (listOf(state.query.trim()) + state.recentSearches)
                 .distinct()
                 .take(MAX_RECENT_SEARCHES)
             state = state.copy(recentSearches = updatedRecent)
         }
+
+        launchAnalyticsComponent.trackFilterApply(
+            status = state.selectedStatus.name,
+            hasQuery = state.query.isNotBlank(),
+            queryLength = state.query.length,
+            filterCount = state.activeFilterCount
+        )
 
         Timber.tag(TAG).d("Applying filters: $result")
         viewModelScope.launch {

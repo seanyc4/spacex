@@ -5,14 +5,17 @@ import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.LaunchesViewModel
+import com.seancoyle.feature.launch.presentation.launches.model.LaunchesUi
 import com.seancoyle.feature.launch.presentation.launches.state.LaunchesEvent
 import com.seancoyle.feature.launch.presentation.launches.state.PagingEvents
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -34,6 +37,9 @@ class LaunchesViewModelTest {
     @MockK
     private lateinit var uiMapper: LaunchUiMapper
 
+    @MockK(relaxed = true)
+    private lateinit var launchAnalyticsComponent: LaunchAnalyticsComponent
+
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var underTest: LaunchesViewModel
 
@@ -43,7 +49,6 @@ class LaunchesViewModelTest {
         MockKAnnotations.init(this)
         savedStateHandle = SavedStateHandle()
 
-        // Mock the use case to return empty paging data for both tabs
         every {
             launchesComponent.observeUpcomingLaunches(any())
         } returns flowOf(PagingData.empty())
@@ -55,6 +60,7 @@ class LaunchesViewModelTest {
         underTest = LaunchesViewModel(
             launchesComponent = launchesComponent,
             uiMapper = uiMapper,
+            launchAnalyticsComponent = launchAnalyticsComponent,
             savedStateHandle = savedStateHandle
         )
     }
@@ -249,5 +255,126 @@ class LaunchesViewModelTest {
 
         assertEquals(100, underTest.screenState.upcomingScrollPosition)
         assertEquals(200, underTest.screenState.pastScrollPosition)
+    }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN DisplayFilterBottomSheet THEN logs filter_open event`() = runTest {
+        underTest.onEvent(LaunchesEvent.DisplayFilterBottomSheet)
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackFilterOpen(
+                launchType = LaunchesType.UPCOMING.name,
+                filterCount = 0
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN TabSelected to PAST THEN logs tab_switch event`() = runTest {
+        underTest.onEvent(LaunchesEvent.TabSelected(LaunchesType.PAST))
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackTabSwitch(
+                fromTab = LaunchesType.UPCOMING.name,
+                toTab = LaunchesType.PAST.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN PullToRefresh THEN logs pull_refresh event`() = runTest {
+        underTest.upcomingPagingEvents.test {
+            underTest.onEvent(LaunchesEvent.PullToRefresh)
+            testScheduler.advanceUntilIdle()
+
+            verify {
+                launchAnalyticsComponent.trackPullRefresh(LaunchesType.UPCOMING.name)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN RetryFetch THEN logs retry_tap event`() = runTest {
+        underTest.upcomingPagingEvents.test {
+            underTest.onEvent(LaunchesEvent.RetryFetch)
+            testScheduler.advanceUntilIdle()
+
+            verify {
+                launchAnalyticsComponent.trackRetryTap(LaunchesType.UPCOMING.name)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `GIVEN launch item WHEN trackLaunchClick THEN logs list_item_click with correct params`() {
+        val launch = LaunchesUi(
+            id = "test-id",
+            missionName = "Test Mission",
+            launchDate = "2026-01-01",
+            status = LaunchStatus.GO,
+            imageUrl = "https://example.com/image.jpg",
+            location = "Cape Canaveral"
+        )
+
+        underTest.trackLaunchClick(launch, position = 5)
+
+        verify {
+            launchAnalyticsComponent.trackListItemClick(
+                launchId = "test-id",
+                launchType = LaunchesType.UPCOMING.name,
+                position = 5,
+                status = LaunchStatus.GO.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN active filters WHEN DisplayFilterBottomSheet THEN logs correct filter count`() = runTest {
+        underTest.onEvent(LaunchesEvent.UpdateFilterState(
+            launchStatus = LaunchStatus.SUCCESS,
+            query = "SpaceX"
+        ))
+        testScheduler.advanceUntilIdle()
+
+        underTest.onEvent(LaunchesEvent.DisplayFilterBottomSheet)
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackFilterOpen(
+                launchType = LaunchesType.UPCOMING.name,
+                filterCount = 2
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN trackScreenView called THEN logs screen_view event`() {
+        underTest.trackScreenView()
+
+        verify {
+            launchAnalyticsComponent.trackScreenView(
+                screenName = "launches",
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN PAST tab WHEN trackScreenView called THEN logs screen_view with PAST type`() = runTest {
+        underTest.onEvent(LaunchesEvent.TabSelected(LaunchesType.PAST))
+        testScheduler.advanceUntilIdle()
+
+        underTest.trackScreenView()
+
+        verify {
+            launchAnalyticsComponent.trackScreenView(
+                screenName = "launches",
+                launchType = LaunchesType.PAST.name
+            )
+        }
     }
 }
