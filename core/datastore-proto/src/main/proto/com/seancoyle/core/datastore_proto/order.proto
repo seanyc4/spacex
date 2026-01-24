@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.seancoyle.core.datastore_proto";
+option java_multiple_files = true;
+
+enum OrderProto {
+  ASC = 0;
+  DESC = 1;
+}

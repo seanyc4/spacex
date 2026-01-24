@@ -1,0 +1,74 @@
+android {
+    compileSdk Android.compileSdk
+
+    defaultConfig {
+        minSdk Android.minSdk
+        targetSdk Android.targetSdk
+        versionCode Android.versionCode
+        versionName Android.versionName
+        vectorDrawables.useSupportLibrary true
+        consumerProguardFiles "consumer-proguard-rules.pro"
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    kotlin {
+        sourceSets {
+            main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+            test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+        }
+
+        jvmToolchain(17)
+    }
+
+    lint {
+        checkDependencies true
+    }
+
+    sourceSets {
+        if (findByName("test") != null) {
+            getByName("test").resources.srcDir("src/test/res")
+        }
+    }
+
+    testOptions {
+        // Fix for mock issue on >= API 28
+        packaging.jniLibs.useLegacyPackaging = true
+
+        unitTests {
+        // To prevent textUtils error with espresso idling resource
+        returnDefaultValues = true
+        includeAndroidResources = true
+
+            all {
+                afterSuite { desc, result ->
+                    if (!desc.parent) {
+                        println "\n======================================================================="
+                        println "${desc.displayName}"
+                        println "Test result: ${result.resultType}"
+                        println "Test summary: ${result.testCount} tests, " +
+                                "${result.successfulTestCount} succeeded, " +
+                                "${result.failedTestCount} failed, " +
+                                "${result.skippedTestCount} skipped"
+                        println "======================================================================="
+                    }
+                }
+
+                testLogging {
+                    exceptionFormat "full"
+                    showCauses true
+                    showExceptions true
+                    showStackTraces true
+                    showStandardStreams true
+                    events = ["passed", "skipped", "failed", "standardOut", "standardError"]
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(libs.timber)
+}

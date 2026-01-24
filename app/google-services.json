@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14037677508",
+    "project_id": "orbital-d2af3",
+    "storage_bucket": "orbital-d2af3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14037677508:android:6c4de1baaeaad0df172091",
+        "android_client_info": {
+          "package_name": "com.seancoyle.orbital"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZa1w2eFsSitP89mbm0PaeMyeXkGbCZkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

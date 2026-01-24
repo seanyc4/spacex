@@ -1,0 +1,65 @@
+name: Assemble Debug APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version: { required: true, type: string, description: "Version Name" }
+
+  workflow_call:
+    inputs:
+      version: { required: true, type: string }
+    outputs:
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      APK_NAME: orbital-debug_${{ inputs.version }}.apk
+      REVENUECAT_API_KEY_DEBUG: ${{ secrets.REVENUECAT_API_KEY_DEBUG }}
+    outputs:
+      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
+
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      # Assemble debug APK
+      - name: Assemble Debug APK
+        run: .github/scripts/assemble_debug_apk.sh "${{ env.APK_NAME }}"
+
+      # Upload debug APK
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.APK_NAME }}
+          path: app/build/outputs/apk/debug/${{ env.APK_NAME }}
+
+      # Checkout Main
+      - name: Checkout main branch into temp dir
+        run: .github/scripts/clone_branch.sh "https://github.com/${{ github.repository }}" "main"
+
+      # Assemble main APK
+      - name: Assemble Main Branch Debug APK
+        run: .github/scripts/assemble_debug_apk.sh "orbital-debug-main.apk"
+
+      # Upload main APK
+      - name: Upload Main Branch Debug APK
+        uses: actions/upload-artifact@v6
+        with:
+          name: orbital-debug-main
+          path: app/build/outputs/apk/debug/orbital-debug-main.apk
+
+      # Output APK name
+      - name: Set job output from env
+        id: set-output
+        run: echo "artifact-name=$APK_NAME" >> $GITHUB_OUTPUT

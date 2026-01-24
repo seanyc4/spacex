@@ -1,0 +1,2631 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "dbdc18f1c497b98e6cbe9cda2776ea1e",
+    "entities": [
+      {
+        "tableName": "upcoming_detail",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `url` TEXT, `name` TEXT NOT NULL, `last_updated` TEXT, `net` TEXT NOT NULL, `window_end` TEXT, `window_start` TEXT, `infographic` TEXT, `probability` INTEGER, `weather_concerns` TEXT, `fail_reason` TEXT, `webcast_live` INTEGER, `program` TEXT NOT NULL, `orbital_launch_attempt_count` INTEGER, `location_launch_attempt_count` INTEGER, `pad_launch_attempt_count` INTEGER, `agency_launch_attempt_count` INTEGER, `orbital_launch_attempt_count_year` INTEGER, `location_launch_attempt_count_year` INTEGER, `pad_launch_attempt_count_year` INTEGER, `agency_launch_attempt_count_year` INTEGER, `updates` TEXT NOT NULL, `info_urls` TEXT NOT NULL, `vid_urls` TEXT NOT NULL, `pad_turnaround` TEXT, `mission_patches` TEXT NOT NULL, `family` TEXT NOT NULL, `net_precisionid` INTEGER, `net_precisionname` TEXT, `net_precisionabbrev` TEXT, `net_precisiondescription` TEXT, `imageid` INTEGER NOT NULL, `imagename` TEXT NOT NULL, `imageimage_url` TEXT NOT NULL, `imagethumbnail_url` TEXT NOT NULL, `imagecredit` TEXT NOT NULL, `agencyid` INTEGER, `agencyurl` TEXT, `agencyname` TEXT, `agencyabbrev` TEXT, `agencytype` TEXT, `agencyfeatured` INTEGER, `agencycountry` TEXT, `agencydescription` TEXT, `agencyadministrator` TEXT, `agencyfounding_year` INTEGER, `agencylaunchers` TEXT, `agencyspacecraft` TEXT, `agencytotal_launch_count` INTEGER, `agencyconsecutive_successful_launches` INTEGER, `agencysuccessful_launches` INTEGER, `agencyfailed_launches` INTEGER, `agencypending_launches` INTEGER, `agencyconsecutive_successful_landings` INTEGER, `agencysuccessful_landings` INTEGER, `agencyfailed_landings` INTEGER, `agencyattempted_landings` INTEGER, `agencysuccessful_landings_spacecraft` INTEGER, `agencyfailed_landings_spacecraft` INTEGER, `agencyattempted_landings_spacecraft` INTEGER, `agencysuccessful_landings_payload` INTEGER, `agencyfailed_landings_payload` INTEGER, `agencyattempted_landings_payload` INTEGER, `agencyinfo_url` TEXT, `agencywiki_url` TEXT, `agencyagency_imageid` INTEGER, `agencyagency_imagename` TEXT, `agencyagency_imageimage_url` TEXT, `agencyagency_imagethumbnail_url` TEXT, `agencyagency_imagecredit` TEXT, `rocketid` INTEGER, `rocketlauncher_stage` TEXT NOT NULL, `rocketspacecraft_stage` TEXT NOT NULL, `rocketconfigurationid` INTEGER, `rocketconfigurationurl` TEXT, `rocketconfigurationname` TEXT, `rocketconfigurationfull_name` TEXT, `rocketconfigurationvariant` TEXT, `rocketconfigurationfamilies` TEXT NOT NULL, `rocketconfigurationwiki_url` TEXT, `rocketconfigurationdescription` TEXT, `rocketconfigurationalias` TEXT, `rocketconfigurationtotal_launch_count` INTEGER, `rocketconfigurationsuccessful_launches` INTEGER, `rocketconfigurationfailed_launches` INTEGER, `rocketconfigurationlength` REAL, `rocketconfigurationdiameter` REAL, `rocketconfigurationlaunch_mass` REAL, `rocketconfigurationmaiden_flight` TEXT, `rocketconfigurationmanufacturer_id` INTEGER, `rocketconfigurationmanufacturer_url` TEXT, `rocketconfigurationmanufacturer_name` TEXT, `rocketconfigurationmanufacturer_abbrev` TEXT, `rocketconfigurationmanufacturer_type` TEXT, `rocketconfigurationmanufacturer_featured` INTEGER, `rocketconfigurationmanufacturer_country` TEXT, `rocketconfigurationmanufacturer_description` TEXT, `rocketconfigurationmanufacturer_administrator` TEXT, `rocketconfigurationmanufacturer_founding_year` INTEGER, `rocketconfigurationmanufacturer_launchers` TEXT, `rocketconfigurationmanufacturer_spacecraft` TEXT, `rocketconfigurationmanufacturer_total_launch_count` INTEGER, `rocketconfigurationmanufacturer_consecutive_successful_launches` INTEGER, `rocketconfigurationmanufacturer_successful_launches` INTEGER, `rocketconfigurationmanufacturer_failed_launches` INTEGER, `rocketconfigurationmanufacturer_pending_launches` INTEGER, `rocketconfigurationmanufacturer_consecutive_successful_landings` INTEGER, `rocketconfigurationmanufacturer_successful_landings` INTEGER, `rocketconfigurationmanufacturer_failed_landings` INTEGER, `rocketconfigurationmanufacturer_attempted_landings` INTEGER, `rocketconfigurationmanufacturer_successful_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_failed_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_attempted_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_successful_landings_payload` INTEGER, `rocketconfigurationmanufacturer_failed_landings_payload` INTEGER, `rocketconfigurationmanufacturer_attempted_landings_payload` INTEGER, `rocketconfigurationmanufacturer_info_url` TEXT, `rocketconfigurationmanufacturer_wiki_url` TEXT, `rocketconfigurationmanufacturer_agency_imageid` INTEGER, `rocketconfigurationmanufacturer_agency_imagename` TEXT, `rocketconfigurationmanufacturer_agency_imageimage_url` TEXT, `rocketconfigurationmanufacturer_agency_imagethumbnail_url` TEXT, `rocketconfigurationmanufacturer_agency_imagecredit` TEXT, `rocketconfigurationconfiguration_image_id` INTEGER, `rocketconfigurationconfiguration_image_name` TEXT, `rocketconfigurationconfiguration_image_image_url` TEXT, `rocketconfigurationconfiguration_image_thumbnail_url` TEXT, `rocketconfigurationconfiguration_image_credit` TEXT, `missionid` INTEGER, `missionname` TEXT, `missiontype` TEXT, `missiondescription` TEXT, `missionagencies` TEXT NOT NULL, `missioninfo_urls` TEXT NOT NULL, `missionvid_urls` TEXT NOT NULL, `missionorbitid` INTEGER, `missionorbitname` TEXT, `missionorbitabbrev` TEXT, `padid` INTEGER, `padurl` TEXT, `padname` TEXT, `padagency` TEXT NOT NULL, `paddescription` TEXT, `padinfo_url` TEXT, `padwiki_url` TEXT, `padmap_url` TEXT, `padmap_image` TEXT, `padlatitude` REAL, `padlongitude` REAL, `padtotal_launch_count` INTEGER, `padorbital_launch_attempt_count` INTEGER, `padfastest_turnaround` TEXT, `padlocation_id` INTEGER, `padlocation_url` TEXT, `padlocation_name` TEXT, `padlocation_description` TEXT, `padlocation_timezone` TEXT, `padlocation_total_launch_count` INTEGER, `padlocation_total_landing_count` INTEGER, `padlocation_longitude` REAL, `padlocation_latitude` REAL, `padlocation_map_image` TEXT, `padpad_imageid` INTEGER NOT NULL, `padpad_imagename` TEXT NOT NULL, `padpad_imageimage_url` TEXT NOT NULL, `padpad_imagethumbnail_url` TEXT NOT NULL, `padpad_imagecredit` TEXT NOT NULL, `padcountryid` INTEGER, `padcountryname` TEXT, `padcountryalpha_2_code` TEXT, `padcountryalpha_3_code` TEXT, `padcountrynationality_name` TEXT, `statusid` INTEGER, `statusname` TEXT NOT NULL, `statusabbrev` TEXT NOT NULL, `statusdescription` TEXT, `configurationid` INTEGER, `configurationurl` TEXT, `configurationname` TEXT, `configurationfull_name` TEXT, `configurationvariant` TEXT, `configurationfamilies` TEXT, `configurationwiki_url` TEXT, `configurationdescription` TEXT, `configurationalias` TEXT, `configurationtotal_launch_count` INTEGER, `configurationsuccessful_launches` INTEGER, `configurationfailed_launches` INTEGER, `configurationlength` REAL, `configurationdiameter` REAL, `configurationlaunch_mass` REAL, `configurationmaiden_flight` TEXT, `configurationmanufacturer_id` INTEGER, `configurationmanufacturer_url` TEXT, `configurationmanufacturer_name` TEXT, `configurationmanufacturer_abbrev` TEXT, `configurationmanufacturer_type` TEXT, `configurationmanufacturer_featured` INTEGER, `configurationmanufacturer_country` TEXT, `configurationmanufacturer_description` TEXT, `configurationmanufacturer_administrator` TEXT, `configurationmanufacturer_founding_year` INTEGER, `configurationmanufacturer_launchers` TEXT, `configurationmanufacturer_spacecraft` TEXT, `configurationmanufacturer_total_launch_count` INTEGER, `configurationmanufacturer_consecutive_successful_launches` INTEGER, `configurationmanufacturer_successful_launches` INTEGER, `configurationmanufacturer_failed_launches` INTEGER, `configurationmanufacturer_pending_launches` INTEGER, `configurationmanufacturer_consecutive_successful_landings` INTEGER, `configurationmanufacturer_successful_landings` INTEGER, `configurationmanufacturer_failed_landings` INTEGER, `configurationmanufacturer_attempted_landings` INTEGER, `configurationmanufacturer_successful_landings_spacecraft` INTEGER, `configurationmanufacturer_failed_landings_spacecraft` INTEGER, `configurationmanufacturer_attempted_landings_spacecraft` INTEGER, `configurationmanufacturer_successful_landings_payload` INTEGER, `configurationmanufacturer_failed_landings_payload` INTEGER, `configurationmanufacturer_attempted_landings_payload` INTEGER, `configurationmanufacturer_info_url` TEXT, `configurationmanufacturer_wiki_url` TEXT, `configurationmanufacturer_agency_imageid` INTEGER, `configurationmanufacturer_agency_imagename` TEXT, `configurationmanufacturer_agency_imageimage_url` TEXT, `configurationmanufacturer_agency_imagethumbnail_url` TEXT, `configurationmanufacturer_agency_imagecredit` TEXT, `configurationconfiguration_image_id` INTEGER, `configurationconfiguration_image_name` TEXT, `configurationconfiguration_image_image_url` TEXT, `configurationconfiguration_image_thumbnail_url` TEXT, `configurationconfiguration_image_credit` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "last_updated",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "net",
+            "columnName": "net",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windowEnd",
+            "columnName": "window_end",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "windowStart",
+            "columnName": "window_start",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "infographic",
+            "columnName": "infographic",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "probability",
+            "columnName": "probability",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "weatherConcerns",
+            "columnName": "weather_concerns",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "failReason",
+            "columnName": "fail_reason",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "webcastLive",
+            "columnName": "webcast_live",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "program",
+            "columnName": "program",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orbitalLaunchAttemptCount",
+            "columnName": "orbital_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "locationLaunchAttemptCount",
+            "columnName": "location_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "padLaunchAttemptCount",
+            "columnName": "pad_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "agencyLaunchAttemptCount",
+            "columnName": "agency_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "orbitalLaunchAttemptCountYear",
+            "columnName": "orbital_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "locationLaunchAttemptCountYear",
+            "columnName": "location_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "padLaunchAttemptCountYear",
+            "columnName": "pad_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "agencyLaunchAttemptCountYear",
+            "columnName": "agency_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "updates",
+            "columnName": "updates",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "infoUrls",
+            "columnName": "info_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vidUrls",
+            "columnName": "vid_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "padTurnaround",
+            "columnName": "pad_turnaround",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "missionPatches",
+            "columnName": "mission_patches",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "families",
+            "columnName": "family",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "netPrecision.id",
+            "columnName": "net_precisionid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "netPrecision.name",
+            "columnName": "net_precisionname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "netPrecision.abbrev",
+            "columnName": "net_precisionabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "netPrecision.description",
+            "columnName": "net_precisiondescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "image.id",
+            "columnName": "imageid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.name",
+            "columnName": "imagename",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.imageUrl",
+            "columnName": "imageimage_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.thumbnailUrl",
+            "columnName": "imagethumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.credit",
+            "columnName": "imagecredit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "launchServiceProvider.id",
+            "columnName": "agencyid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.url",
+            "columnName": "agencyurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.name",
+            "columnName": "agencyname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.abbrev",
+            "columnName": "agencyabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.type",
+            "columnName": "agencytype",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.featured",
+            "columnName": "agencyfeatured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.country",
+            "columnName": "agencycountry",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.description",
+            "columnName": "agencydescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.administrator",
+            "columnName": "agencyadministrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.foundingYear",
+            "columnName": "agencyfounding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.launchers",
+            "columnName": "agencylaunchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.spacecraft",
+            "columnName": "agencyspacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.totalLaunchCount",
+            "columnName": "agencytotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.consecutiveSuccessfulLaunches",
+            "columnName": "agencyconsecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLaunches",
+            "columnName": "agencysuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLaunches",
+            "columnName": "agencyfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.pendingLaunches",
+            "columnName": "agencypending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.consecutiveSuccessfulLandings",
+            "columnName": "agencyconsecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandings",
+            "columnName": "agencysuccessful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandings",
+            "columnName": "agencyfailed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandings",
+            "columnName": "agencyattempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandingsSpacecraft",
+            "columnName": "agencysuccessful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandingsSpacecraft",
+            "columnName": "agencyfailed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandingsSpacecraft",
+            "columnName": "agencyattempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandingsPayload",
+            "columnName": "agencysuccessful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandingsPayload",
+            "columnName": "agencyfailed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandingsPayload",
+            "columnName": "agencyattempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.infoUrl",
+            "columnName": "agencyinfo_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.wikiUrl",
+            "columnName": "agencywiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.id",
+            "columnName": "agencyagency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.name",
+            "columnName": "agencyagency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.imageUrl",
+            "columnName": "agencyagency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.thumbnailUrl",
+            "columnName": "agencyagency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.credit",
+            "columnName": "agencyagency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.id",
+            "columnName": "rocketid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.launcherStage",
+            "columnName": "rocketlauncher_stage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.spacecraftStage",
+            "columnName": "rocketspacecraft_stage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.configuration.id",
+            "columnName": "rocketconfigurationid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.url",
+            "columnName": "rocketconfigurationurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.name",
+            "columnName": "rocketconfigurationname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.fullName",
+            "columnName": "rocketconfigurationfull_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.variant",
+            "columnName": "rocketconfigurationvariant",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.families",
+            "columnName": "rocketconfigurationfamilies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.configuration.wikiUrl",
+            "columnName": "rocketconfigurationwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.description",
+            "columnName": "rocketconfigurationdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.alias",
+            "columnName": "rocketconfigurationalias",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.totalLaunchCount",
+            "columnName": "rocketconfigurationtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.successfulLaunches",
+            "columnName": "rocketconfigurationsuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.failedLaunches",
+            "columnName": "rocketconfigurationfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.length",
+            "columnName": "rocketconfigurationlength",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.diameter",
+            "columnName": "rocketconfigurationdiameter",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.launchMass",
+            "columnName": "rocketconfigurationlaunch_mass",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.maidenFlight",
+            "columnName": "rocketconfigurationmaiden_flight",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.id",
+            "columnName": "rocketconfigurationmanufacturer_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.url",
+            "columnName": "rocketconfigurationmanufacturer_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.name",
+            "columnName": "rocketconfigurationmanufacturer_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.abbrev",
+            "columnName": "rocketconfigurationmanufacturer_abbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.type",
+            "columnName": "rocketconfigurationmanufacturer_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.featured",
+            "columnName": "rocketconfigurationmanufacturer_featured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.country",
+            "columnName": "rocketconfigurationmanufacturer_country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.description",
+            "columnName": "rocketconfigurationmanufacturer_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.administrator",
+            "columnName": "rocketconfigurationmanufacturer_administrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.foundingYear",
+            "columnName": "rocketconfigurationmanufacturer_founding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.launchers",
+            "columnName": "rocketconfigurationmanufacturer_launchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.spacecraft",
+            "columnName": "rocketconfigurationmanufacturer_spacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.totalLaunchCount",
+            "columnName": "rocketconfigurationmanufacturer_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.consecutiveSuccessfulLaunches",
+            "columnName": "rocketconfigurationmanufacturer_consecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLaunches",
+            "columnName": "rocketconfigurationmanufacturer_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLaunches",
+            "columnName": "rocketconfigurationmanufacturer_failed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.pendingLaunches",
+            "columnName": "rocketconfigurationmanufacturer_pending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.consecutiveSuccessfulLandings",
+            "columnName": "rocketconfigurationmanufacturer_consecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandings",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandings",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandings",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.infoUrl",
+            "columnName": "rocketconfigurationmanufacturer_info_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.wikiUrl",
+            "columnName": "rocketconfigurationmanufacturer_wiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.id",
+            "columnName": "rocketconfigurationmanufacturer_agency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.name",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.imageUrl",
+            "columnName": "rocketconfigurationmanufacturer_agency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.thumbnailUrl",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.credit",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.id",
+            "columnName": "rocketconfigurationconfiguration_image_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.name",
+            "columnName": "rocketconfigurationconfiguration_image_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.imageUrl",
+            "columnName": "rocketconfigurationconfiguration_image_image_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.thumbnailUrl",
+            "columnName": "rocketconfigurationconfiguration_image_thumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.credit",
+            "columnName": "rocketconfigurationconfiguration_image_credit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.id",
+            "columnName": "missionid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mission.name",
+            "columnName": "missionname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.type",
+            "columnName": "missiontype",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.description",
+            "columnName": "missiondescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.agencies",
+            "columnName": "missionagencies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.infoUrls",
+            "columnName": "missioninfo_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.vidUrls",
+            "columnName": "missionvid_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.orbit.id",
+            "columnName": "missionorbitid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mission.orbit.name",
+            "columnName": "missionorbitname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.orbit.abbrev",
+            "columnName": "missionorbitabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.id",
+            "columnName": "padid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.url",
+            "columnName": "padurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.name",
+            "columnName": "padname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.agencies",
+            "columnName": "padagency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.description",
+            "columnName": "paddescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.infoUrl",
+            "columnName": "padinfo_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.wikiUrl",
+            "columnName": "padwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.mapUrl",
+            "columnName": "padmap_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.mapImage",
+            "columnName": "padmap_image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.latitude",
+            "columnName": "padlatitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.longitude",
+            "columnName": "padlongitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.totalLaunchCount",
+            "columnName": "padtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.orbitalLaunchAttemptCount",
+            "columnName": "padorbital_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.fastestTurnaround",
+            "columnName": "padfastest_turnaround",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationId",
+            "columnName": "padlocation_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationUrl",
+            "columnName": "padlocation_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationName",
+            "columnName": "padlocation_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationDescription",
+            "columnName": "padlocation_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationTimezone",
+            "columnName": "padlocation_timezone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationTotalLaunchCount",
+            "columnName": "padlocation_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationTotalLandingCount",
+            "columnName": "padlocation_total_landing_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationLongitude",
+            "columnName": "padlocation_longitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.locationLatitude",
+            "columnName": "padlocation_latitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.locationMapImage",
+            "columnName": "padlocation_map_image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.image.id",
+            "columnName": "padpad_imageid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.name",
+            "columnName": "padpad_imagename",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.imageUrl",
+            "columnName": "padpad_imageimage_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.thumbnailUrl",
+            "columnName": "padpad_imagethumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.credit",
+            "columnName": "padpad_imagecredit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.country.id",
+            "columnName": "padcountryid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.country.name",
+            "columnName": "padcountryname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.alpha2Code",
+            "columnName": "padcountryalpha_2_code",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.alpha3Code",
+            "columnName": "padcountryalpha_3_code",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.nationalityName",
+            "columnName": "padcountrynationality_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status.id",
+            "columnName": "statusid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status.name",
+            "columnName": "statusname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.abbrev",
+            "columnName": "statusabbrev",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.description",
+            "columnName": "statusdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.id",
+            "columnName": "configurationid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.url",
+            "columnName": "configurationurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.name",
+            "columnName": "configurationname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.fullName",
+            "columnName": "configurationfull_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.variant",
+            "columnName": "configurationvariant",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.families",
+            "columnName": "configurationfamilies",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.wikiUrl",
+            "columnName": "configurationwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.description",
+            "columnName": "configurationdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.alias",
+            "columnName": "configurationalias",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.totalLaunchCount",
+            "columnName": "configurationtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.successfulLaunches",
+            "columnName": "configurationsuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.failedLaunches",
+            "columnName": "configurationfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.length",
+            "columnName": "configurationlength",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.diameter",
+            "columnName": "configurationdiameter",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.launchMass",
+            "columnName": "configurationlaunch_mass",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.maidenFlight",
+            "columnName": "configurationmaiden_flight",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.id",
+            "columnName": "configurationmanufacturer_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.url",
+            "columnName": "configurationmanufacturer_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.name",
+            "columnName": "configurationmanufacturer_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.abbrev",
+            "columnName": "configurationmanufacturer_abbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.type",
+            "columnName": "configurationmanufacturer_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.featured",
+            "columnName": "configurationmanufacturer_featured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.country",
+            "columnName": "configurationmanufacturer_country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.description",
+            "columnName": "configurationmanufacturer_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.administrator",
+            "columnName": "configurationmanufacturer_administrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.foundingYear",
+            "columnName": "configurationmanufacturer_founding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.launchers",
+            "columnName": "configurationmanufacturer_launchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.spacecraft",
+            "columnName": "configurationmanufacturer_spacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.totalLaunchCount",
+            "columnName": "configurationmanufacturer_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.consecutiveSuccessfulLaunches",
+            "columnName": "configurationmanufacturer_consecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLaunches",
+            "columnName": "configurationmanufacturer_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLaunches",
+            "columnName": "configurationmanufacturer_failed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.pendingLaunches",
+            "columnName": "configurationmanufacturer_pending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.consecutiveSuccessfulLandings",
+            "columnName": "configurationmanufacturer_consecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandings",
+            "columnName": "configurationmanufacturer_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandings",
+            "columnName": "configurationmanufacturer_failed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandings",
+            "columnName": "configurationmanufacturer_attempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_successful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_failed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_attempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandingsPayload",
+            "columnName": "configurationmanufacturer_successful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandingsPayload",
+            "columnName": "configurationmanufacturer_failed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandingsPayload",
+            "columnName": "configurationmanufacturer_attempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.infoUrl",
+            "columnName": "configurationmanufacturer_info_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.wikiUrl",
+            "columnName": "configurationmanufacturer_wiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.id",
+            "columnName": "configurationmanufacturer_agency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.name",
+            "columnName": "configurationmanufacturer_agency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.imageUrl",
+            "columnName": "configurationmanufacturer_agency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.thumbnailUrl",
+            "columnName": "configurationmanufacturer_agency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.credit",
+            "columnName": "configurationmanufacturer_agency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.id",
+            "columnName": "configurationconfiguration_image_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.image.name",
+            "columnName": "configurationconfiguration_image_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.imageUrl",
+            "columnName": "configurationconfiguration_image_image_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.thumbnailUrl",
+            "columnName": "configurationconfiguration_image_thumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.credit",
+            "columnName": "configurationconfiguration_image_credit",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "past_detail",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `url` TEXT, `name` TEXT NOT NULL, `last_updated` TEXT, `net` TEXT NOT NULL, `window_end` TEXT, `window_start` TEXT, `infographic` TEXT, `probability` INTEGER, `weather_concerns` TEXT, `fail_reason` TEXT, `webcast_live` INTEGER, `program` TEXT NOT NULL, `orbital_launch_attempt_count` INTEGER, `location_launch_attempt_count` INTEGER, `pad_launch_attempt_count` INTEGER, `agency_launch_attempt_count` INTEGER, `orbital_launch_attempt_count_year` INTEGER, `location_launch_attempt_count_year` INTEGER, `pad_launch_attempt_count_year` INTEGER, `agency_launch_attempt_count_year` INTEGER, `updates` TEXT NOT NULL, `info_urls` TEXT NOT NULL, `vid_urls` TEXT NOT NULL, `pad_turnaround` TEXT, `mission_patches` TEXT NOT NULL, `family` TEXT NOT NULL, `net_precisionid` INTEGER, `net_precisionname` TEXT, `net_precisionabbrev` TEXT, `net_precisiondescription` TEXT, `imageid` INTEGER NOT NULL, `imagename` TEXT NOT NULL, `imageimage_url` TEXT NOT NULL, `imagethumbnail_url` TEXT NOT NULL, `imagecredit` TEXT NOT NULL, `agencyid` INTEGER, `agencyurl` TEXT, `agencyname` TEXT, `agencyabbrev` TEXT, `agencytype` TEXT, `agencyfeatured` INTEGER, `agencycountry` TEXT, `agencydescription` TEXT, `agencyadministrator` TEXT, `agencyfounding_year` INTEGER, `agencylaunchers` TEXT, `agencyspacecraft` TEXT, `agencytotal_launch_count` INTEGER, `agencyconsecutive_successful_launches` INTEGER, `agencysuccessful_launches` INTEGER, `agencyfailed_launches` INTEGER, `agencypending_launches` INTEGER, `agencyconsecutive_successful_landings` INTEGER, `agencysuccessful_landings` INTEGER, `agencyfailed_landings` INTEGER, `agencyattempted_landings` INTEGER, `agencysuccessful_landings_spacecraft` INTEGER, `agencyfailed_landings_spacecraft` INTEGER, `agencyattempted_landings_spacecraft` INTEGER, `agencysuccessful_landings_payload` INTEGER, `agencyfailed_landings_payload` INTEGER, `agencyattempted_landings_payload` INTEGER, `agencyinfo_url` TEXT, `agencywiki_url` TEXT, `agencyagency_imageid` INTEGER, `agencyagency_imagename` TEXT, `agencyagency_imageimage_url` TEXT, `agencyagency_imagethumbnail_url` TEXT, `agencyagency_imagecredit` TEXT, `rocketid` INTEGER, `rocketlauncher_stage` TEXT NOT NULL, `rocketspacecraft_stage` TEXT NOT NULL, `rocketconfigurationid` INTEGER, `rocketconfigurationurl` TEXT, `rocketconfigurationname` TEXT, `rocketconfigurationfull_name` TEXT, `rocketconfigurationvariant` TEXT, `rocketconfigurationfamilies` TEXT NOT NULL, `rocketconfigurationwiki_url` TEXT, `rocketconfigurationdescription` TEXT, `rocketconfigurationalias` TEXT, `rocketconfigurationtotal_launch_count` INTEGER, `rocketconfigurationsuccessful_launches` INTEGER, `rocketconfigurationfailed_launches` INTEGER, `rocketconfigurationlength` REAL, `rocketconfigurationdiameter` REAL, `rocketconfigurationlaunch_mass` REAL, `rocketconfigurationmaiden_flight` TEXT, `rocketconfigurationmanufacturer_id` INTEGER, `rocketconfigurationmanufacturer_url` TEXT, `rocketconfigurationmanufacturer_name` TEXT, `rocketconfigurationmanufacturer_abbrev` TEXT, `rocketconfigurationmanufacturer_type` TEXT, `rocketconfigurationmanufacturer_featured` INTEGER, `rocketconfigurationmanufacturer_country` TEXT, `rocketconfigurationmanufacturer_description` TEXT, `rocketconfigurationmanufacturer_administrator` TEXT, `rocketconfigurationmanufacturer_founding_year` INTEGER, `rocketconfigurationmanufacturer_launchers` TEXT, `rocketconfigurationmanufacturer_spacecraft` TEXT, `rocketconfigurationmanufacturer_total_launch_count` INTEGER, `rocketconfigurationmanufacturer_consecutive_successful_launches` INTEGER, `rocketconfigurationmanufacturer_successful_launches` INTEGER, `rocketconfigurationmanufacturer_failed_launches` INTEGER, `rocketconfigurationmanufacturer_pending_launches` INTEGER, `rocketconfigurationmanufacturer_consecutive_successful_landings` INTEGER, `rocketconfigurationmanufacturer_successful_landings` INTEGER, `rocketconfigurationmanufacturer_failed_landings` INTEGER, `rocketconfigurationmanufacturer_attempted_landings` INTEGER, `rocketconfigurationmanufacturer_successful_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_failed_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_attempted_landings_spacecraft` INTEGER, `rocketconfigurationmanufacturer_successful_landings_payload` INTEGER, `rocketconfigurationmanufacturer_failed_landings_payload` INTEGER, `rocketconfigurationmanufacturer_attempted_landings_payload` INTEGER, `rocketconfigurationmanufacturer_info_url` TEXT, `rocketconfigurationmanufacturer_wiki_url` TEXT, `rocketconfigurationmanufacturer_agency_imageid` INTEGER, `rocketconfigurationmanufacturer_agency_imagename` TEXT, `rocketconfigurationmanufacturer_agency_imageimage_url` TEXT, `rocketconfigurationmanufacturer_agency_imagethumbnail_url` TEXT, `rocketconfigurationmanufacturer_agency_imagecredit` TEXT, `rocketconfigurationconfiguration_image_id` INTEGER, `rocketconfigurationconfiguration_image_name` TEXT, `rocketconfigurationconfiguration_image_image_url` TEXT, `rocketconfigurationconfiguration_image_thumbnail_url` TEXT, `rocketconfigurationconfiguration_image_credit` TEXT, `missionid` INTEGER, `missionname` TEXT, `missiontype` TEXT, `missiondescription` TEXT, `missionagencies` TEXT NOT NULL, `missioninfo_urls` TEXT NOT NULL, `missionvid_urls` TEXT NOT NULL, `missionorbitid` INTEGER, `missionorbitname` TEXT, `missionorbitabbrev` TEXT, `padid` INTEGER, `padurl` TEXT, `padname` TEXT, `padagency` TEXT NOT NULL, `paddescription` TEXT, `padinfo_url` TEXT, `padwiki_url` TEXT, `padmap_url` TEXT, `padmap_image` TEXT, `padlatitude` REAL, `padlongitude` REAL, `padtotal_launch_count` INTEGER, `padorbital_launch_attempt_count` INTEGER, `padfastest_turnaround` TEXT, `padlocation_id` INTEGER, `padlocation_url` TEXT, `padlocation_name` TEXT, `padlocation_description` TEXT, `padlocation_timezone` TEXT, `padlocation_total_launch_count` INTEGER, `padlocation_total_landing_count` INTEGER, `padlocation_longitude` REAL, `padlocation_latitude` REAL, `padlocation_map_image` TEXT, `padpad_imageid` INTEGER NOT NULL, `padpad_imagename` TEXT NOT NULL, `padpad_imageimage_url` TEXT NOT NULL, `padpad_imagethumbnail_url` TEXT NOT NULL, `padpad_imagecredit` TEXT NOT NULL, `padcountryid` INTEGER, `padcountryname` TEXT, `padcountryalpha_2_code` TEXT, `padcountryalpha_3_code` TEXT, `padcountrynationality_name` TEXT, `statusid` INTEGER, `statusname` TEXT NOT NULL, `statusabbrev` TEXT NOT NULL, `statusdescription` TEXT, `configurationid` INTEGER, `configurationurl` TEXT, `configurationname` TEXT, `configurationfull_name` TEXT, `configurationvariant` TEXT, `configurationfamilies` TEXT, `configurationwiki_url` TEXT, `configurationdescription` TEXT, `configurationalias` TEXT, `configurationtotal_launch_count` INTEGER, `configurationsuccessful_launches` INTEGER, `configurationfailed_launches` INTEGER, `configurationlength` REAL, `configurationdiameter` REAL, `configurationlaunch_mass` REAL, `configurationmaiden_flight` TEXT, `configurationmanufacturer_id` INTEGER, `configurationmanufacturer_url` TEXT, `configurationmanufacturer_name` TEXT, `configurationmanufacturer_abbrev` TEXT, `configurationmanufacturer_type` TEXT, `configurationmanufacturer_featured` INTEGER, `configurationmanufacturer_country` TEXT, `configurationmanufacturer_description` TEXT, `configurationmanufacturer_administrator` TEXT, `configurationmanufacturer_founding_year` INTEGER, `configurationmanufacturer_launchers` TEXT, `configurationmanufacturer_spacecraft` TEXT, `configurationmanufacturer_total_launch_count` INTEGER, `configurationmanufacturer_consecutive_successful_launches` INTEGER, `configurationmanufacturer_successful_launches` INTEGER, `configurationmanufacturer_failed_launches` INTEGER, `configurationmanufacturer_pending_launches` INTEGER, `configurationmanufacturer_consecutive_successful_landings` INTEGER, `configurationmanufacturer_successful_landings` INTEGER, `configurationmanufacturer_failed_landings` INTEGER, `configurationmanufacturer_attempted_landings` INTEGER, `configurationmanufacturer_successful_landings_spacecraft` INTEGER, `configurationmanufacturer_failed_landings_spacecraft` INTEGER, `configurationmanufacturer_attempted_landings_spacecraft` INTEGER, `configurationmanufacturer_successful_landings_payload` INTEGER, `configurationmanufacturer_failed_landings_payload` INTEGER, `configurationmanufacturer_attempted_landings_payload` INTEGER, `configurationmanufacturer_info_url` TEXT, `configurationmanufacturer_wiki_url` TEXT, `configurationmanufacturer_agency_imageid` INTEGER, `configurationmanufacturer_agency_imagename` TEXT, `configurationmanufacturer_agency_imageimage_url` TEXT, `configurationmanufacturer_agency_imagethumbnail_url` TEXT, `configurationmanufacturer_agency_imagecredit` TEXT, `configurationconfiguration_image_id` INTEGER, `configurationconfiguration_image_name` TEXT, `configurationconfiguration_image_image_url` TEXT, `configurationconfiguration_image_thumbnail_url` TEXT, `configurationconfiguration_image_credit` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "last_updated",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "net",
+            "columnName": "net",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windowEnd",
+            "columnName": "window_end",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "windowStart",
+            "columnName": "window_start",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "infographic",
+            "columnName": "infographic",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "probability",
+            "columnName": "probability",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "weatherConcerns",
+            "columnName": "weather_concerns",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "failReason",
+            "columnName": "fail_reason",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "webcastLive",
+            "columnName": "webcast_live",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "program",
+            "columnName": "program",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orbitalLaunchAttemptCount",
+            "columnName": "orbital_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "locationLaunchAttemptCount",
+            "columnName": "location_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "padLaunchAttemptCount",
+            "columnName": "pad_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "agencyLaunchAttemptCount",
+            "columnName": "agency_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "orbitalLaunchAttemptCountYear",
+            "columnName": "orbital_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "locationLaunchAttemptCountYear",
+            "columnName": "location_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "padLaunchAttemptCountYear",
+            "columnName": "pad_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "agencyLaunchAttemptCountYear",
+            "columnName": "agency_launch_attempt_count_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "updates",
+            "columnName": "updates",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "infoUrls",
+            "columnName": "info_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vidUrls",
+            "columnName": "vid_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "padTurnaround",
+            "columnName": "pad_turnaround",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "missionPatches",
+            "columnName": "mission_patches",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "families",
+            "columnName": "family",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "netPrecision.id",
+            "columnName": "net_precisionid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "netPrecision.name",
+            "columnName": "net_precisionname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "netPrecision.abbrev",
+            "columnName": "net_precisionabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "netPrecision.description",
+            "columnName": "net_precisiondescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "image.id",
+            "columnName": "imageid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.name",
+            "columnName": "imagename",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.imageUrl",
+            "columnName": "imageimage_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.thumbnailUrl",
+            "columnName": "imagethumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image.credit",
+            "columnName": "imagecredit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "launchServiceProvider.id",
+            "columnName": "agencyid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.url",
+            "columnName": "agencyurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.name",
+            "columnName": "agencyname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.abbrev",
+            "columnName": "agencyabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.type",
+            "columnName": "agencytype",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.featured",
+            "columnName": "agencyfeatured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.country",
+            "columnName": "agencycountry",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.description",
+            "columnName": "agencydescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.administrator",
+            "columnName": "agencyadministrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.foundingYear",
+            "columnName": "agencyfounding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.launchers",
+            "columnName": "agencylaunchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.spacecraft",
+            "columnName": "agencyspacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.totalLaunchCount",
+            "columnName": "agencytotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.consecutiveSuccessfulLaunches",
+            "columnName": "agencyconsecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLaunches",
+            "columnName": "agencysuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLaunches",
+            "columnName": "agencyfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.pendingLaunches",
+            "columnName": "agencypending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.consecutiveSuccessfulLandings",
+            "columnName": "agencyconsecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandings",
+            "columnName": "agencysuccessful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandings",
+            "columnName": "agencyfailed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandings",
+            "columnName": "agencyattempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandingsSpacecraft",
+            "columnName": "agencysuccessful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandingsSpacecraft",
+            "columnName": "agencyfailed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandingsSpacecraft",
+            "columnName": "agencyattempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.successfulLandingsPayload",
+            "columnName": "agencysuccessful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.failedLandingsPayload",
+            "columnName": "agencyfailed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.attemptedLandingsPayload",
+            "columnName": "agencyattempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.infoUrl",
+            "columnName": "agencyinfo_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.wikiUrl",
+            "columnName": "agencywiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.id",
+            "columnName": "agencyagency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.name",
+            "columnName": "agencyagency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.imageUrl",
+            "columnName": "agencyagency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.thumbnailUrl",
+            "columnName": "agencyagency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "launchServiceProvider.image.credit",
+            "columnName": "agencyagency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.id",
+            "columnName": "rocketid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.launcherStage",
+            "columnName": "rocketlauncher_stage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.spacecraftStage",
+            "columnName": "rocketspacecraft_stage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.configuration.id",
+            "columnName": "rocketconfigurationid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.url",
+            "columnName": "rocketconfigurationurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.name",
+            "columnName": "rocketconfigurationname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.fullName",
+            "columnName": "rocketconfigurationfull_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.variant",
+            "columnName": "rocketconfigurationvariant",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.families",
+            "columnName": "rocketconfigurationfamilies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rocket.configuration.wikiUrl",
+            "columnName": "rocketconfigurationwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.description",
+            "columnName": "rocketconfigurationdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.alias",
+            "columnName": "rocketconfigurationalias",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.totalLaunchCount",
+            "columnName": "rocketconfigurationtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.successfulLaunches",
+            "columnName": "rocketconfigurationsuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.failedLaunches",
+            "columnName": "rocketconfigurationfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.length",
+            "columnName": "rocketconfigurationlength",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.diameter",
+            "columnName": "rocketconfigurationdiameter",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.launchMass",
+            "columnName": "rocketconfigurationlaunch_mass",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "rocket.configuration.maidenFlight",
+            "columnName": "rocketconfigurationmaiden_flight",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.id",
+            "columnName": "rocketconfigurationmanufacturer_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.url",
+            "columnName": "rocketconfigurationmanufacturer_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.name",
+            "columnName": "rocketconfigurationmanufacturer_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.abbrev",
+            "columnName": "rocketconfigurationmanufacturer_abbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.type",
+            "columnName": "rocketconfigurationmanufacturer_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.featured",
+            "columnName": "rocketconfigurationmanufacturer_featured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.country",
+            "columnName": "rocketconfigurationmanufacturer_country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.description",
+            "columnName": "rocketconfigurationmanufacturer_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.administrator",
+            "columnName": "rocketconfigurationmanufacturer_administrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.foundingYear",
+            "columnName": "rocketconfigurationmanufacturer_founding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.launchers",
+            "columnName": "rocketconfigurationmanufacturer_launchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.spacecraft",
+            "columnName": "rocketconfigurationmanufacturer_spacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.totalLaunchCount",
+            "columnName": "rocketconfigurationmanufacturer_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.consecutiveSuccessfulLaunches",
+            "columnName": "rocketconfigurationmanufacturer_consecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLaunches",
+            "columnName": "rocketconfigurationmanufacturer_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLaunches",
+            "columnName": "rocketconfigurationmanufacturer_failed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.pendingLaunches",
+            "columnName": "rocketconfigurationmanufacturer_pending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.consecutiveSuccessfulLandings",
+            "columnName": "rocketconfigurationmanufacturer_consecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandings",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandings",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandings",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandingsSpacecraft",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.successfulLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_successful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.failedLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_failed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.attemptedLandingsPayload",
+            "columnName": "rocketconfigurationmanufacturer_attempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.infoUrl",
+            "columnName": "rocketconfigurationmanufacturer_info_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.wikiUrl",
+            "columnName": "rocketconfigurationmanufacturer_wiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.id",
+            "columnName": "rocketconfigurationmanufacturer_agency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.name",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.imageUrl",
+            "columnName": "rocketconfigurationmanufacturer_agency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.thumbnailUrl",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.manufacturer.image.credit",
+            "columnName": "rocketconfigurationmanufacturer_agency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.id",
+            "columnName": "rocketconfigurationconfiguration_image_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.name",
+            "columnName": "rocketconfigurationconfiguration_image_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.imageUrl",
+            "columnName": "rocketconfigurationconfiguration_image_image_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.thumbnailUrl",
+            "columnName": "rocketconfigurationconfiguration_image_thumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rocket.configuration.image.credit",
+            "columnName": "rocketconfigurationconfiguration_image_credit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.id",
+            "columnName": "missionid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mission.name",
+            "columnName": "missionname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.type",
+            "columnName": "missiontype",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.description",
+            "columnName": "missiondescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.agencies",
+            "columnName": "missionagencies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.infoUrls",
+            "columnName": "missioninfo_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.vidUrls",
+            "columnName": "missionvid_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mission.orbit.id",
+            "columnName": "missionorbitid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mission.orbit.name",
+            "columnName": "missionorbitname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mission.orbit.abbrev",
+            "columnName": "missionorbitabbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.id",
+            "columnName": "padid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.url",
+            "columnName": "padurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.name",
+            "columnName": "padname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.agencies",
+            "columnName": "padagency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.description",
+            "columnName": "paddescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.infoUrl",
+            "columnName": "padinfo_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.wikiUrl",
+            "columnName": "padwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.mapUrl",
+            "columnName": "padmap_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.mapImage",
+            "columnName": "padmap_image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.latitude",
+            "columnName": "padlatitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.longitude",
+            "columnName": "padlongitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.totalLaunchCount",
+            "columnName": "padtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.orbitalLaunchAttemptCount",
+            "columnName": "padorbital_launch_attempt_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.fastestTurnaround",
+            "columnName": "padfastest_turnaround",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationId",
+            "columnName": "padlocation_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationUrl",
+            "columnName": "padlocation_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationName",
+            "columnName": "padlocation_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationDescription",
+            "columnName": "padlocation_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationTimezone",
+            "columnName": "padlocation_timezone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.locationTotalLaunchCount",
+            "columnName": "padlocation_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationTotalLandingCount",
+            "columnName": "padlocation_total_landing_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.locationLongitude",
+            "columnName": "padlocation_longitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.locationLatitude",
+            "columnName": "padlocation_latitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "pad.locationMapImage",
+            "columnName": "padlocation_map_image",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.image.id",
+            "columnName": "padpad_imageid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.name",
+            "columnName": "padpad_imagename",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.imageUrl",
+            "columnName": "padpad_imageimage_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.thumbnailUrl",
+            "columnName": "padpad_imagethumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.image.credit",
+            "columnName": "padpad_imagecredit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pad.country.id",
+            "columnName": "padcountryid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pad.country.name",
+            "columnName": "padcountryname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.alpha2Code",
+            "columnName": "padcountryalpha_2_code",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.alpha3Code",
+            "columnName": "padcountryalpha_3_code",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pad.country.nationalityName",
+            "columnName": "padcountrynationality_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status.id",
+            "columnName": "statusid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status.name",
+            "columnName": "statusname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.abbrev",
+            "columnName": "statusabbrev",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.description",
+            "columnName": "statusdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.id",
+            "columnName": "configurationid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.url",
+            "columnName": "configurationurl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.name",
+            "columnName": "configurationname",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.fullName",
+            "columnName": "configurationfull_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.variant",
+            "columnName": "configurationvariant",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.families",
+            "columnName": "configurationfamilies",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.wikiUrl",
+            "columnName": "configurationwiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.description",
+            "columnName": "configurationdescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.alias",
+            "columnName": "configurationalias",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.totalLaunchCount",
+            "columnName": "configurationtotal_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.successfulLaunches",
+            "columnName": "configurationsuccessful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.failedLaunches",
+            "columnName": "configurationfailed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.length",
+            "columnName": "configurationlength",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.diameter",
+            "columnName": "configurationdiameter",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.launchMass",
+            "columnName": "configurationlaunch_mass",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "configuration.maidenFlight",
+            "columnName": "configurationmaiden_flight",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.id",
+            "columnName": "configurationmanufacturer_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.url",
+            "columnName": "configurationmanufacturer_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.name",
+            "columnName": "configurationmanufacturer_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.abbrev",
+            "columnName": "configurationmanufacturer_abbrev",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.type",
+            "columnName": "configurationmanufacturer_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.featured",
+            "columnName": "configurationmanufacturer_featured",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.country",
+            "columnName": "configurationmanufacturer_country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.description",
+            "columnName": "configurationmanufacturer_description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.administrator",
+            "columnName": "configurationmanufacturer_administrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.foundingYear",
+            "columnName": "configurationmanufacturer_founding_year",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.launchers",
+            "columnName": "configurationmanufacturer_launchers",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.spacecraft",
+            "columnName": "configurationmanufacturer_spacecraft",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.totalLaunchCount",
+            "columnName": "configurationmanufacturer_total_launch_count",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.consecutiveSuccessfulLaunches",
+            "columnName": "configurationmanufacturer_consecutive_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLaunches",
+            "columnName": "configurationmanufacturer_successful_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLaunches",
+            "columnName": "configurationmanufacturer_failed_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.pendingLaunches",
+            "columnName": "configurationmanufacturer_pending_launches",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.consecutiveSuccessfulLandings",
+            "columnName": "configurationmanufacturer_consecutive_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandings",
+            "columnName": "configurationmanufacturer_successful_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandings",
+            "columnName": "configurationmanufacturer_failed_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandings",
+            "columnName": "configurationmanufacturer_attempted_landings",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_successful_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_failed_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandingsSpacecraft",
+            "columnName": "configurationmanufacturer_attempted_landings_spacecraft",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.successfulLandingsPayload",
+            "columnName": "configurationmanufacturer_successful_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.failedLandingsPayload",
+            "columnName": "configurationmanufacturer_failed_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.attemptedLandingsPayload",
+            "columnName": "configurationmanufacturer_attempted_landings_payload",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.infoUrl",
+            "columnName": "configurationmanufacturer_info_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.wikiUrl",
+            "columnName": "configurationmanufacturer_wiki_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.id",
+            "columnName": "configurationmanufacturer_agency_imageid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.name",
+            "columnName": "configurationmanufacturer_agency_imagename",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.imageUrl",
+            "columnName": "configurationmanufacturer_agency_imageimage_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.thumbnailUrl",
+            "columnName": "configurationmanufacturer_agency_imagethumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.manufacturer.image.credit",
+            "columnName": "configurationmanufacturer_agency_imagecredit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.id",
+            "columnName": "configurationconfiguration_image_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "configuration.image.name",
+            "columnName": "configurationconfiguration_image_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.imageUrl",
+            "columnName": "configurationconfiguration_image_image_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.thumbnailUrl",
+            "columnName": "configurationconfiguration_image_thumbnail_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "configuration.image.credit",
+            "columnName": "configurationconfiguration_image_credit",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "upcoming_launches",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `mission_name` TEXT NOT NULL, `net` TEXT NOT NULL, `image_url` TEXT NOT NULL, `location` TEXT NOT NULL, `statusid` INTEGER, `statusname` TEXT NOT NULL, `statusabbrev` TEXT NOT NULL, `statusdescription` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionName",
+            "columnName": "mission_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "net",
+            "columnName": "net",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.id",
+            "columnName": "statusid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status.name",
+            "columnName": "statusname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.abbrev",
+            "columnName": "statusabbrev",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.description",
+            "columnName": "statusdescription",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "upcoming_remote_keys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `next_key` INTEGER, `prev_key` INTEGER, `current_page` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `cached_query` TEXT, `cached_launch_status` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextKey",
+            "columnName": "next_key",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "prevKey",
+            "columnName": "prev_key",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "currentPage",
+            "columnName": "current_page",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cachedQuery",
+            "columnName": "cached_query",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cachedLaunchStatus",
+            "columnName": "cached_launch_status",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "past_launches",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `mission_name` TEXT NOT NULL, `net` TEXT NOT NULL, `image_url` TEXT NOT NULL, `location` TEXT NOT NULL, `statusid` INTEGER, `statusname` TEXT NOT NULL, `statusabbrev` TEXT NOT NULL, `statusdescription` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionName",
+            "columnName": "mission_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "net",
+            "columnName": "net",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.id",
+            "columnName": "statusid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "status.name",
+            "columnName": "statusname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.abbrev",
+            "columnName": "statusabbrev",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status.description",
+            "columnName": "statusdescription",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "past_remote_keys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `next_key` INTEGER, `prev_key` INTEGER, `current_page` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `cached_query` TEXT, `cached_launch_status` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextKey",
+            "columnName": "next_key",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "prevKey",
+            "columnName": "prev_key",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "currentPage",
+            "columnName": "current_page",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cachedQuery",
+            "columnName": "cached_query",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cachedLaunchStatus",
+            "columnName": "cached_launch_status",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dbdc18f1c497b98e6cbe9cda2776ea1e')"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name='Orbital'
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+include ':app'
+include ':benchmark'
+include ':build-logic'
+include ':core:common'
+include ':core:data'
+include ':core:datastore:api'
+include ':core:datastore:implementation'
+include ':core:datastore-proto'
+include ':core:domain'
+include ':core:hilt-ui-test'
+include ':core:navigation'
+include ':core:test'
+include ':core:ui'
+include ':database'
+include ':feature:launch'

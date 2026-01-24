@@ -1,0 +1,6 @@
+dependencies {
+    implementation(libs.hilt.android)
+    androidTestImplementation(libs.hilt.androidTesting)
+    ksp(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
+}

@@ -1,0 +1,22 @@
+apply plugin: libs.plugins.compose.get().pluginId
+
+android {
+    buildFeatures {
+        compose true
+    }
+}
+
+dependencies {
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
+
+    implementation(libs.bundles.composeBundle)
+
+    // Compose Test dependencies
+    androidTestImplementation(libs.compose.uiTest)
+    androidTestImplementation(libs.compose.uiTestJunit4)
+    androidTestImplementation(libs.compose.uiTestManifest)
+
+    // Debug implementations
+    debugImplementation(libs.compose.uiTestManifest)
+    debugImplementation(libs.compose.preview)}

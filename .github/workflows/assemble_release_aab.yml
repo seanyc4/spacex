@@ -1,0 +1,28 @@
+name: Assemble Release AAB
+
+on:
+  workflow_dispatch:
+    inputs:
+      version: { required: true, type: string, description: "Version Name" }
+
+  workflow_call:
+    inputs:
+      version: { required: true, type: string }
+    outputs:
+      artifact-name:
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_sign.yml
+    with:
+      assemble-script: .github/scripts/assemble_release_aab.sh
+      output-dir:      app/build/outputs/bundle/release
+      unsigned-name:   app-release.aab
+      artifact-name:   orbital-release_${{ inputs.version }}.aab
+    secrets:
+      signing-key:       ${{ secrets.SIGNING_KEY }}
+      alias:             ${{ secrets.ALIAS }}
+      keystore-password: ${{ secrets.KEY_STORE_PASSWORD }}
+      key-password:      ${{ secrets.KEY_PASSWORD }}
+      revenuecat-api-key-prod: ${{ secrets.REVENUECAT_API_KEY_PROD }}
