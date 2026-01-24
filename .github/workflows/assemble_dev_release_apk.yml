@@ -26,4 +26,3 @@ jobs:
       keystore-password: ${{ secrets.TEST_KEY_STORE_PASSWORD }}
       key-password:      ${{ secrets.TEST_KEY_PASSWORD }}
       revenuecat-api-key-prod: ${{ secrets.REVENUECAT_API_KEY_PROD }}
-      revenuecat-api-key-debug: ${{ secrets.REVENUECAT_API_KEY_DEBUG }}
