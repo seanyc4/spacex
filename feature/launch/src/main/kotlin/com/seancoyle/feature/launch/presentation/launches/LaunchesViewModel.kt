@@ -13,6 +13,7 @@ import androidx.paging.map
 import com.seancoyle.core.common.coroutines.stateIn
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.feature.launch.domain.model.LaunchesQuery
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.LaunchUiMapper
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
@@ -39,6 +40,7 @@ private const val TAG = "LaunchViewModel"
 class LaunchesViewModel @Inject constructor(
     private val launchesComponent: LaunchesComponent,
     private val uiMapper: LaunchUiMapper,
+    private val launchAnalyticsComponent: LaunchAnalyticsComponent,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -86,16 +88,48 @@ class LaunchesViewModel @Inject constructor(
 
     fun onEvent(event: LaunchesEvent) = viewModelScope.launch {
         when (event) {
-            is LaunchesEvent.DisplayFilterBottomSheet -> displayFilterBottomSheet(true)
+            is LaunchesEvent.DisplayFilterBottomSheet -> {
+                launchAnalyticsComponent.trackFilterOpen(
+                    launchType = screenState.launchesType.name,
+                    filterCount = screenState.activeFilterCount
+                )
+                displayFilterBottomSheet(true)
+            }
+
             is LaunchesEvent.DismissFilterBottomSheet -> displayFilterBottomSheet(false)
-            is LaunchesEvent.PullToRefresh -> onPullToRefresh()
-            is LaunchesEvent.RetryFetch -> onRetryFetch()
-            is LaunchesEvent.TabSelected -> onTabSelected(event.launchesType)
+
+            is LaunchesEvent.PullToRefresh -> {
+                launchAnalyticsComponent.trackPullRefresh(screenState.launchesType.name)
+                onPullToRefresh()
+            }
+
+            is LaunchesEvent.RetryFetch -> {
+                launchAnalyticsComponent.trackRetryTap(screenState.launchesType.name)
+                onRetryFetch()
+            }
+
+            is LaunchesEvent.TabSelected -> {
+                launchAnalyticsComponent.trackTabSwitch(
+                    fromTab = screenState.launchesType.name,
+                    toTab = event.launchesType.name
+                )
+                onTabSelected(event.launchesType)
+            }
+
             is LaunchesEvent.UpdateFilterState -> setLaunchFilterState(
                 launchStatus = event.launchStatus,
                 query = event.query
             )
         }
+    }
+
+    fun trackLaunchClick(launch: LaunchesUi, position: Int) {
+        launchAnalyticsComponent.trackListItemClick(
+            launchId = launch.id,
+            launchType = screenState.launchesType.name,
+            position = position,
+            status = launch.status.name
+        )
     }
 
     private fun clearQueryParameters() {

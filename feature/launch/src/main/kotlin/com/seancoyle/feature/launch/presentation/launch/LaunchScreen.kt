@@ -38,6 +38,8 @@ import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
 @Composable
 fun LaunchScreen(
     launch: LaunchUI,
+    onVideoPlay: (videoId: String, isLive: Boolean) -> Unit,
+    onExternalLinkClick: (linkType: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberSaveable(saver = ScrollState.Saver) {
@@ -59,7 +61,10 @@ fun LaunchScreen(
 
         if (launch.vidUrls.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            VideoSection(videos = launch.vidUrls)
+            VideoSection(
+                videos = launch.vidUrls,
+                onVideoPlay = onVideoPlay
+            )
         }
 
         if (launch.updates.isNotEmpty()) {
@@ -69,10 +74,16 @@ fun LaunchScreen(
         }
 
         Spacer(modifier = Modifier.height(paddingXLarge))
-        LaunchSiteSection(pad = launch.pad)
+        LaunchSiteSection(
+            pad = launch.pad,
+            onExternalLinkClick = { onExternalLinkClick("map") }
+        )
 
         Spacer(modifier = Modifier.height(paddingXLarge))
-        RocketSection(rocket = launch.rocket)
+        RocketSection(
+            rocket = launch.rocket,
+            onExternalLinkClick = { onExternalLinkClick("wiki") }
+        )
 
         if (launch.launchServiceProvider != null) {
             Spacer(modifier = Modifier.height(paddingXLarge))
@@ -86,7 +97,9 @@ fun LaunchScreen(
 private fun LaunchScreenSuccessPreview() {
     AppTheme {
         LaunchScreen(
-            launch = previewData()
+            launch = previewData(),
+            onVideoPlay = { _, _ -> },
+            onExternalLinkClick = { }
         )
     }
 }

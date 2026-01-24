@@ -12,6 +12,10 @@ plugins {
 
 android {
     namespace = "com.seancoyle.core.common"
+
+    testFixtures {
+        enable = true
+    }
 }
 
 dependencies {

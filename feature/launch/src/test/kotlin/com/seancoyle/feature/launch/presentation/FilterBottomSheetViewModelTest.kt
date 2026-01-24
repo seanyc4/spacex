@@ -1,23 +1,19 @@
 package com.seancoyle.feature.launch.presentation
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
+import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchStatus
 import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetEvent
 import com.seancoyle.feature.launch.presentation.launches.filter.FilterBottomSheetViewModel
-import com.seancoyle.feature.launch.presentation.launches.filter.FilterResult
 import io.mockk.MockKAnnotations
-import kotlinx.coroutines.Dispatchers
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -26,22 +22,19 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class FilterBottomSheetViewModelTest {
 
+    @get:Rule
+    val dispatcherRule = TestCoroutineRule()
+
+    @MockK(relaxed = true)
+    private lateinit var launchAnalyticsComponent: LaunchAnalyticsComponent
+
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var underTest: FilterBottomSheetViewModel
 
-    private val testDispatcher = StandardTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
-
     @Before
     fun setup() {
-        Dispatchers.setMain(testDispatcher)
         MockKAnnotations.init(this)
         savedStateHandle = SavedStateHandle()
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     private fun createViewModel(
@@ -51,22 +44,20 @@ class FilterBottomSheetViewModelTest {
         return FilterBottomSheetViewModel(
             initialQuery = initialQuery,
             initialStatus = initialStatus,
+            launchAnalyticsComponent = launchAnalyticsComponent,
             savedStateHandle = savedStateHandle
         )
     }
 
     @Test
     fun `GIVEN initial values WHEN ViewModel is created THEN state reflects those values`() {
-        val initialQuery = "Starlink"
-        val initialStatus = LaunchStatus.SUCCESS
-
         underTest = createViewModel(
-            initialQuery = initialQuery,
-            initialStatus = initialStatus
+            initialQuery = "Starlink",
+            initialStatus = LaunchStatus.SUCCESS
         )
 
-        assertEquals(initialQuery, underTest.state.query)
-        assertEquals(initialStatus, underTest.state.selectedStatus)
+        assertEquals("Starlink", underTest.state.query)
+        assertEquals(LaunchStatus.SUCCESS, underTest.state.selectedStatus)
     }
 
     @Test
@@ -154,60 +145,50 @@ class FilterBottomSheetViewModelTest {
     }
 
     @Test
-    fun `GIVEN filters set WHEN ApplyFilters event THEN filterResult is emitted`() = testScope.runTest {
+    fun `GIVEN filters set WHEN ApplyFilters event THEN filterResult is emitted`() = runTest {
         underTest = createViewModel()
         underTest.onEvent(FilterBottomSheetEvent.QueryChanged("Starlink"))
         underTest.onEvent(FilterBottomSheetEvent.StatusSelected(LaunchStatus.SUCCESS))
 
-        val results = mutableListOf<FilterResult>()
-        val job = launch {
-            underTest.filterResult.toList(results)
+        underTest.filterResult.test {
+            underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
+            testScheduler.advanceUntilIdle()
+
+            val result = awaitItem()
+            assertEquals("Starlink", result.query)
+            assertEquals(LaunchStatus.SUCCESS, result.status)
+            cancelAndIgnoreRemainingEvents()
         }
-
-        underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
-        advanceUntilIdle()
-
-        assertEquals(1, results.size)
-        assertEquals("Starlink", results[0].query)
-        assertEquals(LaunchStatus.SUCCESS, results[0].status)
-
-        job.cancel()
     }
 
     @Test
-    fun `GIVEN query with spaces WHEN ApplyFilters THEN query is trimmed`() = testScope.runTest {
+    fun `GIVEN query with spaces WHEN ApplyFilters THEN query is trimmed`() = runTest {
         underTest = createViewModel()
         underTest.onEvent(FilterBottomSheetEvent.QueryChanged("  Starlink  "))
 
-        val results = mutableListOf<FilterResult>()
-        val job = launch {
-            underTest.filterResult.toList(results)
+        underTest.filterResult.test {
+            underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
+            testScheduler.advanceUntilIdle()
+
+            val result = awaitItem()
+            assertEquals("Starlink", result.query)
+            cancelAndIgnoreRemainingEvents()
         }
-
-        underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
-        advanceUntilIdle()
-
-        assertEquals("Starlink", results[0].query)
-
-        job.cancel()
     }
 
     @Test
-    fun `GIVEN query applied WHEN ApplyFilters THEN query added to recent searches`() = testScope.runTest {
+    fun `GIVEN query applied WHEN ApplyFilters THEN query added to recent searches`() = runTest {
         underTest = createViewModel()
         underTest.onEvent(FilterBottomSheetEvent.QueryChanged("Dragon"))
 
-        val results = mutableListOf<FilterResult>()
-        val job = launch {
-            underTest.filterResult.toList(results)
+        underTest.filterResult.test {
+            underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
+            testScheduler.advanceUntilIdle()
+
+            awaitItem()
+            assertTrue(underTest.state.recentSearches.contains("Dragon"))
+            cancelAndIgnoreRemainingEvents()
         }
-
-        underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
-        advanceUntilIdle()
-
-        assertTrue(underTest.state.recentSearches.contains("Dragon"))
-
-        job.cancel()
     }
 
     @Test
@@ -249,28 +230,23 @@ class FilterBottomSheetViewModelTest {
     @Test
     fun `GIVEN recent search WHEN RecentSearchSelected event THEN query is updated`() {
         underTest = createViewModel()
-        val recentSearch = "Dragon"
 
-        underTest.onEvent(FilterBottomSheetEvent.RecentSearchSelected(recentSearch))
+        underTest.onEvent(FilterBottomSheetEvent.RecentSearchSelected("Dragon"))
 
-        assertEquals(recentSearch, underTest.state.query)
+        assertEquals("Dragon", underTest.state.query)
     }
 
     @Test
-    fun `WHEN Dismiss event THEN dismissEvent is emitted`() = testScope.runTest {
+    fun `WHEN Dismiss event THEN dismissEvent is emitted`() = runTest {
         underTest = createViewModel()
 
-        val dismissEvents = mutableListOf<Unit>()
-        val job = launch {
-            underTest.dismissEvent.toList(dismissEvents)
+        underTest.dismissEvent.test {
+            underTest.onEvent(FilterBottomSheetEvent.Dismiss)
+            testScheduler.advanceUntilIdle()
+
+            awaitItem()
+            cancelAndIgnoreRemainingEvents()
         }
-
-        underTest.onEvent(FilterBottomSheetEvent.Dismiss)
-        advanceUntilIdle()
-
-        assertEquals(1, dismissEvents.size)
-
-        job.cancel()
     }
 
     @Test
@@ -297,5 +273,74 @@ class FilterBottomSheetViewModelTest {
         underTest = createViewModel()
 
         assertEquals(0, underTest.state.activeFilterCount)
+    }
+
+    @Test
+    fun `GIVEN filters applied WHEN ApplyFilters THEN logs filter_apply event`() = runTest {
+        underTest = createViewModel()
+        underTest.onEvent(FilterBottomSheetEvent.QueryChanged("SpaceX"))
+        underTest.onEvent(FilterBottomSheetEvent.StatusSelected(LaunchStatus.SUCCESS))
+
+        underTest.filterResult.test {
+            underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
+            testScheduler.advanceUntilIdle()
+
+            awaitItem()
+            verify {
+                launchAnalyticsComponent.trackFilterApply(
+                    status = LaunchStatus.SUCCESS.name,
+                    hasQuery = true,
+                    queryLength = 6,
+                    filterCount = 2
+                )
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `GIVEN active filters WHEN ClearAllFilters THEN logs filter_clear event`() {
+        underTest = createViewModel(
+            initialQuery = "Test",
+            initialStatus = LaunchStatus.SUCCESS
+        )
+
+        underTest.onEvent(FilterBottomSheetEvent.ClearAllFilters)
+
+        verify {
+            launchAnalyticsComponent.trackFilterClear(filterCount = 2)
+        }
+    }
+
+    @Test
+    fun `GIVEN recent search WHEN RecentSearchSelected THEN logs recent_search_tap event`() {
+        underTest = createViewModel()
+
+        underTest.onEvent(FilterBottomSheetEvent.RecentSearchSelected("Dragon"))
+
+        verify {
+            launchAnalyticsComponent.trackRecentSearchTap()
+        }
+    }
+
+    @Test
+    fun `GIVEN no filters WHEN ApplyFilters THEN logs filter_apply with zero count`() = runTest {
+        underTest = createViewModel()
+
+        underTest.filterResult.test {
+            underTest.onEvent(FilterBottomSheetEvent.ApplyFilters)
+            testScheduler.advanceUntilIdle()
+
+            awaitItem()
+            verify {
+                launchAnalyticsComponent.trackFilterApply(
+                    status = LaunchStatus.ALL.name,
+                    hasQuery = false,
+                    queryLength = 0,
+                    filterCount = 0
+                )
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }

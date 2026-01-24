@@ -4,6 +4,7 @@ import com.seancoyle.core.common.result.DataError
 import com.seancoyle.core.common.result.LaunchResult
 import com.seancoyle.core.domain.LaunchesType
 import com.seancoyle.core.test.TestCoroutineRule
+import com.seancoyle.feature.launch.domain.usecase.analytics.LaunchAnalyticsComponent
 import com.seancoyle.feature.launch.domain.usecase.component.LaunchesComponent
 import com.seancoyle.feature.launch.presentation.launch.LaunchViewModel
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
@@ -20,6 +21,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -43,6 +45,9 @@ class LaunchViewModelTest {
     @MockK
     private lateinit var launchUiMapper: LaunchUiMapper
 
+    @MockK(relaxed = true)
+    private lateinit var launchAnalyticsComponent: LaunchAnalyticsComponent
+
     private lateinit var underTest: LaunchViewModel
 
     @Before
@@ -57,6 +62,7 @@ class LaunchViewModelTest {
         return LaunchViewModel(
             launchesComponent = launchesComponent,
             uiMapper = launchUiMapper,
+            launchAnalyticsComponent = launchAnalyticsComponent,
             launchId = launchId,
             launchType = launchType
         )
@@ -309,5 +315,117 @@ class LaunchViewModelTest {
             vidUrls = emptyList(),
             missionPatches = emptyList()
         )
+    }
+
+    @Test
+    fun `GIVEN successful load WHEN state collected THEN logs detail_view event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        verify {
+            launchAnalyticsComponent.trackDetailView(
+                launchId = "test-launch-id",
+                launchType = LaunchesType.UPCOMING.name,
+                status = LaunchStatus.GO.name,
+                hasVideo = false,
+                agency = "unknown"
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN error state WHEN state collected THEN logs error_displayed event`() = runTest {
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns
+            LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        verify {
+            launchAnalyticsComponent.trackErrorDisplayed(
+                errorType = any(),
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN any state WHEN Retry event THEN logs retry_tap event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.Retry)
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackRetryTap(LaunchesType.UPCOMING.name)
+        }
+    }
+
+    @Test
+    fun `GIVEN any state WHEN PullToRefresh event THEN logs pull_refresh event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.PullToRefresh)
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackPullRefresh(LaunchesType.UPCOMING.name)
+        }
+    }
+
+    @Test
+    fun `GIVEN video info WHEN trackVideoPlay called THEN logs video_play event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.trackVideoPlay(videoId = "abc123", isLive = true)
+
+        verify {
+            launchAnalyticsComponent.trackVideoPlay(
+                launchId = "test-launch-id",
+                videoId = "abc123",
+                isLive = true,
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN link type WHEN trackExternalLinkTap called THEN logs external_link_tap event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+        underTest = createViewModel()
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.trackExternalLinkTap(linkType = "wiki")
+
+        verify {
+            launchAnalyticsComponent.trackExternalLinkTap(
+                launchId = "test-launch-id",
+                linkType = "wiki",
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
     }
 }

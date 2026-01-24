@@ -12,6 +12,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -44,7 +45,8 @@ fun extractYouTubeVideoId(url: String): String? {
 fun EmbeddedYouTubePlayer(
     videoId: String,
     modifier: Modifier = Modifier,
-    videoTitle: String = "Video player"
+    videoTitle: String = "Video player",
+    onVideoStarted: () -> Unit = {}
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val accessibilityDescription = "YouTube video: $videoTitle. Double tap to play or pause."
@@ -63,6 +65,15 @@ fun EmbeddedYouTubePlayer(
                     addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
                             youTubePlayer.cueVideo(videoId, 0f)
+                        }
+
+                        override fun onStateChange(
+                            youTubePlayer: YouTubePlayer,
+                            state: PlayerConstants.PlayerState
+                        ) {
+                            if (state == PlayerConstants.PlayerState.PLAYING) {
+                                onVideoStarted()
+                            }
                         }
                     })
                 }
