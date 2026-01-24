@@ -17,6 +17,18 @@ interface LaunchAnalyticsComponent {
         agency: String
     )
 
+    fun trackDetailSectionExpand(
+        launchId: String,
+        sectionName: String,
+        launchType: String
+    )
+
+    fun trackDetailTimeSpent(
+        launchId: String,
+        launchType: String,
+        durationSeconds: Int
+    )
+
     fun trackTabSwitch(fromTab: String, toTab: String)
 
     fun trackFilterOpen(launchType: String, filterCount: Int)
@@ -39,15 +51,37 @@ interface LaunchAnalyticsComponent {
         launchType: String
     )
 
+    fun trackVideoWatchDuration(
+        launchId: String,
+        videoId: String,
+        durationSeconds: Int,
+        percentWatched: Int,
+        launchType: String
+    )
+
     fun trackExternalLinkTap(
         launchId: String,
         linkType: String,
         launchType: String
     )
 
+    fun trackPaginationLoad(
+        launchType: String,
+        pageNumber: Int,
+        itemCount: Int
+    )
+
+    fun trackScreenView(screenName: String, launchType: String? = null)
+
     fun trackPullRefresh(launchType: String)
 
     fun trackRetryTap(launchType: String)
 
     fun trackErrorDisplayed(errorType: String, launchType: String)
+
+    fun trackScrollDepth(
+        screenName: String,
+        launchType: String,
+        percentScrolled: Int
+    )
 }

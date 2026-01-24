@@ -48,13 +48,14 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.core.ui.util.toCountryFlag
 import com.seancoyle.feature.launch.R
+import com.seancoyle.feature.launch.presentation.launch.model.LinkType
 import com.seancoyle.feature.launch.presentation.launch.model.PadUI
 
 @Composable
 internal fun LaunchSiteSection(
     pad: PadUI,
     modifier: Modifier = Modifier,
-    onExternalLinkClick: () -> Unit = {}
+    onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     AppCard.Primary(modifier = modifier) {
         SectionTitle(text = stringResource(R.string.location))
@@ -72,7 +73,7 @@ internal fun LaunchSiteSection(
 private fun LaunchSiteContent(
     pad: PadUI,
     modifier: Modifier = Modifier,
-    onExternalLinkClick: () -> Unit = {}
+    onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -152,7 +153,7 @@ private fun LaunchSiteContent(
                     .height(launchImageHeight)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
                     .clickable {
-                        onExternalLinkClick()
+                        onExternalLinkClick(LinkType.MAP.type)
                         context.openUrl(pad.mapUrl)
                     }
             ) {

@@ -6,6 +6,9 @@ object AnalyticsEvents {
     // ENGAGEMENT EVENTS
     // ==========================================
 
+    /** User viewed a screen */
+    const val SCREEN_VIEW = "screen_view"
+
     /** User started a new session */
     const val SESSION_START = "session_start"
 
@@ -29,10 +32,6 @@ object AnalyticsEvents {
 
     /** User switched between upcoming/past tabs */
     const val TAB_SWITCH = "tab_switch"
-
-    // ==========================================
-    // DISCOVERY EVENTS
-    // ==========================================
 
     /** User played a video */
     const val VIDEO_PLAY = "video_play"
@@ -104,23 +103,4 @@ object AnalyticsEvents {
 
     /** User tapped retry after error */
     const val RETRY_TAP = "retry_tap"
-
-    // ==========================================
-    // DOMAIN-SPECIFIC EVENTS
-    // ==========================================
-
-    /** User viewed a launch with GO status */
-    const val GO_STATUS_INTEREST = "go_status_interest"
-
-    /** User explored agency information */
-    const val AGENCY_EXPLORATION = "agency_exploration"
-
-    /** User showed interest in a rocket family */
-    const val ROCKET_FAMILY_INTEREST = "rocket_family_interest"
-
-    /** User explored launch site info */
-    const val LAUNCH_SITE_EXPLORATION = "launch_site_explore"
-
-    /** User viewed failure reason for a failed launch */
-    const val FAILURE_REASON_VIEW = "failure_reason_view"
 }

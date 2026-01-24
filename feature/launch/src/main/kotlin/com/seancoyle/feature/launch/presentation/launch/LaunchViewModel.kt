@@ -94,11 +94,37 @@ class LaunchViewModel @AssistedInject constructor(
         )
     }
 
+    fun trackVideoWatchDuration(videoId: String, durationSeconds: Int, percentWatched: Int) {
+        launchAnalyticsComponent.trackVideoWatchDuration(
+            launchId = launchId,
+            videoId = videoId,
+            durationSeconds = durationSeconds,
+            percentWatched = percentWatched,
+            launchType = launchType.name
+        )
+    }
+
     fun trackExternalLinkTap(linkType: String) {
         launchAnalyticsComponent.trackExternalLinkTap(
             launchId = launchId,
             linkType = linkType,
             launchType = launchType.name
+        )
+    }
+
+    fun trackSectionExpand(sectionName: String) {
+        launchAnalyticsComponent.trackDetailSectionExpand(
+            launchId = launchId,
+            sectionName = sectionName,
+            launchType = launchType.name
+        )
+    }
+
+    fun trackTimeSpent(durationSeconds: Int) {
+        launchAnalyticsComponent.trackDetailTimeSpent(
+            launchId = launchId,
+            launchType = launchType.name,
+            durationSeconds = durationSeconds
         )
     }
 

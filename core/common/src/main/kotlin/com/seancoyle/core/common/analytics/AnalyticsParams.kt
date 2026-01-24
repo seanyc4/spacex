@@ -8,6 +8,7 @@ object AnalyticsParams {
     // Position & Navigation
     const val POSITION = "position"
     const val SCREEN = "screen"
+    const val SCREEN_NAME = "screen_name"
     const val SOURCE = "source"
     const val FROM_TAB = "from_tab"
     const val TO_TAB = "to_tab"
@@ -35,6 +36,8 @@ object AnalyticsParams {
     const val DURATION_SECONDS = "duration_seconds"
     const val TOTAL_DURATION = "total_duration"
     const val PERCENT = "percent"
+    const val PERCENT_WATCHED = "percent_watched"
+    const val PERCENT_SCROLLED = "percent_scrolled"
     const val ITEM_COUNT = "item_count"
     const val PAGE_NUMBER = "page_number"
     const val DATA_SOURCE = "data_source"

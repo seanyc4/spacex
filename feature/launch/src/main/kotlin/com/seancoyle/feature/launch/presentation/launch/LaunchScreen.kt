@@ -34,6 +34,7 @@ import com.seancoyle.feature.launch.presentation.launch.components.UpdatesSectio
 import com.seancoyle.feature.launch.presentation.launch.components.VideoSection
 import com.seancoyle.feature.launch.presentation.launch.components.previewData
 import com.seancoyle.feature.launch.presentation.launch.model.LaunchUI
+import com.seancoyle.feature.launch.presentation.launch.model.LinkType
 
 @Composable
 fun LaunchScreen(
@@ -76,13 +77,13 @@ fun LaunchScreen(
         Spacer(modifier = Modifier.height(paddingXLarge))
         LaunchSiteSection(
             pad = launch.pad,
-            onExternalLinkClick = { onExternalLinkClick("map") }
+            onExternalLinkClick = { onExternalLinkClick(LinkType.MAP.type) }
         )
 
         Spacer(modifier = Modifier.height(paddingXLarge))
         RocketSection(
             rocket = launch.rocket,
-            onExternalLinkClick = { onExternalLinkClick("wiki") }
+            onExternalLinkClick = { onExternalLinkClick(LinkType.WEB.type) },
         )
 
         if (launch.launchServiceProvider != null) {
