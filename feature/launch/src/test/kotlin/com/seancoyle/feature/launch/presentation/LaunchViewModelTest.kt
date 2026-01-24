@@ -81,6 +81,7 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI(missionName = "Starlink Mission")
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel()
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -116,12 +117,17 @@ class LaunchViewModelTest {
                 LaunchResult.Success(testLaunch)
             }
         }
+
         underTest = createViewModel()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
         assertTrue(underTest.launchState.value is LaunchUiState.Error)
 
         underTest.onEvent(LaunchEvent.Retry)
+
         testScheduler.advanceUntilIdle()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
         val state = underTest.launchState.value
@@ -134,10 +140,13 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
         underTest.onEvent(LaunchEvent.PullToRefresh)
+
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -149,10 +158,13 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
         underTest.onEvent(LaunchEvent.Retry)
+
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 1) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -164,6 +176,7 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = false) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel()
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -177,6 +190,7 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase("test-id", LaunchesType.UPCOMING, any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel(launchId = "test-id", launchType = LaunchesType.UPCOMING)
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -190,6 +204,7 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase("test-id", LaunchesType.PAST, any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel(launchId = "test-id", launchType = LaunchesType.PAST)
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
@@ -203,12 +218,17 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
         underTest.onEvent(LaunchEvent.PullToRefresh)
+
         testScheduler.advanceUntilIdle()
+
         underTest.onEvent(LaunchEvent.PullToRefresh)
+
         testScheduler.advanceUntilIdle()
 
         coVerify(atLeast = 2) { launchesComponent.getLaunchUseCase(any(), any(), isRefresh = true) }
@@ -228,11 +248,15 @@ class LaunchViewModelTest {
                 LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
             }
         }
+
         underTest = createViewModel()
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
         assertTrue(underTest.launchState.value is LaunchUiState.Success)
 
         underTest.onEvent(LaunchEvent.PullToRefresh)
+
         testScheduler.advanceUntilIdle()
 
         assertTrue(underTest.launchState.value is LaunchUiState.Error)
@@ -245,11 +269,158 @@ class LaunchViewModelTest {
         val testLaunchUI = createTestLaunchUI()
         coEvery { launchesComponent.getLaunchUseCase(launchId, any(), any()) } returns LaunchResult.Success(testLaunch)
         every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
         underTest = createViewModel(launchId = launchId)
 
         backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
 
         coVerify { launchesComponent.getLaunchUseCase(launchId, any(), any()) }
+    }
+
+    @Test
+    fun `GIVEN successful load WHEN state collected THEN logs detail_view event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        verify {
+            launchAnalyticsComponent.trackDetailView(
+                launchId = "test-launch-id",
+                launchType = LaunchesType.UPCOMING.name,
+                status = LaunchStatus.GO.name,
+                hasVideo = false,
+                agency = "unknown"
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN error state WHEN state collected THEN logs error_displayed event`() = runTest {
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns
+            LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        verify {
+            launchAnalyticsComponent.trackErrorDisplayed(
+                errorType = any(),
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN any state WHEN Retry event THEN logs retry_tap event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.Retry)
+
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackRetryTap(LaunchesType.UPCOMING.name)
+        }
+    }
+
+    @Test
+    fun `GIVEN any state WHEN PullToRefresh event THEN logs pull_refresh event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.onEvent(LaunchEvent.PullToRefresh)
+
+        testScheduler.advanceUntilIdle()
+
+        verify {
+            launchAnalyticsComponent.trackPullRefresh(LaunchesType.UPCOMING.name)
+        }
+    }
+
+    @Test
+    fun `GIVEN video info WHEN trackVideoPlay called THEN logs video_play event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.trackVideoPlay(videoId = "abc123", isLive = true)
+
+        verify {
+            launchAnalyticsComponent.trackVideoPlay(
+                launchId = "test-launch-id",
+                videoId = "abc123",
+                isLive = true,
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN link type WHEN trackExternalLinkTap called THEN logs external_link_tap event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.trackExternalLinkTap(linkType = "wiki")
+
+        verify {
+            launchAnalyticsComponent.trackExternalLinkTap(
+                launchId = "test-launch-id",
+                linkType = "wiki",
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN section name WHEN trackSectionExpand called THEN logs detail_section_expand event`() = runTest {
+        val testLaunch = TestData.createLaunch()
+        val testLaunchUI = createTestLaunchUI()
+        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
+        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
+
+        underTest = createViewModel()
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
+
+        underTest.trackSectionExpand(sectionName = "rocket_info")
+
+        verify {
+            launchAnalyticsComponent.trackDetailSectionExpand(
+                launchId = "test-launch-id",
+                sectionName = "rocket_info",
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
     }
 
     private fun createTestLaunchUI(
@@ -315,117 +486,5 @@ class LaunchViewModelTest {
             vidUrls = emptyList(),
             missionPatches = emptyList()
         )
-    }
-
-    @Test
-    fun `GIVEN successful load WHEN state collected THEN logs detail_view event`() = runTest {
-        val testLaunch = TestData.createLaunch()
-        val testLaunchUI = createTestLaunchUI()
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
-        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
-        underTest = createViewModel()
-
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        verify {
-            launchAnalyticsComponent.trackDetailView(
-                launchId = "test-launch-id",
-                launchType = LaunchesType.UPCOMING.name,
-                status = LaunchStatus.GO.name,
-                hasVideo = false,
-                agency = "unknown"
-            )
-        }
-    }
-
-    @Test
-    fun `GIVEN error state WHEN state collected THEN logs error_displayed event`() = runTest {
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns
-            LaunchResult.Error(DataError.RemoteError.NETWORK_CONNECTION_FAILED)
-        underTest = createViewModel()
-
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        verify {
-            launchAnalyticsComponent.trackErrorDisplayed(
-                errorType = any(),
-                launchType = LaunchesType.UPCOMING.name
-            )
-        }
-    }
-
-    @Test
-    fun `GIVEN any state WHEN Retry event THEN logs retry_tap event`() = runTest {
-        val testLaunch = TestData.createLaunch()
-        val testLaunchUI = createTestLaunchUI()
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
-        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
-        underTest = createViewModel()
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        underTest.onEvent(LaunchEvent.Retry)
-        testScheduler.advanceUntilIdle()
-
-        verify {
-            launchAnalyticsComponent.trackRetryTap(LaunchesType.UPCOMING.name)
-        }
-    }
-
-    @Test
-    fun `GIVEN any state WHEN PullToRefresh event THEN logs pull_refresh event`() = runTest {
-        val testLaunch = TestData.createLaunch()
-        val testLaunchUI = createTestLaunchUI()
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
-        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
-        underTest = createViewModel()
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        underTest.onEvent(LaunchEvent.PullToRefresh)
-        testScheduler.advanceUntilIdle()
-
-        verify {
-            launchAnalyticsComponent.trackPullRefresh(LaunchesType.UPCOMING.name)
-        }
-    }
-
-    @Test
-    fun `GIVEN video info WHEN trackVideoPlay called THEN logs video_play event`() = runTest {
-        val testLaunch = TestData.createLaunch()
-        val testLaunchUI = createTestLaunchUI()
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
-        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
-        underTest = createViewModel()
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        underTest.trackVideoPlay(videoId = "abc123", isLive = true)
-
-        verify {
-            launchAnalyticsComponent.trackVideoPlay(
-                launchId = "test-launch-id",
-                videoId = "abc123",
-                isLive = true,
-                launchType = LaunchesType.UPCOMING.name
-            )
-        }
-    }
-
-    @Test
-    fun `GIVEN link type WHEN trackExternalLinkTap called THEN logs external_link_tap event`() = runTest {
-        val testLaunch = TestData.createLaunch()
-        val testLaunchUI = createTestLaunchUI()
-        coEvery { launchesComponent.getLaunchUseCase(any(), any(), any()) } returns LaunchResult.Success(testLaunch)
-        every { launchUiMapper.mapToLaunchUi(testLaunch) } returns testLaunchUI
-        underTest = createViewModel()
-        backgroundScope.launch(UnconfinedTestDispatcher()) { underTest.launchState.collect() }
-
-        underTest.trackExternalLinkTap(linkType = "wiki")
-
-        verify {
-            launchAnalyticsComponent.trackExternalLinkTap(
-                launchId = "test-launch-id",
-                linkType = "wiki",
-                launchType = LaunchesType.UPCOMING.name
-            )
-        }
     }
 }

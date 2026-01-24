@@ -41,6 +41,7 @@ fun LaunchScreen(
     launch: LaunchUI,
     onVideoPlay: (videoId: String, isLive: Boolean) -> Unit,
     onExternalLinkClick: (linkType: String) -> Unit,
+    onSectionExpand: (sectionName: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberSaveable(saver = ScrollState.Saver) {
@@ -70,7 +71,10 @@ fun LaunchScreen(
 
         if (launch.updates.isNotEmpty()) {
             Spacer(modifier = Modifier.height(paddingXLarge))
-            UpdatesSection(updates = launch.updates)
+            UpdatesSection(
+                updates = launch.updates,
+                onSectionExpand = { onSectionExpand("updates") }
+            )
             Spacer(modifier = Modifier.height(paddingLarge))
         }
 
@@ -100,7 +104,8 @@ private fun LaunchScreenSuccessPreview() {
         LaunchScreen(
             launch = previewData(),
             onVideoPlay = { _, _ -> },
-            onExternalLinkClick = { }
+            onExternalLinkClick = { },
+            onSectionExpand = { }
         )
     }
 }

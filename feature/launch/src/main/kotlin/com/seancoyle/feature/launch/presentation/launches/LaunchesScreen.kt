@@ -53,7 +53,7 @@ fun LaunchesScreen(
     selectedLaunchId: String?,
     onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit
+    onClick: (LaunchesUi, LaunchesType, Int) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -95,7 +95,7 @@ private fun LaunchesContent(
     selectedLaunchId: String?,
     onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit,
+    onClick: (LaunchesUi, LaunchesType, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val tabs = LaunchesTab.provideTabs()
@@ -233,7 +233,7 @@ private fun LaunchesListContent(
     selectedLaunchId: String?,
     onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (LaunchesType, Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit
+    onClick: (LaunchesUi, LaunchesType, Int) -> Unit
 ) {
     val refreshLoadState = feedState.loadState.refresh
     val endOfPaginationReached = feedState.loadState.append.endOfPaginationReached

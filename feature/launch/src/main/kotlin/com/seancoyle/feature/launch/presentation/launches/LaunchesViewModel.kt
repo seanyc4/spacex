@@ -132,22 +132,6 @@ class LaunchesViewModel @Inject constructor(
         )
     }
 
-    fun trackPaginationLoad(pageNumber: Int, itemCount: Int) {
-        launchAnalyticsComponent.trackPaginationLoad(
-            launchType = screenState.launchesType.name,
-            pageNumber = pageNumber,
-            itemCount = itemCount
-        )
-    }
-
-    fun trackScrollDepth(percentScrolled: Int) {
-        launchAnalyticsComponent.trackScrollDepth(
-            screenName = "launches_list",
-            launchType = screenState.launchesType.name,
-            percentScrolled = percentScrolled
-        )
-    }
-
     fun trackScreenView() {
         launchAnalyticsComponent.trackScreenView(
             screenName = "launches",

@@ -350,4 +350,31 @@ class LaunchesViewModelTest {
             )
         }
     }
+
+    @Test
+    fun `GIVEN UPCOMING tab WHEN trackScreenView called THEN logs screen_view event`() {
+        underTest.trackScreenView()
+
+        verify {
+            launchAnalyticsComponent.trackScreenView(
+                screenName = "launches",
+                launchType = LaunchesType.UPCOMING.name
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN PAST tab WHEN trackScreenView called THEN logs screen_view with PAST type`() = runTest {
+        underTest.onEvent(LaunchesEvent.TabSelected(LaunchesType.PAST))
+        testScheduler.advanceUntilIdle()
+
+        underTest.trackScreenView()
+
+        verify {
+            launchAnalyticsComponent.trackScreenView(
+                screenName = "launches",
+                launchType = LaunchesType.PAST.name
+            )
+        }
+    }
 }

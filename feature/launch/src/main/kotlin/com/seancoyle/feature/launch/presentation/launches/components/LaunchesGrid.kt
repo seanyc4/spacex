@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -49,7 +49,7 @@ internal fun LaunchesGrid(
     selectedLaunchId: String?,
     onEvent: (LaunchesEvent) -> Unit,
     onUpdateScrollPosition: (Int) -> Unit,
-    onClick: (String, LaunchesType) -> Unit,
+    onClick: (LaunchesUi, LaunchesType, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val initialScrollPosition = when (launchesType) {
@@ -109,7 +109,8 @@ internal fun LaunchesGrid(
                     launchItem = launchItem,
                     onClick = onClick,
                     launchesType = launchesType,
-                    isSelected = isSelected
+                    isSelected = isSelected,
+                    position = index
                 )
             }
         }
@@ -172,15 +173,16 @@ private fun LaunchesGridPreview() {
                 .fillMaxSize()
                 .background(AppTheme.colors.background)
         ) {
-            items(
+            itemsIndexed(
                 items = sampleLaunches,
-                key = { it.id }
-            ) { launchItem ->
+                key = { _, item -> item.id }
+            ) { index, launchItem ->
                 LaunchCard(
                     launchItem = launchItem,
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
-                    isSelected = launchItem.id == "1"
+                    isSelected = launchItem.id == "1",
+                    position = index
                 )
             }
         }

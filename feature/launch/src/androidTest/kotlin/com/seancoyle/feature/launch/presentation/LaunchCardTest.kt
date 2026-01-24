@@ -33,10 +33,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(missionName = missionName),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -53,10 +54,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(launchDate = launchDate),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -71,10 +73,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.SUCCESS),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.PAST,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -89,10 +92,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -107,10 +111,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.SUCCESS),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.PAST,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -125,10 +130,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.GO),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -143,10 +149,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.FAILED),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.PAST,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -161,10 +168,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.TBD),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -179,10 +187,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.TBC),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -193,21 +202,24 @@ class LaunchCardTest {
 
     @Test
     fun givenLaunchId_whenLaunchCardClicked_thenTriggersOnClickWithCorrectId() {
-        var clickedId: String? = null
-        var clickedType: LaunchesType? = null
         val testId = "test-launch-id"
+        var clickedLaunch = createTestLaunchesUi(id = testId)
+        var clickedType: LaunchesType? = null
+        var clickedPosition = 0
 
         composeRule.setContent {
             AppTheme {
                 LaunchCard(
-                    launchItem = createTestLaunchesUi(id = testId),
-                    onClick = { id, type ->
-                        clickedId = id
-                        clickedType = type
+                    launchItem = clickedLaunch,
+                    onClick = { launchItem, launchesType, position ->
+                        clickedType = launchesType
+                        clickedLaunch = launchItem
+                        clickedPosition = position
                     },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -215,7 +227,7 @@ class LaunchCardTest {
         composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
             .performClick()
 
-        assert(clickedId == testId) { "Expected id $testId but got $clickedId" }
+        assert(clickedLaunch.id == testId) { "Expected id $testId but got ${clickedLaunch.id}" }
         assert(clickedType == LaunchesType.UPCOMING) { "Expected UPCOMING but got $clickedType" }
     }
 
@@ -227,10 +239,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(),
-                    onClick = { _, type -> clickedType = type },
+                    onClick = { _, type, _ -> clickedType = type },
                     launchesType = LaunchesType.PAST,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -253,10 +266,11 @@ class LaunchCardTest {
                         missionName = missionName,
                         launchDate = launchDate
                     ),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -272,10 +286,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(status = LaunchStatus.GO),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }
@@ -293,10 +308,11 @@ class LaunchCardTest {
             AppTheme {
                 LaunchCard(
                     launchItem = createTestLaunchesUi(missionName = longMissionName),
-                    onClick = { _, _ -> },
+                    onClick = { _, _, _ -> },
                     launchesType = LaunchesType.UPCOMING,
                     modifier = Modifier.padding(16.dp),
-                    isSelected = true
+                    isSelected = true,
+                    position = 0
                 )
             }
         }

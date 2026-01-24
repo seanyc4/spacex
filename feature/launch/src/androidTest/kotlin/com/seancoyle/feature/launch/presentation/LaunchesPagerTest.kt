@@ -53,7 +53,7 @@ class LaunchesPagerTest {
                         selectedLaunchId = null,
                         onEvent = {},
                         onUpdateScrollPosition = { _, _ -> },
-                        onClick = { _, _ -> }
+                        onClick = { _, _, _ -> }
                     )
                 }
             }
@@ -89,7 +89,7 @@ class LaunchesPagerTest {
                         selectedLaunchId = null,
                         onEvent = {},
                         onUpdateScrollPosition = { _, _ -> },
-                        onClick = { _, _ -> }
+                        onClick = { _, _, _ -> }
                     )
                 }
             }
@@ -130,7 +130,7 @@ class LaunchesPagerTest {
                             }
                         },
                         onUpdateScrollPosition = { _, _ -> },
-                        onClick = { _, _ -> }
+                        onClick = { _, _, _ -> }
                     )
                 }
             }
@@ -169,7 +169,7 @@ class LaunchesPagerTest {
                         selectedLaunchId = null,
                         onEvent = {},
                         onUpdateScrollPosition = { _, _ -> },
-                        onClick = { _, _ -> }
+                        onClick = { _, _, _ -> }
                     )
                 }
             }
