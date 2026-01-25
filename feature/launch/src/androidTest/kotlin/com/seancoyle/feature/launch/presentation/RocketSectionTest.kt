@@ -135,7 +135,10 @@ class RocketSectionTest {
 
         composeRule.setContent {
             AppTheme {
-                RocketConfigurationCard(config = config)
+                RocketConfigurationCard(
+                    config = config,
+                    onOpenUrl = {}
+                )
             }
         }
 
@@ -149,7 +152,10 @@ class RocketSectionTest {
 
         composeRule.setContent {
             AppTheme {
-                RocketConfigurationCard(config = config)
+                RocketConfigurationCard(
+                    config = config,
+                    onOpenUrl = {}
+                )
             }
         }
 
@@ -163,7 +169,10 @@ class RocketSectionTest {
 
         composeRule.setContent {
             AppTheme {
-                RocketConfigurationCard(config = config)
+                RocketConfigurationCard(
+                    config = config,
+                    onOpenUrl = {}
+                )
             }
         }
 
@@ -177,7 +186,10 @@ class RocketSectionTest {
 
         composeRule.setContent {
             AppTheme {
-                RocketConfigurationCard(config = config)
+                RocketConfigurationCard(
+                    config = config,
+                    onOpenUrl = {}
+                )
             }
         }
 
