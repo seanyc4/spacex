@@ -19,6 +19,8 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.seancoyle.core.ui.R
@@ -54,12 +56,12 @@ fun TopAppBar(
                     AppText.headlineLarge(
                         text = stringResource(id = R.string.app_name),
                         color = AppTheme.colors.primary,
-                        
+                        modifier = Modifier.semantics { heading() }
                     )
                     Spacer(modifier = Modifier.width(paddingLarge))
                     Icon(
                         imageVector = Icons.Default.RocketLaunch,
-                        contentDescription = stringResource(id = R.string.rocket_icon_desc),
+                        contentDescription = null, // Decorative - app branding
                         tint = AppTheme.colors.primary,
                         modifier = Modifier.size(32.dp)
                     )

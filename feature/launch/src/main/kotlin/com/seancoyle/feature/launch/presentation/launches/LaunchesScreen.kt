@@ -20,7 +20,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -142,6 +145,7 @@ private fun LaunchesContent(
                 val testTag: String
                 val contentDesc: String
                 val launchType: LaunchesType
+                val isSelectedTab = pagerState.currentPage == index
 
                 if (index == 0) {
                     testTag = LaunchesTestTags.UPCOMING_TAB
@@ -153,14 +157,14 @@ private fun LaunchesContent(
                     launchType = LaunchesType.PAST
                 }
                 Tab(
-                    selected = pagerState.currentPage == index,
+                    selected = isSelectedTab,
                     onClick = {
                         onEvent(LaunchesEvent.TabSelected(launchType))
                     },
                     text = {
                         AppText.titleSmall(
                             text = stringResource(tab.title),
-                            color = if (pagerState.currentPage == index) {
+                            color = if (isSelectedTab) {
                                 AppTheme.colors.onSurface
                             } else {
                                 AppTheme.colors.onSurface.copy(alpha = 0.3f)
@@ -169,7 +173,11 @@ private fun LaunchesContent(
                     },
                     modifier = Modifier
                         .testTag(testTag)
-                        .semantics { contentDescription = contentDesc }
+                        .semantics {
+                            contentDescription = contentDesc
+                            role = Role.Tab
+                            selected = isSelectedTab
+                        }
                 )
             }
         }

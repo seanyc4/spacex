@@ -142,5 +142,17 @@
     <string name="star_icon_desc">Star icon</string>
     <string name="upcoming_tab_desc">Upcoming launches tab</string>
     <string name="past_tab_desc">Past launches tab</string>
-</resources>
 
+    <!-- Accessibility - Launch Status -->
+    <string name="launch_status_desc">Launch status: %1$s</string>
+
+    <!-- Accessibility - Interactive Elements -->
+    <string name="open_map_for">Open map for %1$s</string>
+    <string name="view_rocket_image">View %1$s rocket image in high definition</string>
+
+    <!-- Accessibility - Pager -->
+    <string name="page_indicator">Page %1$d of %2$d</string>
+
+    <!-- Accessibility - Video -->
+    <string name="video_status">Video stream is currently live</string>
+</resources>

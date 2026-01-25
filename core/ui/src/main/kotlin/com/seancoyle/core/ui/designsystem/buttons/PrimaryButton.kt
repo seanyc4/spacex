@@ -10,7 +10,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -32,10 +32,12 @@ fun ButtonPrimary(
     return Button(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
-            .focusable(true)
-            .semantics {
-                contentDescription = text
+            .focusable(enabled)
+            .semantics(mergeDescendants = true) {
                 role = Role.Button
+                if (!enabled) {
+                    disabled()
+                }
             },
         colors = ButtonDefaults.textButtonColors(
             containerColor = AppTheme.colors.primary,

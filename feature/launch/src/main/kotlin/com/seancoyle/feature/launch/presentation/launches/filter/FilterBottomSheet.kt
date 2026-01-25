@@ -53,7 +53,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -515,6 +517,11 @@ private fun StatusFilterChip(
     onSelected: () -> Unit
 ) {
     val chipColor = accentColor ?: AppTheme.colors.primary
+    val selectionStateDesc = if (isSelected) {
+        stringResource(R.string.a11y_selected)
+    } else {
+        stringResource(R.string.a11y_not_selected)
+    }
 
     FilterChip(
         selected = isSelected,
@@ -533,7 +540,7 @@ private fun StatusFilterChip(
             {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = null,
+                    contentDescription = null, // Selection is announced via semantics
                     modifier = Modifier.size(16.dp),
                     tint = AppTheme.colors.onPrimary
                 )
@@ -553,7 +560,11 @@ private fun StatusFilterChip(
         ),
         modifier = Modifier
             .testTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_${status.name}")
-            .semantics { contentDescription = "Filter by ${status.label}" }
+            .semantics {
+                contentDescription = status.label
+                stateDescription = selectionStateDesc
+                selected = isSelected
+            }
     )
 }
 

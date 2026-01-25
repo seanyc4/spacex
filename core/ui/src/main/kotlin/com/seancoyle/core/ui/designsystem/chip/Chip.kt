@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -28,8 +28,12 @@ fun Chip(
     contentColor: Color,
     containerColor: Color,
     icon: ImageVector? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    accessibilityLabel: String? = null
 ) {
+    val isClickable = onClick != null
+    val chipDescription = accessibilityLabel ?: text
+
     AssistChip(
         onClick = onClick ?: {},
         label = {
@@ -45,7 +49,7 @@ fun Chip(
             if (icon != null) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
+                    contentDescription = null, // Decorative - part of the chip's meaning
                     modifier = Modifier.size(16.dp)
                 )
             }
@@ -55,13 +59,13 @@ fun Chip(
             labelColor = contentColor,
             leadingIconContentColor = contentColor
         ),
-        modifier = modifier.semantics {
-            contentDescription = "Launch status: $text"
-            // Only set button role if the chip is clickable
-            if (onClick != null) {
-                role = Role.Button
-            }
-        },
+        modifier = modifier
+            .clearAndSetSemantics {
+                contentDescription = chipDescription
+                if (isClickable) {
+                    role = Role.Button
+                }
+            },
         border = BorderStroke(0.25.dp, AppTheme.colors.onSurfaceVariant)
     )
 }
@@ -74,7 +78,8 @@ fun ChipPreview() {
             text = "Successful",
             icon = Icons.Filled.CheckCircle,
             contentColor = Color(0xFF4CAF50),
-            containerColor = Color(0xFF4CAF50)
+            containerColor = Color(0xFF4CAF50),
+            accessibilityLabel = "Launch status: Successful"
         )
     }
 }

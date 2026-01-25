@@ -27,6 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -151,19 +155,25 @@ private fun LaunchSiteContent(
         }
 
         if (pad.mapImage != null && pad.mapUrl != null) {
+            val mapClickDescription = stringResource(R.string.open_map_for, pad.name)
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(launchImageHeight)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
-                    .clickable {
+                    .clickable(role = Role.Button) {
                         onExternalLinkClick(LinkType.MAP.type)
                         onOpenUrl(pad.mapUrl)
+                    }
+                    .clearAndSetSemantics {
+                        contentDescription = mapClickDescription
+                        role = Role.Button
                     }
             ) {
                 RemoteImage(
                     imageUrl = pad.imageUrl,
-                    contentDescription = stringResource(R.string.map_of_desc, pad.name),
+                    contentDescription = "", // Part of parent semantics
                     modifier = Modifier
                         .fillMaxSize()
                         .testTag(LaunchesTestTags.LAUNCH_SITE_MAP),

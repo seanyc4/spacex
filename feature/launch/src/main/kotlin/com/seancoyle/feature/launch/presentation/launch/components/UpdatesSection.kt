@@ -22,6 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.collapse
+import androidx.compose.ui.semantics.expand
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -47,18 +53,40 @@ internal fun UpdatesSection(
     val collapsibleUpdates = updates.drop(5)
     val hasMoreUpdates = collapsibleUpdates.isNotEmpty()
 
+    val expandedStateDesc = if (isExpanded) {
+        stringResource(R.string.a11y_expanded)
+    } else {
+        stringResource(R.string.a11y_collapsed)
+    }
+
     AppCard.Primary(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .then(
                     if (hasMoreUpdates) {
-                        Modifier.clickable {
-                            if (!isExpanded) {
-                                onSectionExpand()
+                        Modifier
+                            .clickable(role = Role.Button) {
+                                if (!isExpanded) {
+                                    onSectionExpand()
+                                }
+                                isExpanded = !isExpanded
                             }
-                            isExpanded = !isExpanded
-                        }
+                            .semantics {
+                                role = Role.Button
+                                stateDescription = expandedStateDesc
+                                if (isExpanded) {
+                                    collapse {
+                                        isExpanded = false
+                                        true
+                                    }
+                                } else {
+                                    expand {
+                                        isExpanded = true
+                                        true
+                                    }
+                                }
+                            }
                     } else {
                         Modifier
                     }
@@ -71,11 +99,7 @@ internal fun UpdatesSection(
             if (hasMoreUpdates) {
                 Icon(
                     imageVector = Icons.Default.ExpandMore,
-                    contentDescription = if (isExpanded) {
-                        stringResource(R.string.collapse)
-                    } else {
-                        stringResource(R.string.expand)
-                    },
+                    contentDescription = null, // State is announced via semantics
                     modifier = Modifier.rotate(rotationAngle),
                     tint = AppTheme.colors.onSurface
                 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -36,10 +37,7 @@ fun TertiaryButton(
 ) {
     Surface(
         modifier = modifier
-            .semantics {
-                contentDescription = text
-                role = Role.Button
-            }
+            .defaultMinSize(minHeight = 48.dp, minWidth = 48.dp)
             .background(
                 color = AppTheme.colors.inversePrimary,
                 shape = RoundedCornerShape(
@@ -49,8 +47,15 @@ fun TertiaryButton(
                     bottomStart = 0.dp
                 )
             )
-            .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .clickable(
+                onClick = onClick,
+                role = Role.Button
+            )
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .clearAndSetSemantics {
+                contentDescription = text
+                role = Role.Button
+            },
         color = Color.Transparent,
         shape = RoundedCornerShape(
             topEnd = 0.dp,

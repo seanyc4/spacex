@@ -43,4 +43,17 @@
 
     <!-- Actions -->
     <string name="retry">Retry</string>
+
+    <!-- Accessibility - Loading States -->
+    <string name="loading">Loading</string>
+    <string name="refreshing">Refreshing content</string>
+    <string name="pull_to_refresh">Pull down to refresh</string>
+
+    <!-- Accessibility - Selection States -->
+    <string name="a11y_selected">Selected</string>
+    <string name="a11y_not_selected">Not selected</string>
+
+    <!-- Accessibility - Expandable States -->
+    <string name="a11y_expanded">Expanded</string>
+    <string name="a11y_collapsed">Collapsed</string>
 </resources>

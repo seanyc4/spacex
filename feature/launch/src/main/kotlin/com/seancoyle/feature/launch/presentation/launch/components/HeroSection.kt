@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +41,6 @@ internal fun LaunchHeroSection(
     modifier: Modifier = Modifier
 ) {
     val missionImageDesc = stringResource(R.string.mission_image, launch.missionName)
-    val missionNameDesc = stringResource(R.string.mission_name_desc, launch.missionName)
-    val launchDateDesc = stringResource(R.string.launch_date_desc, launch.launchDate)
 
     Box(
         modifier = modifier
@@ -88,10 +86,7 @@ internal fun LaunchHeroSection(
                 text = launch.missionName,
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary,
-                modifier = Modifier.semantics {
-                    contentDescription = missionNameDesc
-                },
-                
+                modifier = Modifier.semantics { heading() }
             )
 
             Spacer(modifier = Modifier.height(paddingMedium))
@@ -107,15 +102,13 @@ internal fun LaunchHeroSection(
                     containerColor = launch.status.containerColor(),
                     contentColor = launch.status.contentColor(),
                     icon = launch.status.icon(),
+                    accessibilityLabel = stringResource(R.string.launch_status_desc, launch.status.label)
                 )
 
                 AppText.bodyLarge(
                     text = launch.launchDate,
                     color = AppTheme.colors.secondary,
                     maxLines = 2,
-                    modifier = Modifier.semantics {
-                        contentDescription = launchDateDesc
-                    },
                 )
             }
         }

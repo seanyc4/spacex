@@ -33,6 +33,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
@@ -159,22 +163,25 @@ private fun RocketHeader(
             }
         }
 
+        val viewRocketImageDesc = stringResource(R.string.view_rocket_image, config.name)
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(launchImageHeight)
                 .clip(RoundedCornerShape(cornerRadiusMedium))
-                .clickable {
+                .clickable(role = Role.Button) {
                     onExternalLinkClick(LinkType.ROCKET_IMAGE.type)
                     onOpenUrl(config.imageUrl)
+                }
+                .clearAndSetSemantics {
+                    contentDescription = viewRocketImageDesc
+                    role = Role.Button
                 }
         ) {
             RemoteImage(
                 imageUrl = config.imageUrl,
-                contentDescription = stringResource(
-                    R.string.rocket_desc,
-                    config.name
-                ),
+                contentDescription = "", // Part of parent semantics
                 modifier = Modifier
                     .fillMaxSize()
                     .testTag(LaunchesTestTags.ROCKET_IMAGE)
