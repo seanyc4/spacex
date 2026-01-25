@@ -53,9 +53,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -361,7 +359,7 @@ private fun FilterCountBadge(count: Int) {
             ),
         contentAlignment = Alignment.Center
     ) {
-       Canvas(modifier = Modifier.size(24.dp)) {
+        Canvas(modifier = Modifier.size(24.dp)) {
             drawCircle(color = Color(0xFF4CAF50).copy(alpha = 0.2f))
         }
         AppText.labelSmall(
@@ -380,7 +378,7 @@ private fun SearchSection(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    Column {
+    Column(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         AppText.titleSmall(
             text = stringResource(R.string.search),
             color = AppTheme.colors.onSurfaceVariant
@@ -517,11 +515,6 @@ private fun StatusFilterChip(
     onSelected: () -> Unit
 ) {
     val chipColor = accentColor ?: AppTheme.colors.primary
-    val selectionStateDesc = if (isSelected) {
-        stringResource(R.string.a11y_selected)
-    } else {
-        stringResource(R.string.a11y_not_selected)
-    }
 
     FilterChip(
         selected = isSelected,
@@ -540,7 +533,7 @@ private fun StatusFilterChip(
             {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = null, // Selection is announced via semantics
+                    contentDescription = null,
                     modifier = Modifier.size(16.dp),
                     tint = AppTheme.colors.onPrimary
                 )
@@ -560,11 +553,6 @@ private fun StatusFilterChip(
         ),
         modifier = Modifier
             .testTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_${status.name}")
-            .semantics {
-                contentDescription = status.label
-                stateDescription = selectionStateDesc
-                selected = isSelected
-            }
     )
 }
 
@@ -788,4 +776,3 @@ private fun ExpandedFilterContentWithFiltersPreview() {
         )
     }
 }
-
