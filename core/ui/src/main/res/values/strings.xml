@@ -43,4 +43,7 @@
 
     <!-- Actions -->
     <string name="retry">Retry</string>
+
+    <!-- Video -->
+    <string name="video_content_desc">"YouTube video: $s. Double tap to play or pause."</string>
 </resources>
