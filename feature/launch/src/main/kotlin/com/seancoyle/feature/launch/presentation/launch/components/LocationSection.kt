@@ -55,11 +55,16 @@ import com.seancoyle.feature.launch.presentation.launch.model.PadUI
 internal fun LaunchSiteSection(
     modifier: Modifier = Modifier,
     pad: PadUI,
+    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } },
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     AppCard.Primary(modifier = modifier) {
         SectionTitle(text = stringResource(R.string.location))
-        LaunchSiteContent(pad = pad, onExternalLinkClick = onExternalLinkClick)
+        LaunchSiteContent(
+            pad = pad,
+            onOpenUrl = onOpenUrl,
+            onExternalLinkClick = onExternalLinkClick
+        )
 
         HorizontalDivider(
             modifier = Modifier.padding(vertical = paddingMedium),
@@ -73,7 +78,7 @@ internal fun LaunchSiteSection(
 private fun LaunchSiteContent(
     modifier: Modifier = Modifier,
     pad: PadUI,
-    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } },
+    onOpenUrl: (String) -> Unit,
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
