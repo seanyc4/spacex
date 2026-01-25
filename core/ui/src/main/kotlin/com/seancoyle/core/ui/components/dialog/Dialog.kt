@@ -12,6 +12,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -23,6 +27,8 @@ fun ErrorDialog(
     onDismissNotification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val errorTitle = stringResource(id = R.string.text_error)
+
     AlertDialog(
         onDismissRequest = onDismissNotification,
         confirmButton = {
@@ -33,13 +39,13 @@ fun ErrorDialog(
         icon = {
             Icon(
                 imageVector = Icons.Default.Error,
-                contentDescription = null,
+                contentDescription = null, // Decorative - error context is in title
                 tint = MaterialTheme.colorScheme.error
             )
         },
         title = {
             Text(
-                text = stringResource(id = R.string.text_error),
+                text = errorTitle,
                 style = MaterialTheme.typography.headlineSmall
             )
         },
@@ -50,7 +56,10 @@ fun ErrorDialog(
             )
         },
         shape = RoundedCornerShape(16.dp),
-        modifier = modifier
+        modifier = modifier.semantics {
+            paneTitle = errorTitle
+            liveRegion = LiveRegionMode.Polite
+        }
     )
 }
 
@@ -60,6 +69,8 @@ fun InfoDialog(
     onDismissNotification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val infoTitle = stringResource(id = R.string.text_info)
+
     AlertDialog(
         onDismissRequest = onDismissNotification,
         confirmButton = {
@@ -70,13 +81,13 @@ fun InfoDialog(
         icon = {
             Icon(
                 imageVector = Icons.Default.Info,
-                contentDescription = null,
+                contentDescription = null, // Decorative - info context is in title
                 tint = MaterialTheme.colorScheme.primary
             )
         },
         title = {
             Text(
-                text = stringResource(id = R.string.text_info),
+                text = infoTitle,
                 style = MaterialTheme.typography.headlineSmall
             )
         },
@@ -87,7 +98,10 @@ fun InfoDialog(
             )
         },
         shape = RoundedCornerShape(16.dp),
-        modifier = modifier
+        modifier = modifier.semantics {
+            paneTitle = infoTitle
+            liveRegion = LiveRegionMode.Polite
+        }
     )
 }
 

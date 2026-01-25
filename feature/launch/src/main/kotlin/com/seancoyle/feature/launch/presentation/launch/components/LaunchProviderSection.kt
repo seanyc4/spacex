@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.card.AppCard
@@ -32,7 +33,10 @@ internal fun LaunchProviderSection(
     agency: AgencyUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Primary(modifier = modifier) {
+    AppCard.Primary(
+        modifier = modifier
+            .semantics(mergeDescendants = true) {}
+    ) {
         SectionTitle(text = stringResource(R.string.launch_provider))
         AppCard.Tinted(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -45,8 +49,8 @@ internal fun LaunchProviderSection(
                         text = stringResource(R.string.name).uppercase(),
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
-                        
-                    )
+
+                        )
                     AppText.titleMedium(
                         text = agency.name,
                         fontWeight = FontWeight.Bold,
@@ -58,8 +62,8 @@ internal fun LaunchProviderSection(
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 14.dp),
-                        
-                    )
+
+                        )
                     AppText.titleMedium(
                         text = agency.abbrev,
                         fontWeight = FontWeight.Bold,
@@ -71,8 +75,8 @@ internal fun LaunchProviderSection(
                         color = AppTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 14.dp),
-                        
-                    )
+
+                        )
                     AppText.titleMedium(
                         text = agency.type,
                         fontWeight = FontWeight.Bold,
@@ -91,7 +95,7 @@ internal fun LaunchProviderSection(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Business,
-                        contentDescription = null,
+                        contentDescription = null, // decorative
                         tint = AppTheme.colors.primary,
                         modifier = Modifier.size(36.dp)
                     )

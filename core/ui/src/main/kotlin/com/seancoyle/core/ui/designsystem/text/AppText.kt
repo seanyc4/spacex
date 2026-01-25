@@ -7,6 +7,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -51,11 +53,16 @@ enum class AppText {
         lineHeight: TextUnit? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
+        contentDescription: String? = null,
     ) {
         val style = asStyle()
         val displayText = if (isUppercase) text.uppercase() else text
         Text(
-            modifier = modifier,
+            modifier = modifier.semantics {
+                if (contentDescription != null) {
+                    this.contentDescription = contentDescription
+                }
+            },
             text = displayText,
             style = style,
             textDecoration = textDecoration,
@@ -72,6 +79,7 @@ enum class AppText {
 
     @Composable
     operator fun invoke(
+        modifier: Modifier = Modifier,
         @StringRes textRes: Int,
         textDecoration: TextDecoration = TextDecoration.None,
         textAlign: TextAlign? = null,
@@ -82,11 +90,15 @@ enum class AppText {
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        modifier: Modifier = Modifier,
+        contentDescription: String? = null,
     ) {
         this(
+            modifier = modifier.semantics {
+                if (contentDescription != null) {
+                    this.contentDescription = contentDescription
+                }
+            },
             text = stringResource(textRes),
-            modifier = modifier,
             textDecoration = textDecoration,
             textAlign = textAlign,
             maxLines = maxLines,
@@ -101,6 +113,7 @@ enum class AppText {
 
     @Composable
     operator fun invoke(
+        modifier: Modifier = Modifier,
         annotatedString: AnnotatedString,
         textDecoration: TextDecoration = TextDecoration.None,
         textAlign: TextAlign? = null,
@@ -111,13 +124,17 @@ enum class AppText {
         fontWeight: FontWeight? = null,
         onTextLayout: (TextLayoutResult) -> Unit = {},
         isUppercase: Boolean = false,
-        modifier: Modifier = Modifier,
+        contentDescription: String? = null,
     ) {
         val style = asStyle()
         val displayText = if (isUppercase) annotatedString.toUpperCase() else annotatedString
         Text(
+            modifier = modifier.semantics {
+                if (contentDescription != null) {
+                    this.contentDescription = contentDescription
+                }
+            },
             text = displayText,
-            modifier = modifier,
             style = style,
             textDecoration = textDecoration,
             textAlign = textAlign,

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.components.image.RemoteImage
@@ -47,7 +48,10 @@ internal fun LauncherStagesSection(
     stages: List<LauncherStageUI>,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Primary(modifier = modifier) {
+    AppCard.Primary(
+        modifier = modifier
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -148,7 +152,11 @@ internal fun LauncherStats(
     launcher: LauncherUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         AppText.labelMedium(
             text = stringResource(R.string.launcher_performance),
             fontWeight = FontWeight.SemiBold,
@@ -159,16 +167,12 @@ internal fun LauncherStats(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            launcher.successfulLandings.let { successful ->
-                launcher.attemptedLandings.let { attempted ->
-                    MiniStatItem(
-                        value = "$successful/$attempted",
-                        label = stringResource(R.string.landings),
-                        icon = Icons.Default.CheckCircle,
-                        iconTint = AppColors.success
-                    )
-                }
-            }
+            MiniStatItem(
+                value = "${launcher.successfulLandings}/${launcher.attemptedLandings}",
+                label = stringResource(R.string.landings),
+                icon = Icons.Default.CheckCircle,
+                iconTint = AppColors.success
+            )
 
             MiniStatItem(
                 value = if (launcher.flightProven) stringResource(R.string.yes) else stringResource(

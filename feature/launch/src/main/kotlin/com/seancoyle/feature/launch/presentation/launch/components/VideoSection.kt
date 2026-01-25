@@ -17,7 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,7 +50,9 @@ internal fun VideoSection(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { role = Role.Carousel }
         ) { page ->
             val video = videos[page]
             VideoContent(
@@ -96,10 +101,10 @@ private fun PagerIndicator(
     currentPage: Int,
     modifier: Modifier = Modifier
 ) {
-    val pageDescription = "Page ${currentPage + 1} of $pageCount"
+    val pageDescription = stringResource(R.string.page_indicator, currentPage + 1, pageCount)
 
     Row(
-        modifier = modifier.semantics {
+        modifier = modifier.clearAndSetSemantics {
             contentDescription = pageDescription
         },
         horizontalArrangement = Arrangement.spacedBy(horizontalArrangementSpacingSmall)
@@ -153,7 +158,8 @@ private fun VideoMetadata(
                 Chip(
                     text = stringResource(R.string.live),
                     contentColor = AppTheme.colors.error,
-                    containerColor = AppTheme.colors.error
+                    containerColor = AppTheme.colors.error,
+                    accessibilityLabel = stringResource(R.string.video_status)
                 )
             }
         }

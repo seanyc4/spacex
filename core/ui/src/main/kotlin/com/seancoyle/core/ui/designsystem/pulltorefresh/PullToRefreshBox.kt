@@ -11,6 +11,12 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.seancoyle.core.ui.R
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppColors
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -27,10 +33,21 @@ fun RefreshableContent(
     state: PullToRefreshState = rememberPullToRefreshState(),
     content: @Composable () -> Unit
 ) {
+    val refreshStateDesc = if (isRefreshing) {
+        stringResource(R.string.refreshing)
+    } else {
+        stringResource(R.string.pull_to_refresh)
+    }
+
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
-        modifier = modifier,
+        modifier = modifier.semantics {
+            stateDescription = refreshStateDesc
+            if (isRefreshing) {
+                liveRegion = LiveRegionMode.Polite
+            }
+        },
         state = state,
         indicator = {
             Indicator(

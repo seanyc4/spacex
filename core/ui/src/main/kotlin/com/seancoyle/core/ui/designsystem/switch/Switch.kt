@@ -4,10 +4,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.semantics.stateDescription
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
@@ -19,8 +20,7 @@ fun Switch(
     label: String? = null,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
-    val stateDescription = if (checked) "On" else "Off"
-    val accessibilityLabel = label?.let { "$it, $stateDescription" } ?: stateDescription
+    val stateDesc = if (checked) "On" else "Off"
 
     Switch(
         checked = checked,
@@ -29,8 +29,11 @@ fun Switch(
             onCheckedChange(it)
         },
         modifier = modifier.semantics {
-            contentDescription = accessibilityLabel
-            toggleableState = if (checked) ToggleableState.On else ToggleableState.Off
+            role = Role.Switch
+            stateDescription = if (label != null) "$label, $stateDesc" else stateDesc
+            if (!enabled) {
+                disabled()
+            }
         },
         colors = SwitchDefaults.colors(
             checkedThumbColor = AppTheme.colors.primary,

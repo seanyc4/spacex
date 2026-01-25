@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -39,8 +38,6 @@ internal fun LinkButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val linkDescription = "Link to $text"
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +46,6 @@ internal fun LinkButton(
                 role = Role.Button
             )
             .semantics {
-                contentDescription = linkDescription
                 role = Role.Button
             },
         colors = CardDefaults.cardColors(
@@ -75,8 +71,8 @@ internal fun LinkButton(
                 color = AppTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
-                
-            )
+
+                )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,

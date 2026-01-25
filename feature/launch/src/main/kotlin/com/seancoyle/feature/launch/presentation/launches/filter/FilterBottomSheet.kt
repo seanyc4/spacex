@@ -359,7 +359,7 @@ private fun FilterCountBadge(count: Int) {
             ),
         contentAlignment = Alignment.Center
     ) {
-       Canvas(modifier = Modifier.size(24.dp)) {
+        Canvas(modifier = Modifier.size(24.dp)) {
             drawCircle(color = Color(0xFF4CAF50).copy(alpha = 0.2f))
         }
         AppText.labelSmall(
@@ -378,7 +378,7 @@ private fun SearchSection(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    Column {
+    Column(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         AppText.titleSmall(
             text = stringResource(R.string.search),
             color = AppTheme.colors.onSurfaceVariant
@@ -553,7 +553,6 @@ private fun StatusFilterChip(
         ),
         modifier = Modifier
             .testTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_${status.name}")
-            .semantics { contentDescription = "Filter by ${status.label}" }
     )
 }
 
@@ -777,4 +776,3 @@ private fun ExpandedFilterContentWithFiltersPreview() {
         )
     }
 }
-
