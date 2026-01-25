@@ -31,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,16 +54,15 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingLarge
 import com.seancoyle.core.ui.designsystem.theme.Dimens.verticalArrangementSpacingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
-import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
 import com.seancoyle.feature.launch.presentation.launch.model.LinkType
 
 @Composable
 internal fun RocketConfigurationCard(
-    config: ConfigurationUI,
     modifier: Modifier = Modifier,
-    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } }
+    config: ConfigurationUI,
+    onOpenUrl: (String) -> Unit,
 ) {
     AppCard.Primary(modifier = modifier) {
         SectionTitle(text = stringResource(R.string.rocket_config))
@@ -187,7 +185,7 @@ private fun RocketHeader(
                 text = stringResource(R.string.view_in_hd),
                 icon = Icons.Default.Image,
                 onClick = {
-                    onExternalLinkClick(LinkType.MAP.type)
+                    onExternalLinkClick(LinkType.ROCKET_IMAGE.type)
                     onOpenUrl(config.imageUrl)
                 }
             )
@@ -431,7 +429,8 @@ private fun ExternalLinks(
 private fun RocketConfigurationCardPreview() {
     AppTheme {
         RocketConfigurationCard(
-            config = previewData().rocket.configuration
+            config = previewData().rocket.configuration,
+            onOpenUrl = {}
         )
     }
 }

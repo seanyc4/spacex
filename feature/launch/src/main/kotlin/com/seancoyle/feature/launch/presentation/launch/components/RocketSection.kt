@@ -14,11 +14,11 @@ import com.seancoyle.feature.launch.presentation.launch.model.RocketUI
 
 @Composable
 internal fun RocketSection(
-    rocket: RocketUI,
     modifier: Modifier = Modifier,
+    rocket: RocketUI,
+    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } },
     onExternalLinkClick: () -> Unit = {}
 ) {
-    val context = LocalContext.current
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -28,7 +28,7 @@ internal fun RocketSection(
             config = rocket.configuration,
             onOpenUrl = { url ->
                 onExternalLinkClick()
-                context.openUrl(url)
+                onOpenUrl(url)
             }
         )
 
