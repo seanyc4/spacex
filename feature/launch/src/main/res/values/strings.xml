@@ -36,6 +36,7 @@
     <string name="location_landings">Location Landings</string>
     <string name="failure_reason">Failure Reason</string>
     <string name="open_in_maps">Open in Maps</string>
+    <string name="view_in_hd">View in HD</string>
     <string name="not_available">N/A</string>
     <string name="launch_site">Launch Site</string>
     <string name="rocket_config">Rocket Configuration</string>

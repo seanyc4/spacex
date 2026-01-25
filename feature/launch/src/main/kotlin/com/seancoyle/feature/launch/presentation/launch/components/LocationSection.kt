@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.image.RemoteImage
+import com.seancoyle.core.ui.designsystem.buttons.TertiaryButton
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -53,8 +53,8 @@ import com.seancoyle.feature.launch.presentation.launch.model.PadUI
 
 @Composable
 internal fun LaunchSiteSection(
-    pad: PadUI,
     modifier: Modifier = Modifier,
+    pad: PadUI,
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     AppCard.Primary(modifier = modifier) {
@@ -71,12 +71,11 @@ internal fun LaunchSiteSection(
 
 @Composable
 private fun LaunchSiteContent(
-    pad: PadUI,
     modifier: Modifier = Modifier,
+    pad: PadUI,
+    onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } },
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
-    val context = LocalContext.current
-
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -146,7 +145,7 @@ private fun LaunchSiteContent(
             )
         }
 
-        if (pad.mapImage != null) {
+        if (pad.mapImage != null && pad.mapUrl != null) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,7 +153,7 @@ private fun LaunchSiteContent(
                     .clip(RoundedCornerShape(cornerRadiusMedium))
                     .clickable {
                         onExternalLinkClick(LinkType.MAP.type)
-                        context.openUrl(pad.mapUrl)
+                        onOpenUrl(pad.mapUrl)
                     }
             ) {
                 RemoteImage(
@@ -164,40 +163,15 @@ private fun LaunchSiteContent(
                         .fillMaxSize()
                         .testTag(LaunchesTestTags.LAUNCH_SITE_MAP),
                 )
-
-                if (pad.mapUrl != null) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .background(
-                                color = AppTheme.colors.inversePrimary,
-                                shape = RoundedCornerShape(
-                                    topEnd = 0.dp,
-                                    topStart = cornerRadiusXSmall,
-                                    bottomEnd = 0.dp,
-                                    bottomStart = 0.dp
-                                )
-                            )
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Place,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            AppText.labelSmall(
-                                text = stringResource(R.string.open_in_maps),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                TertiaryButton(
+                    modifier = modifier.align(Alignment.BottomEnd),
+                    text = stringResource(R.string.open_in_maps),
+                    icon = Icons.Default.Place,
+                    onClick = {
+                        onExternalLinkClick(LinkType.MAP.type)
+                        onOpenUrl(pad.mapUrl)
                     }
-                }
+                )
             }
         }
 
@@ -221,8 +195,8 @@ private fun LaunchSiteContent(
                     AppText.labelMedium(
                         text = stringResource(R.string.coordinates),
                         color = AppTheme.colors.onSurfaceVariant,
-                        
-                    )
+
+                        )
                     AppText.bodyMedium(
                         text = "$latitude, $longitude",
                         color = AppTheme.colors.onSurface,
@@ -236,8 +210,8 @@ private fun LaunchSiteContent(
 
 @Composable
 private fun LaunchStatisticsContent(
-    pad: PadUI,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pad: PadUI
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -261,8 +235,8 @@ private fun LaunchStatisticsContent(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary,
-                
-            )
+
+                )
         }
 
         Row(
@@ -303,9 +277,9 @@ private fun LaunchStatisticsContent(
 
 @Composable
 private fun PadStatChip(
+    modifier: Modifier = Modifier,
     label: String,
-    value: String,
-    modifier: Modifier = Modifier
+    value: String
 ) {
     Card(
         modifier = modifier,
@@ -326,14 +300,14 @@ private fun PadStatChip(
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.onSurface,
                 textAlign = TextAlign.Center,
-                
-            )
+
+                )
             AppText.bodySmall(
                 text = label,
                 color = AppTheme.colors.secondary,
                 textAlign = TextAlign.Center,
-                
-            )
+
+                )
         }
     }
 }

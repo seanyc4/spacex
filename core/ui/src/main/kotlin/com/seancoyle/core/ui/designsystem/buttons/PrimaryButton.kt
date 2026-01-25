@@ -9,7 +9,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ fun ButtonPrimary(
             .focusable(true)
             .semantics {
                 contentDescription = text
+                role = Role.Button
             },
         colors = ButtonDefaults.textButtonColors(
             containerColor = AppTheme.colors.primary,
