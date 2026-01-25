@@ -33,6 +33,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
@@ -113,7 +117,11 @@ private fun RocketHeader(
     onOpenUrl: (String) -> Unit,
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
-    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+    AppCard.Tinted(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -159,29 +167,33 @@ private fun RocketHeader(
             }
         }
 
+        val viewRocketImageDesc = stringResource(R.string.view_rocket_image, config.name)
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(launchImageHeight)
                 .clip(RoundedCornerShape(cornerRadiusMedium))
-                .clickable {
+                .clickable(role = Role.Button) {
                     onExternalLinkClick(LinkType.ROCKET_IMAGE.type)
                     onOpenUrl(config.imageUrl)
+                }
+                .clearAndSetSemantics {
+                    contentDescription = viewRocketImageDesc
                 }
         ) {
             RemoteImage(
                 imageUrl = config.imageUrl,
-                contentDescription = stringResource(
-                    R.string.rocket_desc,
-                    config.name
-                ),
+                contentDescription = "", // Part of parent semantics
                 modifier = Modifier
                     .fillMaxSize()
                     .testTag(LaunchesTestTags.ROCKET_IMAGE)
             )
 
             TertiaryButton(
-                modifier = modifier.align(Alignment.BottomEnd),
+                modifier = modifier
+                    .align(Alignment.BottomEnd)
+                    .clearAndSetSemantics {},
                 text = stringResource(R.string.view_in_hd),
                 icon = Icons.Default.Image,
                 onClick = {
@@ -204,7 +216,10 @@ private fun LaunchStatistics(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
@@ -249,7 +264,11 @@ private fun PhysicalSpecifications(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
@@ -327,7 +346,11 @@ private fun ManufacturerAndHistory(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.manufacturer_and_history),
             fontWeight = FontWeight.Bold,
@@ -451,6 +474,16 @@ private fun ManufacturerCardPreview() {
     AppTheme {
         ManufacturerAndHistory(
             config = previewData().rocket.configuration
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun RocketFamilyCardPreview() {
+    AppTheme {
+        RocketFamilyCard(
+            family = previewData().rocket.configuration.families.first()
         )
     }
 }

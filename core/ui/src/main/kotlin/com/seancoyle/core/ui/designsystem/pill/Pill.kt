@@ -1,5 +1,6 @@
 package com.seancoyle.core.ui.designsystem.pill
 
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
@@ -7,8 +8,10 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -43,8 +46,10 @@ fun Pill(
         shape = RoundedCornerShape(50),
         modifier = modifier
             .height(24.dp)
-            .semantics {
+            .defaultMinSize(minHeight = 48.dp, minWidth = 48.dp)
+            .clearAndSetSemantics {
                 contentDescription = text
+                role = Role.Button
             }
     )
 }

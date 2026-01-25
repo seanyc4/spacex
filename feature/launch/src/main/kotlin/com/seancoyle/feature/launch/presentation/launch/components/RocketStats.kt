@@ -58,8 +58,8 @@ internal fun MiniStatItem(
             color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
             fontSize = AppTextStyles.labelSmall.fontSize,
-            
-        )
+
+            )
     }
 }
 
@@ -92,8 +92,8 @@ internal fun StatItem(
             text = label,
             color = AppTheme.colors.secondary,
             textAlign = TextAlign.Center,
-            
-        )
+
+            )
     }
 }
 

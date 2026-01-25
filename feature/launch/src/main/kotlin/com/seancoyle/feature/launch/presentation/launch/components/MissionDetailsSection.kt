@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -95,7 +96,10 @@ private fun MissionHighlightCard(
     description: String?,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Blended(modifier = modifier) {
+    AppCard.Blended(
+        modifier = modifier
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -130,7 +134,7 @@ private fun MissionHighlightCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
-                    contentDescription = stringResource(R.string.mission),
+                    contentDescription = null, // Decorative
                     tint = AppTheme.colors.primary,
                     modifier = Modifier.size(36.dp)
                 )
@@ -182,7 +186,11 @@ private fun LaunchWindowTimeline(
     // Check if this is an instantaneous launch
     val isInstantaneous = windowDuration == "Instantaneous"
 
-    AppCard.Tinted(modifier = Modifier.fillMaxWidth()) {
+    AppCard.Tinted(
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -197,8 +205,7 @@ private fun LaunchWindowTimeline(
                     text = stringResource(R.string.launch_window).uppercase(),
                     color = AppTheme.colors.primary,
                     fontWeight = FontWeight.Bold,
-
-                    )
+                )
 
                 AppText.titleMedium(
                     text = launchDate,
@@ -218,7 +225,7 @@ private fun LaunchWindowTimeline(
             ) {
                 Icon(
                     imageVector = Icons.Default.Rocket,
-                    contentDescription = stringResource(R.string.launch_window),
+                    contentDescription = null, // Decorative
                     tint = AppTheme.colors.primary,
                     modifier = Modifier.size(36.dp)
                 )
@@ -237,7 +244,8 @@ private fun LaunchWindowTimeline(
                     text = launchTime,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.primary,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    contentDescription = stringResource(R.string.launch_time, launchTime)
                 )
             }
 
@@ -326,13 +334,21 @@ private fun LaunchWindowTimeline(
                             AppText.bodyLarge(
                                 text = windowStartTime,
                                 color = AppTheme.colors.secondary,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                contentDescription = stringResource(
+                                    R.string.launch_window_start,
+                                    windowStartTime
+                                )
                             )
 
                             AppText.bodyLarge(
                                 text = windowEndTime,
                                 color = AppTheme.colors.secondary,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                contentDescription = stringResource(
+                                    R.string.launch_window_closed,
+                                    windowEndTime
+                                )
                             )
                         }
                     }
@@ -375,7 +391,7 @@ private fun LaunchWindowTimeline(
                     ) {
                         Icon(
                             imageVector = Icons.Default.AccessTime,
-                            contentDescription = stringResource(R.string.duration),
+                            contentDescription = null, // Decorative
                             tint = AppTheme.colors.primary,
                             modifier = Modifier.size(13.dp)
                         )
@@ -405,7 +421,11 @@ private fun FailReasonCard(
     reason: String,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Error(modifier = modifier.fillMaxWidth()) {
+    AppCard.Error(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -415,7 +435,7 @@ private fun FailReasonCard(
         ) {
             Icon(
                 imageVector = Icons.Default.Warning,
-                contentDescription = null,
+                contentDescription = null, // Decorative
                 tint = AppTheme.colors.error,
                 modifier = Modifier.size(24.dp)
             )
@@ -428,8 +448,7 @@ private fun FailReasonCard(
                     text = stringResource(R.string.failure_reason),
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.error,
-
-                    )
+                )
                 AppText.bodyMedium(
                     text = reason,
                     color = AppTheme.colors.onSurface,

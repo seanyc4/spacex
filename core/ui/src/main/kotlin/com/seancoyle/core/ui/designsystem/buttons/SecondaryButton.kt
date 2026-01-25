@@ -23,7 +23,7 @@ import com.seancoyle.core.ui.designsystem.theme.Dimens.paddingSmall
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 
 @Composable
-fun ButtonPrimary(
+fun ButtonSecondary(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
@@ -40,10 +40,10 @@ fun ButtonPrimary(
                 }
             },
         colors = ButtonDefaults.textButtonColors(
-            containerColor = AppTheme.colors.primary,
-            disabledContainerColor = AppTheme.colors.primary.copy(alpha = disabledAlpha.toFloat()),
-            disabledContentColor = AppTheme.colors.onPrimary.copy(alpha = disabledAlpha.toFloat()),
-            contentColor = AppTheme.colors.onPrimary
+            containerColor = AppTheme.colors.onSurface,
+            disabledContainerColor = AppTheme.colors.onSurface.copy(alpha = disabledAlpha.toFloat()),
+            disabledContentColor = AppTheme.colors.onSurface.copy(alpha = disabledAlpha.toFloat()),
+            contentColor = AppTheme.colors.onSurface
         ),
         enabled = enabled,
         shape = RoundedCornerShape(cornerRadiusXSmall),
@@ -58,16 +58,16 @@ fun ButtonPrimary(
                     horizontal = paddingMedium,
                     vertical = paddingSmall
                 ),
-            
-        )
+
+            )
     }
 }
 
 @PreviewDarkLightMode
 @Composable
 private fun Preview() {
-    ButtonPrimary(
-        text = "Primary Button",
+    ButtonSecondary(
+        text = "Secondary Button",
         onClick = { }
     )
 }
@@ -75,9 +75,9 @@ private fun Preview() {
 @PreviewDarkLightMode
 @Composable
 private fun PreviewDisabled() {
-    ButtonPrimary(
+    ButtonSecondary(
         enabled = false,
-        text = "Primary Button",
+        text = "Secondary Button",
         onClick = { }
     )
 }

@@ -27,6 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -81,7 +85,11 @@ private fun LaunchSiteContent(
     onOpenUrl: (String) -> Unit,
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
-    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+    AppCard.Tinted(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -151,25 +159,32 @@ private fun LaunchSiteContent(
         }
 
         if (pad.mapImage != null && pad.mapUrl != null) {
+            val mapClickDescription = stringResource(R.string.open_map_for, pad.name)
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(launchImageHeight)
                     .clip(RoundedCornerShape(cornerRadiusMedium))
-                    .clickable {
+                    .clickable(role = Role.Button) {
                         onExternalLinkClick(LinkType.MAP.type)
                         onOpenUrl(pad.mapUrl)
+                    }
+                    .semantics {
+                        contentDescription = mapClickDescription
                     }
             ) {
                 RemoteImage(
                     imageUrl = pad.imageUrl,
-                    contentDescription = stringResource(R.string.map_of_desc, pad.name),
+                    contentDescription = "", // Part of parent semantics
                     modifier = Modifier
                         .fillMaxSize()
                         .testTag(LaunchesTestTags.LAUNCH_SITE_MAP),
                 )
                 TertiaryButton(
-                    modifier = modifier.align(Alignment.BottomEnd),
+                    modifier = modifier
+                        .align(Alignment.BottomEnd)
+                        .clearAndSetSemantics {},
                     text = stringResource(R.string.open_in_maps),
                     icon = Icons.Default.Place,
                     onClick = {
@@ -240,8 +255,7 @@ private fun LaunchStatisticsContent(
                 text = stringResource(R.string.site_statistics),
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.primary,
-
-                )
+            )
         }
 
         Row(
@@ -287,7 +301,7 @@ private fun PadStatChip(
     value: String
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.semantics(mergeDescendants = true) {},
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.primary.copy(alpha = 0.1f)
         ),
@@ -304,15 +318,13 @@ private fun PadStatChip(
                 text = value,
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.onSurface,
-                textAlign = TextAlign.Center,
-
-                )
+                textAlign = TextAlign.Center
+            )
             AppText.bodySmall(
                 text = label,
                 color = AppTheme.colors.secondary,
                 textAlign = TextAlign.Center,
-
-                )
+            )
         }
     }
 }

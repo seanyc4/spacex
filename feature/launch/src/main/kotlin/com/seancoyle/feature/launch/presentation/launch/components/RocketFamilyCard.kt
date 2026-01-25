@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.ui.designsystem.card.AppCard
@@ -29,7 +30,10 @@ internal fun RocketFamilyCard(
     family: RocketFamilyUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}) {
         AppText.titleSmall(
             text = family.name,
             fontWeight = FontWeight.Bold,
@@ -78,7 +82,7 @@ internal fun RocketFamilyCard(
 
             MiniStatItem(
                 value = family.active,
-                label = stringResource(R.string.active),
+                label = stringResource(R.string.status),
                 icon = Icons.Default.CheckCircle,
                 iconTint = if (family.active == "Active") AppColors.success else AppTheme.colors.secondary
             )

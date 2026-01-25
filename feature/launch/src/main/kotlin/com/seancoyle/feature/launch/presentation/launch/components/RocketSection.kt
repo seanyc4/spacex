@@ -19,7 +19,6 @@ internal fun RocketSection(
     onOpenUrl: (String) -> Unit = LocalContext.current.let { context -> { url -> context.openUrl(url) } },
     onExternalLinkClick: () -> Unit = {}
 ) {
-
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(verticalArrangementSpacingLarge)

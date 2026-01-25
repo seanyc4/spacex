@@ -26,9 +26,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,8 +68,6 @@ internal fun LaunchCard(
         launchItem.status.label,
         launchItem.launchDate
     )
-    val missionNameDesc = stringResource(R.string.mission_name_desc, launchItem.missionName)
-    val dateTimeDescription = stringResource(R.string.launch_date_desc, launchItem.launchDate)
 
     val borderStroke = if (isSelected) {
         BorderStroke(3.dp, AppTheme.colors.primary)
@@ -79,9 +79,13 @@ internal fun LaunchCard(
         modifier = modifier
             .fillMaxWidth()
             .height(launchCardHeight)
-            .clickable { onClick(launchItem, launchesType, position) }
-            .semantics {
+            .clickable(
+                onClick = { onClick(launchItem, launchesType, position) },
+                role = Role.Button
+            )
+            .clearAndSetSemantics {
                 contentDescription = launchCardDesc
+                role = Role.Button
                 selected = isSelected
             }
             .testTag(LaunchesTestTags.LAUNCH_CARD),
@@ -99,7 +103,7 @@ internal fun LaunchCard(
             RemoteImage(
                 modifier = Modifier.fillMaxSize(),
                 imageUrl = launchItem.imageUrl,
-                contentDescription = stringResource(R.string.launch_image),
+                contentDescription = "", // Part of card semantics
             )
 
             Box(
@@ -139,6 +143,7 @@ internal fun LaunchCard(
                         containerColor = launchItem.status.containerColor(),
                         contentColor = launchItem.status.contentColor(),
                         icon = launchItem.status.icon(),
+                        accessibilityLabel = launchItem.status.label,
                         modifier = Modifier.testTag(LaunchesTestTags.CARD_STATUS_CHIP)
                     )
                 }
@@ -152,10 +157,6 @@ internal fun LaunchCard(
                         color = AppTheme.colors.primary,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        modifier = Modifier.semantics {
-                            contentDescription = missionNameDesc
-                        },
-                        
                     )
 
                     Row(
@@ -164,7 +165,7 @@ internal fun LaunchCard(
                     ) {
                         Icon(
                             imageVector = Icons.Default.AccessTime,
-                            contentDescription = stringResource(R.string.date_time),
+                            contentDescription = null, // Decorative - info is in text
                             tint = AppTheme.colors.secondary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -173,9 +174,6 @@ internal fun LaunchCard(
                             color = AppTheme.colors.secondary,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            modifier = Modifier.semantics {
-                                contentDescription = dateTimeDescription
-                            }
                         )
                     }
 
@@ -185,7 +183,7 @@ internal fun LaunchCard(
                     ) {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
-                            contentDescription = stringResource(R.string.location),
+                            contentDescription = null, // Decorative - info is in text
                             tint = AppTheme.colors.secondary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -194,9 +192,6 @@ internal fun LaunchCard(
                             color = AppTheme.colors.secondary,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            modifier = Modifier.semantics {
-                                contentDescription = dateTimeDescription
-                            }
                         )
                     }
                 }
