@@ -2,8 +2,7 @@
 <resources>
     <!-- App Bar -->
     <string name="app_name">Orbital</string>
-    <string name="filter_btn_content_desc">Filter List Button</string>
-    <string name="rocket_icon_desc">Rocket Launch Icon</string>
+    <string name="search_btn_content_desc">Search Button</string>
 
     <!-- Error Messages-->
     <string name="empty_data">No launches matching that query</string>

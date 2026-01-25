@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.seancoyle.core.test.testags.LaunchesTestTags
@@ -117,7 +117,11 @@ private fun RocketHeader(
     onOpenUrl: (String) -> Unit,
     onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
-    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+    AppCard.Tinted(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -176,7 +180,6 @@ private fun RocketHeader(
                 }
                 .clearAndSetSemantics {
                     contentDescription = viewRocketImageDesc
-                    role = Role.Button
                 }
         ) {
             RemoteImage(
@@ -188,7 +191,9 @@ private fun RocketHeader(
             )
 
             TertiaryButton(
-                modifier = modifier.align(Alignment.BottomEnd),
+                modifier = modifier
+                    .align(Alignment.BottomEnd)
+                    .clearAndSetSemantics {},
                 text = stringResource(R.string.view_in_hd),
                 icon = Icons.Default.Image,
                 onClick = {
@@ -211,7 +216,10 @@ private fun LaunchStatistics(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}) {
         AppText.titleMedium(
             text = stringResource(R.string.launch_statistics),
             fontWeight = FontWeight.Bold,
@@ -256,7 +264,11 @@ private fun PhysicalSpecifications(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.physical_specifications),
             fontWeight = FontWeight.Bold,
@@ -334,7 +346,11 @@ private fun ManufacturerAndHistory(
     config: ConfigurationUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Subtle(modifier = modifier.fillMaxWidth()) {
+    AppCard.Subtle(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         AppText.titleMedium(
             text = stringResource(R.string.manufacturer_and_history),
             fontWeight = FontWeight.Bold,
@@ -458,6 +474,16 @@ private fun ManufacturerCardPreview() {
     AppTheme {
         ManufacturerAndHistory(
             config = previewData().rocket.configuration
+        )
+    }
+}
+
+@PreviewDarkLightMode
+@Composable
+private fun RocketFamilyCardPreview() {
+    AppTheme {
+        RocketFamilyCard(
+            family = previewData().rocket.configuration.families.first()
         )
     }
 }

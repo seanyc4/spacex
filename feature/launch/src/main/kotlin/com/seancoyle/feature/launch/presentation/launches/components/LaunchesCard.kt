@@ -68,16 +68,6 @@ internal fun LaunchCard(
         launchItem.status.label,
         launchItem.launchDate
     )
-    val selectedDesc = if (isSelected) {
-        stringResource(R.string.a11y_selected)
-    } else {
-        ""
-    }
-    val fullDescription = if (isSelected) {
-        "$launchCardDesc. $selectedDesc"
-    } else {
-        launchCardDesc
-    }
 
     val borderStroke = if (isSelected) {
         BorderStroke(3.dp, AppTheme.colors.primary)
@@ -94,7 +84,7 @@ internal fun LaunchCard(
                 role = Role.Button
             )
             .clearAndSetSemantics {
-                contentDescription = fullDescription
+                contentDescription = launchCardDesc
                 role = Role.Button
                 selected = isSelected
             }

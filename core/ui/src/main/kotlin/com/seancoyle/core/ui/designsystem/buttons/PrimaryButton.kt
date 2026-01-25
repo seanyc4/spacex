@@ -33,7 +33,7 @@ fun ButtonPrimary(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .focusable(enabled)
-            .semantics(mergeDescendants = true) {
+            .semantics {
                 role = Role.Button
                 if (!enabled) {
                     disabled()

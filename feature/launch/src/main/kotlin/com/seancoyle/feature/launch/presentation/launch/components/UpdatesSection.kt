@@ -23,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.collapse
-import androidx.compose.ui.semantics.expand
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -75,17 +73,6 @@ internal fun UpdatesSection(
                             .semantics {
                                 role = Role.Button
                                 stateDescription = expandedStateDesc
-                                if (isExpanded) {
-                                    collapse {
-                                        isExpanded = false
-                                        true
-                                    }
-                                } else {
-                                    expand {
-                                        isExpanded = true
-                                        true
-                                    }
-                                }
                             }
                     } else {
                         Modifier
@@ -131,7 +118,11 @@ private fun UpdateItem(
     update: LaunchUpdateUI,
     modifier: Modifier = Modifier
 ) {
-    AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
+    AppCard.Tinted(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,

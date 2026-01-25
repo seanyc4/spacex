@@ -99,6 +99,7 @@
     <string name="landing_attempted">Landing Attempted</string>
     <string name="no_landing_attempt">No Landing Attempt</string>
     <string name="status_label">Status: %1$s</string>
+    <string name="status">Status</string>
 
     <!-- Spacecraft -->
     <string name="spacecraft">Spacecraft</string>
@@ -140,8 +141,13 @@
     <string name="map_of_desc">Map of %1$s</string>
     <string name="rocket_icon_desc">Rocket icon</string>
     <string name="star_icon_desc">Star icon</string>
-    <string name="upcoming_tab_desc">Upcoming launches tab</string>
+    <string name="upcoming_tab_content_desc">Upcoming launches tab</string>
     <string name="past_tab_desc">Past launches tab</string>
+
+    <!-- Accessibility - Mission details -->
+    <string name="launch_time">%1$s is the time the rocket launched.</string>
+    <string name="launch_window_start">%1$s is when the launch window opened.</string>
+    <string name="launch_window_closed">%1$s is when the launch window closed.</string>
 
     <!-- Accessibility - Launch Status -->
     <string name="launch_status_desc">Launch status: %1$s</string>

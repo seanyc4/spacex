@@ -80,7 +80,7 @@ fun TopAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(id = R.string.filter_btn_content_desc),
+                        contentDescription = stringResource(id = R.string.search_btn_content_desc),
                         tint = AppTheme.colors.primary,
                         modifier = Modifier.size(32.dp)
                     )

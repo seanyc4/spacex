@@ -54,8 +54,6 @@ internal fun DetailRow(
     modifier: Modifier = Modifier,
     valueColor: Color = AppTheme.colors.onSurface
 ) {
-    val detailDescription = stringResource(R.string.detail_row_desc, label, value)
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -64,7 +62,7 @@ internal fun DetailRow(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = null, // decorative
             tint = AppTheme.colors.onSurface,
             modifier = Modifier.size(20.dp)
         )
@@ -76,8 +74,7 @@ internal fun DetailRow(
             )
             AppText.bodyLarge(
                 text = value,
-                color = valueColor,
-                modifier = Modifier.semantics { contentDescription = detailDescription }
+                color = valueColor
             )
         }
     }
