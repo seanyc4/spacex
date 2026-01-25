@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.RocketLaunch
@@ -30,10 +32,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.image.RemoteImage
+import com.seancoyle.core.ui.designsystem.buttons.TertiaryButton
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppColors
@@ -53,6 +58,7 @@ import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
 import com.seancoyle.core.ui.util.openUrl
 import com.seancoyle.feature.launch.R
 import com.seancoyle.feature.launch.presentation.launch.model.ConfigurationUI
+import com.seancoyle.feature.launch.presentation.launch.model.LinkType
 
 @Composable
 internal fun RocketConfigurationCard(
@@ -104,9 +110,10 @@ internal fun RocketConfigurationCard(
 
 @Composable
 private fun RocketHeader(
+    modifier: Modifier = Modifier,
     config: ConfigurationUI,
     onOpenUrl: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onExternalLinkClick: (linkType: String) -> Unit = {}
 ) {
     AppCard.Tinted(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -154,20 +161,37 @@ private fun RocketHeader(
             }
         }
 
-        RemoteImage(
-            imageUrl = config.imageUrl,
-            contentDescription = stringResource(
-                R.string.rocket_desc,
-                config.name
-            ),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(launchImageHeight)
                 .clip(RoundedCornerShape(cornerRadiusMedium))
                 .clickable {
+                    onExternalLinkClick(LinkType.ROCKET_IMAGE.type)
                     onOpenUrl(config.imageUrl)
-                },
-        )
+                }
+        ) {
+            RemoteImage(
+                imageUrl = config.imageUrl,
+                contentDescription = stringResource(
+                    R.string.rocket_desc,
+                    config.name
+                ),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(LaunchesTestTags.ROCKET_IMAGE)
+            )
+
+            TertiaryButton(
+                modifier = modifier.align(Alignment.BottomEnd),
+                text = stringResource(R.string.view_in_hd),
+                icon = Icons.Default.Image,
+                onClick = {
+                    onExternalLinkClick(LinkType.MAP.type)
+                    onOpenUrl(config.imageUrl)
+                }
+            )
+        }
 
         AppText.bodyMedium(
             text = config.description,
