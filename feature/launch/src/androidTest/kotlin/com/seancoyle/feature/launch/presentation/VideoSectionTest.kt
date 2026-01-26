@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.chip.Chip
 import com.seancoyle.core.ui.designsystem.text.AppText
@@ -80,7 +83,7 @@ class VideoSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("LIVE")
+        composeRule.onNodeWithTag(LaunchesTestTags.LIVE_BADGE)
             .assertIsDisplayed()
     }
 
@@ -94,7 +97,7 @@ class VideoSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("LIVE")
+        composeRule.onNodeWithTag(LaunchesTestTags.LIVE_BADGE)
             .assertDoesNotExist()
     }
 
@@ -188,7 +191,8 @@ private fun TestVideoContent(
                 Chip(
                     text = stringResource(R.string.live),
                     contentColor = AppTheme.colors.error,
-                    containerColor = AppTheme.colors.error
+                    containerColor = AppTheme.colors.error,
+                    modifier = Modifier.testTag(LaunchesTestTags.LIVE_BADGE)
                 )
             }
         }

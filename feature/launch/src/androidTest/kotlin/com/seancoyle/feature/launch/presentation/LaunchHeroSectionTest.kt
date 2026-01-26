@@ -70,7 +70,7 @@ class LaunchHeroSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("Success")
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.SUCCESS.name)
             .assertIsDisplayed()
     }
 
@@ -84,7 +84,7 @@ class LaunchHeroSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("Go for Launch")
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.GO.name)
             .assertIsDisplayed()
     }
 
@@ -98,7 +98,7 @@ class LaunchHeroSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("Failed")
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.FAILED.name)
             .assertIsDisplayed()
     }
 
@@ -112,7 +112,7 @@ class LaunchHeroSectionTest {
             }
         }
 
-        composeRule.onNodeWithText("To be Determined")
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.TBD.name)
             .assertIsDisplayed()
     }
 }

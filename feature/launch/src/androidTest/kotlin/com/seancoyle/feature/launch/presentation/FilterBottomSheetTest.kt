@@ -84,13 +84,13 @@ class FilterBottomSheetTest {
             }
         }
 
-        // Check all status options are displayed
-        composeRule.onNodeWithText("All").assertIsDisplayed()
-        composeRule.onNodeWithText("Success").assertIsDisplayed()
-        composeRule.onNodeWithText("Go").assertIsDisplayed()
-        composeRule.onNodeWithText("TBC").assertIsDisplayed()
-        composeRule.onNodeWithText("TBD").assertIsDisplayed()
-        composeRule.onNodeWithText("Failed").assertIsDisplayed()
+        // Check all status options are displayed using test tags
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_ALL").assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_SUCCESS").assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_GO").assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_TBC").assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_TBD").assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_FAILED").assertIsDisplayed()
     }
 
     @Test
@@ -161,7 +161,7 @@ class FilterBottomSheetTest {
         }
 
         // Click Success chip
-        composeRule.onNodeWithText("Success")
+        composeRule.onNodeWithTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_SUCCESS")
             .performClick()
 
         // Verify StatusSelected event was fired

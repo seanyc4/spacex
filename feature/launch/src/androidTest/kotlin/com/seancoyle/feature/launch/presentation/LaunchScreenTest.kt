@@ -185,7 +185,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(LaunchStatus.SUCCESS.label)
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.SUCCESS.name)
             .assertIsDisplayed()
     }
 
@@ -213,7 +213,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("Mission name: Demo Mission")
+        composeRule.onNodeWithContentDescription("Mission image for Demo Mission")
             .assertExists()
     }
 
@@ -416,7 +416,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(LaunchStatus.GO.label)
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.GO.name)
             .assertIsDisplayed()
     }
 
@@ -430,7 +430,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(LaunchStatus.FAILED.label)
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.FAILED.name)
             .assertIsDisplayed()
     }
 
@@ -444,7 +444,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(LaunchStatus.TBD.label)
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.TBD.name)
             .assertIsDisplayed()
     }
 
@@ -458,7 +458,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(LaunchStatus.TBC.label)
+        composeRule.onNodeWithTag(LaunchesTestTags.HERO_STATUS_CHIP + LaunchStatus.TBC.name)
             .assertIsDisplayed()
     }
 
@@ -514,7 +514,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(launch.mission.type!!)
+        composeRule.onNodeWithTag(LaunchesTestTags.CARD_STATUS_CHIP + launch.mission.type!!, useUnmergedTree = true)
             .assertIsDisplayed()
     }
 
@@ -528,7 +528,7 @@ class LaunchScreenTest {
             }
         }
 
-        composeRule.onNodeWithText(launch.mission.orbitName!!)
+        composeRule.onNodeWithTag(LaunchesTestTags.CARD_STATUS_CHIP + launch.mission.orbitName!!, useUnmergedTree = true)
             .assertIsDisplayed()
     }
 

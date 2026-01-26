@@ -27,7 +27,6 @@ android {
 }
 
 dependencies {
-    ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0") // temp fix until dagger support kotlin 2.3.0
     implementation(projects.core.common)
     implementation(projects.core.data)
     implementation(projects.core.datastore.api)

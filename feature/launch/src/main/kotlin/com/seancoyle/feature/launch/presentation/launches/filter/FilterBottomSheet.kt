@@ -552,6 +552,7 @@ private fun StatusFilterChip(
             selected = isSelected
         ),
         modifier = Modifier
+            .semantics { contentDescription = "Filter by ${status.label}" }
             .testTag(LaunchesTestTags.FILTER_STATUS_CHIP + "_${status.name}")
     )
 }

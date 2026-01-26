@@ -15,8 +15,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.designsystem.text.AppText
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
 import com.seancoyle.core.ui.designsystem.theme.PreviewDarkLightMode
@@ -32,7 +34,7 @@ fun Chip(
     accessibilityLabel: String? = null
 ) {
     val isClickable = onClick != null
-    val chipDescription = accessibilityLabel ?: text
+    val accessibilityLabelFinal = accessibilityLabel ?: text
 
     AssistChip(
         onClick = onClick ?: {},
@@ -61,10 +63,11 @@ fun Chip(
         ),
         modifier = modifier
             .clearAndSetSemantics {
-                contentDescription = chipDescription
+                contentDescription = accessibilityLabelFinal
                 if (isClickable) {
                     role = Role.Button
                 }
+                testTag = LaunchesTestTags.CARD_STATUS_CHIP + accessibilityLabelFinal
             },
         border = BorderStroke(0.25.dp, AppTheme.colors.onSurfaceVariant)
     )

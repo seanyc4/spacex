@@ -1,8 +1,8 @@
 package com.seancoyle.feature.launch.presentation
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.seancoyle.core.ui.designsystem.theme.AppTheme
@@ -107,7 +107,7 @@ class UpdatesSectionTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("Expand")
+        composeRule.onNode(hasStateDescription("Collapsed"))
             .assertIsDisplayed()
     }
 
@@ -121,7 +121,7 @@ class UpdatesSectionTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("Expand")
+        composeRule.onNode(hasStateDescription("Collapsed"))
             .assertDoesNotExist()
     }
 
@@ -138,7 +138,7 @@ class UpdatesSectionTest {
         composeRule.onNodeWithText("Update 6")
             .assertDoesNotExist()
 
-        composeRule.onNodeWithContentDescription("Expand")
+        composeRule.onNode(hasStateDescription("Collapsed"))
             .performClick()
 
         composeRule.onNodeWithText("Update 6")
@@ -155,13 +155,13 @@ class UpdatesSectionTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("Expand")
+        composeRule.onNode(hasStateDescription("Collapsed"))
             .performClick()
 
         composeRule.onNodeWithText("Update 6")
             .assertIsDisplayed()
 
-        composeRule.onNodeWithContentDescription("Collapse")
+        composeRule.onNode(hasStateDescription("Expanded"))
             .performClick()
 
         composeRule.onNodeWithText("Update 6")
