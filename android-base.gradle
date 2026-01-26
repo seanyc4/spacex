@@ -3,7 +3,6 @@ android {
 
     defaultConfig {
         minSdk Android.minSdk
-        targetSdk Android.targetSdk
         versionCode Android.versionCode
         versionName Android.versionName
         vectorDrawables.useSupportLibrary true
@@ -12,15 +11,6 @@ android {
 
     buildFeatures {
         buildConfig true
-    }
-
-    kotlin {
-        sourceSets {
-            main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
-            test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
-        }
-
-        jvmToolchain(17)
     }
 
     lint {

@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.compose)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
@@ -68,10 +67,6 @@ android {
         saveInSrc = true
         automaticGenerationDuringBuild = false
         dexLayoutOptimization = true
-    }
-
-    kotlin {
-        jvmToolchain(17)
     }
 
     buildFeatures {
