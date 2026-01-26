@@ -8,6 +8,7 @@ object LaunchesTestTags {
 
     // Launch Detail Sections
     const val LAUNCH_HERO_SECTION = "launch_hero_section"
+    const val HERO_STATUS_CHIP = "hero_status_chip_"
     const val LAUNCH_DETAILS_SECTION = "launch_details_section"
     const val LAUNCH_SITE_SECTION = "launch_site_section"
     const val ROCKET_SECTION = "rocket_section"
@@ -37,6 +38,9 @@ object LaunchesTestTags {
     // Video Components
     const val VIDEO_CARD = "video_card"
     const val LIVE_BADGE = "live_badge"
+    const val VIDEO_TITLE = "video_title"
+    const val VIDEO_PUBLISHER = "video_publisher"
+    const val VIDEO_PAGER_INDICATOR = "video_pager_indicator"
 
     // Mission Patch Components
     const val MISSION_PATCH_IMAGE = "mission_patch_image"
@@ -54,7 +58,7 @@ object LaunchesTestTags {
     const val FILTER_APPLY_BUTTON = "filter_apply_button"
     const val FILTER_CANCEL_BUTTON = "filter_cancel_button"
     const val FILTER_RECENT_SEARCH = "filter_recent_search"
-    const val CARD_STATUS_CHIP = "card_status_chip"
+    const val CARD_STATUS_CHIP = "card_status_chip_"
 
     // Tab Components
     const val UPCOMING_TAB = "upcoming_tab"

@@ -148,9 +148,10 @@
     <string name="launch_time">%1$s is the time the rocket launched.</string>
     <string name="launch_window_start">%1$s is when the launch window opened.</string>
     <string name="launch_window_closed">%1$s is when the launch window closed.</string>
+    <string name="launch_status_content_desc">Launch status %1$s.</string>
 
     <!-- Accessibility - Launch Status -->
-    <string name="launch_status_desc">Launch status: %1$s</string>
+    <string name="launch_status_desc">Launch status %1$s</string>
 
     <!-- Accessibility - Interactive Elements -->
     <string name="open_map_for">Open map for %1$s</string>

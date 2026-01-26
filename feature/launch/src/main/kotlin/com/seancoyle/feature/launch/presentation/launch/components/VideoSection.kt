@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -25,6 +26,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.seancoyle.core.test.testags.LaunchesTestTags
 import com.seancoyle.core.ui.components.videoplayer.EmbeddedYouTubePlayer
 import com.seancoyle.core.ui.designsystem.card.AppCard
 import com.seancoyle.core.ui.designsystem.chip.Chip
@@ -159,7 +161,8 @@ private fun VideoMetadata(
                     text = stringResource(R.string.live),
                     contentColor = AppTheme.colors.error,
                     containerColor = AppTheme.colors.error,
-                    accessibilityLabel = stringResource(R.string.video_status)
+                    accessibilityLabel = stringResource(R.string.video_status),
+                    modifier = Modifier.testTag(LaunchesTestTags.LIVE_BADGE)
                 )
             }
         }

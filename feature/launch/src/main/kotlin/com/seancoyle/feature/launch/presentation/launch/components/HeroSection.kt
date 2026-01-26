@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -102,7 +103,8 @@ internal fun LaunchHeroSection(
                     containerColor = launch.status.containerColor(),
                     contentColor = launch.status.contentColor(),
                     icon = launch.status.icon(),
-                    accessibilityLabel = stringResource(R.string.launch_status_desc, launch.status.label)
+                    accessibilityLabel = stringResource(R.string.launch_status_desc, launch.status.label),
+                    modifier = Modifier.testTag(LaunchesTestTags.HERO_STATUS_CHIP + launch.status.name)
                 )
 
                 AppText.bodyLarge(

@@ -24,13 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -81,14 +81,13 @@ internal fun LaunchCard(
             .height(launchCardHeight)
             .clickable(
                 onClick = { onClick(launchItem, launchesType, position) },
-                role = Role.Button
             )
             .clearAndSetSemantics {
                 contentDescription = launchCardDesc
                 role = Role.Button
                 selected = isSelected
-            }
-            .testTag(LaunchesTestTags.LAUNCH_CARD),
+                testTag = LaunchesTestTags.LAUNCH_CARD + "_" + launchItem.id
+            },
         shape = RoundedCornerShape(cornerRadiusLarge),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.surface
@@ -143,8 +142,7 @@ internal fun LaunchCard(
                         containerColor = launchItem.status.containerColor(),
                         contentColor = launchItem.status.contentColor(),
                         icon = launchItem.status.icon(),
-                        accessibilityLabel = launchItem.status.label,
-                        modifier = Modifier.testTag(LaunchesTestTags.CARD_STATUS_CHIP)
+                        accessibilityLabel = stringResource(R.string.launch_status_desc, launchItem.status.label)
                     )
                 }
 

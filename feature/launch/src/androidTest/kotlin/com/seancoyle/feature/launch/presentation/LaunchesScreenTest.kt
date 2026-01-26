@@ -6,10 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollAction
-import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.paging.PagingData
@@ -95,7 +94,7 @@ class LaunchesScreenTest {
         }
 
         // First item should be visible
-        composeRule.onNodeWithText("Mission Alpha")
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_1")
             .assertIsDisplayed()
     }
 
@@ -129,10 +128,10 @@ class LaunchesScreenTest {
 
         // Scroll to the last item
         composeRule.onNode(hasScrollAction())
-            .performScrollToNode(hasText("Mission 50"))
+            .performScrollToNode(hasTestTag(LaunchesTestTags.LAUNCH_CARD + "_id-50"))
 
         // A card should still be visible after scrolling
-        composeRule.onNodeWithText("Mission 51")
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_id-51")
             .assertExists()
     }
 
@@ -170,7 +169,7 @@ class LaunchesScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_test-id-123")
             .performClick()
 
         assert(testLaunch.id == "test-id-123") { "Expected id test-id-123 but got ${testLaunch.id}" }
@@ -242,7 +241,7 @@ class LaunchesScreenTest {
         }
 
         // First item should be visible at initial position
-        composeRule.onNodeWithText("Mission 0")
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_id-1")
             .assertIsDisplayed()
     }
 
@@ -276,7 +275,7 @@ class LaunchesScreenTest {
         }
 
         composeRule.onNode(hasScrollAction())
-            .performScrollToNode(hasText("Mission 15"))
+            .performScrollToNode(hasTestTag(LaunchesTestTags.LAUNCH_CARD + "_id-15"))
 
         // Initial scroll position should be reported after 750ms
         composeRule.waitUntil(1000L) {
@@ -315,7 +314,7 @@ class LaunchesScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_test-id")
             .performClick()
 
         assert(clickedType == LaunchesType.UPCOMING)
@@ -350,7 +349,7 @@ class LaunchesScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD)
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_test-id")
             .performClick()
 
         assert(clickedType == LaunchesType.PAST)
@@ -388,12 +387,18 @@ class LaunchesScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("GO Mission")
-            .assertIsDisplayed()
-        composeRule.onNodeWithText("TBD Mission")
-            .assertIsDisplayed()
-        composeRule.onNodeWithText("Success Mission")
-            .assertIsDisplayed()
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_1")
+            .assertExists()
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_2")
+            .assertExists()
+        composeRule.onNodeWithTag(LaunchesTestTags.LAUNCH_CARD + "_3")
+            .assertExists()
+        composeRule.onNodeWithTag(LaunchesTestTags.CARD_STATUS_CHIP + "Launch status " +LaunchStatus.GO.label, useUnmergedTree = true)
+            .assertExists()
+        composeRule.onNodeWithTag(LaunchesTestTags.CARD_STATUS_CHIP + "Launch status " +LaunchStatus.TBD.label, useUnmergedTree = true)
+            .assertExists()
+        composeRule.onNodeWithTag(LaunchesTestTags.CARD_STATUS_CHIP + "Launch status " +LaunchStatus.SUCCESS.label, useUnmergedTree = true)
+            .assertExists()
     }
 
     private fun createTestLaunches(count: Int): List<LaunchesUi> {
