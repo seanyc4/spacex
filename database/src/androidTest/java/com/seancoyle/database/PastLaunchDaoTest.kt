@@ -128,7 +128,7 @@ class PastLaunchDaoTest {
         )
 
         assertTrue(loadResult is PagingSource.LoadResult.Page)
-        assertEquals(10, (loadResult as PagingSource.LoadResult.Page).data.size)
+        assertEquals(10, loadResult.data.size)
     }
 
     @Test
@@ -202,12 +202,14 @@ class PastLaunchDaoTest {
             name = "Success",
             abbrev = "Success",
             description = "Launch was successful"
-        )
+        ),
+        location: String = "United States of America"
     ): PastLaunchEntity = PastLaunchEntity(
         id = id,
         missionName = missionName,
         net = net,
         imageUrl = "https://example.com/image.jpg",
-        status = status
+        status = status,
+        location =location
     )
 }

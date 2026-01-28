@@ -115,7 +115,8 @@ class UpcomingLaunchDaoTest {
 
     @Test
     fun givenLaunches_whenPagingSourceCreated_thenReturnsPage() = runTest {
-        val entities = (1..20).map { createTestEntity(id = "test-$it", missionName = "Mission $it") }
+        val entities =
+            (1..20).map { createTestEntity(id = "test-$it", missionName = "Mission $it") }
         dao.upsertAll(entities)
 
         val pagingSource = dao.pagingSource()
@@ -128,12 +129,13 @@ class UpcomingLaunchDaoTest {
         )
 
         assertTrue(loadResult is PagingSource.LoadResult.Page)
-        assertEquals(10, (loadResult as PagingSource.LoadResult.Page).data.size)
+        assertEquals(10, loadResult.data.size)
     }
 
     @Test
     fun givenLargeLaunchDataset_whenPaged_thenHandlesCorrectly() = runTest {
-        val entities = (1..100).map { createTestEntity(id = "test-$it", missionName = "Mission $it") }
+        val entities =
+            (1..100).map { createTestEntity(id = "test-$it", missionName = "Mission $it") }
         dao.upsertAll(entities)
 
         val count = dao.getTotalEntries()
@@ -186,12 +188,14 @@ class UpcomingLaunchDaoTest {
             name = "Go for Launch",
             abbrev = "Go",
             description = "Launch is confirmed"
-        )
+        ),
+        location: String = "United States of America"
     ): UpcomingLaunchEntity = UpcomingLaunchEntity(
         id = id,
         missionName = missionName,
         net = net,
         imageUrl = "https://example.com/image.jpg",
-        status = status
+        status = status,
+        location = location
     )
 }

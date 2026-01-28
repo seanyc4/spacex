@@ -1,12 +1,9 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
 
-apply{
-    from("$rootDir/android-base.gradle")
-}
+apply(from = "$rootDir/android-base.gradle")
 
 plugins {
     alias(libs.plugins.android.test)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.baselineprofile)
 }
 

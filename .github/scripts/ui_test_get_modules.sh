@@ -10,3 +10,4 @@ do
 done
 
 echo "UI_TEST_MODULES=${test_modules}" >> $GITHUB_ENV
+echo "UI_TEST_MODULES=${test_modules}"

@@ -1,11 +1,8 @@
-apply {
-    from("$rootDir/android-base.gradle")
-    from("$rootDir/hilt.gradle")
-}
+apply(from = "$rootDir/android-base.gradle")
+apply(from = "$rootDir/hilt.gradle")
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -22,4 +19,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+
+    androidTestImplementation(projects.core.test)
+    androidTestImplementation(libs.bundles.unitTestBundle)
 }

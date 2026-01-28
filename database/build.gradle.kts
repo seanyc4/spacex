@@ -1,11 +1,8 @@
-apply {
-    from("$rootDir/android-base.gradle")
-    from("$rootDir/hilt.gradle")
-}
+apply(from = "$rootDir/android-base.gradle")
+apply(from = "$rootDir/hilt.gradle")
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -13,7 +10,10 @@ plugins {
 android {
     namespace = "com.seancoyle.core.database"
 
+
     defaultConfig {
+        testInstrumentationRunner = libs.plugins.hiltTestRunner.get().pluginId
+
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }

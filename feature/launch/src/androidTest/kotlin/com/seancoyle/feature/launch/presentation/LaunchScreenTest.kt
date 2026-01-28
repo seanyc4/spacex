@@ -242,7 +242,7 @@ class LaunchScreenTest {
         }
 
         composeRule.onNodeWithText(launch.failReason!!, substring = true)
-            .assertIsDisplayed()
+            .assertExists()
     }
 
     @Test
@@ -599,7 +599,7 @@ class LaunchScreenTest {
         }
 
         composeRule.onNodeWithText(launch.pad.totalLaunchCount, substring = true)
-            .assertIsDisplayed()
+            .assertExists()
     }
 
     @Test

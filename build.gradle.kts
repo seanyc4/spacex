@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.test) apply false
     alias(libs.plugins.baselineprofile) apply false
     alias(libs.plugins.compose) apply false
-    alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.ksp) apply false
@@ -17,18 +16,24 @@ tasks.register("clean", Delete::class) {
 }
 
 // Gets a list of all modules that have androidTest sources for CI
-tasks.register("printAndroidTestModules") {
-    doLast {
-        val modulesWithTests = subprojects.filter { subproject ->
-            val androidTestDir = file("${subproject.projectDir}/src/androidTest")
-            androidTestDir.exists() && androidTestDir.walkTopDown().any { it.isFile && (it.extension == "kt" || it.extension == "java") }
-        }.map { subproject ->
-            subproject.path
-        }
-        modulesWithTests.forEach { module ->
-            println("Module with androidTest: $module")
-        }
+abstract class PrintAndroidTestModulesTask : DefaultTask() {
+    @get:Input
+    abstract val modulesWithKt: ListProperty<String>
+
+    @TaskAction
+    fun printModules() {
+        modulesWithKt.get().forEach { println("Module with androidTest: $it") }
     }
+}
+
+val modulesWithKtList = subprojects.filter { subproject ->
+    val androidTestDir = subproject.projectDir.resolve("src/androidTest")
+    androidTestDir.exists() && androidTestDir.walkTopDown().any { it.isFile && it.extension == "kt" }
+}.map { it.path }
+
+tasks.register("printAndroidTestModules", PrintAndroidTestModulesTask::class) {
+    modulesWithKt.set(modulesWithKtList)
+    group = "verification"
 }
 
 tasks.register("printAppVersionName") {

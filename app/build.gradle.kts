@@ -1,13 +1,10 @@
-apply {
-    from("$rootDir/hilt.gradle")
-    from("$rootDir/android-base-compose.gradle")
-}
+apply(from = "$rootDir/hilt.gradle")
+apply(from = "$rootDir/android-base-compose.gradle")
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.compose)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
@@ -15,6 +12,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
 }
+
 
 android {
     namespace = "com.seancoyle.orbital"
@@ -68,10 +66,6 @@ android {
         saveInSrc = true
         automaticGenerationDuringBuild = false
         dexLayoutOptimization = true
-    }
-
-    kotlin {
-        jvmToolchain(17)
     }
 
     buildFeatures {
@@ -129,8 +123,6 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.coreKtx)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
     implementation(libs.googleAds)
     implementation(libs.lifecycle.savedstate)
     implementation(libs.profileInstaller)

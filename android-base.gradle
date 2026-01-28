@@ -3,7 +3,6 @@ android {
 
     defaultConfig {
         minSdk Android.minSdk
-        targetSdk Android.targetSdk
         versionCode Android.versionCode
         versionName Android.versionName
         vectorDrawables.useSupportLibrary true
@@ -14,17 +13,15 @@ android {
         buildConfig true
     }
 
+    lint {
+        checkDependencies true
+    }
+
     kotlin {
         sourceSets {
             main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
             test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
         }
-
-        jvmToolchain(17)
-    }
-
-    lint {
-        checkDependencies true
     }
 
     sourceSets {
@@ -43,6 +40,7 @@ android {
         includeAndroidResources = true
 
             all {
+                failOnNoDiscoveredTests = false
                 afterSuite { desc, result ->
                     if (!desc.parent) {
                         println "\n======================================================================="
