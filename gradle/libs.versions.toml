@@ -200,8 +200,6 @@ room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 androidTestBundle = [
-    "compose-uiTestJunit4",
-    "compose-uiTest",
     "kotlin-junit",
     "square-okhttp",
     "square-mockwebserver",
@@ -242,4 +240,10 @@ composeBundle = [
     "compose-viewmodelLifecycle",
     "compose-tooling",
     "hilt-navigationCompose"
+]
+
+composeTestBundle = [
+    "compose-uiTest",
+    "compose-uiTestJunit4",
+    "compose-uiTestManifest"
 ]

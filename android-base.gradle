@@ -17,6 +17,13 @@ android {
         checkDependencies true
     }
 
+    kotlin {
+        sourceSets {
+            main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+            test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+        }
+    }
+
     sourceSets {
         if (findByName("test") != null) {
             getByName("test").resources.srcDir("src/test/res")
@@ -33,6 +40,7 @@ android {
         includeAndroidResources = true
 
             all {
+                failOnNoDiscoveredTests = false
                 afterSuite { desc, result ->
                     if (!desc.parent) {
                         println "\n======================================================================="

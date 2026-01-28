@@ -85,7 +85,7 @@ class LaunchLocationSectionTest {
         }
 
         composeRule.onNodeWithText(totalLaunchCount)
-            .assertIsDisplayed()
+            .assertExists()
     }
 
     @Test

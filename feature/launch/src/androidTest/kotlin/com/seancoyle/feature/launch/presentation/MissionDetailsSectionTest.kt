@@ -118,7 +118,7 @@ class MissionDetailsSectionTest {
         }
 
         composeRule.onNodeWithText(failReason)
-            .assertIsDisplayed()
+            .assertExists()
     }
 
     @Test

@@ -1,7 +1,5 @@
-apply {
-    from("$rootDir/android-base.gradle")
-    from("$rootDir/hilt.gradle")
-}
+apply(from = "$rootDir/android-base.gradle")
+apply(from = "$rootDir/hilt.gradle")
 
 plugins {
     alias(libs.plugins.android.library)

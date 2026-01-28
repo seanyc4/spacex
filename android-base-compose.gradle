@@ -13,10 +13,9 @@ dependencies {
     implementation(libs.bundles.composeBundle)
 
     // Compose Test dependencies
-    androidTestImplementation(libs.compose.uiTest)
-    androidTestImplementation(libs.compose.uiTestJunit4)
-    androidTestImplementation(libs.compose.uiTestManifest)
+    androidTestImplementation(libs.bundles.composeTestBundle)
 
     // Debug implementations
     debugImplementation(libs.compose.uiTestManifest)
-    debugImplementation(libs.compose.preview)}
+    debugImplementation(libs.compose.preview)
+}
